@@ -1,0 +1,38 @@
+{
+  "passId": "optimization-pass",
+  "baseUrl": "http://127.0.0.1:5190",
+  "view": "three-quarter",
+  "diagnostics": {
+    "labelCount": 7,
+    "bodyClasses": "showcase-mode",
+    "canvas": {
+      "width": 1280,
+      "height": 720
+    },
+    "plug": {
+      "styleCount": 7,
+      "view": "three-quarter",
+      "debugEnabled": false,
+      "explodeAmount": 0,
+      "selectableParts": [
+        "front-shoulder",
+        "interface-faceplate",
+        "outer-shell",
+        "rear-neck",
+        "status-indicator",
+        "strain-relief",
+        "terminal-assembly"
+      ],
+      "selectedPart": null,
+      "drawCalls": 95,
+      "triangles": 8574,
+      "geometries": 95,
+      "textures": 2
+    },
+    "frameBudget": {
+      "averageFrameMs": 16.944999999999997,
+      "estimatedFps": 59.01445854234289
+    }
+  },
+  "errors": []
+}

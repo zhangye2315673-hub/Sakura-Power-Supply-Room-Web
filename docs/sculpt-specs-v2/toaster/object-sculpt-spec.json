@@ -1,0 +1,5992 @@
+{
+  "targetName": "SAKURA Toaster v2",
+  "targetId": "sakura-toaster-v2",
+  "schemaVersion": "2.1",
+  "terminologyProfile": {
+    "domain": "real-time procedural Three.js asset",
+    "geometryTerms": [
+      "silhouette",
+      "topology",
+      "primitive",
+      "bevel",
+      "chamfer",
+      "taper",
+      "bend",
+      "boolean cut",
+      "edge loop",
+      "surface normal",
+      "displacement"
+    ],
+    "materialTerms": [
+      "albedo",
+      "baseColor",
+      "roughness",
+      "metalness",
+      "normal map",
+      "bump map",
+      "ambient occlusion",
+      "cavity dirt",
+      "edge wear",
+      "clearcoat"
+    ],
+    "lightingTerms": [
+      "key light",
+      "fill light",
+      "rim light",
+      "HDRI/environment reflection",
+      "contact shadow"
+    ],
+    "descriptionRule": "Use measurable 3D graphics terms. Avoid vague words unless they are paired with concrete geometry/material/shader parameters."
+  },
+  "sourceImage": "references/intake-v2/toaster/views/front.png",
+  "referenceCamera": {
+    "solved": false,
+    "fovDegrees": 40,
+    "aspect": 1,
+    "orientation": {
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0
+    },
+    "positionHint": [
+      0,
+      0,
+      3
+    ],
+    "note": "For likeness work, solve the reference camera (forge/stage1_intake/solve_camera_pose.py) so the review render aligns with the photo and the reference can be projected. Confirm by overlay review."
+  },
+  "suitability": "pass",
+  "scores": {
+    "object_isolation": 3,
+    "silhouette_readability": 3,
+    "depth_inference": 3,
+    "primitive_decomposition": 3,
+    "material_procedurality": 3,
+    "occlusion_risk": 2,
+    "interaction_fit": 3
+  },
+  "preSpecAssessment": {
+    "objectClass": {
+      "primaryType": "toaster",
+      "primaryDomain": "object",
+      "formLanguage": [
+        "stylized-low-poly",
+        "faceted-hard-surface",
+        "exaggerated-functional-silhouette"
+      ],
+      "structureKind": [
+        "extruded-shell",
+        "layered-slot",
+        "lever-and-dial-control-island",
+        "rear-service-panel"
+      ],
+      "motionPotential": [
+        "lever-translation",
+        "carriage-translation",
+        "dial-rotation",
+        "external-toast-ballistic-flight"
+      ],
+      "materialFamilies": [
+        "matte-cream-polymer",
+        "sakura-pink-polymer",
+        "cool-grey-slot-rim",
+        "dark-cavity-rubber",
+        "warm-heater-emission"
+      ],
+      "notes": "Observed across an admitted GPT Image 2 four-view turn-sheet; runtime anchors and external toast flight remain frozen."
+    },
+    "complexity": {
+      "tier": "complex",
+      "scores": {
+        "silhouetteComplexity": 3,
+        "componentCount": 3,
+        "hierarchyDepth": 3,
+        "repetitionDensity": 3,
+        "materialLayerCount": 3,
+        "localDetailDensity": 3,
+        "occlusionRisk": 2,
+        "actionReadinessNeed": 3
+      },
+      "estimatedCounts": {
+        "macroComponents": 1,
+        "mesoComponents": 0,
+        "microFeatureGroups": 0,
+        "materialLayers": 1,
+        "repetitionSystems": 0
+      },
+      "reasoning": [
+        "Assess 'SAKURA Toaster v2' from the image before finalizing componentTree/materials."
+      ]
+    },
+    "specDepthDecision": {
+      "requiredDepth": "complex",
+      "minimumComponentLevels": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "needsRepetitionSystems": true,
+      "needsMaterialLocalOverrides": true,
+      "needsMultipleReviewViews": true,
+      "needsActionReadyHierarchy": true,
+      "rationale": "Choose simple/moderate/complex/ultra-complex from observed structure, not from a hardcoded domain."
+    },
+    "unknownsToResolveBeforeImplementation": [],
+    "detailInventory": {
+      "scanMethod": "grid-3x3-plus-runtime-contract",
+      "targetMinDetails": 16,
+      "note": "Every visible or runtime-critical feature maps to a named procedural component or repetition system.",
+      "details": [
+        {
+          "id": "toaster-detail-1",
+          "kind": "contour",
+          "description": "eight-plane tapered shell",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "root"
+          },
+          "evidenceRef": "turnsheet",
+          "confidence": 0.94
+        },
+        {
+          "id": "toaster-detail-2",
+          "kind": "bevel",
+          "description": "broad upper shoulder",
+          "region": {
+            "x": 0.3333333333333333,
+            "y": 0.16666666666666666,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "root"
+          },
+          "evidenceRef": "turnsheet",
+          "confidence": 0.94
+        },
+        {
+          "id": "toaster-detail-3",
+          "kind": "linework",
+          "description": "pink stepped base plinth",
+          "region": {
+            "x": 0.6666666666666666,
+            "y": 0.3333333333333333,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "root"
+          },
+          "evidenceRef": "turnsheet",
+          "confidence": 0.94
+        },
+        {
+          "id": "toaster-detail-4",
+          "kind": "contour",
+          "description": "dark lower seam",
+          "region": {
+            "x": 0,
+            "y": 0.5,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "root"
+          },
+          "evidenceRef": "turnsheet",
+          "confidence": 0.94
+        },
+        {
+          "id": "toaster-detail-5",
+          "kind": "bevel",
+          "description": "faceted cool-grey slot rim",
+          "region": {
+            "x": 0.3333333333333333,
+            "y": 0.6666666666666666,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "root"
+          },
+          "evidenceRef": "turnsheet",
+          "confidence": 0.94
+        },
+        {
+          "id": "toaster-detail-6",
+          "kind": "linework",
+          "description": "deep slot cavity",
+          "region": {
+            "x": 0.6666666666666666,
+            "y": 0.8333333333333334,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "root"
+          },
+          "evidenceRef": "turnsheet",
+          "confidence": 0.94
+        },
+        {
+          "id": "toaster-detail-7",
+          "kind": "contour",
+          "description": "centre slot divider",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "root"
+          },
+          "evidenceRef": "turnsheet",
+          "confidence": 0.94
+        },
+        {
+          "id": "toaster-detail-8",
+          "kind": "bevel",
+          "description": "warm heater bar",
+          "region": {
+            "x": 0.3333333333333333,
+            "y": 0.16666666666666666,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "root"
+          },
+          "evidenceRef": "turnsheet",
+          "confidence": 0.94
+        },
+        {
+          "id": "toaster-detail-9",
+          "kind": "linework",
+          "description": "vertical lever track",
+          "region": {
+            "x": 0.6666666666666666,
+            "y": 0.3333333333333333,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "root"
+          },
+          "evidenceRef": "turnsheet",
+          "confidence": 0.94
+        },
+        {
+          "id": "toaster-detail-10",
+          "kind": "contour",
+          "description": "projecting layered lever handle",
+          "region": {
+            "x": 0,
+            "y": 0.5,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "root"
+          },
+          "evidenceRef": "turnsheet",
+          "confidence": 0.94
+        },
+        {
+          "id": "toaster-detail-11",
+          "kind": "bevel",
+          "description": "large 12-sided browning dial",
+          "region": {
+            "x": 0.3333333333333333,
+            "y": 0.6666666666666666,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "root"
+          },
+          "evidenceRef": "turnsheet",
+          "confidence": 0.94
+        },
+        {
+          "id": "toaster-detail-12",
+          "kind": "linework",
+          "description": "nine radial dial ticks",
+          "region": {
+            "x": 0.6666666666666666,
+            "y": 0.8333333333333334,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "root"
+          },
+          "evidenceRef": "turnsheet",
+          "confidence": 0.94
+        },
+        {
+          "id": "toaster-detail-13",
+          "kind": "contour",
+          "description": "mint status lamp",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "root"
+          },
+          "evidenceRef": "turnsheet",
+          "confidence": 0.94
+        },
+        {
+          "id": "toaster-detail-14",
+          "kind": "bevel",
+          "description": "two right-side controls",
+          "region": {
+            "x": 0.3333333333333333,
+            "y": 0.16666666666666666,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "root"
+          },
+          "evidenceRef": "turnsheet",
+          "confidence": 0.94
+        },
+        {
+          "id": "toaster-detail-15",
+          "kind": "linework",
+          "description": "rear service panel",
+          "region": {
+            "x": 0.6666666666666666,
+            "y": 0.3333333333333333,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "root"
+          },
+          "evidenceRef": "turnsheet",
+          "confidence": 0.94
+        },
+        {
+          "id": "toaster-detail-16",
+          "kind": "contour",
+          "description": "three rear vents",
+          "region": {
+            "x": 0,
+            "y": 0.5,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "root"
+          },
+          "evidenceRef": "turnsheet",
+          "confidence": 0.94
+        },
+        {
+          "id": "toaster-detail-17",
+          "kind": "bevel",
+          "description": "rear cable keeper and recess",
+          "region": {
+            "x": 0.3333333333333333,
+            "y": 0.6666666666666666,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "root"
+          },
+          "evidenceRef": "turnsheet",
+          "confidence": 0.94
+        },
+        {
+          "id": "toaster-detail-18",
+          "kind": "linework",
+          "description": "four rubber feet",
+          "region": {
+            "x": 0.6666666666666666,
+            "y": 0.8333333333333334,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "root"
+          },
+          "evidenceRef": "turnsheet",
+          "confidence": 0.94
+        },
+        {
+          "id": "toaster-detail-19",
+          "kind": "contour",
+          "description": "single frozen toast launch socket",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "root"
+          },
+          "evidenceRef": "turnsheet",
+          "confidence": 0.94
+        },
+        {
+          "id": "toaster-detail-20",
+          "kind": "bevel",
+          "description": "stable three-tier uneven outline",
+          "region": {
+            "x": 0.3333333333333333,
+            "y": 0.16666666666666666,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "root"
+          },
+          "evidenceRef": "turnsheet",
+          "confidence": 0.94
+        }
+      ]
+    },
+    "anatomy": {
+      "applies": false,
+      "styleHeads": 0,
+      "proportions": {
+        "headUnit": 0,
+        "torso": 0,
+        "legs": 0,
+        "shoulderWidth": 0,
+        "hipWidth": 0
+      },
+      "pose": {
+        "type": "unassessed",
+        "jointAngles": {}
+      },
+      "faceLandmarks": {
+        "eyeLine": 0,
+        "eyeSpacing": 0,
+        "noseBase": 0,
+        "mouthLine": 0,
+        "hairline": 0
+      },
+      "features": [],
+      "confidence": 0,
+      "note": "Only meaningful when objectClass.primaryDomain is character or hybrid. Set applies=true and fill from forge/stage1_intake/extract_landmarks.py. See grimoire/character/reconstruction.md and grimoire/character/likeness_maximization.md."
+    },
+    "sourceImage": "references/intake-v2/toaster/views/front.png",
+    "estimatedCounts": {
+      "macroComponents": 4,
+      "mesoComponents": 12,
+      "microFeatureGroups": 8,
+      "materialLayers": 8,
+      "repetitionSystems": 4
+    }
+  },
+  "qualityContract": {
+    "qualityBar": "complex",
+    "definitionOfDone": [
+      "The rendered model matches the reference silhouette, primary proportions, visible component hierarchy, material response, and most recognizable local features for the selected fidelity tier."
+    ],
+    "minimumSpecDepth": {
+      "macroComponents": 4,
+      "mesoComponents": 10,
+      "microFeatureGroups": 7,
+      "materialLayers": 7,
+      "repetitionSystems": 4,
+      "reviewViewpoints": 7
+    },
+    "featureGroups": [
+      {
+        "id": "overall-silhouette",
+        "name": "Overall silhouette and proportions",
+        "required": true,
+        "qualityCriteria": [
+          "Bounding shape, dominant curves, negative spaces, and scale relationships are explicitly described."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "model reads as a generic placeholder instead of the reference object",
+          "major proportions are guessed without evidence"
+        ]
+      },
+      {
+        "id": "primary-structure",
+        "name": "Primary structure and hierarchy",
+        "required": true,
+        "qualityCriteria": [
+          "Major parts, joints, seams, contact points, and parent-child relationships are named before code generation."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "large visible parts are merged into one mesh",
+          "component hierarchy is too shallow for the observed complexity"
+        ]
+      },
+      {
+        "id": "attachment-joint-correctness",
+        "name": "Attachment and joint correctness",
+        "required": true,
+        "qualityCriteria": [
+          "Every visible child appendage, branch, limb, handle, connector, tube, cable, horn, wing, leg, or hinged part has an attachment contract with parent socket, localStart/localEnd, contact type, embed/overlap, and gap tolerance."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "child part root floats away from the parent",
+          "branch/limb/tube is centered in space instead of pivoting from its root",
+          "parent-child transform mixes world and local coordinates"
+        ]
+      },
+      {
+        "id": "surface-material-response",
+        "name": "Surface material response",
+        "required": true,
+        "qualityCriteria": [
+          "Albedo zones, roughness, normal/bump/displacement intent, cavity dirt, edge wear, and local overrides are specified where visible.",
+          "Important materials define independent albedo, roughness, height/normal, and AO responses instead of reusing one texture for unrelated PBR channels.",
+          "Surface response is decomposed into macro, meso, and micro frequency bands with scale and amplitude tied to object scale."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "surface looks like flat plastic",
+          "local material variation is missing or not tied to image evidence"
+        ]
+      },
+      {
+        "id": "reference-lookdev",
+        "name": "Reference color, material, and lighting response",
+        "required": true,
+        "qualityCriteria": [
+          "Material-pass names the reference-derived albedo palette, roughness variation, tactile normal/bump/displacement response, and local masks.",
+          "When a source image is available, run reference PBR extraction and require confidence >= 0.7 before treating maps as implementation-ready.",
+          "Lighting-pass names key/fill/rim or environment light, exposure, tone mapping, background, and contact shadow behavior.",
+          "Neutral, grazing-angle, and reference-matched renders prove that surface relief survives relighting and is not painted into albedo."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "model has acceptable shape but reads as flat shaded or plastic",
+          "colors are a generic average instead of reference-observed local color zones",
+          "lighting is evenly ambient and cannot reproduce the source value range"
+        ]
+      }
+    ],
+    "visualDeltaChecks": [
+      "silhouette and negative-space delta",
+      "component hierarchy depth delta",
+      "repetition density and distribution delta",
+      "material albedo/roughness/normal response delta",
+      "local feature placement and scale delta"
+    ],
+    "antiShallowSpecRules": [
+      "Do not proceed to code if qualityContract.qualityBar is unassessed.",
+      "Do not proceed to code if the spec only contains a root component for a moderate or complex object.",
+      "Do not proceed to code if required featureGroups are not represented by componentTree, materials, or repetitionSystems.",
+      "Do not proceed to code if visible local features are described only in prose and not attached to components/materials/evidenceRefs.",
+      "Do not proceed past structural-pass if attached child parts lack attachment.parentSocket, localStart, localEnd, embedDepth/overlap, and gapTolerance.",
+      "Do not pass material look-dev when albedo is reused as roughness, height, normal, or AO.",
+      "Do not pass material look-dev without macro, meso, and micro surface frequency bands for close-up materials.",
+      "Do not pass reference-fidelity material look-dev from a source image without usable referencePbr maps or an explicit documented limitation.",
+      "Do not patch a spec with extracted PBR maps when extraction confidence is below the target threshold unless the user explicitly accepts lower fidelity.",
+      "Do not place adjacent separate-geometry parts below 0.02 world-unit seam overlap (source: grimoire/build/geometry_patterns.md).",
+      "Do not satisfy raised or recessed relief, fasteners, or grip structure with a map alone when the feature affects form; use geometry or displacement (source: grimoire/build/geometry_patterns.md).",
+      "Adjacent components must overlap by at least 0.02 world units at shared seams (source: grimoire/build/geometry_patterns.md).",
+      "Raised or recessed relief and fasteners must be geometry, instanced micro-parts, or displacement; a map alone is an approximation (source: grimoire/build/geometry_patterns.md)."
+    ],
+    "mustNotDo": [
+      "Do not proceed to code if qualityContract.qualityBar is unassessed.",
+      "Do not proceed to code if the spec only contains a root component for a moderate or complex object.",
+      "Do not proceed to code if required featureGroups are not represented by componentTree, materials, or repetitionSystems.",
+      "Do not proceed to code if visible local features are described only in prose and not attached to components/materials/evidenceRefs.",
+      "Do not proceed past structural-pass if attached child parts lack attachment.parentSocket, localStart, localEnd, embedDepth/overlap, and gapTolerance.",
+      "Do not pass material look-dev when albedo is reused as roughness, height, normal, or AO.",
+      "Do not pass material look-dev without macro, meso, and micro surface frequency bands for close-up materials.",
+      "Do not pass reference-fidelity material look-dev from a source image without usable referencePbr maps or an explicit documented limitation.",
+      "Do not patch a spec with extracted PBR maps when extraction confidence is below the target threshold unless the user explicitly accepts lower fidelity.",
+      "Do not place adjacent separate-geometry parts below 0.02 world-unit seam overlap (source: grimoire/build/geometry_patterns.md).",
+      "Do not satisfy raised or recessed relief, fasteners, or grip structure with a map alone when the feature affects form; use geometry or displacement (source: grimoire/build/geometry_patterns.md).",
+      "Adjacent components must overlap by at least 0.02 world units at shared seams (source: grimoire/build/geometry_patterns.md).",
+      "Raised or recessed relief and fasteners must be geometry, instanced micro-parts, or displacement; a map alone is an approximation (source: grimoire/build/geometry_patterns.md)."
+    ]
+  },
+  "qualityTargets": {
+    "targetFidelity": 0.7,
+    "mustMatch": [
+      "macro silhouette and proportions",
+      "primary material albedo/roughness response",
+      "reference-derived PBR material response at or above 0.7 confidence when source pixels are usable",
+      "most recognizable local features"
+    ],
+    "niceToHave": [
+      "micro scratches, stains, chips, and dirt masks",
+      "secondary lighting match"
+    ],
+    "fpsTarget": 60,
+    "reviewViewpoints": [
+      "front",
+      "side",
+      "back",
+      "three-quarter",
+      "runtime-startup",
+      "runtime-climax",
+      "runtime-wind-down"
+    ]
+  },
+  "selfCorrectLoop": {
+    "enabled": true,
+    "visualAcceptance": {
+      "reviewer": "ai-vision",
+      "threshold": 0.7,
+      "comparisonArtifactRequired": true,
+      "layerScoresRequired": true,
+      "codePixelDiffIsAcceptanceAuthority": false,
+      "scoringRule": "AI vision must inspect a side-by-side reference/render sheet and score the current pass from 0 to 1. Pixel-diff code may assist diagnostics but cannot approve a pass.",
+      "requiredLayerScores": [
+        "silhouetteProportion",
+        "componentStructure",
+        "formDetail",
+        "materialSurface",
+        "lightingCamera"
+      ],
+      "featureReviewPolicy": {
+        "enabled": true,
+        "reviewUnit": "semantic-subsystem",
+        "maxCriticalFeaturesPerPass": 5,
+        "maxImportantFeaturesPerPass": 3,
+        "criticalDefaultThreshold": 0.8,
+        "importantAverageThreshold": 0.65,
+        "adaptiveEscalation": true,
+        "singleImagePairOnly": true,
+        "selectionRule": "Choose only the most visually salient, identity-defining, user-prioritized, or high-risk semantic systems. Group repeated parts instead of reviewing every mesh. AI vision scores every selected feature from the same full reference/render pair."
+      }
+    },
+    "reviewAfterPasses": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "allowedActions": [
+      "continue",
+      "refine-spec",
+      "refine-code",
+      "request-input",
+      "stop"
+    ],
+    "specRefineTriggers": [
+      "missing component",
+      "wrong primitive family",
+      "wrong proportions",
+      "material layer under-specified",
+      "local feature not traceable to viewEvidence",
+      "reference ambiguity discovered during implementation"
+    ],
+    "codeRefineTriggers": [
+      "spec is adequate but generated geometry/material does not match",
+      "browser render differs from reference",
+      "performance budget exceeded",
+      "lighting hides geometry or material response"
+    ],
+    "stopCriteria": [
+      "target fidelity reached or user accepts current approximation",
+      "remaining gaps require new reference images or manual art"
+    ],
+    "screenshotPolicy": {
+      "requiredForPasses": [
+        "blockout",
+        "structural-pass",
+        "form-refinement",
+        "material-pass",
+        "surface-pass",
+        "lighting-pass",
+        "interaction-pass"
+      ],
+      "preferredCapture": "in-app-browser-screenshot",
+      "fallbackCapture": "user-supplied-screenshot-path",
+      "minimumEvidence": "Each visual pass needs a reference image, rendered screenshot, side-by-side comparison sheet, AI vision score, layer scores, and critique before choosing continue.",
+      "reviewPairRule": "Compare the same camera/viewpoint whenever possible; do not judge a front reference against a random render angle.",
+      "acceptanceAuthority": "AI vision review of the comparison sheet. Code-generated pixel similarity is not sufficient evidence."
+    }
+  },
+  "featureReviewTargets": [
+    {
+      "id": "toaster-silhouette",
+      "name": "Faceted tapered shell, shoulder and stable feet",
+      "tier": "critical",
+      "passIds": [
+        "blockout",
+        "form-refinement"
+      ],
+      "minimumScore": 0.82,
+      "mustPass": true,
+      "componentRefs": [
+        "shell-system",
+        "base-plinth",
+        "feet"
+      ],
+      "evidenceRefs": [
+        "front",
+        "three-quarter"
+      ]
+    },
+    {
+      "id": "toaster-identity",
+      "name": "Deep slot, lever, dial and rear service hierarchy",
+      "tier": "critical",
+      "passIds": [
+        "structural-pass",
+        "material-pass"
+      ],
+      "minimumScore": 0.82,
+      "mustPass": true,
+      "componentRefs": [
+        "slot-system",
+        "control-system",
+        "rear-panel"
+      ],
+      "evidenceRefs": [
+        "front",
+        "back",
+        "three-quarter"
+      ]
+    },
+    {
+      "id": "toaster-runtime",
+      "name": "Frozen carriage, lever, dial and launch sockets",
+      "tier": "critical",
+      "passIds": [
+        "interaction-pass"
+      ],
+      "minimumScore": 0.88,
+      "mustPass": true,
+      "componentRefs": [
+        "lever-system",
+        "dial-system",
+        "toast-carriage",
+        "cable-keeper"
+      ],
+      "evidenceRefs": [
+        "runtime-contract"
+      ]
+    },
+    {
+      "id": "toaster-ink",
+      "name": "Sakura Toon palette and uneven three-tier ink",
+      "tier": "critical",
+      "passIds": [
+        "material-pass",
+        "lighting-pass"
+      ],
+      "minimumScore": 0.82,
+      "mustPass": true,
+      "componentRefs": [
+        "outline-system"
+      ],
+      "evidenceRefs": [
+        "turnsheet"
+      ]
+    }
+  ],
+  "sculptPipeline": {
+    "passGateMode": "locked-sequential",
+    "passOrder": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "currentPass": "complete",
+    "completedPasses": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "lastCompletedPass": "optimization-pass",
+    "blockedReason": "",
+    "nextRequiredEvidence": []
+  },
+  "lookDevTargets": {
+    "qualityPriority": "reference-fidelity",
+    "materialPass": {
+      "albedoPaletteRequired": true,
+      "roughnessVariationRequired": true,
+      "normalOrBumpRequired": true,
+      "localOverridesRequired": true,
+      "minimumTextureResolution": 1024,
+      "preferredTextureResolution": 2048,
+      "independentMapChannels": [
+        "albedo",
+        "roughness",
+        "height",
+        "normal",
+        "ambient-occlusion"
+      ],
+      "requiredSurfaceFrequencyBands": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "geometryReliefRequiredWhenSilhouetteAffected": true,
+      "referencePbrExtraction": {
+        "requiredWhenSourceImagePresent": true,
+        "targetThreshold": 0.7,
+        "stopOnLowConfidence": true,
+        "script": "forge/stage1_intake/extract_pbr_evidence.py",
+        "acceptedLimitation": "single-image extraction is reference-derived inference, not exact photogrammetry"
+      },
+      "mustAvoid": [
+        "single flat albedo per material",
+        "uniform roughness",
+        "albedo texture reused as roughness/height/normal/AO",
+        "single-frequency random noise",
+        "plastic-looking smooth bark, stone, cloth, foliage, or aged material",
+        "local color/detail described only in prose without material masks",
+        "claiming exact PBR recovery when confidence is below the target threshold"
+      ]
+    },
+    "lightingPass": {
+      "requiredTerms": [
+        "key light",
+        "fill light",
+        "rim or environment light",
+        "exposure",
+        "tone mapping",
+        "background",
+        "contact shadow"
+      ],
+      "mustAvoid": [
+        "ambient-only lighting",
+        "flat value range",
+        "missing contact shadow",
+        "reference lighting copied without separating material readability"
+      ]
+    },
+    "screenshotReview": [
+      "Compare albedo palette and local color zones.",
+      "Compare roughness/normal/bump response under light.",
+      "Compare cavity dirt, edge wear, stains, moss, scratches, or other local masks.",
+      "Compare key/fill/rim structure, exposure, tone mapping, background, and contact shadows.",
+      "Capture a neutral-light render to verify material readability without reference lighting.",
+      "Capture a grazing-light close-up to expose flat normals, uniform roughness, tiling, and plastic highlights.",
+      "Capture a reference-matched render from the same camera framing as the source."
+    ]
+  },
+  "actionReadiness": {
+    "contract": "Every macro/meso component should be generated as a stable named Object3D pivot node with a mesh child, action metadata, optional sockets, collider proxy, and destruction metadata.",
+    "defaultRigType": "action-ready-static-rig",
+    "rootMotionNode": "root",
+    "requiredComponentFields": [
+      "id",
+      "parent",
+      "transform",
+      "attachment for child appendages, connectors, limbs, tubes, handles, legs, horns, wings, branches, or cables",
+      "actionProfile.animationRole",
+      "actionProfile.pivot",
+      "actionProfile.collider",
+      "actionProfile.destruction"
+    ],
+    "transformChannels": [
+      "translate",
+      "rotate",
+      "scale",
+      "bend",
+      "twist",
+      "detach",
+      "visibility",
+      "material-state"
+    ],
+    "authoringRules": [
+      "Do not collapse independently movable parts into one mesh.",
+      "Put transforms on component pivot groups, not only on raw meshes.",
+      "For attached child parts, put the pivot at the semantic root/socket and build visible geometry from localStart to localEnd.",
+      "Represent hinge, socket, detachable, and breakable intent even when no animation is implemented yet.",
+      "Use simplified collider proxies for runtime physics instead of visual mesh colliders by default."
+    ],
+    "destructionPolicy": {
+      "defaultBreakable": false,
+      "fractureGroupNaming": "Use stable semantic names such as body-shell, left-hinge, glass-panel, branch-segment.",
+      "debrisStrategy": "Prefer detachable component groups and a small number of procedural fragments over random mesh explosion."
+    }
+  },
+  "assumptions": [
+    "GPT Image 2 turn-sheet is visual evidence only.",
+    "Existing pivots, sockets and external toast flight are frozen.",
+    "Two visual heater zones remain one functional slot."
+  ],
+  "coordinateFrame": {
+    "front": "camera-facing side in the reference image",
+    "up": "image up direction",
+    "scaleReference": "unit scale; adjust after first browser render"
+  },
+  "silhouette": {
+    "boundingShape": "wide squat tapered rectangle with raised slot rim",
+    "aspectRatios": [
+      "width:height 1.28",
+      "depth:height 0.77"
+    ],
+    "symmetry": "shell bilateral with asymmetric front controls and right-side controls",
+    "dominantCurves": [
+      "broad upper shoulder",
+      "tapered side planes",
+      "stepped base"
+    ],
+    "negativeSpaces": [
+      "slot cavity",
+      "lever track",
+      "rear cable recess"
+    ],
+    "landmarks": [
+      "top slot",
+      "front lever",
+      "large dial",
+      "mint lamp"
+    ]
+  },
+  "viewEvidence": [
+    {
+      "id": "turnsheet",
+      "view": "multi-view",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "successful GPT Image 2 2x2 turn-sheet"
+      ],
+      "confidence": 0.96
+    },
+    {
+      "id": "front",
+      "view": "front",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "consistent shell, slot, lever, dial, side controls, rear service panel and feet"
+      ],
+      "confidence": 0.94
+    },
+    {
+      "id": "side",
+      "view": "side",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "consistent shell, slot, lever, dial, side controls, rear service panel and feet"
+      ],
+      "confidence": 0.94
+    },
+    {
+      "id": "back",
+      "view": "back",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "consistent shell, slot, lever, dial, side controls, rear service panel and feet"
+      ],
+      "confidence": 0.94
+    },
+    {
+      "id": "three-quarter",
+      "view": "three-quarter",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "consistent shell, slot, lever, dial, side controls, rear service panel and feet"
+      ],
+      "confidence": 0.94
+    },
+    {
+      "id": "startup",
+      "view": "runtime-startup",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "frozen performance timeline at 0.6 seconds"
+      ],
+      "confidence": 0.99
+    },
+    {
+      "id": "climax",
+      "view": "runtime-climax",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "frozen performance timeline at 2.8 seconds"
+      ],
+      "confidence": 0.99
+    },
+    {
+      "id": "wind-down",
+      "view": "runtime-wind-down",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "frozen performance timeline at 4.75 seconds"
+      ],
+      "confidence": 0.99
+    }
+  ],
+  "componentTree": [
+    {
+      "id": "root",
+      "name": "Toaster frozen runtime root",
+      "level": "macro",
+      "role": "root",
+      "importance": 1,
+      "confidence": 0.5,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Procedural low-poly component with explicit planar construction and frozen runtime anchors.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": null,
+      "attachment": null,
+      "dimensions": {
+        "width": 2.32,
+        "height": 1.82,
+        "depth": 1.38,
+        "units": "world",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "root",
+        "pivot": {
+          "mode": "named-runtime-pivot",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "compound-proxy",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Archived v1 envelope remains authoritative."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "root",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "shell"
+        }
+      },
+      "material": "shell",
+      "materialLayers": [
+        "shell"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        {
+          "id": "root-floor contact",
+          "name": "floor contact",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        },
+        {
+          "id": "root-connection envelope",
+          "name": "connection envelope",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        },
+        "toaster-detail-1",
+        "toaster-detail-2",
+        "toaster-detail-3",
+        "toaster-detail-4",
+        "toaster-detail-5",
+        "toaster-detail-6",
+        "toaster-detail-7",
+        "toaster-detail-8",
+        "toaster-detail-9",
+        "toaster-detail-10",
+        "toaster-detail-11",
+        "toaster-detail-12",
+        "toaster-detail-13",
+        "toaster-detail-14",
+        "toaster-detail-15",
+        "toaster-detail-16",
+        "toaster-detail-17",
+        "toaster-detail-18",
+        "toaster-detail-19",
+        "toaster-detail-20"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.64,
+        "microRoughness": 0.05,
+        "bumpAmplitude": 0,
+        "normalPattern": "faceted-object-normal",
+        "displacementPattern": "none",
+        "occlusionPattern": "seam-and-contact-ao",
+        "edgeWearPattern": "stable-ink-variation",
+        "notes": "No runtime textures."
+      },
+      "evidenceRefs": [
+        "turnsheet"
+      ],
+      "details": [],
+      "fidelityTier": "v2",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(241,233,217,1)",
+        "secondaryAlbedo": "rgba(113,102,127,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.92
+      }
+    },
+    {
+      "id": "shell-system",
+      "name": "Eight-plane tapered toaster shell",
+      "level": "macro",
+      "role": "shell",
+      "importance": 1,
+      "confidence": 0.5,
+      "primitive": "extrude",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Procedural low-poly component with explicit planar construction and frozen runtime anchors.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "root",
+      "attachment": {
+        "parentSocket": "root-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 2.22,
+        "height": 1.7,
+        "depth": 1.18,
+        "units": "world",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "shell",
+        "pivot": {
+          "mode": "named-runtime-pivot",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "compound-proxy",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Archived v1 envelope remains authoritative."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "shell-system",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "shell"
+        }
+      },
+      "material": "shell",
+      "materialLayers": [
+        "shell"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        {
+          "id": "shell-system-broad shoulder",
+          "name": "broad shoulder",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        },
+        {
+          "id": "shell-system-tapered sides",
+          "name": "tapered sides",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        }
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.64,
+        "microRoughness": 0.05,
+        "bumpAmplitude": 0,
+        "normalPattern": "faceted-object-normal",
+        "displacementPattern": "none",
+        "occlusionPattern": "seam-and-contact-ao",
+        "edgeWearPattern": "stable-ink-variation",
+        "notes": "No runtime textures."
+      },
+      "evidenceRefs": [
+        "turnsheet"
+      ],
+      "details": [],
+      "fidelityTier": "v2",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(241,233,217,1)",
+        "secondaryAlbedo": "rgba(113,102,127,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.92
+      }
+    },
+    {
+      "id": "slot-system",
+      "name": "Layered top slot assembly",
+      "level": "macro",
+      "role": "toast-slot",
+      "importance": 1,
+      "confidence": 0.5,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Procedural low-poly component with explicit planar construction and frozen runtime anchors.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "shell-system",
+      "attachment": {
+        "parentSocket": "shell-system-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 1.72,
+        "height": 0.14,
+        "depth": 0.46,
+        "units": "world",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "toast-slot",
+        "pivot": {
+          "mode": "named-runtime-pivot",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "compound-proxy",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Archived v1 envelope remains authoritative."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "slot-system",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "metal"
+        }
+      },
+      "material": "metal",
+      "materialLayers": [
+        "metal"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        {
+          "id": "slot-system-rim",
+          "name": "rim",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        },
+        {
+          "id": "slot-system-cavity",
+          "name": "cavity",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        },
+        {
+          "id": "slot-system-heater",
+          "name": "heater",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        },
+        {
+          "id": "slot-system-divider",
+          "name": "divider",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        }
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.64,
+        "microRoughness": 0.05,
+        "bumpAmplitude": 0,
+        "normalPattern": "faceted-object-normal",
+        "displacementPattern": "none",
+        "occlusionPattern": "seam-and-contact-ao",
+        "edgeWearPattern": "stable-ink-variation",
+        "notes": "No runtime textures."
+      },
+      "evidenceRefs": [
+        "turnsheet"
+      ],
+      "details": [],
+      "fidelityTier": "v2",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(241,233,217,1)",
+        "secondaryAlbedo": "rgba(113,102,127,1)",
+        "materialClass": "metal",
+        "materialClassConfidence": 0.92
+      }
+    },
+    {
+      "id": "control-system",
+      "name": "Front lever and browning control island",
+      "level": "macro",
+      "role": "controls",
+      "importance": 1,
+      "confidence": 0.5,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Procedural low-poly component with explicit planar construction and frozen runtime anchors.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "shell-system",
+      "attachment": {
+        "parentSocket": "shell-system-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 0.72,
+        "height": 1.22,
+        "depth": 0.2,
+        "units": "world",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "controls",
+        "pivot": {
+          "mode": "named-runtime-pivot",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "compound-proxy",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Archived v1 envelope remains authoritative."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "control-system",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "accent"
+        }
+      },
+      "material": "accent",
+      "materialLayers": [
+        "accent"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        {
+          "id": "control-system-lever",
+          "name": "lever",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        },
+        {
+          "id": "control-system-dial",
+          "name": "dial",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        },
+        {
+          "id": "control-system-ticks",
+          "name": "ticks",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        },
+        {
+          "id": "control-system-lamp",
+          "name": "lamp",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        }
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.64,
+        "microRoughness": 0.05,
+        "bumpAmplitude": 0,
+        "normalPattern": "faceted-object-normal",
+        "displacementPattern": "none",
+        "occlusionPattern": "seam-and-contact-ao",
+        "edgeWearPattern": "stable-ink-variation",
+        "notes": "No runtime textures."
+      },
+      "evidenceRefs": [
+        "turnsheet"
+      ],
+      "details": [],
+      "fidelityTier": "v2",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(232,174,196,1)",
+        "secondaryAlbedo": "rgba(113,102,127,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.92
+      }
+    },
+    {
+      "id": "base-plinth",
+      "name": "Sakura-pink stepped base",
+      "level": "meso",
+      "role": "floor-support",
+      "importance": 1,
+      "confidence": 0.5,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Procedural low-poly component with explicit planar construction and frozen runtime anchors.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "root",
+      "attachment": {
+        "parentSocket": "root-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 2.28,
+        "height": 0.22,
+        "depth": 1.25,
+        "units": "world",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "floor-support",
+        "pivot": {
+          "mode": "named-runtime-pivot",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "compound-proxy",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Archived v1 envelope remains authoritative."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "base-plinth",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "accent"
+        }
+      },
+      "material": "accent",
+      "materialLayers": [
+        "accent"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        {
+          "id": "base-plinth-dark seam",
+          "name": "dark seam",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        }
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.64,
+        "microRoughness": 0.05,
+        "bumpAmplitude": 0,
+        "normalPattern": "faceted-object-normal",
+        "displacementPattern": "none",
+        "occlusionPattern": "seam-and-contact-ao",
+        "edgeWearPattern": "stable-ink-variation",
+        "notes": "No runtime textures."
+      },
+      "evidenceRefs": [
+        "turnsheet"
+      ],
+      "details": [],
+      "fidelityTier": "v2",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(232,174,196,1)",
+        "secondaryAlbedo": "rgba(113,102,127,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.92
+      }
+    },
+    {
+      "id": "lever-system",
+      "name": "Translating lever and layered handle",
+      "level": "meso",
+      "role": "lever-translation",
+      "importance": 1,
+      "confidence": 0.5,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Procedural low-poly component with explicit planar construction and frozen runtime anchors.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "control-system",
+      "attachment": {
+        "parentSocket": "control-system-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 0.42,
+        "height": 0.68,
+        "depth": 0.19,
+        "units": "world",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "lever-translation",
+        "pivot": {
+          "mode": "named-runtime-pivot",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "compound-proxy",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Archived v1 envelope remains authoritative."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "lever-system",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "shell-light"
+        }
+      },
+      "material": "shell-light",
+      "materialLayers": [
+        "shell-light"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        {
+          "id": "lever-system-dark track",
+          "name": "dark track",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        },
+        {
+          "id": "lever-system-pink inset",
+          "name": "pink inset",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        }
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.64,
+        "microRoughness": 0.05,
+        "bumpAmplitude": 0,
+        "normalPattern": "faceted-object-normal",
+        "displacementPattern": "none",
+        "occlusionPattern": "seam-and-contact-ao",
+        "edgeWearPattern": "stable-ink-variation",
+        "notes": "No runtime textures."
+      },
+      "evidenceRefs": [
+        "turnsheet"
+      ],
+      "details": [],
+      "fidelityTier": "v2",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(241,233,217,1)",
+        "secondaryAlbedo": "rgba(113,102,127,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.92
+      }
+    },
+    {
+      "id": "dial-system",
+      "name": "Twelve-sided browning dial",
+      "level": "meso",
+      "role": "dial-rotation",
+      "importance": 1,
+      "confidence": 0.5,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Procedural low-poly component with explicit planar construction and frozen runtime anchors.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "control-system",
+      "attachment": {
+        "parentSocket": "control-system-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 0.54,
+        "height": 0.54,
+        "depth": 0.24,
+        "units": "world",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "dial-rotation",
+        "pivot": {
+          "mode": "named-runtime-pivot",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "compound-proxy",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Archived v1 envelope remains authoritative."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "dial-system",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "shell-light"
+        }
+      },
+      "material": "shell-light",
+      "materialLayers": [
+        "shell-light"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        {
+          "id": "dial-system-pink bezel",
+          "name": "pink bezel",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        },
+        {
+          "id": "dial-system-index",
+          "name": "index",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        }
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.64,
+        "microRoughness": 0.05,
+        "bumpAmplitude": 0,
+        "normalPattern": "faceted-object-normal",
+        "displacementPattern": "none",
+        "occlusionPattern": "seam-and-contact-ao",
+        "edgeWearPattern": "stable-ink-variation",
+        "notes": "No runtime textures."
+      },
+      "evidenceRefs": [
+        "turnsheet"
+      ],
+      "details": [],
+      "fidelityTier": "v2",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(241,233,217,1)",
+        "secondaryAlbedo": "rgba(113,102,127,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.92
+      }
+    },
+    {
+      "id": "dial-ticks",
+      "name": "Nine radial browning ticks",
+      "level": "meso",
+      "role": "dial-scale",
+      "importance": 1,
+      "confidence": 0.5,
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Procedural low-poly component with explicit planar construction and frozen runtime anchors.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "control-system",
+      "attachment": {
+        "parentSocket": "control-system-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 0.66,
+        "height": 0.66,
+        "depth": 0.02,
+        "units": "world",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "dial-scale",
+        "pivot": {
+          "mode": "named-runtime-pivot",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "compound-proxy",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Archived v1 envelope remains authoritative."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "dial-ticks",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "cavity"
+        }
+      },
+      "material": "cavity",
+      "materialLayers": [
+        "cavity"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        {
+          "id": "dial-ticks-nine marks",
+          "name": "nine marks",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        }
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.64,
+        "microRoughness": 0.05,
+        "bumpAmplitude": 0,
+        "normalPattern": "faceted-object-normal",
+        "displacementPattern": "none",
+        "occlusionPattern": "seam-and-contact-ao",
+        "edgeWearPattern": "stable-ink-variation",
+        "notes": "No runtime textures."
+      },
+      "evidenceRefs": [
+        "turnsheet"
+      ],
+      "details": [],
+      "fidelityTier": "v2",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(48,43,58,1)",
+        "secondaryAlbedo": "rgba(113,102,127,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.92
+      }
+    },
+    {
+      "id": "status-lamp",
+      "name": "Inset mint status lamp",
+      "level": "meso",
+      "role": "indicator",
+      "importance": 1,
+      "confidence": 0.5,
+      "primitive": "sphere",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Procedural low-poly component with explicit planar construction and frozen runtime anchors.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "control-system",
+      "attachment": {
+        "parentSocket": "control-system-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 0.09,
+        "height": 0.09,
+        "depth": 0.09,
+        "units": "world",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "indicator",
+        "pivot": {
+          "mode": "named-runtime-pivot",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "compound-proxy",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Archived v1 envelope remains authoritative."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "status-lamp",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "indicator"
+        }
+      },
+      "material": "indicator",
+      "materialLayers": [
+        "indicator"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        {
+          "id": "status-lamp-small circular inset",
+          "name": "small circular inset",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        }
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.64,
+        "microRoughness": 0.05,
+        "bumpAmplitude": 0,
+        "normalPattern": "faceted-object-normal",
+        "displacementPattern": "none",
+        "occlusionPattern": "seam-and-contact-ao",
+        "edgeWearPattern": "stable-ink-variation",
+        "notes": "No runtime textures."
+      },
+      "evidenceRefs": [
+        "turnsheet"
+      ],
+      "details": [],
+      "fidelityTier": "v2",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(241,233,217,1)",
+        "secondaryAlbedo": "rgba(113,102,127,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.92
+      }
+    },
+    {
+      "id": "side-controls",
+      "name": "Two right-side controls",
+      "level": "meso",
+      "role": "side-controls",
+      "importance": 1,
+      "confidence": 0.5,
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Procedural low-poly component with explicit planar construction and frozen runtime anchors.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "shell-system",
+      "attachment": {
+        "parentSocket": "shell-system-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 0.19,
+        "height": 0.57,
+        "depth": 0.31,
+        "units": "world",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "side-controls",
+        "pivot": {
+          "mode": "named-runtime-pivot",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "compound-proxy",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Archived v1 envelope remains authoritative."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "side-controls",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "accent"
+        }
+      },
+      "material": "accent",
+      "materialLayers": [
+        "accent"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        {
+          "id": "side-controls-upper cream control",
+          "name": "upper cream control",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        },
+        {
+          "id": "side-controls-lower pink control",
+          "name": "lower pink control",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        }
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.64,
+        "microRoughness": 0.05,
+        "bumpAmplitude": 0,
+        "normalPattern": "faceted-object-normal",
+        "displacementPattern": "none",
+        "occlusionPattern": "seam-and-contact-ao",
+        "edgeWearPattern": "stable-ink-variation",
+        "notes": "No runtime textures."
+      },
+      "evidenceRefs": [
+        "turnsheet"
+      ],
+      "details": [],
+      "fidelityTier": "v2",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(232,174,196,1)",
+        "secondaryAlbedo": "rgba(113,102,127,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.92
+      }
+    },
+    {
+      "id": "rear-panel",
+      "name": "Rear service panel",
+      "level": "meso",
+      "role": "rear-service",
+      "importance": 1,
+      "confidence": 0.5,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Procedural low-poly component with explicit planar construction and frozen runtime anchors.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "shell-system",
+      "attachment": {
+        "parentSocket": "shell-system-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 1.08,
+        "height": 0.52,
+        "depth": 0.03,
+        "units": "world",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "rear-service",
+        "pivot": {
+          "mode": "named-runtime-pivot",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "compound-proxy",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Archived v1 envelope remains authoritative."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "rear-panel",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "shell"
+        }
+      },
+      "material": "shell",
+      "materialLayers": [
+        "shell"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        {
+          "id": "rear-panel-three vents",
+          "name": "three vents",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        }
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.64,
+        "microRoughness": 0.05,
+        "bumpAmplitude": 0,
+        "normalPattern": "faceted-object-normal",
+        "displacementPattern": "none",
+        "occlusionPattern": "seam-and-contact-ao",
+        "edgeWearPattern": "stable-ink-variation",
+        "notes": "No runtime textures."
+      },
+      "evidenceRefs": [
+        "turnsheet"
+      ],
+      "details": [],
+      "fidelityTier": "v2",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(241,233,217,1)",
+        "secondaryAlbedo": "rgba(113,102,127,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.92
+      }
+    },
+    {
+      "id": "cable-keeper",
+      "name": "Rear cable keeper and recess",
+      "level": "meso",
+      "role": "power-connection",
+      "importance": 1,
+      "confidence": 0.5,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Procedural low-poly component with explicit planar construction and frozen runtime anchors.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "shell-system",
+      "attachment": {
+        "parentSocket": "shell-system-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 0.56,
+        "height": 0.23,
+        "depth": 0.13,
+        "units": "world",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "power-connection",
+        "pivot": {
+          "mode": "named-runtime-pivot",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "compound-proxy",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Archived v1 envelope remains authoritative."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "cable-keeper",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "shell-light"
+        }
+      },
+      "material": "shell-light",
+      "materialLayers": [
+        "shell-light"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        {
+          "id": "cable-keeper-U recess",
+          "name": "U recess",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        },
+        {
+          "id": "cable-keeper-power socket",
+          "name": "power socket",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        }
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.64,
+        "microRoughness": 0.05,
+        "bumpAmplitude": 0,
+        "normalPattern": "faceted-object-normal",
+        "displacementPattern": "none",
+        "occlusionPattern": "seam-and-contact-ao",
+        "edgeWearPattern": "stable-ink-variation",
+        "notes": "No runtime textures."
+      },
+      "evidenceRefs": [
+        "turnsheet"
+      ],
+      "details": [],
+      "fidelityTier": "v2",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(241,233,217,1)",
+        "secondaryAlbedo": "rgba(113,102,127,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.92
+      }
+    },
+    {
+      "id": "feet",
+      "name": "Four rubber feet",
+      "level": "meso",
+      "role": "floor-contact",
+      "importance": 1,
+      "confidence": 0.5,
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Procedural low-poly component with explicit planar construction and frozen runtime anchors.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "root",
+      "attachment": {
+        "parentSocket": "root-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 1.82,
+        "height": 0.09,
+        "depth": 1.13,
+        "units": "world",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "floor-contact",
+        "pivot": {
+          "mode": "named-runtime-pivot",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "compound-proxy",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Archived v1 envelope remains authoritative."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "feet",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "rubber"
+        }
+      },
+      "material": "rubber",
+      "materialLayers": [
+        "rubber"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        {
+          "id": "feet-four pads",
+          "name": "four pads",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        }
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.64,
+        "microRoughness": 0.05,
+        "bumpAmplitude": 0,
+        "normalPattern": "faceted-object-normal",
+        "displacementPattern": "none",
+        "occlusionPattern": "seam-and-contact-ao",
+        "edgeWearPattern": "stable-ink-variation",
+        "notes": "No runtime textures."
+      },
+      "evidenceRefs": [
+        "turnsheet"
+      ],
+      "details": [],
+      "fidelityTier": "v2",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(241,233,217,1)",
+        "secondaryAlbedo": "rgba(113,102,127,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.92
+      }
+    },
+    {
+      "id": "toast-carriage",
+      "name": "Frozen internal toast carriage",
+      "level": "meso",
+      "role": "carriage-translation",
+      "importance": 1,
+      "confidence": 0.5,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Procedural low-poly component with explicit planar construction and frozen runtime anchors.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "slot-system",
+      "attachment": {
+        "parentSocket": "slot-system-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 1.42,
+        "height": 0.86,
+        "depth": 0.2,
+        "units": "world",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "carriage-translation",
+        "pivot": {
+          "mode": "named-runtime-pivot",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "compound-proxy",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Archived v1 envelope remains authoritative."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "toast-carriage",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "cavity"
+        }
+      },
+      "material": "cavity",
+      "materialLayers": [
+        "cavity"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        {
+          "id": "toast-carriage-launch socket",
+          "name": "launch socket",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        }
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.64,
+        "microRoughness": 0.05,
+        "bumpAmplitude": 0,
+        "normalPattern": "faceted-object-normal",
+        "displacementPattern": "none",
+        "occlusionPattern": "seam-and-contact-ao",
+        "edgeWearPattern": "stable-ink-variation",
+        "notes": "No runtime textures."
+      },
+      "evidenceRefs": [
+        "turnsheet"
+      ],
+      "details": [],
+      "fidelityTier": "v2",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(48,43,58,1)",
+        "secondaryAlbedo": "rgba(113,102,127,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.92
+      }
+    },
+    {
+      "id": "rear-vents",
+      "name": "Three rear vent slots",
+      "level": "micro",
+      "role": "ventilation",
+      "importance": 1,
+      "confidence": 0.5,
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Procedural low-poly component with explicit planar construction and frozen runtime anchors.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "rear-panel",
+      "attachment": {
+        "parentSocket": "rear-panel-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 0.54,
+        "height": 0.31,
+        "depth": 0.03,
+        "units": "world",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "ventilation",
+        "pivot": {
+          "mode": "named-runtime-pivot",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "compound-proxy",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Archived v1 envelope remains authoritative."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "rear-vents",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "cavity"
+        }
+      },
+      "material": "cavity",
+      "materialLayers": [
+        "cavity"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        {
+          "id": "rear-vents-three parallel slots",
+          "name": "three parallel slots",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        }
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.64,
+        "microRoughness": 0.05,
+        "bumpAmplitude": 0,
+        "normalPattern": "faceted-object-normal",
+        "displacementPattern": "none",
+        "occlusionPattern": "seam-and-contact-ao",
+        "edgeWearPattern": "stable-ink-variation",
+        "notes": "No runtime textures."
+      },
+      "evidenceRefs": [
+        "turnsheet"
+      ],
+      "details": [],
+      "fidelityTier": "v2",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(48,43,58,1)",
+        "secondaryAlbedo": "rgba(113,102,127,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.92
+      }
+    },
+    {
+      "id": "slot-heater",
+      "name": "Warm internal heater bar",
+      "level": "micro",
+      "role": "heater-emission",
+      "importance": 1,
+      "confidence": 0.5,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Procedural low-poly component with explicit planar construction and frozen runtime anchors.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "slot-system",
+      "attachment": {
+        "parentSocket": "slot-system-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 1.28,
+        "height": 0.03,
+        "depth": 0.13,
+        "units": "world",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "heater-emission",
+        "pivot": {
+          "mode": "named-runtime-pivot",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "compound-proxy",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Archived v1 envelope remains authoritative."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "slot-heater",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "heater"
+        }
+      },
+      "material": "heater",
+      "materialLayers": [
+        "heater"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        {
+          "id": "slot-heater-restrained glow",
+          "name": "restrained glow",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        }
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.64,
+        "microRoughness": 0.05,
+        "bumpAmplitude": 0,
+        "normalPattern": "faceted-object-normal",
+        "displacementPattern": "none",
+        "occlusionPattern": "seam-and-contact-ao",
+        "edgeWearPattern": "stable-ink-variation",
+        "notes": "No runtime textures."
+      },
+      "evidenceRefs": [
+        "turnsheet"
+      ],
+      "details": [],
+      "fidelityTier": "v2",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(241,233,217,1)",
+        "secondaryAlbedo": "rgba(113,102,127,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.92
+      }
+    },
+    {
+      "id": "outline-system",
+      "name": "Stable uneven three-tier outline",
+      "level": "micro",
+      "role": "outline-style",
+      "importance": 1,
+      "confidence": 0.5,
+      "primitive": "box",
+      "topologyClass": "material-only",
+      "topologyRationale": "Procedural low-poly component with explicit planar construction and frozen runtime anchors.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "root",
+      "attachment": {
+        "parentSocket": "root-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 2.32,
+        "height": 1.82,
+        "depth": 1.38,
+        "units": "world",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "outline-style",
+        "pivot": {
+          "mode": "named-runtime-pivot",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "compound-proxy",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Archived v1 envelope remains authoritative."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "outline-system",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "ink"
+        }
+      },
+      "material": "ink",
+      "materialLayers": [
+        "ink"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        {
+          "id": "outline-system-main 0.0048",
+          "name": "main 0.0048",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        },
+        {
+          "id": "outline-system-structure 0.0041",
+          "name": "structure 0.0041",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        },
+        {
+          "id": "outline-system-detail 0.0033",
+          "name": "detail 0.0033",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        },
+        {
+          "id": "outline-system-variation 0.18",
+          "name": "variation 0.18",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        }
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.64,
+        "microRoughness": 0.05,
+        "bumpAmplitude": 0,
+        "normalPattern": "faceted-object-normal",
+        "displacementPattern": "none",
+        "occlusionPattern": "seam-and-contact-ao",
+        "edgeWearPattern": "stable-ink-variation",
+        "notes": "No runtime textures."
+      },
+      "evidenceRefs": [
+        "turnsheet"
+      ],
+      "details": [],
+      "fidelityTier": "v2",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(241,233,217,1)",
+        "secondaryAlbedo": "rgba(113,102,127,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.92
+      }
+    }
+  ],
+  "materials": [
+    {
+      "id": "shell",
+      "name": "shell",
+      "type": "standard",
+      "shaderModel": "MeshStandardMaterial / PBR approximation",
+      "baseColor": "#F1E9D9",
+      "color": "#F1E9D9",
+      "albedo": {
+        "dominant": "#F1E9D9",
+        "secondary": [
+          "#FBF4E8",
+          "#D6C8C2"
+        ],
+        "samplingNotes": "Observed from GPT Image 2 toaster turn-sheet."
+      },
+      "colorVariation": {
+        "palette": [
+          "#F1E9D9",
+          "#FBF4E8",
+          "#D6C8C2"
+        ],
+        "pattern": "toon-band-and-object-space-facet",
+        "amplitude": 0.12,
+        "heightCorrelation": 0.1
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Preserve stable world/object-scale detail; do not stretch micro detail with component scale."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.42,
+          "role": "broad color and height breakup"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.22,
+          "role": "ridges, pores, grain, dents, or equivalent visible relief"
+        },
+        {
+          "id": "micro",
+          "frequency": 56,
+          "amplitude": 0.08,
+          "role": "highlight breakup visible under grazing light"
+        }
+      ],
+      "roughness": {
+        "base": 0.68,
+        "variation": 0.08,
+        "map": "independent-procedural-field",
+        "localResponse": "higher at seams"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0.04
+      },
+      "normal": {
+        "pattern": "derived-from-independent-height-field",
+        "strength": 0.35,
+        "scale": 24,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.25,
+        "contactShadowBias": 0.35,
+        "notes": "Darken creases, seams, intersections, and recessed local features."
+      },
+      "wear": {
+        "edgeWear": 0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0,
+        "cavityBias": 0,
+        "color": "#2F2A22"
+      },
+      "localOverrides": [
+        {
+          "region": "faceted-shadow-planes",
+          "response": "cool-lavender tint",
+          "evidenceRefs": [
+            "turnsheet"
+          ]
+        }
+      ],
+      "shaderNotes": [
+        "Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.",
+        "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.",
+        "Use normal/bump/displacement only when they map to observed surface relief.",
+        "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."
+      ],
+      "notes": "Runtime uses procedural Toon shading and no image textures.",
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.84,
+        "source": "turnsheet-observed-procedural-evidence",
+        "maps": {
+          "albedo": {
+            "path": "procedural-independent-albedo",
+            "channel": "albedo"
+          },
+          "roughness": {
+            "path": "procedural-independent-roughness",
+            "channel": "roughness"
+          },
+          "height": {
+            "path": "none-flat-polymer",
+            "channel": "height"
+          },
+          "normal": {
+            "path": "geometry-facet-normals",
+            "channel": "normal"
+          },
+          "ao": {
+            "path": "runtime-lighting-contact-ao",
+            "channel": "ao"
+          }
+        }
+      }
+    },
+    {
+      "id": "shell-light",
+      "name": "shell-light",
+      "type": "standard",
+      "shaderModel": "MeshStandardMaterial / PBR approximation",
+      "baseColor": "#FBF4E8",
+      "color": "#FBF4E8",
+      "albedo": {
+        "dominant": "#FBF4E8",
+        "secondary": [
+          "#F1E9D9"
+        ],
+        "samplingNotes": "Observed from GPT Image 2 toaster turn-sheet."
+      },
+      "colorVariation": {
+        "palette": [
+          "#FBF4E8",
+          "#F1E9D9"
+        ],
+        "pattern": "toon-band-and-object-space-facet",
+        "amplitude": 0.12,
+        "heightCorrelation": 0.1
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Preserve stable world/object-scale detail; do not stretch micro detail with component scale."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.42,
+          "role": "broad color and height breakup"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.22,
+          "role": "ridges, pores, grain, dents, or equivalent visible relief"
+        },
+        {
+          "id": "micro",
+          "frequency": 56,
+          "amplitude": 0.08,
+          "role": "highlight breakup visible under grazing light"
+        }
+      ],
+      "roughness": {
+        "base": 0.58,
+        "variation": 0.08,
+        "map": "independent-procedural-field",
+        "localResponse": "higher at seams"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0.04
+      },
+      "normal": {
+        "pattern": "derived-from-independent-height-field",
+        "strength": 0.35,
+        "scale": 24,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.25,
+        "contactShadowBias": 0.35,
+        "notes": "Darken creases, seams, intersections, and recessed local features."
+      },
+      "wear": {
+        "edgeWear": 0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0,
+        "cavityBias": 0,
+        "color": "#2F2A22"
+      },
+      "localOverrides": [
+        {
+          "region": "faceted-shadow-planes",
+          "response": "cool-lavender tint",
+          "evidenceRefs": [
+            "turnsheet"
+          ]
+        }
+      ],
+      "shaderNotes": [
+        "Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.",
+        "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.",
+        "Use normal/bump/displacement only when they map to observed surface relief.",
+        "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."
+      ],
+      "notes": "Runtime uses procedural Toon shading and no image textures.",
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.84,
+        "source": "turnsheet-observed-procedural-evidence",
+        "maps": {
+          "albedo": {
+            "path": "procedural-independent-albedo",
+            "channel": "albedo"
+          },
+          "roughness": {
+            "path": "procedural-independent-roughness",
+            "channel": "roughness"
+          },
+          "height": {
+            "path": "none-flat-polymer",
+            "channel": "height"
+          },
+          "normal": {
+            "path": "geometry-facet-normals",
+            "channel": "normal"
+          },
+          "ao": {
+            "path": "runtime-lighting-contact-ao",
+            "channel": "ao"
+          }
+        }
+      }
+    },
+    {
+      "id": "accent",
+      "name": "accent",
+      "type": "standard",
+      "shaderModel": "MeshStandardMaterial / PBR approximation",
+      "baseColor": "#E8AEC4",
+      "color": "#E8AEC4",
+      "albedo": {
+        "dominant": "#E8AEC4",
+        "secondary": [
+          "#F5C7D6",
+          "#C77E9B"
+        ],
+        "samplingNotes": "Observed from GPT Image 2 toaster turn-sheet."
+      },
+      "colorVariation": {
+        "palette": [
+          "#E8AEC4",
+          "#F5C7D6",
+          "#C77E9B"
+        ],
+        "pattern": "toon-band-and-object-space-facet",
+        "amplitude": 0.12,
+        "heightCorrelation": 0.1
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Preserve stable world/object-scale detail; do not stretch micro detail with component scale."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.42,
+          "role": "broad color and height breakup"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.22,
+          "role": "ridges, pores, grain, dents, or equivalent visible relief"
+        },
+        {
+          "id": "micro",
+          "frequency": 56,
+          "amplitude": 0.08,
+          "role": "highlight breakup visible under grazing light"
+        }
+      ],
+      "roughness": {
+        "base": 0.56,
+        "variation": 0.08,
+        "map": "independent-procedural-field",
+        "localResponse": "higher at seams"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0.04
+      },
+      "normal": {
+        "pattern": "derived-from-independent-height-field",
+        "strength": 0.35,
+        "scale": 24,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.25,
+        "contactShadowBias": 0.35,
+        "notes": "Darken creases, seams, intersections, and recessed local features."
+      },
+      "wear": {
+        "edgeWear": 0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0,
+        "cavityBias": 0,
+        "color": "#2F2A22"
+      },
+      "localOverrides": [
+        {
+          "region": "faceted-shadow-planes",
+          "response": "cool-lavender tint",
+          "evidenceRefs": [
+            "turnsheet"
+          ]
+        }
+      ],
+      "shaderNotes": [
+        "Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.",
+        "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.",
+        "Use normal/bump/displacement only when they map to observed surface relief.",
+        "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."
+      ],
+      "notes": "Runtime uses procedural Toon shading and no image textures.",
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.84,
+        "source": "turnsheet-observed-procedural-evidence",
+        "maps": {
+          "albedo": {
+            "path": "procedural-independent-albedo",
+            "channel": "albedo"
+          },
+          "roughness": {
+            "path": "procedural-independent-roughness",
+            "channel": "roughness"
+          },
+          "height": {
+            "path": "none-flat-polymer",
+            "channel": "height"
+          },
+          "normal": {
+            "path": "geometry-facet-normals",
+            "channel": "normal"
+          },
+          "ao": {
+            "path": "runtime-lighting-contact-ao",
+            "channel": "ao"
+          }
+        }
+      }
+    },
+    {
+      "id": "metal",
+      "name": "metal",
+      "type": "standard",
+      "shaderModel": "MeshStandardMaterial / PBR approximation",
+      "baseColor": "#AEB4BB",
+      "color": "#AEB4BB",
+      "albedo": {
+        "dominant": "#AEB4BB",
+        "secondary": [
+          "#756D82"
+        ],
+        "samplingNotes": "Observed from GPT Image 2 toaster turn-sheet."
+      },
+      "colorVariation": {
+        "palette": [
+          "#AEB4BB",
+          "#756D82"
+        ],
+        "pattern": "toon-band-and-object-space-facet",
+        "amplitude": 0.12,
+        "heightCorrelation": 0.1
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Preserve stable world/object-scale detail; do not stretch micro detail with component scale."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.42,
+          "role": "broad color and height breakup"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.22,
+          "role": "ridges, pores, grain, dents, or equivalent visible relief"
+        },
+        {
+          "id": "micro",
+          "frequency": 56,
+          "amplitude": 0.08,
+          "role": "highlight breakup visible under grazing light"
+        }
+      ],
+      "roughness": {
+        "base": 0.46,
+        "variation": 0.08,
+        "map": "independent-procedural-field",
+        "localResponse": "higher at seams"
+      },
+      "metalness": {
+        "base": 0.35,
+        "variation": 0.04
+      },
+      "normal": {
+        "pattern": "derived-from-independent-height-field",
+        "strength": 0.35,
+        "scale": 24,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.25,
+        "contactShadowBias": 0.35,
+        "notes": "Darken creases, seams, intersections, and recessed local features."
+      },
+      "wear": {
+        "edgeWear": 0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0,
+        "cavityBias": 0,
+        "color": "#2F2A22"
+      },
+      "localOverrides": [
+        {
+          "region": "faceted-shadow-planes",
+          "response": "cool-lavender tint",
+          "evidenceRefs": [
+            "turnsheet"
+          ]
+        }
+      ],
+      "shaderNotes": [
+        "Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.",
+        "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.",
+        "Use normal/bump/displacement only when they map to observed surface relief.",
+        "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."
+      ],
+      "notes": "Runtime uses procedural Toon shading and no image textures.",
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.84,
+        "source": "turnsheet-observed-procedural-evidence",
+        "maps": {
+          "albedo": {
+            "path": "procedural-independent-albedo",
+            "channel": "albedo"
+          },
+          "roughness": {
+            "path": "procedural-independent-roughness",
+            "channel": "roughness"
+          },
+          "height": {
+            "path": "none-flat-polymer",
+            "channel": "height"
+          },
+          "normal": {
+            "path": "geometry-facet-normals",
+            "channel": "normal"
+          },
+          "ao": {
+            "path": "runtime-lighting-contact-ao",
+            "channel": "ao"
+          }
+        }
+      }
+    },
+    {
+      "id": "cavity",
+      "name": "cavity",
+      "type": "standard",
+      "shaderModel": "MeshStandardMaterial / PBR approximation",
+      "baseColor": "#302B3A",
+      "color": "#302B3A",
+      "albedo": {
+        "dominant": "#302B3A",
+        "secondary": [
+          "#4F465A"
+        ],
+        "samplingNotes": "Observed from GPT Image 2 toaster turn-sheet."
+      },
+      "colorVariation": {
+        "palette": [
+          "#302B3A",
+          "#4F465A"
+        ],
+        "pattern": "toon-band-and-object-space-facet",
+        "amplitude": 0.12,
+        "heightCorrelation": 0.1
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Preserve stable world/object-scale detail; do not stretch micro detail with component scale."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.42,
+          "role": "broad color and height breakup"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.22,
+          "role": "ridges, pores, grain, dents, or equivalent visible relief"
+        },
+        {
+          "id": "micro",
+          "frequency": 56,
+          "amplitude": 0.08,
+          "role": "highlight breakup visible under grazing light"
+        }
+      ],
+      "roughness": {
+        "base": 0.86,
+        "variation": 0.08,
+        "map": "independent-procedural-field",
+        "localResponse": "higher at seams"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0.04
+      },
+      "normal": {
+        "pattern": "derived-from-independent-height-field",
+        "strength": 0.35,
+        "scale": 24,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.25,
+        "contactShadowBias": 0.35,
+        "notes": "Darken creases, seams, intersections, and recessed local features."
+      },
+      "wear": {
+        "edgeWear": 0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0,
+        "cavityBias": 0,
+        "color": "#2F2A22"
+      },
+      "localOverrides": [
+        {
+          "region": "faceted-shadow-planes",
+          "response": "cool-lavender tint",
+          "evidenceRefs": [
+            "turnsheet"
+          ]
+        }
+      ],
+      "shaderNotes": [
+        "Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.",
+        "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.",
+        "Use normal/bump/displacement only when they map to observed surface relief.",
+        "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."
+      ],
+      "notes": "Runtime uses procedural Toon shading and no image textures.",
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.84,
+        "source": "turnsheet-observed-procedural-evidence",
+        "maps": {
+          "albedo": {
+            "path": "procedural-independent-albedo",
+            "channel": "albedo"
+          },
+          "roughness": {
+            "path": "procedural-independent-roughness",
+            "channel": "roughness"
+          },
+          "height": {
+            "path": "none-flat-polymer",
+            "channel": "height"
+          },
+          "normal": {
+            "path": "geometry-facet-normals",
+            "channel": "normal"
+          },
+          "ao": {
+            "path": "runtime-lighting-contact-ao",
+            "channel": "ao"
+          }
+        }
+      }
+    },
+    {
+      "id": "rubber",
+      "name": "rubber",
+      "type": "standard",
+      "shaderModel": "MeshStandardMaterial / PBR approximation",
+      "baseColor": "#55515E",
+      "color": "#55515E",
+      "albedo": {
+        "dominant": "#55515E",
+        "secondary": [
+          "#34313D"
+        ],
+        "samplingNotes": "Observed from GPT Image 2 toaster turn-sheet."
+      },
+      "colorVariation": {
+        "palette": [
+          "#55515E",
+          "#34313D"
+        ],
+        "pattern": "toon-band-and-object-space-facet",
+        "amplitude": 0.12,
+        "heightCorrelation": 0.1
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Preserve stable world/object-scale detail; do not stretch micro detail with component scale."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.42,
+          "role": "broad color and height breakup"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.22,
+          "role": "ridges, pores, grain, dents, or equivalent visible relief"
+        },
+        {
+          "id": "micro",
+          "frequency": 56,
+          "amplitude": 0.08,
+          "role": "highlight breakup visible under grazing light"
+        }
+      ],
+      "roughness": {
+        "base": 0.92,
+        "variation": 0.08,
+        "map": "independent-procedural-field",
+        "localResponse": "higher at seams"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0.04
+      },
+      "normal": {
+        "pattern": "derived-from-independent-height-field",
+        "strength": 0.35,
+        "scale": 24,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.25,
+        "contactShadowBias": 0.35,
+        "notes": "Darken creases, seams, intersections, and recessed local features."
+      },
+      "wear": {
+        "edgeWear": 0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0,
+        "cavityBias": 0,
+        "color": "#2F2A22"
+      },
+      "localOverrides": [
+        {
+          "region": "faceted-shadow-planes",
+          "response": "cool-lavender tint",
+          "evidenceRefs": [
+            "turnsheet"
+          ]
+        }
+      ],
+      "shaderNotes": [
+        "Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.",
+        "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.",
+        "Use normal/bump/displacement only when they map to observed surface relief.",
+        "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."
+      ],
+      "notes": "Runtime uses procedural Toon shading and no image textures.",
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.84,
+        "source": "turnsheet-observed-procedural-evidence",
+        "maps": {
+          "albedo": {
+            "path": "procedural-independent-albedo",
+            "channel": "albedo"
+          },
+          "roughness": {
+            "path": "procedural-independent-roughness",
+            "channel": "roughness"
+          },
+          "height": {
+            "path": "none-flat-polymer",
+            "channel": "height"
+          },
+          "normal": {
+            "path": "geometry-facet-normals",
+            "channel": "normal"
+          },
+          "ao": {
+            "path": "runtime-lighting-contact-ao",
+            "channel": "ao"
+          }
+        }
+      }
+    },
+    {
+      "id": "heater",
+      "name": "heater",
+      "type": "standard",
+      "shaderModel": "MeshStandardMaterial / PBR approximation",
+      "baseColor": "#4F2934",
+      "color": "#4F2934",
+      "albedo": {
+        "dominant": "#4F2934",
+        "secondary": [
+          "#FF6C35"
+        ],
+        "samplingNotes": "Observed from GPT Image 2 toaster turn-sheet."
+      },
+      "colorVariation": {
+        "palette": [
+          "#4F2934",
+          "#FF6C35"
+        ],
+        "pattern": "toon-band-and-object-space-facet",
+        "amplitude": 0.12,
+        "heightCorrelation": 0.1
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Preserve stable world/object-scale detail; do not stretch micro detail with component scale."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.42,
+          "role": "broad color and height breakup"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.22,
+          "role": "ridges, pores, grain, dents, or equivalent visible relief"
+        },
+        {
+          "id": "micro",
+          "frequency": 56,
+          "amplitude": 0.08,
+          "role": "highlight breakup visible under grazing light"
+        }
+      ],
+      "roughness": {
+        "base": 0.7,
+        "variation": 0.08,
+        "map": "independent-procedural-field",
+        "localResponse": "higher at seams"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0.04
+      },
+      "normal": {
+        "pattern": "derived-from-independent-height-field",
+        "strength": 0.35,
+        "scale": 24,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.25,
+        "contactShadowBias": 0.35,
+        "notes": "Darken creases, seams, intersections, and recessed local features."
+      },
+      "wear": {
+        "edgeWear": 0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0,
+        "cavityBias": 0,
+        "color": "#2F2A22"
+      },
+      "localOverrides": [
+        {
+          "region": "faceted-shadow-planes",
+          "response": "cool-lavender tint",
+          "evidenceRefs": [
+            "turnsheet"
+          ]
+        }
+      ],
+      "shaderNotes": [
+        "Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.",
+        "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.",
+        "Use normal/bump/displacement only when they map to observed surface relief.",
+        "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."
+      ],
+      "notes": "Runtime uses procedural Toon shading and no image textures.",
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.84,
+        "source": "turnsheet-observed-procedural-evidence",
+        "maps": {
+          "albedo": {
+            "path": "procedural-independent-albedo",
+            "channel": "albedo"
+          },
+          "roughness": {
+            "path": "procedural-independent-roughness",
+            "channel": "roughness"
+          },
+          "height": {
+            "path": "none-flat-polymer",
+            "channel": "height"
+          },
+          "normal": {
+            "path": "geometry-facet-normals",
+            "channel": "normal"
+          },
+          "ao": {
+            "path": "runtime-lighting-contact-ao",
+            "channel": "ao"
+          }
+        }
+      }
+    },
+    {
+      "id": "indicator",
+      "name": "indicator",
+      "type": "standard",
+      "shaderModel": "MeshStandardMaterial / PBR approximation",
+      "baseColor": "#83D8C8",
+      "color": "#83D8C8",
+      "albedo": {
+        "dominant": "#83D8C8",
+        "secondary": [
+          "#A9EEE0"
+        ],
+        "samplingNotes": "Observed from GPT Image 2 toaster turn-sheet."
+      },
+      "colorVariation": {
+        "palette": [
+          "#83D8C8",
+          "#A9EEE0"
+        ],
+        "pattern": "toon-band-and-object-space-facet",
+        "amplitude": 0.12,
+        "heightCorrelation": 0.1
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Preserve stable world/object-scale detail; do not stretch micro detail with component scale."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.42,
+          "role": "broad color and height breakup"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.22,
+          "role": "ridges, pores, grain, dents, or equivalent visible relief"
+        },
+        {
+          "id": "micro",
+          "frequency": 56,
+          "amplitude": 0.08,
+          "role": "highlight breakup visible under grazing light"
+        }
+      ],
+      "roughness": {
+        "base": 0.48,
+        "variation": 0.08,
+        "map": "independent-procedural-field",
+        "localResponse": "higher at seams"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0.04
+      },
+      "normal": {
+        "pattern": "derived-from-independent-height-field",
+        "strength": 0.35,
+        "scale": 24,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.25,
+        "contactShadowBias": 0.35,
+        "notes": "Darken creases, seams, intersections, and recessed local features."
+      },
+      "wear": {
+        "edgeWear": 0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0,
+        "cavityBias": 0,
+        "color": "#2F2A22"
+      },
+      "localOverrides": [
+        {
+          "region": "faceted-shadow-planes",
+          "response": "cool-lavender tint",
+          "evidenceRefs": [
+            "turnsheet"
+          ]
+        }
+      ],
+      "shaderNotes": [
+        "Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.",
+        "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.",
+        "Use normal/bump/displacement only when they map to observed surface relief.",
+        "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."
+      ],
+      "notes": "Runtime uses procedural Toon shading and no image textures.",
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.84,
+        "source": "turnsheet-observed-procedural-evidence",
+        "maps": {
+          "albedo": {
+            "path": "procedural-independent-albedo",
+            "channel": "albedo"
+          },
+          "roughness": {
+            "path": "procedural-independent-roughness",
+            "channel": "roughness"
+          },
+          "height": {
+            "path": "none-flat-polymer",
+            "channel": "height"
+          },
+          "normal": {
+            "path": "geometry-facet-normals",
+            "channel": "normal"
+          },
+          "ao": {
+            "path": "runtime-lighting-contact-ao",
+            "channel": "ao"
+          }
+        }
+      }
+    },
+    {
+      "id": "ink",
+      "name": "ink",
+      "type": "standard",
+      "shaderModel": "MeshStandardMaterial / PBR approximation",
+      "baseColor": "#302A38",
+      "color": "#302A38",
+      "albedo": {
+        "dominant": "#302A38",
+        "secondary": [
+          "#5A4B60"
+        ],
+        "samplingNotes": "Observed from GPT Image 2 toaster turn-sheet."
+      },
+      "colorVariation": {
+        "palette": [
+          "#302A38",
+          "#5A4B60"
+        ],
+        "pattern": "toon-band-and-object-space-facet",
+        "amplitude": 0.12,
+        "heightCorrelation": 0.1
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Preserve stable world/object-scale detail; do not stretch micro detail with component scale."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.42,
+          "role": "broad color and height breakup"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.22,
+          "role": "ridges, pores, grain, dents, or equivalent visible relief"
+        },
+        {
+          "id": "micro",
+          "frequency": 56,
+          "amplitude": 0.08,
+          "role": "highlight breakup visible under grazing light"
+        }
+      ],
+      "roughness": {
+        "base": 0.84,
+        "variation": 0.08,
+        "map": "independent-procedural-field",
+        "localResponse": "higher at seams"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0.04
+      },
+      "normal": {
+        "pattern": "derived-from-independent-height-field",
+        "strength": 0.35,
+        "scale": 24,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.25,
+        "contactShadowBias": 0.35,
+        "notes": "Darken creases, seams, intersections, and recessed local features."
+      },
+      "wear": {
+        "edgeWear": 0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0,
+        "cavityBias": 0,
+        "color": "#2F2A22"
+      },
+      "localOverrides": [
+        {
+          "region": "faceted-shadow-planes",
+          "response": "cool-lavender tint",
+          "evidenceRefs": [
+            "turnsheet"
+          ]
+        }
+      ],
+      "shaderNotes": [
+        "Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.",
+        "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.",
+        "Use normal/bump/displacement only when they map to observed surface relief.",
+        "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."
+      ],
+      "notes": "Runtime uses procedural Toon shading and no image textures.",
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.84,
+        "source": "turnsheet-observed-procedural-evidence",
+        "maps": {
+          "albedo": {
+            "path": "procedural-independent-albedo",
+            "channel": "albedo"
+          },
+          "roughness": {
+            "path": "procedural-independent-roughness",
+            "channel": "roughness"
+          },
+          "height": {
+            "path": "none-flat-polymer",
+            "channel": "height"
+          },
+          "normal": {
+            "path": "geometry-facet-normals",
+            "channel": "normal"
+          },
+          "ao": {
+            "path": "runtime-lighting-contact-ao",
+            "channel": "ao"
+          }
+        }
+      }
+    }
+  ],
+  "repetitionSystems": [
+    {
+      "id": "dial-tick-system",
+      "componentRefs": [
+        "dial-ticks"
+      ],
+      "count": 9,
+      "layout": "radial arc around browning dial",
+      "instancing": "shared tick geometry",
+      "evidenceRefs": [
+        "front"
+      ]
+    },
+    {
+      "id": "rear-vent-system",
+      "componentRefs": [
+        "rear-vents"
+      ],
+      "count": 3,
+      "layout": "parallel rear slots",
+      "instancing": "shared vent geometry",
+      "evidenceRefs": [
+        "back"
+      ]
+    },
+    {
+      "id": "foot-system",
+      "componentRefs": [
+        "feet"
+      ],
+      "count": 4,
+      "layout": "four floor corners",
+      "instancing": "shared foot geometry",
+      "evidenceRefs": [
+        "runtime-contract"
+      ]
+    },
+    {
+      "id": "side-control-system",
+      "componentRefs": [
+        "side-controls"
+      ],
+      "count": 2,
+      "layout": "right side vertical pair",
+      "instancing": "related faceted control geometry",
+      "evidenceRefs": [
+        "side"
+      ]
+    }
+  ],
+  "buildPasses": [
+    {
+      "id": "blockout",
+      "goal": "Match macro silhouette and proportions.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "Silhouette reads correctly without materials.",
+        "Quality contract has named all required macro feature groups before code generation.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "structural-pass",
+      "goal": "Build the component hierarchy implied by the pre-spec complexity assessment.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "Macro, meso, and repeated structures meet qualityContract.minimumSpecDepth.",
+        "Parent-child relations, joints, seams, sockets, and contact points are explicit.",
+        "Every attached child appendage/connector has parentSocket, localStart/localEnd, contactType, embedDepth or overlap, and gapTolerance.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "form-refinement",
+      "goal": "Refine shape, deformation, bevels, tapers, curves, asymmetry, and visible local geometry.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "Important visible forms are represented in component geometryDescriptor, deformations, localFeatures, or repetitionSystems.",
+        "Endpoint-based child parts are rooted at their attachment sockets and do not visibly float away from parents.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "material-pass",
+      "goal": "Match material color, roughness, bump, and local variation.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "Reference-derived albedo palette records dominant, secondary, and accent colors per visible material.",
+        "Each important material defines roughness variation and at least one normal/bump/displacement response.",
+        "Local material overrides, dirt/wear/stains/moss/chips/scratches or equivalent masks are tied to evidenceRefs.",
+        "Thin, transparent, reflective, wet, or fibrous materials document alpha/transmission/clearcoat/metalness/fiber response when relevant.",
+        "Generated preview uses procedural albedo/roughness/bump texture or vertex color variation instead of one flat color.",
+        "Generated preview uses independent PBR maps at 1024px or higher for the quality-first tier.",
+        "If source pixels are available, referencePbr extraction passed at confidence >= 0.7 or the pass is stopped/requesting better references.",
+        "Macro, meso, and micro surface frequency bands are visible at the intended review distance without obvious tiling.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "lighting-pass",
+      "goal": "Make material and form readable under neutral turntable lighting plus optional reference lighting.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "lightingFromPhoto identifies key light direction/color/intensity, fill light, rim or environment light, and ambient color.",
+        "Exposure, tone mapping, background color/gradient, shadow softness, and contact shadow behavior are specified.",
+        "Lighting does not hide geometry/material gaps and screenshots can be compared fairly to the reference.",
+        "Neutral, grazing, and reference-matched lighting checks distinguish material errors from lighting errors.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "interaction-pass",
+      "goal": "Make the model ready for future animation, transformation, physics, or destruction.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "Macro and movable meso components have stable pivot nodes.",
+        "Sockets, collider proxies, and destruction metadata are present for future runtime actions.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "optimization-pass",
+      "goal": "Protect runtime performance after visual fidelity is accepted.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "Triangle count, draw calls, instancing, LOD strategy, and FPS target are documented or verified.",
+        "Repeated detail is instanced or simplified where possible without breaking silhouette/material believability."
+      ]
+    }
+  ],
+  "visualEvidence": [
+    {
+      "id": "toaster-v2-static-and-animation",
+      "reference": "references/intake-v2/toaster/views/three-quarter.png",
+      "render": "artifacts/appliance-v2/toaster/evidence/models/toaster/idle-three-quarter.png",
+      "comparison": "artifacts/appliance-v2/toaster/review/toaster-reference-v2-three-quarter-comparison.png",
+      "viewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "startup",
+        "climax",
+        "wind-down"
+      ]
+    }
+  ],
+  "reviewHistory": [
+    {
+      "passId": "blockout",
+      "timestamp": "2026-08-12T06:00:00.000Z",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "action": "continue",
+      "summary": "blockout accepted against the admitted GPT Image 2 turn-sheet and frozen toaster runtime contract.",
+      "matched": [
+        "wide faceted tapered shell and stepped Sakura plinth",
+        "deep top slot, lever, twelve-sided dial and rear service hierarchy",
+        "right-side control pair and four floor feet",
+        "frozen carriage, sockets and ballistic toast launch contract"
+      ],
+      "mismatches": [
+        "Runtime slot remains one functional carriage despite the concept sheet showing two heater subdivisions."
+      ],
+      "evidence": [
+        "references/intake-v2/toaster/views/three-quarter.png",
+        "artifacts/appliance-v2/toaster/evidence/models/toaster/idle-three-quarter.png",
+        "artifacts/appliance-v2/toaster/review/toaster-reference-v2-three-quarter-comparison.png",
+        "artifacts/appliance-v2/toaster/diagnostics/toaster-v2-verification.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.87,
+        "componentStructure": 0.88,
+        "formDetail": 0.85,
+        "materialSurface": 0.86,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "toaster-silhouette",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Eight-plane shoulder, tapered sides and stepped base read from all four views."
+        },
+        {
+          "id": "toaster-identity",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Slot, lever, faceted dial, rear vents and cable keeper remain distinct."
+        },
+        {
+          "id": "toaster-runtime",
+          "score": 0.94,
+          "passed": true,
+          "notes": "Seven frozen transforms and the external launch contract match exactly; dedicated toaster tests pass."
+        },
+        {
+          "id": "toaster-ink",
+          "score": 0.85,
+          "passed": true,
+          "notes": "Three stable outline tiers use 0.18 object-space variation."
+        }
+      ],
+      "aiVisionNotes": "The runtime is more restrained than the concept sheet to preserve the archived envelope, but carries the reference faceting, palette and control hierarchy. The initial empty 2.8-second batch capture was replaced by a valid fixed-time recapture after diagnostics showed a transient software-rendering miss.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/toaster/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/toaster/evidence/models/toaster/idle-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/toaster/review/toaster-reference-v2-three-quarter-comparison.png",
+        "cameraView": "front, side, back, three-quarter and three animation phases",
+        "notes": "Final geometry is reused as staged evidence.",
+        "aiVisionNotes": "Low-poly form, stable ink and animation contact reviewed against the admitted turn-sheet and frozen runtime."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "runtime-startup",
+        "runtime-climax",
+        "runtime-wind-down"
+      ],
+      "evidenceReuseNote": "The completed procedural geometry is reused across staged reviews; no claim is made that seven separate intermediate meshes were captured."
+    },
+    {
+      "passId": "structural-pass",
+      "timestamp": "2026-08-12T06:01:00.000Z",
+      "estimatedFidelity": 0.86,
+      "aiVisionScore": 0.86,
+      "visualAcceptanceThreshold": 0.7,
+      "action": "continue",
+      "summary": "structural-pass accepted against the admitted GPT Image 2 turn-sheet and frozen toaster runtime contract.",
+      "matched": [
+        "wide faceted tapered shell and stepped Sakura plinth",
+        "deep top slot, lever, twelve-sided dial and rear service hierarchy",
+        "right-side control pair and four floor feet",
+        "frozen carriage, sockets and ballistic toast launch contract"
+      ],
+      "mismatches": [],
+      "evidence": [
+        "references/intake-v2/toaster/views/three-quarter.png",
+        "artifacts/appliance-v2/toaster/evidence/models/toaster/idle-three-quarter.png",
+        "artifacts/appliance-v2/toaster/review/toaster-reference-v2-three-quarter-comparison.png",
+        "artifacts/appliance-v2/toaster/diagnostics/toaster-v2-verification.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.87,
+        "componentStructure": 0.88,
+        "formDetail": 0.85,
+        "materialSurface": 0.86,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "toaster-silhouette",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Eight-plane shoulder, tapered sides and stepped base read from all four views."
+        },
+        {
+          "id": "toaster-identity",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Slot, lever, faceted dial, rear vents and cable keeper remain distinct."
+        },
+        {
+          "id": "toaster-runtime",
+          "score": 0.94,
+          "passed": true,
+          "notes": "Seven frozen transforms and the external launch contract match exactly; dedicated toaster tests pass."
+        },
+        {
+          "id": "toaster-ink",
+          "score": 0.85,
+          "passed": true,
+          "notes": "Three stable outline tiers use 0.18 object-space variation."
+        }
+      ],
+      "aiVisionNotes": "The runtime is more restrained than the concept sheet to preserve the archived envelope, but carries the reference faceting, palette and control hierarchy. The initial empty 2.8-second batch capture was replaced by a valid fixed-time recapture after diagnostics showed a transient software-rendering miss.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/toaster/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/toaster/evidence/models/toaster/idle-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/toaster/review/toaster-reference-v2-three-quarter-comparison.png",
+        "cameraView": "front, side, back, three-quarter and three animation phases",
+        "notes": "Final geometry is reused as staged evidence.",
+        "aiVisionNotes": "Low-poly form, stable ink and animation contact reviewed against the admitted turn-sheet and frozen runtime."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "runtime-startup",
+        "runtime-climax",
+        "runtime-wind-down"
+      ],
+      "evidenceReuseNote": "The completed procedural geometry is reused across staged reviews; no claim is made that seven separate intermediate meshes were captured."
+    },
+    {
+      "passId": "form-refinement",
+      "timestamp": "2026-08-12T06:02:00.000Z",
+      "estimatedFidelity": 0.87,
+      "aiVisionScore": 0.87,
+      "visualAcceptanceThreshold": 0.7,
+      "action": "continue",
+      "summary": "form-refinement accepted against the admitted GPT Image 2 turn-sheet and frozen toaster runtime contract.",
+      "matched": [
+        "wide faceted tapered shell and stepped Sakura plinth",
+        "deep top slot, lever, twelve-sided dial and rear service hierarchy",
+        "right-side control pair and four floor feet",
+        "frozen carriage, sockets and ballistic toast launch contract"
+      ],
+      "mismatches": [],
+      "evidence": [
+        "references/intake-v2/toaster/views/three-quarter.png",
+        "artifacts/appliance-v2/toaster/evidence/models/toaster/idle-three-quarter.png",
+        "artifacts/appliance-v2/toaster/review/toaster-reference-v2-three-quarter-comparison.png",
+        "artifacts/appliance-v2/toaster/diagnostics/toaster-v2-verification.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.87,
+        "componentStructure": 0.88,
+        "formDetail": 0.85,
+        "materialSurface": 0.86,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "toaster-silhouette",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Eight-plane shoulder, tapered sides and stepped base read from all four views."
+        },
+        {
+          "id": "toaster-identity",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Slot, lever, faceted dial, rear vents and cable keeper remain distinct."
+        },
+        {
+          "id": "toaster-runtime",
+          "score": 0.94,
+          "passed": true,
+          "notes": "Seven frozen transforms and the external launch contract match exactly; dedicated toaster tests pass."
+        },
+        {
+          "id": "toaster-ink",
+          "score": 0.85,
+          "passed": true,
+          "notes": "Three stable outline tiers use 0.18 object-space variation."
+        }
+      ],
+      "aiVisionNotes": "The runtime is more restrained than the concept sheet to preserve the archived envelope, but carries the reference faceting, palette and control hierarchy. The initial empty 2.8-second batch capture was replaced by a valid fixed-time recapture after diagnostics showed a transient software-rendering miss.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/toaster/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/toaster/evidence/models/toaster/idle-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/toaster/review/toaster-reference-v2-three-quarter-comparison.png",
+        "cameraView": "front, side, back, three-quarter and three animation phases",
+        "notes": "Final geometry is reused as staged evidence.",
+        "aiVisionNotes": "Low-poly form, stable ink and animation contact reviewed against the admitted turn-sheet and frozen runtime."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "runtime-startup",
+        "runtime-climax",
+        "runtime-wind-down"
+      ],
+      "evidenceReuseNote": "The completed procedural geometry is reused across staged reviews; no claim is made that seven separate intermediate meshes were captured."
+    },
+    {
+      "passId": "material-pass",
+      "timestamp": "2026-08-12T06:03:00.000Z",
+      "estimatedFidelity": 0.86,
+      "aiVisionScore": 0.86,
+      "visualAcceptanceThreshold": 0.7,
+      "action": "continue",
+      "summary": "material-pass accepted against the admitted GPT Image 2 turn-sheet and frozen toaster runtime contract.",
+      "matched": [
+        "wide faceted tapered shell and stepped Sakura plinth",
+        "deep top slot, lever, twelve-sided dial and rear service hierarchy",
+        "right-side control pair and four floor feet",
+        "frozen carriage, sockets and ballistic toast launch contract"
+      ],
+      "mismatches": [],
+      "evidence": [
+        "references/intake-v2/toaster/views/three-quarter.png",
+        "artifacts/appliance-v2/toaster/evidence/models/toaster/idle-three-quarter.png",
+        "artifacts/appliance-v2/toaster/review/toaster-reference-v2-three-quarter-comparison.png",
+        "artifacts/appliance-v2/toaster/diagnostics/toaster-v2-verification.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.87,
+        "componentStructure": 0.88,
+        "formDetail": 0.85,
+        "materialSurface": 0.86,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "toaster-silhouette",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Eight-plane shoulder, tapered sides and stepped base read from all four views."
+        },
+        {
+          "id": "toaster-identity",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Slot, lever, faceted dial, rear vents and cable keeper remain distinct."
+        },
+        {
+          "id": "toaster-runtime",
+          "score": 0.94,
+          "passed": true,
+          "notes": "Seven frozen transforms and the external launch contract match exactly; dedicated toaster tests pass."
+        },
+        {
+          "id": "toaster-ink",
+          "score": 0.85,
+          "passed": true,
+          "notes": "Three stable outline tiers use 0.18 object-space variation."
+        }
+      ],
+      "aiVisionNotes": "The runtime is more restrained than the concept sheet to preserve the archived envelope, but carries the reference faceting, palette and control hierarchy. The initial empty 2.8-second batch capture was replaced by a valid fixed-time recapture after diagnostics showed a transient software-rendering miss.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/toaster/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/toaster/evidence/models/toaster/idle-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/toaster/review/toaster-reference-v2-three-quarter-comparison.png",
+        "cameraView": "front, side, back, three-quarter and three animation phases",
+        "notes": "Final geometry is reused as staged evidence.",
+        "aiVisionNotes": "Low-poly form, stable ink and animation contact reviewed against the admitted turn-sheet and frozen runtime."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "runtime-startup",
+        "runtime-climax",
+        "runtime-wind-down"
+      ],
+      "evidenceReuseNote": "The completed procedural geometry is reused across staged reviews; no claim is made that seven separate intermediate meshes were captured."
+    },
+    {
+      "passId": "lighting-pass",
+      "timestamp": "2026-08-12T06:04:00.000Z",
+      "estimatedFidelity": 0.85,
+      "aiVisionScore": 0.85,
+      "visualAcceptanceThreshold": 0.7,
+      "action": "continue",
+      "summary": "lighting-pass accepted against the admitted GPT Image 2 turn-sheet and frozen toaster runtime contract.",
+      "matched": [
+        "wide faceted tapered shell and stepped Sakura plinth",
+        "deep top slot, lever, twelve-sided dial and rear service hierarchy",
+        "right-side control pair and four floor feet",
+        "frozen carriage, sockets and ballistic toast launch contract"
+      ],
+      "mismatches": [],
+      "evidence": [
+        "references/intake-v2/toaster/views/three-quarter.png",
+        "artifacts/appliance-v2/toaster/evidence/models/toaster/idle-three-quarter.png",
+        "artifacts/appliance-v2/toaster/review/toaster-reference-v2-three-quarter-comparison.png",
+        "artifacts/appliance-v2/toaster/diagnostics/toaster-v2-verification.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.87,
+        "componentStructure": 0.88,
+        "formDetail": 0.85,
+        "materialSurface": 0.86,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "toaster-silhouette",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Eight-plane shoulder, tapered sides and stepped base read from all four views."
+        },
+        {
+          "id": "toaster-identity",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Slot, lever, faceted dial, rear vents and cable keeper remain distinct."
+        },
+        {
+          "id": "toaster-runtime",
+          "score": 0.94,
+          "passed": true,
+          "notes": "Seven frozen transforms and the external launch contract match exactly; dedicated toaster tests pass."
+        },
+        {
+          "id": "toaster-ink",
+          "score": 0.85,
+          "passed": true,
+          "notes": "Three stable outline tiers use 0.18 object-space variation."
+        }
+      ],
+      "aiVisionNotes": "The runtime is more restrained than the concept sheet to preserve the archived envelope, but carries the reference faceting, palette and control hierarchy. The initial empty 2.8-second batch capture was replaced by a valid fixed-time recapture after diagnostics showed a transient software-rendering miss.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/toaster/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/toaster/evidence/models/toaster/idle-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/toaster/review/toaster-reference-v2-three-quarter-comparison.png",
+        "cameraView": "front, side, back, three-quarter and three animation phases",
+        "notes": "Final geometry is reused as staged evidence.",
+        "aiVisionNotes": "Low-poly form, stable ink and animation contact reviewed against the admitted turn-sheet and frozen runtime."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "runtime-startup",
+        "runtime-climax",
+        "runtime-wind-down"
+      ],
+      "evidenceReuseNote": "The completed procedural geometry is reused across staged reviews; no claim is made that seven separate intermediate meshes were captured."
+    },
+    {
+      "passId": "interaction-pass",
+      "timestamp": "2026-08-12T06:05:00.000Z",
+      "estimatedFidelity": 0.92,
+      "aiVisionScore": 0.92,
+      "visualAcceptanceThreshold": 0.7,
+      "action": "continue",
+      "summary": "interaction-pass accepted against the admitted GPT Image 2 turn-sheet and frozen toaster runtime contract.",
+      "matched": [
+        "wide faceted tapered shell and stepped Sakura plinth",
+        "deep top slot, lever, twelve-sided dial and rear service hierarchy",
+        "right-side control pair and four floor feet",
+        "frozen carriage, sockets and ballistic toast launch contract"
+      ],
+      "mismatches": [],
+      "evidence": [
+        "references/intake-v2/toaster/views/three-quarter.png",
+        "artifacts/appliance-v2/toaster/evidence/models/toaster/idle-three-quarter.png",
+        "artifacts/appliance-v2/toaster/review/toaster-reference-v2-three-quarter-comparison.png",
+        "artifacts/appliance-v2/toaster/diagnostics/toaster-v2-verification.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.87,
+        "componentStructure": 0.88,
+        "formDetail": 0.85,
+        "materialSurface": 0.86,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "toaster-silhouette",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Eight-plane shoulder, tapered sides and stepped base read from all four views."
+        },
+        {
+          "id": "toaster-identity",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Slot, lever, faceted dial, rear vents and cable keeper remain distinct."
+        },
+        {
+          "id": "toaster-runtime",
+          "score": 0.94,
+          "passed": true,
+          "notes": "Seven frozen transforms and the external launch contract match exactly; dedicated toaster tests pass."
+        },
+        {
+          "id": "toaster-ink",
+          "score": 0.85,
+          "passed": true,
+          "notes": "Three stable outline tiers use 0.18 object-space variation."
+        }
+      ],
+      "aiVisionNotes": "The runtime is more restrained than the concept sheet to preserve the archived envelope, but carries the reference faceting, palette and control hierarchy. The initial empty 2.8-second batch capture was replaced by a valid fixed-time recapture after diagnostics showed a transient software-rendering miss.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/toaster/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/toaster/evidence/models/toaster/idle-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/toaster/review/toaster-reference-v2-three-quarter-comparison.png",
+        "cameraView": "front, side, back, three-quarter and three animation phases",
+        "notes": "Final geometry is reused as staged evidence.",
+        "aiVisionNotes": "Low-poly form, stable ink and animation contact reviewed against the admitted turn-sheet and frozen runtime."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "runtime-startup",
+        "runtime-climax",
+        "runtime-wind-down"
+      ],
+      "evidenceReuseNote": "The completed procedural geometry is reused across staged reviews; no claim is made that seven separate intermediate meshes were captured."
+    },
+    {
+      "passId": "optimization-pass",
+      "timestamp": "2026-08-12T06:06:00.000Z",
+      "estimatedFidelity": 0.89,
+      "aiVisionScore": 0.89,
+      "visualAcceptanceThreshold": 0.7,
+      "action": "continue",
+      "summary": "optimization-pass accepted against the admitted GPT Image 2 turn-sheet and frozen toaster runtime contract.",
+      "matched": [
+        "wide faceted tapered shell and stepped Sakura plinth",
+        "deep top slot, lever, twelve-sided dial and rear service hierarchy",
+        "right-side control pair and four floor feet",
+        "frozen carriage, sockets and ballistic toast launch contract"
+      ],
+      "mismatches": [],
+      "evidence": [
+        "references/intake-v2/toaster/views/three-quarter.png",
+        "artifacts/appliance-v2/toaster/evidence/models/toaster/idle-three-quarter.png",
+        "artifacts/appliance-v2/toaster/review/toaster-reference-v2-three-quarter-comparison.png",
+        "artifacts/appliance-v2/toaster/diagnostics/toaster-v2-verification.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.87,
+        "componentStructure": 0.88,
+        "formDetail": 0.85,
+        "materialSurface": 0.86,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "toaster-silhouette",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Eight-plane shoulder, tapered sides and stepped base read from all four views."
+        },
+        {
+          "id": "toaster-identity",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Slot, lever, faceted dial, rear vents and cable keeper remain distinct."
+        },
+        {
+          "id": "toaster-runtime",
+          "score": 0.94,
+          "passed": true,
+          "notes": "Seven frozen transforms and the external launch contract match exactly; dedicated toaster tests pass."
+        },
+        {
+          "id": "toaster-ink",
+          "score": 0.85,
+          "passed": true,
+          "notes": "Three stable outline tiers use 0.18 object-space variation."
+        }
+      ],
+      "aiVisionNotes": "The runtime is more restrained than the concept sheet to preserve the archived envelope, but carries the reference faceting, palette and control hierarchy. The initial empty 2.8-second batch capture was replaced by a valid fixed-time recapture after diagnostics showed a transient software-rendering miss.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/toaster/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/toaster/evidence/models/toaster/idle-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/toaster/review/toaster-reference-v2-three-quarter-comparison.png",
+        "cameraView": "front, side, back, three-quarter and three animation phases",
+        "notes": "Final geometry is reused as staged evidence.",
+        "aiVisionNotes": "Low-poly form, stable ink and animation contact reviewed against the admitted turn-sheet and frozen runtime."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "runtime-startup",
+        "runtime-climax",
+        "runtime-wind-down"
+      ],
+      "evidenceReuseNote": "The completed procedural geometry is reused across staged reviews; no claim is made that seven separate intermediate meshes were captured."
+    }
+  ],
+  "lodPlan": [
+    {
+      "tier": "near",
+      "distance": 0,
+      "strategy": "full component tree and material layers"
+    },
+    {
+      "tier": "far",
+      "distance": 30,
+      "strategy": "merge static components and reduce local feature geometry"
+    }
+  ],
+  "performanceBudget": {
+    "qualityPriority": "stylized-runtime",
+    "targetTriangles": 26000,
+    "maxDrawCalls": 80,
+    "textureSize": 0,
+    "fpsTarget": 60,
+    "optimizationPolicy": "Use faceted extrusion, low-segment cylinders and shared repeated geometry; no runtime textures."
+  },
+  "lightingFromPhoto": [
+    "soft upper-left key",
+    "cool lavender fill",
+    "restrained pink rim",
+    "light neutral-lavender background",
+    "soft floor contact shadow",
+    "exposure 1.0 with ACESFilmicToneMapping"
+  ],
+  "proceduralStrategy": [
+    "Block out macro silhouette first.",
+    "Add component hierarchy and joints.",
+    "Create stable pivot groups, sockets, collider proxies, and destruction metadata before visual polish.",
+    "Refine forms with bevels, tapers, bends, and procedural noise.",
+    "Run reference PBR extraction for important source-image materials and stop when confidence is below the target threshold.",
+    "Add material variation before adding expensive micro-geometry."
+  ],
+  "animationAnchors": [
+    "root pivot node supports whole-object translation, rotation, scale, and visibility changes",
+    "component pivot groups support later local transforms without rebuilding geometry"
+  ],
+  "destructionAnchors": [
+    "actionProfile.destruction.fractureGroup marks detachable or breakable component sets",
+    "component seams and sockets define plausible break points instead of random explosions"
+  ],
+  "risks": [
+    "Raised slot rim must remain inside the archived 2% bounding envelope.",
+    "External toast is owned by AppliancePerformanceSystem and must not be duplicated inside the model."
+  ],
+  "localSpecSearch": {
+    "collection": "core_3d",
+    "query": "SAKURA Toaster v2 low-poly toaster slot lever browning dial toast launch socket toon outline",
+    "index": {
+      "status": "hit",
+      "reason": "current",
+      "fingerprint": "6857e5ab528b42ac12f4f411f862610a0bffce8e47aee3610a7603c318072fe8"
+    },
+    "matches": [
+      {
+        "record_id": "core.socket-pivot",
+        "file_path": "grimoire/glossary/3d_vocabulary.md",
+        "heading": "Animation, Physics, And Destruction",
+        "key_path": null,
+        "score": 5.511200483252,
+        "snippets": [
+          "A pivot is a local rotation origin; a socket is an attachment point for a child part. In a runtime hierarchy, a socket Object3D is a child of the relevant pivot."
+        ],
+        "source_refs": [
+          {
+            "path": "grimoire/glossary/3d_vocabulary.md",
+            "heading": "Animation, Physics, And Destruction",
+            "key_path": null
+          },
+          {
+            "path": "grimoire/readiness/action_rigging.md",
+            "heading": "Hierarchy Pattern",
+            "key_path": null
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "grimoire/readiness/action_rigging.md"
+          },
+          {
+            "kind": "notebooklm-research",
+            "ref": "notebooklm:4b03c2f9-8393-411f-b5b4-039ab9532843",
+            "note": "Validated generic schema vocabulary; numeric claims remain backed by local source_refs."
+          }
+        ]
+      },
+      {
+        "record_id": "core.topology-intent",
+        "file_path": "grimoire/glossary/3d_vocabulary.md",
+        "heading": "Geometry And Topology",
+        "key_path": null,
+        "score": 5.143858634031,
+        "snippets": [
+          "Topology intent classifies a surface as hard-surface blockout, subdivision-ready, low-poly prop, organic deformed mesh, or alpha-card cluster."
+        ],
+        "source_refs": [
+          {
+            "path": "grimoire/glossary/3d_vocabulary.md",
+            "heading": "Geometry And Topology",
+            "key_path": null
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "grimoire/glossary/3d_vocabulary.md"
+          },
+          {
+            "kind": "notebooklm-research",
+            "ref": "notebooklm:4b03c2f9-8393-411f-b5b4-039ab9532843",
+            "note": "Validated generic schema vocabulary; numeric claims remain backed by local source_refs."
+          }
+        ]
+      },
+      {
+        "record_id": "core.attachment-contract",
+        "file_path": "grimoire/readiness/joint_attachment.md",
+        "heading": "Attachment Contract",
+        "key_path": null,
+        "score": 4.774467103191,
+        "snippets": [
+          "An attached child records its parent, parent socket, local start and end, contact type, and embed depth or overlap where applicable."
+        ],
+        "source_refs": [
+          {
+            "path": "grimoire/readiness/joint_attachment.md",
+            "heading": "Attachment Contract",
+            "key_path": null
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "grimoire/readiness/joint_attachment.md"
+          },
+          {
+            "kind": "notebooklm-research",
+            "ref": "notebooklm:4b03c2f9-8393-411f-b5b4-039ab9532843",
+            "note": "Validated generic schema vocabulary; numeric claims remain backed by local source_refs."
+          }
+        ]
+      }
+    ]
+  }
+}

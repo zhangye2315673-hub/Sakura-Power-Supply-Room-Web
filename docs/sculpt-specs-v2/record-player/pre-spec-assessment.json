@@ -1,0 +1,642 @@
+{
+  "targetName": "SAKURA Record Player",
+  "sourceImage": "references/intake-v2/record-player/views/front.png",
+  "preSpecAssessment": {
+    "objectClass": {
+      "primaryType": "unassessed",
+      "primaryDomain": "unassessed",
+      "formLanguage": [],
+      "structureKind": [],
+      "motionPotential": [],
+      "materialFamilies": [],
+      "notes": "Fill from direct visual inspection before writing the final spec. Do not use fixed domain profiles. Set primaryDomain to object, character, or hybrid."
+    },
+    "complexity": {
+      "tier": "complex",
+      "scores": {
+        "silhouetteComplexity": 0,
+        "componentCount": 0,
+        "hierarchyDepth": 0,
+        "repetitionDensity": 0,
+        "materialLayerCount": 0,
+        "localDetailDensity": 0,
+        "occlusionRisk": 0,
+        "actionReadinessNeed": 0
+      },
+      "estimatedCounts": {
+        "macroComponents": 1,
+        "mesoComponents": 0,
+        "microFeatureGroups": 0,
+        "materialLayers": 1,
+        "repetitionSystems": 0
+      },
+      "reasoning": [
+        "Assess 'SAKURA Record Player' from the image before finalizing componentTree/materials."
+      ]
+    },
+    "specDepthDecision": {
+      "requiredDepth": "complex",
+      "minimumComponentLevels": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "needsRepetitionSystems": true,
+      "needsMaterialLocalOverrides": true,
+      "needsMultipleReviewViews": true,
+      "needsActionReadyHierarchy": true,
+      "rationale": "Choose simple/moderate/complex/ultra-complex from observed structure, not from a hardcoded domain."
+    },
+    "unknownsToResolveBeforeImplementation": [],
+    "detailInventory": {
+      "scanMethod": "component-zones",
+      "targetMinDetails": 10,
+      "note": "Enumerate every identity-defining small detail before authoring the spec. Each detail must map to a component.localFeatures entry or material.localOverrides entry, never prose only. Use forge/stage1_intake/build_detail_inventory.py to scan zones.",
+      "details": []
+    },
+    "anatomy": {
+      "applies": false,
+      "styleHeads": 0,
+      "proportions": {
+        "headUnit": 0,
+        "torso": 0,
+        "legs": 0,
+        "shoulderWidth": 0,
+        "hipWidth": 0
+      },
+      "pose": {
+        "type": "unassessed",
+        "jointAngles": {}
+      },
+      "faceLandmarks": {
+        "eyeLine": 0,
+        "eyeSpacing": 0,
+        "noseBase": 0,
+        "mouthLine": 0,
+        "hairline": 0
+      },
+      "features": [],
+      "confidence": 0,
+      "note": "Only meaningful when objectClass.primaryDomain is character or hybrid. Set applies=true and fill from forge/stage1_intake/extract_landmarks.py. See grimoire/character/reconstruction.md and grimoire/character/likeness_maximization.md."
+    },
+    "sourceImage": "references/intake/record-player/front.png"
+  },
+  "qualityContract": {
+    "qualityBar": "complex",
+    "definitionOfDone": [
+      "The v2 record player reads as a more exaggerated faceted SAKURA game prop while its archived package, platter/tonearm mechanics, effect origin and exact reset contract remain unchanged."
+    ],
+    "minimumSpecDepth": {
+      "macroComponents": 5,
+      "mesoComponents": 16,
+      "microFeatureGroups": 10,
+      "materialLayers": 7,
+      "repetitionSystems": 6,
+      "reviewViewpoints": 7
+    },
+    "featureGroups": [
+      {
+        "id": "shell",
+        "name": "Rounded shell proportion",
+        "required": true,
+        "qualityCriteria": [
+          "Height/width 1.12 and depth/width 0.72 with broad corner radii."
+        ],
+        "evidenceRefs": [
+          "front",
+          "side"
+        ],
+        "failureModes": [
+          "boxy silhouette"
+        ]
+      },
+      {
+        "id": "playback-mechanism",
+        "name": "Platter and tonearm mechanism",
+        "required": true,
+        "qualityCriteria": [
+          "Platter, center spindle, tonearm pivot, cartridge and stylus remain independently named around the playback axis."
+        ],
+        "evidenceRefs": [
+          "front"
+        ],
+        "failureModes": [
+          "fused platter/tonearm parts or off-axis spindle"
+        ]
+      },
+      {
+        "id": "front-grille",
+        "name": "Front speaker grille",
+        "required": true,
+        "qualityCriteria": [
+          "Eleven horizontal pink slats remain raised inside a dark recessed front cavity."
+        ],
+        "evidenceRefs": [
+          "side",
+          "back"
+        ],
+        "failureModes": [
+          "flat grille decal or wrong slat rhythm"
+        ]
+      },
+      {
+        "id": "rear-hardware",
+        "name": "Rear hinges, carry handle and I/O plate",
+        "required": true,
+        "qualityCriteria": [
+          "Two hinges, centered recessed handle and two circular sockets remain readable from the back."
+        ],
+        "evidenceRefs": [
+          "back"
+        ],
+        "failureModes": [
+          "missing rear hardware or fused handle"
+        ]
+      },
+      {
+        "id": "powered-action",
+        "name": "Powered purpose animation",
+        "required": true,
+        "qualityCriteria": [
+          "Control turns, platter spins and tonearm cues while the status light activates, then all transforms reset at 5.2 seconds."
+        ],
+        "evidenceRefs": [
+          "turn-sheet-left-effect"
+        ],
+        "failureModes": [
+          "generic wobble without recognizable record playback"
+        ]
+      },
+      {
+        "id": "outline-hierarchy",
+        "name": "Stable irregular ink hierarchy",
+        "required": true,
+        "qualityCriteria": [
+          "Main 0.0048, structure 0.0041 and detail 0.0033 use stable object-space variation 0.18.",
+          "Transparent lid and volumetric music effects have no visible hull outlines."
+        ],
+        "evidenceRefs": [
+          "runtime-contract"
+        ],
+        "failureModes": [
+          "uniform thin outline",
+          "transparent/effect outline clumps"
+        ]
+      }
+    ],
+    "visualDeltaChecks": [
+      "silhouette",
+      "depth ratio",
+      "platter and tonearm alignment",
+      "material separation",
+      "powered record playback"
+    ],
+    "antiShallowSpecRules": [
+      "No fused compound mesh.",
+      "No flat texture replacement for platter, tonearm or grille.",
+      "No pass without browser evidence."
+    ]
+  },
+  "authoringInstruction": "Fill observed object class, complexity reasoning, featureGroups, visualDeltaChecks, and unknowns before generating or implementing ObjectSculptSpec.",
+  "localSpecSearch": {
+    "collection": "core_3d",
+    "query": "low poly record player turntable hinged lid tonearm vinyl grille outline",
+    "index": {
+      "status": "hit",
+      "reason": "current",
+      "fingerprint": "6857e5ab528b42ac12f4f411f862610a0bffce8e47aee3610a7603c318072fe8"
+    },
+    "matches": [
+      {
+        "record_id": "core.measurement-source-text",
+        "source_refs": [
+          {
+            "path": "grimoire/intake/image_analysis.md",
+            "heading": "Layer 2 - Overall form and silhouette"
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "grimoire/intake/image_analysis.md"
+          }
+        ]
+      },
+      {
+        "record_id": "core.pbr-roughness",
+        "source_refs": [
+          {
+            "path": "grimoire/glossary/3d_vocabulary.md",
+            "heading": "Material And PBR"
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "grimoire/glossary/3d_vocabulary.md"
+          }
+        ]
+      }
+    ]
+  },
+  "objectClass": {
+    "primaryType": "portable electric record player / turntable",
+    "primaryDomain": "object",
+    "formLanguage": [
+      "hard-surface",
+      "faceted-low-poly",
+      "sakura-toon",
+      "hinged-mechanical"
+    ],
+    "structureKind": [
+      "compound object",
+      "hinged enclosure",
+      "rotating mechanism",
+      "repeated grille slats"
+    ],
+    "motionPotential": [
+      "articulated",
+      "rotating mechanism",
+      "tonearm sweep",
+      "status-emitter"
+    ],
+    "materialFamilies": [
+      "injection-molded plastic",
+      "transparent plastic",
+      "painted metal",
+      "rubber",
+      "vinyl"
+    ],
+    "notes": "Four archived runtime views conditionally establish the exterior. They are not GPT Image 2 output. The visual rebuild preserves all archived animation anchors."
+  },
+  "complexity": {
+    "tier": "complex",
+    "scores": {
+      "silhouetteComplexity": 2,
+      "componentCount": 3,
+      "hierarchyDepth": 3,
+      "repetitionDensity": 3,
+      "materialLayerCount": 3,
+      "localDetailDensity": 3,
+      "occlusionRisk": 2,
+      "actionReadinessNeed": 3
+    },
+    "estimatedCounts": {
+      "macroComponents": 4,
+      "mesoComponents": 15,
+      "microFeatureGroups": 8,
+      "materialLayers": 6,
+      "repetitionSystems": 3
+    },
+    "reasoning": [
+      "Low rectangular base plus hinged lid, platter/tonearm mechanism, grille repetition, rear hardware, and a visible playback animation make this a complex compound appliance."
+    ]
+  },
+  "detailInventory": {
+    "scanMethod": "three-view component-zones",
+    "targetMinDetails": 16,
+    "note": "Every identity-defining detail is linked to a component or material override below.",
+    "details": [
+      {
+        "id": "record-player-detail-1",
+        "kind": "contour",
+        "description": "Cream rounded base shell with softened front and side corners.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "macro",
+        "affects": "silhouette/material/interaction",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "body-shell"
+        },
+        "evidenceRef": "front-view",
+        "confidence": 0.92
+      },
+      {
+        "id": "record-player-detail-2",
+        "kind": "bevel",
+        "description": "Raised transparent lid frame with inset inner panel.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "macro",
+        "affects": "silhouette/material/interaction",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "lid-panel"
+        },
+        "evidenceRef": "front-view",
+        "confidence": 0.92
+      },
+      {
+        "id": "record-player-detail-3",
+        "kind": "fastener",
+        "description": "Two pink rear hinge blocks and barrel pins.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "micro",
+        "affects": "silhouette/material/interaction",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "lid-hinge-array"
+        },
+        "evidenceRef": "front-view",
+        "confidence": 0.92
+      },
+      {
+        "id": "record-player-detail-4",
+        "kind": "contour",
+        "description": "Dark circular platter with thin pink perimeter band.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "silhouette/material/interaction",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "platter"
+        },
+        "evidenceRef": "front-view",
+        "confidence": 0.92
+      },
+      {
+        "id": "record-player-detail-5",
+        "kind": "groove",
+        "description": "Central spindle pin and concentric record label ring.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "micro",
+        "affects": "silhouette/material/interaction",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "spindle"
+        },
+        "evidenceRef": "front-view",
+        "confidence": 0.92
+      },
+      {
+        "id": "record-player-detail-6",
+        "kind": "contour",
+        "description": "Bent cream tonearm rooted at rear-right pivot.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "silhouette/material/interaction",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "tonearm"
+        },
+        "evidenceRef": "front-view",
+        "confidence": 0.92
+      },
+      {
+        "id": "record-player-detail-7",
+        "kind": "bevel",
+        "description": "Pink rectangular cartridge at stylus end.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "micro",
+        "affects": "silhouette/material/interaction",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "cartridge"
+        },
+        "evidenceRef": "front-view",
+        "confidence": 0.92
+      },
+      {
+        "id": "record-player-detail-8",
+        "kind": "ridge",
+        "description": "Dense horizontal pink slat field across front panel.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "silhouette/material/interaction",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "front-grille"
+        },
+        "evidenceRef": "front-view",
+        "confidence": 0.92
+      },
+      {
+        "id": "record-player-detail-9",
+        "kind": "gloss",
+        "description": "Pink cylindrical speed/volume knob on top-right.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "micro",
+        "affects": "silhouette/material/interaction",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "control-knob"
+        },
+        "evidenceRef": "side-view",
+        "confidence": 0.92
+      },
+      {
+        "id": "record-player-detail-10",
+        "kind": "contour",
+        "description": "Centered recessed carry handle with two pink mounts.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "silhouette/material/interaction",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "rear-handle"
+        },
+        "evidenceRef": "side-view",
+        "confidence": 0.92
+      },
+      {
+        "id": "record-player-detail-11",
+        "kind": "hole",
+        "description": "Pink rear I/O plate with two circular sockets.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "micro",
+        "affects": "silhouette/material/interaction",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "rear-io-plate"
+        },
+        "evidenceRef": "back-view",
+        "confidence": 0.78
+      },
+      {
+        "id": "record-player-detail-12",
+        "kind": "fastener",
+        "description": "Four separate dark-pink rubber feet under shell.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "micro",
+        "affects": "silhouette/material/interaction",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "foot-array"
+        },
+        "evidenceRef": "back-view",
+        "confidence": 0.78
+      },
+      {
+        "id": "record-player-detail-13",
+        "kind": "emissive",
+        "description": "Small power indicator beside control area.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "micro",
+        "affects": "silhouette/material/interaction",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "status-light"
+        },
+        "evidenceRef": "back-view",
+        "confidence": 0.92
+      },
+      {
+        "id": "record-player-v2-detail-14",
+        "kind": "contour",
+        "description": "Two six-sided Sakura side cheeks break the rectangular base silhouette.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "silhouette/material",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "body-side-facets"
+        },
+        "evidenceRef": "three-quarter-view",
+        "confidence": 0.88
+      },
+      {
+        "id": "record-player-v2-detail-15",
+        "kind": "groove",
+        "description": "Three concentric low-poly vinyl grooves reinforce record rotation.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "micro",
+        "affects": "form/material/interaction",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "vinyl-grooves"
+        },
+        "evidenceRef": "front-view",
+        "confidence": 0.9
+      },
+      {
+        "id": "record-player-v2-detail-16",
+        "kind": "contour",
+        "description": "Eight-sided pink tonearm counterweight remains attached to the cue pivot.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "form/interaction",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "tonearm-counterweight"
+        },
+        "evidenceRef": "side-view",
+        "confidence": 0.82
+      },
+      {
+        "id": "record-player-v2-detail-17",
+        "kind": "ridge",
+        "description": "Octagonal speaker badge and pulse ring interrupt the uniform front slat field.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "form/material",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "speaker-badge"
+        },
+        "evidenceRef": "front-view",
+        "confidence": 0.84
+      }
+    ]
+  }
+}

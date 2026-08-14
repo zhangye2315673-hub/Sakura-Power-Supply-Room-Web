@@ -1,0 +1,22 @@
+{
+  "target": "refrigerator-v2",
+  "source": "references/intake-v2/refrigerator/refrigerator-turnsheet-v2.png",
+  "technicalProbe": {
+    "width": 1254,
+    "height": 1254,
+    "bytes": 1124128,
+    "technicalSuitability": "pass",
+    "warnings": []
+  },
+  "views": [
+    { "viewpoint": "front", "admitted": true, "width": 627, "height": 627, "foregroundCoverage": 0.4381, "largestComponentFraction": 1.0, "pHash": "16975313388316664214" },
+    { "viewpoint": "side", "admitted": true, "width": 627, "height": 627, "foregroundCoverage": 0.4033, "largestComponentFraction": 1.0, "pHash": "13748144690044678857" },
+    { "viewpoint": "back", "admitted": true, "width": 627, "height": 627, "foregroundCoverage": 0.4595, "largestComponentFraction": 1.0, "pHash": "16973105363612308577" },
+    { "viewpoint": "three-quarter", "admitted": true, "width": 627, "height": 627, "foregroundCoverage": 0.4583, "largestComponentFraction": 0.9996, "pHash": "12019501354716807231" }
+  ],
+  "verdict": "pass",
+  "notes": [
+    "All crops are non-empty, large, mutually distinct and consistent in door, handle, hinge, foot and rear-service counts.",
+    "The generated sheet owns visible form language only; the archived v1 runtime contract owns dimensions, anchors and animation state."
+  ]
+}

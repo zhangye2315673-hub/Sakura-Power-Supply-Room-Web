@@ -1,0 +1,22 @@
+{
+  "target": "blender-v2",
+  "source": "references/intake-v2/blender/blender-turnsheet-v2.png",
+  "technicalProbe": {
+    "width": 1254,
+    "height": 1254,
+    "bytes": 1389013,
+    "technicalSuitability": "pass",
+    "warnings": []
+  },
+  "views": [
+    { "viewpoint": "front", "admitted": true, "width": 627, "height": 627, "foregroundCoverage": 0.4277, "largestComponentFraction": 1.0, "pHash": "16327124895346954954" },
+    { "viewpoint": "side", "admitted": true, "width": 627, "height": 627, "foregroundCoverage": 0.3248, "largestComponentFraction": 1.0, "pHash": "13173605892505588683" },
+    { "viewpoint": "back", "admitted": true, "width": 627, "height": 627, "foregroundCoverage": 0.3321, "largestComponentFraction": 0.983, "pHash": "16615126792925518648" },
+    { "viewpoint": "three-quarter", "admitted": true, "width": 627, "height": 627, "foregroundCoverage": 0.3731, "largestComponentFraction": 0.983, "pHash": "13029915157246887989" }
+  ],
+  "verdict": "pass",
+  "notes": [
+    "All four crops are non-empty, sufficiently large and distinct by pHash.",
+    "The current runtime screenshots remain dimensional and rig authority when the generated sheet differs."
+  ]
+}

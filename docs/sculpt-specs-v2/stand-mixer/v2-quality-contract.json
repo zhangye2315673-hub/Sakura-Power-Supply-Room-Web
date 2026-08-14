@@ -1,0 +1,57 @@
+{
+  "targetId": "stand-mixer-v2",
+  "complexity": "complex",
+  "referenceAdmission": "conditional",
+  "referenceManifest": "references/intake-v2/stand-mixer/intake-manifest.json",
+  "qualityContract": {
+    "overallMinimum": 0.8,
+    "criticalMinimum": 0.82,
+    "mustPreserve": [
+      "stand-mixer-motor-head-pivot",
+      "stand-mixer-rear-column-pivot",
+      "stand-mixer-bowl-pivot",
+      "stand-mixer-bowl-lock-plate-pivot",
+      "stand-mixer-planetary-pivot",
+      "stand-mixer-beater-spin-pivot",
+      "stand-mixer-mixture-pivot",
+      "stand-mixer-liquid-effects-pivot",
+      "stand-mixer-head-hinge-socket",
+      "stand-mixer-tool-drive-socket",
+      "stand-mixer-bowl-seat-socket",
+      "stand-mixer-liquid-effect-socket",
+      "stand-mixer-power-cable-socket"
+    ],
+    "visualTargets": [
+      "exaggerated long cream motor head over a deep handled bowl",
+      "tapered pink rear column and wide stepped base",
+      "low-poly faceting on bowl, head details, controls and drive components",
+      "six independent whisk wires aligned with the unchanged beater pivot",
+      "three-tier stable SAKURA ink at 0.0048, 0.0041 and 0.0033 with 0.18 object-space variation"
+    ],
+    "animationContact": [
+      "planetary drive remains attached under the head",
+      "whisk remains centered inside the bowl",
+      "mixture vortex, ridges and settle peak remain inside the bowl",
+      "pull arcs, dollops and droplets originate from the frozen liquid-effect socket",
+      "stop restores the exact idle pose"
+    ],
+    "performance": {
+      "maxTriangleRatioToV1": 1.35,
+      "maxDrawCallRatioToV1": 1.2
+    }
+  },
+  "pipeline": [
+    "image-analysis",
+    "reference-admission",
+    "local-spec-search",
+    "quality-contract",
+    "strict-spec-validation",
+    "blockout",
+    "structural-pass",
+    "form-refinement",
+    "material-pass",
+    "lighting-pass",
+    "interaction-pass",
+    "optimization-pass"
+  ]
+}

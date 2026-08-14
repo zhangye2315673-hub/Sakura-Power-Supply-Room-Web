@@ -1,0 +1,13 @@
+{
+  "requestedModel": "gpt-image-2",
+  "baseUrl": "https://ai.comfly.org/v1",
+  "quality": "high",
+  "size": "2048x2048",
+  "attempts": [
+    { "inputCount": 4, "result": "connect-timeout", "timeoutSeconds": 180 },
+    { "inputCount": 4, "result": "connect-timeout", "timeoutSeconds": 360 },
+    { "inputCount": 1, "quality": "low", "size": "1024x1024", "result": "connect-timeout", "timeoutSeconds": 120 }
+  ],
+  "fallback": "admitted procedural four-view captures; no runtime image assets",
+  "keyStored": false
+}

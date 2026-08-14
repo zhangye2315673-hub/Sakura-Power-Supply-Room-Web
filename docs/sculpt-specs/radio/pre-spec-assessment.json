@@ -1,0 +1,321 @@
+﻿{
+  "targetName": "Sakura Table Radio",
+  "sourceImage": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\radio\\view-crops\\front.png",
+  "preSpecAssessment": {
+    "objectClass": {
+      "primaryType": "portable tabletop radio",
+      "primaryDomain": "object",
+      "formLanguage": ["hard-surface", "rounded geometric", "retro domestic appliance"],
+      "structureKind": ["layered shell", "compound object", "articulated antenna", "repeated grille modules"],
+      "motionPotential": ["static prop", "articulated antenna", "rotary controls", "speaker pulse"],
+      "materialFamilies": ["painted plastic", "rubber", "metal", "dark translucent display"],
+      "notes": "涓夎鍥捐〃鏄庝富浣撲负瀹芥墎鍦嗚绠变綋锛涜韩浠戒富瑕佺敱宸︿晶妯悜鎵０鍣ㄦ牸鏍呫€佸彸渚ч鐜囩獥銆佸ぇ灏忔棆閽拰浼哥缉澶╃嚎鏋勬垚銆?
+    },
+    "complexity": {
+      "tier": "complex",
+      "scores": {
+        "silhouetteComplexity": 2,
+        "componentCount": 3,
+        "hierarchyDepth": 3,
+        "repetitionDensity": 3,
+        "materialLayerCount": 2,
+        "localDetailDensity": 3,
+        "occlusionRisk": 1,
+        "actionReadinessNeed": 3
+      },
+      "estimatedCounts": {
+        "macroComponents": 4,
+        "mesoComponents": 10,
+        "microFeatureGroups": 7,
+        "materialLayers": 5,
+        "repetitionSystems": 3
+      },
+      "reasoning": [
+        "鍦嗚涓诲３鍜屽墠鍚庨潰鏉跨粨鏋勭畝鍗曪紝浣嗘壃澹板櫒妯爡銆侀鐜囧埢搴︺€佽儗閮ㄦ暎鐑Ы涓庡娈靛ぉ绾块渶瑕佺嫭绔嬪眰绾у拰閲嶅绯荤粺銆?,
+        "澶╃嚎閾伴摼鍜屼袱鏋氭棆閽渶瑕佸彲鍔ㄧ敾 pivot锛涘墠闈㈡澘缁撴瀯涓嶈兘鍚堝苟涓哄崟涓€缃戞牸銆?
+      ]
+    },
+    "specDepthDecision": {
+      "requiredDepth": "complex",
+      "minimumComponentLevels": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "needsRepetitionSystems": true,
+      "needsMaterialLocalOverrides": true,
+      "needsMultipleReviewViews": true,
+      "needsActionReadyHierarchy": true,
+      "rationale": "澶嶆潅搴︽潵鑷彲鍔ㄥぉ绾夸笌鏃嬮挳銆佷笁缁勯噸澶嶇粏鑺傚拰浜旂被琛ㄩ潰锛屼笉鏉ヨ嚜鍗曠函闈㈡暟銆?
+    },
+    "unknownsToResolveBeforeImplementation": [
+      "鍐呴儴鎵０鍣ㄣ€佽皟璋愭満鏋勫拰鐢靛瓙鍏冧欢涓嶅彲瑙侊紝涓嶉噸寤恒€?,
+      "搴曢潰涓庤儗鏉垮唴閮ㄥ帤搴︿笉鍙锛屾寜灏侀棴濉戞枡澹充綋涓庡洓鑴氭帹娴嬨€?,
+      "鍙傝€冨浘鏈粰鍑哄ぉ绾垮畬鍏ㄥ睍寮€鏃剁殑绮剧‘鑺傛闀垮害锛屾寜姝ｉ潰涓庤儗闈㈡姇褰辫繎浼笺€?
+    ],
+    "detailInventory": {
+      "scanMethod": "grid-3x3-plus-multiview",
+      "targetMinDetails": 10,
+      "note": "Enumerate every identity-defining small detail before authoring the spec. Each detail must map to a component.localFeatures entry or material.localOverrides entry, never prose only. Use forge/stage1_intake/build_detail_inventory.py to scan zones.",
+      "details": [
+        {"id":"shell-rounded-bevel","kind":"bevel","description":"瀹芥墎鍦嗚鏈哄３涓庤繛缁€掕","mapsTo":{"type":"component.localFeatures","ref":"outer-shell.edgeTreatment"},"evidenceRef":"view-crops/front.png","confidence":0.98},
+        {"id":"front-panel-inset","kind":"linework","description":"绮夎壊鍐呭祵鍓嶉潰鏉挎帴缂?,"mapsTo":{"type":"component.localFeatures","ref":"front-panel.inset-seam"},"evidenceRef":"view-crops/front.png","confidence":0.98},
+        {"id":"speaker-frame","kind":"contour","description":"鎵０鍣ㄧ嫭绔嬪渾瑙掓涓庢繁鑹插０鑵?,"mapsTo":{"type":"component.localFeatures","ref":"speaker-frame.raised-rim"},"evidenceRef":"view-crops/front.png","confidence":0.98},
+        {"id":"speaker-horizontal-slats","kind":"linework","description":"绾?6鏉＄瓑璺濇í鍚戞爡鏉?,"mapsTo":{"type":"component.localFeatures","ref":"speaker-grille.horizontal-slats"},"evidenceRef":"view-crops/front.png","confidence":0.97},
+        {"id":"frequency-window","kind":"bevel","description":"鍘氳竟妗嗘繁鑹查鐜囩獥","mapsTo":{"type":"component.localFeatures","ref":"frequency-window.beveled-frame"},"evidenceRef":"view-crops/front.png","confidence":0.98},
+        {"id":"frequency-ticks-pointer","kind":"linework","description":"娴呯伆鍒诲害涓庣矇鑹叉父鏍?,"mapsTo":{"type":"component.localFeatures","ref":"frequency-display.scale-and-pointer"},"evidenceRef":"view-crops/front.png","confidence":0.95},
+        {"id":"dual-control-knobs","kind":"contour","description":"涓€灏忎竴澶у弻鏃嬮挳灞傜骇","mapsTo":{"type":"component.localFeatures","ref":"control-cluster.dual-knob-hierarchy"},"evidenceRef":"view-crops/front.png","confidence":0.98},
+        {"id":"telescopic-antenna","kind":"contour","description":"涓夋浼哥缉閲戝睘鏉嗕笌甯藉ご","mapsTo":{"type":"component.localFeatures","ref":"antenna.telescoping-segments"},"evidenceRef":"view-crops/front.png","confidence":0.97},
+        {"id":"antenna-hinge","kind":"fastener","description":"鑳岄潰妞渾閾伴摼鏀灦涓庡渾杞?,"mapsTo":{"type":"component.localFeatures","ref":"antenna-hinge.pivot-bracket"},"evidenceRef":"view-crops/back.png","confidence":0.97},
+        {"id":"rear-vent-grid","kind":"linework","description":"鍥涘垪鍥涜鍦嗙鏁ｇ儹妲?,"mapsTo":{"type":"component.localFeatures","ref":"rear-panel.vent-grid"},"evidenceRef":"view-crops/back.png","confidence":0.95},
+        {"id":"rear-fasteners","kind":"fastener","description":"鑳屾澘涓ら鍦嗗ご鍥哄畾浠?,"mapsTo":{"type":"component.localFeatures","ref":"rear-panel.fasteners"},"evidenceRef":"view-crops/back.png","confidence":0.96},
+        {"id":"feet-set","kind":"contour","description":"鍥涗釜浣庣煯鑴氬灚","mapsTo":{"type":"component.localFeatures","ref":"feet.four-pad-layout"},"evidenceRef":"view-crops/front.png","confidence":0.96}
+      ]
+    },
+    "anatomy": {
+      "applies": false,
+      "styleHeads": 0.0,
+      "proportions": {
+        "headUnit": 0.0,
+        "torso": 0.0,
+        "legs": 0.0,
+        "shoulderWidth": 0.0,
+        "hipWidth": 0.0
+      },
+      "pose": {
+        "type": "unassessed",
+        "jointAngles": {}
+      },
+      "faceLandmarks": {
+        "eyeLine": 0.0,
+        "eyeSpacing": 0.0,
+        "noseBase": 0.0,
+        "mouthLine": 0.0,
+        "hairline": 0.0
+      },
+      "features": [],
+      "confidence": 0.0,
+      "note": "Only meaningful when objectClass.primaryDomain is character or hybrid. Set applies=true and fill from forge/stage1_intake/extract_landmarks.py. See grimoire/character/reconstruction.md and grimoire/character/likeness_maximization.md."
+    },
+    "sourceImage": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\radio\\view-crops\\front.png"
+  },
+  "qualityContract": {
+    "qualityBar": "complex",
+    "definitionOfDone": [
+      "鏈哄３瀹介珮姣斻€佸渾瑙掑崐寰勫拰鍘氬害蹇呴』鍚屾椂鎺ヨ繎涓夎鍥俱€?,
+      "宸︿晶鎵０鍣ㄦí鏍呫€佸彸涓婇鐜囩獥銆佸彸涓嬪ぇ灏忔棆閽€佹姌鍙犱几缂╁ぉ绾垮繀椤讳竴鐪艰瘑鍒€?,
+      "姝ｉ潰銆佷笁鍒嗕箣鍥涖€佷晶闈€佽儗闈㈠洓瑙嗚鍧囦笉鑳藉嚭鐜版墎鐗囧亣浣撴垨鎮┖闄勪欢銆?,
+      "閫氱數鏃舵壃澹板櫒榧撳姩銆佹父鏍囨父璧般€佹棆閽笌澶╃嚎杞绘憜锛涙柇鐢靛悗鎵€鏈夋灑杞村洖鍒板緟鏈哄Э鎬併€?
+    ],
+    "minimumSpecDepth": {
+      "macroComponents": 3,
+        "mesoComponents": 10,
+        "microFeatureGroups": 7,
+        "materialLayers": 5,
+        "repetitionSystems": 3,
+      "reviewViewpoints": 4
+    },
+    "featureGroups": [
+      {
+        "id": "overall-silhouette",
+        "name": "Overall silhouette and proportions",
+        "required": true,
+        "qualityCriteria": [
+          "Bounding shape, dominant curves, negative spaces, and scale relationships are explicitly described."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "model reads as a generic placeholder instead of the reference object",
+          "major proportions are guessed without evidence"
+        ]
+      },
+      {
+        "id": "primary-structure",
+        "name": "Primary structure and hierarchy",
+        "required": true,
+        "qualityCriteria": [
+          "Major parts, joints, seams, contact points, and parent-child relationships are named before code generation."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "large visible parts are merged into one mesh",
+          "component hierarchy is too shallow for the observed complexity"
+        ]
+      },
+      {
+        "id": "attachment-joint-correctness",
+        "name": "Attachment and joint correctness",
+        "required": true,
+        "qualityCriteria": [
+          "Every visible child appendage, branch, limb, handle, connector, tube, cable, horn, wing, leg, or hinged part has an attachment contract with parent socket, localStart/localEnd, contact type, embed/overlap, and gap tolerance."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "child part root floats away from the parent",
+          "branch/limb/tube is centered in space instead of pivoting from its root",
+          "parent-child transform mixes world and local coordinates"
+        ]
+      },
+      {
+        "id": "surface-material-response",
+        "name": "Surface material response",
+        "required": true,
+        "qualityCriteria": [
+          "Albedo zones, roughness, normal/bump/displacement intent, cavity dirt, edge wear, and local overrides are specified where visible.",
+          "Important materials define independent albedo, roughness, height/normal, and AO responses instead of reusing one texture for unrelated PBR channels.",
+          "Surface response is decomposed into macro, meso, and micro frequency bands with scale and amplitude tied to object scale."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "surface looks like flat plastic",
+          "local material variation is missing or not tied to image evidence"
+        ]
+      },
+      {
+        "id": "reference-lookdev",
+        "name": "Reference color, material, and lighting response",
+        "required": true,
+        "qualityCriteria": [
+          "Material-pass names the reference-derived albedo palette, roughness variation, tactile normal/bump/displacement response, and local masks.",
+          "When a source image is available, run reference PBR extraction and require confidence >= 0.7 before treating maps as implementation-ready.",
+          "Lighting-pass names key/fill/rim or environment light, exposure, tone mapping, background, and contact shadow behavior.",
+          "Neutral, grazing-angle, and reference-matched renders prove that surface relief survives relighting and is not painted into albedo."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "model has acceptable shape but reads as flat shaded or plastic",
+          "colors are a generic average instead of reference-observed local color zones",
+          "lighting is evenly ambient and cannot reproduce the source value range"
+        ]
+      }
+    ],
+    "visualDeltaChecks": [
+      "silhouette and negative-space delta",
+      "component hierarchy depth delta",
+      "repetition density and distribution delta",
+      "material albedo/roughness/normal response delta",
+      "local feature placement and scale delta"
+    ],
+    "antiShallowSpecRules": [
+      "Do not proceed to code if qualityContract.qualityBar is unassessed.",
+      "Do not proceed to code if the spec only contains a root component for a moderate or complex object.",
+      "Do not proceed to code if required featureGroups are not represented by componentTree, materials, or repetitionSystems.",
+      "Do not proceed to code if visible local features are described only in prose and not attached to components/materials/evidenceRefs.",
+      "Do not proceed past structural-pass if attached child parts lack attachment.parentSocket, localStart, localEnd, embedDepth/overlap, and gapTolerance.",
+      "Do not pass material look-dev when albedo is reused as roughness, height, normal, or AO.",
+      "Do not pass material look-dev without macro, meso, and micro surface frequency bands for close-up materials.",
+      "Do not pass reference-fidelity material look-dev from a source image without usable referencePbr maps or an explicit documented limitation.",
+      "Do not patch a spec with extracted PBR maps when extraction confidence is below the target threshold unless the user explicitly accepts lower fidelity.",
+      "Do not place adjacent separate-geometry parts below 0.02 world-unit seam overlap (source: grimoire/build/geometry_patterns.md).",
+      "Do not satisfy raised or recessed relief, fasteners, or grip structure with a map alone when the feature affects form; use geometry or displacement (source: grimoire/build/geometry_patterns.md)."
+    ]
+  },
+  "authoringInstruction": "Fill observed object class, complexity reasoning, featureGroups, visualDeltaChecks, and unknowns before generating or implementing ObjectSculptSpec.",
+  "localSpecSearch": {
+    "collection": "core_3d",
+    "query": "Sakura Table Radio vintage tabletop radio rounded shell speaker grille tuning dial telescopic antenna hinged telescopic antenna pivot",
+    "index": {
+      "status": "hit",
+      "reason": "current",
+      "fingerprint": "6857e5ab528b42ac12f4f411f862610a0bffce8e47aee3610a7603c318072fe8"
+    },
+    "matches": [
+      {
+        "record_id": "core.socket-pivot",
+        "file_path": "grimoire/glossary/3d_vocabulary.md",
+        "heading": "Animation, Physics, And Destruction",
+        "key_path": null,
+        "score": 6.208524523517,
+        "snippets": [
+          "A pivot is a local rotation origin; a socket is an attachment point for a child part. In a runtime hierarchy, a socket Object3D is a child of the relevant pivot."
+        ],
+        "source_refs": [
+          {
+            "path": "grimoire/glossary/3d_vocabulary.md",
+            "heading": "Animation, Physics, And Destruction",
+            "key_path": null
+          },
+          {
+            "path": "grimoire/readiness/action_rigging.md",
+            "heading": "Hierarchy Pattern",
+            "key_path": null
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "grimoire/readiness/action_rigging.md"
+          },
+          {
+            "kind": "notebooklm-research",
+            "ref": "notebooklm:4b03c2f9-8393-411f-b5b4-039ab9532843",
+            "note": "Validated generic schema vocabulary; numeric claims remain backed by local source_refs."
+          }
+        ]
+      },
+      {
+        "record_id": "core.shader-mapping-capsulegeometry-rounded-edge-components",
+        "file_path": "docs/raw/img2threejs-skill-dataset.json",
+        "heading": null,
+        "key_path": "categories.rendering_shader_mapping[6]",
+        "score": 5.386043518442,
+        "snippets": [
+          "Maps to components with hemispherical rounded ends. 脕nh x岷?t峄沬 c谩c b峄?ph岷璶 c贸 膽岷 bo tr貌n d岷g b谩n c岷. Recognition cues: Rod-like part with distinctly rounded (not flat-cut) ends, e.g. a knife spine or a safety lever D岷 hi峄噓 nh岷璶 di峄噉: B峄?ph岷璶 ..."
+        ],
+        "source_refs": [
+          {
+            "path": "docs/raw/img2threejs-skill-dataset.json",
+            "heading": null,
+            "key_path": "categories.rendering_shader_mapping[6]"
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "docs/raw/img2threejs-skill-dataset.json",
+            "note": "img2threejs NotebookLM research distillation"
+          }
+        ]
+      },
+      {
+        "record_id": "core.runtime-hierarchy",
+        "file_path": "grimoire/readiness/action_rigging.md",
+        "heading": "Hierarchy Pattern",
+        "key_path": null,
+        "score": 4.377257479872,
+        "snippets": [
+          "An action-ready model uses a root, component pivot groups, visual meshes, sockets, collider metadata or proxies, and destruction-group metadata."
+        ],
+        "source_refs": [
+          {
+            "path": "grimoire/readiness/action_rigging.md",
+            "heading": "Hierarchy Pattern",
+            "key_path": null
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "grimoire/readiness/action_rigging.md"
+          },
+          {
+            "kind": "notebooklm-research",
+            "ref": "notebooklm:4b03c2f9-8393-411f-b5b4-039ab9532843",
+            "note": "Validated generic schema vocabulary; numeric claims remain backed by local source_refs."
+          }
+        ]
+      }
+    ]
+  }
+}
+

@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "targetId": "induction-cooktop-v2",
+  "verdict": "conditional",
+  "views": [
+    { "role": "top", "path": "references/intake-v2/induction-cooktop/views/front.png", "admitted": true, "evidence": ["rounded-square package", "cooking ring", "control positions"] },
+    { "role": "right-side", "path": "references/intake-v2/induction-cooktop/views/side.png", "admitted": true, "evidence": ["low profile", "nine vents", "lower band", "feet"] },
+    { "role": "underside", "path": "references/intake-v2/induction-cooktop/views/back.png", "admitted": true, "evidence": ["fan grille", "cable recess", "stored plug", "four feet"] },
+    { "role": "three-quarter-proxy", "path": "references/intake-v2/induction-cooktop/views/three-quarter.png", "admitted": false, "reason": "Duplicate of the top reference for board layout; excluded from independent-view claims." }
+  ],
+  "identityContract": "A low rounded-square single-zone induction cooktop with inset pink panel, front control row, mint lower band, side vents, underside service systems, and model-owned hotpot performance.",
+  "runtimeAuthority": "docs/history/appliance-model-v1-2026-08-11/appliance-rig-v1-contract.json"
+}

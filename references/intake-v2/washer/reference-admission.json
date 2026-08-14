@@ -1,0 +1,24 @@
+{
+  "status": "pass",
+  "provider": "openai-compatible-comfly",
+  "model": "gpt-image-2",
+  "quality": "high",
+  "size": "2048x2048",
+  "output": "references/intake-v2/washer/washer-turnsheet-v2.png",
+  "views": ["front", "right-side", "back", "three-quarter"],
+  "checks": {
+    "technicalProbe": true,
+    "frontAdmission": true,
+    "sideAdmission": true,
+    "backAdmission": true,
+    "threeQuarterAdmission": true,
+    "crossViewPartConsistency": true,
+    "commonGroundLine": true,
+    "closedDoorAndFixedHinge": true,
+    "drumAxisConsistency": true,
+    "rearConnectionsConsistent": true,
+    "noTextOrWatermark": true,
+    "animationAnchorsVisuallyCompatible": true
+  },
+  "notes": "All split views independently passed admission. The porthole grows visually around the existing drum axis and right door hinge. Existing pivots, sockets, laundry, wet effects, feet and timeline remain authoritative."
+}

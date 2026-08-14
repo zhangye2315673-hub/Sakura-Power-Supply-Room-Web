@@ -1,0 +1,707 @@
+{
+  "objectClass": {
+    "primaryType": "countertop-popcorn-vending-machine",
+    "primaryDomain": "object",
+    "formLanguage": [
+      "stylized-low-poly",
+      "faceted-hard-surface",
+      "exaggerated-cinema-silhouette"
+    ],
+    "structureKind": [
+      "three-band-tower",
+      "transparent-chamber",
+      "cinema-canopy",
+      "arched-dispense-cavity"
+    ],
+    "motionPotential": [
+      "popper-rotation",
+      "chamber-eruption",
+      "outward-dispense-burst"
+    ],
+    "materialFamilies": [
+      "matte-cream-polymer",
+      "sakura-pink-polymer",
+      "cool-plum-cavity",
+      "tinted-glass",
+      "food-toon"
+    ],
+    "notes": "Archived v1 four-view captures are conditionally admitted; frozen runtime anchors and bounds are authoritative."
+  },
+  "complexity": {
+    "tier": "complex",
+    "scores": {
+      "silhouetteComplexity": 3,
+      "componentCount": 3,
+      "hierarchyDepth": 3,
+      "repetitionDensity": 3,
+      "materialLayerCount": 3,
+      "localDetailDensity": 3,
+      "occlusionRisk": 3,
+      "actionReadinessNeed": 3
+    },
+    "estimatedCounts": {
+      "macroComponents": 1,
+      "mesoComponents": 0,
+      "microFeatureGroups": 0,
+      "materialLayers": 1,
+      "repetitionSystems": 0
+    },
+    "reasoning": [
+      "Assess 'SAKURA Popcorn Machine v2' from the image before finalizing componentTree/materials."
+    ]
+  },
+  "specDepthDecision": {
+    "requiredDepth": "complex",
+    "minimumComponentLevels": [
+      "macro",
+      "meso",
+      "micro"
+    ],
+    "needsRepetitionSystems": true,
+    "needsMaterialLocalOverrides": true,
+    "needsMultipleReviewViews": true,
+    "needsActionReadyHierarchy": true,
+    "rationale": "Choose simple/moderate/complex/ultra-complex from observed structure, not from a hardcoded domain."
+  },
+  "unknownsToResolveBeforeImplementation": [],
+  "detailInventory": {
+    "scanMethod": "four-view-plus-runtime-contract",
+    "targetMinDetails": 20,
+    "note": "All details map to root or named component features.",
+    "details": [
+      {
+        "id": "popcorn-machine-detail-1",
+        "kind": "contour",
+        "description": "three-band tower silhouette",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 0.33,
+          "height": 0.16,
+          "units": "normalized"
+        },
+        "scale": "macro",
+        "affects": "geometry, materialSurface, actionReadiness",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "root"
+        },
+        "evidenceRef": "runtime-contract",
+        "confidence": 0.95
+      },
+      {
+        "id": "popcorn-machine-detail-2",
+        "kind": "bevel",
+        "description": "eight-plane cabinet",
+        "region": {
+          "x": 0.3333333333333333,
+          "y": 0.16666666666666666,
+          "width": 0.33,
+          "height": 0.16,
+          "units": "normalized"
+        },
+        "scale": "macro",
+        "affects": "geometry, materialSurface, actionReadiness",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "root"
+        },
+        "evidenceRef": "runtime-contract",
+        "confidence": 0.95
+      },
+      {
+        "id": "popcorn-machine-detail-3",
+        "kind": "linework",
+        "description": "pink base rail",
+        "region": {
+          "x": 0.6666666666666666,
+          "y": 0.3333333333333333,
+          "width": 0.33,
+          "height": 0.16,
+          "units": "normalized"
+        },
+        "scale": "macro",
+        "affects": "geometry, materialSurface, actionReadiness",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "root"
+        },
+        "evidenceRef": "runtime-contract",
+        "confidence": 0.95
+      },
+      {
+        "id": "popcorn-machine-detail-4",
+        "kind": "contour",
+        "description": "cinema canopy",
+        "region": {
+          "x": 0,
+          "y": 0.5,
+          "width": 0.33,
+          "height": 0.16,
+          "units": "normalized"
+        },
+        "scale": "macro",
+        "affects": "geometry, materialSurface, actionReadiness",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "root"
+        },
+        "evidenceRef": "runtime-contract",
+        "confidence": 0.95
+      },
+      {
+        "id": "popcorn-machine-detail-5",
+        "kind": "bevel",
+        "description": "three roof ribs",
+        "region": {
+          "x": 0.3333333333333333,
+          "y": 0.6666666666666666,
+          "width": 0.33,
+          "height": 0.16,
+          "units": "normalized"
+        },
+        "scale": "macro",
+        "affects": "geometry, materialSurface, actionReadiness",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "root"
+        },
+        "evidenceRef": "runtime-contract",
+        "confidence": 0.95
+      },
+      {
+        "id": "popcorn-machine-detail-6",
+        "kind": "linework",
+        "description": "top crown",
+        "region": {
+          "x": 0.6666666666666666,
+          "y": 0.8333333333333334,
+          "width": 0.33,
+          "height": 0.16,
+          "units": "normalized"
+        },
+        "scale": "macro",
+        "affects": "geometry, materialSurface, actionReadiness",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "root"
+        },
+        "evidenceRef": "runtime-contract",
+        "confidence": 0.95
+      },
+      {
+        "id": "popcorn-machine-detail-7",
+        "kind": "contour",
+        "description": "four clear panels",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 0.33,
+          "height": 0.16,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry, materialSurface, actionReadiness",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "root"
+        },
+        "evidenceRef": "runtime-contract",
+        "confidence": 0.95
+      },
+      {
+        "id": "popcorn-machine-detail-8",
+        "kind": "bevel",
+        "description": "four chamber posts",
+        "region": {
+          "x": 0.3333333333333333,
+          "y": 0.16666666666666666,
+          "width": 0.33,
+          "height": 0.16,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry, materialSurface, actionReadiness",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "root"
+        },
+        "evidenceRef": "runtime-contract",
+        "confidence": 0.95
+      },
+      {
+        "id": "popcorn-machine-detail-9",
+        "kind": "linework",
+        "description": "two front braces",
+        "region": {
+          "x": 0.6666666666666666,
+          "y": 0.3333333333333333,
+          "width": 0.33,
+          "height": 0.16,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry, materialSurface, actionReadiness",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "root"
+        },
+        "evidenceRef": "runtime-contract",
+        "confidence": 0.95
+      },
+      {
+        "id": "popcorn-machine-detail-10",
+        "kind": "contour",
+        "description": "lower chamber rail",
+        "region": {
+          "x": 0,
+          "y": 0.5,
+          "width": 0.33,
+          "height": 0.16,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry, materialSurface, actionReadiness",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "root"
+        },
+        "evidenceRef": "runtime-contract",
+        "confidence": 0.95
+      },
+      {
+        "id": "popcorn-machine-detail-11",
+        "kind": "bevel",
+        "description": "upper chamber rail",
+        "region": {
+          "x": 0.3333333333333333,
+          "y": 0.6666666666666666,
+          "width": 0.33,
+          "height": 0.16,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry, materialSurface, actionReadiness",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "root"
+        },
+        "evidenceRef": "runtime-contract",
+        "confidence": 0.95
+      },
+      {
+        "id": "popcorn-machine-detail-12",
+        "kind": "linework",
+        "description": "deep arched chute",
+        "region": {
+          "x": 0.6666666666666666,
+          "y": 0.8333333333333334,
+          "width": 0.33,
+          "height": 0.16,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry, materialSurface, actionReadiness",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "root"
+        },
+        "evidenceRef": "runtime-contract",
+        "confidence": 0.95
+      },
+      {
+        "id": "popcorn-machine-detail-13",
+        "kind": "contour",
+        "description": "chute back wall",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 0.33,
+          "height": 0.16,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry, materialSurface, actionReadiness",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "root"
+        },
+        "evidenceRef": "runtime-contract",
+        "confidence": 0.95
+      },
+      {
+        "id": "popcorn-machine-detail-14",
+        "kind": "bevel",
+        "description": "projecting tray",
+        "region": {
+          "x": 0.3333333333333333,
+          "y": 0.16666666666666666,
+          "width": 0.33,
+          "height": 0.16,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry, materialSurface, actionReadiness",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "root"
+        },
+        "evidenceRef": "runtime-contract",
+        "confidence": 0.95
+      },
+      {
+        "id": "popcorn-machine-detail-15",
+        "kind": "linework",
+        "description": "tray lip",
+        "region": {
+          "x": 0.6666666666666666,
+          "y": 0.3333333333333333,
+          "width": 0.33,
+          "height": 0.16,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry, materialSurface, actionReadiness",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "root"
+        },
+        "evidenceRef": "runtime-contract",
+        "confidence": 0.95
+      },
+      {
+        "id": "popcorn-machine-detail-16",
+        "kind": "contour",
+        "description": "polygon control",
+        "region": {
+          "x": 0,
+          "y": 0.5,
+          "width": 0.33,
+          "height": 0.16,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry, materialSurface, actionReadiness",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "root"
+        },
+        "evidenceRef": "runtime-contract",
+        "confidence": 0.95
+      },
+      {
+        "id": "popcorn-machine-detail-17",
+        "kind": "bevel",
+        "description": "control index",
+        "region": {
+          "x": 0.3333333333333333,
+          "y": 0.6666666666666666,
+          "width": 0.33,
+          "height": 0.16,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry, materialSurface, actionReadiness",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "root"
+        },
+        "evidenceRef": "runtime-contract",
+        "confidence": 0.95
+      },
+      {
+        "id": "popcorn-machine-detail-18",
+        "kind": "linework",
+        "description": "side release",
+        "region": {
+          "x": 0.6666666666666666,
+          "y": 0.8333333333333334,
+          "width": 0.33,
+          "height": 0.16,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry, materialSurface, actionReadiness",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "root"
+        },
+        "evidenceRef": "runtime-contract",
+        "confidence": 0.95
+      },
+      {
+        "id": "popcorn-machine-detail-19",
+        "kind": "contour",
+        "description": "two side hubs",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 0.33,
+          "height": 0.16,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry, materialSurface, actionReadiness",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "root"
+        },
+        "evidenceRef": "runtime-contract",
+        "confidence": 0.95
+      },
+      {
+        "id": "popcorn-machine-detail-20",
+        "kind": "bevel",
+        "description": "rear service panel",
+        "region": {
+          "x": 0.3333333333333333,
+          "y": 0.16666666666666666,
+          "width": 0.33,
+          "height": 0.16,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry, materialSurface, actionReadiness",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "root"
+        },
+        "evidenceRef": "runtime-contract",
+        "confidence": 0.95
+      },
+      {
+        "id": "popcorn-machine-detail-21",
+        "kind": "linework",
+        "description": "ten rear vents",
+        "region": {
+          "x": 0.6666666666666666,
+          "y": 0.3333333333333333,
+          "width": 0.33,
+          "height": 0.16,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry, materialSurface, actionReadiness",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "root"
+        },
+        "evidenceRef": "runtime-contract",
+        "confidence": 0.95
+      },
+      {
+        "id": "popcorn-machine-detail-22",
+        "kind": "contour",
+        "description": "four feet",
+        "region": {
+          "x": 0,
+          "y": 0.5,
+          "width": 0.33,
+          "height": 0.16,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry, materialSurface, actionReadiness",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "root"
+        },
+        "evidenceRef": "runtime-contract",
+        "confidence": 0.95
+      },
+      {
+        "id": "popcorn-machine-detail-23",
+        "kind": "bevel",
+        "description": "drive column",
+        "region": {
+          "x": 0.3333333333333333,
+          "y": 0.6666666666666666,
+          "width": 0.33,
+          "height": 0.16,
+          "units": "normalized"
+        },
+        "scale": "micro",
+        "affects": "geometry, materialSurface, actionReadiness",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "root"
+        },
+        "evidenceRef": "runtime-contract",
+        "confidence": 0.95
+      },
+      {
+        "id": "popcorn-machine-detail-24",
+        "kind": "linework",
+        "description": "rotor disc",
+        "region": {
+          "x": 0.6666666666666666,
+          "y": 0.8333333333333334,
+          "width": 0.33,
+          "height": 0.16,
+          "units": "normalized"
+        },
+        "scale": "micro",
+        "affects": "geometry, materialSurface, actionReadiness",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "root"
+        },
+        "evidenceRef": "runtime-contract",
+        "confidence": 0.95
+      },
+      {
+        "id": "popcorn-machine-detail-25",
+        "kind": "contour",
+        "description": "three stirring arms",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 0.33,
+          "height": 0.16,
+          "units": "normalized"
+        },
+        "scale": "micro",
+        "affects": "geometry, materialSurface, actionReadiness",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "root"
+        },
+        "evidenceRef": "runtime-contract",
+        "confidence": 0.95
+      },
+      {
+        "id": "popcorn-machine-detail-26",
+        "kind": "bevel",
+        "description": "warm lamp",
+        "region": {
+          "x": 0.3333333333333333,
+          "y": 0.16666666666666666,
+          "width": 0.33,
+          "height": 0.16,
+          "units": "normalized"
+        },
+        "scale": "micro",
+        "affects": "geometry, materialSurface, actionReadiness",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "root"
+        },
+        "evidenceRef": "runtime-contract",
+        "confidence": 0.95
+      },
+      {
+        "id": "popcorn-machine-detail-27",
+        "kind": "linework",
+        "description": "dense static pile",
+        "region": {
+          "x": 0.6666666666666666,
+          "y": 0.3333333333333333,
+          "width": 0.33,
+          "height": 0.16,
+          "units": "normalized"
+        },
+        "scale": "micro",
+        "affects": "geometry, materialSurface, actionReadiness",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "root"
+        },
+        "evidenceRef": "runtime-contract",
+        "confidence": 0.95
+      },
+      {
+        "id": "popcorn-machine-detail-28",
+        "kind": "contour",
+        "description": "powered chamber pieces",
+        "region": {
+          "x": 0,
+          "y": 0.5,
+          "width": 0.33,
+          "height": 0.16,
+          "units": "normalized"
+        },
+        "scale": "micro",
+        "affects": "geometry, materialSurface, actionReadiness",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "root"
+        },
+        "evidenceRef": "runtime-contract",
+        "confidence": 0.95
+      },
+      {
+        "id": "popcorn-machine-detail-29",
+        "kind": "bevel",
+        "description": "48 outward pieces",
+        "region": {
+          "x": 0.3333333333333333,
+          "y": 0.6666666666666666,
+          "width": 0.33,
+          "height": 0.16,
+          "units": "normalized"
+        },
+        "scale": "micro",
+        "affects": "geometry, materialSurface, actionReadiness",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "root"
+        },
+        "evidenceRef": "runtime-contract",
+        "confidence": 0.95
+      },
+      {
+        "id": "popcorn-machine-detail-30",
+        "kind": "linework",
+        "description": "stable three-tier ink",
+        "region": {
+          "x": 0.6666666666666666,
+          "y": 0.8333333333333334,
+          "width": 0.33,
+          "height": 0.16,
+          "units": "normalized"
+        },
+        "scale": "micro",
+        "affects": "geometry, materialSurface, actionReadiness",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "root"
+        },
+        "evidenceRef": "runtime-contract",
+        "confidence": 0.95
+      }
+    ]
+  },
+  "anatomy": {
+    "applies": false,
+    "styleHeads": 0,
+    "proportions": {
+      "headUnit": 0,
+      "torso": 0,
+      "legs": 0,
+      "shoulderWidth": 0,
+      "hipWidth": 0
+    },
+    "pose": {
+      "type": "unassessed",
+      "jointAngles": {}
+    },
+    "faceLandmarks": {
+      "eyeLine": 0,
+      "eyeSpacing": 0,
+      "noseBase": 0,
+      "mouthLine": 0,
+      "hairline": 0
+    },
+    "features": [],
+    "confidence": 0,
+    "note": "Only meaningful when objectClass.primaryDomain is character or hybrid. Set applies=true and fill from forge/stage1_intake/extract_landmarks.py. See grimoire/character/reconstruction.md and grimoire/character/likeness_maximization.md."
+  },
+  "sourceImage": "references/intake-v2/popcorn-machine/views/front.png",
+  "estimatedCounts": {
+    "macroComponents": 6,
+    "mesoComponents": 15,
+    "microFeatureGroups": 10,
+    "materialLayers": 10,
+    "repetitionSystems": 7
+  }
+}

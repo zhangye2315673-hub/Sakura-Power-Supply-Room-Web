@@ -1,0 +1,237 @@
+{
+  "scanMethod": "grid-3x3",
+  "targetMinDetails": 10,
+  "details": [
+    {
+      "id": "base-beveled-rim",
+      "kind": "bevel",
+      "description": "Broad shallow round base has a softened upper shoulder and a darker lower rim.",
+      "region": {
+        "x": 0.1,
+        "y": 0.72,
+        "width": 0.2,
+        "height": 0.16,
+        "units": "normalized"
+      },
+      "scale": "meso",
+      "affects": "base silhouette and grazing highlight",
+      "mapsTo": {
+        "type": "component.localFeatures",
+        "ref": "base.base-beveled-rim"
+      },
+      "evidenceRef": "detail-crops/zone-r2c0.png",
+      "confidence": 0.96,
+      "realization": "implemented by base.base-beveled-rim"
+    },
+    {
+      "id": "base-layer-seam",
+      "kind": "seam",
+      "description": "Pink upper plate meets a darker pink lower ring as a continuous radial seam.",
+      "region": {
+        "x": 0.1,
+        "y": 0.77,
+        "width": 0.2,
+        "height": 0.09,
+        "units": "normalized"
+      },
+      "scale": "meso",
+      "affects": "base construction read",
+      "mapsTo": {
+        "type": "component.localFeatures",
+        "ref": "base.base-layer-seam"
+      },
+      "evidenceRef": "detail-crops/zone-r2c0.png",
+      "confidence": 0.95,
+      "realization": "implemented by base.base-layer-seam"
+    },
+    {
+      "id": "stem-foot-collar",
+      "kind": "ridge",
+      "description": "Short pink cylindrical collar sockets the thin off-white stem into the base.",
+      "region": {
+        "x": 0.18,
+        "y": 0.68,
+        "width": 0.07,
+        "height": 0.11,
+        "units": "normalized"
+      },
+      "scale": "meso",
+      "affects": "stem attachment",
+      "mapsTo": {
+        "type": "component.localFeatures",
+        "ref": "base.stem-foot-collar"
+      },
+      "evidenceRef": "detail-crops/zone-r2c0.png",
+      "confidence": 0.98,
+      "realization": "implemented by base.stem-foot-collar"
+    },
+    {
+      "id": "stem-satin-highlight",
+      "kind": "gloss",
+      "description": "Thin vertical stem carries a narrow controlled highlight, reading as satin painted metal.",
+      "region": {
+        "x": 0.19,
+        "y": 0.35,
+        "width": 0.04,
+        "height": 0.38,
+        "units": "normalized"
+      },
+      "scale": "micro",
+      "affects": "stem material response",
+      "mapsTo": {
+        "type": "component.localFeatures",
+        "ref": "base.stem-satin-highlight"
+      },
+      "evidenceRef": "detail-crops/zone-r1c0.png",
+      "confidence": 0.88,
+      "realization": "implemented by base.stem-satin-highlight"
+    },
+    {
+      "id": "hinge-round-cap",
+      "kind": "fastener",
+      "description": "Large circular side cap marks the lampshade pitch axis.",
+      "region": {
+        "x": 0.51,
+        "y": 0.23,
+        "width": 0.08,
+        "height": 0.13,
+        "units": "normalized"
+      },
+      "scale": "meso",
+      "affects": "articulation identity",
+      "mapsTo": {
+        "type": "component.localFeatures",
+        "ref": "base.hinge-round-cap"
+      },
+      "evidenceRef": "detail-crops/zone-r0c1.png",
+      "confidence": 0.98,
+      "realization": "implemented by base.hinge-round-cap"
+    },
+    {
+      "id": "hinge-yoke",
+      "kind": "contour",
+      "description": "Pink rectangular yoke rises behind the shade and overlaps the rear neck.",
+      "region": {
+        "x": 0.49,
+        "y": 0.2,
+        "width": 0.09,
+        "height": 0.2,
+        "units": "normalized"
+      },
+      "scale": "meso",
+      "affects": "head-to-stem connection",
+      "mapsTo": {
+        "type": "component.localFeatures",
+        "ref": "base.hinge-yoke"
+      },
+      "evidenceRef": "detail-crops/zone-r0c1.png",
+      "confidence": 0.93,
+      "realization": "implemented by base.hinge-yoke"
+    },
+    {
+      "id": "shade-taper",
+      "kind": "contour",
+      "description": "Lamp shade is a truncated cone, narrower at the rear/top and wider at the luminous mouth.",
+      "region": {
+        "x": 0.12,
+        "y": 0.14,
+        "width": 0.17,
+        "height": 0.25,
+        "units": "normalized"
+      },
+      "scale": "macro",
+      "affects": "primary identity silhouette",
+      "mapsTo": {
+        "type": "component.localFeatures",
+        "ref": "base.shade-taper"
+      },
+      "evidenceRef": "detail-crops/zone-r0c0.png",
+      "confidence": 0.99,
+      "realization": "implemented by base.shade-taper"
+    },
+    {
+      "id": "shade-front-rim",
+      "kind": "ridge",
+      "description": "The wide mouth has a separate narrow cream rim around a warm recessed diffuser.",
+      "region": {
+        "x": 0.12,
+        "y": 0.31,
+        "width": 0.18,
+        "height": 0.1,
+        "units": "normalized"
+      },
+      "scale": "meso",
+      "affects": "shade depth and light opening",
+      "mapsTo": {
+        "type": "component.localFeatures",
+        "ref": "base.shade-front-rim"
+      },
+      "evidenceRef": "detail-crops/zone-r0c0.png",
+      "confidence": 0.94,
+      "realization": "implemented by base.shade-front-rim"
+    },
+    {
+      "id": "shade-panel-value",
+      "kind": "gloss",
+      "description": "Off-white shade uses two to three broad toon value planes rather than a flat unlit fill.",
+      "region": {
+        "x": 0.13,
+        "y": 0.16,
+        "width": 0.16,
+        "height": 0.2,
+        "units": "normalized"
+      },
+      "scale": "macro",
+      "affects": "shade material response",
+      "mapsTo": {
+        "type": "component.localFeatures",
+        "ref": "base.shade-panel-value"
+      },
+      "evidenceRef": "detail-crops/zone-r0c0.png",
+      "confidence": 0.86,
+      "realization": "implemented by base.shade-panel-value"
+    },
+    {
+      "id": "top-button",
+      "kind": "ridge",
+      "description": "Short pink pill/cylinder button protrudes from the narrow shade end.",
+      "region": {
+        "x": 0.18,
+        "y": 0.12,
+        "width": 0.04,
+        "height": 0.06,
+        "units": "normalized"
+      },
+      "scale": "micro",
+      "affects": "head identity and control affordance",
+      "mapsTo": {
+        "type": "component.localFeatures",
+        "ref": "base.top-button"
+      },
+      "evidenceRef": "detail-crops/zone-r0c0.png",
+      "confidence": 0.96,
+      "realization": "implemented by base.top-button"
+    },
+    {
+      "id": "diffuser-emission",
+      "kind": "emissive",
+      "description": "Warm cream disk recessed inside the mouth becomes luminous when powered.",
+      "region": {
+        "x": 0.13,
+        "y": 0.33,
+        "width": 0.16,
+        "height": 0.07,
+        "units": "normalized"
+      },
+      "scale": "meso",
+      "affects": "powered state",
+      "mapsTo": {
+        "type": "component.localFeatures",
+        "ref": "base.diffuser-emission"
+      },
+      "evidenceRef": "detail-crops/zone-r1c0.png",
+      "confidence": 0.82,
+      "realization": "implemented by base.diffuser-emission"
+    }
+  ]
+}

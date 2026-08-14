@@ -1,0 +1,47 @@
+{
+  "source": "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake-v2\\rice-cooker\\rice-cooker-turnsheet-v2.png",
+  "sourceWidth": 2048,
+  "sourceHeight": 2048,
+  "outputs": [
+    {
+      "view": "front",
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake-v2\\rice-cooker\\views\\front.png",
+      "crop": [
+        0,
+        0,
+        1024,
+        1024
+      ]
+    },
+    {
+      "view": "side",
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake-v2\\rice-cooker\\views\\side.png",
+      "crop": [
+        1024,
+        0,
+        2048,
+        1024
+      ]
+    },
+    {
+      "view": "back",
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake-v2\\rice-cooker\\views\\back.png",
+      "crop": [
+        0,
+        1024,
+        1024,
+        2048
+      ]
+    },
+    {
+      "view": "three-quarter",
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake-v2\\rice-cooker\\views\\three-quarter.png",
+      "crop": [
+        1024,
+        1024,
+        2048,
+        2048
+      ]
+    }
+  ]
+}

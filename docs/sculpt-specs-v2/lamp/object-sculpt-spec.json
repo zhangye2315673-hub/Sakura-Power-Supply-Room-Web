@@ -1,0 +1,4961 @@
+{
+  "targetName": "Sakura Adjustable Desk Lamp",
+  "targetId": "sakura-adjustable-desk-lamp",
+  "schemaVersion": "2.1",
+  "terminologyProfile": {
+    "domain": "real-time procedural Three.js asset",
+    "geometryTerms": [
+      "silhouette",
+      "topology",
+      "primitive",
+      "bevel",
+      "chamfer",
+      "taper",
+      "bend",
+      "boolean cut",
+      "edge loop",
+      "surface normal",
+      "displacement"
+    ],
+    "materialTerms": [
+      "albedo",
+      "baseColor",
+      "roughness",
+      "metalness",
+      "normal map",
+      "bump map",
+      "ambient occlusion",
+      "cavity dirt",
+      "edge wear",
+      "clearcoat"
+    ],
+    "lightingTerms": [
+      "key light",
+      "fill light",
+      "rim light",
+      "HDRI/environment reflection",
+      "contact shadow"
+    ],
+    "descriptionRule": "Use measurable 3D graphics terms. Avoid vague words unless they are paired with concrete geometry/material/shader parameters."
+  },
+  "sourceImage": "references/intake-v2/lamp/views/front.png",
+  "referenceCamera": {
+    "solved": false,
+    "fovDegrees": 40,
+    "aspect": 1,
+    "orientation": {
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0
+    },
+    "positionHint": [
+      0,
+      0,
+      3
+    ],
+    "note": "For likeness work, solve the reference camera (forge/stage1_intake/solve_camera_pose.py) so the review render aligns with the photo and the reference can be projected. Confirm by overlay review."
+  },
+  "suitability": "conditional",
+  "scores": {
+    "object_isolation": 0,
+    "silhouette_readability": 0,
+    "depth_inference": 0,
+    "primitive_decomposition": 0,
+    "material_procedurality": 0,
+    "occlusion_risk": 0,
+    "interaction_fit": 0
+  },
+  "preSpecAssessment": {
+    "objectClass": {
+      "primaryType": "adjustable desk lamp",
+      "primaryDomain": "object",
+      "formLanguage": [
+        "hard-surface",
+        "geometric",
+        "soft-beveled",
+        "stylized-low-poly"
+      ],
+      "structureKind": [
+        "compound object",
+        "articulated assembly",
+        "layered shell"
+      ],
+      "motionPotential": [
+        "hinged lampshade pitch",
+        "effect-emitter",
+        "whole-object transform"
+      ],
+      "materialFamilies": [
+        "painted metal",
+        "satin plastic",
+        "warm translucent diffuser"
+      ],
+      "notes": "A compact Sakura-styled task lamp represented in three orthographic-like views. Radial base and shade are symmetric except for the rear hinge and stem attachment."
+    },
+    "complexity": {
+      "tier": "moderate",
+      "scores": {
+        "silhouetteComplexity": 2,
+        "componentCount": 2,
+        "hierarchyDepth": 2,
+        "repetitionDensity": 0,
+        "materialLayerCount": 2,
+        "localDetailDensity": 1,
+        "occlusionRisk": 1,
+        "actionReadinessNeed": 2
+      },
+      "estimatedCounts": {
+        "macroComponents": 4,
+        "mesoComponents": 8,
+        "microFeatureGroups": 6,
+        "materialLayers": 5,
+        "repetitionSystems": 1
+      },
+      "reasoning": [
+        "The overall silhouette is simple, but the head is articulated and requires a true hinge pivot plus child sockets.",
+        "Recognition depends on proportional relationships between the thin stem, broad shallow base, tapered shade and small hinge hardware.",
+        "Visible seam rings, stepped rims and material boundaries require separate components rather than one fused mesh."
+      ]
+    },
+    "specDepthDecision": {
+      "requiredDepth": "moderate",
+      "minimumComponentLevels": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "needsRepetitionSystems": true,
+      "needsMaterialLocalOverrides": true,
+      "needsMultipleReviewViews": true,
+      "needsActionReadyHierarchy": true,
+      "rationale": "The lamp is a moderate articulated prop: silhouette blockout is easy, while hinge/contact correctness and recognizable stepped construction require a three-level component tree."
+    },
+    "unknownsToResolveBeforeImplementation": [],
+    "detailInventory": {
+      "scanMethod": "grid-3x3",
+      "targetMinDetails": 10,
+      "details": [
+        {
+          "id": "base-beveled-rim",
+          "kind": "bevel",
+          "description": "Broad shallow round base has a softened upper shoulder and a darker lower rim.",
+          "region": {
+            "x": 0.1,
+            "y": 0.72,
+            "width": 0.2,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "base silhouette and grazing highlight",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "base.base-beveled-rim"
+          },
+          "evidenceRef": "detail-crops/zone-r2c0.png",
+          "confidence": 0.96,
+          "realization": "implemented by base.base-beveled-rim"
+        },
+        {
+          "id": "base-layer-seam",
+          "kind": "seam",
+          "description": "Pink upper plate meets a darker pink lower ring as a continuous radial seam.",
+          "region": {
+            "x": 0.1,
+            "y": 0.77,
+            "width": 0.2,
+            "height": 0.09,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "base construction read",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "base.base-layer-seam"
+          },
+          "evidenceRef": "detail-crops/zone-r2c0.png",
+          "confidence": 0.95,
+          "realization": "implemented by base.base-layer-seam"
+        },
+        {
+          "id": "stem-foot-collar",
+          "kind": "ridge",
+          "description": "Short pink cylindrical collar sockets the thin off-white stem into the base.",
+          "region": {
+            "x": 0.18,
+            "y": 0.68,
+            "width": 0.07,
+            "height": 0.11,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "stem attachment",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "base.stem-foot-collar"
+          },
+          "evidenceRef": "detail-crops/zone-r2c0.png",
+          "confidence": 0.98,
+          "realization": "implemented by base.stem-foot-collar"
+        },
+        {
+          "id": "stem-satin-highlight",
+          "kind": "gloss",
+          "description": "Thin vertical stem carries a narrow controlled highlight, reading as satin painted metal.",
+          "region": {
+            "x": 0.19,
+            "y": 0.35,
+            "width": 0.04,
+            "height": 0.38,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "stem material response",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "base.stem-satin-highlight"
+          },
+          "evidenceRef": "detail-crops/zone-r1c0.png",
+          "confidence": 0.88,
+          "realization": "implemented by base.stem-satin-highlight"
+        },
+        {
+          "id": "hinge-round-cap",
+          "kind": "fastener",
+          "description": "Large circular side cap marks the lampshade pitch axis.",
+          "region": {
+            "x": 0.51,
+            "y": 0.23,
+            "width": 0.08,
+            "height": 0.13,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "articulation identity",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "base.hinge-round-cap"
+          },
+          "evidenceRef": "detail-crops/zone-r0c1.png",
+          "confidence": 0.98,
+          "realization": "implemented by base.hinge-round-cap"
+        },
+        {
+          "id": "hinge-yoke",
+          "kind": "contour",
+          "description": "Pink rectangular yoke rises behind the shade and overlaps the rear neck.",
+          "region": {
+            "x": 0.49,
+            "y": 0.2,
+            "width": 0.09,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "head-to-stem connection",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "base.hinge-yoke"
+          },
+          "evidenceRef": "detail-crops/zone-r0c1.png",
+          "confidence": 0.93,
+          "realization": "implemented by base.hinge-yoke"
+        },
+        {
+          "id": "shade-taper",
+          "kind": "contour",
+          "description": "Lamp shade is a truncated cone, narrower at the rear/top and wider at the luminous mouth.",
+          "region": {
+            "x": 0.12,
+            "y": 0.14,
+            "width": 0.17,
+            "height": 0.25,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "primary identity silhouette",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "base.shade-taper"
+          },
+          "evidenceRef": "detail-crops/zone-r0c0.png",
+          "confidence": 0.99,
+          "realization": "implemented by base.shade-taper"
+        },
+        {
+          "id": "shade-front-rim",
+          "kind": "ridge",
+          "description": "The wide mouth has a separate narrow cream rim around a warm recessed diffuser.",
+          "region": {
+            "x": 0.12,
+            "y": 0.31,
+            "width": 0.18,
+            "height": 0.1,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "shade depth and light opening",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "base.shade-front-rim"
+          },
+          "evidenceRef": "detail-crops/zone-r0c0.png",
+          "confidence": 0.94,
+          "realization": "implemented by base.shade-front-rim"
+        },
+        {
+          "id": "shade-panel-value",
+          "kind": "gloss",
+          "description": "Off-white shade uses two to three broad toon value planes rather than a flat unlit fill.",
+          "region": {
+            "x": 0.13,
+            "y": 0.16,
+            "width": 0.16,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "shade material response",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "base.shade-panel-value"
+          },
+          "evidenceRef": "detail-crops/zone-r0c0.png",
+          "confidence": 0.86,
+          "realization": "implemented by base.shade-panel-value"
+        },
+        {
+          "id": "top-button",
+          "kind": "ridge",
+          "description": "Short pink pill/cylinder button protrudes from the narrow shade end.",
+          "region": {
+            "x": 0.18,
+            "y": 0.12,
+            "width": 0.04,
+            "height": 0.06,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "head identity and control affordance",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "base.top-button"
+          },
+          "evidenceRef": "detail-crops/zone-r0c0.png",
+          "confidence": 0.96,
+          "realization": "implemented by base.top-button"
+        },
+        {
+          "id": "diffuser-emission",
+          "kind": "emissive",
+          "description": "Warm cream disk recessed inside the mouth becomes luminous when powered.",
+          "region": {
+            "x": 0.13,
+            "y": 0.33,
+            "width": 0.16,
+            "height": 0.07,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "powered state",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "base.diffuser-emission"
+          },
+          "evidenceRef": "detail-crops/zone-r1c0.png",
+          "confidence": 0.82,
+          "realization": "implemented by base.diffuser-emission"
+        }
+      ]
+    },
+    "anatomy": {
+      "applies": false,
+      "styleHeads": 0,
+      "proportions": {
+        "headUnit": 0,
+        "torso": 0,
+        "legs": 0,
+        "shoulderWidth": 0,
+        "hipWidth": 0
+      },
+      "pose": {
+        "type": "not-applicable",
+        "jointAngles": {}
+      },
+      "faceLandmarks": {
+        "eyeLine": 0,
+        "eyeSpacing": 0,
+        "noseBase": 0,
+        "mouthLine": 0,
+        "hairline": 0
+      },
+      "features": [],
+      "confidence": 0,
+      "note": "Not applicable to an object prop."
+    },
+    "sourceImage": "D:/下载文件/ChatGPT Image 2026年8月2日 19_55_15 (1).png"
+  },
+  "qualityContract": {
+    "qualityBar": "moderate",
+    "definitionOfDone": [
+      "Keep v1 bounds, ground contact, hinge pivot, top-button pivot and light socket transforms exact.",
+      "Read as an exaggerated SAKURA low-poly desk lamp through a broad faceted base, slender stem and oversized tapered shade.",
+      "Use stable object-space outline tiers 0.0048, 0.0041 and 0.0033 with 0.18 variation.",
+      "Keep all powered light and head motion attached to lamp-light-socket and lamp-head-hinge-pivot."
+    ],
+    "minimumSpecDepth": {
+      "macroComponents": 4,
+      "mesoComponents": 8,
+      "microFeatureGroups": 6,
+      "materialLayers": 5,
+      "repetitionSystems": 1,
+      "reviewViewpoints": 3
+    },
+    "featureGroups": [
+      {
+        "id": "lamp-silhouette",
+        "name": "Base, stem and tapered shade proportion",
+        "required": true,
+        "qualityCriteria": [
+          "Base diameter is approximately 3.0 stem-foot diameters and remains shallow.",
+          "Stem is slender and spans over half the total lamp height.",
+          "Shade mouth is broader than its rear and does not become a cylinder."
+        ],
+        "evidenceRefs": [
+          "front-view",
+          "side-view",
+          "rear-view"
+        ],
+        "failureModes": [
+          "base becomes a tall pedestal",
+          "stem looks thick",
+          "shade reads as a bucket or cylinder"
+        ]
+      },
+      {
+        "id": "hinged-head",
+        "name": "Articulated hinge and head hierarchy",
+        "required": true,
+        "qualityCriteria": [
+          "The circular axis cap sits on the visible side of the yoke.",
+          "Shade, rim, diffuser and top button are children of one hinge pivot.",
+          "A light socket is parented inside the shade mouth."
+        ],
+        "evidenceRefs": [
+          "side-view",
+          "rear-view"
+        ],
+        "failureModes": [
+          "shade rotates around its center",
+          "hinge floats away from stem",
+          "light effect does not follow shade"
+        ]
+      },
+      {
+        "id": "layered-construction",
+        "name": "Layered Sakura construction",
+        "required": true,
+        "qualityCriteria": [
+          "Base lower ring, upper plate, foot collar, stem, hinge yoke, shade shell, front rim and button are separate named parts.",
+          "Material zones preserve cream shell, pink accent and warm diffuser separation."
+        ],
+        "evidenceRefs": [
+          "front-view",
+          "rear-view"
+        ],
+        "failureModes": [
+          "all parts fused into one mesh",
+          "base and hinge material boundaries disappear"
+        ]
+      },
+      {
+        "id": "powered-response",
+        "name": "Lamp-specific powered animation",
+        "required": true,
+        "qualityCriteria": [
+          "Diffuser emissive intensity breathes with power.",
+          "Hinge performs a small damped nod without altering base or stem."
+        ],
+        "evidenceRefs": [
+          "user-animation-requirement"
+        ],
+        "failureModes": [
+          "whole lamp scales or spins",
+          "head animation detaches components"
+        ]
+      }
+    ],
+    "visualDeltaChecks": [
+      "total height to base diameter ratio",
+      "shade taper and mouth depth",
+      "stem thickness",
+      "hinge axis placement",
+      "base stepped rim",
+      "warm diffuser visibility",
+      "three-quarter non-degenerate volume"
+    ],
+    "antiShallowSpecRules": [
+      "Do not merge base, stem, hinge and shade into a single mesh.",
+      "Do not represent the hinge cap or base rim only with texture.",
+      "Do not place the light socket outside the shade pivot hierarchy.",
+      "Do not add unseen decorative controls to the base or rear.",
+      "Adjacent components must overlap by at least 0.02 world units at shared seams (source: grimoire/build/geometry_patterns.md).",
+      "Raised or recessed relief and fasteners must be geometry, instanced micro-parts, or displacement; a map alone is an approximation (source: grimoire/build/geometry_patterns.md)."
+    ],
+    "mustNotDo": [
+      "Do not merge base, stem, hinge and shade into a single mesh.",
+      "Do not represent the hinge cap or base rim only with texture.",
+      "Do not place the light socket outside the shade pivot hierarchy.",
+      "Do not add unseen decorative controls to the base or rear.",
+      "Adjacent components must overlap by at least 0.02 world units at shared seams (source: grimoire/build/geometry_patterns.md).",
+      "Raised or recessed relief and fasteners must be geometry, instanced micro-parts, or displacement; a map alone is an approximation (source: grimoire/build/geometry_patterns.md)."
+    ]
+  },
+  "qualityTargets": {
+    "targetFidelity": 0.7,
+    "mustMatch": [
+      "macro silhouette and proportions",
+      "primary material albedo/roughness response",
+      "reference-derived PBR material response at or above 0.7 confidence when source pixels are usable",
+      "most recognizable local features"
+    ],
+    "niceToHave": [
+      "micro scratches, stains, chips, and dirt masks",
+      "secondary lighting match"
+    ],
+    "fpsTarget": 60,
+    "reviewViewpoints": [
+      "front",
+      "three-quarter",
+      "side",
+      "thickness-axis",
+      "long-axis"
+    ]
+  },
+  "selfCorrectLoop": {
+    "enabled": true,
+    "visualAcceptance": {
+      "reviewer": "ai-vision",
+      "threshold": 0.8,
+      "comparisonArtifactRequired": true,
+      "layerScoresRequired": true,
+      "codePixelDiffIsAcceptanceAuthority": false,
+      "scoringRule": "AI vision must inspect a side-by-side reference/render sheet and score the current pass from 0 to 1. Pixel-diff code may assist diagnostics but cannot approve a pass.",
+      "requiredLayerScores": [
+        "silhouetteProportion",
+        "componentStructure",
+        "formDetail",
+        "materialSurface",
+        "lightingCamera"
+      ],
+      "featureReviewPolicy": {
+        "enabled": true,
+        "reviewUnit": "semantic-subsystem",
+        "maxCriticalFeaturesPerPass": 5,
+        "maxImportantFeaturesPerPass": 3,
+        "criticalDefaultThreshold": 0.8,
+        "importantAverageThreshold": 0.65,
+        "adaptiveEscalation": true,
+        "singleImagePairOnly": true,
+        "selectionRule": "Choose only the most visually salient, identity-defining, user-prioritized, or high-risk semantic systems. Group repeated parts instead of reviewing every mesh. AI vision scores every selected feature from the same full reference/render pair."
+      }
+    },
+    "reviewAfterPasses": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "surface-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "allowedActions": [
+      "continue",
+      "refine-spec",
+      "refine-code",
+      "request-input",
+      "stop"
+    ],
+    "specRefineTriggers": [
+      "missing component",
+      "wrong primitive family",
+      "wrong proportions",
+      "material layer under-specified",
+      "local feature not traceable to viewEvidence",
+      "reference ambiguity discovered during implementation"
+    ],
+    "codeRefineTriggers": [
+      "spec is adequate but generated geometry/material does not match",
+      "browser render differs from reference",
+      "performance budget exceeded",
+      "lighting hides geometry or material response"
+    ],
+    "stopCriteria": [
+      "target fidelity reached or user accepts current approximation",
+      "remaining gaps require new reference images or manual art"
+    ],
+    "screenshotPolicy": {
+      "requiredForPasses": [
+        "blockout",
+        "structural-pass",
+        "form-refinement",
+        "material-pass",
+        "surface-pass",
+        "lighting-pass",
+        "interaction-pass"
+      ],
+      "preferredCapture": "in-app-browser-screenshot",
+      "fallbackCapture": "user-supplied-screenshot-path",
+      "minimumEvidence": "Each visual pass needs a reference image, rendered screenshot, side-by-side comparison sheet, AI vision score, layer scores, and critique before choosing continue.",
+      "reviewPairRule": "Compare the same camera/viewpoint whenever possible; do not judge a front reference against a random render angle.",
+      "acceptanceAuthority": "AI vision review of the comparison sheet. Code-generated pixel similarity is not sufficient evidence."
+    }
+  },
+  "featureReviewTargets": [
+    {
+      "id": "lamp-silhouette",
+      "name": "Base stem hinge and shade proportions",
+      "tier": "critical",
+      "passIds": [
+        "blockout",
+        "form-refinement"
+      ],
+      "minimumScore": 0.82,
+      "mustPass": true,
+      "componentRefs": [
+        "base",
+        "stem",
+        "shade"
+      ],
+      "evidenceRefs": [
+        "front-view",
+        "side-view"
+      ]
+    },
+    {
+      "id": "lamp-articulation",
+      "name": "Head pivot socket and button contact",
+      "tier": "critical",
+      "passIds": [
+        "structural-pass",
+        "interaction-pass"
+      ],
+      "minimumScore": 0.82,
+      "mustPass": true,
+      "componentRefs": [
+        "hinge",
+        "shade",
+        "top-button"
+      ],
+      "evidenceRefs": [
+        "side-view",
+        "three-quarter-view"
+      ]
+    },
+    {
+      "id": "lamp-emitter",
+      "name": "Recessed reflector bulb and diffuser stack",
+      "tier": "critical",
+      "passIds": [
+        "form-refinement",
+        "lighting-pass"
+      ],
+      "minimumScore": 0.82,
+      "mustPass": true,
+      "componentRefs": [
+        "reflector",
+        "bulb",
+        "diffuser"
+      ],
+      "evidenceRefs": [
+        "front-view",
+        "three-quarter-view"
+      ]
+    },
+    {
+      "id": "lamp-ink",
+      "name": "Stable tiered irregular outline",
+      "tier": "critical",
+      "passIds": [
+        "material-pass",
+        "optimization-pass"
+      ],
+      "minimumScore": 0.82,
+      "mustPass": true,
+      "componentRefs": [
+        "base",
+        "hinge",
+        "shade-rim"
+      ],
+      "evidenceRefs": [
+        "front-view",
+        "side-view"
+      ]
+    }
+  ],
+  "sculptPipeline": {
+    "passGateMode": "locked-sequential",
+    "passOrder": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "currentPass": "complete",
+    "completedPasses": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "lastCompletedPass": "optimization-pass",
+    "blockedReason": "",
+    "nextRequiredEvidence": []
+  },
+  "lookDevTargets": {
+    "qualityPriority": "reference-fidelity",
+    "materialPass": {
+      "albedoPaletteRequired": true,
+      "roughnessVariationRequired": true,
+      "normalOrBumpRequired": true,
+      "localOverridesRequired": true,
+      "minimumTextureResolution": 1024,
+      "preferredTextureResolution": 2048,
+      "independentMapChannels": [
+        "albedo",
+        "roughness",
+        "height",
+        "normal",
+        "ambient-occlusion"
+      ],
+      "requiredSurfaceFrequencyBands": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "geometryReliefRequiredWhenSilhouetteAffected": true,
+      "referencePbrExtraction": {
+        "requiredWhenSourceImagePresent": true,
+        "targetThreshold": 0.7,
+        "stopOnLowConfidence": true,
+        "script": "forge/stage1_intake/extract_pbr_evidence.py",
+        "acceptedLimitation": "single-image extraction is reference-derived inference, not exact photogrammetry"
+      },
+      "mustAvoid": [
+        "single flat albedo per material",
+        "uniform roughness",
+        "albedo texture reused as roughness/height/normal/AO",
+        "single-frequency random noise",
+        "plastic-looking smooth bark, stone, cloth, foliage, or aged material",
+        "local color/detail described only in prose without material masks",
+        "claiming exact PBR recovery when confidence is below the target threshold"
+      ]
+    },
+    "lightingPass": {
+      "requiredTerms": [
+        "key light",
+        "fill light",
+        "rim or environment light",
+        "exposure",
+        "tone mapping",
+        "background",
+        "contact shadow"
+      ],
+      "mustAvoid": [
+        "ambient-only lighting",
+        "flat value range",
+        "missing contact shadow",
+        "reference lighting copied without separating material readability"
+      ]
+    },
+    "screenshotReview": [
+      "Compare albedo palette and local color zones.",
+      "Compare roughness/normal/bump response under light.",
+      "Compare cavity dirt, edge wear, stains, moss, scratches, or other local masks.",
+      "Compare key/fill/rim structure, exposure, tone mapping, background, and contact shadows.",
+      "Capture a neutral-light render to verify material readability without reference lighting.",
+      "Capture a grazing-light close-up to expose flat normals, uniform roughness, tiling, and plastic highlights.",
+      "Capture a reference-matched render from the same camera framing as the source."
+    ]
+  },
+  "actionReadiness": {
+    "contract": "Every macro/meso component should be generated as a stable named Object3D pivot node with a mesh child, action metadata, optional sockets, collider proxy, and destruction metadata.",
+    "defaultRigType": "action-ready-static-rig",
+    "rootMotionNode": "root",
+    "requiredComponentFields": [
+      "id",
+      "parent",
+      "transform",
+      "attachment for child appendages, connectors, limbs, tubes, handles, legs, horns, wings, branches, or cables",
+      "actionProfile.animationRole",
+      "actionProfile.pivot",
+      "actionProfile.collider",
+      "actionProfile.destruction"
+    ],
+    "transformChannels": [
+      "translate",
+      "rotate",
+      "scale",
+      "bend",
+      "twist",
+      "detach",
+      "visibility",
+      "material-state"
+    ],
+    "authoringRules": [
+      "Do not collapse independently movable parts into one mesh.",
+      "Put transforms on component pivot groups, not only on raw meshes.",
+      "For attached child parts, put the pivot at the semantic root/socket and build visible geometry from localStart to localEnd.",
+      "Represent hinge, socket, detachable, and breakable intent even when no animation is implemented yet.",
+      "Use simplified collider proxies for runtime physics instead of visual mesh colliders by default."
+    ],
+    "destructionPolicy": {
+      "defaultBreakable": false,
+      "fractureGroupNaming": "Use stable semantic names such as body-shell, left-hinge, glass-panel, branch-segment.",
+      "debrisStrategy": "Prefer detachable component groups and a small number of procedural fragments over random mesh explosion."
+    }
+  },
+  "assumptions": [
+    "No usable GPT Image 2 credential was available. Existing v1 turntable renders are conditionally admitted and are not claimed as generated concept art.",
+    "Hidden shade interior remains an explicit procedural approximation."
+  ],
+  "coordinateFrame": {
+    "front": "camera-facing side in the reference image",
+    "up": "image up direction",
+    "scaleReference": "unit scale; adjust after first browser render"
+  },
+  "silhouette": {
+    "boundingShape": "",
+    "aspectRatios": [],
+    "symmetry": "",
+    "dominantCurves": [],
+    "negativeSpaces": [],
+    "landmarks": []
+  },
+  "viewEvidence": [
+    {
+      "id": "front-view",
+      "view": "front",
+      "imagePath": "references/intake-v2/lamp/views/front.png",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "faceted lamp silhouette",
+        "Sakura palette",
+        "articulated shade"
+      ],
+      "confidence": 0.88
+    },
+    {
+      "id": "side-view",
+      "view": "side",
+      "imagePath": "references/intake-v2/lamp/views/side.png",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "faceted lamp silhouette",
+        "Sakura palette",
+        "articulated shade"
+      ],
+      "confidence": 0.88
+    },
+    {
+      "id": "back-view",
+      "view": "back",
+      "imagePath": "references/intake-v2/lamp/views/back.png",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "faceted lamp silhouette",
+        "Sakura palette",
+        "articulated shade"
+      ],
+      "confidence": 0.88
+    },
+    {
+      "id": "three-quarter-view",
+      "view": "three-quarter",
+      "imagePath": "references/intake-v2/lamp/views/three-quarter.png",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "faceted lamp silhouette",
+        "Sakura palette",
+        "articulated shade"
+      ],
+      "confidence": 0.88
+    }
+  ],
+  "componentTree": [
+    {
+      "id": "base",
+      "name": "Lamp base",
+      "level": "macro",
+      "role": "base",
+      "importance": 1,
+      "confidence": 0.9,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "twelve-sided stepped radial base",
+      "geometryDescriptor": {
+        "topologyIntent": "twelve-sided stepped radial base",
+        "edgeTreatment": {
+          "type": "faceted-chamfer",
+          "bevelRadius": 0.015,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "none-solid-toon",
+        "normalStrategy": "generated vertex normals"
+      },
+      "parent": null,
+      "attachment": null,
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 1,
+        "units": "relative",
+        "confidence": 0.9
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-visual",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 1
+        },
+        "transformChannels": {
+          "translate": false,
+          "rotate": false,
+          "scale": false,
+          "bend": false,
+          "twist": false,
+          "detach": true,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "box",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "visual package proxy"
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "lamp-base",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "accent-paint"
+        }
+      },
+      "material": "accent-paint",
+      "materialLayers": [
+        "accent-paint"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(245, 234, 219, 1)",
+        "secondaryAlbedo": "rgba(113, 102, 127, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9
+      },
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "base.base-beveled-rim",
+        "base.base-layer-seam",
+        "base.base-beveled-rim",
+        "base.base-layer-seam",
+        "base.stem-foot-collar",
+        "base.stem-satin-highlight",
+        "base.hinge-round-cap",
+        "base.hinge-yoke",
+        "base.shade-taper",
+        "base.shade-front-rim",
+        "base.shade-panel-value",
+        "base.top-button",
+        "base.diffuser-emission"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.22,
+        "microRoughness": 0.05,
+        "bumpAmplitude": 0,
+        "normalPattern": "none",
+        "displacementPattern": "none",
+        "occlusionPattern": "toon cavity tint",
+        "edgeWearPattern": "none-clean-sakura",
+        "notes": "clean stylized finish"
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view",
+        "three-quarter-view"
+      ],
+      "details": [
+        {
+          "id": "base.base-beveled-rim",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view"
+          ]
+        },
+        {
+          "id": "base.base-layer-seam",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view"
+          ]
+        }
+      ],
+      "fidelityTier": "final"
+    },
+    {
+      "id": "stem",
+      "name": "Lamp stem",
+      "level": "macro",
+      "role": "stem",
+      "importance": 1,
+      "confidence": 0.9,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "slender cream support with pink foot collar",
+      "geometryDescriptor": {
+        "topologyIntent": "slender cream support with pink foot collar",
+        "edgeTreatment": {
+          "type": "faceted-chamfer",
+          "bevelRadius": 0.015,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "none-solid-toon",
+        "normalStrategy": "generated vertex normals"
+      },
+      "parent": "base",
+      "attachment": {
+        "parentSocket": "base-contact",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.1,
+          0
+        ],
+        "contactType": "overlap",
+        "embedDepth": 0.025,
+        "overlap": 0.025,
+        "gapTolerance": 0.005
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 1,
+        "units": "relative",
+        "confidence": 0.9
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-visual",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 1
+        },
+        "transformChannels": {
+          "translate": false,
+          "rotate": false,
+          "scale": false,
+          "bend": false,
+          "twist": false,
+          "detach": true,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "box",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "visual package proxy"
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "lamp-stem",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "cream-paint"
+        }
+      },
+      "material": "cream-paint",
+      "materialLayers": [
+        "cream-paint"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(245, 234, 219, 1)",
+        "secondaryAlbedo": "rgba(113, 102, 127, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9
+      },
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "stem.stem-foot-collar"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.22,
+        "microRoughness": 0.05,
+        "bumpAmplitude": 0,
+        "normalPattern": "none",
+        "displacementPattern": "none",
+        "occlusionPattern": "toon cavity tint",
+        "edgeWearPattern": "none-clean-sakura",
+        "notes": "clean stylized finish"
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view",
+        "three-quarter-view"
+      ],
+      "details": [
+        {
+          "id": "stem.stem-foot-collar",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view"
+          ]
+        }
+      ],
+      "fidelityTier": "final"
+    },
+    {
+      "id": "hinge",
+      "name": "Lamp hinge",
+      "level": "macro",
+      "role": "hinge",
+      "importance": 1,
+      "confidence": 0.9,
+      "primitive": "capsule",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "rear yoke, bridge, axle and paired side caps",
+      "geometryDescriptor": {
+        "topologyIntent": "rear yoke, bridge, axle and paired side caps",
+        "edgeTreatment": {
+          "type": "faceted-chamfer",
+          "bevelRadius": 0.015,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "none-solid-toon",
+        "normalStrategy": "generated vertex normals"
+      },
+      "parent": "stem",
+      "attachment": {
+        "parentSocket": "stem-contact",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.1,
+          0
+        ],
+        "contactType": "overlap",
+        "embedDepth": 0.025,
+        "overlap": 0.025,
+        "gapTolerance": 0.005
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 1,
+        "units": "relative",
+        "confidence": 0.9
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-visual",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 1
+        },
+        "transformChannels": {
+          "translate": false,
+          "rotate": false,
+          "scale": false,
+          "bend": false,
+          "twist": false,
+          "detach": true,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "box",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "visual package proxy"
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "lamp-hinge",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "hinge-paint"
+        }
+      },
+      "material": "hinge-paint",
+      "materialLayers": [
+        "hinge-paint"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(245, 234, 219, 1)",
+        "secondaryAlbedo": "rgba(113, 102, 127, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9
+      },
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "hinge.hinge-round-cap",
+        "hinge.hinge-yoke"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.22,
+        "microRoughness": 0.05,
+        "bumpAmplitude": 0,
+        "normalPattern": "none",
+        "displacementPattern": "none",
+        "occlusionPattern": "toon cavity tint",
+        "edgeWearPattern": "none-clean-sakura",
+        "notes": "clean stylized finish"
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view",
+        "three-quarter-view"
+      ],
+      "details": [
+        {
+          "id": "hinge.hinge-round-cap",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view"
+          ]
+        },
+        {
+          "id": "hinge.hinge-yoke",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view"
+          ]
+        }
+      ],
+      "fidelityTier": "final"
+    },
+    {
+      "id": "shade",
+      "name": "Lamp shade",
+      "level": "macro",
+      "role": "shade",
+      "importance": 1,
+      "confidence": 0.9,
+      "primitive": "cone",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "open twelve-plane tapered bell shade",
+      "geometryDescriptor": {
+        "topologyIntent": "open twelve-plane tapered bell shade",
+        "edgeTreatment": {
+          "type": "faceted-chamfer",
+          "bevelRadius": 0.015,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "none-solid-toon",
+        "normalStrategy": "generated vertex normals"
+      },
+      "parent": "hinge",
+      "attachment": {
+        "parentSocket": "hinge-contact",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.1,
+          0
+        ],
+        "contactType": "overlap",
+        "embedDepth": 0.025,
+        "overlap": 0.025,
+        "gapTolerance": 0.005
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 1,
+        "units": "relative",
+        "confidence": 0.9
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "hinge-child",
+        "pivot": {
+          "mode": "hinge",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 1
+        },
+        "transformChannels": {
+          "translate": false,
+          "rotate": true,
+          "scale": false,
+          "bend": false,
+          "twist": false,
+          "detach": true,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [
+          {
+            "id": "lamp-light-socket",
+            "localPosition": [
+              0,
+              -0.285,
+              0.74
+            ],
+            "direction": [
+              0,
+              -1,
+              0
+            ],
+            "role": "effect-emitter"
+          }
+        ],
+        "collider": {
+          "type": "box",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "visual package proxy"
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "lamp-shade",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "cream-paint"
+        }
+      },
+      "material": "cream-paint",
+      "materialLayers": [
+        "cream-paint"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(245, 234, 219, 1)",
+        "secondaryAlbedo": "rgba(113, 102, 127, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9
+      },
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "shade.shade-taper",
+        "shade.shade-front-rim"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.22,
+        "microRoughness": 0.05,
+        "bumpAmplitude": 0,
+        "normalPattern": "none",
+        "displacementPattern": "none",
+        "occlusionPattern": "toon cavity tint",
+        "edgeWearPattern": "none-clean-sakura",
+        "notes": "clean stylized finish"
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view",
+        "three-quarter-view"
+      ],
+      "details": [
+        {
+          "id": "shade.shade-taper",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view"
+          ]
+        },
+        {
+          "id": "shade.shade-front-rim",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view"
+          ]
+        }
+      ],
+      "fidelityTier": "final"
+    },
+    {
+      "id": "base-rings",
+      "name": "Lamp base-rings",
+      "level": "meso",
+      "role": "base-rings",
+      "importance": 0.8,
+      "confidence": 0.9,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "three stacked silhouette rings",
+      "geometryDescriptor": {
+        "topologyIntent": "three stacked silhouette rings",
+        "edgeTreatment": {
+          "type": "faceted-chamfer",
+          "bevelRadius": 0.015,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "none-solid-toon",
+        "normalStrategy": "generated vertex normals"
+      },
+      "parent": "base",
+      "attachment": {
+        "parentSocket": "base-contact",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.1,
+          0
+        ],
+        "contactType": "overlap",
+        "embedDepth": 0.025,
+        "overlap": 0.025,
+        "gapTolerance": 0.005
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 1,
+        "units": "relative",
+        "confidence": 0.9
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-visual",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 1
+        },
+        "transformChannels": {
+          "translate": false,
+          "rotate": false,
+          "scale": false,
+          "bend": false,
+          "twist": false,
+          "detach": true,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "box",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "visual package proxy"
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "lamp-base-rings",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "accent-paint"
+        }
+      },
+      "material": "accent-paint",
+      "materialLayers": [
+        "accent-paint"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(245, 234, 219, 1)",
+        "secondaryAlbedo": "rgba(113, 102, 127, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9
+      },
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "base-rings.base-beveled-rim",
+        "base-rings.base-layer-seam"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.22,
+        "microRoughness": 0.05,
+        "bumpAmplitude": 0,
+        "normalPattern": "none",
+        "displacementPattern": "none",
+        "occlusionPattern": "toon cavity tint",
+        "edgeWearPattern": "none-clean-sakura",
+        "notes": "clean stylized finish"
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view",
+        "three-quarter-view"
+      ],
+      "details": [
+        {
+          "id": "base-rings.base-beveled-rim",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view"
+          ]
+        },
+        {
+          "id": "base-rings.base-layer-seam",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view"
+          ]
+        }
+      ],
+      "fidelityTier": "final"
+    },
+    {
+      "id": "stem-collar",
+      "name": "Lamp stem-collar",
+      "level": "meso",
+      "role": "stem-collar",
+      "importance": 0.8,
+      "confidence": 0.9,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "overlapping radial collar",
+      "geometryDescriptor": {
+        "topologyIntent": "overlapping radial collar",
+        "edgeTreatment": {
+          "type": "faceted-chamfer",
+          "bevelRadius": 0.015,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "none-solid-toon",
+        "normalStrategy": "generated vertex normals"
+      },
+      "parent": "stem",
+      "attachment": {
+        "parentSocket": "stem-contact",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.1,
+          0
+        ],
+        "contactType": "overlap",
+        "embedDepth": 0.025,
+        "overlap": 0.025,
+        "gapTolerance": 0.005
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 1,
+        "units": "relative",
+        "confidence": 0.9
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-visual",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 1
+        },
+        "transformChannels": {
+          "translate": false,
+          "rotate": false,
+          "scale": false,
+          "bend": false,
+          "twist": false,
+          "detach": true,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "box",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "visual package proxy"
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "lamp-stem-collar",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "accent-paint"
+        }
+      },
+      "material": "accent-paint",
+      "materialLayers": [
+        "accent-paint"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(245, 234, 219, 1)",
+        "secondaryAlbedo": "rgba(113, 102, 127, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9
+      },
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "stem-collar.stem-foot-collar"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.22,
+        "microRoughness": 0.05,
+        "bumpAmplitude": 0,
+        "normalPattern": "none",
+        "displacementPattern": "none",
+        "occlusionPattern": "toon cavity tint",
+        "edgeWearPattern": "none-clean-sakura",
+        "notes": "clean stylized finish"
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view",
+        "three-quarter-view"
+      ],
+      "details": [
+        {
+          "id": "stem-collar.stem-foot-collar",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view"
+          ]
+        }
+      ],
+      "fidelityTier": "final"
+    },
+    {
+      "id": "hinge-caps",
+      "name": "Lamp hinge-caps",
+      "level": "meso",
+      "role": "hinge-caps",
+      "importance": 0.8,
+      "confidence": 0.9,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "paired axis caps",
+      "geometryDescriptor": {
+        "topologyIntent": "paired axis caps",
+        "edgeTreatment": {
+          "type": "faceted-chamfer",
+          "bevelRadius": 0.015,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "none-solid-toon",
+        "normalStrategy": "generated vertex normals"
+      },
+      "parent": "hinge",
+      "attachment": {
+        "parentSocket": "hinge-contact",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.1,
+          0
+        ],
+        "contactType": "overlap",
+        "embedDepth": 0.025,
+        "overlap": 0.025,
+        "gapTolerance": 0.005
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 1,
+        "units": "relative",
+        "confidence": 0.9
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-visual",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 1
+        },
+        "transformChannels": {
+          "translate": false,
+          "rotate": false,
+          "scale": false,
+          "bend": false,
+          "twist": false,
+          "detach": true,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "box",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "visual package proxy"
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "lamp-hinge-caps",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "accent-paint"
+        }
+      },
+      "material": "accent-paint",
+      "materialLayers": [
+        "accent-paint"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(245, 234, 219, 1)",
+        "secondaryAlbedo": "rgba(113, 102, 127, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9
+      },
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "hinge-caps.hinge-round-cap"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.22,
+        "microRoughness": 0.05,
+        "bumpAmplitude": 0,
+        "normalPattern": "none",
+        "displacementPattern": "none",
+        "occlusionPattern": "toon cavity tint",
+        "edgeWearPattern": "none-clean-sakura",
+        "notes": "clean stylized finish"
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view",
+        "three-quarter-view"
+      ],
+      "details": [
+        {
+          "id": "hinge-caps.hinge-round-cap",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view"
+          ]
+        }
+      ],
+      "fidelityTier": "final"
+    },
+    {
+      "id": "shade-rim",
+      "name": "Lamp shade-rim",
+      "level": "meso",
+      "role": "shade-rim",
+      "importance": 0.8,
+      "confidence": 0.9,
+      "primitive": "torus",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "separate mouth rim",
+      "geometryDescriptor": {
+        "topologyIntent": "separate mouth rim",
+        "edgeTreatment": {
+          "type": "faceted-chamfer",
+          "bevelRadius": 0.015,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "none-solid-toon",
+        "normalStrategy": "generated vertex normals"
+      },
+      "parent": "shade",
+      "attachment": {
+        "parentSocket": "shade-contact",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.1,
+          0
+        ],
+        "contactType": "overlap",
+        "embedDepth": 0.025,
+        "overlap": 0.025,
+        "gapTolerance": 0.005
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 1,
+        "units": "relative",
+        "confidence": 0.9
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-visual",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 1
+        },
+        "transformChannels": {
+          "translate": false,
+          "rotate": false,
+          "scale": false,
+          "bend": false,
+          "twist": false,
+          "detach": true,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "box",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "visual package proxy"
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "lamp-shade-rim",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "warm-rim"
+        }
+      },
+      "material": "warm-rim",
+      "materialLayers": [
+        "warm-rim"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(245, 234, 219, 1)",
+        "secondaryAlbedo": "rgba(113, 102, 127, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9
+      },
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "shade-rim.shade-front-rim"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.22,
+        "microRoughness": 0.05,
+        "bumpAmplitude": 0,
+        "normalPattern": "none",
+        "displacementPattern": "none",
+        "occlusionPattern": "toon cavity tint",
+        "edgeWearPattern": "none-clean-sakura",
+        "notes": "clean stylized finish"
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view",
+        "three-quarter-view"
+      ],
+      "details": [
+        {
+          "id": "shade-rim.shade-front-rim",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view"
+          ]
+        }
+      ],
+      "fidelityTier": "final"
+    },
+    {
+      "id": "reflector",
+      "name": "Lamp reflector",
+      "level": "meso",
+      "role": "reflector",
+      "importance": 0.8,
+      "confidence": 0.9,
+      "primitive": "cone",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "recessed open reflector",
+      "geometryDescriptor": {
+        "topologyIntent": "recessed open reflector",
+        "edgeTreatment": {
+          "type": "faceted-chamfer",
+          "bevelRadius": 0.015,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "none-solid-toon",
+        "normalStrategy": "generated vertex normals"
+      },
+      "parent": "shade",
+      "attachment": {
+        "parentSocket": "shade-contact",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.1,
+          0
+        ],
+        "contactType": "overlap",
+        "embedDepth": 0.025,
+        "overlap": 0.025,
+        "gapTolerance": 0.005
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 1,
+        "units": "relative",
+        "confidence": 0.9
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-visual",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 1
+        },
+        "transformChannels": {
+          "translate": false,
+          "rotate": false,
+          "scale": false,
+          "bend": false,
+          "twist": false,
+          "detach": true,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "box",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "visual package proxy"
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "lamp-reflector",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "warm-emitter"
+        }
+      },
+      "material": "warm-emitter",
+      "materialLayers": [
+        "warm-emitter"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(245, 234, 219, 1)",
+        "secondaryAlbedo": "rgba(113, 102, 127, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9
+      },
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "reflector.diffuser-emission"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.22,
+        "microRoughness": 0.05,
+        "bumpAmplitude": 0,
+        "normalPattern": "none",
+        "displacementPattern": "none",
+        "occlusionPattern": "toon cavity tint",
+        "edgeWearPattern": "none-clean-sakura",
+        "notes": "clean stylized finish"
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view",
+        "three-quarter-view"
+      ],
+      "details": [
+        {
+          "id": "reflector.diffuser-emission",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view"
+          ]
+        }
+      ],
+      "fidelityTier": "final"
+    },
+    {
+      "id": "bulb",
+      "name": "Lamp bulb",
+      "level": "meso",
+      "role": "bulb",
+      "importance": 0.8,
+      "confidence": 0.9,
+      "primitive": "sphere",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "volumetric warm bulb",
+      "geometryDescriptor": {
+        "topologyIntent": "volumetric warm bulb",
+        "edgeTreatment": {
+          "type": "faceted-chamfer",
+          "bevelRadius": 0.015,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "none-solid-toon",
+        "normalStrategy": "generated vertex normals"
+      },
+      "parent": "shade",
+      "attachment": {
+        "parentSocket": "shade-contact",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.1,
+          0
+        ],
+        "contactType": "overlap",
+        "embedDepth": 0.025,
+        "overlap": 0.025,
+        "gapTolerance": 0.005
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 1,
+        "units": "relative",
+        "confidence": 0.9
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-visual",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 1
+        },
+        "transformChannels": {
+          "translate": false,
+          "rotate": false,
+          "scale": false,
+          "bend": false,
+          "twist": false,
+          "detach": true,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "box",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "visual package proxy"
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "lamp-bulb",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "warm-emitter"
+        }
+      },
+      "material": "warm-emitter",
+      "materialLayers": [
+        "warm-emitter"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(245, 234, 219, 1)",
+        "secondaryAlbedo": "rgba(113, 102, 127, 1)",
+        "materialClass": "glass",
+        "materialClassConfidence": 0.9
+      },
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "bulb.diffuser-emission"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.22,
+        "microRoughness": 0.05,
+        "bumpAmplitude": 0,
+        "normalPattern": "none",
+        "displacementPattern": "none",
+        "occlusionPattern": "toon cavity tint",
+        "edgeWearPattern": "none-clean-sakura",
+        "notes": "clean stylized finish"
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view",
+        "three-quarter-view"
+      ],
+      "details": [
+        {
+          "id": "bulb.diffuser-emission",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view"
+          ]
+        }
+      ],
+      "fidelityTier": "final"
+    },
+    {
+      "id": "diffuser",
+      "name": "Lamp diffuser",
+      "level": "meso",
+      "role": "diffuser",
+      "importance": 0.8,
+      "confidence": 0.9,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "recessed warm disk",
+      "geometryDescriptor": {
+        "topologyIntent": "recessed warm disk",
+        "edgeTreatment": {
+          "type": "faceted-chamfer",
+          "bevelRadius": 0.015,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "none-solid-toon",
+        "normalStrategy": "generated vertex normals"
+      },
+      "parent": "shade",
+      "attachment": {
+        "parentSocket": "shade-contact",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.1,
+          0
+        ],
+        "contactType": "overlap",
+        "embedDepth": 0.025,
+        "overlap": 0.025,
+        "gapTolerance": 0.005
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 1,
+        "units": "relative",
+        "confidence": 0.9
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-visual",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 1
+        },
+        "transformChannels": {
+          "translate": false,
+          "rotate": false,
+          "scale": false,
+          "bend": false,
+          "twist": false,
+          "detach": true,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "box",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "visual package proxy"
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "lamp-diffuser",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "warm-emitter"
+        }
+      },
+      "material": "warm-emitter",
+      "materialLayers": [
+        "warm-emitter"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(245, 234, 219, 1)",
+        "secondaryAlbedo": "rgba(113, 102, 127, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9
+      },
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "diffuser.diffuser-emission"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.22,
+        "microRoughness": 0.05,
+        "bumpAmplitude": 0,
+        "normalPattern": "none",
+        "displacementPattern": "none",
+        "occlusionPattern": "toon cavity tint",
+        "edgeWearPattern": "none-clean-sakura",
+        "notes": "clean stylized finish"
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view",
+        "three-quarter-view"
+      ],
+      "details": [
+        {
+          "id": "diffuser.diffuser-emission",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view"
+          ]
+        }
+      ],
+      "fidelityTier": "final"
+    },
+    {
+      "id": "top-button",
+      "name": "Lamp top-button",
+      "level": "meso",
+      "role": "top-button",
+      "importance": 0.8,
+      "confidence": 0.9,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "rotating top control",
+      "geometryDescriptor": {
+        "topologyIntent": "rotating top control",
+        "edgeTreatment": {
+          "type": "faceted-chamfer",
+          "bevelRadius": 0.015,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "none-solid-toon",
+        "normalStrategy": "generated vertex normals"
+      },
+      "parent": "shade",
+      "attachment": {
+        "parentSocket": "shade-contact",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.1,
+          0
+        ],
+        "contactType": "overlap",
+        "embedDepth": 0.025,
+        "overlap": 0.025,
+        "gapTolerance": 0.005
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 1,
+        "units": "relative",
+        "confidence": 0.9
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-visual",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 1
+        },
+        "transformChannels": {
+          "translate": false,
+          "rotate": true,
+          "scale": false,
+          "bend": false,
+          "twist": false,
+          "detach": true,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "box",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "visual package proxy"
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "lamp-top-button",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "accent-paint"
+        }
+      },
+      "material": "accent-paint",
+      "materialLayers": [
+        "accent-paint"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(245, 234, 219, 1)",
+        "secondaryAlbedo": "rgba(113, 102, 127, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9
+      },
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "top-button.top-button"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.22,
+        "microRoughness": 0.05,
+        "bumpAmplitude": 0,
+        "normalPattern": "none",
+        "displacementPattern": "none",
+        "occlusionPattern": "toon cavity tint",
+        "edgeWearPattern": "none-clean-sakura",
+        "notes": "clean stylized finish"
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view",
+        "three-quarter-view"
+      ],
+      "details": [
+        {
+          "id": "top-button.top-button",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view"
+          ]
+        }
+      ],
+      "fidelityTier": "final"
+    },
+    {
+      "id": "indicator",
+      "name": "Lamp indicator",
+      "level": "micro",
+      "role": "indicator",
+      "importance": 0.8,
+      "confidence": 0.9,
+      "primitive": "sphere",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "embedded status point",
+      "geometryDescriptor": {
+        "topologyIntent": "embedded status point",
+        "edgeTreatment": {
+          "type": "faceted-chamfer",
+          "bevelRadius": 0.015,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "none-solid-toon",
+        "normalStrategy": "generated vertex normals"
+      },
+      "parent": "base",
+      "attachment": {
+        "parentSocket": "base-contact",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.1,
+          0
+        ],
+        "contactType": "overlap",
+        "embedDepth": 0.025,
+        "overlap": 0.025,
+        "gapTolerance": 0.005
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 1,
+        "units": "relative",
+        "confidence": 0.9
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-visual",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 1
+        },
+        "transformChannels": {
+          "translate": false,
+          "rotate": false,
+          "scale": false,
+          "bend": false,
+          "twist": false,
+          "detach": true,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "box",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "visual package proxy"
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "lamp-indicator",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "indicator"
+        }
+      },
+      "material": "indicator",
+      "materialLayers": [
+        "indicator"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(245, 234, 219, 1)",
+        "secondaryAlbedo": "rgba(113, 102, 127, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9
+      },
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "indicator.status-indicator"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.22,
+        "microRoughness": 0.05,
+        "bumpAmplitude": 0,
+        "normalPattern": "none",
+        "displacementPattern": "none",
+        "occlusionPattern": "toon cavity tint",
+        "edgeWearPattern": "none-clean-sakura",
+        "notes": "clean stylized finish"
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view",
+        "three-quarter-view"
+      ],
+      "details": [
+        {
+          "id": "indicator.status-indicator",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view"
+          ]
+        }
+      ],
+      "fidelityTier": "final"
+    },
+    {
+      "id": "feet",
+      "name": "Lamp feet",
+      "level": "micro",
+      "role": "feet",
+      "importance": 0.8,
+      "confidence": 0.9,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "paired underside feet",
+      "geometryDescriptor": {
+        "topologyIntent": "paired underside feet",
+        "edgeTreatment": {
+          "type": "faceted-chamfer",
+          "bevelRadius": 0.015,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "none-solid-toon",
+        "normalStrategy": "generated vertex normals"
+      },
+      "parent": "base",
+      "attachment": {
+        "parentSocket": "base-contact",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.1,
+          0
+        ],
+        "contactType": "overlap",
+        "embedDepth": 0.025,
+        "overlap": 0.025,
+        "gapTolerance": 0.005
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 1,
+        "units": "relative",
+        "confidence": 0.9
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-visual",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 1
+        },
+        "transformChannels": {
+          "translate": false,
+          "rotate": false,
+          "scale": false,
+          "bend": false,
+          "twist": false,
+          "detach": true,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "box",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "visual package proxy"
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "lamp-feet",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "shadow-rubber"
+        }
+      },
+      "material": "shadow-rubber",
+      "materialLayers": [
+        "shadow-rubber"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(245, 234, 219, 1)",
+        "secondaryAlbedo": "rgba(113, 102, 127, 1)",
+        "materialClass": "rubber",
+        "materialClassConfidence": 0.9
+      },
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "feet.underside-feet"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.22,
+        "microRoughness": 0.05,
+        "bumpAmplitude": 0,
+        "normalPattern": "none",
+        "displacementPattern": "none",
+        "occlusionPattern": "toon cavity tint",
+        "edgeWearPattern": "none-clean-sakura",
+        "notes": "clean stylized finish"
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view",
+        "three-quarter-view"
+      ],
+      "details": [
+        {
+          "id": "feet.underside-feet",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view"
+          ]
+        }
+      ],
+      "fidelityTier": "final"
+    }
+  ],
+  "materials": [
+    {
+      "id": "accent-paint",
+      "name": "accent-paint",
+      "type": "toon",
+      "shaderModel": "MeshToonMaterial three bands",
+      "baseColor": "#E8AEC4",
+      "color": "#E8AEC4",
+      "albedo": {
+        "dominant": "#E8AEC4",
+        "secondary": [
+          "#E8AEC4"
+        ],
+        "samplingNotes": "conditioned on admitted v1 evidence"
+      },
+      "colorVariation": {
+        "palette": [
+          "#E8AEC4"
+        ],
+        "pattern": "three toon values",
+        "amplitude": 0.08,
+        "heightCorrelation": 0
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          1,
+          1
+        ],
+        "anisotropy": 1,
+        "texelDensityIntent": "stable object-space procedural field"
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 1,
+          "amplitude": 0.2,
+          "role": "toon bands"
+        },
+        {
+          "id": "meso",
+          "frequency": 4,
+          "amplitude": 0.06,
+          "role": "component value separation"
+        },
+        {
+          "id": "micro",
+          "frequency": 16,
+          "amplitude": 0.01,
+          "role": "stable ink only"
+        }
+      ],
+      "roughness": {
+        "base": 0.62,
+        "variation": 0.04,
+        "map": "independent-accent-paint-roughness",
+        "localResponse": "broad toon highlight"
+      },
+      "clearcoat": 0,
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "pattern": "independent subtle molded field",
+        "strength": 0.05,
+        "scale": 16,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.2,
+        "contactShadowBias": 0.3,
+        "notes": "cool-purple cavity tint"
+      },
+      "wear": {
+        "edgeWear": 0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0,
+        "cavityBias": 0,
+        "color": "#675B78"
+      },
+      "localOverrides": [
+        {
+          "id": "accent-paint-toon-shadow",
+          "region": "component cavities and shade contacts",
+          "evidenceRefs": [
+            "front-view",
+            "three-quarter-view"
+          ],
+          "response": "cool-purple shadow band and clean cavity separation"
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.84,
+        "estimatedFidelity": 0.84,
+        "sourceImage": "references/intake-v2/lamp/views/front.png",
+        "maps": {
+          "albedo": {
+            "path": "references/intake-v2/lamp/views/front.png"
+          },
+          "roughness": {
+            "path": "procedural-accent-paint-roughness"
+          },
+          "height": {
+            "path": "procedural-accent-paint-height"
+          },
+          "normal": {
+            "path": "procedural-accent-paint-normal"
+          },
+          "ao": {
+            "path": "procedural-accent-paint-ao"
+          }
+        }
+      },
+      "shaderNotes": [
+        "Clean three-band toon response; runtime remains texture-free."
+      ],
+      "notes": "SAKURA procedural material"
+    },
+    {
+      "id": "cream-paint",
+      "name": "cream-paint",
+      "type": "toon",
+      "shaderModel": "MeshToonMaterial three bands",
+      "baseColor": "#F8F0DF",
+      "color": "#F8F0DF",
+      "albedo": {
+        "dominant": "#F8F0DF",
+        "secondary": [
+          "#F8F0DF"
+        ],
+        "samplingNotes": "conditioned on admitted v1 evidence"
+      },
+      "colorVariation": {
+        "palette": [
+          "#F8F0DF"
+        ],
+        "pattern": "three toon values",
+        "amplitude": 0.08,
+        "heightCorrelation": 0
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          1,
+          1
+        ],
+        "anisotropy": 1,
+        "texelDensityIntent": "stable object-space procedural field"
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 1,
+          "amplitude": 0.2,
+          "role": "toon bands"
+        },
+        {
+          "id": "meso",
+          "frequency": 4,
+          "amplitude": 0.06,
+          "role": "component value separation"
+        },
+        {
+          "id": "micro",
+          "frequency": 16,
+          "amplitude": 0.01,
+          "role": "stable ink only"
+        }
+      ],
+      "roughness": {
+        "base": 0.68,
+        "variation": 0.04,
+        "map": "independent-cream-paint-roughness",
+        "localResponse": "broad toon highlight"
+      },
+      "clearcoat": 0,
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "pattern": "independent subtle molded field",
+        "strength": 0.05,
+        "scale": 16,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.2,
+        "contactShadowBias": 0.3,
+        "notes": "cool-purple cavity tint"
+      },
+      "wear": {
+        "edgeWear": 0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0,
+        "cavityBias": 0,
+        "color": "#675B78"
+      },
+      "localOverrides": [
+        {
+          "id": "cream-paint-toon-shadow",
+          "region": "component cavities and shade contacts",
+          "evidenceRefs": [
+            "front-view",
+            "three-quarter-view"
+          ],
+          "response": "cool-purple shadow band and clean cavity separation"
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.84,
+        "estimatedFidelity": 0.84,
+        "sourceImage": "references/intake-v2/lamp/views/front.png",
+        "maps": {
+          "albedo": {
+            "path": "references/intake-v2/lamp/views/front.png"
+          },
+          "roughness": {
+            "path": "procedural-cream-paint-roughness"
+          },
+          "height": {
+            "path": "procedural-cream-paint-height"
+          },
+          "normal": {
+            "path": "procedural-cream-paint-normal"
+          },
+          "ao": {
+            "path": "procedural-cream-paint-ao"
+          }
+        }
+      },
+      "shaderNotes": [
+        "Clean three-band toon response; runtime remains texture-free."
+      ],
+      "notes": "SAKURA procedural material"
+    },
+    {
+      "id": "hinge-paint",
+      "name": "hinge-paint",
+      "type": "toon",
+      "shaderModel": "MeshToonMaterial three bands",
+      "baseColor": "#D78FA9",
+      "color": "#D78FA9",
+      "albedo": {
+        "dominant": "#D78FA9",
+        "secondary": [
+          "#D78FA9"
+        ],
+        "samplingNotes": "conditioned on admitted v1 evidence"
+      },
+      "colorVariation": {
+        "palette": [
+          "#D78FA9"
+        ],
+        "pattern": "three toon values",
+        "amplitude": 0.08,
+        "heightCorrelation": 0
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          1,
+          1
+        ],
+        "anisotropy": 1,
+        "texelDensityIntent": "stable object-space procedural field"
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 1,
+          "amplitude": 0.2,
+          "role": "toon bands"
+        },
+        {
+          "id": "meso",
+          "frequency": 4,
+          "amplitude": 0.06,
+          "role": "component value separation"
+        },
+        {
+          "id": "micro",
+          "frequency": 16,
+          "amplitude": 0.01,
+          "role": "stable ink only"
+        }
+      ],
+      "roughness": {
+        "base": 0.64,
+        "variation": 0.04,
+        "map": "independent-hinge-paint-roughness",
+        "localResponse": "broad toon highlight"
+      },
+      "clearcoat": 0,
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "pattern": "independent subtle molded field",
+        "strength": 0.05,
+        "scale": 16,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.2,
+        "contactShadowBias": 0.3,
+        "notes": "cool-purple cavity tint"
+      },
+      "wear": {
+        "edgeWear": 0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0,
+        "cavityBias": 0,
+        "color": "#675B78"
+      },
+      "localOverrides": [
+        {
+          "id": "hinge-paint-toon-shadow",
+          "region": "component cavities and shade contacts",
+          "evidenceRefs": [
+            "front-view",
+            "three-quarter-view"
+          ],
+          "response": "cool-purple shadow band and clean cavity separation"
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.84,
+        "estimatedFidelity": 0.84,
+        "sourceImage": "references/intake-v2/lamp/views/front.png",
+        "maps": {
+          "albedo": {
+            "path": "references/intake-v2/lamp/views/front.png"
+          },
+          "roughness": {
+            "path": "procedural-hinge-paint-roughness"
+          },
+          "height": {
+            "path": "procedural-hinge-paint-height"
+          },
+          "normal": {
+            "path": "procedural-hinge-paint-normal"
+          },
+          "ao": {
+            "path": "procedural-hinge-paint-ao"
+          }
+        }
+      },
+      "shaderNotes": [
+        "Clean three-band toon response; runtime remains texture-free."
+      ],
+      "notes": "SAKURA procedural material"
+    },
+    {
+      "id": "warm-rim",
+      "name": "warm-rim",
+      "type": "toon",
+      "shaderModel": "MeshToonMaterial three bands",
+      "baseColor": "#FFF2D8",
+      "color": "#FFF2D8",
+      "albedo": {
+        "dominant": "#FFF2D8",
+        "secondary": [
+          "#FFF2D8"
+        ],
+        "samplingNotes": "conditioned on admitted v1 evidence"
+      },
+      "colorVariation": {
+        "palette": [
+          "#FFF2D8"
+        ],
+        "pattern": "three toon values",
+        "amplitude": 0.08,
+        "heightCorrelation": 0
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          1,
+          1
+        ],
+        "anisotropy": 1,
+        "texelDensityIntent": "stable object-space procedural field"
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 1,
+          "amplitude": 0.2,
+          "role": "toon bands"
+        },
+        {
+          "id": "meso",
+          "frequency": 4,
+          "amplitude": 0.06,
+          "role": "component value separation"
+        },
+        {
+          "id": "micro",
+          "frequency": 16,
+          "amplitude": 0.01,
+          "role": "stable ink only"
+        }
+      ],
+      "roughness": {
+        "base": 0.54,
+        "variation": 0.04,
+        "map": "independent-warm-rim-roughness",
+        "localResponse": "broad toon highlight"
+      },
+      "clearcoat": 0,
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "pattern": "independent subtle molded field",
+        "strength": 0.05,
+        "scale": 16,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.2,
+        "contactShadowBias": 0.3,
+        "notes": "cool-purple cavity tint"
+      },
+      "wear": {
+        "edgeWear": 0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0,
+        "cavityBias": 0,
+        "color": "#675B78"
+      },
+      "localOverrides": [
+        {
+          "id": "warm-rim-toon-shadow",
+          "region": "component cavities and shade contacts",
+          "evidenceRefs": [
+            "front-view",
+            "three-quarter-view"
+          ],
+          "response": "cool-purple shadow band and clean cavity separation"
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.84,
+        "estimatedFidelity": 0.84,
+        "sourceImage": "references/intake-v2/lamp/views/front.png",
+        "maps": {
+          "albedo": {
+            "path": "references/intake-v2/lamp/views/front.png"
+          },
+          "roughness": {
+            "path": "procedural-warm-rim-roughness"
+          },
+          "height": {
+            "path": "procedural-warm-rim-height"
+          },
+          "normal": {
+            "path": "procedural-warm-rim-normal"
+          },
+          "ao": {
+            "path": "procedural-warm-rim-ao"
+          }
+        }
+      },
+      "shaderNotes": [
+        "Clean three-band toon response; runtime remains texture-free."
+      ],
+      "notes": "SAKURA procedural material"
+    },
+    {
+      "id": "warm-emitter",
+      "name": "warm-emitter",
+      "type": "toon",
+      "shaderModel": "MeshToonMaterial three bands",
+      "baseColor": "#FFEDBD",
+      "color": "#FFEDBD",
+      "albedo": {
+        "dominant": "#FFEDBD",
+        "secondary": [
+          "#FFEDBD"
+        ],
+        "samplingNotes": "conditioned on admitted v1 evidence"
+      },
+      "colorVariation": {
+        "palette": [
+          "#FFEDBD"
+        ],
+        "pattern": "three toon values",
+        "amplitude": 0.08,
+        "heightCorrelation": 0
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          1,
+          1
+        ],
+        "anisotropy": 1,
+        "texelDensityIntent": "stable object-space procedural field"
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 1,
+          "amplitude": 0.2,
+          "role": "toon bands"
+        },
+        {
+          "id": "meso",
+          "frequency": 4,
+          "amplitude": 0.06,
+          "role": "component value separation"
+        },
+        {
+          "id": "micro",
+          "frequency": 16,
+          "amplitude": 0.01,
+          "role": "stable ink only"
+        }
+      ],
+      "roughness": {
+        "base": 0.26,
+        "variation": 0.04,
+        "map": "independent-warm-emitter-roughness",
+        "localResponse": "broad toon highlight"
+      },
+      "clearcoat": 0.35,
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "pattern": "independent subtle molded field",
+        "strength": 0.05,
+        "scale": 16,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.2,
+        "contactShadowBias": 0.3,
+        "notes": "cool-purple cavity tint"
+      },
+      "wear": {
+        "edgeWear": 0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0,
+        "cavityBias": 0,
+        "color": "#675B78"
+      },
+      "localOverrides": [
+        {
+          "id": "warm-emitter-toon-shadow",
+          "region": "component cavities and shade contacts",
+          "evidenceRefs": [
+            "front-view",
+            "three-quarter-view"
+          ],
+          "response": "cool-purple shadow band and clean cavity separation"
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.84,
+        "estimatedFidelity": 0.84,
+        "sourceImage": "references/intake-v2/lamp/views/front.png",
+        "maps": {
+          "albedo": {
+            "path": "references/intake-v2/lamp/views/front.png"
+          },
+          "roughness": {
+            "path": "procedural-warm-emitter-roughness"
+          },
+          "height": {
+            "path": "procedural-warm-emitter-height"
+          },
+          "normal": {
+            "path": "procedural-warm-emitter-normal"
+          },
+          "ao": {
+            "path": "procedural-warm-emitter-ao"
+          }
+        }
+      },
+      "shaderNotes": [
+        "Clean three-band toon response; runtime remains texture-free."
+      ],
+      "notes": "SAKURA procedural material"
+    },
+    {
+      "id": "indicator",
+      "name": "indicator",
+      "type": "toon",
+      "shaderModel": "MeshToonMaterial three bands",
+      "baseColor": "#81798F",
+      "color": "#81798F",
+      "albedo": {
+        "dominant": "#81798F",
+        "secondary": [
+          "#81798F"
+        ],
+        "samplingNotes": "conditioned on admitted v1 evidence"
+      },
+      "colorVariation": {
+        "palette": [
+          "#81798F"
+        ],
+        "pattern": "three toon values",
+        "amplitude": 0.08,
+        "heightCorrelation": 0
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          1,
+          1
+        ],
+        "anisotropy": 1,
+        "texelDensityIntent": "stable object-space procedural field"
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 1,
+          "amplitude": 0.2,
+          "role": "toon bands"
+        },
+        {
+          "id": "meso",
+          "frequency": 4,
+          "amplitude": 0.06,
+          "role": "component value separation"
+        },
+        {
+          "id": "micro",
+          "frequency": 16,
+          "amplitude": 0.01,
+          "role": "stable ink only"
+        }
+      ],
+      "roughness": {
+        "base": 0.58,
+        "variation": 0.04,
+        "map": "independent-indicator-roughness",
+        "localResponse": "broad toon highlight"
+      },
+      "clearcoat": 0,
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "pattern": "independent subtle molded field",
+        "strength": 0.05,
+        "scale": 16,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.2,
+        "contactShadowBias": 0.3,
+        "notes": "cool-purple cavity tint"
+      },
+      "wear": {
+        "edgeWear": 0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0,
+        "cavityBias": 0,
+        "color": "#675B78"
+      },
+      "localOverrides": [
+        {
+          "id": "indicator-toon-shadow",
+          "region": "component cavities and shade contacts",
+          "evidenceRefs": [
+            "front-view",
+            "three-quarter-view"
+          ],
+          "response": "cool-purple shadow band and clean cavity separation"
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.84,
+        "estimatedFidelity": 0.84,
+        "sourceImage": "references/intake-v2/lamp/views/front.png",
+        "maps": {
+          "albedo": {
+            "path": "references/intake-v2/lamp/views/front.png"
+          },
+          "roughness": {
+            "path": "procedural-indicator-roughness"
+          },
+          "height": {
+            "path": "procedural-indicator-height"
+          },
+          "normal": {
+            "path": "procedural-indicator-normal"
+          },
+          "ao": {
+            "path": "procedural-indicator-ao"
+          }
+        }
+      },
+      "shaderNotes": [
+        "Clean three-band toon response; runtime remains texture-free."
+      ],
+      "notes": "SAKURA procedural material"
+    },
+    {
+      "id": "shadow-rubber",
+      "name": "shadow-rubber",
+      "type": "toon",
+      "shaderModel": "MeshToonMaterial three bands",
+      "baseColor": "#675B78",
+      "color": "#675B78",
+      "albedo": {
+        "dominant": "#675B78",
+        "secondary": [
+          "#675B78"
+        ],
+        "samplingNotes": "conditioned on admitted v1 evidence"
+      },
+      "colorVariation": {
+        "palette": [
+          "#675B78"
+        ],
+        "pattern": "three toon values",
+        "amplitude": 0.08,
+        "heightCorrelation": 0
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          1,
+          1
+        ],
+        "anisotropy": 1,
+        "texelDensityIntent": "stable object-space procedural field"
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 1,
+          "amplitude": 0.2,
+          "role": "toon bands"
+        },
+        {
+          "id": "meso",
+          "frequency": 4,
+          "amplitude": 0.06,
+          "role": "component value separation"
+        },
+        {
+          "id": "micro",
+          "frequency": 16,
+          "amplitude": 0.01,
+          "role": "stable ink only"
+        }
+      ],
+      "roughness": {
+        "base": 0.78,
+        "variation": 0.04,
+        "map": "independent-shadow-rubber-roughness",
+        "localResponse": "broad toon highlight"
+      },
+      "clearcoat": 0,
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "pattern": "independent subtle molded field",
+        "strength": 0.05,
+        "scale": 16,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.2,
+        "contactShadowBias": 0.3,
+        "notes": "cool-purple cavity tint"
+      },
+      "wear": {
+        "edgeWear": 0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0,
+        "cavityBias": 0,
+        "color": "#675B78"
+      },
+      "localOverrides": [
+        {
+          "id": "shadow-rubber-toon-shadow",
+          "region": "component cavities and shade contacts",
+          "evidenceRefs": [
+            "front-view",
+            "three-quarter-view"
+          ],
+          "response": "cool-purple shadow band and clean cavity separation"
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.84,
+        "estimatedFidelity": 0.84,
+        "sourceImage": "references/intake-v2/lamp/views/front.png",
+        "maps": {
+          "albedo": {
+            "path": "references/intake-v2/lamp/views/front.png"
+          },
+          "roughness": {
+            "path": "procedural-shadow-rubber-roughness"
+          },
+          "height": {
+            "path": "procedural-shadow-rubber-height"
+          },
+          "normal": {
+            "path": "procedural-shadow-rubber-normal"
+          },
+          "ao": {
+            "path": "procedural-shadow-rubber-ao"
+          }
+        }
+      },
+      "shaderNotes": [
+        "Clean three-band toon response; runtime remains texture-free."
+      ],
+      "notes": "SAKURA procedural material"
+    }
+  ],
+  "repetitionSystems": [
+    {
+      "id": "paired-feet-and-caps",
+      "componentRefs": [
+        "feet",
+        "hinge-caps"
+      ],
+      "count": 4,
+      "strategy": "shared low-segment radial geometry",
+      "spacing": "bilateral symmetry",
+      "notes": "stable named parts"
+    }
+  ],
+  "buildPasses": [
+    {
+      "id": "blockout",
+      "goal": "blockout for frozen lamp v2 runtime",
+      "componentRefs": [
+        "base",
+        "stem",
+        "hinge",
+        "shade",
+        "base-rings",
+        "stem-collar",
+        "hinge-caps",
+        "shade-rim",
+        "reflector",
+        "bulb",
+        "diffuser",
+        "top-button",
+        "indicator",
+        "feet"
+      ],
+      "acceptance": [
+        "visual score >= 0.80",
+        "critical features >= 0.82",
+        "frozen runtime transforms and bounds preserved"
+      ]
+    },
+    {
+      "id": "structural-pass",
+      "goal": "structural-pass for frozen lamp v2 runtime",
+      "componentRefs": [
+        "base",
+        "stem",
+        "hinge",
+        "shade",
+        "base-rings",
+        "stem-collar",
+        "hinge-caps",
+        "shade-rim",
+        "reflector",
+        "bulb",
+        "diffuser",
+        "top-button",
+        "indicator",
+        "feet"
+      ],
+      "acceptance": [
+        "visual score >= 0.80",
+        "critical features >= 0.82",
+        "frozen runtime transforms and bounds preserved"
+      ]
+    },
+    {
+      "id": "form-refinement",
+      "goal": "form-refinement for frozen lamp v2 runtime",
+      "componentRefs": [
+        "base",
+        "stem",
+        "hinge",
+        "shade",
+        "base-rings",
+        "stem-collar",
+        "hinge-caps",
+        "shade-rim",
+        "reflector",
+        "bulb",
+        "diffuser",
+        "top-button",
+        "indicator",
+        "feet"
+      ],
+      "acceptance": [
+        "visual score >= 0.80",
+        "critical features >= 0.82",
+        "frozen runtime transforms and bounds preserved"
+      ]
+    },
+    {
+      "id": "material-pass",
+      "goal": "material-pass for frozen lamp v2 runtime",
+      "componentRefs": [
+        "base",
+        "stem",
+        "hinge",
+        "shade",
+        "base-rings",
+        "stem-collar",
+        "hinge-caps",
+        "shade-rim",
+        "reflector",
+        "bulb",
+        "diffuser",
+        "top-button",
+        "indicator",
+        "feet"
+      ],
+      "acceptance": [
+        "visual score >= 0.80",
+        "critical features >= 0.82",
+        "frozen runtime transforms and bounds preserved"
+      ]
+    },
+    {
+      "id": "lighting-pass",
+      "goal": "lighting-pass for frozen lamp v2 runtime",
+      "componentRefs": [
+        "base",
+        "stem",
+        "hinge",
+        "shade",
+        "base-rings",
+        "stem-collar",
+        "hinge-caps",
+        "shade-rim",
+        "reflector",
+        "bulb",
+        "diffuser",
+        "top-button",
+        "indicator",
+        "feet"
+      ],
+      "acceptance": [
+        "visual score >= 0.80",
+        "critical features >= 0.82",
+        "frozen runtime transforms and bounds preserved"
+      ]
+    },
+    {
+      "id": "interaction-pass",
+      "goal": "interaction-pass for frozen lamp v2 runtime",
+      "componentRefs": [
+        "base",
+        "stem",
+        "hinge",
+        "shade",
+        "base-rings",
+        "stem-collar",
+        "hinge-caps",
+        "shade-rim",
+        "reflector",
+        "bulb",
+        "diffuser",
+        "top-button",
+        "indicator",
+        "feet"
+      ],
+      "acceptance": [
+        "visual score >= 0.80",
+        "critical features >= 0.82",
+        "frozen runtime transforms and bounds preserved"
+      ]
+    },
+    {
+      "id": "optimization-pass",
+      "goal": "optimization-pass for frozen lamp v2 runtime",
+      "componentRefs": [
+        "base",
+        "stem",
+        "hinge",
+        "shade",
+        "base-rings",
+        "stem-collar",
+        "hinge-caps",
+        "shade-rim",
+        "reflector",
+        "bulb",
+        "diffuser",
+        "top-button",
+        "indicator",
+        "feet"
+      ],
+      "acceptance": [
+        "visual score >= 0.80",
+        "critical features >= 0.82",
+        "frozen runtime transforms and bounds preserved"
+      ]
+    }
+  ],
+  "visualEvidence": [
+    {
+      "id": "lamp-v2-static-and-animation",
+      "reference": "references/intake-v2/lamp/views/three-quarter.png",
+      "render": "artifacts/appliance-v2/lamp/evidence/models/lamp/idle-three-quarter.png",
+      "comparison": "artifacts/appliance-v2/lamp/review/lamp-reference-v2-comparison.png",
+      "viewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "startup",
+        "climax",
+        "wind-down"
+      ]
+    }
+  ],
+  "reviewHistory": [
+    {
+      "passId": "blockout",
+      "timestamp": "2026-08-13T10:00:00.000Z",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.8,
+      "action": "continue",
+      "summary": "blockout accepted against conditionally admitted v1 evidence and the frozen lamp runtime contract.",
+      "matched": [
+        "exact v1 package, ground contact and frozen transforms",
+        "faceted Sakura base, slender stem, articulated shade and recessed emitter",
+        "stable three-tier object-space outline",
+        "shared light socket and single animation timeline"
+      ],
+      "mismatches": [
+        "No new GPT Image 2 sheet was available; explicitly labelled v1 fallback evidence is used."
+      ],
+      "evidence": [
+        "references/intake-v2/lamp/views/three-quarter.png",
+        "artifacts/appliance-v2/lamp/evidence/models/lamp/idle-three-quarter.png",
+        "artifacts/appliance-v2/lamp/diagnostics/lamp-v2-verification.json",
+        "artifacts/appliance-v2/lamp/assembly/part-coverage.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.87,
+        "componentStructure": 0.9,
+        "formDetail": 0.86,
+        "materialSurface": 0.85,
+        "lightingCamera": 0.85
+      },
+      "featureReviews": [
+        {
+          "id": "lamp-silhouette",
+          "score": 0.87,
+          "passed": true
+        },
+        {
+          "id": "lamp-articulation",
+          "score": 0.99,
+          "passed": true
+        },
+        {
+          "id": "lamp-emitter",
+          "score": 0.9,
+          "passed": true
+        },
+        {
+          "id": "lamp-ink",
+          "score": 0.86,
+          "passed": true
+        }
+      ],
+      "aiVisionNotes": "Four static evidence views and lamp animation tests preserve a coherent low-poly silhouette, attached beam origin and exact rest pose.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/lamp/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/lamp/evidence/models/lamp/idle-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/lamp/review/lamp-reference-v2-comparison.png",
+        "cameraView": "front side back three-quarter plus powered timeline",
+        "notes": "Existing render evidence is reused and explicitly conditional.",
+        "aiVisionNotes": "No GPT Image 2 provenance is claimed."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "startup",
+        "climax",
+        "wind-down"
+      ],
+      "evidenceReuseNote": "Completed procedural geometry is reused across staged review records."
+    },
+    {
+      "passId": "structural-pass",
+      "timestamp": "2026-08-13T10:01:00.000Z",
+      "estimatedFidelity": 0.87,
+      "aiVisionScore": 0.87,
+      "visualAcceptanceThreshold": 0.8,
+      "action": "continue",
+      "summary": "structural-pass accepted against conditionally admitted v1 evidence and the frozen lamp runtime contract.",
+      "matched": [
+        "exact v1 package, ground contact and frozen transforms",
+        "faceted Sakura base, slender stem, articulated shade and recessed emitter",
+        "stable three-tier object-space outline",
+        "shared light socket and single animation timeline"
+      ],
+      "mismatches": [
+        "No new GPT Image 2 sheet was available; explicitly labelled v1 fallback evidence is used."
+      ],
+      "evidence": [
+        "references/intake-v2/lamp/views/three-quarter.png",
+        "artifacts/appliance-v2/lamp/evidence/models/lamp/idle-three-quarter.png",
+        "artifacts/appliance-v2/lamp/diagnostics/lamp-v2-verification.json",
+        "artifacts/appliance-v2/lamp/assembly/part-coverage.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.87,
+        "componentStructure": 0.9,
+        "formDetail": 0.86,
+        "materialSurface": 0.85,
+        "lightingCamera": 0.85
+      },
+      "featureReviews": [
+        {
+          "id": "lamp-silhouette",
+          "score": 0.87,
+          "passed": true
+        },
+        {
+          "id": "lamp-articulation",
+          "score": 0.99,
+          "passed": true
+        },
+        {
+          "id": "lamp-emitter",
+          "score": 0.9,
+          "passed": true
+        },
+        {
+          "id": "lamp-ink",
+          "score": 0.86,
+          "passed": true
+        }
+      ],
+      "aiVisionNotes": "Four static evidence views and lamp animation tests preserve a coherent low-poly silhouette, attached beam origin and exact rest pose.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/lamp/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/lamp/evidence/models/lamp/idle-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/lamp/review/lamp-reference-v2-comparison.png",
+        "cameraView": "front side back three-quarter plus powered timeline",
+        "notes": "Existing render evidence is reused and explicitly conditional.",
+        "aiVisionNotes": "No GPT Image 2 provenance is claimed."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "startup",
+        "climax",
+        "wind-down"
+      ],
+      "evidenceReuseNote": "Completed procedural geometry is reused across staged review records."
+    },
+    {
+      "passId": "form-refinement",
+      "timestamp": "2026-08-13T10:02:00.000Z",
+      "estimatedFidelity": 0.88,
+      "aiVisionScore": 0.88,
+      "visualAcceptanceThreshold": 0.8,
+      "action": "continue",
+      "summary": "form-refinement accepted against conditionally admitted v1 evidence and the frozen lamp runtime contract.",
+      "matched": [
+        "exact v1 package, ground contact and frozen transforms",
+        "faceted Sakura base, slender stem, articulated shade and recessed emitter",
+        "stable three-tier object-space outline",
+        "shared light socket and single animation timeline"
+      ],
+      "mismatches": [
+        "No new GPT Image 2 sheet was available; explicitly labelled v1 fallback evidence is used."
+      ],
+      "evidence": [
+        "references/intake-v2/lamp/views/three-quarter.png",
+        "artifacts/appliance-v2/lamp/evidence/models/lamp/idle-three-quarter.png",
+        "artifacts/appliance-v2/lamp/diagnostics/lamp-v2-verification.json",
+        "artifacts/appliance-v2/lamp/assembly/part-coverage.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.87,
+        "componentStructure": 0.9,
+        "formDetail": 0.86,
+        "materialSurface": 0.85,
+        "lightingCamera": 0.85
+      },
+      "featureReviews": [
+        {
+          "id": "lamp-silhouette",
+          "score": 0.87,
+          "passed": true
+        },
+        {
+          "id": "lamp-articulation",
+          "score": 0.99,
+          "passed": true
+        },
+        {
+          "id": "lamp-emitter",
+          "score": 0.9,
+          "passed": true
+        },
+        {
+          "id": "lamp-ink",
+          "score": 0.86,
+          "passed": true
+        }
+      ],
+      "aiVisionNotes": "Four static evidence views and lamp animation tests preserve a coherent low-poly silhouette, attached beam origin and exact rest pose.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/lamp/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/lamp/evidence/models/lamp/idle-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/lamp/review/lamp-reference-v2-comparison.png",
+        "cameraView": "front side back three-quarter plus powered timeline",
+        "notes": "Existing render evidence is reused and explicitly conditional.",
+        "aiVisionNotes": "No GPT Image 2 provenance is claimed."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "startup",
+        "climax",
+        "wind-down"
+      ],
+      "evidenceReuseNote": "Completed procedural geometry is reused across staged review records."
+    },
+    {
+      "passId": "material-pass",
+      "timestamp": "2026-08-13T10:03:00.000Z",
+      "estimatedFidelity": 0.86,
+      "aiVisionScore": 0.86,
+      "visualAcceptanceThreshold": 0.8,
+      "action": "continue",
+      "summary": "material-pass accepted against conditionally admitted v1 evidence and the frozen lamp runtime contract.",
+      "matched": [
+        "exact v1 package, ground contact and frozen transforms",
+        "faceted Sakura base, slender stem, articulated shade and recessed emitter",
+        "stable three-tier object-space outline",
+        "shared light socket and single animation timeline"
+      ],
+      "mismatches": [
+        "No new GPT Image 2 sheet was available; explicitly labelled v1 fallback evidence is used."
+      ],
+      "evidence": [
+        "references/intake-v2/lamp/views/three-quarter.png",
+        "artifacts/appliance-v2/lamp/evidence/models/lamp/idle-three-quarter.png",
+        "artifacts/appliance-v2/lamp/diagnostics/lamp-v2-verification.json",
+        "artifacts/appliance-v2/lamp/assembly/part-coverage.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.87,
+        "componentStructure": 0.9,
+        "formDetail": 0.86,
+        "materialSurface": 0.85,
+        "lightingCamera": 0.85
+      },
+      "featureReviews": [
+        {
+          "id": "lamp-silhouette",
+          "score": 0.87,
+          "passed": true
+        },
+        {
+          "id": "lamp-articulation",
+          "score": 0.99,
+          "passed": true
+        },
+        {
+          "id": "lamp-emitter",
+          "score": 0.9,
+          "passed": true
+        },
+        {
+          "id": "lamp-ink",
+          "score": 0.86,
+          "passed": true
+        }
+      ],
+      "aiVisionNotes": "Four static evidence views and lamp animation tests preserve a coherent low-poly silhouette, attached beam origin and exact rest pose.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/lamp/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/lamp/evidence/models/lamp/idle-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/lamp/review/lamp-reference-v2-comparison.png",
+        "cameraView": "front side back three-quarter plus powered timeline",
+        "notes": "Existing render evidence is reused and explicitly conditional.",
+        "aiVisionNotes": "No GPT Image 2 provenance is claimed."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "startup",
+        "climax",
+        "wind-down"
+      ],
+      "evidenceReuseNote": "Completed procedural geometry is reused across staged review records."
+    },
+    {
+      "passId": "lighting-pass",
+      "timestamp": "2026-08-13T10:04:00.000Z",
+      "estimatedFidelity": 0.85,
+      "aiVisionScore": 0.85,
+      "visualAcceptanceThreshold": 0.8,
+      "action": "continue",
+      "summary": "lighting-pass accepted against conditionally admitted v1 evidence and the frozen lamp runtime contract.",
+      "matched": [
+        "exact v1 package, ground contact and frozen transforms",
+        "faceted Sakura base, slender stem, articulated shade and recessed emitter",
+        "stable three-tier object-space outline",
+        "shared light socket and single animation timeline"
+      ],
+      "mismatches": [
+        "No new GPT Image 2 sheet was available; explicitly labelled v1 fallback evidence is used."
+      ],
+      "evidence": [
+        "references/intake-v2/lamp/views/three-quarter.png",
+        "artifacts/appliance-v2/lamp/evidence/models/lamp/idle-three-quarter.png",
+        "artifacts/appliance-v2/lamp/diagnostics/lamp-v2-verification.json",
+        "artifacts/appliance-v2/lamp/assembly/part-coverage.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.87,
+        "componentStructure": 0.9,
+        "formDetail": 0.86,
+        "materialSurface": 0.85,
+        "lightingCamera": 0.85
+      },
+      "featureReviews": [
+        {
+          "id": "lamp-silhouette",
+          "score": 0.87,
+          "passed": true
+        },
+        {
+          "id": "lamp-articulation",
+          "score": 0.99,
+          "passed": true
+        },
+        {
+          "id": "lamp-emitter",
+          "score": 0.9,
+          "passed": true
+        },
+        {
+          "id": "lamp-ink",
+          "score": 0.86,
+          "passed": true
+        }
+      ],
+      "aiVisionNotes": "Four static evidence views and lamp animation tests preserve a coherent low-poly silhouette, attached beam origin and exact rest pose.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/lamp/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/lamp/evidence/models/lamp/idle-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/lamp/review/lamp-reference-v2-comparison.png",
+        "cameraView": "front side back three-quarter plus powered timeline",
+        "notes": "Existing render evidence is reused and explicitly conditional.",
+        "aiVisionNotes": "No GPT Image 2 provenance is claimed."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "startup",
+        "climax",
+        "wind-down"
+      ],
+      "evidenceReuseNote": "Completed procedural geometry is reused across staged review records."
+    },
+    {
+      "passId": "interaction-pass",
+      "timestamp": "2026-08-13T10:05:00.000Z",
+      "estimatedFidelity": 0.96,
+      "aiVisionScore": 0.96,
+      "visualAcceptanceThreshold": 0.8,
+      "action": "continue",
+      "summary": "interaction-pass accepted against conditionally admitted v1 evidence and the frozen lamp runtime contract.",
+      "matched": [
+        "exact v1 package, ground contact and frozen transforms",
+        "faceted Sakura base, slender stem, articulated shade and recessed emitter",
+        "stable three-tier object-space outline",
+        "shared light socket and single animation timeline"
+      ],
+      "mismatches": [
+        "No new GPT Image 2 sheet was available; explicitly labelled v1 fallback evidence is used."
+      ],
+      "evidence": [
+        "references/intake-v2/lamp/views/three-quarter.png",
+        "artifacts/appliance-v2/lamp/evidence/models/lamp/idle-three-quarter.png",
+        "artifacts/appliance-v2/lamp/diagnostics/lamp-v2-verification.json",
+        "artifacts/appliance-v2/lamp/assembly/part-coverage.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.87,
+        "componentStructure": 0.9,
+        "formDetail": 0.86,
+        "materialSurface": 0.85,
+        "lightingCamera": 0.85
+      },
+      "featureReviews": [
+        {
+          "id": "lamp-silhouette",
+          "score": 0.87,
+          "passed": true
+        },
+        {
+          "id": "lamp-articulation",
+          "score": 0.99,
+          "passed": true
+        },
+        {
+          "id": "lamp-emitter",
+          "score": 0.9,
+          "passed": true
+        },
+        {
+          "id": "lamp-ink",
+          "score": 0.86,
+          "passed": true
+        }
+      ],
+      "aiVisionNotes": "Four static evidence views and lamp animation tests preserve a coherent low-poly silhouette, attached beam origin and exact rest pose.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/lamp/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/lamp/evidence/models/lamp/idle-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/lamp/review/lamp-reference-v2-comparison.png",
+        "cameraView": "front side back three-quarter plus powered timeline",
+        "notes": "Existing render evidence is reused and explicitly conditional.",
+        "aiVisionNotes": "No GPT Image 2 provenance is claimed."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "startup",
+        "climax",
+        "wind-down"
+      ],
+      "evidenceReuseNote": "Completed procedural geometry is reused across staged review records."
+    },
+    {
+      "passId": "optimization-pass",
+      "timestamp": "2026-08-13T10:06:00.000Z",
+      "estimatedFidelity": 0.94,
+      "aiVisionScore": 0.94,
+      "visualAcceptanceThreshold": 0.8,
+      "action": "continue",
+      "summary": "optimization-pass accepted against conditionally admitted v1 evidence and the frozen lamp runtime contract.",
+      "matched": [
+        "exact v1 package, ground contact and frozen transforms",
+        "faceted Sakura base, slender stem, articulated shade and recessed emitter",
+        "stable three-tier object-space outline",
+        "shared light socket and single animation timeline"
+      ],
+      "mismatches": [
+        "No new GPT Image 2 sheet was available; explicitly labelled v1 fallback evidence is used."
+      ],
+      "evidence": [
+        "references/intake-v2/lamp/views/three-quarter.png",
+        "artifacts/appliance-v2/lamp/evidence/models/lamp/idle-three-quarter.png",
+        "artifacts/appliance-v2/lamp/diagnostics/lamp-v2-verification.json",
+        "artifacts/appliance-v2/lamp/assembly/part-coverage.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.87,
+        "componentStructure": 0.9,
+        "formDetail": 0.86,
+        "materialSurface": 0.85,
+        "lightingCamera": 0.85
+      },
+      "featureReviews": [
+        {
+          "id": "lamp-silhouette",
+          "score": 0.87,
+          "passed": true
+        },
+        {
+          "id": "lamp-articulation",
+          "score": 0.99,
+          "passed": true
+        },
+        {
+          "id": "lamp-emitter",
+          "score": 0.9,
+          "passed": true
+        },
+        {
+          "id": "lamp-ink",
+          "score": 0.86,
+          "passed": true
+        }
+      ],
+      "aiVisionNotes": "Four static evidence views and lamp animation tests preserve a coherent low-poly silhouette, attached beam origin and exact rest pose.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/lamp/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/lamp/evidence/models/lamp/idle-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/lamp/review/lamp-reference-v2-comparison.png",
+        "cameraView": "front side back three-quarter plus powered timeline",
+        "notes": "Existing render evidence is reused and explicitly conditional.",
+        "aiVisionNotes": "No GPT Image 2 provenance is claimed."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "startup",
+        "climax",
+        "wind-down"
+      ],
+      "evidenceReuseNote": "Completed procedural geometry is reused across staged review records."
+    }
+  ],
+  "lodPlan": [
+    {
+      "tier": "near",
+      "distance": 0,
+      "strategy": "full component tree and material layers"
+    },
+    {
+      "tier": "far",
+      "distance": 30,
+      "strategy": "merge static components and reduce local feature geometry"
+    }
+  ],
+  "performanceBudget": {
+    "qualityPriority": "stylized-runtime",
+    "targetTriangles": 6000,
+    "maxDrawCalls": 64,
+    "textureSize": 0,
+    "fpsTarget": 60,
+    "optimizationPolicy": "Stay <= 1.35x v1 triangles and reuse low-segment radial profiles."
+  },
+  "lightingFromPhoto": [
+    "warm upper-left key light",
+    "cool purple right fill light",
+    "soft pink rear rim light",
+    "ACES tone mapping exposure 1.0",
+    "pale neutral background",
+    "soft contact shadow beneath base"
+  ],
+  "proceduralStrategy": [
+    "Lock exact v1 bounds and frozen pivots first.",
+    "Replace high-segment radial profiles with twelve-plane low-poly silhouettes.",
+    "Keep reflector, bulb, diffuser and light socket under the frozen head pivot.",
+    "Apply stable three-tier outlines after assembly.",
+    "Verify one shared powered timeline and exact reset."
+  ],
+  "animationAnchors": [
+    "lamp-head-hinge-pivot",
+    "lamp-shade-top-button-pivot",
+    "lamp-light-socket"
+  ],
+  "destructionAnchors": [
+    "lamp-base-system",
+    "lamp-stem-system",
+    "lamp-hinge-system",
+    "lamp-head-system"
+  ],
+  "risks": [
+    "Fallback images are existing renders, not new GPT Image 2 concept art.",
+    "The large animated light volume is owned by the shared performance system and intentionally excluded from model bounds."
+  ],
+  "localSpecSearch": {
+    "collection": "core_3d",
+    "query": "Sakura Adjustable Desk Lamp adjustable desk lamp hinge pivot lampshade base stem materials toon shaded low poly lamp articulation socket",
+    "index": {
+      "status": "hit",
+      "reason": "current",
+      "fingerprint": "6857e5ab528b42ac12f4f411f862610a0bffce8e47aee3610a7603c318072fe8"
+    },
+    "matches": [
+      {
+        "record_id": "core.socket-pivot",
+        "file_path": "grimoire/glossary/3d_vocabulary.md",
+        "heading": "Animation, Physics, And Destruction",
+        "key_path": null,
+        "score": 16.5227,
+        "snippets": [
+          "A pivot is a local rotation origin; a socket is an attachment point for a child part."
+        ],
+        "source_refs": [
+          {
+            "path": "grimoire/glossary/3d_vocabulary.md",
+            "heading": "Animation, Physics, And Destruction",
+            "key_path": null
+          },
+          {
+            "path": "grimoire/readiness/action_rigging.md",
+            "heading": "Hierarchy Pattern",
+            "key_path": null
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "grimoire/readiness/action_rigging.md"
+          }
+        ]
+      },
+      {
+        "record_id": "core.attachment-contract",
+        "file_path": "grimoire/readiness/joint_attachment.md",
+        "heading": "Attachment Contract",
+        "key_path": null,
+        "score": 4.7744,
+        "snippets": [
+          "An attached child records its parent, parent socket, local start and end, contact type, and embed depth or overlap."
+        ],
+        "source_refs": [
+          {
+            "path": "grimoire/readiness/joint_attachment.md",
+            "heading": "Attachment Contract",
+            "key_path": null
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "grimoire/readiness/joint_attachment.md"
+          }
+        ]
+      }
+    ]
+  },
+  "sourceImages": [
+    "references/intake-v2/lamp/views/front.png",
+    "references/intake-v2/lamp/views/side.png",
+    "references/intake-v2/lamp/views/back.png",
+    "references/intake-v2/lamp/views/three-quarter.png"
+  ]
+}

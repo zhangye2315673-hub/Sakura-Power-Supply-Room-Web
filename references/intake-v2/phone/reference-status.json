@@ -1,0 +1,13 @@
+{
+  "status": "conditional-fallback",
+  "target": "original SAKURA phone redesign",
+  "generationProvider": null,
+  "reason": "OPENAI_API_KEY, COMFLY_API_KEY and COMFLY_KEY were absent at execution time",
+  "sources": [
+    "views/front.png",
+    "views/side.png",
+    "views/back.png",
+    "views/three-quarter.png"
+  ],
+  "limitation": "Archived v1 runtime views only; not GPT Image 2 output and not an image-exact reconstruction."
+}

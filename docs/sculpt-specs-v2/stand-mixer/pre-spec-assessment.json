@@ -1,0 +1,332 @@
+{
+    "targetName":  "SAKURA Stand Mixer v2",
+    "sourceImage":  "references/intake-v2/stand-mixer/views/front.png",
+    "preSpecAssessment":  {
+                              "objectClass":  {
+                                                  "primaryType":  "tilt-head countertop stand mixer",
+                                                  "primaryDomain":  "object",
+                                                  "formLanguage":  [
+                                                                       "exaggerated-low-poly",
+                                                                       "rounded-hard-surface",
+                                                                       "faceted-Sakura-toon",
+                                                                       "stable-uneven-ink"
+                                                                   ],
+                                                  "structureKind":  [
+                                                                        "compound appliance",
+                                                                        "articulated head",
+                                                                        "rotating planetary tool",
+                                                                        "repeated wire and vent modules"
+                                                                    ],
+                                                  "motionPotential":  [
+                                                                          "head lift",
+                                                                          "planetary rotation",
+                                                                          "beater spin",
+                                                                          "bowl shake",
+                                                                          "volumetric mixture state"
+                                                                      ],
+                                                  "materialFamilies":  [
+                                                                           "warm cream shell",
+                                                                           "Sakura pink housing",
+                                                                           "brushed steel whisk",
+                                                                           "ceramic-like bowl",
+                                                                           "dark cavity",
+                                                                           "rubber feet"
+                                                                       ],
+                                                  "notes":  "Existing three-view turn-sheet is conditionally admitted because image generation credentials were unavailable. Hidden drive, hinge internals and bowl lock remain inferred; archived runtime contract is authoritative."
+                                              },
+                              "complexity":  {
+                                                 "tier":  "complex",
+                                                 "scores":  {
+                                                                "hierarchyDepth":  3,
+                                                                "actionReadinessNeed":  3,
+                                                                "componentCount":  3,
+                                                                "localDetailDensity":  3,
+                                                                "occlusionRisk":  2,
+                                                                "repetitionDensity":  3,
+                                                                "silhouetteComplexity":  3,
+                                                                "materialLayerCount":  3
+                                                            },
+                                                 "estimatedCounts":  {
+                                                                         "repetitionSystems":  4,
+                                                                         "materialLayers":  7,
+                                                                         "macroComponents":  5,
+                                                                         "mesoComponents":  17,
+                                                                         "microFeatureGroups":  12
+                                                                     },
+                                                 "reasoning":  [
+                                                                   "Head, rear column, deep handled bowl, planetary tool, controls and repeated wires/vents require a complex action-ready hierarchy."
+                                                               ]
+                                             },
+                              "specDepthDecision":  {
+                                                        "requiredDepth":  "complex",
+                                                        "minimumComponentLevels":  [
+                                                                                       "macro",
+                                                                                       "meso",
+                                                                                       "micro"
+                                                                                   ],
+                                                        "needsRepetitionSystems":  true,
+                                                        "needsMaterialLocalOverrides":  true,
+                                                        "needsMultipleReviewViews":  true,
+                                                        "needsActionReadyHierarchy":  true,
+                                                        "rationale":  "Choose simple/moderate/complex/ultra-complex from observed structure, not from a hardcoded domain."
+                                                    },
+                              "unknownsToResolveBeforeImplementation":  [
+
+                                                                        ],
+                              "detailInventory":  {
+                                                      "scanMethod":  "three-view turn-sheet plus existing IMG2THREEJS review",
+                                                      "details":  [
+                                                                      "long motor head",
+                                                                      "pink waist seam",
+                                                                      "tapered rear column",
+                                                                      "side hinge caps",
+                                                                      "deep bowl",
+                                                                      "rolled rim",
+                                                                      "two handles",
+                                                                      "three-lug seat",
+                                                                      "front speed dial",
+                                                                      "lower control dial",
+                                                                      "release lever",
+                                                                      "eight rear vents",
+                                                                      "six whisk wires",
+                                                                      "four feet",
+                                                                      "mixture vortex",
+                                                                      "liquid effect socket"
+                                                                  ],
+                                                      "note":  "All identity details map to named runtime parts; GPT Image 2 generation is recorded as unavailable.",
+                                                      "targetMinDetails":  16
+                                                  },
+                              "anatomy":  {
+                                              "applies":  false,
+                                              "styleHeads":  0.0,
+                                              "proportions":  {
+                                                                  "headUnit":  0.0,
+                                                                  "torso":  0.0,
+                                                                  "legs":  0.0,
+                                                                  "shoulderWidth":  0.0,
+                                                                  "hipWidth":  0.0
+                                                              },
+                                              "pose":  {
+                                                           "type":  "unassessed",
+                                                           "jointAngles":  {
+
+                                                                           }
+                                                       },
+                                              "faceLandmarks":  {
+                                                                    "eyeLine":  0.0,
+                                                                    "eyeSpacing":  0.0,
+                                                                    "noseBase":  0.0,
+                                                                    "mouthLine":  0.0,
+                                                                    "hairline":  0.0
+                                                                },
+                                              "features":  [
+
+                                                           ],
+                                              "confidence":  0.0,
+                                              "note":  "Only meaningful when objectClass.primaryDomain is character or hybrid. Set applies=true and fill from forge/stage1_intake/extract_landmarks.py. See grimoire/character/reconstruction.md and grimoire/character/likeness_maximization.md."
+                                          },
+                              "sourceImage":  "references\\intake\\stand-mixer\\front.png"
+                          },
+    "qualityContract":  {
+                            "qualityBar":  "complex",
+                            "definitionOfDone":  [
+                                                     "The rendered model matches the reference silhouette, primary proportions, visible component hierarchy, material response, and most recognizable local features for the selected fidelity tier."
+                                                 ],
+                            "minimumSpecDepth":  {
+                                                     "macroComponents":  3,
+                                                     "mesoComponents":  8,
+                                                     "microFeatureGroups":  5,
+                                                     "materialLayers":  3,
+                                                     "repetitionSystems":  1,
+                                                     "reviewViewpoints":  4
+                                                 },
+                            "featureGroups":  [
+                                                  {
+                                                      "id":  "overall-silhouette",
+                                                      "name":  "Overall silhouette and proportions",
+                                                      "required":  true,
+                                                      "qualityCriteria":  [
+                                                                              "Bounding shape, dominant curves, negative spaces, and scale relationships are explicitly described."
+                                                                          ],
+                                                      "evidenceRefs":  [
+                                                                           "full-object"
+                                                                       ],
+                                                      "failureModes":  [
+                                                                           "model reads as a generic placeholder instead of the reference object",
+                                                                           "major proportions are guessed without evidence"
+                                                                       ]
+                                                  },
+                                                  {
+                                                      "id":  "primary-structure",
+                                                      "name":  "Primary structure and hierarchy",
+                                                      "required":  true,
+                                                      "qualityCriteria":  [
+                                                                              "Major parts, joints, seams, contact points, and parent-child relationships are named before code generation."
+                                                                          ],
+                                                      "evidenceRefs":  [
+                                                                           "full-object"
+                                                                       ],
+                                                      "failureModes":  [
+                                                                           "large visible parts are merged into one mesh",
+                                                                           "component hierarchy is too shallow for the observed complexity"
+                                                                       ]
+                                                  },
+                                                  {
+                                                      "id":  "attachment-joint-correctness",
+                                                      "name":  "Attachment and joint correctness",
+                                                      "required":  true,
+                                                      "qualityCriteria":  [
+                                                                              "Every visible child appendage, branch, limb, handle, connector, tube, cable, horn, wing, leg, or hinged part has an attachment contract with parent socket, localStart/localEnd, contact type, embed/overlap, and gap tolerance."
+                                                                          ],
+                                                      "evidenceRefs":  [
+                                                                           "full-object"
+                                                                       ],
+                                                      "failureModes":  [
+                                                                           "child part root floats away from the parent",
+                                                                           "branch/limb/tube is centered in space instead of pivoting from its root",
+                                                                           "parent-child transform mixes world and local coordinates"
+                                                                       ]
+                                                  },
+                                                  {
+                                                      "id":  "surface-material-response",
+                                                      "name":  "Surface material response",
+                                                      "required":  true,
+                                                      "qualityCriteria":  [
+                                                                              "Albedo zones, roughness, normal/bump/displacement intent, cavity dirt, edge wear, and local overrides are specified where visible.",
+                                                                              "Important materials define independent albedo, roughness, height/normal, and AO responses instead of reusing one texture for unrelated PBR channels.",
+                                                                              "Surface response is decomposed into macro, meso, and micro frequency bands with scale and amplitude tied to object scale."
+                                                                          ],
+                                                      "evidenceRefs":  [
+                                                                           "full-object"
+                                                                       ],
+                                                      "failureModes":  [
+                                                                           "surface looks like flat plastic",
+                                                                           "local material variation is missing or not tied to image evidence"
+                                                                       ]
+                                                  },
+                                                  {
+                                                      "id":  "reference-lookdev",
+                                                      "name":  "Reference color, material, and lighting response",
+                                                      "required":  true,
+                                                      "qualityCriteria":  [
+                                                                              "Material-pass names the reference-derived albedo palette, roughness variation, tactile normal/bump/displacement response, and local masks.",
+                                                                              "When a source image is available, run reference PBR extraction and require confidence \u003e= 0.7 before treating maps as implementation-ready.",
+                                                                              "Lighting-pass names key/fill/rim or environment light, exposure, tone mapping, background, and contact shadow behavior.",
+                                                                              "Neutral, grazing-angle, and reference-matched renders prove that surface relief survives relighting and is not painted into albedo."
+                                                                          ],
+                                                      "evidenceRefs":  [
+                                                                           "full-object"
+                                                                       ],
+                                                      "failureModes":  [
+                                                                           "model has acceptable shape but reads as flat shaded or plastic",
+                                                                           "colors are a generic average instead of reference-observed local color zones",
+                                                                           "lighting is evenly ambient and cannot reproduce the source value range"
+                                                                       ]
+                                                  }
+                                              ],
+                            "visualDeltaChecks":  [
+                                                      "silhouette and negative-space delta",
+                                                      "component hierarchy depth delta",
+                                                      "repetition density and distribution delta",
+                                                      "material albedo/roughness/normal response delta",
+                                                      "local feature placement and scale delta"
+                                                  ],
+                            "antiShallowSpecRules":  [
+                                                         "Do not proceed to code if qualityContract.qualityBar is unassessed.",
+                                                         "Do not proceed to code if the spec only contains a root component for a moderate or complex object.",
+                                                         "Do not proceed to code if required featureGroups are not represented by componentTree, materials, or repetitionSystems.",
+                                                         "Do not proceed to code if visible local features are described only in prose and not attached to components/materials/evidenceRefs.",
+                                                         "Do not proceed past structural-pass if attached child parts lack attachment.parentSocket, localStart, localEnd, embedDepth/overlap, and gapTolerance.",
+                                                         "Do not pass material look-dev when albedo is reused as roughness, height, normal, or AO.",
+                                                         "Do not pass material look-dev without macro, meso, and micro surface frequency bands for close-up materials.",
+                                                         "Do not pass reference-fidelity material look-dev from a source image without usable referencePbr maps or an explicit documented limitation.",
+                                                         "Do not patch a spec with extracted PBR maps when extraction confidence is below the target threshold unless the user explicitly accepts lower fidelity.",
+                                                         "Do not place adjacent separate-geometry parts below 0.02 world-unit seam overlap (source: grimoire/build/geometry_patterns.md).",
+                                                         "Do not satisfy raised or recessed relief, fasteners, or grip structure with a map alone when the feature affects form; use geometry or displacement (source: grimoire/build/geometry_patterns.md)."
+                                                     ]
+                        },
+    "authoringInstruction":  "Fill observed object class, complexity reasoning, featureGroups, visualDeltaChecks, and unknowns before generating or implementing ObjectSculptSpec.",
+    "localSpecSearch":  {
+                            "collection":  "core_3d",
+                            "query":  "SAKURA Stand Mixer stand mixer planetary beater bowl tilt head painted metal PBR",
+                            "index":  {
+                                          "status":  "hit",
+                                          "reason":  "current",
+                                          "fingerprint":  "6857e5ab528b42ac12f4f411f862610a0bffce8e47aee3610a7603c318072fe8"
+                                      },
+                            "matches":  [
+                                            {
+                                                "record_id":  "core.description-pbr-vocabulary-caption-calibration",
+                                                "file_path":  "docs/raw/img2threejs-skill-dataset.json",
+                                                "heading":  null,
+                                                "key_path":  "categories.description_conventions[7]",
+                                                "score":  5.5504900701,
+                                                "snippets":  [
+                                                                 "... tr煤c, kh么ng ch峄?v膬n xu么i. Recognition cues: A reconstruction-ready description states measured-style values, e.g. \u0027raw metal reflectance sRGB 180-255\u0027 or \u0027dielectric F0 鈮?0.04\u0027, not just \u0027shiny\u0027 or \u0027metallic-looking\u0027 D岷 hi峄噓 nh岷璶 di峄噉: ..."
+                                                             ],
+                                                "source_refs":  [
+                                                                    {
+                                                                        "path":  "docs/raw/img2threejs-skill-dataset.json",
+                                                                        "heading":  null,
+                                                                        "key_path":  "categories.description_conventions[7]"
+                                                                    }
+                                                                ],
+                                                "evidence_refs":  [
+                                                                      {
+                                                                          "kind":  "source",
+                                                                          "ref":  "docs/raw/img2threejs-skill-dataset.json",
+                                                                          "note":  "img2threejs NotebookLM research distillation"
+                                                                      }
+                                                                  ]
+                                            },
+                                            {
+                                                "record_id":  "core.pbr-hand-painted-vs-pbr-texture",
+                                                "file_path":  "docs/raw/img2threejs-skill-dataset.json",
+                                                "heading":  null,
+                                                "key_path":  "categories.material_pbr[12]",
+                                                "score":  4.661903223664,
+                                                "snippets":  [
+                                                                 "... baked directly into color (static, stylized) from textures that respond dynamically to scene lighting via separate PBR channels. Ph芒n bi峄噒 k岷縯 c岷 c贸 谩nh s谩ng 膽瓢峄 n瓢峄沶g tr峄眂 ti岷縫 v脿o m脿u (t末nh, c谩ch 膽i峄噓) v峄沬 k岷縯 c岷 ph岷 h峄搃 膽峄檔g ..."
+                                                             ],
+                                                "source_refs":  [
+                                                                    {
+                                                                        "path":  "docs/raw/img2threejs-skill-dataset.json",
+                                                                        "heading":  null,
+                                                                        "key_path":  "categories.material_pbr[12]"
+                                                                    }
+                                                                ],
+                                                "evidence_refs":  [
+                                                                      {
+                                                                          "kind":  "source",
+                                                                          "ref":  "docs/raw/img2threejs-skill-dataset.json",
+                                                                          "note":  "img2threejs NotebookLM research distillation"
+                                                                      }
+                                                                  ]
+                                            },
+                                            {
+                                                "record_id":  "core.shader-mapping-meshphysicalmaterial-core-pbr-fields",
+                                                "file_path":  "docs/raw/img2threejs-skill-dataset.json",
+                                                "heading":  null,
+                                                "key_path":  "categories.rendering_shader_mapping[0]",
+                                                "score":  4.632717063119,
+                                                "snippets":  [
+                                                                 "The baseline Three.js material exposing direct scalar/map fields for the standard PBR channel set. V岷璽 li峄噓 Three.js c啤 b岷 cung c岷 tr峄眂 ti岷縫 c谩c tr瓢峄漬g v么 h瓢峄沶g/b岷 膽峄?cho b峄?k锚nh PBR ti锚u chu岷﹏. Recognition cues: Use whenever a static ..."
+                                                             ],
+                                                "source_refs":  [
+                                                                    {
+                                                                        "path":  "docs/raw/img2threejs-skill-dataset.json",
+                                                                        "heading":  null,
+                                                                        "key_path":  "categories.rendering_shader_mapping[0]"
+                                                                    }
+                                                                ],
+                                                "evidence_refs":  [
+                                                                      {
+                                                                          "kind":  "source",
+                                                                          "ref":  "docs/raw/img2threejs-skill-dataset.json",
+                                                                          "note":  "img2threejs NotebookLM research distillation"
+                                                                      }
+                                                                  ]
+                                            }
+                                        ]
+                        }
+}

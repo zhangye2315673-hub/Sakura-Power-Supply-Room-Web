@@ -1,0 +1,47 @@
+{
+  "source": "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake-v2\\toaster\\toaster-turnsheet-v2.png",
+  "sourceWidth": 2048,
+  "sourceHeight": 2048,
+  "outputs": [
+    {
+      "view": "front",
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake-v2\\toaster\\views\\front.png",
+      "crop": [
+        0,
+        0,
+        1024,
+        1024
+      ]
+    },
+    {
+      "view": "side",
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake-v2\\toaster\\views\\side.png",
+      "crop": [
+        1024,
+        0,
+        2048,
+        1024
+      ]
+    },
+    {
+      "view": "back",
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake-v2\\toaster\\views\\back.png",
+      "crop": [
+        0,
+        1024,
+        1024,
+        2048
+      ]
+    },
+    {
+      "view": "three-quarter",
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake-v2\\toaster\\views\\three-quarter.png",
+      "crop": [
+        1024,
+        1024,
+        2048,
+        2048
+      ]
+    }
+  ]
+}

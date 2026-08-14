@@ -1,0 +1,19 @@
+{
+  "status": "pass",
+  "provider": "openai-compatible-comfly",
+  "model": "gpt-image-2",
+  "quality": "high",
+  "size": "2048x2048",
+  "output": "references/intake-v2/rice-cooker/rice-cooker-turnsheet-v2.png",
+  "views": ["front", "right-side", "back", "three-quarter"],
+  "checks": {
+    "technicalProbe": true,
+    "frontAdmission": true,
+    "crossViewPartConsistency": true,
+    "commonGroundLine": true,
+    "noTextOrWatermark": true,
+    "noCableOrMotionEffects": true,
+    "animationAnchorsVisuallyCompatible": true
+  },
+  "notes": "Generated reference is used only as procedural modeling evidence. Existing runtime pivots, sockets, colliders, effects, and timelines remain authoritative."
+}

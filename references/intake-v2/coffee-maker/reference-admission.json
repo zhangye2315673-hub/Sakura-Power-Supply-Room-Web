@@ -1,0 +1,28 @@
+{
+  "status": "pass",
+  "provider": "openai-compatible-comfly",
+  "model": "gpt-image-2",
+  "quality": "high",
+  "size": "2048x2048",
+  "output": "references/intake-v2/coffee-maker/coffee-maker-turnsheet-v2.png",
+  "views": ["front", "right-side", "back", "three-quarter"],
+  "machineAdmission": {
+    "front": { "coverage": 0.3533, "largestComponent": 0.9017, "admitted": true },
+    "side": { "coverage": 0.3758, "largestComponent": 0.9086, "admitted": true },
+    "back": { "coverage": 0.3623, "largestComponent": 0.9079, "admitted": true },
+    "threeQuarter": { "coverage": 0.3728, "largestComponent": 0.9091, "admitted": true }
+  },
+  "checks": {
+    "technicalProbe": true,
+    "allViewsAdmitted": true,
+    "crossViewPartConsistency": true,
+    "commonGroundLine": true,
+    "hopperAndBeanConsistency": true,
+    "outletAndCupAxisConsistency": true,
+    "rightSideWaterTankConsistency": true,
+    "steamClearanceCompatible": true,
+    "noTextOrWatermark": true,
+    "animationAnchorsVisuallyCompatible": true
+  },
+  "notes": "All views describe one L-shaped coffee maker. Archived pivots, sockets, effects, bean transforms, cup axis and package bounds remain authoritative."
+}

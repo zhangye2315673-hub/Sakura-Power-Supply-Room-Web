@@ -1,0 +1,319 @@
+{
+  "targetName": "SAKURA Handheld Hair Dryer",
+  "sourceImage": "references\\intake\\hair-dryer\\front.png",
+  "preSpecAssessment": {
+    "objectClass": {
+      "primaryType": "handheld hair dryer",
+      "primaryDomain": "object",
+      "formLanguage": ["hard-surface", "rounded geometric", "variable-section loft"],
+      "structureKind": ["compound object", "layered shell", "articulated assembly", "repeated modules"],
+      "motionPotential": ["rotary fan", "linear slider", "button press", "effect emitter"],
+      "materialFamilies": ["plastic", "rubber", "emissive effect"],
+      "notes": "Three admitted views define profile, controls and rear intake; internal heater, motor and hidden connections remain inferred."
+    },
+    "complexity": {
+      "tier": "complex",
+      "scores": {
+        "silhouetteComplexity": 2,
+        "componentCount": 3,
+        "hierarchyDepth": 3,
+        "repetitionDensity": 3,
+        "materialLayerCount": 2,
+        "localDetailDensity": 2,
+        "occlusionRisk": 2,
+        "actionReadinessNeed": 3
+      },
+      "estimatedCounts": {
+        "macroComponents": 4,
+        "mesoComponents": 13,
+        "microFeatureGroups": 19,
+        "materialLayers": 8,
+        "repetitionSystems": 4
+      },
+      "reasoning": [
+        "The macro T silhouette is simple, but identity depends on a variable elliptical nozzle, layered intake, dense perforations, separate controls, cable hierarchy and powered airflow."
+      ]
+    },
+    "specDepthDecision": {
+      "requiredDepth": "complex",
+      "minimumComponentLevels": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "needsRepetitionSystems": true,
+      "needsMaterialLocalOverrides": true,
+      "needsMultipleReviewViews": true,
+      "needsActionReadyHierarchy": true,
+      "rationale": "A complex action-ready hierarchy is required to preserve the nozzle cross-section, intake repetition and purpose animation."
+    },
+    "unknownsToResolveBeforeImplementation": [],
+    "detailInventory": {
+      "scanMethod": "grid-4x4-plus-three-admitted-views",
+      "targetMinDetails": 18,
+      "note": "Every entry maps to a concrete component feature or material override in object-sculpt-spec.json.",
+      "details": [
+        {"id":"shell-soft-bevel","kind":"bevel","mapsTo":{"ref":"shell-soft-bevel"},"evidenceRef":"profile-view","confidence":0.98},
+        {"id":"nozzle-variable-loft","kind":"contour","mapsTo":{"ref":"nozzle-variable-loft"},"evidenceRef":"profile-view","confidence":0.98},
+        {"id":"nozzle-socket-seam","kind":"seam","mapsTo":{"ref":"nozzle-socket-seam"},"evidenceRef":"profile-view","confidence":0.96},
+        {"id":"flat-outlet-hole","kind":"hole","mapsTo":{"ref":"flat-outlet-hole"},"evidenceRef":"profile-view","confidence":0.86},
+        {"id":"rear-bezel-bevel","kind":"bevel","mapsTo":{"ref":"rear-bezel-bevel"},"evidenceRef":"rear-view","confidence":0.99},
+        {"id":"mint-ring-highlight","kind":"gloss","mapsTo":{"ref":"mint-ring-highlight"},"evidenceRef":"rear-view","confidence":0.94},
+        {"id":"perforation-array","kind":"hole","mapsTo":{"ref":"perforation-array"},"evidenceRef":"rear-view","confidence":0.99},
+        {"id":"seven-blade-rotor","kind":"contour","mapsTo":{"ref":"seven-blade-rotor"},"evidenceRef":"rear-view","confidence":0.72},
+        {"id":"handle-rounded-shoulder","kind":"contour","mapsTo":{"ref":"handle-rounded-shoulder"},"evidenceRef":"profile-view","confidence":0.98},
+        {"id":"handle-mould-seam","kind":"seam","mapsTo":{"ref":"handle-mould-seam"},"evidenceRef":"rear-view","confidence":0.91},
+        {"id":"cool-shot-button","kind":"contour","mapsTo":{"ref":"cool-shot-button"},"evidenceRef":"control-view","confidence":0.99},
+        {"id":"power-slider-groove","kind":"groove","mapsTo":{"ref":"power-slider-groove"},"evidenceRef":"control-view","confidence":0.99},
+        {"id":"status-led","kind":"emissive","mapsTo":{"ref":"status-led-powered"},"evidenceRef":"powered-view","confidence":0.84},
+        {"id":"lower-collar-seam","kind":"seam","mapsTo":{"ref":"lower-collar-seam"},"evidenceRef":"profile-view","confidence":0.97},
+        {"id":"strain-relief-ribs","kind":"ridge","mapsTo":{"ref":"strain-relief-ribs"},"evidenceRef":"profile-view","confidence":0.99},
+        {"id":"visible-power-cord","kind":"contour","mapsTo":{"ref":"visible-power-cord"},"evidenceRef":"profile-view","confidence":0.98},
+        {"id":"plastic-lacquer-highlight","kind":"gloss","mapsTo":{"ref":"pink-lacquer-highlight"},"evidenceRef":"profile-view","confidence":0.93},
+        {"id":"solid-wind-ribbons","kind":"volumetric-form","mapsTo":{"ref":"socket-bound-ribbon-field"},"evidenceRef":"ribbon-reference-research","confidence":0.95},
+        {"id":"released-ribbon-flight","kind":"motion-continuity","mapsTo":{"ref":"released-ribbon-flight"},"evidenceRef":"ribbon-quality-contract","confidence":0.95}
+      ]
+    },
+    "anatomy": {
+      "applies": false,
+      "styleHeads": 0.0,
+      "proportions": {
+        "headUnit": 0.0,
+        "torso": 0.0,
+        "legs": 0.0,
+        "shoulderWidth": 0.0,
+        "hipWidth": 0.0
+      },
+      "pose": {
+        "type": "unassessed",
+        "jointAngles": {}
+      },
+      "faceLandmarks": {
+        "eyeLine": 0.0,
+        "eyeSpacing": 0.0,
+        "noseBase": 0.0,
+        "mouthLine": 0.0,
+        "hairline": 0.0
+      },
+      "features": [],
+      "confidence": 0.0,
+      "note": "Only meaningful when objectClass.primaryDomain is character or hybrid. Set applies=true and fill from forge/stage1_intake/extract_landmarks.py. See grimoire/character/reconstruction.md and grimoire/character/likeness_maximization.md."
+    },
+    "sourceImage": "references\\intake\\hair-dryer\\front.png"
+  },
+  "qualityContract": {
+    "qualityBar": "complex",
+    "definitionOfDone": [
+      "The profile preserves the cream barrel, pink waist nozzle and handle proportions; rear intake preserves the mint perforated screen; powered state visibly dries a strand group and resets exactly."
+    ],
+    "minimumSpecDepth": {
+      "macroComponents": 4,
+      "mesoComponents": 12,
+      "microFeatureGroups": 18,
+      "materialLayers": 7,
+      "repetitionSystems": 4,
+      "reviewViewpoints": 5
+    },
+    "featureGroups": [
+      {
+        "id": "overall-silhouette",
+        "name": "Overall silhouette and proportions",
+        "required": true,
+        "qualityCriteria": [
+          "Bounding shape, dominant curves, negative spaces, and scale relationships are explicitly described."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "model reads as a generic placeholder instead of the reference object",
+          "major proportions are guessed without evidence"
+        ]
+      },
+      {
+        "id": "primary-structure",
+        "name": "Primary structure and hierarchy",
+        "required": true,
+        "qualityCriteria": [
+          "Major parts, joints, seams, contact points, and parent-child relationships are named before code generation."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "large visible parts are merged into one mesh",
+          "component hierarchy is too shallow for the observed complexity"
+        ]
+      },
+      {
+        "id": "attachment-joint-correctness",
+        "name": "Attachment and joint correctness",
+        "required": true,
+        "qualityCriteria": [
+          "Every visible child appendage, branch, limb, handle, connector, tube, cable, horn, wing, leg, or hinged part has an attachment contract with parent socket, localStart/localEnd, contact type, embed/overlap, and gap tolerance."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "child part root floats away from the parent",
+          "branch/limb/tube is centered in space instead of pivoting from its root",
+          "parent-child transform mixes world and local coordinates"
+        ]
+      },
+      {
+        "id": "surface-material-response",
+        "name": "Surface material response",
+        "required": true,
+        "qualityCriteria": [
+          "Albedo zones, roughness, normal/bump/displacement intent, cavity dirt, edge wear, and local overrides are specified where visible.",
+          "Important materials define independent albedo, roughness, height/normal, and AO responses instead of reusing one texture for unrelated PBR channels.",
+          "Surface response is decomposed into macro, meso, and micro frequency bands with scale and amplitude tied to object scale."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "surface looks like flat plastic",
+          "local material variation is missing or not tied to image evidence"
+        ]
+      },
+      {
+        "id": "reference-lookdev",
+        "name": "Reference color, material, and lighting response",
+        "required": true,
+        "qualityCriteria": [
+          "Material-pass names the reference-derived albedo palette, roughness variation, tactile normal/bump/displacement response, and local masks.",
+          "When a source image is available, run reference PBR extraction and require confidence >= 0.7 before treating maps as implementation-ready.",
+          "Lighting-pass names key/fill/rim or environment light, exposure, tone mapping, background, and contact shadow behavior.",
+          "Neutral, grazing-angle, and reference-matched renders prove that surface relief survives relighting and is not painted into albedo."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "model has acceptable shape but reads as flat shaded or plastic",
+          "colors are a generic average instead of reference-observed local color zones",
+          "lighting is evenly ambient and cannot reproduce the source value range"
+        ]
+      }
+    ],
+    "visualDeltaChecks": [
+      "silhouette and negative-space delta",
+      "component hierarchy depth delta",
+      "repetition density and distribution delta",
+      "material albedo/roughness/normal response delta",
+      "local feature placement and scale delta"
+    ],
+    "antiShallowSpecRules": [
+      "Do not proceed to code if qualityContract.qualityBar is unassessed.",
+      "Do not proceed to code if the spec only contains a root component for a moderate or complex object.",
+      "Do not proceed to code if required featureGroups are not represented by componentTree, materials, or repetitionSystems.",
+      "Do not proceed to code if visible local features are described only in prose and not attached to components/materials/evidenceRefs.",
+      "Do not proceed past structural-pass if attached child parts lack attachment.parentSocket, localStart, localEnd, embedDepth/overlap, and gapTolerance.",
+      "Do not pass material look-dev when albedo is reused as roughness, height, normal, or AO.",
+      "Do not pass material look-dev without macro, meso, and micro surface frequency bands for close-up materials.",
+      "Do not pass reference-fidelity material look-dev from a source image without usable referencePbr maps or an explicit documented limitation.",
+      "Do not patch a spec with extracted PBR maps when extraction confidence is below the target threshold unless the user explicitly accepts lower fidelity.",
+      "Do not place adjacent separate-geometry parts below 0.02 world-unit seam overlap (source: grimoire/build/geometry_patterns.md).",
+      "Do not satisfy raised or recessed relief, fasteners, or grip structure with a map alone when the feature affects form; use geometry or displacement (source: grimoire/build/geometry_patterns.md)."
+    ]
+  },
+  "authoringInstruction": "Fill observed object class, complexity reasoning, featureGroups, visualDeltaChecks, and unknowns before generating or implementing ObjectSculptSpec.",
+  "localSpecSearch": {
+    "collection": "core_3d",
+    "query": "SAKURA Handheld Hair Dryer handheld hair dryer nozzle fan grille handle switch cord socket plastic housing airflow",
+    "index": {
+      "status": "hit",
+      "reason": "current",
+      "fingerprint": "6857e5ab528b42ac12f4f411f862610a0bffce8e47aee3610a7603c318072fe8"
+    },
+    "matches": [
+      {
+        "record_id": "core.socket-pivot",
+        "file_path": "grimoire/glossary/3d_vocabulary.md",
+        "heading": "Animation, Physics, And Destruction",
+        "key_path": null,
+        "score": 5.511200483252,
+        "snippets": [
+          "A pivot is a local rotation origin; a socket is an attachment point for a child part. In a runtime hierarchy, a socket Object3D is a child of the relevant pivot."
+        ],
+        "source_refs": [
+          {
+            "path": "grimoire/glossary/3d_vocabulary.md",
+            "heading": "Animation, Physics, And Destruction",
+            "key_path": null
+          },
+          {
+            "path": "grimoire/readiness/action_rigging.md",
+            "heading": "Hierarchy Pattern",
+            "key_path": null
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "grimoire/readiness/action_rigging.md"
+          },
+          {
+            "kind": "notebooklm-research",
+            "ref": "notebooklm:4b03c2f9-8393-411f-b5b4-039ab9532843",
+            "note": "Validated generic schema vocabulary; numeric claims remain backed by local source_refs."
+          }
+        ]
+      },
+      {
+        "record_id": "core.attachment-contract",
+        "file_path": "grimoire/readiness/joint_attachment.md",
+        "heading": "Attachment Contract",
+        "key_path": null,
+        "score": 4.774467103191,
+        "snippets": [
+          "An attached child records its parent, parent socket, local start and end, contact type, and embed depth or overlap where applicable."
+        ],
+        "source_refs": [
+          {
+            "path": "grimoire/readiness/joint_attachment.md",
+            "heading": "Attachment Contract",
+            "key_path": null
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "grimoire/readiness/joint_attachment.md"
+          },
+          {
+            "kind": "notebooklm-research",
+            "ref": "notebooklm:4b03c2f9-8393-411f-b5b4-039ab9532843",
+            "note": "Validated generic schema vocabulary; numeric claims remain backed by local source_refs."
+          }
+        ]
+      },
+      {
+        "record_id": "core.shader-mapping-torusgeometry-rings-loops",
+        "file_path": "docs/raw/img2threejs-skill-dataset.json",
+        "heading": null,
+        "key_path": "categories.rendering_shader_mapping[8]",
+        "score": 3.760685282793,
+        "snippets": [
+          "... circular features. Ánh xạ tới các chi tiết hình vòng tròn kiểu donut. Recognition cues: Circular loop feature — bayonet handle ring, finger loop on a Talon knife, trigger guard loop, carrying handle Dấu hiệu nhận diện: Chi tiết vòng tròn — ..."
+        ],
+        "source_refs": [
+          {
+            "path": "docs/raw/img2threejs-skill-dataset.json",
+            "heading": null,
+            "key_path": "categories.rendering_shader_mapping[8]"
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "docs/raw/img2threejs-skill-dataset.json",
+            "note": "img2threejs NotebookLM research distillation"
+          }
+        ]
+      }
+    ]
+  }
+}

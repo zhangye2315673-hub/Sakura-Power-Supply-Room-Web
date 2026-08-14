@@ -1,0 +1,91 @@
+{
+  "sourceImage": "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake\\desktop-computer\\back.png",
+  "zonesDir": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\desktop-computer\\zones\\back",
+  "detailInventory": {
+    "scanMethod": "component-zones",
+    "targetMinDetails": 16,
+    "details": [
+      {
+        "id": "monitor-back",
+        "kind": "",
+        "description": "",
+        "region": {
+          "x": 0.0,
+          "y": 0.3,
+          "width": 0.63,
+          "height": 0.28,
+          "units": "normalized"
+        },
+        "scale": "",
+        "affects": "",
+        "mapsTo": {
+          "type": "",
+          "ref": ""
+        },
+        "evidenceRef": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\desktop-computer\\zones\\back\\monitor-back.png",
+        "confidence": 0.0
+      },
+      {
+        "id": "monitor-stand",
+        "kind": "",
+        "description": "",
+        "region": {
+          "x": 0.16,
+          "y": 0.5,
+          "width": 0.42,
+          "height": 0.16,
+          "units": "normalized"
+        },
+        "scale": "",
+        "affects": "",
+        "mapsTo": {
+          "type": "",
+          "ref": ""
+        },
+        "evidenceRef": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\desktop-computer\\zones\\back\\monitor-stand.png",
+        "confidence": 0.0
+      },
+      {
+        "id": "tower-rear",
+        "kind": "",
+        "description": "",
+        "region": {
+          "x": 0.63,
+          "y": 0.32,
+          "width": 0.37,
+          "height": 0.34,
+          "units": "normalized"
+        },
+        "scale": "",
+        "affects": "",
+        "mapsTo": {
+          "type": "",
+          "ref": ""
+        },
+        "evidenceRef": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\desktop-computer\\zones\\back\\tower-rear.png",
+        "confidence": 0.0
+      },
+      {
+        "id": "keyboard-rear",
+        "kind": "",
+        "description": "",
+        "region": {
+          "x": 0.09,
+          "y": 0.58,
+          "width": 0.54,
+          "height": 0.1,
+          "units": "normalized"
+        },
+        "scale": "",
+        "affects": "",
+        "mapsTo": {
+          "type": "",
+          "ref": ""
+        },
+        "evidenceRef": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\desktop-computer\\zones\\back\\keyboard-rear.png",
+        "confidence": 0.0
+      }
+    ]
+  },
+  "authoringInstruction": "Open each zone crop under zonesDir and replace every detail stub's kind, description, scale, affects, mapsTo, and confidence with what is actually observed. Add more detail entries per zone if a single zone contains multiple distinct marks; do not leave stubs unfilled or unlinked (mapsTo must reference a real component.localFeatures or material.localOverrides entry)."
+}

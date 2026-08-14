@@ -1,0 +1,1237 @@
+{
+  "schemaVersion": 1,
+  "applianceCount": 29,
+  "requiredCapturesPerAppliance": 7,
+  "models": [
+    {
+      "id": "lamp",
+      "captureCount": 7,
+      "captures": [
+        {
+          "name": "idle-front.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-side.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-back.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-three-quarter.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-startup-0.6.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-climax-2.8.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-wind-down-4.75.png",
+          "width": 1200,
+          "height": 830
+        }
+      ],
+      "missing": []
+    },
+    {
+      "id": "fan",
+      "captureCount": 7,
+      "captures": [
+        {
+          "name": "idle-front.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-side.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-back.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-three-quarter.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-startup-0.6.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-climax-2.8.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-wind-down-4.75.png",
+          "width": 1200,
+          "height": 830
+        }
+      ],
+      "missing": []
+    },
+    {
+      "id": "radio",
+      "captureCount": 7,
+      "captures": [
+        {
+          "name": "idle-front.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-side.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-back.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-three-quarter.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-startup-0.6.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-climax-2.8.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-wind-down-4.75.png",
+          "width": 1200,
+          "height": 830
+        }
+      ],
+      "missing": []
+    },
+    {
+      "id": "television",
+      "captureCount": 7,
+      "captures": [
+        {
+          "name": "idle-front.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-side.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-back.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-three-quarter.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-startup-0.6.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-climax-2.8.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-wind-down-4.75.png",
+          "width": 1200,
+          "height": 830
+        }
+      ],
+      "missing": []
+    },
+    {
+      "id": "humidifier",
+      "captureCount": 7,
+      "captures": [
+        {
+          "name": "idle-front.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-side.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-back.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-three-quarter.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-startup-0.6.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-climax-2.8.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-wind-down-4.75.png",
+          "width": 1200,
+          "height": 830
+        }
+      ],
+      "missing": []
+    },
+    {
+      "id": "toaster",
+      "captureCount": 7,
+      "captures": [
+        {
+          "name": "idle-front.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-side.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-back.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-three-quarter.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-startup-0.6.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-climax-2.8.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-wind-down-4.75.png",
+          "width": 1200,
+          "height": 830
+        }
+      ],
+      "missing": []
+    },
+    {
+      "id": "refrigerator",
+      "captureCount": 7,
+      "captures": [
+        {
+          "name": "idle-front.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-side.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-back.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-three-quarter.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-startup-0.6.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-climax-2.8.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-wind-down-4.75.png",
+          "width": 1200,
+          "height": 830
+        }
+      ],
+      "missing": []
+    },
+    {
+      "id": "washer",
+      "captureCount": 7,
+      "captures": [
+        {
+          "name": "idle-front.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-side.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-back.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-three-quarter.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-startup-0.6.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-climax-2.8.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-wind-down-4.75.png",
+          "width": 1200,
+          "height": 830
+        }
+      ],
+      "missing": []
+    },
+    {
+      "id": "microwave",
+      "captureCount": 7,
+      "captures": [
+        {
+          "name": "idle-front.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-side.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-back.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-three-quarter.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-startup-0.6.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-climax-2.8.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-wind-down-4.75.png",
+          "width": 1200,
+          "height": 830
+        }
+      ],
+      "missing": []
+    },
+    {
+      "id": "coffee-maker",
+      "captureCount": 7,
+      "captures": [
+        {
+          "name": "idle-front.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-side.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-back.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-three-quarter.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-startup-0.6.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-climax-2.8.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-wind-down-4.75.png",
+          "width": 1200,
+          "height": 830
+        }
+      ],
+      "missing": []
+    },
+    {
+      "id": "kettle",
+      "captureCount": 7,
+      "captures": [
+        {
+          "name": "idle-front.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-side.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-back.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-three-quarter.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-startup-0.6.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-climax-2.8.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-wind-down-4.75.png",
+          "width": 1200,
+          "height": 830
+        }
+      ],
+      "missing": []
+    },
+    {
+      "id": "rice-cooker",
+      "captureCount": 7,
+      "captures": [
+        {
+          "name": "idle-front.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-side.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-back.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-three-quarter.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-startup-0.6.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-climax-2.8.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-wind-down-4.75.png",
+          "width": 1200,
+          "height": 830
+        }
+      ],
+      "missing": []
+    },
+    {
+      "id": "phone",
+      "captureCount": 7,
+      "captures": [
+        {
+          "name": "idle-front.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-side.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-back.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-three-quarter.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-startup-0.6.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-climax-2.8.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-wind-down-4.75.png",
+          "width": 1200,
+          "height": 830
+        }
+      ],
+      "missing": []
+    },
+    {
+      "id": "robot-vacuum",
+      "captureCount": 7,
+      "captures": [
+        {
+          "name": "idle-front.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-side.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-back.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-three-quarter.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-startup-0.6.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-climax-2.8.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-wind-down-4.75.png",
+          "width": 1200,
+          "height": 830
+        }
+      ],
+      "missing": []
+    },
+    {
+      "id": "bubble-machine",
+      "captureCount": 7,
+      "captures": [
+        {
+          "name": "idle-front.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-side.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-back.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-three-quarter.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-startup-0.6.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-climax-2.8.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-wind-down-4.75.png",
+          "width": 1200,
+          "height": 830
+        }
+      ],
+      "missing": []
+    },
+    {
+      "id": "gumball-machine",
+      "captureCount": 7,
+      "captures": [
+        {
+          "name": "idle-front.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-side.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-back.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-three-quarter.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-startup-0.6.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-climax-2.8.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-wind-down-4.75.png",
+          "width": 1200,
+          "height": 830
+        }
+      ],
+      "missing": []
+    },
+    {
+      "id": "popcorn-machine",
+      "captureCount": 7,
+      "captures": [
+        {
+          "name": "idle-front.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-side.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-back.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-three-quarter.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-startup-0.6.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-climax-2.8.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-wind-down-4.75.png",
+          "width": 1200,
+          "height": 830
+        }
+      ],
+      "missing": []
+    },
+    {
+      "id": "alarm-clock",
+      "captureCount": 7,
+      "captures": [
+        {
+          "name": "idle-front.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-side.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-back.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-three-quarter.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-startup-0.6.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-climax-2.8.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-wind-down-4.75.png",
+          "width": 1200,
+          "height": 830
+        }
+      ],
+      "missing": []
+    },
+    {
+      "id": "smart-bin",
+      "captureCount": 7,
+      "captures": [
+        {
+          "name": "idle-front.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-side.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-back.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-three-quarter.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-startup-0.6.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-climax-2.8.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-wind-down-4.75.png",
+          "width": 1200,
+          "height": 830
+        }
+      ],
+      "missing": []
+    },
+    {
+      "id": "record-player",
+      "captureCount": 7,
+      "captures": [
+        {
+          "name": "idle-front.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-side.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-back.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-three-quarter.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-startup-0.6.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-climax-2.8.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-wind-down-4.75.png",
+          "width": 1200,
+          "height": 830
+        }
+      ],
+      "missing": []
+    },
+    {
+      "id": "stand-mixer",
+      "captureCount": 7,
+      "captures": [
+        {
+          "name": "idle-front.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-side.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-back.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-three-quarter.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-startup-0.6.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-climax-2.8.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-wind-down-4.75.png",
+          "width": 1200,
+          "height": 830
+        }
+      ],
+      "missing": []
+    },
+    {
+      "id": "printer",
+      "captureCount": 7,
+      "captures": [
+        {
+          "name": "idle-front.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-side.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-back.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-three-quarter.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-startup-0.6.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-climax-2.8.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-wind-down-4.75.png",
+          "width": 1200,
+          "height": 830
+        }
+      ],
+      "missing": []
+    },
+    {
+      "id": "induction-cooktop",
+      "captureCount": 7,
+      "captures": [
+        {
+          "name": "idle-front.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-side.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-back.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-three-quarter.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-startup-0.6.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-climax-2.8.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-wind-down-4.75.png",
+          "width": 1200,
+          "height": 830
+        }
+      ],
+      "missing": []
+    },
+    {
+      "id": "blender",
+      "captureCount": 7,
+      "captures": [
+        {
+          "name": "idle-front.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-side.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-back.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-three-quarter.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-startup-0.6.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-climax-2.8.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-wind-down-4.75.png",
+          "width": 1200,
+          "height": 830
+        }
+      ],
+      "missing": []
+    },
+    {
+      "id": "dehumidifier",
+      "captureCount": 7,
+      "captures": [
+        {
+          "name": "idle-front.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-side.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-back.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-three-quarter.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-startup-0.6.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-climax-2.8.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-wind-down-4.75.png",
+          "width": 1200,
+          "height": 830
+        }
+      ],
+      "missing": []
+    },
+    {
+      "id": "portable-speaker",
+      "captureCount": 7,
+      "captures": [
+        {
+          "name": "idle-front.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-side.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-back.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-three-quarter.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-startup-0.6.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-climax-2.8.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-wind-down-4.75.png",
+          "width": 1200,
+          "height": 830
+        }
+      ],
+      "missing": []
+    },
+    {
+      "id": "hair-dryer",
+      "captureCount": 7,
+      "captures": [
+        {
+          "name": "idle-front.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-side.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-back.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-three-quarter.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-startup-0.6.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-climax-2.8.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-wind-down-4.75.png",
+          "width": 1200,
+          "height": 830
+        }
+      ],
+      "missing": []
+    },
+    {
+      "id": "desktop-computer",
+      "captureCount": 7,
+      "captures": [
+        {
+          "name": "idle-front.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-side.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-back.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-three-quarter.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-startup-0.6.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-climax-2.8.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-wind-down-4.75.png",
+          "width": 1200,
+          "height": 830
+        }
+      ],
+      "missing": []
+    },
+    {
+      "id": "game-controller",
+      "captureCount": 7,
+      "captures": [
+        {
+          "name": "idle-front.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-side.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-back.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "idle-three-quarter.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-startup-0.6.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-climax-2.8.png",
+          "width": 1200,
+          "height": 830
+        },
+        {
+          "name": "active-wind-down-4.75.png",
+          "width": 1200,
+          "height": 830
+        }
+      ],
+      "missing": []
+    }
+  ],
+  "game": {
+    "game-seed-2679418801.png": {
+      "width": 1200,
+      "height": 900
+    },
+    "game-seed-2679418801-canvas.png": {
+      "width": 1200,
+      "height": 900
+    }
+  },
+  "missing": [],
+  "complete": true
+}

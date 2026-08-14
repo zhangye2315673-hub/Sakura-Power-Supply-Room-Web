@@ -1,0 +1,22 @@
+{
+  "status": "pass",
+  "provider": "openai-compatible-comfly",
+  "model": "gpt-image-2",
+  "quality": "high",
+  "size": "2048x2048",
+  "output": "references/intake-v2/printer/printer-turnsheet-v2.png",
+  "views": ["front", "right-side", "back", "three-quarter"],
+  "checks": {
+    "technicalProbe": true,
+    "frontAdmission": true,
+    "sideAdmission": true,
+    "backAdmission": true,
+    "threeQuarterAdmission": true,
+    "crossViewPartConsistency": true,
+    "commonGroundLine": true,
+    "noTextOrWatermark": true,
+    "noCableOrMotionEffects": true,
+    "animationAnchorsVisuallyCompatible": true
+  },
+  "notes": "All split views independently passed admission. The output throat, tray hinge, rear support hinge, control and rear power inlet remain visually compatible with the archived runtime contract. Existing pivots, sockets, five paper profiles and timeline remain authoritative."
+}

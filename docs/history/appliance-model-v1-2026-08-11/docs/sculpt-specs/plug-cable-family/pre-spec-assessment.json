@@ -1,0 +1,555 @@
+{
+  "targetName": "SAKURA Plug Cable Family v2",
+  "sourceImage": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\plug-cable-family\\reference-v1-round-two-pin.png",
+  "preSpecAssessment": {
+    "objectClass": {
+      "primaryType": "stylized plug-and-cable family",
+      "primaryDomain": "object",
+      "formLanguage": [
+        "low-poly hard-surface",
+        "axially revolved shell",
+        "fiber-strand cable"
+      ],
+      "structureKind": [
+        "compound object",
+        "shared family shell",
+        "replaceable terminal variants"
+      ],
+      "motionPotential": [
+        "whole-object transform",
+        "progressive path extraction",
+        "bendable visual cable",
+        "socket insertion"
+      ],
+      "materialFamilies": [
+        "toon plastic",
+        "toon rubber",
+        "cool gray metal",
+        "dark connector cavity"
+      ],
+      "notes": "Code-only real-time game prop. Preserve current gameplay envelope and seven terminal identities while refining the visible construction."
+    },
+    "complexity": {
+      "tier": "complex",
+      "scores": {
+        "silhouetteComplexity": 1,
+        "componentCount": 3,
+        "hierarchyDepth": 2,
+        "repetitionDensity": 2,
+        "materialLayerCount": 2,
+        "localDetailDensity": 2,
+        "occlusionRisk": 1,
+        "actionReadinessNeed": 3
+      },
+      "estimatedCounts": {
+        "macroComponents": 3,
+        "mesoComponents": 9,
+        "microFeatureGroups": 7,
+        "materialLayers": 4,
+        "repetitionSystems": 2
+      },
+      "reasoning": [
+        "The common shell is simple, but seven terminal variants, two cable-end modes, progressive extraction, runtime picking and repeated geometry rebuilds require a complex action-ready contract.",
+        "Identity depends on preserved terminal layouts and on a rounded-corner cable system that must remain inside the existing collision envelope."
+      ]
+    },
+    "specDepthDecision": {
+      "requiredDepth": "complex",
+      "minimumComponentLevels": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "needsRepetitionSystems": true,
+      "needsMaterialLocalOverrides": true,
+      "needsMultipleReviewViews": true,
+      "needsActionReadyHierarchy": true,
+      "rationale": "One shared authored family must cover seven visible terminal systems and dynamic cable geometry without changing gameplay data."
+    },
+    "unknownsToResolveBeforeImplementation": [
+      "Back-side shell detail is not visible; use axial symmetry and do not invent controls or branding.",
+      "The reference does not establish manufacturing dimensions; retain current game-space constants as authoritative.",
+      "The family board is multi-object style evidence, not single-object geometry ground truth."
+    ],
+    "detailInventory": {
+      "scanMethod": "component-zones-plus-grid-3x3",
+      "targetMinDetails": 10,
+      "details": [
+        {
+          "id": "front-chamfer",
+          "kind": "bevel",
+          "description": "主壳前肩的克制单段倒角形成连续亮边",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "0.04 shell radius",
+          "affects": "procedural geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "outer-shell.front-chamfer"
+          },
+          "evidenceRef": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\plug-cable-family\\detail-zones\\zone-r0c1.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "terminal-spacing",
+          "kind": "contour",
+          "description": "双圆针保持平行、等长并与中心轴对称",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "pin spacing 0.15",
+          "affects": "procedural geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "terminal-assembly.terminal-layout"
+          },
+          "evidenceRef": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\plug-cable-family\\detail-zones\\zone-r0c1.png",
+          "confidence": 1
+        },
+        {
+          "id": "faceplate-seam",
+          "kind": "seam",
+          "description": "接口面圈与主壳之间保留清晰但不夸张的构造缝",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "0.01 axial seam",
+          "affects": "procedural geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "interface-faceplate.perimeter-seam"
+          },
+          "evidenceRef": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\plug-cable-family\\detail-zones\\zone-r0c1.png",
+          "confidence": 0.94
+        },
+        {
+          "id": "shell-facets",
+          "kind": "contour",
+          "description": "主壳竖向低多边形面在三段 Toon 光下形成宽色带",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "12 radial facets",
+          "affects": "procedural geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "outer-shell.radial-facets"
+          },
+          "evidenceRef": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\plug-cable-family\\detail-zones\\zone-r1c1.png",
+          "confidence": 0.98
+        },
+        {
+          "id": "status-inset",
+          "kind": "emissive",
+          "description": "侧面状态点改为浅内嵌圆点并保留交互发光",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "0.024 radius",
+          "affects": "procedural geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "status-indicator.recessed-dot"
+          },
+          "evidenceRef": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\plug-cable-family\\detail-zones\\zone-r1c2.png",
+          "confidence": 0.92
+        },
+        {
+          "id": "rear-chamfer",
+          "kind": "bevel",
+          "description": "主壳后缘通过短倒角收向后颈而非球形鼓包",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "0.035 shell radius",
+          "affects": "procedural geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "outer-shell.rear-chamfer"
+          },
+          "evidenceRef": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\plug-cable-family\\detail-zones\\zone-r1c1.png",
+          "confidence": 0.94
+        },
+        {
+          "id": "strain-relief-rings",
+          "kind": "ridge",
+          "description": "护线套使用两道浅环脊表达真实弯折保护结构",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "0.008 relief",
+          "affects": "procedural geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "strain-relief.shallow-rings"
+          },
+          "evidenceRef": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\plug-cable-family\\detail-zones\\zone-r2c1.png",
+          "confidence": 0.88
+        },
+        {
+          "id": "cable-socket-overlap",
+          "kind": "seam",
+          "description": "线身嵌入护线套并至少重叠 0.02 世界单位",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "0.02 overlap",
+          "affects": "procedural geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "strain-relief.cable-overlap"
+          },
+          "evidenceRef": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\plug-cable-family\\detail-zones\\zone-r2c1.png",
+          "confidence": 0.98
+        },
+        {
+          "id": "cable-radial-facets",
+          "kind": "contour",
+          "description": "线身使用八边圆截面以保持城市风格的平面折光",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "8 radial segments",
+          "affects": "procedural geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "cable-body.radial-facets"
+          },
+          "evidenceRef": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\plug-cable-family\\detail-zones\\zone-r2c1.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "tangent-fillet",
+          "kind": "contour",
+          "description": "每个正交折点使用不越界的相切四分之一圆角",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "0.13 radius clamped to 28 percent",
+          "affects": "procedural geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "cable-body.tangent-fillet"
+          },
+          "evidenceRef": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\plug-cable-family\\detail-zones\\zone-r2c1.png",
+          "confidence": 1
+        },
+        {
+          "id": "cool-shadow-bands",
+          "kind": "contour",
+          "description": "外壳与线身保持三段色阶并把暗部偏向冷紫",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "3 toon bands",
+          "affects": "toon material response",
+          "mapsTo": {
+            "type": "material.localOverrides",
+            "ref": "shell-toon.cool-violet-shadow-bands"
+          },
+          "evidenceRef": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\plug-cable-family\\detail-zones\\zone-r1c1.png",
+          "confidence": 0.98
+        },
+        {
+          "id": "ink-outline",
+          "kind": "contour",
+          "description": "主壳、面圈与线身使用深紫倒置壳墨线，微小针脚不重复加粗",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "0.0030-0.0033",
+          "affects": "toon material response",
+          "mapsTo": {
+            "type": "material.localOverrides",
+            "ref": "shell-toon.restrained-ink-outline"
+          },
+          "evidenceRef": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\plug-cable-family\\detail-zones\\zone-r1c1.png",
+          "confidence": 0.98
+        }
+      ]
+    },
+    "anatomy": {
+      "applies": false,
+      "styleHeads": 0,
+      "proportions": {
+        "headUnit": 0,
+        "torso": 0,
+        "legs": 0,
+        "shoulderWidth": 0,
+        "hipWidth": 0
+      },
+      "pose": {
+        "type": "unassessed",
+        "jointAngles": {}
+      },
+      "faceLandmarks": {
+        "eyeLine": 0,
+        "eyeSpacing": 0,
+        "noseBase": 0,
+        "mouthLine": 0,
+        "hairline": 0
+      },
+      "features": [],
+      "confidence": 0,
+      "note": "Only meaningful when objectClass.primaryDomain is character or hybrid. Set applies=true and fill from forge/stage1_intake/extract_landmarks.py. See grimoire/character/reconstruction.md and grimoire/character/likeness_maximization.md."
+    },
+    "sourceImage": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\plug-cable-family\\reference-v1-round-two-pin.png"
+  },
+  "qualityContract": {
+    "qualityBar": "complex",
+    "definitionOfDone": [
+      "All seven plug styles remain instantly distinguishable by their terminal assembly while sharing one cleaner SAKURA construction language.",
+      "Every style remains inside the current 0.18 radius and 0.64 length envelope in front, side and three-quarter views.",
+      "Cable corners use tangent low-poly fillets without Catmull-Rom overshoot, spherical elbow bulges, gaps or reversed short-segment bends.",
+      "Static, double-ended, showcase and appliance-flight cables share the same section, material hierarchy and plug attachment.",
+      "Hover, blocked, energized, picking, reset, disposal and progressive extraction behavior remain compatible with existing callers."
+    ],
+    "minimumSpecDepth": {
+      "macroComponents": 3,
+      "mesoComponents": 8,
+      "microFeatureGroups": 5,
+      "materialLayers": 4,
+      "repetitionSystems": 2,
+      "reviewViewpoints": 4
+    },
+    "featureGroups": [
+      {
+        "id": "family-shell-silhouette",
+        "name": "Shared shell silhouette and construction",
+        "required": true,
+        "qualityCriteria": [
+          "A restrained five-stage axial profile replaces the generic cylinder without exceeding the legacy envelope."
+        ],
+        "evidenceRefs": [
+          "reference-v1-round-two-pin",
+          "v1-seven-style-board"
+        ],
+        "failureModes": [
+          "bulbous toy silhouette",
+          "straight cylinder remains visually dominant",
+          "shell exceeds collision envelope"
+        ]
+      },
+      {
+        "id": "seven-terminal-identities",
+        "name": "Seven terminal identity systems",
+        "required": true,
+        "qualityCriteria": [
+          "Pin count, slot/cavity layout, orientation and relative spacing remain recognizable for all seven PlugStyleId values."
+        ],
+        "evidenceRefs": [
+          "v1-seven-style-board"
+        ],
+        "failureModes": [
+          "two styles become visually interchangeable",
+          "terminal tip exceeds maximum length",
+          "micro outlines obscure the connector"
+        ]
+      },
+      {
+        "id": "tangent-cable-fillet",
+        "name": "Orthogonal cable fillet system",
+        "required": true,
+        "qualityCriteria": [
+          "A 0.13 radius quarter-turn is clamped to 28 percent of each adjacent leg, remains tangent and never overshoots the polyline cell."
+        ],
+        "evidenceRefs": [
+          "v1-fixed-seed-game"
+        ],
+        "failureModes": [
+          "spherical elbow bulge",
+          "Catmull-Rom corner cutting",
+          "short-segment reversal",
+          "open tube end"
+        ]
+      },
+      {
+        "id": "attachment-runtime",
+        "name": "Cable attachment and runtime hierarchy",
+        "required": true,
+        "qualityCriteria": [
+          "Cable overlaps the strain-relief socket, every visible part has a stable node name, and sculptRuntime publishes nodes, sockets and destruction groups."
+        ],
+        "evidenceRefs": [
+          "reference-v1-round-two-pin"
+        ],
+        "failureModes": [
+          "floating cable",
+          "unnamed mesh",
+          "picking and explode part definitions disagree"
+        ]
+      },
+      {
+        "id": "sakura-toon-response",
+        "name": "SAKURA city toon response",
+        "required": true,
+        "qualityCriteria": [
+          "Narrow saturated palette, cool violet shadow bands, restrained deep-purple ink and low-poly facets match the city source without toy or cyber-mechanical cues."
+        ],
+        "evidenceRefs": [
+          "sakura-crossing-hero-1",
+          "sakura-crossing-hero-2",
+          "sakura-crossing-hero-4"
+        ],
+        "failureModes": [
+          "soft-vinyl toy read",
+          "photoreal PBR mismatch",
+          "excess panel clutter",
+          "thick micro-part outlines"
+        ]
+      }
+    ],
+    "visualDeltaChecks": [
+      "legacy versus v2 shell silhouette and envelope",
+      "seven-style terminal identity at one shared camera",
+      "sharp elbow versus tangent fillet without path overshoot",
+      "cable-to-strain-relief contact and outline continuity",
+      "SAKURA palette and cool-shadow parity across neutral and three-quarter views"
+    ],
+    "antiShallowSpecRules": [
+      "Do not alter puzzle paths, pathLength, clickability, collision constants or appliance mappings to make the new visuals fit.",
+      "Do not use a free Catmull-Rom spline for orthogonal puzzle cable corners.",
+      "Do not represent a terminal hole as a dark decal when a real cavity face is visible.",
+      "Do not merge all terminal variants into one anonymous mesh or omit runtime node names.",
+      "Do not accept a cable-to-plug seam with less than 0.02 world-unit overlap.",
+      "Do not add photo projection or external texture assets for flat SAKURA materials."
+    ]
+  },
+  "authoringInstruction": "Fill observed object class, complexity reasoning, featureGroups, visualDeltaChecks, and unknowns before generating or implementing ObjectSculptSpec.",
+  "localSpecSearch": {
+    "collection": "core_3d",
+    "query": "SAKURA Plug Cable Family v2 stylized low-poly plastic plug cable strain relief tube along orthogonal path rounded fillet toon outline plastic connector",
+    "index": {
+      "status": "hit",
+      "reason": "current",
+      "fingerprint": "6857e5ab528b42ac12f4f411f862610a0bffce8e47aee3610a7603c318072fe8"
+    },
+    "matches": [
+      {
+        "record_id": "core.shader-mapping-capsulegeometry-rounded-edge-components",
+        "file_path": "docs/raw/img2threejs-skill-dataset.json",
+        "heading": null,
+        "key_path": "categories.rendering_shader_mapping[6]",
+        "score": 5.386043518442,
+        "snippets": [
+          "Maps to components with hemispherical rounded ends. Ánh xạ tới các bộ phận có đầu bo tròn dạng bán cầu. Recognition cues: Rod-like part with distinctly rounded (not flat-cut) ends, e.g. a knife spine or a safety lever Dấu hiệu nhận diện: Bộ phận ..."
+        ],
+        "source_refs": [
+          {
+            "path": "docs/raw/img2threejs-skill-dataset.json",
+            "heading": null,
+            "key_path": "categories.rendering_shader_mapping[6]"
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "docs/raw/img2threejs-skill-dataset.json",
+            "note": "img2threejs NotebookLM research distillation"
+          }
+        ]
+      },
+      {
+        "record_id": "core.topology-intent",
+        "file_path": "grimoire/glossary/3d_vocabulary.md",
+        "heading": "Geometry And Topology",
+        "key_path": null,
+        "score": 5.143858634031,
+        "snippets": [
+          "Topology intent classifies a surface as hard-surface blockout, subdivision-ready, low-poly prop, organic deformed mesh, or alpha-card cluster."
+        ],
+        "source_refs": [
+          {
+            "path": "grimoire/glossary/3d_vocabulary.md",
+            "heading": "Geometry And Topology",
+            "key_path": null
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "grimoire/glossary/3d_vocabulary.md"
+          },
+          {
+            "kind": "notebooklm-research",
+            "ref": "notebooklm:4b03c2f9-8393-411f-b5b4-039ab9532843",
+            "note": "Validated generic schema vocabulary; numeric claims remain backed by local source_refs."
+          }
+        ]
+      },
+      {
+        "record_id": "core.shader-mapping-tubegeometry-straps-cables-belts",
+        "file_path": "docs/raw/img2threejs-skill-dataset.json",
+        "heading": null,
+        "key_path": "categories.rendering_shader_mapping[10]",
+        "score": 3.699753200989,
+        "snippets": [
+          "... theo một đường cong 3D. Recognition cues: Flexible, curve-following linear component — sling strap, pressure-switch cable, ammo belt draping into a receiver Dấu hiệu nhận diện: Bộ phận tuyến tính mềm dẻo chạy theo đường cong — dây đeo ..."
+        ],
+        "source_refs": [
+          {
+            "path": "docs/raw/img2threejs-skill-dataset.json",
+            "heading": null,
+            "key_path": "categories.rendering_shader_mapping[10]"
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "docs/raw/img2threejs-skill-dataset.json",
+            "note": "img2threejs NotebookLM research distillation"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "model": "humidifier",
+  "status": "conditional-fallback",
+  "generator": null,
+  "generatorClaim": "No GPT Image 2 generation was performed because no Comfly or OpenAI environment credential was available.",
+  "sources": [
+    { "view": "front", "path": "views/front.png", "width": 1200, "height": 830, "admitted": true, "pHash": "16616536764610025830" },
+    { "view": "side", "path": "views/side.png", "width": 1200, "height": 830, "admitted": true, "pHash": "16616533535730747686" },
+    { "view": "back", "path": "views/back.png", "width": 1200, "height": 830, "admitted": true, "pHash": "12955898892256122982" },
+    { "view": "three-quarter", "path": "views/three-quarter.png", "width": 1200, "height": 830, "admitted": true, "pHash": "16616538138982848550" }
+  ],
+  "authority": "Archived v1 rig contract remains authoritative for bounds, ground, pivots, sockets, collision and animation."
+}

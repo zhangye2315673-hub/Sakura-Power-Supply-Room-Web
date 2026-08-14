@@ -1,0 +1,14 @@
+﻿{
+  "admitted": true,
+  "reasons": [],
+  "provenance": {
+    "viewpoint": "three-quarter",
+    "sourcePath": "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake-v2\\desktop-computer\\views\\three-quarter.png",
+    "width": 627,
+    "height": 627,
+    "foregroundCoverage": 0.4572,
+    "largestComponentFraction": 0.9996,
+    "pHash": 13447117100229072486,
+    "duplicateOfHash": null
+  }
+}

@@ -1,0 +1,12 @@
+# Normalise line endings in the repository, check out native on each platform.
+* text=auto
+
+# Nothing in the repository needs these today, but a batch file that reaches it
+# as LF is silently broken: cmd.exe aborts at the first multi-line `if ( ... )`
+# block and a double-click appears to do nothing at all.  Cheap insurance.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+*.mp3 binary
+*.jpg binary
+*.png binary

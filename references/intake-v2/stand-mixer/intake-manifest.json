@@ -1,0 +1,20 @@
+{
+  "targetId": "stand-mixer-v2",
+  "provider": "conditional-fallback",
+  "requestedProvider": "GPT Image 2 via configured image service",
+  "generationAttempted": false,
+  "reason": "No OPENAI_API_KEY, OPENAI_BASE_URL, COMFLY_API_KEY or COMFLY_BASE_URL was available in the executing environment.",
+  "admission": "conditional",
+  "runtimeAuthority": "docs/history/appliance-model-v1-2026-08-11/appliance-rig-v1-contract.json",
+  "views": {
+    "front": "views/front.png",
+    "side": "views/side.png",
+    "back": "views/back.png",
+    "threeQuarter": "views/three-quarter.png"
+  },
+  "notes": [
+    "Front, side and back are the admitted existing turn-sheet views.",
+    "The three-quarter panel is the existing procedural reference render, not GPT Image 2 output.",
+    "Reference images guide visual proportion only; archived pivots, sockets, node paths and package bounds remain authoritative."
+  ]
+}

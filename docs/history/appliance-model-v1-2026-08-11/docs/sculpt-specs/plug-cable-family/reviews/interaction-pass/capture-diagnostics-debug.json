@@ -1,0 +1,34 @@
+{
+  "passId": "interaction-pass",
+  "baseUrl": "http://127.0.0.1:5190",
+  "view": "three-quarter",
+  "diagnostics": {
+    "labelCount": 7,
+    "bodyClasses": "showcase-mode",
+    "canvas": {
+      "width": 1728,
+      "height": 972
+    },
+    "plug": {
+      "styleCount": 7,
+      "view": "three-quarter",
+      "debugEnabled": true,
+      "explodeAmount": 0.72,
+      "selectableParts": [
+        "front-shoulder",
+        "interface-faceplate",
+        "outer-shell",
+        "rear-neck",
+        "status-indicator",
+        "strain-relief",
+        "terminal-assembly"
+      ],
+      "selectedPart": "round-two-pin:outer-shell",
+      "drawCalls": 95,
+      "triangles": 8574,
+      "geometries": 95,
+      "textures": 2
+    }
+  },
+  "errors": []
+}

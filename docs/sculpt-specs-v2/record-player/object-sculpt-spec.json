@@ -1,0 +1,6037 @@
+{
+  "targetName": "SAKURA Record Player v2",
+  "targetId": "sakura-record-player-v2",
+  "schemaVersion": "2.1",
+  "terminologyProfile": {
+    "domain": "real-time procedural Three.js appliance",
+    "geometryTerms": [
+      "silhouette",
+      "topology",
+      "bevel",
+      "pivot",
+      "socket",
+      "instancing"
+    ],
+    "materialTerms": [
+      "albedo",
+      "roughness",
+      "normal map",
+      "ambient occlusion",
+      "clearcoat",
+      "transmission"
+    ],
+    "lightingTerms": [
+      "key light",
+      "fill light",
+      "rim light",
+      "contact shadow",
+      "exposure"
+    ],
+    "descriptionRule": "Use measurable 3D object-space terms and evidence refs."
+  },
+  "sourceImage": "references/intake-v2/record-player/views/front.png",
+  "referenceCamera": {
+    "solved": false,
+    "fovDegrees": 40,
+    "aspect": 0.59192348565356,
+    "orientation": {
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0
+    },
+    "positionHint": [
+      0,
+      0,
+      3
+    ],
+    "note": "Front, side and back orthographic-like views are available; perspective and hidden hinge stops remain inferred."
+  },
+  "suitability": "pass",
+  "scores": {
+    "object_isolation": 3,
+    "silhouette_readability": 3,
+    "depth_inference": 3,
+    "primitive_decomposition": 3,
+    "material_procedurality": 3,
+    "occlusion_risk": 2,
+    "interaction_fit": 3
+  },
+  "preSpecAssessment": {
+    "objectClass": {
+      "primaryType": "portable electric record player / turntable",
+      "primaryDomain": "object",
+      "formLanguage": [
+        "hard-surface",
+        "faceted-low-poly",
+        "sakura-toon",
+        "hinged-mechanical"
+      ],
+      "structureKind": [
+        "compound object",
+        "hinged enclosure",
+        "rotating mechanism",
+        "repeated grille slats"
+      ],
+      "motionPotential": [
+        "articulated",
+        "rotating mechanism",
+        "tonearm sweep",
+        "status-emitter"
+      ],
+      "materialFamilies": [
+        "injection-molded plastic",
+        "transparent plastic",
+        "painted metal",
+        "rubber",
+        "vinyl"
+      ],
+      "notes": "Four archived runtime views conditionally establish the exterior. They are not GPT Image 2 output. The visual rebuild preserves all archived animation anchors."
+    },
+    "complexity": {
+      "tier": "complex",
+      "scores": {
+        "silhouetteComplexity": 2,
+        "componentCount": 3,
+        "hierarchyDepth": 3,
+        "repetitionDensity": 3,
+        "materialLayerCount": 3,
+        "localDetailDensity": 3,
+        "occlusionRisk": 2,
+        "actionReadinessNeed": 3
+      },
+      "estimatedCounts": {
+        "macroComponents": 4,
+        "mesoComponents": 15,
+        "microFeatureGroups": 8,
+        "materialLayers": 6,
+        "repetitionSystems": 3
+      },
+      "reasoning": [
+        "Low rectangular base plus hinged lid, platter/tonearm mechanism, grille repetition, rear hardware, and a visible playback animation make this a complex compound appliance."
+      ]
+    },
+    "specDepthDecision": {
+      "requiredDepth": "complex",
+      "minimumComponentLevels": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "needsRepetitionSystems": true,
+      "needsMaterialLocalOverrides": true,
+      "needsMultipleReviewViews": true,
+      "needsActionReadyHierarchy": true,
+      "rationale": "Compound articulated assembly with radial repetition and mixed transparency."
+    },
+    "unknownsToResolveBeforeImplementation": [],
+    "detailInventory": {
+      "scanMethod": "three-view component-zones",
+      "targetMinDetails": 16,
+      "note": "Every identity-defining detail is linked to a component or material override below.",
+      "details": [
+        {
+          "id": "record-player-detail-1",
+          "kind": "contour",
+          "description": "Cream rounded base shell with softened front and side corners.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "body-shell"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.92
+        },
+        {
+          "id": "record-player-detail-2",
+          "kind": "bevel",
+          "description": "Raised transparent lid frame with inset inner panel.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "lid-panel"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.92
+        },
+        {
+          "id": "record-player-detail-3",
+          "kind": "fastener",
+          "description": "Two pink rear hinge blocks and barrel pins.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "lid-hinge-array"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.92
+        },
+        {
+          "id": "record-player-detail-4",
+          "kind": "contour",
+          "description": "Dark circular platter with thin pink perimeter band.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "platter"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.92
+        },
+        {
+          "id": "record-player-detail-5",
+          "kind": "groove",
+          "description": "Central spindle pin and concentric record label ring.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "spindle"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.92
+        },
+        {
+          "id": "record-player-detail-6",
+          "kind": "contour",
+          "description": "Bent cream tonearm rooted at rear-right pivot.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "tonearm"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.92
+        },
+        {
+          "id": "record-player-detail-7",
+          "kind": "bevel",
+          "description": "Pink rectangular cartridge at stylus end.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "cartridge"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.92
+        },
+        {
+          "id": "record-player-detail-8",
+          "kind": "ridge",
+          "description": "Dense horizontal pink slat field across front panel.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "front-grille"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.92
+        },
+        {
+          "id": "record-player-detail-9",
+          "kind": "gloss",
+          "description": "Pink cylindrical speed/volume knob on top-right.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "control-knob"
+          },
+          "evidenceRef": "side-view",
+          "confidence": 0.92
+        },
+        {
+          "id": "record-player-detail-10",
+          "kind": "contour",
+          "description": "Centered recessed carry handle with two pink mounts.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "rear-handle"
+          },
+          "evidenceRef": "side-view",
+          "confidence": 0.92
+        },
+        {
+          "id": "record-player-detail-11",
+          "kind": "hole",
+          "description": "Pink rear I/O plate with two circular sockets.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "rear-io-plate"
+          },
+          "evidenceRef": "back-view",
+          "confidence": 0.78
+        },
+        {
+          "id": "record-player-detail-12",
+          "kind": "fastener",
+          "description": "Four separate dark-pink rubber feet under shell.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "foot-array"
+          },
+          "evidenceRef": "back-view",
+          "confidence": 0.78
+        },
+        {
+          "id": "record-player-detail-13",
+          "kind": "emissive",
+          "description": "Small power indicator beside control area.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "status-light"
+          },
+          "evidenceRef": "back-view",
+          "confidence": 0.92
+        },
+        {
+          "id": "record-player-v2-detail-14",
+          "kind": "contour",
+          "description": "Two six-sided Sakura side cheeks break the rectangular base silhouette.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "silhouette/material",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "body-side-facets"
+          },
+          "evidenceRef": "three-quarter-view",
+          "confidence": 0.88
+        },
+        {
+          "id": "record-player-v2-detail-15",
+          "kind": "groove",
+          "description": "Three concentric low-poly vinyl grooves reinforce record rotation.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "form/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "vinyl-grooves"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.9
+        },
+        {
+          "id": "record-player-v2-detail-16",
+          "kind": "contour",
+          "description": "Eight-sided pink tonearm counterweight remains attached to the cue pivot.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "form/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "tonearm-counterweight"
+          },
+          "evidenceRef": "side-view",
+          "confidence": 0.82
+        },
+        {
+          "id": "record-player-v2-detail-17",
+          "kind": "ridge",
+          "description": "Octagonal speaker badge and pulse ring interrupt the uniform front slat field.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "form/material",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "speaker-badge"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.84
+        }
+      ]
+    },
+    "sourceImage": "references/intake-v2/record-player/views/front.png"
+  },
+  "qualityContract": {
+    "qualityBar": "complex",
+    "definitionOfDone": [
+      "The v2 record player reads as a more exaggerated faceted SAKURA game prop while its archived package, platter/tonearm mechanics, effect origin and exact reset contract remain unchanged."
+    ],
+    "minimumSpecDepth": {
+      "macroComponents": 5,
+      "mesoComponents": 16,
+      "microFeatureGroups": 10,
+      "materialLayers": 7,
+      "repetitionSystems": 6,
+      "reviewViewpoints": 7
+    },
+    "featureGroups": [
+      {
+        "id": "shell",
+        "name": "Rounded shell proportion",
+        "required": true,
+        "qualityCriteria": [
+          "Height/width 1.12 and depth/width 0.72 with broad corner radii."
+        ],
+        "evidenceRefs": [
+          "front",
+          "side"
+        ],
+        "failureModes": [
+          "boxy silhouette"
+        ]
+      },
+      {
+        "id": "playback-mechanism",
+        "name": "Platter and tonearm mechanism",
+        "required": true,
+        "qualityCriteria": [
+          "Platter, center spindle, tonearm pivot, cartridge and stylus remain independently named around the playback axis."
+        ],
+        "evidenceRefs": [
+          "front"
+        ],
+        "failureModes": [
+          "fused platter/tonearm parts or off-axis spindle"
+        ]
+      },
+      {
+        "id": "front-grille",
+        "name": "Front speaker grille",
+        "required": true,
+        "qualityCriteria": [
+          "Eleven horizontal pink slats remain raised inside a dark recessed front cavity."
+        ],
+        "evidenceRefs": [
+          "side",
+          "back"
+        ],
+        "failureModes": [
+          "flat grille decal or wrong slat rhythm"
+        ]
+      },
+      {
+        "id": "rear-hardware",
+        "name": "Rear hinges, carry handle and I/O plate",
+        "required": true,
+        "qualityCriteria": [
+          "Two hinges, centered recessed handle and two circular sockets remain readable from the back."
+        ],
+        "evidenceRefs": [
+          "back"
+        ],
+        "failureModes": [
+          "missing rear hardware or fused handle"
+        ]
+      },
+      {
+        "id": "powered-action",
+        "name": "Powered purpose animation",
+        "required": true,
+        "qualityCriteria": [
+          "Control turns, platter spins and tonearm cues while the status light activates, then all transforms reset at 5.2 seconds."
+        ],
+        "evidenceRefs": [
+          "turn-sheet-left-effect"
+        ],
+        "failureModes": [
+          "generic wobble without recognizable record playback"
+        ]
+      },
+      {
+        "id": "outline-hierarchy",
+        "name": "Stable irregular ink hierarchy",
+        "required": true,
+        "qualityCriteria": [
+          "Main 0.0048, structure 0.0041 and detail 0.0033 use stable object-space variation 0.18.",
+          "Transparent lid and volumetric music effects have no visible hull outlines."
+        ],
+        "evidenceRefs": [
+          "runtime-contract"
+        ],
+        "failureModes": [
+          "uniform thin outline",
+          "transparent/effect outline clumps"
+        ]
+      }
+    ],
+    "visualDeltaChecks": [
+      "silhouette",
+      "depth ratio",
+      "platter and tonearm alignment",
+      "material separation",
+      "powered record playback"
+    ],
+    "antiShallowSpecRules": [
+      "No fused compound mesh.",
+      "No flat texture replacement for platter, tonearm or grille.",
+      "No pass without browser evidence."
+    ]
+  },
+  "qualityTargets": {
+    "fidelity": "high stylized low-poly runtime upgrade",
+    "minimumReadDistance": "gallery orbit",
+    "identityCritical": [
+      "platter and spindle",
+      "tonearm and cartridge",
+      "front grille and rear handle",
+      "cream-pink palette"
+    ],
+    "reviewViewpoints": [
+      "front",
+      "side",
+      "back",
+      "three-quarter",
+      "runtime-startup",
+      "runtime-climax",
+      "runtime-wind-down"
+    ],
+    "mustMatch": [
+      "faceted suitcase shell inside archived package",
+      "oversized twelve-sided record and visible concentric grooves",
+      "right-rear tonearm, counterweight, cartridge and stylus under frozen pivots",
+      "front eleven-slat grille with speaker pulse badge",
+      "stable three-tier outline and conditional transparent/effect exclusions",
+      "exact archived animation anchors and music effect center"
+    ]
+  },
+  "selfCorrectLoop": {
+    "enabled": true,
+    "visualAcceptance": {
+      "reviewer": "ai-vision",
+      "threshold": 0.8,
+      "comparisonArtifactRequired": true,
+      "layerScoresRequired": true,
+      "codePixelDiffIsAcceptanceAuthority": false,
+      "requiredLayerScores": [
+        "silhouetteProportion",
+        "componentStructure",
+        "formDetail",
+        "materialSurface",
+        "lightingCamera"
+      ],
+      "featureReviewPolicy": {
+        "enabled": true,
+        "reviewUnit": "semantic-subsystem",
+        "maxCriticalFeaturesPerPass": 5,
+        "maxImportantFeaturesPerPass": 3,
+        "criticalDefaultThreshold": 0.8,
+        "importantAverageThreshold": 0.65,
+        "adaptiveEscalation": true,
+        "singleImagePairOnly": true
+      }
+    },
+    "reviewAfterPasses": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "allowedActions": [
+      "continue",
+      "refine-spec",
+      "refine-code",
+      "request-input",
+      "stop"
+    ],
+    "screenshotPolicy": {
+      "requiredForPasses": [
+        "blockout",
+        "structural-pass",
+        "form-refinement",
+        "material-pass",
+        "lighting-pass",
+        "interaction-pass"
+      ],
+      "preferredCapture": "model-review.html",
+      "minimumEvidence": "render screenshot, side-by-side comparison, AI vision score and feature scores"
+    }
+  },
+  "featureReviewTargets": [
+    {
+      "id": "record-player-silhouette",
+      "name": "Faceted suitcase silhouette",
+      "tier": "critical",
+      "passIds": [
+        "blockout",
+        "form-refinement"
+      ],
+      "minimumScore": 0.82,
+      "mustPass": true,
+      "componentRefs": [
+        "body-shell",
+        "body-side-facets",
+        "hinged-lid"
+      ],
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "three-quarter-view"
+      ]
+    },
+    {
+      "id": "record-player-playback",
+      "name": "Platter and tonearm identity",
+      "tier": "critical",
+      "passIds": [
+        "structural-pass",
+        "interaction-pass"
+      ],
+      "minimumScore": 0.82,
+      "mustPass": true,
+      "componentRefs": [
+        "platter",
+        "vinyl-grooves",
+        "tonearm",
+        "tonearm-counterweight",
+        "cartridge",
+        "stylus"
+      ],
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "runtime-contract"
+      ]
+    },
+    {
+      "id": "record-player-speaker",
+      "name": "Front grille and speaker badge",
+      "tier": "critical",
+      "passIds": [
+        "structural-pass",
+        "form-refinement"
+      ],
+      "minimumScore": 0.82,
+      "mustPass": true,
+      "componentRefs": [
+        "front-grille",
+        "grille-slat-array",
+        "speaker-badge"
+      ],
+      "evidenceRefs": [
+        "front-view"
+      ]
+    },
+    {
+      "id": "record-player-animation-contact",
+      "name": "Frozen playback and music effect contact",
+      "tier": "critical",
+      "passIds": [
+        "interaction-pass"
+      ],
+      "minimumScore": 0.82,
+      "mustPass": true,
+      "componentRefs": [
+        "platter-assembly",
+        "tonearm-assembly",
+        "status-light"
+      ],
+      "evidenceRefs": [
+        "runtime-startup",
+        "runtime-climax",
+        "runtime-wind-down"
+      ]
+    },
+    {
+      "id": "record-player-ink",
+      "name": "Three-tier stable SAKURA ink",
+      "tier": "critical",
+      "passIds": [
+        "material-pass",
+        "lighting-pass",
+        "optimization-pass"
+      ],
+      "minimumScore": 0.82,
+      "mustPass": true,
+      "componentRefs": [
+        "body-shell",
+        "hinged-lid",
+        "platter",
+        "front-grille"
+      ],
+      "evidenceRefs": [
+        "outline-contract"
+      ]
+    }
+  ],
+  "sculptPipeline": {
+    "passGateMode": "locked-sequential",
+    "passOrder": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "currentPass": "complete",
+    "completedPasses": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "lastCompletedPass": "optimization-pass",
+    "blockedReason": "all build passes completed",
+    "nextRequiredEvidence": []
+  },
+  "lookDevTargets": {
+    "qualityPriority": "reference-fidelity",
+    "materialPass": {
+      "minimumTextureResolution": 1024,
+      "independentMapChannels": [
+        "albedo",
+        "roughness",
+        "height",
+        "normal",
+        "ambient-occlusion"
+      ],
+      "referencePbrExtraction": {
+        "requiredWhenSourceImagePresent": true,
+        "targetThreshold": 0.7,
+        "stopOnLowConfidence": true
+      }
+    },
+    "lightingPass": {
+      "requiredTerms": [
+        "key light",
+        "fill light",
+        "rim light",
+        "exposure",
+        "tone mapping",
+        "contact shadow"
+      ]
+    }
+  },
+  "actionReadiness": {
+    "hierarchyReady": true,
+    "pivotStrategy": "Existing named pivots and sockets are frozen; v2 geometry is rebuilt as their visual children.",
+    "sockets": [
+      "record-player-lid-attachment-socket",
+      "record-player-platter-axis-socket",
+      "record-player-tonearm-attachment-socket",
+      "record-player-control-socket",
+      "record-player-motor-drive-socket",
+      "record-player-power-connection-socket",
+      "record-player-audio-connection-socket"
+    ],
+    "colliders": [
+      "record-player-body",
+      "record-player-lid",
+      "record-player-platter"
+    ],
+    "destructionGroups": [
+      "body-deck",
+      "lid-assembly",
+      "speaker-grille",
+      "platter-assembly"
+    ],
+    "interactionNotes": [
+      "No controller or timeline changes.",
+      "Platter/effect center remains [-0.35, 1.2, 0].",
+      "Tonearm counterweight is a child of the frozen cue pivot."
+    ]
+  },
+  "assumptions": [
+    "Archived v1 runtime views are conditional fallback evidence and not GPT Image 2 output.",
+    "Archived bounds, ground, pivot/socket parent paths, local transforms and socket directions are immutable.",
+    "Hidden motor, belt, speaker cone and wiring remain omitted."
+  ],
+  "coordinateFrame": {
+    "front": "camera-facing side in the reference image",
+    "up": "image up direction",
+    "scaleReference": "base width = 2.8 world units; floor at y=0"
+  },
+  "silhouette": {
+    "boundingShape": "low rounded rectangular suitcase body with a thinner hinged rectangular lid raised behind the platter",
+    "aspectRatios": [
+      "base width:height:depth = 2.8:1.18:1.35",
+      "lid width:height:thickness = 2.72:1.55:0.14"
+    ],
+    "symmetry": "base and grille are bilateral; tonearm, knob and I/O plate are right-biased; handle is centered on rear",
+    "dominantCurves": [
+      "large shell corner fillets",
+      "circular platter and spindle",
+      "arched tonearm bend",
+      "rounded handle U profile"
+    ],
+    "negativeSpaces": [
+      "open gap between lid and platter",
+      "tonearm clearance above platter",
+      "recessed handle cavity"
+    ],
+    "landmarks": [
+      "pink top lid latch",
+      "black platter with pink rim",
+      "front slat grille",
+      "right tonearm/cartridge",
+      "rear handle and hinges"
+    ]
+  },
+  "viewEvidence": [
+    {
+      "id": "front-view",
+      "view": "front",
+      "imagePath": "references/intake/record-player/front.png",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "lid open behind platter",
+        "front grille spans lower panel",
+        "tonearm on right"
+      ],
+      "confidence": 0.95
+    },
+    {
+      "id": "side-view",
+      "view": "side",
+      "imagePath": "references/intake/record-player/side.png",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "lid rotates from rear hinge",
+        "base depth and feet",
+        "tonearm pivot height"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "id": "back-view",
+      "view": "back",
+      "imagePath": "references/intake/record-player/back.png",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "two hinge blocks",
+        "recessed carry handle",
+        "dual circular I/O sockets"
+      ],
+      "confidence": 0.94
+    }
+  ],
+  "componentTree": [
+    {
+      "id": "root",
+      "name": "Record Player Root",
+      "level": "macro",
+      "role": "container",
+      "importance": 1,
+      "confidence": 1,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Runtime container for the complete record-player hierarchy.",
+      "parent": null,
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "localFeatures": [
+        "root.silhouette",
+        "root.bevel",
+        "root.material-zone"
+      ],
+      "actionProfile": {
+        "animationRole": "root",
+        "pivot": {
+          "mode": "base",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 1
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(248,233,213,1)",
+        "secondaryAlbedo": "rgba(243,194,181,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.98
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "root.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "root.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "root.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        }
+      ],
+      "geometryDescriptor": {
+        "topologyIntent": "assembled rounded suitcase enclosure with separate lid and mechanical subassemblies",
+        "edgeTreatment": {
+          "type": "rounded bevel",
+          "bevelRadius": 0.12,
+          "segments": 4
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from beveled geometry"
+      },
+      "dimensions": {
+        "width": 2.8,
+        "height": 2.7,
+        "depth": 1.42,
+        "units": "world",
+        "confidence": 0.88
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "body-shell",
+      "name": "Rounded Base Shell",
+      "level": "macro",
+      "role": "part",
+      "importance": 1,
+      "confidence": 0.99,
+      "primitive": "extrude",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rounded molded suitcase base with a broad rectangular footprint, softened corners, front grille recess and visible shell seam.",
+      "parent": "root",
+      "transform": {
+        "position": [
+          0,
+          1.12,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "localFeatures": [
+        "body-shell.silhouette",
+        "body-shell.bevel",
+        "body-shell.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(248,233,213,1)",
+        "secondaryAlbedo": "rgba(245,225,206,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.99
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "body-shell.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "body-shell.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "body-shell.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "root",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "hinged-lid",
+      "name": "Hinged Lid Assembly",
+      "level": "macro",
+      "role": "part",
+      "importance": 1,
+      "confidence": 0.99,
+      "primitive": "ellipsoid",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Independent rounded dust-cover frame hinged along the rear edge of the base.",
+      "parent": "body-shell",
+      "transform": {
+        "position": [
+          0,
+          0.28,
+          0.82
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "smoked-lid",
+      "materialLayers": [
+        "smoked-lid"
+      ],
+      "localFeatures": [
+        "hinged-lid.silhouette",
+        "hinged-lid.bevel",
+        "hinged-lid.material-zone"
+      ],
+      "actionProfile": {
+        "animationRole": "hinged-cover",
+        "pivot": {
+          "mode": "custom",
+          "localPosition": [
+            0,
+            -0.48,
+            -0.46
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 0.92
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(102,80,70,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.98
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "hinged-lid.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "hinged-lid.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "hinged-lid.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "body-shell",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "lid-panel",
+      "name": "Transparent Lid Panel",
+      "level": "macro",
+      "role": "part",
+      "importance": 0.9,
+      "confidence": 0.94,
+      "primitive": "extrude",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Transparent inset panel retained inside the rounded lid frame.",
+      "parent": "hinged-lid",
+      "transform": {
+        "position": [
+          0.92,
+          0.1,
+          -0.28
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "smoked-lid",
+      "materialLayers": [
+        "smoked-lid"
+      ],
+      "localFeatures": [
+        "lid-panel.silhouette",
+        "lid-panel.bevel",
+        "lid-panel.material-zone"
+      ],
+      "actionProfile": {
+        "animationRole": "static-part"
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(235,189,177,0.68)",
+        "secondaryAlbedo": "rgba(248,233,213,0.42)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.92
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "lid-panel.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "lid-panel.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "lid-panel.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "body-shell",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "lid-latch",
+      "name": "Top Lid Latch",
+      "level": "macro",
+      "role": "part",
+      "importance": 0.95,
+      "confidence": 0.99,
+      "primitive": "ellipsoid",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Small centered latch block fixed to the upper rim of the dust cover.",
+      "parent": "hinged-lid",
+      "transform": {
+        "position": [
+          0,
+          0.18,
+          -0.82
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-accent",
+      "materialLayers": [
+        "pink-accent"
+      ],
+      "localFeatures": [
+        "lid-latch.silhouette",
+        "lid-latch.bevel",
+        "lid-latch.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(70,57,49,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.98
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "lid-latch.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "lid-latch.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "lid-latch.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "body-shell",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "lid-hinge-array",
+      "name": "Rear Hinge Pair",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.95,
+      "confidence": 0.99,
+      "primitive": "torus",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Two discrete rear hinge blocks with barrel-pin axes join the lid to the base.",
+      "parent": "body-shell",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0.03
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-accent",
+      "materialLayers": [
+        "pink-accent"
+      ],
+      "localFeatures": [
+        "lid-hinge-array.silhouette",
+        "lid-hinge-array.bevel",
+        "lid-hinge-array.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(215,181,170,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.99
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "lid-hinge-array.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "lid-hinge-array.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "lid-hinge-array.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "hinged-lid",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "platter-assembly",
+      "name": "Platter Assembly",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.9,
+      "confidence": 0.96,
+      "primitive": "ellipsoid",
+      "topologyClass": "conforming-shell",
+      "topologyRationale": "Stationary support group locating the horizontal platter, spindle and inferred drive under the open lid.",
+      "parent": "body-shell",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0.04
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "vinyl-black",
+      "materialLayers": [
+        "vinyl-black"
+      ],
+      "localFeatures": [
+        "platter-assembly.silhouette",
+        "platter-assembly.bevel",
+        "platter-assembly.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(102,80,70,0.36)",
+        "secondaryAlbedo": "rgba(215,181,170,0.18)",
+        "materialClass": "glass",
+        "materialClassConfidence": 0.9
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "platter-assembly.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "platter-assembly.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "platter-assembly.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "hinged-lid",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "platter",
+      "name": "Black Vinyl Platter",
+      "level": "meso",
+      "role": "part",
+      "importance": 1,
+      "confidence": 0.99,
+      "primitive": "ellipsoid",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Horizontal circular turntable and vinyl-disc assembly rotating about the vertical spindle axis.",
+      "parent": "platter-assembly",
+      "transform": {
+        "position": [
+          0,
+          0,
+          -0.03
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "vinyl-black",
+      "materialLayers": [
+        "vinyl-black"
+      ],
+      "localFeatures": [
+        "platter.silhouette",
+        "platter.bevel",
+        "platter.material-zone"
+      ],
+      "actionProfile": {
+        "animationRole": "turntable-rotor",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.99
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(215,181,170,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.99
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "platter.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "platter.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "platter.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "hinged-lid",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "record-label",
+      "name": "Record Label Ring",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.85,
+      "confidence": 0.99,
+      "primitive": "ellipsoid",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Concentric label disc fixed to the rotating vinyl record.",
+      "parent": "platter",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0.12
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "vinyl-black",
+      "materialLayers": [
+        "vinyl-black"
+      ],
+      "localFeatures": [
+        "record-label.silhouette",
+        "record-label.bevel",
+        "record-label.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(185,137,129,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.99
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "record-label.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "record-label.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "record-label.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "platter",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "spindle",
+      "name": "Center Spindle",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.82,
+      "confidence": 0.97,
+      "primitive": "extrude",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Short vertical metal spindle centered in the platter.",
+      "parent": "platter-assembly",
+      "transform": {
+        "position": [
+          0,
+          -0.48,
+          0.9
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "metal-hardware",
+      "materialLayers": [
+        "metal-hardware"
+      ],
+      "localFeatures": [
+        "spindle.silhouette",
+        "spindle.bevel",
+        "spindle.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(185,137,129,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.98
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "spindle.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "spindle.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "spindle.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "body-shell",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "tonearm-assembly",
+      "name": "Tonearm Assembly",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.78,
+      "confidence": 0.94,
+      "primitive": "ellipsoid",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rear-right pivot base and cueing support that anchors the articulated tonearm.",
+      "parent": "body-shell",
+      "transform": {
+        "position": [
+          0,
+          1.13,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "localFeatures": [
+        "tonearm-assembly.silhouette",
+        "tonearm-assembly.bevel",
+        "tonearm-assembly.material-zone"
+      ],
+      "actionProfile": {
+        "animationRole": "tonearm-pivot",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.95
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(185,137,129,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.98
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "tonearm-assembly.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "tonearm-assembly.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "tonearm-assembly.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "body-shell",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "tonearm",
+      "name": "Bent Tonearm",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.7,
+      "confidence": 0.95,
+      "primitive": "ellipsoid",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Bent cream tonearm rotating in plan around its rear-right pivot toward the record.",
+      "parent": "tonearm-assembly",
+      "transform": {
+        "position": [
+          0,
+          0.68,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "localFeatures": [
+        "tonearm.silhouette",
+        "tonearm.bevel",
+        "tonearm.material-zone"
+      ],
+      "actionProfile": {
+        "animationRole": "articulated-arm"
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(215,181,170,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.97
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "tonearm.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "tonearm.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "tonearm.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "lid-panel",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "cartridge",
+      "name": "Pink Cartridge",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.9,
+      "confidence": 0.94,
+      "primitive": "ellipsoid",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Pink rectangular cartridge attached to the distal end of the tonearm.",
+      "parent": "tonearm",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0.03
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-accent",
+      "materialLayers": [
+        "pink-accent"
+      ],
+      "localFeatures": [
+        "cartridge.silhouette",
+        "cartridge.bevel",
+        "cartridge.material-zone"
+      ],
+      "actionProfile": {
+        "animationRole": "static-child"
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(70,57,49,1)",
+        "secondaryAlbedo": "rgba(243,194,181,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "cartridge.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "cartridge.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "cartridge.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "lid-latch",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "stylus",
+      "name": "Stylus Tip",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.95,
+      "confidence": 0.99,
+      "primitive": "torus",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Small stylus tip descending from the cartridge toward the record surface.",
+      "parent": "cartridge",
+      "transform": {
+        "position": [
+          0,
+          0,
+          -0.08
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "metal-hardware",
+      "materialLayers": [
+        "metal-hardware"
+      ],
+      "localFeatures": [
+        "stylus.silhouette",
+        "stylus.bevel",
+        "stylus.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(70,57,49,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.99
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "stylus.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "stylus.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "stylus.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "lid-latch",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "front-grille",
+      "name": "Front Speaker Grille",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.72,
+      "confidence": 0.97,
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Shallow rounded rectangular speaker cavity inset into the lower front face.",
+      "parent": "body-shell",
+      "transform": {
+        "position": [
+          0,
+          -1.1,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "grille-pink",
+      "materialLayers": [
+        "grille-pink"
+      ],
+      "localFeatures": [
+        "front-grille.silhouette",
+        "front-grille.bevel",
+        "front-grille.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(70,57,49,1)",
+        "materialClass": "rubber",
+        "materialClassConfidence": 0.82
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "front-grille.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "front-grille.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "front-grille.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "body-shell",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "grille-slat-array",
+      "name": "Horizontal Grille Slats",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.65,
+      "confidence": 0.42,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Eleven separate horizontal rounded slats repeat across the front speaker cavity.",
+      "parent": "front-grille",
+      "transform": {
+        "position": [
+          0.65,
+          -0.75,
+          -0.83
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "grille-pink",
+      "materialLayers": [
+        "grille-pink"
+      ],
+      "localFeatures": [
+        "grille-slat-array.silhouette",
+        "grille-slat-array.bevel",
+        "grille-slat-array.material-zone"
+      ],
+      "actionProfile": {
+        "animationRole": "static-part"
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(70,57,49,1)",
+        "secondaryAlbedo": "rgba(95,91,104,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.7
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "grille-slat-array.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "grille-slat-array.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "grille-slat-array.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "body-shell",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "control-knob",
+      "name": "Speed Control Knob",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.68,
+      "confidence": 0.98,
+      "primitive": "instanced-cluster",
+      "topologyClass": "surface-relief",
+      "topologyRationale": "Independent pink cylindrical speed or volume knob on the top-right control deck.",
+      "parent": "body-shell",
+      "transform": {
+        "position": [
+          0,
+          -0.48,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-accent",
+      "materialLayers": [
+        "pink-accent"
+      ],
+      "localFeatures": [
+        "control-knob.silhouette",
+        "control-knob.bevel",
+        "control-knob.material-zone"
+      ],
+      "actionProfile": {
+        "animationRole": "control",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.9
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(70,57,49,1)",
+        "secondaryAlbedo": "rgba(102,80,70,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.95
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "control-knob.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "control-knob.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "control-knob.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "body-shell",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "status-light",
+      "name": "Power Status Indicator",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.55,
+      "confidence": 0.94,
+      "primitive": "extrude",
+      "topologyClass": "surface-relief",
+      "topologyRationale": "Small indicator lens beside the control area, emissive only while powered.",
+      "parent": "body-shell",
+      "transform": {
+        "position": [
+          0,
+          -0.72,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-accent",
+      "materialLayers": [
+        "pink-accent"
+      ],
+      "localFeatures": [
+        "status-light.silhouette",
+        "status-light.bevel",
+        "status-light.material-zone"
+      ],
+      "actionProfile": {
+        "animationRole": "powered-indicator"
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(102,80,70,1)",
+        "secondaryAlbedo": "rgba(248,233,213,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "status-light.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "status-light.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "status-light.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "body-shell",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "rear-handle",
+      "name": "Recessed Carry Handle",
+      "level": "micro",
+      "role": "part",
+      "importance": 1,
+      "confidence": 0.99,
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Centered recessed carry handle attached to the rear panel.",
+      "parent": "body-shell",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0.06
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "localFeatures": [
+        "rear-handle.silhouette",
+        "rear-handle.bevel",
+        "rear-handle.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(215,181,170,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.99
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "rear-handle.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "rear-handle.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "rear-handle.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "platter",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "rear-handle-mounts",
+      "name": "Handle Mount Blocks",
+      "level": "micro",
+      "role": "part",
+      "importance": 0.9,
+      "confidence": 0.99,
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Two pink mounting blocks fix the carry handle to the rear panel.",
+      "parent": "body-shell",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0.02
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-accent",
+      "materialLayers": [
+        "pink-accent"
+      ],
+      "localFeatures": [
+        "rear-handle-mounts.silhouette",
+        "rear-handle-mounts.bevel",
+        "rear-handle-mounts.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(215,181,170,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.99
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "rear-handle-mounts.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "rear-handle-mounts.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "rear-handle-mounts.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "platter",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "rear-io-plate",
+      "name": "Rear I/O Plate",
+      "level": "micro",
+      "role": "part",
+      "importance": 0.82,
+      "confidence": 0.84,
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Pink rectangular I/O plate inset at the lower-right rear face.",
+      "parent": "body-shell",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-accent",
+      "materialLayers": [
+        "pink-accent"
+      ],
+      "localFeatures": [
+        "rear-io-plate.silhouette",
+        "rear-io-plate.bevel",
+        "rear-io-plate.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(70,57,49,1)",
+        "secondaryAlbedo": "rgba(102,80,70,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.82
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "rear-io-plate.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "rear-io-plate.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "rear-io-plate.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "cartridge",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "rear-io-sockets",
+      "name": "Rear Circular Sockets",
+      "level": "micro",
+      "role": "part",
+      "importance": 0.88,
+      "confidence": 0.99,
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Two separate circular sockets nested in the rear I/O plate.",
+      "parent": "rear-io-plate",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "metal-hardware",
+      "materialLayers": [
+        "metal-hardware"
+      ],
+      "localFeatures": [
+        "rear-io-sockets.silhouette",
+        "rear-io-sockets.bevel",
+        "rear-io-sockets.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(185,137,129,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.99
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "rear-io-sockets.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "rear-io-sockets.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "rear-io-sockets.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "stylus",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "foot-array",
+      "name": "Four Rubber Feet",
+      "level": "micro",
+      "role": "part",
+      "importance": 0.65,
+      "confidence": 0.99,
+      "primitive": "instanced-cluster",
+      "topologyClass": "surface-relief",
+      "topologyRationale": "Four discrete rubber feet repeat beneath the base corners.",
+      "parent": "body-shell",
+      "transform": {
+        "position": [
+          0,
+          0,
+          -0.84
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "rubber-foot",
+      "materialLayers": [
+        "rubber-foot"
+      ],
+      "localFeatures": [
+        "foot-array.silhouette",
+        "foot-array.bevel",
+        "foot-array.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(70,57,49,1)",
+        "secondaryAlbedo": "rgba(95,91,104,1)",
+        "materialClass": "metal",
+        "materialClassConfidence": 0.75
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "foot-array.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "foot-array.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "foot-array.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "body-shell",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "shell-seam",
+      "name": "Shell Seam Rail",
+      "level": "micro",
+      "role": "part",
+      "importance": 0.52,
+      "confidence": 0.8,
+      "primitive": "box",
+      "topologyClass": "surface-relief",
+      "topologyRationale": "Thin perimeter split line separates upper deck and lower shell panels.",
+      "parent": "body-shell",
+      "transform": {
+        "position": [
+          0,
+          0.07,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-accent",
+      "materialLayers": [
+        "pink-accent"
+      ],
+      "localFeatures": [
+        "shell-seam.silhouette",
+        "shell-seam.bevel",
+        "shell-seam.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(70,57,49,1)",
+        "secondaryAlbedo": "rgba(102,80,70,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.85
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "shell-seam.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "shell-seam.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "shell-seam.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "tonearm-assembly",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "power-socket",
+      "name": "Inferred Power Socket",
+      "level": "micro",
+      "role": "part",
+      "importance": 0.5,
+      "confidence": 0.48,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "External power inlet inferred from the rear I/O layout and project plug contract; exact connector geometry is not fully visible.",
+      "parent": "body-shell",
+      "transform": {
+        "position": [
+          0.84,
+          0.1,
+          -0.28
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "metal-hardware",
+      "materialLayers": [
+        "metal-hardware"
+      ],
+      "localFeatures": [
+        "power-socket.silhouette",
+        "power-socket.bevel",
+        "power-socket.material-zone"
+      ],
+      "actionProfile": {
+        "animationRole": "power-connection",
+        "sockets": [
+          {
+            "id": "external-power-connection",
+            "localPosition": [
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(215,181,170,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.75
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "power-socket.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "power-socket.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "power-socket.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "body-shell",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "motor-inference",
+      "name": "Inferred Motor Housing",
+      "level": "micro",
+      "role": "effect",
+      "importance": 1,
+      "confidence": 0.96,
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Hidden motor and belt-drive volume beneath the platter, represented only as a low-confidence inferred runtime anchor.",
+      "parent": "platter-assembly",
+      "transform": {
+        "position": [
+          -0.68,
+          0.05,
+          0.18
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "vinyl-black",
+      "materialLayers": [
+        "vinyl-black"
+      ],
+      "localFeatures": [
+        "motor-inference.silhouette",
+        "motor-inference.bevel",
+        "motor-inference.material-zone"
+      ],
+      "actionProfile": {
+        "animationRole": "inferred-turntable-driver",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.45
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(214,241,242,0.22)",
+        "secondaryAlbedo": "rgba(245,193,218,0.18)",
+        "materialClass": "glass",
+        "materialClassConfidence": 0.78
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "motor-inference.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "motor-inference.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "motor-inference.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "platter",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "body-side-facets",
+      "name": "Faceted Body Side Cheeks",
+      "parent": "body-shell",
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.84,
+      "confidence": 0.84,
+      "topologyRationale": "Independent stylized low-poly hard-surface part with stable animation-ready attachment.",
+      "material": "pink-accent",
+      "materialLayers": [
+        "pink-accent"
+      ],
+      "localFeatures": [
+        "two mirrored six-sided side masses",
+        "inside archived width/depth envelope"
+      ],
+      "actionProfile": {
+        "movable": false,
+        "detachable": true
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(232,167,183,1)",
+        "secondaryAlbedo": "rgba(109,91,119,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.84
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view"
+      ],
+      "details": [
+        {
+          "id": "body-side-facets.detail-1",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "body-side-facets.detail-2",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "attachment": {
+        "parentSocket": "body-shell",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0
+        ],
+        "contactType": "flush",
+        "overlap": 0.01,
+        "gapTolerance": 0.005
+      }
+    },
+    {
+      "id": "lid-side-spines",
+      "name": "Lid Side Spines",
+      "parent": "hinged-lid",
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.84,
+      "confidence": 0.84,
+      "topologyRationale": "Independent stylized low-poly hard-surface part with stable animation-ready attachment.",
+      "material": "pink-accent",
+      "materialLayers": [
+        "pink-accent"
+      ],
+      "localFeatures": [
+        "mirrored low-poly structural rails"
+      ],
+      "actionProfile": {
+        "movable": false,
+        "detachable": true
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(232,167,183,1)",
+        "secondaryAlbedo": "rgba(109,91,119,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.84
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view"
+      ],
+      "details": [
+        {
+          "id": "lid-side-spines.detail-1",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "attachment": {
+        "parentSocket": "hinged-lid",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0
+        ],
+        "contactType": "flush",
+        "overlap": 0.01,
+        "gapTolerance": 0.005
+      }
+    },
+    {
+      "id": "vinyl-grooves",
+      "name": "Concentric Vinyl Grooves",
+      "parent": "platter",
+      "primitive": "torus",
+      "topologyClass": "surface-relief",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.84,
+      "confidence": 0.84,
+      "topologyRationale": "Independent stylized low-poly hard-surface part with stable animation-ready attachment.",
+      "material": "pink-accent",
+      "materialLayers": [
+        "pink-accent"
+      ],
+      "localFeatures": [
+        "three twelve-sided concentric rings"
+      ],
+      "actionProfile": {
+        "movable": false,
+        "detachable": true
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(232,167,183,1)",
+        "secondaryAlbedo": "rgba(109,91,119,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.84
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view"
+      ],
+      "details": [
+        {
+          "id": "vinyl-grooves.detail-1",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "attachment": {
+        "parentSocket": "platter",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0
+        ],
+        "contactType": "flush",
+        "overlap": 0.01,
+        "gapTolerance": 0.005
+      }
+    },
+    {
+      "id": "tonearm-counterweight",
+      "name": "Tonearm Counterweight",
+      "parent": "tonearm-assembly",
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.84,
+      "confidence": 0.84,
+      "topologyRationale": "Independent stylized low-poly hard-surface part with stable animation-ready attachment.",
+      "material": "pink-accent",
+      "materialLayers": [
+        "pink-accent"
+      ],
+      "localFeatures": [
+        "eight-sided horizontal weight under cue pivot"
+      ],
+      "actionProfile": {
+        "movable": false,
+        "detachable": true
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(232,167,183,1)",
+        "secondaryAlbedo": "rgba(109,91,119,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.84
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view"
+      ],
+      "details": [
+        {
+          "id": "tonearm-counterweight.detail-1",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "attachment": {
+        "parentSocket": "tonearm-assembly",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0
+        ],
+        "contactType": "flush",
+        "overlap": 0.01,
+        "gapTolerance": 0.005
+      }
+    },
+    {
+      "id": "speaker-badge",
+      "name": "Speaker Pulse Badge",
+      "parent": "front-grille",
+      "primitive": "cylinder",
+      "topologyClass": "surface-relief",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.84,
+      "confidence": 0.84,
+      "topologyRationale": "Independent stylized low-poly hard-surface part with stable animation-ready attachment.",
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "localFeatures": [
+        "octagonal badge with dark pulse ring"
+      ],
+      "actionProfile": {
+        "movable": false,
+        "detachable": true
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(248,234,215,1)",
+        "secondaryAlbedo": "rgba(109,91,119,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.84
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view"
+      ],
+      "details": [
+        {
+          "id": "speaker-badge.detail-1",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "attachment": {
+        "parentSocket": "front-grille",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0
+        ],
+        "contactType": "flush",
+        "overlap": 0.01,
+        "gapTolerance": 0.005
+      }
+    }
+  ],
+  "materials": [
+    {
+      "id": "cream-shell",
+      "name": "Cream Painted Shell",
+      "type": "physical",
+      "shaderModel": "MeshToonMaterial project style informed by painted-plastic PBR evidence",
+      "baseColor": "#F8E9D5",
+      "albedo": {
+        "dominant": "#F8E9D5",
+        "secondary": [
+          "#FFF5E5",
+          "#F7C2C2",
+          "#FFF7EA",
+          "#45454B",
+          "#EFA8B1",
+          "#6F6570",
+          "#D8CACA"
+        ],
+        "samplingNotes": "Observed pastel shell and pink accent zones from admitted turn sheet."
+      },
+      "colorVariation": {
+        "palette": [
+          "#F8E9D5",
+          "#F5E1CE",
+          "#EBBDB1"
+        ],
+        "pattern": "subtle molded gradient",
+        "amplitude": 0.05
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Stable object-scale detail without stretching across shell panels."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.28,
+          "role": "broad painted shell variation"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.12,
+          "role": "panel seams and grille ridges"
+        },
+        {
+          "id": "micro",
+          "frequency": 56,
+          "amplitude": 0.05,
+          "role": "grazing highlight breakup"
+        }
+      ],
+      "roughness": {
+        "base": 0.48,
+        "variation": 0.14,
+        "map": "independent-cream-shell-roughness"
+      },
+      "metalness": {
+        "base": 0
+      },
+      "normal": {
+        "strength": 0.08,
+        "pattern": "procedural molded-plastic micro-normal"
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.34,
+        "contactShadowBias": 0.28,
+        "notes": "Darken shell seams, hinge overlaps, grille recesses and handle cavity."
+      },
+      "localOverrides": [
+        {
+          "id": "cream-shell-edge-wear",
+          "region": "beveled edges and contact zones",
+          "response": "slightly lower roughness with warm edge tint",
+          "evidenceRefs": [
+            "front-view",
+            "back-view"
+          ]
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.895,
+        "estimatedFidelity": 0.895,
+        "sourceImage": "docs/sculpt-specs/record-player/pbr/cream-shell/source-crop.png",
+        "maps": {
+          "albedo": {
+            "path": "docs/sculpt-specs/record-player/pbr/cream-shell/cream-shell_albedo.png",
+            "channel": "albedo",
+            "source": "reference-pixel-extraction"
+          },
+          "roughness": {
+            "path": "docs/sculpt-specs/record-player/pbr/cream-shell/cream-shell_roughness.png",
+            "channel": "roughness",
+            "source": "reference-pixel-extraction"
+          },
+          "height": {
+            "path": "docs/sculpt-specs/record-player/pbr/cream-shell/cream-shell_height.png",
+            "channel": "height",
+            "source": "reference-pixel-extraction"
+          },
+          "normal": {
+            "path": "docs/sculpt-specs/record-player/pbr/cream-shell/cream-shell_normal.png",
+            "channel": "normal",
+            "source": "reference-pixel-extraction"
+          },
+          "ao": {
+            "path": "docs/sculpt-specs/record-player/pbr/cream-shell/cream-shell_ao.png",
+            "channel": "ao",
+            "source": "reference-pixel-extraction"
+          }
+        },
+        "warnings": [],
+        "limitation": "single-image PBR extraction is an estimate; 70%+ extraction confidence still needs render screenshot review"
+      },
+      "color": "#F8E9D5",
+      "dirt": {
+        "amount": 0.08,
+        "cavityBias": 0.24,
+        "color": "#54474B"
+      }
+    },
+    {
+      "id": "pink-accent",
+      "name": "Sakura Pink Accent",
+      "type": "physical",
+      "shaderModel": "MeshToonMaterial project style with clear-coated painted-plastic response",
+      "baseColor": "#EFA9AE",
+      "albedo": {
+        "dominant": "#EFA9AE",
+        "secondary": [
+          "#FFF5E5",
+          "#F7C2C2",
+          "#FFF7EA",
+          "#45454B",
+          "#EFA8B1",
+          "#6F6570",
+          "#D8CACA"
+        ],
+        "samplingNotes": "Observed pastel shell and pink accent zones from admitted turn sheet."
+      },
+      "colorVariation": {
+        "palette": [
+          "#F3C2B5",
+          "#D7B5AA",
+          "#B98981"
+        ],
+        "pattern": "bevel gradient",
+        "amplitude": 0.08
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Stable object-scale detail without stretching across shell panels."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.28,
+          "role": "broad painted shell variation"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.12,
+          "role": "panel seams and grille ridges"
+        },
+        {
+          "id": "micro",
+          "frequency": 56,
+          "amplitude": 0.05,
+          "role": "grazing highlight breakup"
+        }
+      ],
+      "roughness": {
+        "base": 0.4,
+        "variation": 0.14,
+        "map": "independent-pink-accent-roughness"
+      },
+      "metalness": {
+        "base": 0
+      },
+      "normal": {
+        "strength": 0.06,
+        "pattern": "procedural clear-coated paint micro-normal"
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.34,
+        "contactShadowBias": 0.28,
+        "notes": "Darken shell seams, hinge overlaps, grille recesses and handle cavity."
+      },
+      "clearcoat": 0.55,
+      "localOverrides": [
+        {
+          "id": "pink-accent-edge-wear",
+          "region": "beveled edges and contact zones",
+          "response": "slightly lower roughness with warm edge tint",
+          "evidenceRefs": [
+            "front-view",
+            "back-view"
+          ]
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.909,
+        "estimatedFidelity": 0.909,
+        "sourceImage": "docs/sculpt-specs/record-player/pbr/pink-accent/source-crop.png",
+        "maps": {
+          "albedo": {
+            "path": "docs/sculpt-specs/record-player/pbr/pink-accent/pink-accent_albedo.png",
+            "channel": "albedo",
+            "source": "reference-pixel-extraction"
+          },
+          "roughness": {
+            "path": "docs/sculpt-specs/record-player/pbr/pink-accent/pink-accent_roughness.png",
+            "channel": "roughness",
+            "source": "reference-pixel-extraction"
+          },
+          "height": {
+            "path": "docs/sculpt-specs/record-player/pbr/pink-accent/pink-accent_height.png",
+            "channel": "height",
+            "source": "reference-pixel-extraction"
+          },
+          "normal": {
+            "path": "docs/sculpt-specs/record-player/pbr/pink-accent/pink-accent_normal.png",
+            "channel": "normal",
+            "source": "reference-pixel-extraction"
+          },
+          "ao": {
+            "path": "docs/sculpt-specs/record-player/pbr/pink-accent/pink-accent_ao.png",
+            "channel": "ao",
+            "source": "reference-pixel-extraction"
+          }
+        },
+        "warnings": [],
+        "limitation": "single-image PBR extraction is an estimate; 70%+ extraction confidence still needs render screenshot review"
+      },
+      "color": "#EFA9AE",
+      "dirt": {
+        "amount": 0.08,
+        "cavityBias": 0.24,
+        "color": "#54474B"
+      }
+    },
+    {
+      "id": "smoked-lid",
+      "name": "Transparent Lid",
+      "type": "physical",
+      "shaderModel": "Transparent MeshPhysicalMaterial approximation for the tinted acrylic dust cover",
+      "baseColor": "#F2E5D7",
+      "albedo": {
+        "dominant": "#F2E5D7",
+        "secondary": [
+          "#FFF5E5",
+          "#F7C2C2",
+          "#FFF7EA",
+          "#45454B",
+          "#EFA8B1",
+          "#6F6570",
+          "#D8CACA"
+        ],
+        "samplingNotes": "Observed pastel shell and pink accent zones from admitted turn sheet."
+      },
+      "colorVariation": {
+        "palette": [
+          "#665046",
+          "#D7B5AA"
+        ],
+        "pattern": "transparent tint",
+        "amplitude": 0.06
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Stable object-scale detail without stretching across shell panels."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.28,
+          "role": "broad painted shell variation"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.12,
+          "role": "panel seams and grille ridges"
+        },
+        {
+          "id": "micro",
+          "frequency": 56,
+          "amplitude": 0.05,
+          "role": "grazing highlight breakup"
+        }
+      ],
+      "roughness": {
+        "base": 0.18,
+        "variation": 0.14,
+        "map": "independent-smoked-lid-roughness"
+      },
+      "metalness": {
+        "base": 0
+      },
+      "normal": {
+        "strength": 0.03,
+        "pattern": "procedural acrylic surface micro-normal"
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.34,
+        "contactShadowBias": 0.28,
+        "notes": "Darken shell seams, hinge overlaps, grille recesses and handle cavity."
+      },
+      "clearcoat": 0.8,
+      "transmission": 0.62,
+      "localOverrides": [
+        {
+          "id": "smoked-lid-edge-wear",
+          "region": "beveled edges and contact zones",
+          "response": "slightly lower roughness with warm edge tint",
+          "evidenceRefs": [
+            "front-view",
+            "back-view"
+          ]
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.751,
+        "estimatedFidelity": 0.751,
+        "sourceImage": "docs/sculpt-specs/record-player/pbr/smoked-lid/source-crop.png",
+        "maps": {
+          "albedo": {
+            "path": "docs/sculpt-specs/record-player/pbr/smoked-lid/smoked-lid_albedo.png",
+            "channel": "albedo",
+            "source": "reference-pixel-extraction"
+          },
+          "roughness": {
+            "path": "docs/sculpt-specs/record-player/pbr/smoked-lid/smoked-lid_roughness.png",
+            "channel": "roughness",
+            "source": "reference-pixel-extraction"
+          },
+          "height": {
+            "path": "docs/sculpt-specs/record-player/pbr/smoked-lid/smoked-lid_height.png",
+            "channel": "height",
+            "source": "reference-pixel-extraction"
+          },
+          "normal": {
+            "path": "docs/sculpt-specs/record-player/pbr/smoked-lid/smoked-lid_normal.png",
+            "channel": "normal",
+            "source": "reference-pixel-extraction"
+          },
+          "ao": {
+            "path": "docs/sculpt-specs/record-player/pbr/smoked-lid/smoked-lid_ao.png",
+            "channel": "ao",
+            "source": "reference-pixel-extraction"
+          }
+        },
+        "warnings": [
+          "image is not clearly isolated from background; using most pixels as material evidence",
+          "object/background separation is weak",
+          "low value range weakens height/roughness inference"
+        ],
+        "limitation": "single-image PBR extraction is an estimate; 70%+ extraction confidence still needs render screenshot review"
+      },
+      "color": "#F2E5D7",
+      "dirt": {
+        "amount": 0.08,
+        "cavityBias": 0.24,
+        "color": "#54474B"
+      }
+    },
+    {
+      "id": "vinyl-black",
+      "name": "Vinyl Record",
+      "type": "physical",
+      "shaderModel": "Opaque MeshToonMaterial with restrained vinyl clearcoat",
+      "baseColor": "#28282B",
+      "albedo": {
+        "dominant": "#28282B",
+        "secondary": [
+          "#FFF5E5",
+          "#F7C2C2",
+          "#FFF7EA",
+          "#45454B",
+          "#EFA8B1",
+          "#6F6570",
+          "#D8CACA"
+        ],
+        "samplingNotes": "Observed pastel shell and pink accent zones from admitted turn sheet."
+      },
+      "colorVariation": {
+        "palette": [
+          "#EBBDB1",
+          "#F8E9D5"
+        ],
+        "pattern": "subtle concentric groove response",
+        "amplitude": 0.08
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Stable object-scale detail without stretching across shell panels."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.28,
+          "role": "broad painted shell variation"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.12,
+          "role": "panel seams and grille ridges"
+        },
+        {
+          "id": "micro",
+          "frequency": 56,
+          "amplitude": 0.05,
+          "role": "grazing highlight breakup"
+        }
+      ],
+      "roughness": {
+        "base": 0.3,
+        "variation": 0.14,
+        "map": "independent-vinyl-black-roughness"
+      },
+      "metalness": {
+        "base": 0
+      },
+      "normal": {
+        "strength": 0.03,
+        "pattern": "procedural concentric vinyl groove micro-normal"
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.34,
+        "contactShadowBias": 0.28,
+        "notes": "Darken shell seams, hinge overlaps, grille recesses and handle cavity."
+      },
+      "clearcoat": 0.65,
+      "localOverrides": [
+        {
+          "id": "vinyl-black-edge-wear",
+          "region": "beveled edges and contact zones",
+          "response": "slightly lower roughness with warm edge tint",
+          "evidenceRefs": [
+            "front-view",
+            "back-view"
+          ]
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.878,
+        "estimatedFidelity": 0.878,
+        "sourceImage": "docs/sculpt-specs/record-player/pbr/vinyl-black/source-crop.png",
+        "maps": {
+          "albedo": {
+            "path": "docs/sculpt-specs/record-player/pbr/vinyl-black/vinyl-black_albedo.png",
+            "channel": "albedo",
+            "source": "reference-pixel-extraction"
+          },
+          "roughness": {
+            "path": "docs/sculpt-specs/record-player/pbr/vinyl-black/vinyl-black_roughness.png",
+            "channel": "roughness",
+            "source": "reference-pixel-extraction"
+          },
+          "height": {
+            "path": "docs/sculpt-specs/record-player/pbr/vinyl-black/vinyl-black_height.png",
+            "channel": "height",
+            "source": "reference-pixel-extraction"
+          },
+          "normal": {
+            "path": "docs/sculpt-specs/record-player/pbr/vinyl-black/vinyl-black_normal.png",
+            "channel": "normal",
+            "source": "reference-pixel-extraction"
+          },
+          "ao": {
+            "path": "docs/sculpt-specs/record-player/pbr/vinyl-black/vinyl-black_ao.png",
+            "channel": "ao",
+            "source": "reference-pixel-extraction"
+          }
+        },
+        "warnings": [],
+        "limitation": "single-image PBR extraction is an estimate; 70%+ extraction confidence still needs render screenshot review"
+      },
+      "color": "#28282B",
+      "dirt": {
+        "amount": 0.08,
+        "cavityBias": 0.24,
+        "color": "#54474B"
+      }
+    },
+    {
+      "id": "grille-pink",
+      "name": "Speaker Grille Pink",
+      "type": "physical",
+      "shaderModel": "MeshToonMaterial for painted speaker grille slats",
+      "baseColor": "#D98794",
+      "albedo": {
+        "dominant": "#D98794",
+        "secondary": [
+          "#FFF5E5",
+          "#F7C2C2",
+          "#FFF7EA",
+          "#45454B",
+          "#EFA8B1",
+          "#6F6570",
+          "#D8CACA"
+        ],
+        "samplingNotes": "Observed pastel shell and pink accent zones from admitted turn sheet."
+      },
+      "colorVariation": {
+        "palette": [
+          "#463931",
+          "#665046"
+        ],
+        "pattern": "cavity gradient",
+        "amplitude": 0.08
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Stable object-scale detail without stretching across shell panels."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.28,
+          "role": "broad painted shell variation"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.12,
+          "role": "panel seams and grille ridges"
+        },
+        {
+          "id": "micro",
+          "frequency": 56,
+          "amplitude": 0.05,
+          "role": "grazing highlight breakup"
+        }
+      ],
+      "roughness": {
+        "base": 0.38,
+        "variation": 0.14,
+        "map": "independent-grille-pink-roughness"
+      },
+      "metalness": {
+        "base": 0
+      },
+      "normal": {
+        "strength": 0.1,
+        "pattern": "procedural horizontal ridge micro-normal"
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.34,
+        "contactShadowBias": 0.28,
+        "notes": "Darken shell seams, hinge overlaps, grille recesses and handle cavity."
+      },
+      "localOverrides": [
+        {
+          "id": "grille-pink-edge-wear",
+          "region": "beveled edges and contact zones",
+          "response": "slightly lower roughness with warm edge tint",
+          "evidenceRefs": [
+            "front-view",
+            "back-view"
+          ]
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.827,
+        "estimatedFidelity": 0.827,
+        "sourceImage": "docs/sculpt-specs/record-player/pbr/grille-pink/source-crop.png",
+        "maps": {
+          "albedo": {
+            "path": "docs/sculpt-specs/record-player/pbr/grille-pink/grille-pink_albedo.png",
+            "channel": "albedo",
+            "source": "reference-pixel-extraction"
+          },
+          "roughness": {
+            "path": "docs/sculpt-specs/record-player/pbr/grille-pink/grille-pink_roughness.png",
+            "channel": "roughness",
+            "source": "reference-pixel-extraction"
+          },
+          "height": {
+            "path": "docs/sculpt-specs/record-player/pbr/grille-pink/grille-pink_height.png",
+            "channel": "height",
+            "source": "reference-pixel-extraction"
+          },
+          "normal": {
+            "path": "docs/sculpt-specs/record-player/pbr/grille-pink/grille-pink_normal.png",
+            "channel": "normal",
+            "source": "reference-pixel-extraction"
+          },
+          "ao": {
+            "path": "docs/sculpt-specs/record-player/pbr/grille-pink/grille-pink_ao.png",
+            "channel": "ao",
+            "source": "reference-pixel-extraction"
+          }
+        },
+        "warnings": [
+          "image is not clearly isolated from background; using most pixels as material evidence",
+          "object/background separation is weak"
+        ],
+        "limitation": "single-image PBR extraction is an estimate; 70%+ extraction confidence still needs render screenshot review"
+      },
+      "color": "#D98794",
+      "dirt": {
+        "amount": 0.08,
+        "cavityBias": 0.24,
+        "color": "#54474B"
+      }
+    },
+    {
+      "id": "rubber-foot",
+      "name": "Rubber Feet",
+      "type": "physical",
+      "shaderModel": "High-roughness MeshToonMaterial for molded rubber feet",
+      "baseColor": "#514A52",
+      "albedo": {
+        "dominant": "#514A52",
+        "secondary": [
+          "#FFF5E5",
+          "#F7C2C2",
+          "#FFF7EA",
+          "#45454B",
+          "#EFA8B1",
+          "#6F6570",
+          "#D8CACA"
+        ],
+        "samplingNotes": "Observed pastel shell and pink accent zones from admitted turn sheet."
+      },
+      "colorVariation": {
+        "palette": [
+          "#5F5B68",
+          "#463931"
+        ],
+        "pattern": "rubber mottle",
+        "amplitude": 0.08
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Stable object-scale detail without stretching across shell panels."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.28,
+          "role": "broad painted shell variation"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.12,
+          "role": "panel seams and grille ridges"
+        },
+        {
+          "id": "micro",
+          "frequency": 56,
+          "amplitude": 0.05,
+          "role": "grazing highlight breakup"
+        }
+      ],
+      "roughness": {
+        "base": 0.72,
+        "variation": 0.14,
+        "map": "independent-rubber-foot-roughness"
+      },
+      "metalness": {
+        "base": 0
+      },
+      "normal": {
+        "strength": 0.12,
+        "pattern": "procedural fine rubber mottle"
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.34,
+        "contactShadowBias": 0.28,
+        "notes": "Darken shell seams, hinge overlaps, grille recesses and handle cavity."
+      },
+      "localOverrides": [
+        {
+          "id": "rubber-foot-edge-wear",
+          "region": "beveled edges and contact zones",
+          "response": "slightly lower roughness with warm edge tint",
+          "evidenceRefs": [
+            "front-view",
+            "back-view"
+          ]
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.909,
+        "estimatedFidelity": 0.909,
+        "sourceImage": "docs/sculpt-specs/record-player/pbr/rubber-foot/source-crop.png",
+        "maps": {
+          "albedo": {
+            "path": "docs/sculpt-specs/record-player/pbr/rubber-foot/rubber-foot_albedo.png",
+            "channel": "albedo",
+            "source": "reference-pixel-extraction"
+          },
+          "roughness": {
+            "path": "docs/sculpt-specs/record-player/pbr/rubber-foot/rubber-foot_roughness.png",
+            "channel": "roughness",
+            "source": "reference-pixel-extraction"
+          },
+          "height": {
+            "path": "docs/sculpt-specs/record-player/pbr/rubber-foot/rubber-foot_height.png",
+            "channel": "height",
+            "source": "reference-pixel-extraction"
+          },
+          "normal": {
+            "path": "docs/sculpt-specs/record-player/pbr/rubber-foot/rubber-foot_normal.png",
+            "channel": "normal",
+            "source": "reference-pixel-extraction"
+          },
+          "ao": {
+            "path": "docs/sculpt-specs/record-player/pbr/rubber-foot/rubber-foot_ao.png",
+            "channel": "ao",
+            "source": "reference-pixel-extraction"
+          }
+        },
+        "warnings": [],
+        "limitation": "single-image PBR extraction is an estimate; 70%+ extraction confidence still needs render screenshot review"
+      },
+      "color": "#514A52",
+      "dirt": {
+        "amount": 0.08,
+        "cavityBias": 0.24,
+        "color": "#54474B"
+      }
+    },
+    {
+      "id": "metal-hardware",
+      "name": "Metal Hardware",
+      "type": "physical",
+      "shaderModel": "MeshToonMaterial with restrained metallic response for spindle, hinge pins and socket rims",
+      "baseColor": "#A9A0A0",
+      "albedo": {
+        "dominant": "#A9A0A0",
+        "secondary": [
+          "#FFF5E5",
+          "#F7C2C2",
+          "#FFF7EA",
+          "#45454B",
+          "#EFA8B1",
+          "#6F6570",
+          "#D8CACA"
+        ],
+        "samplingNotes": "Observed pastel shell and pink accent zones from admitted turn sheet."
+      },
+      "colorVariation": {
+        "palette": [
+          "#C9C3C0",
+          "#8E8989",
+          "#E6DEDA"
+        ],
+        "pattern": "brushed highlight variation",
+        "amplitude": 0.08
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Stable object-scale detail without stretching across shell panels."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.28,
+          "role": "broad painted shell variation"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.12,
+          "role": "panel seams and grille ridges"
+        },
+        {
+          "id": "micro",
+          "frequency": 56,
+          "amplitude": 0.05,
+          "role": "grazing highlight breakup"
+        }
+      ],
+      "roughness": {
+        "base": 0.26,
+        "variation": 0.14,
+        "map": "independent-metal-hardware-roughness"
+      },
+      "metalness": {
+        "base": 0.62
+      },
+      "normal": {
+        "strength": 0.02,
+        "pattern": "procedural fine brushed-metal micro-normal"
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.34,
+        "contactShadowBias": 0.28,
+        "notes": "Darken shell seams, hinge overlaps, grille recesses and handle cavity."
+      },
+      "clearcoat": 0.25,
+      "localOverrides": [
+        {
+          "id": "metal-hardware-edge-wear",
+          "region": "beveled edges and contact zones",
+          "response": "slightly lower roughness with warm edge tint",
+          "evidenceRefs": [
+            "front-view",
+            "back-view"
+          ]
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.909,
+        "estimatedFidelity": 0.909,
+        "sourceImage": "docs/sculpt-specs/record-player/pbr/metal-hardware/source-crop.png",
+        "maps": {
+          "albedo": {
+            "path": "docs/sculpt-specs/record-player/pbr/metal-hardware/metal-hardware_albedo.png",
+            "channel": "albedo",
+            "source": "reference-pixel-extraction"
+          },
+          "roughness": {
+            "path": "docs/sculpt-specs/record-player/pbr/metal-hardware/metal-hardware_roughness.png",
+            "channel": "roughness",
+            "source": "reference-pixel-extraction"
+          },
+          "height": {
+            "path": "docs/sculpt-specs/record-player/pbr/metal-hardware/metal-hardware_height.png",
+            "channel": "height",
+            "source": "reference-pixel-extraction"
+          },
+          "normal": {
+            "path": "docs/sculpt-specs/record-player/pbr/metal-hardware/metal-hardware_normal.png",
+            "channel": "normal",
+            "source": "reference-pixel-extraction"
+          },
+          "ao": {
+            "path": "docs/sculpt-specs/record-player/pbr/metal-hardware/metal-hardware_ao.png",
+            "channel": "ao",
+            "source": "reference-pixel-extraction"
+          }
+        },
+        "warnings": [],
+        "limitation": "single-image PBR extraction is an estimate; 70%+ extraction confidence still needs render screenshot review"
+      },
+      "color": "#A9A0A0",
+      "dirt": {
+        "amount": 0.08,
+        "cavityBias": 0.24,
+        "color": "#54474B"
+      }
+    }
+  ],
+  "repetitionSystems": [
+    {
+      "id": "grille-slats-eleven",
+      "name": "Eleven front horizontal speaker slats",
+      "componentRef": "grille-slat-array",
+      "count": 11,
+      "distribution": "even horizontal spacing across front lower panel",
+      "geometry": "rounded rectangular relief strips",
+      "material": "grille-pink",
+      "evidenceRefs": [
+        "front-view"
+      ]
+    },
+    {
+      "id": "rear-hinges-two",
+      "name": "Two rear hinge blocks",
+      "componentRef": "lid-hinge-array",
+      "count": 2,
+      "distribution": "mirrored along rear lid axis",
+      "geometry": "pink rounded blocks with barrel pins",
+      "material": "pink-accent",
+      "evidenceRefs": [
+        "back-view"
+      ]
+    },
+    {
+      "id": "feet-four",
+      "name": "Four rubber feet",
+      "componentRef": "foot-array",
+      "count": 4,
+      "distribution": "corners under base shell",
+      "geometry": "rounded pads",
+      "material": "rubber-foot",
+      "evidenceRefs": [
+        "front-view",
+        "side-view"
+      ]
+    },
+    {
+      "id": "tonearm-fasteners-two",
+      "name": "Tonearm pivot fasteners",
+      "componentRef": "tonearm-assembly",
+      "count": 2,
+      "distribution": "paired at tonearm base",
+      "geometry": "small cylindrical fasteners",
+      "material": "metal-hardware",
+      "evidenceRefs": [
+        "front-view",
+        "side-view"
+      ]
+    },
+    {
+      "id": "rear-io-two",
+      "name": "Two circular rear sockets",
+      "componentRef": "rear-io-sockets",
+      "count": 2,
+      "distribution": "side-by-side on rear I/O plate",
+      "geometry": "concentric socket rings",
+      "material": "metal-hardware",
+      "evidenceRefs": [
+        "back-view"
+      ]
+    },
+    {
+      "id": "vinyl-grooves-three",
+      "name": "Three concentric vinyl grooves",
+      "componentRef": "vinyl-grooves",
+      "count": 3,
+      "distribution": "concentric on the frozen platter axis",
+      "geometry": "shared twelve-sided torus topology",
+      "material": "pink-accent",
+      "evidenceRefs": [
+        "front-view"
+      ]
+    }
+  ],
+  "buildPasses": [
+    {
+      "id": "blockout",
+      "goal": "Match macro silhouette and ratios.",
+      "componentRefs": [
+        "root",
+        "housing-shell",
+        "front-assembly",
+        "platter-assembly",
+        "rear-assembly"
+      ],
+      "acceptance": [
+        "front/side/back silhouette readable",
+        "browser comparison score >=0.7"
+      ]
+    },
+    {
+      "id": "structural-pass",
+      "goal": "Build all independent assemblies and repetitions.",
+      "componentRefs": [
+        "body-shell",
+        "hinged-lid",
+        "platter-assembly",
+        "tonearm-assembly",
+        "front-grille",
+        "rear-handle",
+        "lid-hinge-array",
+        "rear-io-plate",
+        "foot-array"
+      ],
+      "acceptance": [
+        "named pivots and sockets",
+        "platter/spindle/tonearm hierarchy",
+        "rear hinges/handle/I-O hierarchy"
+      ]
+    },
+    {
+      "id": "form-refinement",
+      "goal": "Refine bevels, seams, grille, vents and micro hardware.",
+      "componentRefs": [
+        "lid-panel",
+        "lid-latch",
+        "platter",
+        "record-label",
+        "spindle",
+        "tonearm",
+        "cartridge",
+        "stylus",
+        "grille-slat-array",
+        "control-knob"
+      ],
+      "acceptance": [
+        "identity details match reference views",
+        "no floating joints"
+      ]
+    },
+    {
+      "id": "material-pass",
+      "goal": "Match cream/pink/smoked/translucent material separation.",
+      "componentRefs": [
+        "body-shell",
+        "hinged-lid",
+        "lid-panel",
+        "platter",
+        "front-grille"
+      ],
+      "acceptance": [
+        "reference PBR confidence >=0.7",
+        "transparent layers preserve interior visibility"
+      ]
+    },
+    {
+      "id": "lighting-pass",
+      "goal": "Verify neutral/reference/grazing readability.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "key/fill/rim/contact shadow visible",
+        "palette remains stable"
+      ]
+    },
+    {
+      "id": "interaction-pass",
+      "goal": "Verify recognizable powered record-playback action and exact reset.",
+      "componentRefs": [
+        "control-knob",
+        "platter",
+        "tonearm",
+        "status-light"
+      ],
+      "acceptance": [
+        "control turns",
+        "platter spins around the spindle",
+        "tonearm cues over the record",
+        "status light and 5.2 second reset are exact"
+      ]
+    },
+    {
+      "id": "optimization-pass",
+      "goal": "Protect browser runtime performance.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "no per-frame geometry allocation",
+        "shared geometry/materials",
+        "responsive orbit review"
+      ]
+    }
+  ],
+  "visualEvidence": [
+    {
+      "id": "record-player-v2-static-and-animation",
+      "reference": "references/intake-v2/record-player/views/three-quarter.png",
+      "render": "artifacts/appliance-v2/record-player/evidence/models/record-player/render-off-three-quarter.png",
+      "comparison": "artifacts/appliance-v2/record-player/review/record-player-reference-v2-four-view-comparison.png",
+      "viewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "startup",
+        "climax",
+        "wind-down"
+      ],
+      "referenceStatus": "conditional-fallback-v1-not-gpt-image-2"
+    }
+  ],
+  "reviewHistory": [
+    {
+      "passId": "blockout",
+      "timestamp": "2026-08-13T08:00:00.000Z",
+      "estimatedFidelity": 0.86,
+      "aiVisionScore": 0.86,
+      "visualAcceptanceThreshold": 0.8,
+      "action": "continue",
+      "summary": "blockout accepted against the conditionally admitted archived v1 views and frozen record-player runtime contract.",
+      "matched": [
+        "faceted suitcase base and lid remain inside the archived package",
+        "twelve-sided record, concentric grooves, tonearm counterweight, cartridge and stylus remain independently named",
+        "front grille, speaker pulse badge, rear hinges, handle and I/O remain attached",
+        "stable three-tier ink applies to solid parts while transparent lid and volumetric music effects are excluded",
+        "all archived pivots, sockets, platter/effect center and playback timeline retain exact local transforms"
+      ],
+      "mismatches": [
+        "No GPT Image 2 concept sheet was available; reference evidence is explicitly conditional fallback."
+      ],
+      "evidence": [
+        "references/intake-v2/record-player/views/three-quarter.png",
+        "artifacts/appliance-v2/record-player/evidence/models/record-player/render-off-three-quarter.png",
+        "artifacts/appliance-v2/record-player/review/record-player-reference-v2-four-view-comparison.png",
+        "artifacts/appliance-v2/record-player/diagnostics/record-player-v2-verification.json",
+        "artifacts/appliance-v2/record-player/assembly/part-coverage.json",
+        "artifacts/appliance-v2/record-player/diagnostics/record-player-v2-browser-performance.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.88,
+        "componentStructure": 0.92,
+        "formDetail": 0.9,
+        "materialSurface": 0.87,
+        "lightingCamera": 0.86
+      },
+      "featureReviews": [
+        {
+          "id": "record-player-silhouette",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Faceted base cheeks, open lid spines and broad deck read across four static views."
+        },
+        {
+          "id": "record-player-playback",
+          "score": 0.92,
+          "passed": true,
+          "notes": "Twelve-sided record, grooves, spindle, tonearm, counterweight, cartridge and stylus remain distinct."
+        },
+        {
+          "id": "record-player-speaker",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Eleven raised grille slats, dark cavity and octagonal pulse badge stay readable from the front and three-quarter views."
+        },
+        {
+          "id": "record-player-animation-contact",
+          "score": 0.99,
+          "passed": true,
+          "notes": "Startup lift, climax stylus placement and wind-down return use one frozen timeline owner; waves and notes originate above the platter."
+        },
+        {
+          "id": "record-player-ink",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Main, structure and detail tiers use stable 0.18 variation; transparent/effect meshes own no visible thick outlines."
+        }
+      ],
+      "aiVisionNotes": "Four idle views and startup, climax and wind-down were manually inspected. Images are nonblank and uncropped; the stylus stays over the record region, effects originate above the platter, rear hardware stays attached, and no side facet penetrates the shell.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/record-player/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/record-player/evidence/models/record-player/render-off-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/record-player/review/record-player-reference-v2-four-view-comparison.png",
+        "cameraView": "four static and three fixed runtime views",
+        "notes": "Completed procedural geometry is reused as staged evidence.",
+        "aiVisionNotes": "The admitted archive is conditional fallback evidence and is not claimed as GPT Image 2 output."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "runtime-startup",
+        "runtime-climax",
+        "runtime-wind-down"
+      ],
+      "evidenceReuseNote": "The completed procedural model is reused across staged reviews; seven separate intermediate meshes were not captured."
+    },
+    {
+      "passId": "structural-pass",
+      "timestamp": "2026-08-13T08:01:00.000Z",
+      "estimatedFidelity": 0.89,
+      "aiVisionScore": 0.89,
+      "visualAcceptanceThreshold": 0.8,
+      "action": "continue",
+      "summary": "structural-pass accepted against the conditionally admitted archived v1 views and frozen record-player runtime contract.",
+      "matched": [
+        "faceted suitcase base and lid remain inside the archived package",
+        "twelve-sided record, concentric grooves, tonearm counterweight, cartridge and stylus remain independently named",
+        "front grille, speaker pulse badge, rear hinges, handle and I/O remain attached",
+        "stable three-tier ink applies to solid parts while transparent lid and volumetric music effects are excluded",
+        "all archived pivots, sockets, platter/effect center and playback timeline retain exact local transforms"
+      ],
+      "mismatches": [
+        "No GPT Image 2 concept sheet was available; reference evidence is explicitly conditional fallback."
+      ],
+      "evidence": [
+        "references/intake-v2/record-player/views/three-quarter.png",
+        "artifacts/appliance-v2/record-player/evidence/models/record-player/render-off-three-quarter.png",
+        "artifacts/appliance-v2/record-player/review/record-player-reference-v2-four-view-comparison.png",
+        "artifacts/appliance-v2/record-player/diagnostics/record-player-v2-verification.json",
+        "artifacts/appliance-v2/record-player/assembly/part-coverage.json",
+        "artifacts/appliance-v2/record-player/diagnostics/record-player-v2-browser-performance.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.88,
+        "componentStructure": 0.92,
+        "formDetail": 0.9,
+        "materialSurface": 0.87,
+        "lightingCamera": 0.86
+      },
+      "featureReviews": [
+        {
+          "id": "record-player-silhouette",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Faceted base cheeks, open lid spines and broad deck read across four static views."
+        },
+        {
+          "id": "record-player-playback",
+          "score": 0.92,
+          "passed": true,
+          "notes": "Twelve-sided record, grooves, spindle, tonearm, counterweight, cartridge and stylus remain distinct."
+        },
+        {
+          "id": "record-player-speaker",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Eleven raised grille slats, dark cavity and octagonal pulse badge stay readable from the front and three-quarter views."
+        },
+        {
+          "id": "record-player-animation-contact",
+          "score": 0.99,
+          "passed": true,
+          "notes": "Startup lift, climax stylus placement and wind-down return use one frozen timeline owner; waves and notes originate above the platter."
+        },
+        {
+          "id": "record-player-ink",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Main, structure and detail tiers use stable 0.18 variation; transparent/effect meshes own no visible thick outlines."
+        }
+      ],
+      "aiVisionNotes": "Four idle views and startup, climax and wind-down were manually inspected. Images are nonblank and uncropped; the stylus stays over the record region, effects originate above the platter, rear hardware stays attached, and no side facet penetrates the shell.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/record-player/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/record-player/evidence/models/record-player/render-off-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/record-player/review/record-player-reference-v2-four-view-comparison.png",
+        "cameraView": "four static and three fixed runtime views",
+        "notes": "Completed procedural geometry is reused as staged evidence.",
+        "aiVisionNotes": "The admitted archive is conditional fallback evidence and is not claimed as GPT Image 2 output."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "runtime-startup",
+        "runtime-climax",
+        "runtime-wind-down"
+      ],
+      "evidenceReuseNote": "The completed procedural model is reused across staged reviews; seven separate intermediate meshes were not captured."
+    },
+    {
+      "passId": "form-refinement",
+      "timestamp": "2026-08-13T08:02:00.000Z",
+      "estimatedFidelity": 0.9,
+      "aiVisionScore": 0.9,
+      "visualAcceptanceThreshold": 0.8,
+      "action": "continue",
+      "summary": "form-refinement accepted against the conditionally admitted archived v1 views and frozen record-player runtime contract.",
+      "matched": [
+        "faceted suitcase base and lid remain inside the archived package",
+        "twelve-sided record, concentric grooves, tonearm counterweight, cartridge and stylus remain independently named",
+        "front grille, speaker pulse badge, rear hinges, handle and I/O remain attached",
+        "stable three-tier ink applies to solid parts while transparent lid and volumetric music effects are excluded",
+        "all archived pivots, sockets, platter/effect center and playback timeline retain exact local transforms"
+      ],
+      "mismatches": [
+        "The v2 platter and shell are deliberately more angular and game-like than the soft v1 archive."
+      ],
+      "evidence": [
+        "references/intake-v2/record-player/views/three-quarter.png",
+        "artifacts/appliance-v2/record-player/evidence/models/record-player/render-off-three-quarter.png",
+        "artifacts/appliance-v2/record-player/review/record-player-reference-v2-four-view-comparison.png",
+        "artifacts/appliance-v2/record-player/diagnostics/record-player-v2-verification.json",
+        "artifacts/appliance-v2/record-player/assembly/part-coverage.json",
+        "artifacts/appliance-v2/record-player/diagnostics/record-player-v2-browser-performance.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.88,
+        "componentStructure": 0.92,
+        "formDetail": 0.9,
+        "materialSurface": 0.87,
+        "lightingCamera": 0.86
+      },
+      "featureReviews": [
+        {
+          "id": "record-player-silhouette",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Faceted base cheeks, open lid spines and broad deck read across four static views."
+        },
+        {
+          "id": "record-player-playback",
+          "score": 0.92,
+          "passed": true,
+          "notes": "Twelve-sided record, grooves, spindle, tonearm, counterweight, cartridge and stylus remain distinct."
+        },
+        {
+          "id": "record-player-speaker",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Eleven raised grille slats, dark cavity and octagonal pulse badge stay readable from the front and three-quarter views."
+        },
+        {
+          "id": "record-player-animation-contact",
+          "score": 0.99,
+          "passed": true,
+          "notes": "Startup lift, climax stylus placement and wind-down return use one frozen timeline owner; waves and notes originate above the platter."
+        },
+        {
+          "id": "record-player-ink",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Main, structure and detail tiers use stable 0.18 variation; transparent/effect meshes own no visible thick outlines."
+        }
+      ],
+      "aiVisionNotes": "Four idle views and startup, climax and wind-down were manually inspected. Images are nonblank and uncropped; the stylus stays over the record region, effects originate above the platter, rear hardware stays attached, and no side facet penetrates the shell.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/record-player/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/record-player/evidence/models/record-player/render-off-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/record-player/review/record-player-reference-v2-four-view-comparison.png",
+        "cameraView": "four static and three fixed runtime views",
+        "notes": "Completed procedural geometry is reused as staged evidence.",
+        "aiVisionNotes": "The admitted archive is conditional fallback evidence and is not claimed as GPT Image 2 output."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "runtime-startup",
+        "runtime-climax",
+        "runtime-wind-down"
+      ],
+      "evidenceReuseNote": "The completed procedural model is reused across staged reviews; seven separate intermediate meshes were not captured."
+    },
+    {
+      "passId": "material-pass",
+      "timestamp": "2026-08-13T08:03:00.000Z",
+      "estimatedFidelity": 0.87,
+      "aiVisionScore": 0.87,
+      "visualAcceptanceThreshold": 0.8,
+      "action": "continue",
+      "summary": "material-pass accepted against the conditionally admitted archived v1 views and frozen record-player runtime contract.",
+      "matched": [
+        "faceted suitcase base and lid remain inside the archived package",
+        "twelve-sided record, concentric grooves, tonearm counterweight, cartridge and stylus remain independently named",
+        "front grille, speaker pulse badge, rear hinges, handle and I/O remain attached",
+        "stable three-tier ink applies to solid parts while transparent lid and volumetric music effects are excluded",
+        "all archived pivots, sockets, platter/effect center and playback timeline retain exact local transforms"
+      ],
+      "mismatches": [
+        "No GPT Image 2 concept sheet was available; reference evidence is explicitly conditional fallback."
+      ],
+      "evidence": [
+        "references/intake-v2/record-player/views/three-quarter.png",
+        "artifacts/appliance-v2/record-player/evidence/models/record-player/render-off-three-quarter.png",
+        "artifacts/appliance-v2/record-player/review/record-player-reference-v2-four-view-comparison.png",
+        "artifacts/appliance-v2/record-player/diagnostics/record-player-v2-verification.json",
+        "artifacts/appliance-v2/record-player/assembly/part-coverage.json",
+        "artifacts/appliance-v2/record-player/diagnostics/record-player-v2-browser-performance.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.88,
+        "componentStructure": 0.92,
+        "formDetail": 0.9,
+        "materialSurface": 0.87,
+        "lightingCamera": 0.86
+      },
+      "featureReviews": [
+        {
+          "id": "record-player-silhouette",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Faceted base cheeks, open lid spines and broad deck read across four static views."
+        },
+        {
+          "id": "record-player-playback",
+          "score": 0.92,
+          "passed": true,
+          "notes": "Twelve-sided record, grooves, spindle, tonearm, counterweight, cartridge and stylus remain distinct."
+        },
+        {
+          "id": "record-player-speaker",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Eleven raised grille slats, dark cavity and octagonal pulse badge stay readable from the front and three-quarter views."
+        },
+        {
+          "id": "record-player-animation-contact",
+          "score": 0.99,
+          "passed": true,
+          "notes": "Startup lift, climax stylus placement and wind-down return use one frozen timeline owner; waves and notes originate above the platter."
+        },
+        {
+          "id": "record-player-ink",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Main, structure and detail tiers use stable 0.18 variation; transparent/effect meshes own no visible thick outlines."
+        }
+      ],
+      "aiVisionNotes": "Four idle views and startup, climax and wind-down were manually inspected. Images are nonblank and uncropped; the stylus stays over the record region, effects originate above the platter, rear hardware stays attached, and no side facet penetrates the shell.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/record-player/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/record-player/evidence/models/record-player/render-off-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/record-player/review/record-player-reference-v2-four-view-comparison.png",
+        "cameraView": "four static and three fixed runtime views",
+        "notes": "Completed procedural geometry is reused as staged evidence.",
+        "aiVisionNotes": "The admitted archive is conditional fallback evidence and is not claimed as GPT Image 2 output."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "runtime-startup",
+        "runtime-climax",
+        "runtime-wind-down"
+      ],
+      "evidenceReuseNote": "The completed procedural model is reused across staged reviews; seven separate intermediate meshes were not captured."
+    },
+    {
+      "passId": "lighting-pass",
+      "timestamp": "2026-08-13T08:04:00.000Z",
+      "estimatedFidelity": 0.86,
+      "aiVisionScore": 0.86,
+      "visualAcceptanceThreshold": 0.8,
+      "action": "continue",
+      "summary": "lighting-pass accepted against the conditionally admitted archived v1 views and frozen record-player runtime contract.",
+      "matched": [
+        "faceted suitcase base and lid remain inside the archived package",
+        "twelve-sided record, concentric grooves, tonearm counterweight, cartridge and stylus remain independently named",
+        "front grille, speaker pulse badge, rear hinges, handle and I/O remain attached",
+        "stable three-tier ink applies to solid parts while transparent lid and volumetric music effects are excluded",
+        "all archived pivots, sockets, platter/effect center and playback timeline retain exact local transforms"
+      ],
+      "mismatches": [
+        "No GPT Image 2 concept sheet was available; reference evidence is explicitly conditional fallback."
+      ],
+      "evidence": [
+        "references/intake-v2/record-player/views/three-quarter.png",
+        "artifacts/appliance-v2/record-player/evidence/models/record-player/render-off-three-quarter.png",
+        "artifacts/appliance-v2/record-player/review/record-player-reference-v2-four-view-comparison.png",
+        "artifacts/appliance-v2/record-player/diagnostics/record-player-v2-verification.json",
+        "artifacts/appliance-v2/record-player/assembly/part-coverage.json",
+        "artifacts/appliance-v2/record-player/diagnostics/record-player-v2-browser-performance.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.88,
+        "componentStructure": 0.92,
+        "formDetail": 0.9,
+        "materialSurface": 0.87,
+        "lightingCamera": 0.86
+      },
+      "featureReviews": [
+        {
+          "id": "record-player-silhouette",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Faceted base cheeks, open lid spines and broad deck read across four static views."
+        },
+        {
+          "id": "record-player-playback",
+          "score": 0.92,
+          "passed": true,
+          "notes": "Twelve-sided record, grooves, spindle, tonearm, counterweight, cartridge and stylus remain distinct."
+        },
+        {
+          "id": "record-player-speaker",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Eleven raised grille slats, dark cavity and octagonal pulse badge stay readable from the front and three-quarter views."
+        },
+        {
+          "id": "record-player-animation-contact",
+          "score": 0.99,
+          "passed": true,
+          "notes": "Startup lift, climax stylus placement and wind-down return use one frozen timeline owner; waves and notes originate above the platter."
+        },
+        {
+          "id": "record-player-ink",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Main, structure and detail tiers use stable 0.18 variation; transparent/effect meshes own no visible thick outlines."
+        }
+      ],
+      "aiVisionNotes": "Four idle views and startup, climax and wind-down were manually inspected. Images are nonblank and uncropped; the stylus stays over the record region, effects originate above the platter, rear hardware stays attached, and no side facet penetrates the shell.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/record-player/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/record-player/evidence/models/record-player/render-off-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/record-player/review/record-player-reference-v2-four-view-comparison.png",
+        "cameraView": "four static and three fixed runtime views",
+        "notes": "Completed procedural geometry is reused as staged evidence.",
+        "aiVisionNotes": "The admitted archive is conditional fallback evidence and is not claimed as GPT Image 2 output."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "runtime-startup",
+        "runtime-climax",
+        "runtime-wind-down"
+      ],
+      "evidenceReuseNote": "The completed procedural model is reused across staged reviews; seven separate intermediate meshes were not captured."
+    },
+    {
+      "passId": "interaction-pass",
+      "timestamp": "2026-08-13T08:05:00.000Z",
+      "estimatedFidelity": 0.98,
+      "aiVisionScore": 0.98,
+      "visualAcceptanceThreshold": 0.8,
+      "action": "continue",
+      "summary": "interaction-pass accepted against the conditionally admitted archived v1 views and frozen record-player runtime contract.",
+      "matched": [
+        "faceted suitcase base and lid remain inside the archived package",
+        "twelve-sided record, concentric grooves, tonearm counterweight, cartridge and stylus remain independently named",
+        "front grille, speaker pulse badge, rear hinges, handle and I/O remain attached",
+        "stable three-tier ink applies to solid parts while transparent lid and volumetric music effects are excluded",
+        "all archived pivots, sockets, platter/effect center and playback timeline retain exact local transforms"
+      ],
+      "mismatches": [
+        "Dense climax waves partially obscure the open lid by design, but originate at the preserved platter center."
+      ],
+      "evidence": [
+        "references/intake-v2/record-player/views/three-quarter.png",
+        "artifacts/appliance-v2/record-player/evidence/models/record-player/render-off-three-quarter.png",
+        "artifacts/appliance-v2/record-player/review/record-player-reference-v2-four-view-comparison.png",
+        "artifacts/appliance-v2/record-player/diagnostics/record-player-v2-verification.json",
+        "artifacts/appliance-v2/record-player/assembly/part-coverage.json",
+        "artifacts/appliance-v2/record-player/diagnostics/record-player-v2-browser-performance.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.88,
+        "componentStructure": 0.92,
+        "formDetail": 0.9,
+        "materialSurface": 0.87,
+        "lightingCamera": 0.86
+      },
+      "featureReviews": [
+        {
+          "id": "record-player-silhouette",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Faceted base cheeks, open lid spines and broad deck read across four static views."
+        },
+        {
+          "id": "record-player-playback",
+          "score": 0.92,
+          "passed": true,
+          "notes": "Twelve-sided record, grooves, spindle, tonearm, counterweight, cartridge and stylus remain distinct."
+        },
+        {
+          "id": "record-player-speaker",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Eleven raised grille slats, dark cavity and octagonal pulse badge stay readable from the front and three-quarter views."
+        },
+        {
+          "id": "record-player-animation-contact",
+          "score": 0.99,
+          "passed": true,
+          "notes": "Startup lift, climax stylus placement and wind-down return use one frozen timeline owner; waves and notes originate above the platter."
+        },
+        {
+          "id": "record-player-ink",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Main, structure and detail tiers use stable 0.18 variation; transparent/effect meshes own no visible thick outlines."
+        }
+      ],
+      "aiVisionNotes": "Four idle views and startup, climax and wind-down were manually inspected. Images are nonblank and uncropped; the stylus stays over the record region, effects originate above the platter, rear hardware stays attached, and no side facet penetrates the shell.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/record-player/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/record-player/evidence/models/record-player/render-off-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/record-player/review/record-player-reference-v2-four-view-comparison.png",
+        "cameraView": "four static and three fixed runtime views",
+        "notes": "Completed procedural geometry is reused as staged evidence.",
+        "aiVisionNotes": "The admitted archive is conditional fallback evidence and is not claimed as GPT Image 2 output."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "runtime-startup",
+        "runtime-climax",
+        "runtime-wind-down"
+      ],
+      "evidenceReuseNote": "The completed procedural model is reused across staged reviews; seven separate intermediate meshes were not captured."
+    },
+    {
+      "passId": "optimization-pass",
+      "timestamp": "2026-08-13T08:06:00.000Z",
+      "estimatedFidelity": 0.95,
+      "aiVisionScore": 0.95,
+      "visualAcceptanceThreshold": 0.8,
+      "action": "continue",
+      "summary": "optimization-pass accepted against the conditionally admitted archived v1 views and frozen record-player runtime contract.",
+      "matched": [
+        "faceted suitcase base and lid remain inside the archived package",
+        "twelve-sided record, concentric grooves, tonearm counterweight, cartridge and stylus remain independently named",
+        "front grille, speaker pulse badge, rear hinges, handle and I/O remain attached",
+        "stable three-tier ink applies to solid parts while transparent lid and volumetric music effects are excluded",
+        "all archived pivots, sockets, platter/effect center and playback timeline retain exact local transforms"
+      ],
+      "mismatches": [
+        "No GPT Image 2 concept sheet was available; reference evidence is explicitly conditional fallback."
+      ],
+      "evidence": [
+        "references/intake-v2/record-player/views/three-quarter.png",
+        "artifacts/appliance-v2/record-player/evidence/models/record-player/render-off-three-quarter.png",
+        "artifacts/appliance-v2/record-player/review/record-player-reference-v2-four-view-comparison.png",
+        "artifacts/appliance-v2/record-player/diagnostics/record-player-v2-verification.json",
+        "artifacts/appliance-v2/record-player/assembly/part-coverage.json",
+        "artifacts/appliance-v2/record-player/diagnostics/record-player-v2-browser-performance.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.88,
+        "componentStructure": 0.92,
+        "formDetail": 0.9,
+        "materialSurface": 0.87,
+        "lightingCamera": 0.86
+      },
+      "featureReviews": [
+        {
+          "id": "record-player-silhouette",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Faceted base cheeks, open lid spines and broad deck read across four static views."
+        },
+        {
+          "id": "record-player-playback",
+          "score": 0.92,
+          "passed": true,
+          "notes": "Twelve-sided record, grooves, spindle, tonearm, counterweight, cartridge and stylus remain distinct."
+        },
+        {
+          "id": "record-player-speaker",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Eleven raised grille slats, dark cavity and octagonal pulse badge stay readable from the front and three-quarter views."
+        },
+        {
+          "id": "record-player-animation-contact",
+          "score": 0.99,
+          "passed": true,
+          "notes": "Startup lift, climax stylus placement and wind-down return use one frozen timeline owner; waves and notes originate above the platter."
+        },
+        {
+          "id": "record-player-ink",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Main, structure and detail tiers use stable 0.18 variation; transparent/effect meshes own no visible thick outlines."
+        }
+      ],
+      "aiVisionNotes": "Four idle views and startup, climax and wind-down were manually inspected. Images are nonblank and uncropped; the stylus stays over the record region, effects originate above the platter, rear hardware stays attached, and no side facet penetrates the shell.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/record-player/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/record-player/evidence/models/record-player/render-off-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/record-player/review/record-player-reference-v2-four-view-comparison.png",
+        "cameraView": "four static and three fixed runtime views",
+        "notes": "Completed procedural geometry is reused as staged evidence.",
+        "aiVisionNotes": "The admitted archive is conditional fallback evidence and is not claimed as GPT Image 2 output."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "runtime-startup",
+        "runtime-climax",
+        "runtime-wind-down"
+      ],
+      "evidenceReuseNote": "The completed procedural model is reused across staged reviews; seven separate intermediate meshes were not captured."
+    }
+  ],
+  "lodPlan": [
+    {
+      "tier": "near",
+      "distance": 0,
+      "strategy": "full named assemblies"
+    },
+    {
+      "tier": "far",
+      "distance": 20,
+      "strategy": "reuse grille/foot geometry and stop playback transforms when inactive"
+    }
+  ],
+  "performanceBudget": {
+    "qualityPriority": "stylized-runtime",
+    "targetTriangles": 76000,
+    "maxDrawCalls": 120,
+    "textureSize": 0,
+    "fpsTarget": 60,
+    "optimizationPolicy": "Remain <=1.35x archived triangles and <=1.20x comparable browser draw calls; use no runtime textures."
+  },
+  "lightingFromPhoto": [
+    "warm upper-left key separating cream and pink Toon bands",
+    "cool violet lower fill defining faceted side cheeks",
+    "soft pink rear rim around lid and tonearm",
+    "pale blue-gray background with contact shadow",
+    "transparent lid excluded from thick outline"
+  ],
+  "proceduralStrategy": [
+    "Block out the low suitcase shell and raised lid first.",
+    "Separate platter, tonearm, cartridge, grille slats, hinges, handle and I/O plate into named components.",
+    "Use stable pivots for lid hinge, platter spindle, tonearm cue and control knob; expose power socket and stylus sockets.",
+    "Use independent pastel PBR materials and transparent lid depth-write disabled.",
+    "Animate power as a recognizable platter spin, tonearm cueing and status-light pulse."
+  ],
+  "animationAnchors": [
+    "lid-hinge-pivot rotates around rear hinge axis",
+    "platter-spin-pivot rotates around vertical spindle",
+    "tonearm-pivot sweeps stylus over platter with cartridge socket",
+    "power-connection-socket anchors cable and start signal"
+  ],
+  "destructionAnchors": [
+    "lid and hinge pair form one detachable shell group",
+    "front grille slat array remains a separate breakable group",
+    "platter/tonearm assembly can detach from body shell without fusing visual meshes"
+  ],
+  "risks": [
+    "The low-poly v2 is deliberately more angular than the soft v1 archive.",
+    "The transparent lid can soften internal borders under some view angles.",
+    "Dense climax effects can partially obscure the enlarged platter and tonearm."
+  ],
+  "localSpecSearch": {
+    "collection": "core_3d",
+    "query": "low poly record player turntable hinged lid tonearm vinyl grille outline",
+    "index": {
+      "status": "hit",
+      "reason": "current",
+      "fingerprint": "6857e5ab528b42ac12f4f411f862610a0bffce8e47aee3610a7603c318072fe8"
+    },
+    "matches": [
+      {
+        "record_id": "core.measurement-source-text",
+        "source_refs": [
+          {
+            "path": "grimoire/intake/image_analysis.md",
+            "heading": "Layer 2 - Overall form and silhouette"
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "grimoire/intake/image_analysis.md"
+          }
+        ]
+      },
+      {
+        "record_id": "core.pbr-roughness",
+        "source_refs": [
+          {
+            "path": "grimoire/glossary/3d_vocabulary.md",
+            "heading": "Material And PBR"
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "grimoire/glossary/3d_vocabulary.md"
+          }
+        ]
+      }
+    ]
+  },
+  "tier1Results": [
+    {
+      "passed": false,
+      "checks": {
+        "silhouetteIoU": 0.3264,
+        "aspectRatioDelta": 0.5151,
+        "scaleDelta": 0.5177,
+        "bilateralSymmetryError": 0.0626,
+        "colorDelta": {
+          "checked": 26,
+          "maxDeltaE": 11.77,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 10.5
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.5
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.68
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.73
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.42
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.42
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.42
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.73
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.42
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.42
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.42
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.77
+            }
+          ],
+          "gated": false
+        }
+      },
+      "failures": [
+        "silhouette IoU 0.326 is below threshold 0.85",
+        "aspect-ratio delta 0.515 exceeds threshold 0.05",
+        "scale delta 0.518 exceeds threshold 0.08",
+        "blockout requires --map-stripped-render evidence"
+      ],
+      "renderHash": "d328458ddd76fecb",
+      "passId": "blockout"
+    },
+    {
+      "passed": false,
+      "checks": {
+        "silhouetteIoU": 0.4163,
+        "aspectRatioDelta": 0.3693,
+        "scaleDelta": 0.3143,
+        "bilateralSymmetryError": 0.0747,
+        "colorDelta": {
+          "checked": 26,
+          "maxDeltaE": 15.61,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 7.76
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.76
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.47
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.13
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.47
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.47
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.34
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.47
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.47
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.47
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.47
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.47
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.41
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.47
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.47
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.41
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.41
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.34
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.47
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.47
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.41
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.47
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.41
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.41
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.47
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.61
+            }
+          ],
+          "gated": false
+        }
+      },
+      "failures": [
+        "silhouette IoU 0.416 is below threshold 0.85",
+        "aspect-ratio delta 0.369 exceeds threshold 0.05",
+        "scale delta 0.314 exceeds threshold 0.08",
+        "blockout requires --map-stripped-render evidence"
+      ],
+      "renderHash": "3b698d6f5b9ce476",
+      "passId": "blockout"
+    },
+    {
+      "passed": false,
+      "checks": {
+        "silhouetteIoU": 0.4485,
+        "aspectRatioDelta": 0.0089,
+        "scaleDelta": 0.009,
+        "bilateralSymmetryError": 0.141,
+        "colorDelta": {
+          "checked": 26,
+          "maxDeltaE": 15.68,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 7.6
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.6
+            },
+            {
+              "componentId": null,
+              "deltaE": 14.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.41
+            },
+            {
+              "componentId": null,
+              "deltaE": 14.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 14.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.32
+            },
+            {
+              "componentId": null,
+              "deltaE": 14.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 14.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 14.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 14.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 14.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.4
+            },
+            {
+              "componentId": null,
+              "deltaE": 14.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 14.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.4
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.4
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.32
+            },
+            {
+              "componentId": null,
+              "deltaE": 14.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 14.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.4
+            },
+            {
+              "componentId": null,
+              "deltaE": 14.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.4
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.4
+            },
+            {
+              "componentId": null,
+              "deltaE": 14.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.68
+            }
+          ],
+          "gated": false
+        }
+      },
+      "failures": [
+        "silhouette IoU 0.449 is below threshold 0.85"
+      ],
+      "renderHash": "e8982536c1028851",
+      "passId": "blockout",
+      "mapStrippedRender": "artifacts\\img2threejs\\record-player\\tier1\\render-tight.png"
+    },
+    {
+      "passed": false,
+      "checks": {
+        "silhouetteIoU": 0.5678,
+        "aspectRatioDelta": 0.1667,
+        "scaleDelta": 0.1667,
+        "bilateralSymmetryError": 0.5121,
+        "colorDelta": {
+          "checked": 26,
+          "maxDeltaE": 17.06,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 17.06
+            },
+            {
+              "componentId": null,
+              "deltaE": 17.06
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.68
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.68
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.68
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.05
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.68
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.68
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.68
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.68
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.68
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.73
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.68
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.68
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.73
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.73
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.05
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.68
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.68
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.73
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.68
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.73
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.73
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.68
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.2
+            }
+          ],
+          "gated": false
+        }
+      },
+      "failures": [
+        "silhouette IoU 0.568 is below threshold 0.85",
+        "aspect-ratio delta 0.167 exceeds threshold 0.05",
+        "scale delta 0.167 exceeds threshold 0.08"
+      ],
+      "renderHash": "353530f2f866e3ff",
+      "passId": "blockout",
+      "mapStrippedRender": "artifacts\\img2threejs\\record-player\\tier1-clay\\render-front.png"
+    }
+  ],
+  "sourceImages": [
+    "references/intake-v2/record-player/views/front.png",
+    "references/intake-v2/record-player/views/side.png",
+    "references/intake-v2/record-player/views/back.png",
+    "references/intake-v2/record-player/views/three-quarter.png"
+  ]
+}

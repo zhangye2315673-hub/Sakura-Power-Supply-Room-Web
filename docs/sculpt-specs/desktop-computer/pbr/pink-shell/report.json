@@ -1,0 +1,83 @@
+{
+  "ok": true,
+  "verdict": "pass",
+  "confidence": 0.909,
+  "estimatedFidelity": 0.909,
+  "targetThreshold": 0.7,
+  "materialId": "pink-shell",
+  "sourceImage": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\desktop-computer\\zones\\back\\monitor-stand.png",
+  "outDir": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\desktop-computer\\pbr\\pink-shell",
+  "palette": [
+    "#D8C3B1",
+    "#EBB7AD",
+    "#B99589",
+    "#5B4B43",
+    "#F0D5C4"
+  ],
+  "maps": {
+    "albedo": {
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\desktop-computer\\pbr\\pink-shell\\pink-shell_albedo.png",
+      "url": "pink-shell_albedo.png",
+      "channel": "albedo",
+      "source": "reference-pixel-extraction"
+    },
+    "roughness": {
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\desktop-computer\\pbr\\pink-shell\\pink-shell_roughness.png",
+      "url": "pink-shell_roughness.png",
+      "channel": "roughness",
+      "source": "reference-pixel-extraction"
+    },
+    "height": {
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\desktop-computer\\pbr\\pink-shell\\pink-shell_height.png",
+      "url": "pink-shell_height.png",
+      "channel": "height",
+      "source": "reference-pixel-extraction"
+    },
+    "normal": {
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\desktop-computer\\pbr\\pink-shell\\pink-shell_normal.png",
+      "url": "pink-shell_normal.png",
+      "channel": "normal",
+      "source": "reference-pixel-extraction"
+    },
+    "ao": {
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\desktop-computer\\pbr\\pink-shell\\pink-shell_ao.png",
+      "url": "pink-shell_ao.png",
+      "channel": "ao",
+      "source": "reference-pixel-extraction"
+    }
+  },
+  "diagnostics": {
+    "sourceWidth": 234,
+    "sourceHeight": 151,
+    "mapSize": 1024,
+    "cropBBoxPixels": {
+      "x": 0,
+      "y": 0,
+      "width": 234,
+      "height": 151
+    },
+    "mask": {
+      "backgroundColor": "#F8E6D4",
+      "backgroundNoise": 50.229,
+      "transparentPixelFraction": 0.0,
+      "foregroundCoverage": 0.3972
+    },
+    "mapStats": {
+      "valueRange": 0.5259,
+      "heightP90Gradient": 0.05574,
+      "roughnessBase": 0.683,
+      "roughnessVariation": 0.08,
+      "normalStrength": 0.222,
+      "blurRadius": 21
+    },
+    "palette": [
+      "#D8C3B1",
+      "#EBB7AD",
+      "#B99589",
+      "#5B4B43",
+      "#F0D5C4"
+    ]
+  },
+  "warnings": [],
+  "limitation": "single-image PBR extraction is an estimate; 70%+ extraction confidence still needs render screenshot review"
+}

@@ -1,0 +1,9 @@
+{
+  "sheetVerdict": {"admitted": false, "reason": "multi-view sheet is intentionally fragmented into three isolated subjects; use admitted crops instead"},
+  "views": [
+    {"viewpoint":"front-view","path":"admitted-views/front-view.png","admitted":true,"width":435,"height":499,"foregroundCoverage":0.5932,"largestComponentFraction":0.9917,"pHash":"12443678415008576830"},
+    {"viewpoint":"side-view","path":"admitted-views/side-view.png","admitted":true,"width":418,"height":499,"foregroundCoverage":0.5686,"largestComponentFraction":1.0,"pHash":"10071663063619326158"},
+    {"viewpoint":"back-view","path":"admitted-views/back-view.png","admitted":true,"width":468,"height":499,"foregroundCoverage":0.5823,"largestComponentFraction":0.9984,"pHash":"16708598852624000602"}
+  ],
+  "probe": {"type":"png","bytes":1406859,"width":1672,"height":941,"aspectRatio":1.7768331562167907,"technicalSuitability":"pass","warnings":[]}
+}

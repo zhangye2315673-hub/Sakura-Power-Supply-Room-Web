@@ -1,0 +1,872 @@
+{
+  "targetName": "SAKURA Bubble Machine v2",
+  "sourceImage": "references/intake-v2/bubble-machine/views/front.png",
+  "preSpecAssessment": {
+    "objectClass": {
+      "primaryType": "portable-electric-bubble-machine",
+      "primaryDomain": "object",
+      "formLanguage": [
+        "stylized-low-poly",
+        "faceted-hard-surface",
+        "exaggerated-functional-silhouette"
+      ],
+      "structureKind": [
+        "layered-shell",
+        "radial-wheel-assembly",
+        "asymmetric-reservoir",
+        "rear-fan-assembly"
+      ],
+      "motionPotential": [
+        "wheel-rotation",
+        "fan-rotation",
+        "control-rotation",
+        "effect-emitter"
+      ],
+      "materialFamilies": [
+        "matte-cream-polymer",
+        "sakura-pink-polymer",
+        "cool-plum-cavity",
+        "translucent-reservoir",
+        "bubble-film"
+      ],
+      "notes": "Observed across admitted GPT Image 2 front, side, back and three-quarter views. Archived v1 transforms and bounds remain authoritative."
+    },
+    "complexity": {
+      "tier": "complex",
+      "scores": {
+        "silhouetteComplexity": 2,
+        "componentCount": 3,
+        "hierarchyDepth": 3,
+        "repetitionDensity": 3,
+        "materialLayerCount": 3,
+        "localDetailDensity": 2,
+        "occlusionRisk": 2,
+        "actionReadinessNeed": 3
+      },
+      "estimatedCounts": {
+        "macroComponents": 6,
+        "mesoComponents": 14,
+        "microFeatureGroups": 9,
+        "materialLayers": 9,
+        "repetitionSystems": 7
+      }
+    },
+    "specDepthDecision": {
+      "requiredDepth": "complex",
+      "minimumComponentLevels": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "needsRepetitionSystems": true,
+      "needsMaterialLocalOverrides": true,
+      "needsMultipleReviewViews": true,
+      "needsActionReadyHierarchy": true,
+      "rationale": "Compound articulated assembly with radial repetition and mixed transparency."
+    },
+    "unknownsToResolveBeforeImplementation": [],
+    "detailInventory": {
+      "scanMethod": "four-view-grid-plus-runtime-contract",
+      "targetMinDetails": 20,
+      "note": "Each visible identity feature and runtime effect maps to existing named procedural geometry or the v2 outline contract.",
+      "details": [
+        {
+          "id": "bubble-machine-v2-detail-1",
+          "kind": "contour",
+          "description": "faceted rounded-square housing",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-2",
+          "kind": "bevel",
+          "description": "broad cream shoulder planes",
+          "region": {
+            "x": 0.3333333333333333,
+            "y": 0.16666666666666666,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-3",
+          "kind": "linework",
+          "description": "pink lower seam rail",
+          "region": {
+            "x": 0.6666666666666666,
+            "y": 0.3333333333333333,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-4",
+          "kind": "contour",
+          "description": "four independent feet",
+          "region": {
+            "x": 0,
+            "y": 0.5,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-5",
+          "kind": "bevel",
+          "description": "mint foot pads",
+          "region": {
+            "x": 0.3333333333333333,
+            "y": 0.6666666666666666,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-6",
+          "kind": "linework",
+          "description": "deep circular front cavity",
+          "region": {
+            "x": 0.6666666666666666,
+            "y": 0.8333333333333334,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-7",
+          "kind": "contour",
+          "description": "thick faceted outer rim",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-8",
+          "kind": "bevel",
+          "description": "thin inner rim",
+          "region": {
+            "x": 0.3333333333333333,
+            "y": 0.16666666666666666,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-9",
+          "kind": "linework",
+          "description": "smoked protective window",
+          "region": {
+            "x": 0.6666666666666666,
+            "y": 0.3333333333333333,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-10",
+          "kind": "contour",
+          "description": "exactly eight bubble rings",
+          "region": {
+            "x": 0,
+            "y": 0.5,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-11",
+          "kind": "bevel",
+          "description": "eight mint radial spokes",
+          "region": {
+            "x": 0.3333333333333333,
+            "y": 0.6666666666666666,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-12",
+          "kind": "linework",
+          "description": "central wheel hub",
+          "region": {
+            "x": 0.6666666666666666,
+            "y": 0.8333333333333334,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-13",
+          "kind": "contour",
+          "description": "lower drip tray",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-14",
+          "kind": "bevel",
+          "description": "top faceted control knob",
+          "region": {
+            "x": 0.3333333333333333,
+            "y": 0.16666666666666666,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-15",
+          "kind": "linework",
+          "description": "control index",
+          "region": {
+            "x": 0.6666666666666666,
+            "y": 0.3333333333333333,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-16",
+          "kind": "contour",
+          "description": "inset status light",
+          "region": {
+            "x": 0,
+            "y": 0.5,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-17",
+          "kind": "bevel",
+          "description": "translucent side reservoir",
+          "region": {
+            "x": 0.3333333333333333,
+            "y": 0.6666666666666666,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-18",
+          "kind": "linework",
+          "description": "visible reservoir fill",
+          "region": {
+            "x": 0.6666666666666666,
+            "y": 0.8333333333333334,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-19",
+          "kind": "contour",
+          "description": "reservoir cap and bracket",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-20",
+          "kind": "bevel",
+          "description": "seven side vents",
+          "region": {
+            "x": 0.3333333333333333,
+            "y": 0.16666666666666666,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-21",
+          "kind": "linework",
+          "description": "rear recessed fan cavity",
+          "region": {
+            "x": 0.6666666666666666,
+            "y": 0.3333333333333333,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-22",
+          "kind": "contour",
+          "description": "five rear fan blades",
+          "region": {
+            "x": 0,
+            "y": 0.5,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-23",
+          "kind": "bevel",
+          "description": "four concentric rear grille rings",
+          "region": {
+            "x": 0.3333333333333333,
+            "y": 0.6666666666666666,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-24",
+          "kind": "linework",
+          "description": "eight rear grille spokes",
+          "region": {
+            "x": 0.6666666666666666,
+            "y": 0.8333333333333334,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-25",
+          "kind": "contour",
+          "description": "four rear fasteners",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-26",
+          "kind": "bevel",
+          "description": "rear power inlet",
+          "region": {
+            "x": 0.3333333333333333,
+            "y": 0.16666666666666666,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-27",
+          "kind": "linework",
+          "description": "forty-eight ordinary bubble volumes",
+          "region": {
+            "x": 0.6666666666666666,
+            "y": 0.3333333333333333,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "runtime-contract",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-28",
+          "kind": "contour",
+          "description": "giant bubble and eight burst fragments",
+          "region": {
+            "x": 0,
+            "y": 0.5,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "runtime-contract",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-29",
+          "kind": "bevel",
+          "description": "stable three-tier uneven outline",
+          "region": {
+            "x": 0.3333333333333333,
+            "y": 0.6666666666666666,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "runtime-contract",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-30",
+          "kind": "linework",
+          "description": "cold-purple Toon shadow planes",
+          "region": {
+            "x": 0.6666666666666666,
+            "y": 0.8333333333333334,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "runtime-contract",
+          "confidence": 0.95
+        }
+      ]
+    }
+  },
+  "qualityContract": {
+    "qualityBar": "complex",
+    "definitionOfDone": [
+      "Four static views retain the v1 package envelope while reading as a more exaggerated faceted SAKURA game prop.",
+      "The front chamber keeps exactly eight independently named rings and spokes on the frozen rotating pivot and output socket.",
+      "The asymmetric reservoir, rear fan, control, feet and power inlet remain attached at archived parent paths and transforms.",
+      "Main, structure and detail outlines use 0.0048, 0.0041 and 0.0033 thickness with stable 0.18 object-space variation.",
+      "All 48 ordinary bubbles, giant bubble, burst fragments and reset behavior remain owned by the existing performance timeline."
+    ],
+    "minimumSpecDepth": {
+      "macroComponents": 5,
+      "mesoComponents": 12,
+      "microFeatureGroups": 8,
+      "materialLayers": 7,
+      "repetitionSystems": 5,
+      "reviewViewpoints": 7
+    },
+    "featureGroups": [
+      {
+        "id": "shell",
+        "name": "Rounded shell proportion",
+        "required": true,
+        "qualityCriteria": [
+          "Height/width 1.12 and depth/width 0.72 with broad corner radii."
+        ],
+        "evidenceRefs": [
+          "front",
+          "side"
+        ],
+        "failureModes": [
+          "boxy silhouette"
+        ]
+      },
+      {
+        "id": "wheel",
+        "name": "Eight-ring bubble wheel",
+        "required": true,
+        "qualityCriteria": [
+          "Exactly eight rings and eight spokes rotate around a centered front axis."
+        ],
+        "evidenceRefs": [
+          "front"
+        ],
+        "failureModes": [
+          "wrong count or fused parts"
+        ]
+      },
+      {
+        "id": "reservoir",
+        "name": "Side liquid reservoir",
+        "required": true,
+        "qualityCriteria": [
+          "Translucent right-rear tank remains attached from side and back."
+        ],
+        "evidenceRefs": [
+          "side",
+          "back"
+        ],
+        "failureModes": [
+          "floating or opaque tank"
+        ]
+      },
+      {
+        "id": "rear-fan",
+        "name": "Rear fan and grille",
+        "required": true,
+        "qualityCriteria": [
+          "Rotor is visible behind concentric grille geometry and four fasteners."
+        ],
+        "evidenceRefs": [
+          "back"
+        ],
+        "failureModes": [
+          "flat decal grille"
+        ]
+      },
+      {
+        "id": "powered-action",
+        "name": "Powered purpose animation",
+        "required": true,
+        "qualityCriteria": [
+          "Control, wheel and fan rotate while bubbles rise and spread, then exact reset at 5.2 seconds."
+        ],
+        "evidenceRefs": [
+          "turn-sheet-left-effect"
+        ],
+        "failureModes": [
+          "generic wobble or no bubbles"
+        ]
+      }
+    ],
+    "visualDeltaChecks": [
+      "silhouette",
+      "depth ratio",
+      "eight-ring count",
+      "material separation",
+      "powered bubbles"
+    ],
+    "antiShallowSpecRules": [
+      "No fused compound mesh.",
+      "No flat texture replacement for wheel or grille.",
+      "No pass without browser evidence."
+    ]
+  },
+  "authoringInstruction": "Fill observed object class, complexity reasoning, featureGroups, visualDeltaChecks, and unknowns before generating or implementing ObjectSculptSpec.",
+  "localSpecSearch": {
+    "collection": "core_3d",
+    "query": "SAKURA Bubble Machine v2 low-poly appliance layered shell radial wheel transparent reservoir action-ready pivots sockets",
+    "index": {
+      "status": "hit",
+      "reason": "current",
+      "fingerprint": "6857e5ab528b42ac12f4f411f862610a0bffce8e47aee3610a7603c318072fe8"
+    },
+    "matches": [
+      {
+        "record_id": "core.runtime-hierarchy",
+        "file_path": "grimoire/readiness/action_rigging.md",
+        "heading": "Hierarchy Pattern",
+        "key_path": null,
+        "score": 9.500915197936,
+        "snippets": [
+          "An action-ready model uses a root, component pivot groups, visual meshes, sockets, collider metadata or proxies, and destruction-group metadata."
+        ],
+        "source_refs": [
+          {
+            "path": "grimoire/readiness/action_rigging.md",
+            "heading": "Hierarchy Pattern",
+            "key_path": null
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "grimoire/readiness/action_rigging.md"
+          },
+          {
+            "kind": "notebooklm-research",
+            "ref": "notebooklm:4b03c2f9-8393-411f-b5b4-039ab9532843",
+            "note": "Validated generic schema vocabulary; numeric claims remain backed by local source_refs."
+          }
+        ]
+      },
+      {
+        "record_id": "core.topology-intent",
+        "file_path": "grimoire/glossary/3d_vocabulary.md",
+        "heading": "Geometry And Topology",
+        "key_path": null,
+        "score": 5.143858634031,
+        "snippets": [
+          "Topology intent classifies a surface as hard-surface blockout, subdivision-ready, low-poly prop, organic deformed mesh, or alpha-card cluster."
+        ],
+        "source_refs": [
+          {
+            "path": "grimoire/glossary/3d_vocabulary.md",
+            "heading": "Geometry And Topology",
+            "key_path": null
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "grimoire/glossary/3d_vocabulary.md"
+          },
+          {
+            "kind": "notebooklm-research",
+            "ref": "notebooklm:4b03c2f9-8393-411f-b5b4-039ab9532843",
+            "note": "Validated generic schema vocabulary; numeric claims remain backed by local source_refs."
+          }
+        ]
+      },
+      {
+        "record_id": "core.shader-mapping-uvcoordinate-system-conversion-attachment-hierarchy",
+        "file_path": "docs/raw/img2threejs-skill-dataset.json",
+        "heading": null,
+        "key_path": "categories.rendering_shader_mapping[14]",
+        "score": 4.37507566929,
+        "snippets": [
+          "... appears mirrored or flipped sideways after import signals a handedness mismatch; Attachment points behave like named sockets/joints (Unreal sockets, USD UsdPhysicsFixedJoint, 'ghost links') — a local offset+rotation relative to a parent ..."
+        ],
+        "source_refs": [
+          {
+            "path": "docs/raw/img2threejs-skill-dataset.json",
+            "heading": null,
+            "key_path": "categories.rendering_shader_mapping[14]"
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "docs/raw/img2threejs-skill-dataset.json",
+            "note": "img2threejs NotebookLM research distillation"
+          }
+        ]
+      }
+    ]
+  }
+}

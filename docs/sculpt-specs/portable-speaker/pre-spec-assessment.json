@@ -1,0 +1,711 @@
+{
+  "targetName": "SAKURA Portable Speaker",
+  "sourceImage": "references\\intake\\portable-speaker\\front.png",
+  "preSpecAssessment": {
+    "objectClass": {
+      "primaryType": "portable loudspeaker with articulated carry handle",
+      "primaryDomain": "object",
+      "formLanguage": [
+        "hard-surface",
+        "rounded geometric",
+        "repeated surface relief"
+      ],
+      "structureKind": [
+        "compound object",
+        "layered shell",
+        "articulated assembly",
+        "repeated modules"
+      ],
+      "motionPotential": [
+        "hinged handle",
+        "press control",
+        "whole-machine bass pulse",
+        "driver diaphragm travel",
+        "volumetric wave emitter"
+      ],
+      "materialFamilies": [
+        "molded plastic",
+        "rubber",
+        "dark cavity",
+        "emissive indicator"
+      ],
+      "notes": "Three admitted elevations define the visible cabinet, fascia, handle and rear service panel. Hidden acoustic and hinge internals remain inferred."
+    },
+    "complexity": {
+      "tier": "complex",
+      "scores": {
+        "silhouetteComplexity": 2,
+        "componentCount": 3,
+        "hierarchyDepth": 2,
+        "repetitionDensity": 3,
+        "materialLayerCount": 2,
+        "localDetailDensity": 3,
+        "occlusionRisk": 2,
+        "actionReadinessNeed": 3
+      },
+      "estimatedCounts": {
+        "macroComponents": 3,
+        "mesoComponents": 10,
+        "microFeatureGroups": 18,
+        "materialLayers": 6,
+        "repetitionSystems": 2
+      },
+      "reasoning": [
+        "A rounded cabinet blockout is straightforward, but reference identity depends on a dense perforation field, layered fascia, articulated dual-finish handle, paired hinges, controls and rear service details."
+      ]
+    },
+    "specDepthDecision": {
+      "requiredDepth": "complex",
+      "minimumComponentLevels": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "needsRepetitionSystems": true,
+      "needsMaterialLocalOverrides": true,
+      "needsMultipleReviewViews": true,
+      "needsActionReadyHierarchy": true,
+      "rationale": "Complex is required because the perforation field, attachments and power animation must remain separate, selectable and performant."
+    },
+    "unknownsToResolveBeforeImplementation": [
+      "One full-range driver with basket rim, compliant surround, tapered cone and dust cap is inferred; exact count, compliance and enclosure depth remain hidden.",
+      "Handle hinge mechanism and angular stop are inferred from the visible pivot caps.",
+      "Rear slot function is ambiguous; model as a generic recessed service/charging port.",
+      "Underside fasteners and internal cable routing are not visible and will be omitted."
+    ],
+    "detailInventory": {
+      "scanMethod": "grid-4x4-plus-three-admitted-elevations",
+      "targetMinDetails": 18,
+      "details": [
+        {
+          "id": "cabinet-bevel",
+          "kind": "bevel",
+          "description": "broad rounded cabinet edge",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry and silhouette",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "cabinet-shell.soft-edge-bevel"
+          },
+          "evidenceRef": "front+side+back",
+          "confidence": 0.99
+        },
+        {
+          "id": "cabinet-seam",
+          "kind": "seam",
+          "description": "front fascia to cabinet construction seam",
+          "region": {
+            "x": 0.25,
+            "y": 0,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry and silhouette",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "cabinet-shell.front-fascia-seam"
+          },
+          "evidenceRef": "front",
+          "confidence": 0.97
+        },
+        {
+          "id": "pink-satin-highlight",
+          "kind": "gloss",
+          "description": "broad satin highlight on pink molded shell",
+          "region": {
+            "x": 0.5,
+            "y": 0,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "material response",
+          "mapsTo": {
+            "type": "material.localOverrides",
+            "ref": "pink-plastic.satin-highlight"
+          },
+          "evidenceRef": "front+side+back",
+          "confidence": 0.96
+        },
+        {
+          "id": "fascia-bevel",
+          "kind": "bevel",
+          "description": "cream rounded-square grille surround",
+          "region": {
+            "x": 0.75,
+            "y": 0,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry and silhouette",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "front-fascia.rounded-bevel"
+          },
+          "evidenceRef": "front",
+          "confidence": 0.99
+        },
+        {
+          "id": "fascia-inset",
+          "kind": "seam",
+          "description": "recessed cream fascia inside pink rim",
+          "region": {
+            "x": 0,
+            "y": 0.2,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry and silhouette",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "front-fascia.recessed-inset"
+          },
+          "evidenceRef": "front",
+          "confidence": 0.99
+        },
+        {
+          "id": "perforation-grid",
+          "kind": "fastener",
+          "description": "regular circular acoustic hole field",
+          "region": {
+            "x": 0.25,
+            "y": 0.2,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "micro-repeated",
+          "affects": "geometry and silhouette",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "grille-perforations.instanced-grid"
+          },
+          "evidenceRef": "front",
+          "confidence": 0.99
+        },
+        {
+          "id": "control-exclusion",
+          "kind": "contour",
+          "description": "lower-right void in hole field around controls",
+          "region": {
+            "x": 0.5,
+            "y": 0.2,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry and silhouette",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "grille-perforations.control-clearance"
+          },
+          "evidenceRef": "front",
+          "confidence": 0.98
+        },
+        {
+          "id": "power-outer-ring",
+          "kind": "ridge",
+          "description": "raised concentric power-button ring",
+          "region": {
+            "x": 0.75,
+            "y": 0.2,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry and silhouette",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "power-control.concentric-ring"
+          },
+          "evidenceRef": "front",
+          "confidence": 0.99
+        },
+        {
+          "id": "power-disc",
+          "kind": "contour",
+          "description": "cream circular button face",
+          "region": {
+            "x": 0,
+            "y": 0.4,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry and silhouette",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "power-control.button-disc"
+          },
+          "evidenceRef": "front",
+          "confidence": 0.99
+        },
+        {
+          "id": "power-glyph",
+          "kind": "linework",
+          "description": "raised power symbol on button face",
+          "region": {
+            "x": 0.25,
+            "y": 0.4,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry and silhouette",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "power-control.power-glyph"
+          },
+          "evidenceRef": "front",
+          "confidence": 0.96
+        },
+        {
+          "id": "status-dot",
+          "kind": "emissive",
+          "description": "small mint indicator below button",
+          "region": {
+            "x": 0.5,
+            "y": 0.4,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "material response",
+          "mapsTo": {
+            "type": "material.localOverrides",
+            "ref": "status-indicator.powered-emissive"
+          },
+          "evidenceRef": "front",
+          "confidence": 0.99
+        },
+        {
+          "id": "handle-arch",
+          "kind": "contour",
+          "description": "broad inverted-U carry handle",
+          "region": {
+            "x": 0.75,
+            "y": 0.4,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry and silhouette",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "carry-handle.arch-profile"
+          },
+          "evidenceRef": "front+back",
+          "confidence": 0.99
+        },
+        {
+          "id": "handle-insert",
+          "kind": "seam",
+          "description": "mint insert on handle side face",
+          "region": {
+            "x": 0,
+            "y": 0.6000000000000001,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry and silhouette",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "carry-handle.mint-side-insert"
+          },
+          "evidenceRef": "side",
+          "confidence": 0.94
+        },
+        {
+          "id": "hinge-caps",
+          "kind": "fastener",
+          "description": "paired cream circular side pivots",
+          "region": {
+            "x": 0.25,
+            "y": 0.6000000000000001,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "micro-repeated",
+          "affects": "geometry and silhouette",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "handle-hinges.mirrored-caps"
+          },
+          "evidenceRef": "front+side+back",
+          "confidence": 0.99
+        },
+        {
+          "id": "rear-panel",
+          "kind": "panel",
+          "description": "cream rounded lower rear service panel",
+          "region": {
+            "x": 0.5,
+            "y": 0.6000000000000001,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry and silhouette",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "rear-service-panel.recessed-panel"
+          },
+          "evidenceRef": "back",
+          "confidence": 0.99
+        },
+        {
+          "id": "rear-slot",
+          "kind": "interface",
+          "description": "single horizontal recessed rear slot",
+          "region": {
+            "x": 0.75,
+            "y": 0.6000000000000001,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry and silhouette",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "rear-service-panel.horizontal-port"
+          },
+          "evidenceRef": "back",
+          "confidence": 0.97
+        },
+        {
+          "id": "feet-pair",
+          "kind": "contour",
+          "description": "two shallow feet under cabinet",
+          "region": {
+            "x": 0,
+            "y": 0.8,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry and silhouette",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "feet.mirrored-pair"
+          },
+          "evidenceRef": "front+back+side",
+          "confidence": 0.97
+        },
+        {
+          "id": "cavity-response",
+          "kind": "gloss",
+          "description": "dark low-value cavity response in holes and port",
+          "region": {
+            "x": 0.25,
+            "y": 0.8,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "material response",
+          "mapsTo": {
+            "type": "material.localOverrides",
+            "ref": "cavity.dark-recess"
+          },
+          "evidenceRef": "front+back",
+          "confidence": 0.95
+        }
+      ]
+    },
+    "anatomy": {
+      "applies": false,
+      "styleHeads": 0,
+      "proportions": {
+        "headUnit": 0,
+        "torso": 0,
+        "legs": 0,
+        "shoulderWidth": 0,
+        "hipWidth": 0
+      },
+      "pose": {
+        "type": "unassessed",
+        "jointAngles": {}
+      },
+      "faceLandmarks": {
+        "eyeLine": 0,
+        "eyeSpacing": 0,
+        "noseBase": 0,
+        "mouthLine": 0,
+        "hairline": 0
+      },
+      "features": [],
+      "confidence": 0,
+      "note": "Only meaningful when objectClass.primaryDomain is character or hybrid. Set applies=true and fill from forge/stage1_intake/extract_landmarks.py. See grimoire/character/reconstruction.md and grimoire/character/likeness_maximization.md."
+    },
+    "sourceImage": "references\\intake\\portable-speaker\\front.png"
+  },
+  "qualityContract": {
+    "qualityBar": "complex",
+    "definitionOfDone": [
+      "Front, side, back and three-quarter renders preserve the slightly-taller-than-wide rounded cabinet, deep side profile, arched handle negative space and layered front fascia.",
+      "Dense perforations remain regular and performant, preserve the lower-right control exclusion, and do not become hundreds of draw calls.",
+      "Handle, hinge caps, controls, grille, rear panel and feet remain independent named components with sockets and pivots.",
+      "Power sequence drives the complete machine through escalating bass compression, expansion and rebound, gives the inferred front driver stronger forward travel, emits thick 3D waves, then lands and restores the exact idle state."
+    ],
+    "minimumSpecDepth": {
+      "macroComponents": 3,
+      "mesoComponents": 9,
+      "microFeatureGroups": 15,
+      "materialLayers": 5,
+      "repetitionSystems": 2,
+      "reviewViewpoints": 4
+    },
+    "featureGroups": [
+      {
+        "id": "speaker-silhouette",
+        "name": "Rounded cabinet and carry-handle silhouette",
+        "required": true,
+        "qualityCriteria": [
+          "Cabinet is slightly taller than wide and the broad handle arch clears the cabinet top with continuous side attachments."
+        ],
+        "evidenceRefs": [
+          "front",
+          "side",
+          "back"
+        ],
+        "failureModes": [
+          "cabinet reads square or too shallow",
+          "handle floats or negative space collapses"
+        ]
+      },
+      {
+        "id": "acoustic-front",
+        "name": "Layered fascia and perforation system",
+        "required": true,
+        "qualityCriteria": [
+          "Cream recessed fascia, regular circular grid and lower-right control clearance match the front elevation."
+        ],
+        "evidenceRefs": [
+          "front"
+        ],
+        "failureModes": [
+          "grille is flat painted texture",
+          "hole density is sparse",
+          "controls overlap perforations"
+        ]
+      },
+      {
+        "id": "handle-joints",
+        "name": "Handle attachments and hinge pivots",
+        "required": true,
+        "qualityCriteria": [
+          "Both handle roots overlap named side hinge sockets and rotate from the visible cap axes."
+        ],
+        "evidenceRefs": [
+          "front",
+          "side",
+          "back"
+        ],
+        "failureModes": [
+          "floating handle root",
+          "center-pivot rotation",
+          "mint insert absent"
+        ]
+      },
+      {
+        "id": "controls-service",
+        "name": "Power controls and rear service panel",
+        "required": true,
+        "qualityCriteria": [
+          "Concentric button, power glyph, mint indicator, rear cream panel and horizontal port remain legible."
+        ],
+        "evidenceRefs": [
+          "front",
+          "back"
+        ],
+        "failureModes": [
+          "generic single button",
+          "rear panel omitted"
+        ]
+      },
+      {
+        "id": "powered-purpose",
+        "name": "Powered loudspeaker action",
+        "required": true,
+        "qualityCriteria": [
+          "Button press, grille/driver pulse, indicator and expanding waves identify speaker use within one second and reset exactly."
+        ],
+        "evidenceRefs": [
+          "animation requirement"
+        ],
+        "failureModes": [
+          "only object bobbing",
+          "no visible sound cue",
+          "reset drift"
+        ]
+      },
+      {
+        "id": "surface-material-response",
+        "name": "SAKURA material separation",
+        "required": true,
+        "qualityCriteria": [
+          "Pink satin shell, cream fascia, mint insert/light, dark cavities and rubber feet remain distinct under toon lighting."
+        ],
+        "evidenceRefs": [
+          "front",
+          "side",
+          "back"
+        ],
+        "failureModes": [
+          "one-note pink material",
+          "cavity holes wash out"
+        ]
+      }
+    ],
+    "visualDeltaChecks": [
+      "cabinet width-to-height and depth delta",
+      "handle arch and negative-space delta",
+      "perforation density/control exclusion delta",
+      "front/rear panel layering delta",
+      "pink/cream/mint/cavity material separation delta",
+      "powered action and exact reset delta"
+    ],
+    "antiShallowSpecRules": [
+      "Do not proceed to code if qualityContract.qualityBar is unassessed.",
+      "Do not proceed to code if the spec only contains a root component for a moderate or complex object.",
+      "Do not proceed to code if required featureGroups are not represented by componentTree, materials, or repetitionSystems.",
+      "Do not proceed to code if visible local features are described only in prose and not attached to components/materials/evidenceRefs.",
+      "Do not proceed past structural-pass if attached child parts lack attachment.parentSocket, localStart, localEnd, embedDepth/overlap, and gapTolerance.",
+      "Do not pass material look-dev when albedo is reused as roughness, height, normal, or AO.",
+      "Do not pass material look-dev without macro, meso, and micro surface frequency bands for close-up materials.",
+      "Do not pass reference-fidelity material look-dev from a source image without usable referencePbr maps or an explicit documented limitation.",
+      "Do not patch a spec with extracted PBR maps when extraction confidence is below the target threshold unless the user explicitly accepts lower fidelity.",
+      "Do not place adjacent separate-geometry parts below 0.02 world-unit seam overlap (source: grimoire/build/geometry_patterns.md).",
+      "Do not satisfy raised or recessed relief, fasteners, or grip structure with a map alone when the feature affects form; use geometry or displacement (source: grimoire/build/geometry_patterns.md)."
+    ]
+  },
+  "authoringInstruction": "Fill observed object class, complexity reasoning, featureGroups, visualDeltaChecks, and unknowns before generating or implementing ObjectSculptSpec.",
+  "localSpecSearch": {
+    "collection": "core_3d",
+    "query": "SAKURA Portable Speaker portable speaker perforated grille handle hinge controls plastic housing bevel panel seam loudspeaker diaphragm animation",
+    "index": {
+      "status": "hit",
+      "reason": "current",
+      "fingerprint": "6857e5ab528b42ac12f4f411f862610a0bffce8e47aee3610a7603c318072fe8"
+    },
+    "matches": [
+      {
+        "record_id": "core.pbr-opacity-alpha",
+        "file_path": "docs/raw/img2threejs-skill-dataset.json",
+        "heading": null,
+        "key_path": "categories.material_pbr[8]",
+        "score": 6.173944048162,
+        "snippets": [
+          "Controls material transparency and blend mode; in CS2 workflows the alpha channel of Base Color is repurposed as a non-transparency data channel. Kiểm soát độ trong suốt và chế độ blend của vật liệu; trong quy trình CS2, kênh alpha của Base ..."
+        ],
+        "source_refs": [
+          {
+            "path": "docs/raw/img2threejs-skill-dataset.json",
+            "heading": null,
+            "key_path": "categories.material_pbr[8]"
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "docs/raw/img2threejs-skill-dataset.json",
+            "note": "img2threejs NotebookLM research distillation"
+          }
+        ]
+      },
+      {
+        "record_id": "core.coordinate-relative-units",
+        "file_path": "grimoire/glossary/3d_vocabulary.md",
+        "heading": "Geometry And Topology",
+        "key_path": null,
+        "score": 5.594547623161,
+        "snippets": [
+          "A bevel radius is sized in object-relative units."
+        ],
+        "source_refs": [
+          {
+            "path": "grimoire/glossary/3d_vocabulary.md",
+            "heading": "Geometry And Topology",
+            "key_path": null
+          },
+          {
+            "path": "grimoire/intake/image_analysis.md",
+            "heading": "Layer 2 — Overall form & silhouette",
+            "key_path": null
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "grimoire/glossary/3d_vocabulary.md"
+          },
+          {
+            "kind": "notebooklm-research",
+            "ref": "notebooklm:4b03c2f9-8393-411f-b5b4-039ab9532843",
+            "note": "Validated generic schema vocabulary; numeric claims remain backed by local source_refs."
+          }
+        ]
+      },
+      {
+        "record_id": "core.socket-pivot",
+        "file_path": "grimoire/glossary/3d_vocabulary.md",
+        "heading": "Animation, Physics, And Destruction",
+        "key_path": null,
+        "score": 4.802998721041,
+        "snippets": [
+          "A pivot is a local rotation origin; a socket is an attachment point for a child part. In a runtime hierarchy, a socket Object3D is a child of the relevant pivot."
+        ],
+        "source_refs": [
+          {
+            "path": "grimoire/glossary/3d_vocabulary.md",
+            "heading": "Animation, Physics, And Destruction",
+            "key_path": null
+          },
+          {
+            "path": "grimoire/readiness/action_rigging.md",
+            "heading": "Hierarchy Pattern",
+            "key_path": null
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "grimoire/readiness/action_rigging.md"
+          },
+          {
+            "kind": "notebooklm-research",
+            "ref": "notebooklm:4b03c2f9-8393-411f-b5b4-039ab9532843",
+            "note": "Validated generic schema vocabulary; numeric claims remain backed by local source_refs."
+          }
+        ]
+      }
+    ]
+  }
+}

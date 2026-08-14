@@ -1,0 +1,6446 @@
+{
+  "targetName": "SAKURA Hair Dryer v2",
+  "targetId": "hair-dryer-v2",
+  "schemaVersion": "2.1",
+  "terminologyProfile": {
+    "domain": "real-time procedural Three.js asset",
+    "geometryTerms": [
+      "silhouette",
+      "topology",
+      "primitive",
+      "bevel",
+      "chamfer",
+      "taper",
+      "bend",
+      "boolean cut",
+      "edge loop",
+      "surface normal",
+      "displacement"
+    ],
+    "materialTerms": [
+      "albedo",
+      "baseColor",
+      "roughness",
+      "metalness",
+      "normal map",
+      "bump map",
+      "ambient occlusion",
+      "cavity dirt",
+      "edge wear",
+      "clearcoat"
+    ],
+    "lightingTerms": [
+      "key light",
+      "fill light",
+      "rim light",
+      "HDRI/environment reflection",
+      "contact shadow"
+    ],
+    "descriptionRule": "Use measurable 3D graphics terms. Avoid vague words unless they are paired with concrete geometry/material/shader parameters."
+  },
+  "sourceImage": "references/intake/hair-dryer/front.png",
+  "referenceCamera": {
+    "solved": true,
+    "projection": "orthographic archived three-view",
+    "fovDegrees": 30,
+    "aspect": 0.59192348565356,
+    "orientation": {
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0
+    },
+    "positionHint": [
+      -0.56,
+      -0.03,
+      10
+    ],
+    "note": "Archived views own geometric evidence; v1 runtime contract owns pivots, sockets and envelope."
+  },
+  "suitability": "conditional",
+  "scores": {
+    "object_isolation": 3,
+    "silhouette_readability": 3,
+    "depth_inference": 3,
+    "primitive_decomposition": 3,
+    "material_procedurality": 3,
+    "occlusion_risk": 2,
+    "interaction_fit": 3
+  },
+  "preSpecAssessment": {
+    "objectClass": {
+      "primaryType": "faceted handheld hair dryer with articulated controls and model-owned ribbon performance",
+      "primaryDomain": "object",
+      "formLanguage": [
+        "hard-surface",
+        "low-poly",
+        "faceted",
+        "Sakura game appliance"
+      ],
+      "structureKind": [
+        "compound object",
+        "radial shell",
+        "attached handle",
+        "repeated modules"
+      ],
+      "motionPotential": [
+        "fan rotation",
+        "body recoil",
+        "button travel",
+        "slider travel",
+        "five-ribbon propagation and release"
+      ],
+      "materialFamilies": [
+        "molded cream plastic",
+        "molded pink plastic",
+        "mint intake screen",
+        "plum cavity",
+        "soft cord"
+      ],
+      "notes": "Visual mass changes only inside the frozen v1 runtime contract."
+    },
+    "complexity": {
+      "tier": "complex",
+      "scores": {
+        "silhouetteComplexity": 3,
+        "componentCount": 3,
+        "hierarchyDepth": 3,
+        "repetitionDensity": 3,
+        "materialLayerCount": 2,
+        "localDetailDensity": 3,
+        "occlusionRisk": 2,
+        "actionReadinessNeed": 3
+      },
+      "estimatedCounts": {
+        "macroComponents": 6,
+        "mesoComponents": 15,
+        "microFeatureGroups": 18,
+        "materialLayers": 4,
+        "repetitionSystems": 4
+      },
+      "reasoning": [
+        "Nine frozen pivots and eight sockets must retain exact local transforms.",
+        "Outlet louvers, perforations, fan blades, strain ribs and ribbons are count-sensitive systems.",
+        "The animated ribbon release must remain continuous and exactly resettable."
+      ]
+    },
+    "specDepthDecision": {
+      "requiredDepth": "complex",
+      "minimumComponentLevels": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "needsRepetitionSystems": true,
+      "needsMaterialLocalOverrides": true,
+      "needsMultipleReviewViews": true,
+      "needsActionReadyHierarchy": true,
+      "rationale": "Animation-rich handheld prop with exact emitter and reset contracts."
+    },
+    "unknownsToResolveBeforeImplementation": [],
+    "detailInventory": {
+      "scanMethod": "grid-3x3 plus archived three-view review",
+      "targetMinDetails": 18,
+      "details": [
+        {
+          "id": "detail-01",
+          "kind": "contour",
+          "description": "Twelve-sided tapered cream motor barrel remains inside the v1 envelope.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 0.3333333333333333,
+            "height": 0.16666666666666666,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "motor-shell"
+          },
+          "evidenceRef": "references/intake/hair-dryer/front.png",
+          "confidence": 0.94
+        },
+        {
+          "id": "detail-02",
+          "kind": "seam",
+          "description": "Rear mould seam and front transition lip remain countable.",
+          "region": {
+            "x": 0.3333333333333333,
+            "y": 0,
+            "width": 0.3333333333333333,
+            "height": 0.16666666666666666,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "body-seam"
+          },
+          "evidenceRef": "references/intake/hair-dryer/front.png",
+          "confidence": 0.94
+        },
+        {
+          "id": "detail-03",
+          "kind": "contour",
+          "description": "Six-ring concentrator pinches then widens into a flattened outlet.",
+          "region": {
+            "x": 0.6666666666666666,
+            "y": 0,
+            "width": 0.3333333333333333,
+            "height": 0.16666666666666666,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "nozzle-loft"
+          },
+          "evidenceRef": "references/intake/hair-dryer/front.png",
+          "confidence": 0.94
+        },
+        {
+          "id": "detail-04",
+          "kind": "linework",
+          "description": "Five recessed outlet louvers remain evenly spaced.",
+          "region": {
+            "x": 0,
+            "y": 0.16666666666666666,
+            "width": 0.3333333333333333,
+            "height": 0.16666666666666666,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "outlet-louvers"
+          },
+          "evidenceRef": "references/intake/hair-dryer/front.png",
+          "confidence": 0.94
+        },
+        {
+          "id": "detail-05",
+          "kind": "contour",
+          "description": "Cream and mint intake rings preserve the frozen rear pivot.",
+          "region": {
+            "x": 0.3333333333333333,
+            "y": 0.16666666666666666,
+            "width": 0.3333333333333333,
+            "height": 0.16666666666666666,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "rear-intake"
+          },
+          "evidenceRef": "references/intake/hair-dryer/back.png",
+          "confidence": 0.94
+        },
+        {
+          "id": "detail-06",
+          "kind": "linework",
+          "description": "Sixty-nine dark perforations remain bounded by the mint ring.",
+          "region": {
+            "x": 0.6666666666666666,
+            "y": 0.16666666666666666,
+            "width": 0.3333333333333333,
+            "height": 0.16666666666666666,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "perforation-field"
+          },
+          "evidenceRef": "references/intake/hair-dryer/back.png",
+          "confidence": 0.94
+        },
+        {
+          "id": "detail-07",
+          "kind": "contour",
+          "description": "Seven fan blades retain the archived rotor axis.",
+          "region": {
+            "x": 0,
+            "y": 0.3333333333333333,
+            "width": 0.3333333333333333,
+            "height": 0.16666666666666666,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "fan-rotor"
+          },
+          "evidenceRef": "references/intake/hair-dryer/back.png",
+          "confidence": 0.94
+        },
+        {
+          "id": "detail-08",
+          "kind": "contour",
+          "description": "Clipped-corner pink handle retains the archived handle pivot.",
+          "region": {
+            "x": 0.3333333333333333,
+            "y": 0.3333333333333333,
+            "width": 0.3333333333333333,
+            "height": 0.16666666666666666,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "handle-shell"
+          },
+          "evidenceRef": "references/intake/hair-dryer/back.png",
+          "confidence": 0.94
+        },
+        {
+          "id": "detail-09",
+          "kind": "bevel",
+          "description": "Broad faceted shoulder overlaps the barrel without changing the socket.",
+          "region": {
+            "x": 0.6666666666666666,
+            "y": 0.3333333333333333,
+            "width": 0.3333333333333333,
+            "height": 0.16666666666666666,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "handle-shell"
+          },
+          "evidenceRef": "references/intake/hair-dryer/front.png",
+          "confidence": 0.94
+        },
+        {
+          "id": "detail-10",
+          "kind": "contour",
+          "description": "Round cool-shot button retains its translation axis.",
+          "region": {
+            "x": 0,
+            "y": 0.5,
+            "width": 0.3333333333333333,
+            "height": 0.16666666666666666,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "cool-control"
+          },
+          "evidenceRef": "references/intake/hair-dryer/front.png",
+          "confidence": 0.94
+        },
+        {
+          "id": "detail-11",
+          "kind": "ridge",
+          "description": "Two-position slider and thumb groove remain readable.",
+          "region": {
+            "x": 0.3333333333333333,
+            "y": 0.5,
+            "width": 0.3333333333333333,
+            "height": 0.16666666666666666,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "power-slider"
+          },
+          "evidenceRef": "references/intake/hair-dryer/front.png",
+          "confidence": 0.94
+        },
+        {
+          "id": "detail-12",
+          "kind": "contour",
+          "description": "Cream cable collar preserves the archived cable pivot.",
+          "region": {
+            "x": 0.6666666666666666,
+            "y": 0.5,
+            "width": 0.3333333333333333,
+            "height": 0.16666666666666666,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "cable-assembly"
+          },
+          "evidenceRef": "references/intake/hair-dryer/front.png",
+          "confidence": 0.94
+        },
+        {
+          "id": "detail-13",
+          "kind": "ridge",
+          "description": "Six tapered strain-relief ribs remain countable.",
+          "region": {
+            "x": 0,
+            "y": 0.6666666666666666,
+            "width": 0.3333333333333333,
+            "height": 0.16666666666666666,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "strain-relief"
+          },
+          "evidenceRef": "references/intake/hair-dryer/front.png",
+          "confidence": 0.94
+        },
+        {
+          "id": "detail-14",
+          "kind": "contour",
+          "description": "Short eight-sided visible cord stays inside the v1 Box3.",
+          "region": {
+            "x": 0.3333333333333333,
+            "y": 0.6666666666666666,
+            "width": 0.3333333333333333,
+            "height": 0.16666666666666666,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "cable-assembly"
+          },
+          "evidenceRef": "references/intake/hair-dryer/front.png",
+          "confidence": 0.94
+        },
+        {
+          "id": "detail-15",
+          "kind": "contour",
+          "description": "Five solid-section ribbons retain their exact emitter and release behavior.",
+          "region": {
+            "x": 0.6666666666666666,
+            "y": 0.6666666666666666,
+            "width": 0.3333333333333333,
+            "height": 0.16666666666666666,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "ribbon-system"
+          },
+          "evidenceRef": "references/intake/hair-dryer/front.png",
+          "confidence": 0.94
+        },
+        {
+          "id": "detail-16",
+          "kind": "linework",
+          "description": "Stable main, structure and detail ink uses 0.0048, 0.0041 and 0.0033 widths.",
+          "region": {
+            "x": 0,
+            "y": 0.8333333333333334,
+            "width": 0.3333333333333333,
+            "height": 0.16666666666666666,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "materialSurface",
+          "mapsTo": {
+            "type": "material.localOverrides",
+            "ref": "outline-system"
+          },
+          "evidenceRef": "references/intake/hair-dryer/front.png",
+          "confidence": 0.94
+        },
+        {
+          "id": "detail-17",
+          "kind": "gloss",
+          "description": "Cream shell uses restrained satin Toon response.",
+          "region": {
+            "x": 0.3333333333333333,
+            "y": 0.8333333333333334,
+            "width": 0.3333333333333333,
+            "height": 0.16666666666666666,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "materialSurface",
+          "mapsTo": {
+            "type": "material.localOverrides",
+            "ref": "cream-shell"
+          },
+          "evidenceRef": "references/intake/hair-dryer/front.png",
+          "confidence": 0.94
+        },
+        {
+          "id": "detail-18",
+          "kind": "gloss",
+          "description": "Pink structure uses separate highlight and shadow values.",
+          "region": {
+            "x": 0.6666666666666666,
+            "y": 0.8333333333333334,
+            "width": 0.3333333333333333,
+            "height": 0.16666666666666666,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "materialSurface",
+          "mapsTo": {
+            "type": "material.localOverrides",
+            "ref": "pink-shell"
+          },
+          "evidenceRef": "references/intake/hair-dryer/front.png",
+          "confidence": 0.94
+        }
+      ]
+    },
+    "anatomy": {
+      "applies": false,
+      "styleHeads": 0,
+      "proportions": {
+        "headUnit": 0,
+        "torso": 0,
+        "legs": 0,
+        "shoulderWidth": 0,
+        "hipWidth": 0
+      },
+      "pose": {
+        "type": "unassessed",
+        "jointAngles": {}
+      },
+      "faceLandmarks": {
+        "eyeLine": 0,
+        "eyeSpacing": 0,
+        "noseBase": 0,
+        "mouthLine": 0,
+        "hairline": 0
+      },
+      "features": [],
+      "confidence": 0,
+      "note": "Only meaningful when objectClass.primaryDomain is character or hybrid. Set applies=true and fill from forge/stage1_intake/extract_landmarks.py. See grimoire/character/reconstruction.md and grimoire/character/likeness_maximization.md."
+    },
+    "sourceImage": "references/intake/hair-dryer/front.png"
+  },
+  "qualityContract": {
+    "qualityBar": "complex",
+    "definitionOfDone": [
+      "The v2 dryer preserves the v1 envelope, pivots, sockets and animation behavior while replacing smooth toy-like forms with countable low-poly planes and stable three-tier ink."
+    ],
+    "minimumSpecDepth": {
+      "macroComponents": 3,
+      "mesoComponents": 8,
+      "microFeatureGroups": 5,
+      "materialLayers": 3,
+      "repetitionSystems": 1,
+      "reviewViewpoints": 4
+    },
+    "featureGroups": [
+      {
+        "id": "overall-silhouette",
+        "name": "Overall silhouette and proportions",
+        "required": true,
+        "qualityCriteria": [
+          "Bounding shape, dominant curves, negative spaces, and scale relationships are explicitly described."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "model reads as a generic placeholder instead of the reference object",
+          "major proportions are guessed without evidence"
+        ]
+      },
+      {
+        "id": "primary-structure",
+        "name": "Primary structure and hierarchy",
+        "required": true,
+        "qualityCriteria": [
+          "Major parts, joints, seams, contact points, and parent-child relationships are named before code generation."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "large visible parts are merged into one mesh",
+          "component hierarchy is too shallow for the observed complexity"
+        ]
+      },
+      {
+        "id": "attachment-joint-correctness",
+        "name": "Attachment and joint correctness",
+        "required": true,
+        "qualityCriteria": [
+          "Every visible child appendage, branch, limb, handle, connector, tube, cable, horn, wing, leg, or hinged part has an attachment contract with parent socket, localStart/localEnd, contact type, embed/overlap, and gap tolerance."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "child part root floats away from the parent",
+          "branch/limb/tube is centered in space instead of pivoting from its root",
+          "parent-child transform mixes world and local coordinates"
+        ]
+      },
+      {
+        "id": "surface-material-response",
+        "name": "Surface material response",
+        "required": true,
+        "qualityCriteria": [
+          "Albedo zones, roughness, normal/bump/displacement intent, cavity dirt, edge wear, and local overrides are specified where visible.",
+          "Important materials define independent albedo, roughness, height/normal, and AO responses instead of reusing one texture for unrelated PBR channels.",
+          "Surface response is decomposed into macro, meso, and micro frequency bands with scale and amplitude tied to object scale."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "surface looks like flat plastic",
+          "local material variation is missing or not tied to image evidence"
+        ]
+      },
+      {
+        "id": "reference-lookdev",
+        "name": "Reference color, material, and lighting response",
+        "required": true,
+        "qualityCriteria": [
+          "Material-pass names the reference-derived albedo palette, roughness variation, tactile normal/bump/displacement response, and local masks.",
+          "When a source image is available, run reference PBR extraction and require confidence >= 0.7 before treating maps as implementation-ready.",
+          "Lighting-pass names key/fill/rim or environment light, exposure, tone mapping, background, and contact shadow behavior.",
+          "Neutral, grazing-angle, and reference-matched renders prove that surface relief survives relighting and is not painted into albedo."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "model has acceptable shape but reads as flat shaded or plastic",
+          "colors are a generic average instead of reference-observed local color zones",
+          "lighting is evenly ambient and cannot reproduce the source value range"
+        ]
+      }
+    ],
+    "visualDeltaChecks": [
+      "silhouette and negative-space delta",
+      "component hierarchy depth delta",
+      "repetition density and distribution delta",
+      "material albedo/roughness/normal response delta",
+      "local feature placement and scale delta"
+    ],
+    "antiShallowSpecRules": [
+      "Do not proceed to code if qualityContract.qualityBar is unassessed.",
+      "Do not proceed to code if the spec only contains a root component for a moderate or complex object.",
+      "Do not proceed to code if required featureGroups are not represented by componentTree, materials, or repetitionSystems.",
+      "Do not proceed to code if visible local features are described only in prose and not attached to components/materials/evidenceRefs.",
+      "Do not proceed past structural-pass if attached child parts lack attachment.parentSocket, localStart, localEnd, embedDepth/overlap, and gapTolerance.",
+      "Do not pass material look-dev when albedo is reused as roughness, height, normal, or AO.",
+      "Do not pass material look-dev without macro, meso, and micro surface frequency bands for close-up materials.",
+      "Do not pass reference-fidelity material look-dev from a source image without usable referencePbr maps or an explicit documented limitation.",
+      "Do not patch a spec with extracted PBR maps when extraction confidence is below the target threshold unless the user explicitly accepts lower fidelity.",
+      "Do not place adjacent separate-geometry parts below 0.02 world-unit seam overlap (source: grimoire/build/geometry_patterns.md).",
+      "Do not satisfy raised or recessed relief, fasteners, or grip structure with a map alone when the feature affects form; use geometry or displacement (source: grimoire/build/geometry_patterns.md).",
+      "Adjacent components must overlap by at least 0.02 world units at shared seams (source: grimoire/build/geometry_patterns.md).",
+      "Raised or recessed relief and fasteners must be geometry, instanced micro-parts, or displacement; a map alone is an approximation (source: grimoire/build/geometry_patterns.md)."
+    ],
+    "mustNotDo": [
+      "Do not proceed to code if qualityContract.qualityBar is unassessed.",
+      "Do not proceed to code if the spec only contains a root component for a moderate or complex object.",
+      "Do not proceed to code if required featureGroups are not represented by componentTree, materials, or repetitionSystems.",
+      "Do not proceed to code if visible local features are described only in prose and not attached to components/materials/evidenceRefs.",
+      "Do not proceed past structural-pass if attached child parts lack attachment.parentSocket, localStart, localEnd, embedDepth/overlap, and gapTolerance.",
+      "Do not pass material look-dev when albedo is reused as roughness, height, normal, or AO.",
+      "Do not pass material look-dev without macro, meso, and micro surface frequency bands for close-up materials.",
+      "Do not pass reference-fidelity material look-dev from a source image without usable referencePbr maps or an explicit documented limitation.",
+      "Do not patch a spec with extracted PBR maps when extraction confidence is below the target threshold unless the user explicitly accepts lower fidelity.",
+      "Do not place adjacent separate-geometry parts below 0.02 world-unit seam overlap (source: grimoire/build/geometry_patterns.md).",
+      "Do not satisfy raised or recessed relief, fasteners, or grip structure with a map alone when the feature affects form; use geometry or displacement (source: grimoire/build/geometry_patterns.md).",
+      "Adjacent components must overlap by at least 0.02 world units at shared seams (source: grimoire/build/geometry_patterns.md).",
+      "Raised or recessed relief and fasteners must be geometry, instanced micro-parts, or displacement; a map alone is an approximation (source: grimoire/build/geometry_patterns.md)."
+    ]
+  },
+  "qualityTargets": {
+    "targetFidelity": 0.7,
+    "mustMatch": [
+      "macro silhouette and proportions",
+      "primary material albedo/roughness response",
+      "reference-derived PBR material response at or above 0.7 confidence when source pixels are usable",
+      "most recognizable local features"
+    ],
+    "niceToHave": [
+      "micro scratches, stains, chips, and dirt masks",
+      "secondary lighting match"
+    ],
+    "fpsTarget": 60,
+    "reviewViewpoints": [
+      "front",
+      "three-quarter",
+      "side",
+      "thickness-axis",
+      "long-axis"
+    ]
+  },
+  "selfCorrectLoop": {
+    "enabled": true,
+    "visualAcceptance": {
+      "reviewer": "ai-vision",
+      "threshold": 0.7,
+      "comparisonArtifactRequired": true,
+      "layerScoresRequired": true,
+      "codePixelDiffIsAcceptanceAuthority": false,
+      "scoringRule": "AI vision must inspect a side-by-side reference/render sheet and score the current pass from 0 to 1. Pixel-diff code may assist diagnostics but cannot approve a pass.",
+      "requiredLayerScores": [
+        "silhouetteProportion",
+        "componentStructure",
+        "formDetail",
+        "materialSurface",
+        "lightingCamera"
+      ],
+      "featureReviewPolicy": {
+        "enabled": true,
+        "reviewUnit": "semantic-subsystem",
+        "maxCriticalFeaturesPerPass": 5,
+        "maxImportantFeaturesPerPass": 3,
+        "criticalDefaultThreshold": 0.8,
+        "importantAverageThreshold": 0.65,
+        "adaptiveEscalation": true,
+        "singleImagePairOnly": true,
+        "selectionRule": "Choose only the most visually salient, identity-defining, user-prioritized, or high-risk semantic systems. Group repeated parts instead of reviewing every mesh. AI vision scores every selected feature from the same full reference/render pair."
+      }
+    },
+    "reviewAfterPasses": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "surface-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "allowedActions": [
+      "continue",
+      "refine-spec",
+      "refine-code",
+      "request-input",
+      "stop"
+    ],
+    "specRefineTriggers": [
+      "missing component",
+      "wrong primitive family",
+      "wrong proportions",
+      "material layer under-specified",
+      "local feature not traceable to viewEvidence",
+      "reference ambiguity discovered during implementation"
+    ],
+    "codeRefineTriggers": [
+      "spec is adequate but generated geometry/material does not match",
+      "browser render differs from reference",
+      "performance budget exceeded",
+      "lighting hides geometry or material response"
+    ],
+    "stopCriteria": [
+      "target fidelity reached or user accepts current approximation",
+      "remaining gaps require new reference images or manual art"
+    ],
+    "screenshotPolicy": {
+      "requiredForPasses": [
+        "blockout",
+        "structural-pass",
+        "form-refinement",
+        "material-pass",
+        "surface-pass",
+        "lighting-pass",
+        "interaction-pass"
+      ],
+      "preferredCapture": "in-app-browser-screenshot",
+      "fallbackCapture": "user-supplied-screenshot-path",
+      "minimumEvidence": "Each visual pass needs a reference image, rendered screenshot, side-by-side comparison sheet, AI vision score, layer scores, and critique before choosing continue.",
+      "reviewPairRule": "Compare the same camera/viewpoint whenever possible; do not judge a front reference against a random render angle.",
+      "acceptanceAuthority": "AI vision review of the comparison sheet. Code-generated pixel similarity is not sufficient evidence."
+    }
+  },
+  "featureReviewTargets": [
+    {
+      "id": "dryer-silhouette",
+      "name": "Barrel, nozzle and handle silhouette",
+      "tier": "critical",
+      "passIds": [
+        "blockout"
+      ],
+      "minimumScore": 0.82,
+      "mustPass": true,
+      "componentRefs": [
+        "body-assembly",
+        "nozzle-assembly",
+        "handle-assembly"
+      ],
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ]
+    },
+    {
+      "id": "nozzle-intake-identity",
+      "name": "Flattened nozzle and layered rear intake",
+      "tier": "critical",
+      "passIds": [
+        "structural-pass"
+      ],
+      "minimumScore": 0.82,
+      "mustPass": true,
+      "componentRefs": [
+        "nozzle-assembly",
+        "rear-assembly"
+      ],
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ]
+    },
+    {
+      "id": "control-and-cable-layout",
+      "name": "Handle controls and cable boot",
+      "tier": "critical",
+      "passIds": [
+        "form-refinement"
+      ],
+      "minimumScore": 0.82,
+      "mustPass": true,
+      "componentRefs": [
+        "handle-assembly",
+        "cable-assembly"
+      ],
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ]
+    },
+    {
+      "id": "toon-material-system",
+      "name": "Cream, pink, mint and plum Toon response",
+      "tier": "critical",
+      "passIds": [
+        "material-pass"
+      ],
+      "minimumScore": 0.82,
+      "mustPass": true,
+      "componentRefs": [
+        "motor-shell",
+        "handle-shell",
+        "rear-intake"
+      ],
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ]
+    },
+    {
+      "id": "outline-hierarchy",
+      "name": "Stable three-tier irregular ink",
+      "tier": "critical",
+      "passIds": [
+        "lighting-pass"
+      ],
+      "minimumScore": 0.82,
+      "mustPass": true,
+      "componentRefs": [
+        "outline-system"
+      ],
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ]
+    },
+    {
+      "id": "frozen-animation-rig",
+      "name": "Frozen pivots, sockets and ribbon behavior",
+      "tier": "critical",
+      "passIds": [
+        "interaction-pass"
+      ],
+      "minimumScore": 0.82,
+      "mustPass": true,
+      "componentRefs": [
+        "performance-rig",
+        "ribbon-system"
+      ],
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ]
+    }
+  ],
+  "sculptPipeline": {
+    "passGateMode": "locked-sequential",
+    "passOrder": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "surface-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "currentPass": "complete",
+    "completedPasses": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "surface-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "lastCompletedPass": "optimization-pass",
+    "blockedReason": "all build passes completed",
+    "nextRequiredEvidence": []
+  },
+  "lookDevTargets": {
+    "qualityPriority": "reference-fidelity",
+    "materialPass": {
+      "albedoPaletteRequired": true,
+      "roughnessVariationRequired": true,
+      "normalOrBumpRequired": true,
+      "localOverridesRequired": true,
+      "minimumTextureResolution": 1024,
+      "preferredTextureResolution": 2048,
+      "independentMapChannels": [
+        "albedo",
+        "roughness",
+        "height",
+        "normal",
+        "ambient-occlusion"
+      ],
+      "requiredSurfaceFrequencyBands": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "geometryReliefRequiredWhenSilhouetteAffected": true,
+      "referencePbrExtraction": {
+        "requiredWhenSourceImagePresent": true,
+        "targetThreshold": 0.7,
+        "stopOnLowConfidence": true,
+        "script": "forge/stage1_intake/extract_pbr_evidence.py",
+        "acceptedLimitation": "single-image extraction is reference-derived inference, not exact photogrammetry"
+      },
+      "mustAvoid": [
+        "single flat albedo per material",
+        "uniform roughness",
+        "albedo texture reused as roughness/height/normal/AO",
+        "single-frequency random noise",
+        "plastic-looking smooth bark, stone, cloth, foliage, or aged material",
+        "local color/detail described only in prose without material masks",
+        "claiming exact PBR recovery when confidence is below the target threshold"
+      ]
+    },
+    "lightingPass": {
+      "requiredTerms": [
+        "key light",
+        "fill light",
+        "rim or environment light",
+        "exposure",
+        "tone mapping",
+        "background",
+        "contact shadow"
+      ],
+      "mustAvoid": [
+        "ambient-only lighting",
+        "flat value range",
+        "missing contact shadow",
+        "reference lighting copied without separating material readability"
+      ]
+    },
+    "screenshotReview": [
+      "Compare albedo palette and local color zones.",
+      "Compare roughness/normal/bump response under light.",
+      "Compare cavity dirt, edge wear, stains, moss, scratches, or other local masks.",
+      "Compare key/fill/rim structure, exposure, tone mapping, background, and contact shadows.",
+      "Capture a neutral-light render to verify material readability without reference lighting.",
+      "Capture a grazing-light close-up to expose flat normals, uniform roughness, tiling, and plastic highlights.",
+      "Capture a reference-matched render from the same camera framing as the source."
+    ]
+  },
+  "actionReadiness": {
+    "contract": "Every macro/meso component should be generated as a stable named Object3D pivot node with a mesh child, action metadata, optional sockets, collider proxy, and destruction metadata.",
+    "defaultRigType": "action-ready-static-rig",
+    "rootMotionNode": "root",
+    "requiredComponentFields": [
+      "id",
+      "parent",
+      "transform",
+      "attachment for child appendages, connectors, limbs, tubes, handles, legs, horns, wings, branches, or cables",
+      "actionProfile.animationRole",
+      "actionProfile.pivot",
+      "actionProfile.collider",
+      "actionProfile.destruction"
+    ],
+    "transformChannels": [
+      "translate",
+      "rotate",
+      "scale",
+      "bend",
+      "twist",
+      "detach",
+      "visibility",
+      "material-state"
+    ],
+    "authoringRules": [
+      "Do not collapse independently movable parts into one mesh.",
+      "Put transforms on component pivot groups, not only on raw meshes.",
+      "For attached child parts, put the pivot at the semantic root/socket and build visible geometry from localStart to localEnd.",
+      "Represent hinge, socket, detachable, and breakable intent even when no animation is implemented yet.",
+      "Use simplified collider proxies for runtime physics instead of visual mesh colliders by default."
+    ],
+    "destructionPolicy": {
+      "defaultBreakable": false,
+      "fractureGroupNaming": "Use stable semantic names such as body-shell, left-hinge, glass-panel, branch-segment.",
+      "debrisStrategy": "Prefer detachable component groups and a small number of procedural fragments over random mesh explosion."
+    }
+  },
+  "assumptions": [
+    "Internal motor and heater remain omitted.",
+    "Archived v1 Box3 and local transforms are compatibility truth.",
+    "GPT Image 2 turn-sheet generation remains pending after bounded endpoint timeouts."
+  ],
+  "coordinateFrame": {
+    "front": "+Z faces the handle controls",
+    "up": "+Y with visible cord ending at Y=-2.31",
+    "scaleReference": "archived v1 full-tree bounds 4.0121616125 x 4.5649999738 x 1.8099999428"
+  },
+  "silhouette": {
+    "boundingShape": "horizontal barrel and nozzle over a long vertical handle",
+    "aspectRatios": [
+      0.8788959474260678,
+      0.39649507119386634
+    ],
+    "symmetry": "radial barrel with asymmetric lower handle",
+    "dominantCurves": [
+      "faceted barrel",
+      "pinched nozzle loft",
+      "clipped handle"
+    ],
+    "negativeSpaces": [
+      "handle-to-nozzle undercut",
+      "outlet recess",
+      "rear perforations"
+    ],
+    "landmarks": [
+      "body Y=1.35",
+      "handle X=0.45",
+      "emitter X=-2.43",
+      "rear pivot X=1.25"
+    ]
+  },
+  "viewEvidence": [
+    {
+      "id": "front-view",
+      "view": "front",
+      "imagePath": "references/intake/hair-dryer/front.png",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "barrel/nozzle silhouette",
+        "handle controls",
+        "cable boot"
+      ],
+      "confidence": 0.98
+    },
+    {
+      "id": "side-view",
+      "view": "side",
+      "imagePath": "references/intake/hair-dryer/side.png",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "barrel depth",
+        "handle depth",
+        "outlet flattening"
+      ],
+      "confidence": 0.97
+    },
+    {
+      "id": "back-view",
+      "view": "back",
+      "imagePath": "references/intake/hair-dryer/back.png",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "mint intake ring",
+        "perforations",
+        "fan axis"
+      ],
+      "confidence": 0.98
+    }
+  ],
+  "componentTree": [
+    {
+      "id": "root",
+      "name": "Hair Dryer Runtime Root",
+      "level": "macro",
+      "role": "container",
+      "importance": 1,
+      "confidence": 0.96,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rigid low-poly hard-surface assembly with broad planes and stable overlap.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": null,
+      "attachment": null,
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 1,
+        "units": "relative",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "root",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": null,
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "root",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "base"
+        }
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "detail-01"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.12,
+        "microRoughness": 0.04,
+        "bumpAmplitude": 0.006,
+        "normalPattern": "stable molded response",
+        "displacementPattern": "none",
+        "occlusionPattern": "seams and contact overlaps",
+        "edgeWearPattern": "restrained chamfer highlight",
+        "notes": "Broad low-poly planes remain dominant."
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "detail-01",
+          "kind": "construction",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(247, 234, 214, 1)",
+        "secondaryAlbedo": "rgba(232, 167, 183, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      }
+    },
+    {
+      "id": "body-assembly",
+      "name": "Faceted Motor Body",
+      "level": "macro",
+      "role": "body",
+      "importance": 0.9,
+      "confidence": 0.96,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rigid low-poly hard-surface assembly with broad planes and stable overlap.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "root",
+      "attachment": {
+        "parentSocket": "root-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.04,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.025,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "front-view",
+          "side-view",
+          "back-view"
+        ]
+      },
+      "dimensions": {
+        "width": 2.52,
+        "height": 1.64,
+        "depth": 1.64,
+        "units": "world",
+        "confidence": 1
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "body-recoil",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            1.35,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "cylinder",
+          "offset": [
+            0,
+            1.35,
+            0
+          ],
+          "scale": [
+            2.52,
+            1.64,
+            1.64
+          ],
+          "isTrigger": false
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "body-assembly",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "base"
+        }
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "detail-01",
+        "detail-02"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.12,
+        "microRoughness": 0.04,
+        "bumpAmplitude": 0.006,
+        "normalPattern": "stable molded response",
+        "displacementPattern": "none",
+        "occlusionPattern": "seams and contact overlaps",
+        "edgeWearPattern": "restrained chamfer highlight",
+        "notes": "Broad low-poly planes remain dominant."
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "detail-01",
+          "kind": "construction",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "detail-02",
+          "kind": "construction",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(247, 234, 214, 1)",
+        "secondaryAlbedo": "rgba(232, 167, 183, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      }
+    },
+    {
+      "id": "nozzle-assembly",
+      "name": "Pinched Concentrator",
+      "level": "macro",
+      "role": "nozzle",
+      "importance": 0.9,
+      "confidence": 0.96,
+      "primitive": "curve-sweep",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rigid low-poly hard-surface assembly with broad planes and stable overlap.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "body-assembly",
+      "attachment": {
+        "parentSocket": "body-assembly-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.04,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.025,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "front-view",
+          "side-view",
+          "back-view"
+        ]
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 1,
+        "units": "relative",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "nozzle-recoil",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": null,
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "nozzle-assembly",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "base"
+        }
+      },
+      "material": "pink-shell",
+      "materialLayers": [
+        "pink-shell"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "detail-03",
+        "detail-04"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.12,
+        "microRoughness": 0.04,
+        "bumpAmplitude": 0.006,
+        "normalPattern": "stable molded response",
+        "displacementPattern": "none",
+        "occlusionPattern": "seams and contact overlaps",
+        "edgeWearPattern": "restrained chamfer highlight",
+        "notes": "Broad low-poly planes remain dominant."
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "detail-03",
+          "kind": "construction",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "detail-04",
+          "kind": "construction",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(247, 234, 214, 1)",
+        "secondaryAlbedo": "rgba(232, 167, 183, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      }
+    },
+    {
+      "id": "rear-assembly",
+      "name": "Rear Intake Assembly",
+      "level": "macro",
+      "role": "intake",
+      "importance": 0.9,
+      "confidence": 0.96,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rigid low-poly hard-surface assembly with broad planes and stable overlap.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "body-assembly",
+      "attachment": {
+        "parentSocket": "body-assembly-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.04,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.025,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "front-view",
+          "side-view",
+          "back-view"
+        ]
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 1,
+        "units": "relative",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "fan-intake",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            1.25,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": null,
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "rear-assembly",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "base"
+        }
+      },
+      "material": "mint-intake",
+      "materialLayers": [
+        "mint-intake"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "detail-05",
+        "detail-06",
+        "detail-07"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.12,
+        "microRoughness": 0.04,
+        "bumpAmplitude": 0.006,
+        "normalPattern": "stable molded response",
+        "displacementPattern": "none",
+        "occlusionPattern": "seams and contact overlaps",
+        "edgeWearPattern": "restrained chamfer highlight",
+        "notes": "Broad low-poly planes remain dominant."
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "detail-05",
+          "kind": "construction",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "detail-06",
+          "kind": "construction",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "detail-07",
+          "kind": "construction",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(247, 234, 214, 1)",
+        "secondaryAlbedo": "rgba(232, 167, 183, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      }
+    },
+    {
+      "id": "handle-assembly",
+      "name": "Faceted Handle Assembly",
+      "level": "macro",
+      "role": "handle",
+      "importance": 0.9,
+      "confidence": 0.96,
+      "primitive": "extrude",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rigid low-poly hard-surface assembly with broad planes and stable overlap.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "root",
+      "attachment": {
+        "parentSocket": "root-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.04,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.025,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "front-view",
+          "side-view",
+          "back-view"
+        ]
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 1,
+        "units": "relative",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "handle-recoil",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0.45,
+            0.76,
+            0
+          ],
+          "axis": [
+            0,
+            0,
+            1
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": null,
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "handle-assembly",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "base"
+        }
+      },
+      "material": "pink-shell",
+      "materialLayers": [
+        "pink-shell"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "detail-08",
+        "detail-09",
+        "detail-10",
+        "detail-11"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.12,
+        "microRoughness": 0.04,
+        "bumpAmplitude": 0.006,
+        "normalPattern": "stable molded response",
+        "displacementPattern": "none",
+        "occlusionPattern": "seams and contact overlaps",
+        "edgeWearPattern": "restrained chamfer highlight",
+        "notes": "Broad low-poly planes remain dominant."
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "detail-08",
+          "kind": "construction",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "detail-09",
+          "kind": "construction",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "detail-10",
+          "kind": "construction",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "detail-11",
+          "kind": "construction",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(247, 234, 214, 1)",
+        "secondaryAlbedo": "rgba(232, 167, 183, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      }
+    },
+    {
+      "id": "performance-rig",
+      "name": "Ribbon Performance Rig",
+      "level": "macro",
+      "role": "effect",
+      "importance": 0.9,
+      "confidence": 0.96,
+      "primitive": "tube",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rigid low-poly hard-surface assembly with broad planes and stable overlap.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "body-assembly",
+      "attachment": {
+        "parentSocket": "body-assembly-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.04,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.025,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "front-view",
+          "side-view",
+          "back-view"
+        ]
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 1,
+        "units": "relative",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "model-owned-performance",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": null,
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "performance-rig",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "base"
+        }
+      },
+      "material": "pink-shell",
+      "materialLayers": [
+        "pink-shell"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "detail-15"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.12,
+        "microRoughness": 0.04,
+        "bumpAmplitude": 0.006,
+        "normalPattern": "stable molded response",
+        "displacementPattern": "none",
+        "occlusionPattern": "seams and contact overlaps",
+        "edgeWearPattern": "restrained chamfer highlight",
+        "notes": "Broad low-poly planes remain dominant."
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "detail-15",
+          "kind": "construction",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(247, 234, 214, 1)",
+        "secondaryAlbedo": "rgba(232, 167, 183, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      }
+    },
+    {
+      "id": "motor-shell",
+      "name": "Twelve-sided Motor Shell",
+      "level": "meso",
+      "role": "shell",
+      "importance": 0.9,
+      "confidence": 0.96,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rigid low-poly hard-surface assembly with broad planes and stable overlap.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "body-assembly",
+      "attachment": {
+        "parentSocket": "body-assembly-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.04,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.025,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "front-view",
+          "side-view",
+          "back-view"
+        ]
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 1,
+        "units": "relative",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": null,
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "motor-shell",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "base"
+        }
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "detail-01"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.12,
+        "microRoughness": 0.04,
+        "bumpAmplitude": 0.006,
+        "normalPattern": "stable molded response",
+        "displacementPattern": "none",
+        "occlusionPattern": "seams and contact overlaps",
+        "edgeWearPattern": "restrained chamfer highlight",
+        "notes": "Broad low-poly planes remain dominant."
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "detail-01",
+          "kind": "construction",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(247, 234, 214, 1)",
+        "secondaryAlbedo": "rgba(232, 167, 183, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      }
+    },
+    {
+      "id": "body-seam",
+      "name": "Body Mould Seam",
+      "level": "meso",
+      "role": "seam",
+      "importance": 0.9,
+      "confidence": 0.96,
+      "primitive": "torus",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rigid low-poly hard-surface assembly with broad planes and stable overlap.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "body-assembly",
+      "attachment": {
+        "parentSocket": "body-assembly-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.04,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.025,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "front-view",
+          "side-view",
+          "back-view"
+        ]
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 1,
+        "units": "relative",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": null,
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "body-seam",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "base"
+        }
+      },
+      "material": "pink-shell",
+      "materialLayers": [
+        "pink-shell"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "detail-02"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.12,
+        "microRoughness": 0.04,
+        "bumpAmplitude": 0.006,
+        "normalPattern": "stable molded response",
+        "displacementPattern": "none",
+        "occlusionPattern": "seams and contact overlaps",
+        "edgeWearPattern": "restrained chamfer highlight",
+        "notes": "Broad low-poly planes remain dominant."
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "detail-02",
+          "kind": "construction",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(247, 234, 214, 1)",
+        "secondaryAlbedo": "rgba(232, 167, 183, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      }
+    },
+    {
+      "id": "nozzle-loft",
+      "name": "Six-ring Nozzle Loft",
+      "level": "meso",
+      "role": "shell",
+      "importance": 0.9,
+      "confidence": 0.96,
+      "primitive": "curve-sweep",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rigid low-poly hard-surface assembly with broad planes and stable overlap.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "nozzle-assembly",
+      "attachment": {
+        "parentSocket": "nozzle-assembly-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.04,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.025,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "front-view",
+          "side-view",
+          "back-view"
+        ]
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 1,
+        "units": "relative",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": null,
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "nozzle-loft",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "base"
+        }
+      },
+      "material": "pink-shell",
+      "materialLayers": [
+        "pink-shell"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "detail-03"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.12,
+        "microRoughness": 0.04,
+        "bumpAmplitude": 0.006,
+        "normalPattern": "stable molded response",
+        "displacementPattern": "none",
+        "occlusionPattern": "seams and contact overlaps",
+        "edgeWearPattern": "restrained chamfer highlight",
+        "notes": "Broad low-poly planes remain dominant."
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "detail-03",
+          "kind": "construction",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(247, 234, 214, 1)",
+        "secondaryAlbedo": "rgba(232, 167, 183, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      }
+    },
+    {
+      "id": "outlet-louvers",
+      "name": "Five Outlet Louvers",
+      "level": "meso",
+      "role": "vent",
+      "importance": 0.9,
+      "confidence": 0.96,
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rigid low-poly hard-surface assembly with broad planes and stable overlap.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "nozzle-assembly",
+      "attachment": {
+        "parentSocket": "nozzle-assembly-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.04,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.025,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "front-view",
+          "side-view",
+          "back-view"
+        ]
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 1,
+        "units": "relative",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": null,
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "outlet-louvers",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "base"
+        }
+      },
+      "material": "plum-cavity",
+      "materialLayers": [
+        "plum-cavity"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "detail-04"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.12,
+        "microRoughness": 0.04,
+        "bumpAmplitude": 0.006,
+        "normalPattern": "stable molded response",
+        "displacementPattern": "none",
+        "occlusionPattern": "seams and contact overlaps",
+        "edgeWearPattern": "restrained chamfer highlight",
+        "notes": "Broad low-poly planes remain dominant."
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "detail-04",
+          "kind": "construction",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(247, 234, 214, 1)",
+        "secondaryAlbedo": "rgba(232, 167, 183, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      }
+    },
+    {
+      "id": "rear-intake",
+      "name": "Layered Rear Intake",
+      "level": "meso",
+      "role": "intake",
+      "importance": 0.9,
+      "confidence": 0.96,
+      "primitive": "torus",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rigid low-poly hard-surface assembly with broad planes and stable overlap.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "rear-assembly",
+      "attachment": {
+        "parentSocket": "rear-assembly-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.04,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.025,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "front-view",
+          "side-view",
+          "back-view"
+        ]
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 1,
+        "units": "relative",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": null,
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "rear-intake",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "base"
+        }
+      },
+      "material": "mint-intake",
+      "materialLayers": [
+        "mint-intake"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "detail-05"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.12,
+        "microRoughness": 0.04,
+        "bumpAmplitude": 0.006,
+        "normalPattern": "stable molded response",
+        "displacementPattern": "none",
+        "occlusionPattern": "seams and contact overlaps",
+        "edgeWearPattern": "restrained chamfer highlight",
+        "notes": "Broad low-poly planes remain dominant."
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "detail-05",
+          "kind": "construction",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(247, 234, 214, 1)",
+        "secondaryAlbedo": "rgba(232, 167, 183, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      }
+    },
+    {
+      "id": "perforation-field",
+      "name": "Rear Perforation Field",
+      "level": "meso",
+      "role": "vent",
+      "importance": 0.9,
+      "confidence": 0.96,
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rigid low-poly hard-surface assembly with broad planes and stable overlap.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "rear-assembly",
+      "attachment": {
+        "parentSocket": "rear-assembly-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.04,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.025,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "front-view",
+          "side-view",
+          "back-view"
+        ]
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 1,
+        "units": "relative",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": null,
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "perforation-field",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "base"
+        }
+      },
+      "material": "plum-cavity",
+      "materialLayers": [
+        "plum-cavity"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "detail-06"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.12,
+        "microRoughness": 0.04,
+        "bumpAmplitude": 0.006,
+        "normalPattern": "stable molded response",
+        "displacementPattern": "none",
+        "occlusionPattern": "seams and contact overlaps",
+        "edgeWearPattern": "restrained chamfer highlight",
+        "notes": "Broad low-poly planes remain dominant."
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "detail-06",
+          "kind": "construction",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(247, 234, 214, 1)",
+        "secondaryAlbedo": "rgba(232, 167, 183, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      }
+    },
+    {
+      "id": "fan-rotor",
+      "name": "Seven-blade Fan Rotor",
+      "level": "meso",
+      "role": "rotor",
+      "importance": 0.9,
+      "confidence": 0.96,
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rigid low-poly hard-surface assembly with broad planes and stable overlap.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "rear-assembly",
+      "attachment": {
+        "parentSocket": "rear-assembly-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.04,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.025,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "front-view",
+          "side-view",
+          "back-view"
+        ]
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 1,
+        "units": "relative",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "rotating-assembly",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0.075,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": null,
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "fan-rotor",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "base"
+        }
+      },
+      "material": "plum-cavity",
+      "materialLayers": [
+        "plum-cavity"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "detail-07"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.12,
+        "microRoughness": 0.04,
+        "bumpAmplitude": 0.006,
+        "normalPattern": "stable molded response",
+        "displacementPattern": "none",
+        "occlusionPattern": "seams and contact overlaps",
+        "edgeWearPattern": "restrained chamfer highlight",
+        "notes": "Broad low-poly planes remain dominant."
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "detail-07",
+          "kind": "construction",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(247, 234, 214, 1)",
+        "secondaryAlbedo": "rgba(232, 167, 183, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      }
+    },
+    {
+      "id": "handle-shell",
+      "name": "Clipped Handle Shell",
+      "level": "meso",
+      "role": "grip",
+      "importance": 0.9,
+      "confidence": 0.96,
+      "primitive": "extrude",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rigid low-poly hard-surface assembly with broad planes and stable overlap.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "handle-assembly",
+      "attachment": {
+        "parentSocket": "handle-assembly-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.04,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.025,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "front-view",
+          "side-view",
+          "back-view"
+        ]
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 1,
+        "units": "relative",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": null,
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "handle-shell",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "base"
+        }
+      },
+      "material": "pink-shell",
+      "materialLayers": [
+        "pink-shell"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "detail-08",
+        "detail-09"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.12,
+        "microRoughness": 0.04,
+        "bumpAmplitude": 0.006,
+        "normalPattern": "stable molded response",
+        "displacementPattern": "none",
+        "occlusionPattern": "seams and contact overlaps",
+        "edgeWearPattern": "restrained chamfer highlight",
+        "notes": "Broad low-poly planes remain dominant."
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "detail-08",
+          "kind": "construction",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "detail-09",
+          "kind": "construction",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(247, 234, 214, 1)",
+        "secondaryAlbedo": "rgba(232, 167, 183, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      }
+    },
+    {
+      "id": "cool-control",
+      "name": "Cool-shot Control",
+      "level": "meso",
+      "role": "control",
+      "importance": 0.9,
+      "confidence": 0.96,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rigid low-poly hard-surface assembly with broad planes and stable overlap.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "handle-assembly",
+      "attachment": {
+        "parentSocket": "handle-assembly-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.04,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.025,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "front-view",
+          "side-view",
+          "back-view"
+        ]
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 1,
+        "units": "relative",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "button-travel",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            -0.43,
+            0.365
+          ],
+          "axis": [
+            0,
+            0,
+            -1
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": null,
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "cool-control",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "base"
+        }
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "detail-10"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.12,
+        "microRoughness": 0.04,
+        "bumpAmplitude": 0.006,
+        "normalPattern": "stable molded response",
+        "displacementPattern": "none",
+        "occlusionPattern": "seams and contact overlaps",
+        "edgeWearPattern": "restrained chamfer highlight",
+        "notes": "Broad low-poly planes remain dominant."
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "detail-10",
+          "kind": "construction",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(247, 234, 214, 1)",
+        "secondaryAlbedo": "rgba(232, 167, 183, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      }
+    },
+    {
+      "id": "power-slider",
+      "name": "Power Slider",
+      "level": "meso",
+      "role": "control",
+      "importance": 0.9,
+      "confidence": 0.96,
+      "primitive": "extrude",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rigid low-poly hard-surface assembly with broad planes and stable overlap.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "handle-assembly",
+      "attachment": {
+        "parentSocket": "handle-assembly-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.04,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.025,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "front-view",
+          "side-view",
+          "back-view"
+        ]
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 1,
+        "units": "relative",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "slider-travel",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            -1.03,
+            0.365
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": null,
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "power-slider",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "base"
+        }
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "detail-11"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.12,
+        "microRoughness": 0.04,
+        "bumpAmplitude": 0.006,
+        "normalPattern": "stable molded response",
+        "displacementPattern": "none",
+        "occlusionPattern": "seams and contact overlaps",
+        "edgeWearPattern": "restrained chamfer highlight",
+        "notes": "Broad low-poly planes remain dominant."
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "detail-11",
+          "kind": "construction",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(247, 234, 214, 1)",
+        "secondaryAlbedo": "rgba(232, 167, 183, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      }
+    },
+    {
+      "id": "cable-assembly",
+      "name": "Cable Collar and Boot",
+      "level": "meso",
+      "role": "cable",
+      "importance": 0.9,
+      "confidence": 0.96,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rigid low-poly hard-surface assembly with broad planes and stable overlap.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "handle-assembly",
+      "attachment": {
+        "parentSocket": "handle-assembly-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.04,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.025,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "front-view",
+          "side-view",
+          "back-view"
+        ]
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 1,
+        "units": "relative",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "cable-socket",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            -1.96,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": null,
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "cable-assembly",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "base"
+        }
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "detail-12",
+        "detail-13",
+        "detail-14"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.12,
+        "microRoughness": 0.04,
+        "bumpAmplitude": 0.006,
+        "normalPattern": "stable molded response",
+        "displacementPattern": "none",
+        "occlusionPattern": "seams and contact overlaps",
+        "edgeWearPattern": "restrained chamfer highlight",
+        "notes": "Broad low-poly planes remain dominant."
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "detail-12",
+          "kind": "construction",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "detail-13",
+          "kind": "construction",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "detail-14",
+          "kind": "construction",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(247, 234, 214, 1)",
+        "secondaryAlbedo": "rgba(232, 167, 183, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      }
+    },
+    {
+      "id": "strain-relief",
+      "name": "Six Strain-relief Ribs",
+      "level": "micro",
+      "role": "rib",
+      "importance": 0.9,
+      "confidence": 0.96,
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rigid low-poly hard-surface assembly with broad planes and stable overlap.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "cable-assembly",
+      "attachment": {
+        "parentSocket": "cable-assembly-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.04,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.025,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "front-view",
+          "side-view",
+          "back-view"
+        ]
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 1,
+        "units": "relative",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": null,
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "strain-relief",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "base"
+        }
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "detail-13"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.12,
+        "microRoughness": 0.04,
+        "bumpAmplitude": 0.006,
+        "normalPattern": "stable molded response",
+        "displacementPattern": "none",
+        "occlusionPattern": "seams and contact overlaps",
+        "edgeWearPattern": "restrained chamfer highlight",
+        "notes": "Broad low-poly planes remain dominant."
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "detail-13",
+          "kind": "construction",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(247, 234, 214, 1)",
+        "secondaryAlbedo": "rgba(232, 167, 183, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      }
+    },
+    {
+      "id": "ribbon-system",
+      "name": "Five Solid Wind Ribbons",
+      "level": "micro",
+      "role": "effect",
+      "importance": 0.9,
+      "confidence": 0.96,
+      "primitive": "tube",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rigid low-poly hard-surface assembly with broad planes and stable overlap.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "performance-rig",
+      "attachment": {
+        "parentSocket": "performance-rig-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.04,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.025,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "front-view",
+          "side-view",
+          "back-view"
+        ]
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 1,
+        "units": "relative",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "effect-emitter",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": null,
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "ribbon-system",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "base"
+        }
+      },
+      "material": "pink-shell",
+      "materialLayers": [
+        "pink-shell"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "detail-15"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.12,
+        "microRoughness": 0.04,
+        "bumpAmplitude": 0.006,
+        "normalPattern": "stable molded response",
+        "displacementPattern": "none",
+        "occlusionPattern": "seams and contact overlaps",
+        "edgeWearPattern": "restrained chamfer highlight",
+        "notes": "Broad low-poly planes remain dominant."
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "detail-15",
+          "kind": "construction",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(247, 234, 214, 1)",
+        "secondaryAlbedo": "rgba(232, 167, 183, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      }
+    },
+    {
+      "id": "outline-system",
+      "name": "Stable Three-tier Ink",
+      "level": "micro",
+      "role": "material",
+      "importance": 0.9,
+      "confidence": 0.96,
+      "primitive": "extrude",
+      "topologyClass": "conforming-shell",
+      "topologyRationale": "Rigid low-poly hard-surface assembly with broad planes and stable overlap.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "root",
+      "attachment": {
+        "parentSocket": "root-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.04,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.025,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "front-view",
+          "side-view",
+          "back-view"
+        ]
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 1,
+        "units": "relative",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": null,
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "outline-system",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "base"
+        }
+      },
+      "material": "plum-cavity",
+      "materialLayers": [
+        "plum-cavity"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "detail-16"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.12,
+        "microRoughness": 0.04,
+        "bumpAmplitude": 0.006,
+        "normalPattern": "stable molded response",
+        "displacementPattern": "none",
+        "occlusionPattern": "seams and contact overlaps",
+        "edgeWearPattern": "restrained chamfer highlight",
+        "notes": "Broad low-poly planes remain dominant."
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "detail-16",
+          "kind": "construction",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(247, 234, 214, 1)",
+        "secondaryAlbedo": "rgba(232, 167, 183, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      }
+    }
+  ],
+  "materials": [
+    {
+      "id": "cream-shell",
+      "name": "Cream Molded Shell",
+      "type": "toon",
+      "shaderModel": "MeshToonMaterial with project gradient response",
+      "baseColor": "#F7EAD6",
+      "color": "#F7EAD6",
+      "albedo": {
+        "dominant": "#F7EAD6",
+        "secondary": [
+          "#FFF4E4",
+          "#94828B"
+        ],
+        "samplingNotes": "Archived orthographic reference palette."
+      },
+      "colorVariation": {
+        "palette": [
+          "#F7EAD6",
+          "#FFF4E4",
+          "#94828B"
+        ],
+        "pattern": "stable molded value bands",
+        "amplitude": 0.04,
+        "heightCorrelation": 0
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Preserve stable world/object-scale detail; do not stretch micro detail with component scale."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.42,
+          "role": "broad color and height breakup"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.22,
+          "role": "ridges, pores, grain, dents, or equivalent visible relief"
+        },
+        {
+          "id": "micro",
+          "frequency": 56,
+          "amplitude": 0.08,
+          "role": "highlight breakup visible under grazing light"
+        }
+      ],
+      "roughness": {
+        "base": 0.32,
+        "variation": 0.06,
+        "map": "independent roughness evidence",
+        "localResponse": "higher in cavities, lower on facet crowns"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "pattern": "independent molded micro-normal",
+        "strength": 0.06,
+        "scale": 32,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "restrained molded micrograin",
+        "amplitude": 0.006,
+        "scale": 64
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.28,
+        "contactShadowBias": 0.3,
+        "notes": "nozzle seams, intake stack and control recesses"
+      },
+      "wear": {
+        "edgeWear": 0.01,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0.01,
+        "cavityBias": 0.08,
+        "color": "#443943"
+      },
+      "localOverrides": [
+        {
+          "id": "cream-shell-facet-response",
+          "mask": "object-space facet normal",
+          "response": "two to three stable Toon bands"
+        }
+      ],
+      "shaderNotes": [
+        "Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.",
+        "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.",
+        "Use normal/bump/displacement only when they map to observed surface relief.",
+        "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."
+      ],
+      "notes": "Replace with image-derived color, roughness, noise, and edge-wear notes.",
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.86,
+        "estimatedFidelity": 0.86,
+        "sourceImage": "references/intake/hair-dryer/front.png",
+        "maps": {
+          "albedo": {
+            "path": "docs/sculpt-specs-v2/hair-dryer/pbr/cream-shell/cream-shell_albedo.png"
+          },
+          "roughness": {
+            "path": "docs/sculpt-specs-v2/hair-dryer/pbr/cream-shell/cream-shell_roughness.png"
+          },
+          "height": {
+            "path": "docs/sculpt-specs-v2/hair-dryer/pbr/cream-shell/cream-shell_height.png"
+          },
+          "normal": {
+            "path": "docs/sculpt-specs-v2/hair-dryer/pbr/cream-shell/cream-shell_normal.png"
+          },
+          "ao": {
+            "path": "docs/sculpt-specs-v2/hair-dryer/pbr/cream-shell/cream-shell_ao.png"
+          }
+        },
+        "limitation": "Single-image evidence estimates response and does not claim measured physical channels."
+      }
+    },
+    {
+      "id": "pink-shell",
+      "name": "Cherry Pink Structure",
+      "type": "toon",
+      "shaderModel": "MeshToonMaterial with project gradient response",
+      "baseColor": "#E8A7B7",
+      "color": "#E8A7B7",
+      "albedo": {
+        "dominant": "#E8A7B7",
+        "secondary": [
+          "#F3C1CC",
+          "#A96F86"
+        ],
+        "samplingNotes": "Archived orthographic reference palette."
+      },
+      "colorVariation": {
+        "palette": [
+          "#E8A7B7",
+          "#F3C1CC",
+          "#A96F86"
+        ],
+        "pattern": "stable molded value bands",
+        "amplitude": 0.04,
+        "heightCorrelation": 0
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Preserve stable world/object-scale detail; do not stretch micro detail with component scale."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.42,
+          "role": "broad color and height breakup"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.22,
+          "role": "ridges, pores, grain, dents, or equivalent visible relief"
+        },
+        {
+          "id": "micro",
+          "frequency": 56,
+          "amplitude": 0.08,
+          "role": "highlight breakup visible under grazing light"
+        }
+      ],
+      "roughness": {
+        "base": 0.34,
+        "variation": 0.06,
+        "map": "independent roughness evidence",
+        "localResponse": "higher in cavities, lower on facet crowns"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "pattern": "independent molded micro-normal",
+        "strength": 0.06,
+        "scale": 32,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "restrained molded micrograin",
+        "amplitude": 0.006,
+        "scale": 64
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.28,
+        "contactShadowBias": 0.3,
+        "notes": "nozzle seams, intake stack and control recesses"
+      },
+      "wear": {
+        "edgeWear": 0.01,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0.01,
+        "cavityBias": 0.08,
+        "color": "#443943"
+      },
+      "localOverrides": [
+        {
+          "id": "pink-shell-facet-response",
+          "mask": "object-space facet normal",
+          "response": "two to three stable Toon bands"
+        }
+      ],
+      "shaderNotes": [
+        "Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.",
+        "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.",
+        "Use normal/bump/displacement only when they map to observed surface relief.",
+        "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."
+      ],
+      "notes": "Replace with image-derived color, roughness, noise, and edge-wear notes.",
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.86,
+        "estimatedFidelity": 0.86,
+        "sourceImage": "references/intake/hair-dryer/front.png",
+        "maps": {
+          "albedo": {
+            "path": "docs/sculpt-specs-v2/hair-dryer/pbr/pink-shell/pink-shell_albedo.png"
+          },
+          "roughness": {
+            "path": "docs/sculpt-specs-v2/hair-dryer/pbr/pink-shell/pink-shell_roughness.png"
+          },
+          "height": {
+            "path": "docs/sculpt-specs-v2/hair-dryer/pbr/pink-shell/pink-shell_height.png"
+          },
+          "normal": {
+            "path": "docs/sculpt-specs-v2/hair-dryer/pbr/pink-shell/pink-shell_normal.png"
+          },
+          "ao": {
+            "path": "docs/sculpt-specs-v2/hair-dryer/pbr/pink-shell/pink-shell_ao.png"
+          }
+        },
+        "limitation": "Single-image evidence estimates response and does not claim measured physical channels."
+      }
+    },
+    {
+      "id": "mint-intake",
+      "name": "Mint Intake",
+      "type": "toon",
+      "shaderModel": "MeshToonMaterial with project gradient response",
+      "baseColor": "#BFE1DA",
+      "color": "#BFE1DA",
+      "albedo": {
+        "dominant": "#BFE1DA",
+        "secondary": [
+          "#D7EEE7",
+          "#789796"
+        ],
+        "samplingNotes": "Archived orthographic reference palette."
+      },
+      "colorVariation": {
+        "palette": [
+          "#BFE1DA",
+          "#D7EEE7",
+          "#789796"
+        ],
+        "pattern": "stable molded value bands",
+        "amplitude": 0.04,
+        "heightCorrelation": 0
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Preserve stable world/object-scale detail; do not stretch micro detail with component scale."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.42,
+          "role": "broad color and height breakup"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.22,
+          "role": "ridges, pores, grain, dents, or equivalent visible relief"
+        },
+        {
+          "id": "micro",
+          "frequency": 56,
+          "amplitude": 0.08,
+          "role": "highlight breakup visible under grazing light"
+        }
+      ],
+      "roughness": {
+        "base": 0.56,
+        "variation": 0.06,
+        "map": "independent roughness evidence",
+        "localResponse": "higher in cavities, lower on facet crowns"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "pattern": "independent molded micro-normal",
+        "strength": 0.06,
+        "scale": 32,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "restrained molded micrograin",
+        "amplitude": 0.006,
+        "scale": 64
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.28,
+        "contactShadowBias": 0.3,
+        "notes": "nozzle seams, intake stack and control recesses"
+      },
+      "wear": {
+        "edgeWear": 0.01,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0.01,
+        "cavityBias": 0.08,
+        "color": "#443943"
+      },
+      "localOverrides": [
+        {
+          "id": "mint-intake-facet-response",
+          "mask": "object-space facet normal",
+          "response": "two to three stable Toon bands"
+        }
+      ],
+      "shaderNotes": [
+        "Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.",
+        "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.",
+        "Use normal/bump/displacement only when they map to observed surface relief.",
+        "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."
+      ],
+      "notes": "Replace with image-derived color, roughness, noise, and edge-wear notes.",
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.86,
+        "estimatedFidelity": 0.86,
+        "sourceImage": "references/intake/hair-dryer/front.png",
+        "maps": {
+          "albedo": {
+            "path": "docs/sculpt-specs-v2/hair-dryer/pbr/mint-intake/mint-intake_albedo.png"
+          },
+          "roughness": {
+            "path": "docs/sculpt-specs-v2/hair-dryer/pbr/mint-intake/mint-intake_roughness.png"
+          },
+          "height": {
+            "path": "docs/sculpt-specs-v2/hair-dryer/pbr/mint-intake/mint-intake_height.png"
+          },
+          "normal": {
+            "path": "docs/sculpt-specs-v2/hair-dryer/pbr/mint-intake/mint-intake_normal.png"
+          },
+          "ao": {
+            "path": "docs/sculpt-specs-v2/hair-dryer/pbr/mint-intake/mint-intake_ao.png"
+          }
+        },
+        "limitation": "Single-image evidence estimates response and does not claim measured physical channels."
+      }
+    },
+    {
+      "id": "plum-cavity",
+      "name": "Cold Plum Cavity",
+      "type": "toon",
+      "shaderModel": "MeshToonMaterial with project gradient response",
+      "baseColor": "#4C4A4B",
+      "color": "#4C4A4B",
+      "albedo": {
+        "dominant": "#4C4A4B",
+        "secondary": [
+          "#756F6D",
+          "#33323A"
+        ],
+        "samplingNotes": "Archived orthographic reference palette."
+      },
+      "colorVariation": {
+        "palette": [
+          "#4C4A4B",
+          "#756F6D",
+          "#33323A"
+        ],
+        "pattern": "stable molded value bands",
+        "amplitude": 0.04,
+        "heightCorrelation": 0
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Preserve stable world/object-scale detail; do not stretch micro detail with component scale."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.42,
+          "role": "broad color and height breakup"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.22,
+          "role": "ridges, pores, grain, dents, or equivalent visible relief"
+        },
+        {
+          "id": "micro",
+          "frequency": 56,
+          "amplitude": 0.08,
+          "role": "highlight breakup visible under grazing light"
+        }
+      ],
+      "roughness": {
+        "base": 0.56,
+        "variation": 0.06,
+        "map": "independent roughness evidence",
+        "localResponse": "higher in cavities, lower on facet crowns"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "pattern": "independent molded micro-normal",
+        "strength": 0.06,
+        "scale": 32,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "restrained molded micrograin",
+        "amplitude": 0.006,
+        "scale": 64
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.28,
+        "contactShadowBias": 0.3,
+        "notes": "nozzle seams, intake stack and control recesses"
+      },
+      "wear": {
+        "edgeWear": 0.01,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0.01,
+        "cavityBias": 0.08,
+        "color": "#443943"
+      },
+      "localOverrides": [
+        {
+          "id": "plum-cavity-facet-response",
+          "mask": "object-space facet normal",
+          "response": "two to three stable Toon bands"
+        }
+      ],
+      "shaderNotes": [
+        "Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.",
+        "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.",
+        "Use normal/bump/displacement only when they map to observed surface relief.",
+        "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."
+      ],
+      "notes": "Replace with image-derived color, roughness, noise, and edge-wear notes.",
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.86,
+        "estimatedFidelity": 0.86,
+        "sourceImage": "references/intake/hair-dryer/front.png",
+        "maps": {
+          "albedo": {
+            "path": "docs/sculpt-specs-v2/hair-dryer/pbr/plum-cavity/plum-cavity_albedo.png"
+          },
+          "roughness": {
+            "path": "docs/sculpt-specs-v2/hair-dryer/pbr/plum-cavity/plum-cavity_roughness.png"
+          },
+          "height": {
+            "path": "docs/sculpt-specs-v2/hair-dryer/pbr/plum-cavity/plum-cavity_height.png"
+          },
+          "normal": {
+            "path": "docs/sculpt-specs-v2/hair-dryer/pbr/plum-cavity/plum-cavity_normal.png"
+          },
+          "ao": {
+            "path": "docs/sculpt-specs-v2/hair-dryer/pbr/plum-cavity/plum-cavity_ao.png"
+          }
+        },
+        "limitation": "Single-image evidence estimates response and does not claim measured physical channels."
+      }
+    }
+  ],
+  "repetitionSystems": [
+    {
+      "id": "outlet-louvers-five",
+      "componentRef": "outlet-louvers",
+      "count": 5,
+      "realization": "geometry",
+      "buildsGeometry": true,
+      "geometry": {
+        "primitive": "faceted-bar"
+      },
+      "distribution": "five vertical positions across flattened outlet"
+    },
+    {
+      "id": "rear-perforations-sixty-nine",
+      "componentRef": "perforation-field",
+      "count": 69,
+      "realization": "instanced",
+      "buildsGeometry": true,
+      "geometry": {
+        "primitive": "eight-sided-disc"
+      },
+      "distribution": "bounded radial grid"
+    },
+    {
+      "id": "fan-blades-seven",
+      "componentRef": "fan-rotor",
+      "count": 7,
+      "realization": "geometry",
+      "buildsGeometry": true,
+      "geometry": {
+        "primitive": "faceted-blade"
+      },
+      "distribution": "equal radial angles"
+    },
+    {
+      "id": "strain-ribs-six",
+      "componentRef": "strain-relief",
+      "count": 6,
+      "realization": "geometry",
+      "buildsGeometry": true,
+      "geometry": {
+        "primitive": "tapered-eight-sided-ring"
+      },
+      "distribution": "descending cable axis"
+    },
+    {
+      "id": "wind-ribbons-five",
+      "componentRef": "ribbon-system",
+      "count": 5,
+      "realization": "geometry",
+      "buildsGeometry": true,
+      "geometry": {
+        "primitive": "segmented-solid-ribbon"
+      },
+      "distribution": "five authored emitter anchors"
+    }
+  ],
+  "buildPasses": [
+    {
+      "id": "blockout",
+      "goal": "Match macro silhouette and proportions.",
+      "componentRefs": [
+        "root",
+        "body-assembly",
+        "nozzle-assembly",
+        "rear-assembly",
+        "handle-assembly",
+        "performance-rig"
+      ],
+      "acceptance": [
+        "Silhouette reads correctly without materials.",
+        "Quality contract has named all required macro feature groups before code generation.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "structural-pass",
+      "goal": "Build the component hierarchy implied by the pre-spec complexity assessment.",
+      "componentRefs": [
+        "root",
+        "body-assembly",
+        "nozzle-assembly",
+        "rear-assembly",
+        "handle-assembly",
+        "performance-rig"
+      ],
+      "acceptance": [
+        "Macro, meso, and repeated structures meet qualityContract.minimumSpecDepth.",
+        "Parent-child relations, joints, seams, sockets, and contact points are explicit.",
+        "Every attached child appendage/connector has parentSocket, localStart/localEnd, contactType, embedDepth or overlap, and gapTolerance.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "form-refinement",
+      "goal": "Refine shape, deformation, bevels, tapers, curves, asymmetry, and visible local geometry.",
+      "componentRefs": [
+        "root",
+        "body-assembly",
+        "nozzle-assembly",
+        "rear-assembly",
+        "handle-assembly",
+        "performance-rig",
+        "motor-shell",
+        "body-seam",
+        "nozzle-loft",
+        "outlet-louvers",
+        "rear-intake",
+        "perforation-field",
+        "fan-rotor",
+        "handle-shell",
+        "cool-control",
+        "power-slider",
+        "cable-assembly",
+        "strain-relief",
+        "ribbon-system",
+        "outline-system"
+      ],
+      "acceptance": [
+        "Important visible forms are represented in component geometryDescriptor, deformations, localFeatures, or repetitionSystems.",
+        "Endpoint-based child parts are rooted at their attachment sockets and do not visibly float away from parents.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "material-pass",
+      "goal": "Match material color, roughness, bump, and local variation.",
+      "componentRefs": [
+        "root",
+        "body-assembly",
+        "nozzle-assembly",
+        "rear-assembly",
+        "handle-assembly",
+        "performance-rig"
+      ],
+      "acceptance": [
+        "Reference-derived albedo palette records dominant, secondary, and accent colors per visible material.",
+        "Each important material defines roughness variation and at least one normal/bump/displacement response.",
+        "Local material overrides, dirt/wear/stains/moss/chips/scratches or equivalent masks are tied to evidenceRefs.",
+        "Thin, transparent, reflective, wet, or fibrous materials document alpha/transmission/clearcoat/metalness/fiber response when relevant.",
+        "Generated preview uses procedural albedo/roughness/bump texture or vertex color variation instead of one flat color.",
+        "Generated preview uses independent PBR maps at 1024px or higher for the quality-first tier.",
+        "If source pixels are available, referencePbr extraction passed at confidence >= 0.7 or the pass is stopped/requesting better references.",
+        "Macro, meso, and micro surface frequency bands are visible at the intended review distance without obvious tiling.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "surface-pass",
+      "goal": "Add procedural surface locality such as normal/bump/displacement, AO, dirt, stains, chips, grain, moss, scratches, and wear.",
+      "componentRefs": [
+        "root",
+        "body-assembly",
+        "nozzle-assembly",
+        "rear-assembly",
+        "handle-assembly",
+        "performance-rig"
+      ],
+      "acceptance": [
+        "Every required material feature group has local overrides or surfaceDetail tied to evidenceRefs.",
+        "A grazing-angle close-up proves that normal/height detail breaks highlights naturally and does not read as smooth plastic.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "lighting-pass",
+      "goal": "Make material and form readable under neutral turntable lighting plus optional reference lighting.",
+      "componentRefs": [
+        "root",
+        "body-assembly",
+        "nozzle-assembly",
+        "rear-assembly",
+        "handle-assembly",
+        "performance-rig"
+      ],
+      "acceptance": [
+        "lightingFromPhoto identifies key light direction/color/intensity, fill light, rim or environment light, and ambient color.",
+        "Exposure, tone mapping, background color/gradient, shadow softness, and contact shadow behavior are specified.",
+        "Lighting does not hide geometry/material gaps and screenshots can be compared fairly to the reference.",
+        "Neutral, grazing, and reference-matched lighting checks distinguish material errors from lighting errors.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "interaction-pass",
+      "goal": "Make the model ready for future animation, transformation, physics, or destruction.",
+      "componentRefs": [
+        "root",
+        "body-assembly",
+        "nozzle-assembly",
+        "rear-assembly",
+        "handle-assembly",
+        "performance-rig"
+      ],
+      "acceptance": [
+        "Macro and movable meso components have stable pivot nodes.",
+        "Sockets, collider proxies, and destruction metadata are present for future runtime actions.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "optimization-pass",
+      "goal": "Protect runtime performance after visual fidelity is accepted.",
+      "componentRefs": [
+        "root",
+        "body-assembly",
+        "nozzle-assembly",
+        "rear-assembly",
+        "handle-assembly",
+        "performance-rig"
+      ],
+      "acceptance": [
+        "Triangle count, draw calls, instancing, LOD strategy, and FPS target are documented or verified.",
+        "Repeated detail is instanced or simplified where possible without breaking silhouette/material believability."
+      ]
+    }
+  ],
+  "visualEvidence": [
+    {
+      "timestamp": "2026-08-11T16:13:51.467891+00:00",
+      "passId": "blockout",
+      "estimatedFidelity": 0.87,
+      "aiVisionScore": 0.87,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.88,
+        "componentStructure": 0.86,
+        "formDetail": 0.86,
+        "materialSurface": 0.84,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "dryer-silhouette",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Barrel, flattened nozzle and long handle remain immediately readable."
+        },
+        {
+          "id": "nozzle-intake-identity",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Pinched outlet and layered mint rear intake remain countable."
+        },
+        {
+          "id": "control-and-cable-layout",
+          "score": 0.85,
+          "passed": true,
+          "notes": "Controls and cable boot retain archived positions."
+        },
+        {
+          "id": "outline-hierarchy",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Three stable widths use object-space variation without time shimmer."
+        },
+        {
+          "id": "frozen-animation-rig",
+          "score": 0.93,
+          "passed": true,
+          "notes": "Nine pivots, eight sockets and five ribbon anchors remain compatible."
+        }
+      ],
+      "referenceScreenshot": "docs/history/appliance-model-v1-2026-08-11/screenshots/models/hair-dryer/idle-front.png",
+      "renderScreenshot": "artifacts/appliance-v2/hair-dryer/static/render-off-front.png",
+      "comparisonImage": "artifacts/appliance-v2/hair-dryer/reviews/blockout/comparison.png",
+      "cameraView": "front",
+      "notes": "Manual visual review of stable local render; generated reference endpoint timed out.",
+      "aiVisionNotes": ""
+    },
+    {
+      "timestamp": "2026-08-11T16:15:01.369325+00:00",
+      "passId": "structural-pass",
+      "estimatedFidelity": 0.88,
+      "aiVisionScore": 0.88,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.89,
+        "componentStructure": 0.91,
+        "formDetail": 0.87,
+        "materialSurface": 0.84,
+        "lightingCamera": 0.85
+      },
+      "featureReviews": [
+        {
+          "id": "dryer-silhouette",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Barrel, flattened nozzle and long handle remain immediately readable."
+        },
+        {
+          "id": "nozzle-intake-identity",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Pinched outlet and layered mint rear intake remain countable."
+        },
+        {
+          "id": "control-and-cable-layout",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Controls and cable boot retain archived positions."
+        },
+        {
+          "id": "outline-hierarchy",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Three stable widths use object-space variation without time shimmer."
+        },
+        {
+          "id": "frozen-animation-rig",
+          "score": 0.93,
+          "passed": true,
+          "notes": "Nine pivots, eight sockets and five ribbon anchors remain compatible."
+        }
+      ],
+      "referenceScreenshot": "docs/history/appliance-model-v1-2026-08-11/screenshots/models/hair-dryer/idle-three-quarter.png",
+      "renderScreenshot": "artifacts/appliance-v2/hair-dryer/static/render-off-three-quarter.png",
+      "comparisonImage": "artifacts/appliance-v2/hair-dryer/reviews/structural-pass/comparison.png",
+      "cameraView": "three-quarter",
+      "notes": "Manual visual review of stable local render; generated reference endpoint timed out.",
+      "aiVisionNotes": ""
+    },
+    {
+      "timestamp": "2026-08-11T16:15:01.891850+00:00",
+      "passId": "form-refinement",
+      "estimatedFidelity": 0.89,
+      "aiVisionScore": 0.89,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.91,
+        "componentStructure": 0.91,
+        "formDetail": 0.9,
+        "materialSurface": 0.85,
+        "lightingCamera": 0.86
+      },
+      "featureReviews": [
+        {
+          "id": "dryer-silhouette",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Barrel, flattened nozzle and long handle remain immediately readable."
+        },
+        {
+          "id": "nozzle-intake-identity",
+          "score": 0.89,
+          "passed": true,
+          "notes": "Pinched outlet and layered mint rear intake remain countable."
+        },
+        {
+          "id": "control-and-cable-layout",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Controls and cable boot retain archived positions."
+        },
+        {
+          "id": "outline-hierarchy",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Three stable widths use object-space variation without time shimmer."
+        },
+        {
+          "id": "frozen-animation-rig",
+          "score": 0.93,
+          "passed": true,
+          "notes": "Nine pivots, eight sockets and five ribbon anchors remain compatible."
+        }
+      ],
+      "referenceScreenshot": "docs/history/appliance-model-v1-2026-08-11/screenshots/models/hair-dryer/idle-side.png",
+      "renderScreenshot": "artifacts/appliance-v2/hair-dryer/static/render-off-side.png",
+      "comparisonImage": "artifacts/appliance-v2/hair-dryer/reviews/form-refinement/comparison.png",
+      "cameraView": "side",
+      "notes": "Manual visual review of stable local render; generated reference endpoint timed out.",
+      "aiVisionNotes": ""
+    },
+    {
+      "timestamp": "2026-08-11T16:15:45.812495+00:00",
+      "passId": "material-pass",
+      "estimatedFidelity": 0.88,
+      "aiVisionScore": 0.88,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.9,
+        "componentStructure": 0.9,
+        "formDetail": 0.88,
+        "materialSurface": 0.9,
+        "lightingCamera": 0.86
+      },
+      "featureReviews": [
+        {
+          "id": "dryer-silhouette",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Barrel, flattened nozzle and long handle remain immediately readable."
+        },
+        {
+          "id": "nozzle-intake-identity",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Pinched outlet and layered mint rear intake remain countable."
+        },
+        {
+          "id": "control-and-cable-layout",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Controls and cable boot retain archived positions."
+        },
+        {
+          "id": "toon-material-system",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Cream, pink, mint and plum values remain separated."
+        },
+        {
+          "id": "outline-hierarchy",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Three stable widths use object-space variation without time shimmer."
+        },
+        {
+          "id": "frozen-animation-rig",
+          "score": 0.93,
+          "passed": true,
+          "notes": "Nine pivots, eight sockets and five ribbon anchors remain compatible."
+        }
+      ],
+      "referenceScreenshot": "docs/history/appliance-model-v1-2026-08-11/screenshots/models/hair-dryer/idle-front.png",
+      "renderScreenshot": "artifacts/appliance-v2/hair-dryer/static/render-off-front.png",
+      "comparisonImage": "artifacts/appliance-v2/hair-dryer/reviews/material-pass/comparison.png",
+      "cameraView": "front",
+      "notes": "Manual visual review of stable local render; generated reference endpoint timed out.",
+      "aiVisionNotes": ""
+    },
+    {
+      "timestamp": "2026-08-11T16:16:31.815283+00:00",
+      "passId": "surface-pass",
+      "estimatedFidelity": 0.88,
+      "aiVisionScore": 0.88,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.9,
+        "componentStructure": 0.9,
+        "formDetail": 0.88,
+        "materialSurface": 0.9,
+        "lightingCamera": 0.86
+      },
+      "featureReviews": [
+        {
+          "id": "dryer-silhouette",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Barrel, flattened nozzle and long handle remain immediately readable."
+        },
+        {
+          "id": "nozzle-intake-identity",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Pinched outlet and layered mint rear intake remain countable."
+        },
+        {
+          "id": "control-and-cable-layout",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Controls and cable boot retain archived positions."
+        },
+        {
+          "id": "toon-material-system",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Cream, pink, mint and plum values remain separated."
+        },
+        {
+          "id": "outline-hierarchy",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Three stable widths use object-space variation without time shimmer."
+        },
+        {
+          "id": "frozen-animation-rig",
+          "score": 0.93,
+          "passed": true,
+          "notes": "Nine pivots, eight sockets and five ribbon anchors remain compatible."
+        }
+      ],
+      "referenceScreenshot": "docs/history/appliance-model-v1-2026-08-11/screenshots/models/hair-dryer/idle-front.png",
+      "renderScreenshot": "artifacts/appliance-v2/hair-dryer/static/render-off-front.png",
+      "comparisonImage": "artifacts/appliance-v2/hair-dryer/reviews/surface-pass/comparison.png",
+      "cameraView": "front",
+      "notes": "Manual visual review of stable local render; generated reference endpoint timed out.",
+      "aiVisionNotes": ""
+    },
+    {
+      "timestamp": "2026-08-11T16:16:32.283672+00:00",
+      "passId": "lighting-pass",
+      "estimatedFidelity": 0.87,
+      "aiVisionScore": 0.87,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.9,
+        "componentStructure": 0.9,
+        "formDetail": 0.88,
+        "materialSurface": 0.88,
+        "lightingCamera": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "dryer-silhouette",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Barrel, flattened nozzle and long handle remain immediately readable."
+        },
+        {
+          "id": "nozzle-intake-identity",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Pinched outlet and layered mint rear intake remain countable."
+        },
+        {
+          "id": "control-and-cable-layout",
+          "score": 0.85,
+          "passed": true,
+          "notes": "Controls and cable boot retain archived positions."
+        },
+        {
+          "id": "toon-material-system",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Cream, pink, mint and plum values remain separated."
+        },
+        {
+          "id": "outline-hierarchy",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Three stable widths use object-space variation without time shimmer."
+        },
+        {
+          "id": "frozen-animation-rig",
+          "score": 0.93,
+          "passed": true,
+          "notes": "Nine pivots, eight sockets and five ribbon anchors remain compatible."
+        }
+      ],
+      "referenceScreenshot": "docs/history/appliance-model-v1-2026-08-11/screenshots/models/hair-dryer/idle-three-quarter.png",
+      "renderScreenshot": "artifacts/appliance-v2/hair-dryer/static/render-off-three-quarter.png",
+      "comparisonImage": "artifacts/appliance-v2/hair-dryer/reviews/lighting-pass/comparison.png",
+      "cameraView": "three-quarter",
+      "notes": "Manual visual review of stable local render; generated reference endpoint timed out.",
+      "aiVisionNotes": ""
+    },
+    {
+      "timestamp": "2026-08-11T16:16:32.846622+00:00",
+      "passId": "interaction-pass",
+      "estimatedFidelity": 0.93,
+      "aiVisionScore": 0.93,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.92,
+        "componentStructure": 0.96,
+        "formDetail": 0.92,
+        "materialSurface": 0.9,
+        "lightingCamera": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "dryer-silhouette",
+          "score": 0.92,
+          "passed": true,
+          "notes": "Barrel, flattened nozzle and long handle remain immediately readable."
+        },
+        {
+          "id": "nozzle-intake-identity",
+          "score": 0.93,
+          "passed": true,
+          "notes": "Pinched outlet and layered mint rear intake remain countable."
+        },
+        {
+          "id": "control-and-cable-layout",
+          "score": 0.91,
+          "passed": true,
+          "notes": "Controls and cable boot retain archived positions."
+        },
+        {
+          "id": "toon-material-system",
+          "score": 0.92,
+          "passed": true,
+          "notes": "Cream, pink, mint and plum values remain separated."
+        },
+        {
+          "id": "outline-hierarchy",
+          "score": 0.92,
+          "passed": true,
+          "notes": "Three stable widths use object-space variation without time shimmer."
+        },
+        {
+          "id": "frozen-animation-rig",
+          "score": 1,
+          "passed": true,
+          "notes": "Nine pivots, eight sockets and five ribbon anchors remain compatible."
+        }
+      ],
+      "referenceScreenshot": "docs/history/appliance-model-v1-2026-08-11/screenshots/models/hair-dryer/idle-side.png",
+      "renderScreenshot": "artifacts/appliance-v2/hair-dryer/static/render-off-side.png",
+      "comparisonImage": "artifacts/appliance-v2/hair-dryer/reviews/interaction-pass/comparison.png",
+      "cameraView": "side",
+      "notes": "Manual visual review of stable local render; generated reference endpoint timed out.",
+      "aiVisionNotes": ""
+    },
+    {
+      "timestamp": "2026-08-11T16:16:33.403194+00:00",
+      "passId": "optimization-pass",
+      "estimatedFidelity": 0.92,
+      "aiVisionScore": 0.92,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.92,
+        "componentStructure": 0.96,
+        "formDetail": 0.91,
+        "materialSurface": 0.9,
+        "lightingCamera": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "dryer-silhouette",
+          "score": 0.91,
+          "passed": true,
+          "notes": "Barrel, flattened nozzle and long handle remain immediately readable."
+        },
+        {
+          "id": "nozzle-intake-identity",
+          "score": 0.92,
+          "passed": true,
+          "notes": "Pinched outlet and layered mint rear intake remain countable."
+        },
+        {
+          "id": "control-and-cable-layout",
+          "score": 0.9,
+          "passed": true,
+          "notes": "Controls and cable boot retain archived positions."
+        },
+        {
+          "id": "toon-material-system",
+          "score": 0.91,
+          "passed": true,
+          "notes": "Cream, pink, mint and plum values remain separated."
+        },
+        {
+          "id": "outline-hierarchy",
+          "score": 0.91,
+          "passed": true,
+          "notes": "Three stable widths use object-space variation without time shimmer."
+        },
+        {
+          "id": "frozen-animation-rig",
+          "score": 1,
+          "passed": true,
+          "notes": "Nine pivots, eight sockets and five ribbon anchors remain compatible."
+        }
+      ],
+      "referenceScreenshot": "docs/history/appliance-model-v1-2026-08-11/screenshots/models/hair-dryer/idle-back.png",
+      "renderScreenshot": "artifacts/appliance-v2/hair-dryer/static/render-off-back.png",
+      "comparisonImage": "artifacts/appliance-v2/hair-dryer/reviews/optimization-pass/comparison.png",
+      "cameraView": "back",
+      "notes": "Manual visual review of stable local render; generated reference endpoint timed out.",
+      "aiVisionNotes": ""
+    }
+  ],
+  "reviewHistory": [
+    {
+      "timestamp": "2026-08-11T16:13:51.467891+00:00",
+      "passId": "blockout",
+      "estimatedFidelity": 0.87,
+      "aiVisionScore": 0.87,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.88,
+        "componentStructure": 0.86,
+        "formDetail": 0.86,
+        "materialSurface": 0.84,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "dryer-silhouette",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Barrel, flattened nozzle and long handle remain immediately readable."
+        },
+        {
+          "id": "nozzle-intake-identity",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Pinched outlet and layered mint rear intake remain countable."
+        },
+        {
+          "id": "control-and-cable-layout",
+          "score": 0.85,
+          "passed": true,
+          "notes": "Controls and cable boot retain archived positions."
+        },
+        {
+          "id": "outline-hierarchy",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Three stable widths use object-space variation without time shimmer."
+        },
+        {
+          "id": "frozen-animation-rig",
+          "score": 0.93,
+          "passed": true,
+          "notes": "Nine pivots, eight sockets and five ribbon anchors remain compatible."
+        }
+      ],
+      "action": "continue",
+      "summary": "Macro silhouette preserved; low-poly shell and flattened nozzle read as a hair dryer.",
+      "matched": [
+        "identity silhouette",
+        "frozen runtime hierarchy",
+        "low-poly Sakura materials"
+      ],
+      "mismatches": [
+        "GPT Image 2 turn-sheet unavailable",
+        "pixel IoU against legacy screenshot is not a visual acceptance proxy"
+      ],
+      "specFixes": [],
+      "codeFixes": [
+        "none"
+      ],
+      "evidence": [
+        "artifacts/appliance-v2/hair-dryer/reviews/blockout/comparison.png",
+        "artifacts/appliance-v2/hair-dryer/static/render-off-front.png"
+      ],
+      "mapStrippedRender": "artifacts/appliance-v2/hair-dryer/static/render-off-front.png",
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "long-axis",
+        "thickness-axis"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "docs/history/appliance-model-v1-2026-08-11/screenshots/models/hair-dryer/idle-front.png",
+        "renderScreenshot": "artifacts/appliance-v2/hair-dryer/static/render-off-front.png",
+        "comparisonImage": "artifacts/appliance-v2/hair-dryer/reviews/blockout/comparison.png",
+        "cameraView": "front",
+        "notes": "Manual visual review of stable local render; generated reference endpoint timed out.",
+        "aiVisionNotes": ""
+      }
+    },
+    {
+      "timestamp": "2026-08-11T16:15:01.369325+00:00",
+      "passId": "structural-pass",
+      "estimatedFidelity": 0.88,
+      "aiVisionScore": 0.88,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.89,
+        "componentStructure": 0.91,
+        "formDetail": 0.87,
+        "materialSurface": 0.84,
+        "lightingCamera": 0.85
+      },
+      "featureReviews": [
+        {
+          "id": "dryer-silhouette",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Barrel, flattened nozzle and long handle remain immediately readable."
+        },
+        {
+          "id": "nozzle-intake-identity",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Pinched outlet and layered mint rear intake remain countable."
+        },
+        {
+          "id": "control-and-cable-layout",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Controls and cable boot retain archived positions."
+        },
+        {
+          "id": "outline-hierarchy",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Three stable widths use object-space variation without time shimmer."
+        },
+        {
+          "id": "frozen-animation-rig",
+          "score": 0.93,
+          "passed": true,
+          "notes": "Nine pivots, eight sockets and five ribbon anchors remain compatible."
+        }
+      ],
+      "action": "continue",
+      "summary": "Named body, nozzle, intake, handle, cable and performance groups retain archived attachments.",
+      "matched": [
+        "identity silhouette",
+        "frozen runtime hierarchy",
+        "low-poly Sakura materials"
+      ],
+      "mismatches": [
+        "GPT Image 2 turn-sheet unavailable",
+        "pixel IoU against legacy screenshot is not a visual acceptance proxy"
+      ],
+      "specFixes": [],
+      "codeFixes": [
+        "none"
+      ],
+      "evidence": [
+        "artifacts/appliance-v2/hair-dryer/reviews/structural-pass/comparison.png",
+        "artifacts/appliance-v2/hair-dryer/static/render-off-three-quarter.png"
+      ],
+      "mapStrippedRender": "artifacts/appliance-v2/hair-dryer/static/render-off-front.png",
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "long-axis",
+        "thickness-axis"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "docs/history/appliance-model-v1-2026-08-11/screenshots/models/hair-dryer/idle-three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/hair-dryer/static/render-off-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/hair-dryer/reviews/structural-pass/comparison.png",
+        "cameraView": "three-quarter",
+        "notes": "Manual visual review of stable local render; generated reference endpoint timed out.",
+        "aiVisionNotes": ""
+      }
+    },
+    {
+      "timestamp": "2026-08-11T16:15:01.891850+00:00",
+      "passId": "form-refinement",
+      "estimatedFidelity": 0.89,
+      "aiVisionScore": 0.89,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.91,
+        "componentStructure": 0.91,
+        "formDetail": 0.9,
+        "materialSurface": 0.85,
+        "lightingCamera": 0.86
+      },
+      "featureReviews": [
+        {
+          "id": "dryer-silhouette",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Barrel, flattened nozzle and long handle remain immediately readable."
+        },
+        {
+          "id": "nozzle-intake-identity",
+          "score": 0.89,
+          "passed": true,
+          "notes": "Pinched outlet and layered mint rear intake remain countable."
+        },
+        {
+          "id": "control-and-cable-layout",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Controls and cable boot retain archived positions."
+        },
+        {
+          "id": "outline-hierarchy",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Three stable widths use object-space variation without time shimmer."
+        },
+        {
+          "id": "frozen-animation-rig",
+          "score": 0.93,
+          "passed": true,
+          "notes": "Nine pivots, eight sockets and five ribbon anchors remain compatible."
+        }
+      ],
+      "action": "continue",
+      "summary": "Twelve-sided barrel, six-ring nozzle loft and clipped handle shoulder improve the game silhouette.",
+      "matched": [
+        "identity silhouette",
+        "frozen runtime hierarchy",
+        "low-poly Sakura materials"
+      ],
+      "mismatches": [
+        "GPT Image 2 turn-sheet unavailable",
+        "pixel IoU against legacy screenshot is not a visual acceptance proxy"
+      ],
+      "specFixes": [],
+      "codeFixes": [
+        "none"
+      ],
+      "evidence": [
+        "artifacts/appliance-v2/hair-dryer/reviews/form-refinement/comparison.png",
+        "artifacts/appliance-v2/hair-dryer/static/render-off-side.png"
+      ],
+      "mapStrippedRender": "artifacts/appliance-v2/hair-dryer/static/render-off-front.png",
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "long-axis",
+        "thickness-axis"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "docs/history/appliance-model-v1-2026-08-11/screenshots/models/hair-dryer/idle-side.png",
+        "renderScreenshot": "artifacts/appliance-v2/hair-dryer/static/render-off-side.png",
+        "comparisonImage": "artifacts/appliance-v2/hair-dryer/reviews/form-refinement/comparison.png",
+        "cameraView": "side",
+        "notes": "Manual visual review of stable local render; generated reference endpoint timed out.",
+        "aiVisionNotes": ""
+      }
+    },
+    {
+      "timestamp": "2026-08-11T16:15:45.812495+00:00",
+      "passId": "material-pass",
+      "estimatedFidelity": 0.88,
+      "aiVisionScore": 0.88,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.9,
+        "componentStructure": 0.9,
+        "formDetail": 0.88,
+        "materialSurface": 0.9,
+        "lightingCamera": 0.86
+      },
+      "featureReviews": [
+        {
+          "id": "dryer-silhouette",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Barrel, flattened nozzle and long handle remain immediately readable."
+        },
+        {
+          "id": "nozzle-intake-identity",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Pinched outlet and layered mint rear intake remain countable."
+        },
+        {
+          "id": "control-and-cable-layout",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Controls and cable boot retain archived positions."
+        },
+        {
+          "id": "toon-material-system",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Cream, pink, mint and plum values remain separated."
+        },
+        {
+          "id": "outline-hierarchy",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Three stable widths use object-space variation without time shimmer."
+        },
+        {
+          "id": "frozen-animation-rig",
+          "score": 0.93,
+          "passed": true,
+          "notes": "Nine pivots, eight sockets and five ribbon anchors remain compatible."
+        }
+      ],
+      "action": "continue",
+      "summary": "Cream, pink, mint and plum materials retain separate Toon value bands and extracted PBR evidence.",
+      "matched": [
+        "identity silhouette",
+        "frozen runtime hierarchy",
+        "low-poly Sakura materials"
+      ],
+      "mismatches": [
+        "GPT Image 2 turn-sheet unavailable",
+        "pixel IoU against legacy screenshot is not a visual acceptance proxy"
+      ],
+      "specFixes": [],
+      "codeFixes": [
+        "none"
+      ],
+      "evidence": [
+        "artifacts/appliance-v2/hair-dryer/reviews/material-pass/comparison.png",
+        "artifacts/appliance-v2/hair-dryer/static/render-off-front.png"
+      ],
+      "mapStrippedRender": "artifacts/appliance-v2/hair-dryer/static/render-off-front.png",
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "long-axis",
+        "thickness-axis"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "docs/history/appliance-model-v1-2026-08-11/screenshots/models/hair-dryer/idle-front.png",
+        "renderScreenshot": "artifacts/appliance-v2/hair-dryer/static/render-off-front.png",
+        "comparisonImage": "artifacts/appliance-v2/hair-dryer/reviews/material-pass/comparison.png",
+        "cameraView": "front",
+        "notes": "Manual visual review of stable local render; generated reference endpoint timed out.",
+        "aiVisionNotes": ""
+      }
+    },
+    {
+      "timestamp": "2026-08-11T16:16:31.815283+00:00",
+      "passId": "surface-pass",
+      "estimatedFidelity": 0.88,
+      "aiVisionScore": 0.88,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.9,
+        "componentStructure": 0.9,
+        "formDetail": 0.88,
+        "materialSurface": 0.9,
+        "lightingCamera": 0.86
+      },
+      "featureReviews": [
+        {
+          "id": "dryer-silhouette",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Barrel, flattened nozzle and long handle remain immediately readable."
+        },
+        {
+          "id": "nozzle-intake-identity",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Pinched outlet and layered mint rear intake remain countable."
+        },
+        {
+          "id": "control-and-cable-layout",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Controls and cable boot retain archived positions."
+        },
+        {
+          "id": "toon-material-system",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Cream, pink, mint and plum values remain separated."
+        },
+        {
+          "id": "outline-hierarchy",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Three stable widths use object-space variation without time shimmer."
+        },
+        {
+          "id": "frozen-animation-rig",
+          "score": 0.93,
+          "passed": true,
+          "notes": "Nine pivots, eight sockets and five ribbon anchors remain compatible."
+        }
+      ],
+      "action": "continue",
+      "summary": "Independent roughness, height, normal and AO evidence remains separated across molded surfaces.",
+      "matched": [
+        "identity silhouette",
+        "frozen runtime hierarchy",
+        "low-poly Sakura materials"
+      ],
+      "mismatches": [
+        "GPT Image 2 turn-sheet unavailable",
+        "pixel IoU against legacy screenshot is not a visual acceptance proxy"
+      ],
+      "specFixes": [],
+      "codeFixes": [
+        "none"
+      ],
+      "evidence": [
+        "artifacts/appliance-v2/hair-dryer/reviews/surface-pass/comparison.png",
+        "artifacts/appliance-v2/hair-dryer/static/render-off-front.png"
+      ],
+      "mapStrippedRender": "artifacts/appliance-v2/hair-dryer/static/render-off-front.png",
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "long-axis",
+        "thickness-axis"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "docs/history/appliance-model-v1-2026-08-11/screenshots/models/hair-dryer/idle-front.png",
+        "renderScreenshot": "artifacts/appliance-v2/hair-dryer/static/render-off-front.png",
+        "comparisonImage": "artifacts/appliance-v2/hair-dryer/reviews/surface-pass/comparison.png",
+        "cameraView": "front",
+        "notes": "Manual visual review of stable local render; generated reference endpoint timed out.",
+        "aiVisionNotes": ""
+      }
+    },
+    {
+      "timestamp": "2026-08-11T16:16:32.283672+00:00",
+      "passId": "lighting-pass",
+      "estimatedFidelity": 0.87,
+      "aiVisionScore": 0.87,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.9,
+        "componentStructure": 0.9,
+        "formDetail": 0.88,
+        "materialSurface": 0.88,
+        "lightingCamera": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "dryer-silhouette",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Barrel, flattened nozzle and long handle remain immediately readable."
+        },
+        {
+          "id": "nozzle-intake-identity",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Pinched outlet and layered mint rear intake remain countable."
+        },
+        {
+          "id": "control-and-cable-layout",
+          "score": 0.85,
+          "passed": true,
+          "notes": "Controls and cable boot retain archived positions."
+        },
+        {
+          "id": "toon-material-system",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Cream, pink, mint and plum values remain separated."
+        },
+        {
+          "id": "outline-hierarchy",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Three stable widths use object-space variation without time shimmer."
+        },
+        {
+          "id": "frozen-animation-rig",
+          "score": 0.93,
+          "passed": true,
+          "notes": "Nine pivots, eight sockets and five ribbon anchors remain compatible."
+        }
+      ],
+      "action": "continue",
+      "summary": "Stable three-tier irregular ink and Sakura key/fill/rim lighting preserve facet readability.",
+      "matched": [
+        "identity silhouette",
+        "frozen runtime hierarchy",
+        "low-poly Sakura materials"
+      ],
+      "mismatches": [
+        "GPT Image 2 turn-sheet unavailable",
+        "pixel IoU against legacy screenshot is not a visual acceptance proxy"
+      ],
+      "specFixes": [],
+      "codeFixes": [
+        "none"
+      ],
+      "evidence": [
+        "artifacts/appliance-v2/hair-dryer/reviews/lighting-pass/comparison.png",
+        "artifacts/appliance-v2/hair-dryer/static/render-off-three-quarter.png"
+      ],
+      "mapStrippedRender": "artifacts/appliance-v2/hair-dryer/static/render-off-front.png",
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "long-axis",
+        "thickness-axis"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "docs/history/appliance-model-v1-2026-08-11/screenshots/models/hair-dryer/idle-three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/hair-dryer/static/render-off-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/hair-dryer/reviews/lighting-pass/comparison.png",
+        "cameraView": "three-quarter",
+        "notes": "Manual visual review of stable local render; generated reference endpoint timed out.",
+        "aiVisionNotes": ""
+      }
+    },
+    {
+      "timestamp": "2026-08-11T16:16:32.846622+00:00",
+      "passId": "interaction-pass",
+      "estimatedFidelity": 0.93,
+      "aiVisionScore": 0.93,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.92,
+        "componentStructure": 0.96,
+        "formDetail": 0.92,
+        "materialSurface": 0.9,
+        "lightingCamera": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "dryer-silhouette",
+          "score": 0.92,
+          "passed": true,
+          "notes": "Barrel, flattened nozzle and long handle remain immediately readable."
+        },
+        {
+          "id": "nozzle-intake-identity",
+          "score": 0.93,
+          "passed": true,
+          "notes": "Pinched outlet and layered mint rear intake remain countable."
+        },
+        {
+          "id": "control-and-cable-layout",
+          "score": 0.91,
+          "passed": true,
+          "notes": "Controls and cable boot retain archived positions."
+        },
+        {
+          "id": "toon-material-system",
+          "score": 0.92,
+          "passed": true,
+          "notes": "Cream, pink, mint and plum values remain separated."
+        },
+        {
+          "id": "outline-hierarchy",
+          "score": 0.92,
+          "passed": true,
+          "notes": "Three stable widths use object-space variation without time shimmer."
+        },
+        {
+          "id": "frozen-animation-rig",
+          "score": 1,
+          "passed": true,
+          "notes": "Nine pivots, eight sockets and five ribbon anchors remain compatible."
+        }
+      ],
+      "action": "continue",
+      "summary": "Frozen pivots/sockets and five ribbon anchors match v1; dedicated animation test passes.",
+      "matched": [
+        "identity silhouette",
+        "frozen runtime hierarchy",
+        "low-poly Sakura materials"
+      ],
+      "mismatches": [
+        "GPT Image 2 turn-sheet unavailable",
+        "pixel IoU against legacy screenshot is not a visual acceptance proxy"
+      ],
+      "specFixes": [],
+      "codeFixes": [
+        "none"
+      ],
+      "evidence": [
+        "artifacts/appliance-v2/hair-dryer/reviews/interaction-pass/comparison.png",
+        "artifacts/appliance-v2/hair-dryer/static/render-off-side.png"
+      ],
+      "mapStrippedRender": "artifacts/appliance-v2/hair-dryer/static/render-off-front.png",
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "long-axis",
+        "thickness-axis"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "docs/history/appliance-model-v1-2026-08-11/screenshots/models/hair-dryer/idle-side.png",
+        "renderScreenshot": "artifacts/appliance-v2/hair-dryer/static/render-off-side.png",
+        "comparisonImage": "artifacts/appliance-v2/hair-dryer/reviews/interaction-pass/comparison.png",
+        "cameraView": "side",
+        "notes": "Manual visual review of stable local render; generated reference endpoint timed out.",
+        "aiVisionNotes": ""
+      }
+    },
+    {
+      "timestamp": "2026-08-11T16:16:33.403194+00:00",
+      "passId": "optimization-pass",
+      "estimatedFidelity": 0.92,
+      "aiVisionScore": 0.92,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.92,
+        "componentStructure": 0.96,
+        "formDetail": 0.91,
+        "materialSurface": 0.9,
+        "lightingCamera": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "dryer-silhouette",
+          "score": 0.91,
+          "passed": true,
+          "notes": "Barrel, flattened nozzle and long handle remain immediately readable."
+        },
+        {
+          "id": "nozzle-intake-identity",
+          "score": 0.92,
+          "passed": true,
+          "notes": "Pinched outlet and layered mint rear intake remain countable."
+        },
+        {
+          "id": "control-and-cable-layout",
+          "score": 0.9,
+          "passed": true,
+          "notes": "Controls and cable boot retain archived positions."
+        },
+        {
+          "id": "toon-material-system",
+          "score": 0.91,
+          "passed": true,
+          "notes": "Cream, pink, mint and plum values remain separated."
+        },
+        {
+          "id": "outline-hierarchy",
+          "score": 0.91,
+          "passed": true,
+          "notes": "Three stable widths use object-space variation without time shimmer."
+        },
+        {
+          "id": "frozen-animation-rig",
+          "score": 1,
+          "passed": true,
+          "notes": "Nine pivots, eight sockets and five ribbon anchors remain compatible."
+        }
+      ],
+      "action": "continue",
+      "summary": "Finite geometry, envelope, outline tiers and three-cycle deterministic rebuild pass.",
+      "matched": [
+        "identity silhouette",
+        "frozen runtime hierarchy",
+        "low-poly Sakura materials"
+      ],
+      "mismatches": [
+        "GPT Image 2 turn-sheet unavailable",
+        "pixel IoU against legacy screenshot is not a visual acceptance proxy"
+      ],
+      "specFixes": [],
+      "codeFixes": [
+        "none"
+      ],
+      "evidence": [
+        "artifacts/appliance-v2/hair-dryer/reviews/optimization-pass/comparison.png",
+        "artifacts/appliance-v2/hair-dryer/static/render-off-back.png"
+      ],
+      "mapStrippedRender": "artifacts/appliance-v2/hair-dryer/static/render-off-front.png",
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "long-axis",
+        "thickness-axis"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "docs/history/appliance-model-v1-2026-08-11/screenshots/models/hair-dryer/idle-back.png",
+        "renderScreenshot": "artifacts/appliance-v2/hair-dryer/static/render-off-back.png",
+        "comparisonImage": "artifacts/appliance-v2/hair-dryer/reviews/optimization-pass/comparison.png",
+        "cameraView": "back",
+        "notes": "Manual visual review of stable local render; generated reference endpoint timed out.",
+        "aiVisionNotes": ""
+      }
+    }
+  ],
+  "lodPlan": [
+    {
+      "tier": "near",
+      "distance": 0,
+      "strategy": "full component tree and material layers"
+    },
+    {
+      "tier": "far",
+      "distance": 30,
+      "strategy": "merge static components and reduce local feature geometry"
+    }
+  ],
+  "performanceBudget": {
+    "qualityPriority": "reference-fidelity",
+    "targetTriangles": 250000,
+    "maxDrawCalls": 160,
+    "textureSize": 2048,
+    "fpsTarget": 30,
+    "optimizationPolicy": "Reach accepted visual fidelity first, then optimize without removing reference-critical geometry or surface layers."
+  },
+  "lightingFromPhoto": [
+    "warm upper-left key light on cream facets",
+    "cool right-rear lavender fill",
+    "pink rim light on nozzle and handle",
+    "neutral exposure with ACES tone mapping",
+    "soft floor contact shadow"
+  ],
+  "proceduralStrategy": [
+    "twelve-sided radial primitives for barrel and rings",
+    "six-ring authored loft for concentrator",
+    "clipped-corner extruded handle profile",
+    "instanced perforation grid and bounded repeated details",
+    "stable object-space outline variation"
+  ],
+  "animationAnchors": [
+    {
+      "id": "fan-axis",
+      "node": "hair-dryer-fan-rotor-pivot",
+      "socket": "hair-dryer-fan-axis-socket",
+      "purpose": "fan rotation"
+    },
+    {
+      "id": "airflow-emitter",
+      "node": "hair-dryer-nozzle-pivot",
+      "socket": "hair-dryer-airflow-emitter-socket",
+      "purpose": "five-ribbon emission"
+    },
+    {
+      "id": "controls",
+      "node": "hair-dryer-handle-pivot",
+      "socket": "hair-dryer-power-switch-socket",
+      "purpose": "button and slider travel"
+    }
+  ],
+  "destructionAnchors": [
+    "actionProfile.destruction.fractureGroup marks detachable or breakable component sets",
+    "component seams and sockets define plausible break points instead of random explosions"
+  ],
+  "risks": [
+    "High segment counts would weaken the low-poly read.",
+    "Main ink on perforations could clump.",
+    "Moving the emitter would detach ribbon effects.",
+    "Generated turn-sheet is currently unavailable."
+  ],
+  "localSpecSearch": {
+    "collection": "core_3d",
+    "query": "SAKURA Hair Dryer v2 handheld hair dryer low poly shell nozzle handle attachment socket toon outline",
+    "index": {
+      "status": "hit",
+      "reason": "current",
+      "fingerprint": "6857e5ab528b42ac12f4f411f862610a0bffce8e47aee3610a7603c318072fe8"
+    },
+    "matches": [
+      {
+        "record_id": "core.attachment-contract",
+        "file_path": "grimoire/readiness/joint_attachment.md",
+        "heading": "Attachment Contract",
+        "key_path": null,
+        "score": 9.097721292368,
+        "snippets": [
+          "An attached child records its parent, parent socket, local start and end, contact type, and embed depth or overlap where applicable."
+        ],
+        "source_refs": [
+          {
+            "path": "grimoire/readiness/joint_attachment.md",
+            "heading": "Attachment Contract",
+            "key_path": null
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "grimoire/readiness/joint_attachment.md"
+          },
+          {
+            "kind": "notebooklm-research",
+            "ref": "notebooklm:4b03c2f9-8393-411f-b5b4-039ab9532843",
+            "note": "Validated generic schema vocabulary; numeric claims remain backed by local source_refs."
+          }
+        ]
+      },
+      {
+        "record_id": "core.socket-pivot",
+        "file_path": "grimoire/glossary/3d_vocabulary.md",
+        "heading": "Animation, Physics, And Destruction",
+        "key_path": null,
+        "score": 8.809409158926,
+        "snippets": [
+          "A pivot is a local rotation origin; a socket is an attachment point for a child part. In a runtime hierarchy, a socket Object3D is a child of the relevant pivot."
+        ],
+        "source_refs": [
+          {
+            "path": "grimoire/glossary/3d_vocabulary.md",
+            "heading": "Animation, Physics, And Destruction",
+            "key_path": null
+          },
+          {
+            "path": "grimoire/readiness/action_rigging.md",
+            "heading": "Hierarchy Pattern",
+            "key_path": null
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "grimoire/readiness/action_rigging.md"
+          },
+          {
+            "kind": "notebooklm-research",
+            "ref": "notebooklm:4b03c2f9-8393-411f-b5b4-039ab9532843",
+            "note": "Validated generic schema vocabulary; numeric claims remain backed by local source_refs."
+          }
+        ]
+      },
+      {
+        "record_id": "core.shader-mapping-uvcoordinate-system-conversion-attachment-hierarchy",
+        "file_path": "docs/raw/img2threejs-skill-dataset.json",
+        "heading": null,
+        "key_path": "categories.rendering_shader_mapping[14]",
+        "score": 5.636966969988,
+        "snippets": [
+          "Handling handedness/up-axis differences (Unity Y-up left-handed vs. USD/glTF right-handed) and representing sub-part attachment via parent-child scene-graph transforms. Xử lý khác biệt tay thuận/trục lên (Unity Y-up trái vs. USD/glTF phải) và ..."
+        ],
+        "source_refs": [
+          {
+            "path": "docs/raw/img2threejs-skill-dataset.json",
+            "heading": null,
+            "key_path": "categories.rendering_shader_mapping[14]"
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "docs/raw/img2threejs-skill-dataset.json",
+            "note": "img2threejs NotebookLM research distillation"
+          }
+        ]
+      }
+    ]
+  },
+  "tier1Results": [
+    {
+      "passed": false,
+      "checks": {
+        "silhouetteIoU": 0.6451,
+        "aspectRatioDelta": 0.0774,
+        "scaleDelta": 0.0813,
+        "bilateralSymmetryError": 0.1481,
+        "colorDelta": {
+          "checked": 20,
+          "maxDeltaE": 7.52,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 7.52
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.52
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.52
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.52
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.52
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.52
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.52
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.52
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.52
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.52
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.52
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.52
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.52
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.52
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.52
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.52
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.52
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.52
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.52
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.52
+            }
+          ],
+          "gated": false
+        }
+      },
+      "failures": [
+        "silhouette IoU 0.645 is below threshold 0.85",
+        "aspect-ratio delta 0.077 exceeds threshold 0.05",
+        "scale delta 0.081 exceeds threshold 0.08",
+        "blockout requires --map-stripped-render evidence"
+      ],
+      "renderHash": "ce88bede2a3f4ec3",
+      "passId": "blockout"
+    },
+    {
+      "passed": true,
+      "checks": {
+        "silhouetteIoU": 1.0,
+        "aspectRatioDelta": 0.0,
+        "scaleDelta": 0.0,
+        "bilateralSymmetryError": 0.1481,
+        "colorDelta": {
+          "checked": 20,
+          "maxDeltaE": 7.52,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 7.52
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.52
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.52
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.52
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.52
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.52
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.52
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.52
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.52
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.52
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.52
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.52
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.52
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.52
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.52
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.52
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.52
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.52
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.52
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.52
+            }
+          ],
+          "gated": false
+        }
+      },
+      "failures": [],
+      "renderHash": "ce88bede2a3f4ec3",
+      "passId": "blockout",
+      "mapStrippedRender": "artifacts\\appliance-v2\\hair-dryer\\static\\render-off-front.png"
+    }
+  ]
+}

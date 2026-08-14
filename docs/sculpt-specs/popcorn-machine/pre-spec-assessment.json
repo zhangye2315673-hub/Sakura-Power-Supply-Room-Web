@@ -1,0 +1,121 @@
+{
+  "targetName": "SAKURA Popcorn Machine",
+  "sourceImage": "D:/下载文件/ChatGPT Image 2026年8月3日 16_17_49 (2).png",
+  "preSpecAssessment": {
+    "objectClass": {
+      "primaryType": "countertop popcorn vending machine",
+      "primaryDomain": "object",
+      "formLanguage": ["hard-surface", "rounded geometric", "transparent-like"],
+      "structureKind": ["compound object", "layered shell", "articulated assembly", "repeated modules"],
+      "motionPotential": ["rotary control", "rotating popper", "particle lift", "dispense effect", "light emitter"],
+      "materialFamilies": ["satin plastic", "clear plastic", "rubber", "food-like mixed material"],
+      "notes": "Three admitted orthographic crops define front, side and back. The heater, motor, underside, power cable and internal gate remain explicitly inferred."
+    },
+    "complexity": {
+      "tier": "complex",
+      "scores": {
+        "silhouetteComplexity": 2,
+        "componentCount": 3,
+        "hierarchyDepth": 3,
+        "repetitionDensity": 3,
+        "materialLayerCount": 3,
+        "localDetailDensity": 2,
+        "occlusionRisk": 2,
+        "actionReadinessNeed": 3
+      },
+      "estimatedCounts": {
+        "macroComponents": 5,
+        "mesoComponents": 15,
+        "microFeatureGroups": 10,
+        "materialLayers": 7,
+        "repetitionSystems": 4
+      },
+      "reasoning": [
+        "The visible transparent chamber, four posts, rotary popper, outlet architecture and rear ventilation require a deep component hierarchy.",
+        "Popcorn must be a bounded repeated system with deterministic powered-state transitions rather than a single filler mesh.",
+        "Animation needs separate pivots, sockets and exact 5.2-second reset behavior."
+      ]
+    },
+    "specDepthDecision": {
+      "requiredDepth": "complex",
+      "minimumComponentLevels": ["macro", "meso", "micro"],
+      "needsRepetitionSystems": true,
+      "needsMaterialLocalOverrides": true,
+      "needsMultipleReviewViews": true,
+      "needsActionReadyHierarchy": true,
+      "rationale": "Identity depends on both the transparent container architecture and animated popcorn production/dispense systems."
+    },
+    "unknownsToResolveBeforeImplementation": [
+      "The hidden heater, gearbox, motor and internal dispensing gate are not visible and will be represented only as inferred dark cavities or animation anchors.",
+      "The exact underside, foot pad tread and power cable geometry are not visible; only the visible feet and a rear cable socket will be authored.",
+      "The side triangular projection is ambiguous and will be treated as a chute release lever with lower confidence."
+    ],
+    "detailInventory": {
+      "scanMethod": "grid-3x3-plus-three-admitted-view-crops",
+      "targetMinDetails": 18,
+      "details": [
+        {"id":"pink-dome-bevel","kind":"bevel","description":"low pink dome with broad rounded eave","mapsTo":{"type":"component.localFeatures","ref":"top-dome.soft-bevel"},"evidenceRef":"front","confidence":0.98},
+        {"id":"dome-crown","kind":"contour","description":"small centered rounded crown","mapsTo":{"type":"component.localFeatures","ref":"top-crown.rounded-cap"},"evidenceRef":"front","confidence":0.98},
+        {"id":"pink-gloss","kind":"gloss","description":"lacquer highlight on pink cap and buttons","mapsTo":{"type":"material.localOverrides","ref":"accent.lacquer-highlight"},"evidenceRef":"front","confidence":0.95},
+        {"id":"glass-chamber","kind":"gloss","description":"clear four-sided chamber with edge reflections","mapsTo":{"type":"material.localOverrides","ref":"glass.edge-highlight"},"evidenceRef":"front","confidence":0.96},
+        {"id":"chamber-posts","kind":"contour","description":"four cream corner posts joining chamber frames","mapsTo":{"type":"component.localFeatures","ref":"chamber-posts.four-corner-layout"},"evidenceRef":"front","confidence":0.94},
+        {"id":"upper-frame-seam","kind":"seam","description":"upper frame seam between dome and glass","mapsTo":{"type":"component.localFeatures","ref":"upper-chamber-frame.recessed-seam"},"evidenceRef":"front","confidence":0.97},
+        {"id":"lower-frame-seam","kind":"seam","description":"lower glass-to-cabinet seam","mapsTo":{"type":"component.localFeatures","ref":"lower-chamber-frame.recessed-seam"},"evidenceRef":"front","confidence":0.98},
+        {"id":"popper-disc","kind":"contour","description":"pink rotating disc under roof","mapsTo":{"type":"component.localFeatures","ref":"popper-pivot.rotating-disc"},"evidenceRef":"front","confidence":0.93},
+        {"id":"popper-column","kind":"ridge","description":"short vertical drive column","mapsTo":{"type":"component.localFeatures","ref":"popper-column.vertical-drive"},"evidenceRef":"side","confidence":0.9},
+        {"id":"warm-lamp","kind":"emissive","description":"powered warm lamp beneath popper","mapsTo":{"type":"material.localOverrides","ref":"warm-lamp.powered-emissive"},"evidenceRef":"animation-requirement","confidence":0.9},
+        {"id":"popcorn-pile","kind":"contour","description":"dense uneven warm-white popcorn pile","mapsTo":{"type":"component.localFeatures","ref":"popcorn-cluster.dense-pile"},"evidenceRef":"front","confidence":0.99},
+        {"id":"popcorn-lobes","kind":"contour","description":"individual lobed popcorn forms with golden cores","mapsTo":{"type":"component.localFeatures","ref":"popcorn-kernel.lobed-profile"},"evidenceRef":"front","confidence":0.92},
+        {"id":"lower-shell-bevel","kind":"bevel","description":"rounded slightly tapered lower cabinet","mapsTo":{"type":"component.localFeatures","ref":"lower-cabinet.rounded-taper"},"evidenceRef":"front","confidence":0.99},
+        {"id":"delivery-arch","kind":"hole","description":"deep rounded front dispense arch","mapsTo":{"type":"component.localFeatures","ref":"delivery-chute.recessed-arch"},"evidenceRef":"front","confidence":0.99},
+        {"id":"delivery-tray","kind":"contour","description":"projecting pink bowl tray","mapsTo":{"type":"component.localFeatures","ref":"delivery-tray.projecting-bowl"},"evidenceRef":"front","confidence":0.99},
+        {"id":"control-button","kind":"contour","description":"layered round control button","mapsTo":{"type":"component.localFeatures","ref":"control-pivot.layered-button"},"evidenceRef":"front","confidence":0.99},
+        {"id":"side-release","kind":"contour","description":"projecting side release control","mapsTo":{"type":"component.localFeatures","ref":"side-release.projecting-control"},"evidenceRef":"side","confidence":0.91},
+        {"id":"rear-vent-slots","kind":"hole","description":"ten rounded vertical rear vent slots","mapsTo":{"type":"component.localFeatures","ref":"rear-vent-array.ten-slots"},"evidenceRef":"back","confidence":0.99},
+        {"id":"base-accent-band","kind":"seam","description":"continuous pink base band and panel seam","mapsTo":{"type":"component.localFeatures","ref":"base-band.continuous-accent-seam"},"evidenceRef":"front","confidence":0.98},
+        {"id":"four-feet","kind":"contour","description":"four small pink ground pads","mapsTo":{"type":"component.localFeatures","ref":"feet.four-pad-layout"},"evidenceRef":"front","confidence":0.95}
+      ]
+    },
+    "anatomy": {
+      "applies": false,
+      "styleHeads": 0,
+      "proportions": {"headUnit":0,"torso":0,"legs":0,"shoulderWidth":0,"hipWidth":0},
+      "pose": {"type":"not-applicable","jointAngles":{}},
+      "faceLandmarks": {"eyeLine":0,"eyeSpacing":0,"noseBase":0,"mouthLine":0,"hairline":0},
+      "features": [],
+      "confidence": 0,
+      "note": "Not applicable."
+    },
+    "sourceImage": "D:/下载文件/ChatGPT Image 2026年8月3日 16_17_49 (2).png"
+  },
+  "qualityContract": {
+    "qualityBar": "complex",
+    "definitionOfDone": [
+      "Front, side and back renders preserve the reference height/width/depth, rounded cabinet, transparent chamber and low dome silhouette.",
+      "Chamber, popper, outlet, tray, controls, vents, feet and popcorn remain separate named parts with stable pivots and sockets.",
+      "Powered animation clearly reads as popcorn production: control turn, warm lamp, rotating mechanism, kernels swelling/jumping, chamber tumbling and a bounded dispense handful.",
+      "At exactly 5.2 seconds stop restores all transforms, visibility, scales and emissive values without penetrating chamber walls."
+    ],
+    "minimumSpecDepth": {"macroComponents":5,"mesoComponents":15,"microFeatureGroups":10,"materialLayers":7,"repetitionSystems":4,"reviewViewpoints":5},
+    "featureGroups": [
+      {"id":"silhouette","name":"Tall rounded cabinet and low dome silhouette","required":true,"qualityCriteria":["Front height-to-width and side depth remain within the illustrated proportions.","Dome, chamber and lower cabinet occupy distinct vertical thirds."],"evidenceRefs":["front","side","back"],"failureModes":["generic box silhouette","dome too tall","chamber too short"]},
+      {"id":"transparent-chamber","name":"Transparent four-sided chamber structure","required":true,"qualityCriteria":["Glass panels, corner posts and upper/lower frames remain separable and readable from orbit."],"evidenceRefs":["front","side","back"],"failureModes":["single opaque block","missing posts","glass hides popcorn"]},
+      {"id":"popper-and-pile","name":"Top popper and popcorn repeated system","required":true,"qualityCriteria":["Rotating disc/column is centered under the dome and the popcorn pile has an uneven multi-lobed surface."],"evidenceRefs":["front","side"],"failureModes":["generic spheres","floating mechanism","particles pass through glass"]},
+      {"id":"delivery-system","name":"Front arch and projecting tray","required":true,"qualityCriteria":["Deep arch cavity, lip and tray create the correct front negative space and depth."],"evidenceRefs":["front","side"],"failureModes":["painted-on hole","flat tray","dispensed popcorn misses tray"]},
+      {"id":"rear-and-controls","name":"Controls, rear vents and feet","required":true,"qualityCriteria":["Round button, side control, ten rear slots, base seam and four feet are visible in their corresponding elevations."],"evidenceRefs":["front","side","back"],"failureModes":["missing back identity","merged controls","floating feet"]},
+      {"id":"material-and-light","name":"SAKURA toon material separation","required":true,"qualityCriteria":["Cream satin shell, lacquer pink, transparent chamber, warm food, dark cavity and powered warm lamp remain visually distinct."],"evidenceRefs":["full-object"],"failureModes":["uniform flat plastic","opaque chamber","weak powered cue"]}
+    ],
+    "visualDeltaChecks": ["front silhouette and vertical mass ratio","side depth and tray projection","rear vent count and placement","glass/post/frame separation","popcorn repetition density and containment","powered animation reset"],
+    "antiShallowSpecRules": ["Do not merge the clear chamber into the cabinet.","Do not model the popcorn pile as one blob.","Do not merge moving controls or popper pivots.","Do not accept a powered state without both mechanism motion and food transformation.","Do not claim the hidden heater, underside or power cable are reference-accurate."],
+    "mustNotDo": ["Do not allow any animated popcorn center beyond the inner chamber bounds.","Do not leave any powered transform or emissive value active after stop."]
+  },
+  "localSpecSearch": {
+    "collection":"core_3d",
+    "query":"countertop popcorn machine transparent chamber rotating kettle warm lamp toon glass repeated popcorn particle instancing pivot socket hierarchy",
+    "matches":[
+      {"record_id":"core.runtime-hierarchy","source_refs":[{"path":"grimoire/readiness/action_rigging.md","heading":"Hierarchy Pattern"}],"evidence_refs":[{"kind":"source","ref":"grimoire/readiness/action_rigging.md"}]},
+      {"record_id":"core.socket-pivot","source_refs":[{"path":"grimoire/glossary/3d_vocabulary.md","heading":"Animation, Physics, And Destruction"}],"evidence_refs":[{"kind":"source","ref":"grimoire/glossary/3d_vocabulary.md"}]},
+      {"record_id":"core.pbr-opacity-alpha","source_refs":[{"path":"docs/raw/img2threejs-skill-dataset.json","key_path":"categories.material_pbr[8]"}],"evidence_refs":[{"kind":"source","ref":"docs/raw/img2threejs-skill-dataset.json"}]}
+    ]
+  }
+}

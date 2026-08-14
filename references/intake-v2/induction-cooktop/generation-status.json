@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "targetId": "induction-cooktop-v2",
+  "generation": {
+    "provider": "conditional-v1-runtime-fallback",
+    "requestedProvider": "Comfly OpenAI-compatible API",
+    "requestedModel": "gpt-image-2",
+    "attempted": false,
+    "reason": "The delegated process had no runtime OPENAI_API_KEY or OPENAI_BASE_URL. No credential was recovered, written, echoed, or guessed.",
+    "source": "Archived v1 intake views"
+  },
+  "suitability": "conditional-pass",
+  "limitations": [
+    "The source set contains top, right-side, and underside views rather than front, side, back, and true three-quarter elevations.",
+    "views/three-quarter.png is a front/top layout proxy only and is not independent geometric evidence.",
+    "The v2 model is a stylized low-poly optimization constrained by the archived runtime rig, not a claim of exact GPT Image 2 reconstruction."
+  ]
+}

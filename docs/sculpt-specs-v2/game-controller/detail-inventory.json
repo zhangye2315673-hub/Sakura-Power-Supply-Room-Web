@@ -1,0 +1,476 @@
+{
+  "sourceImage": "references/intake-v2/game-controller/game-controller-turnsheet-v2.png",
+  "zonesDir": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs-v2\\game-controller\\detail-zones",
+  "detailInventory": {
+    "scanMethod": "grid-4x4 plus four-view component review",
+    "targetMinDetails": 22,
+    "details": [
+      {
+        "id": "gc-detail-01",
+        "kind": "contour",
+        "description": "Broad cream upper shell with inward lower notch and symmetric handle shoulders.",
+        "region": {
+          "x": 0.06,
+          "y": 0.29,
+          "width": 0.88,
+          "height": 0.35,
+          "units": "normalized"
+        },
+        "scale": "macro",
+        "affects": "silhouette",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "front-shell"
+        },
+        "evidenceRef": "front-view",
+        "confidence": 0.94,
+        "realization": "unreported"
+      },
+      {
+        "id": "gc-detail-02",
+        "kind": "contour",
+        "description": "Two long rounded grips descend and flare toward the palm ends.",
+        "region": {
+          "x": 0.05,
+          "y": 0.43,
+          "width": 0.9,
+          "height": 0.25,
+          "units": "normalized"
+        },
+        "scale": "macro",
+        "affects": "silhouette",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "grip-shell-pair"
+        },
+        "evidenceRef": "front/back-view",
+        "confidence": 0.96,
+        "realization": "unreported"
+      },
+      {
+        "id": "gc-detail-03",
+        "kind": "seam",
+        "description": "Continuous front-to-rear perimeter shell seam.",
+        "region": {
+          "x": 0.06,
+          "y": 0.29,
+          "width": 0.88,
+          "height": 0.39,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "form/AO",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "perimeter-shell-seam"
+        },
+        "evidenceRef": "side-view",
+        "confidence": 0.94,
+        "realization": "unreported"
+      },
+      {
+        "id": "gc-detail-04",
+        "kind": "seam",
+        "description": "Diagonal curved cream-to-pink boundary across each grip.",
+        "region": {
+          "x": 0.05,
+          "y": 0.46,
+          "width": 0.9,
+          "height": 0.2,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "material/form",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "pink-grip-panel-pair"
+        },
+        "evidenceRef": "front/back-view",
+        "confidence": 0.96,
+        "realization": "unreported"
+      },
+      {
+        "id": "gc-detail-05",
+        "kind": "bevel",
+        "description": "Raised rounded cross D-pad with broad arm fillets.",
+        "region": {
+          "x": 0.23,
+          "y": 0.36,
+          "width": 0.21,
+          "height": 0.16,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "form/interaction",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "dpad-cross"
+        },
+        "evidenceRef": "front-view",
+        "confidence": 0.98,
+        "realization": "unreported"
+      },
+      {
+        "id": "gc-detail-06",
+        "kind": "bevel",
+        "description": "Four round unlabeled face buttons arranged in a diamond.",
+        "region": {
+          "x": 0.69,
+          "y": 0.35,
+          "width": 0.24,
+          "height": 0.2,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "form/interaction",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "face-button-array"
+        },
+        "evidenceRef": "front-view",
+        "confidence": 0.98,
+        "realization": "unreported"
+      },
+      {
+        "id": "gc-detail-07",
+        "kind": "ridge",
+        "description": "Left analog stick rises from a cream socket ring with a recessed cap centre.",
+        "region": {
+          "x": 0.38,
+          "y": 0.49,
+          "width": 0.17,
+          "height": 0.14,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "form/interaction",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "left-stick-assembly"
+        },
+        "evidenceRef": "front/side-view",
+        "confidence": 0.97,
+        "realization": "unreported"
+      },
+      {
+        "id": "gc-detail-08",
+        "kind": "ridge",
+        "description": "Right analog stick mirrors the left with its own socket ring and cap recess.",
+        "region": {
+          "x": 0.61,
+          "y": 0.49,
+          "width": 0.17,
+          "height": 0.14,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "form/interaction",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "right-stick-assembly"
+        },
+        "evidenceRef": "front-view",
+        "confidence": 0.97,
+        "realization": "unreported"
+      },
+      {
+        "id": "gc-detail-09",
+        "kind": "gloss",
+        "description": "Small rose status/home lens centred above the select button.",
+        "region": {
+          "x": 0.54,
+          "y": 0.36,
+          "width": 0.08,
+          "height": 0.07,
+          "units": "normalized"
+        },
+        "scale": "micro",
+        "affects": "material/interaction",
+        "mapsTo": {
+          "type": "material.localOverrides",
+          "ref": "status-lens-powered-glow"
+        },
+        "evidenceRef": "front-view",
+        "confidence": 0.94,
+        "realization": "unreported"
+      },
+      {
+        "id": "gc-detail-10",
+        "kind": "bevel",
+        "description": "Small horizontal rounded select button below the status lens.",
+        "region": {
+          "x": 0.55,
+          "y": 0.43,
+          "width": 0.07,
+          "height": 0.04,
+          "units": "normalized"
+        },
+        "scale": "micro",
+        "affects": "form/interaction",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "select-button"
+        },
+        "evidenceRef": "front-view",
+        "confidence": 0.96,
+        "realization": "unreported"
+      },
+      {
+        "id": "gc-detail-11",
+        "kind": "contour",
+        "description": "Left and right upper bumpers sit proud of the shoulder deck.",
+        "region": {
+          "x": 0.2,
+          "y": 0.27,
+          "width": 0.65,
+          "height": 0.08,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "silhouette/interaction",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "bumper-pair"
+        },
+        "evidenceRef": "front/back/side-view",
+        "confidence": 0.95,
+        "realization": "unreported"
+      },
+      {
+        "id": "gc-detail-12",
+        "kind": "contour",
+        "description": "Second pink trigger layer is visible behind and below each bumper.",
+        "region": {
+          "x": 0.2,
+          "y": 0.27,
+          "width": 0.65,
+          "height": 0.1,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "silhouette/interaction",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "trigger-pair"
+        },
+        "evidenceRef": "back/side-view",
+        "confidence": 0.94,
+        "realization": "unreported"
+      },
+      {
+        "id": "gc-detail-13",
+        "kind": "linework",
+        "description": "Rounded rectangular rear battery/service cover centred on the back shell.",
+        "region": {
+          "x": 0.36,
+          "y": 0.43,
+          "width": 0.26,
+          "height": 0.13,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "form/AO",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "rear-battery-cover"
+        },
+        "evidenceRef": "back-view",
+        "confidence": 0.97,
+        "realization": "unreported"
+      },
+      {
+        "id": "gc-detail-14",
+        "kind": "fastener",
+        "description": "Four countersunk circular screw heads repeat across the rear lower shell and grip ends.",
+        "region": {
+          "x": 0.02,
+          "y": 0.44,
+          "width": 0.96,
+          "height": 0.24,
+          "units": "normalized"
+        },
+        "scale": "micro",
+        "affects": "form/material",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "rear-screw-array"
+        },
+        "evidenceRef": "back-view",
+        "confidence": 0.95,
+        "realization": "unreported"
+      },
+      {
+        "id": "gc-detail-15",
+        "kind": "linework",
+        "description": "Pink rounded rear upper-centre inset interrupts the cream shoulder deck.",
+        "region": {
+          "x": 0.42,
+          "y": 0.31,
+          "width": 0.18,
+          "height": 0.07,
+          "units": "normalized"
+        },
+        "scale": "micro",
+        "affects": "form/material",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "rear-port-cover"
+        },
+        "evidenceRef": "back-view",
+        "confidence": 0.94,
+        "realization": "unreported"
+      },
+      {
+        "id": "gc-detail-16",
+        "kind": "bevel",
+        "description": "Cream analog socket rings carry a narrow catch-light bevel around each pink stick.",
+        "region": {
+          "x": 0.37,
+          "y": 0.48,
+          "width": 0.42,
+          "height": 0.16,
+          "units": "normalized"
+        },
+        "scale": "micro",
+        "affects": "form/lighting",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "stick-socket-ring-pair"
+        },
+        "evidenceRef": "front-view",
+        "confidence": 0.96,
+        "realization": "unreported"
+      },
+      {
+        "id": "gc-detail-17",
+        "kind": "gloss",
+        "description": "Pink button crowns and grip panels have slightly glossier highlights than the cream shell.",
+        "region": {
+          "x": 0.05,
+          "y": 0.34,
+          "width": 0.9,
+          "height": 0.34,
+          "units": "normalized"
+        },
+        "scale": "micro",
+        "affects": "material",
+        "mapsTo": {
+          "type": "material.localOverrides",
+          "ref": "pink-crown-roughness"
+        },
+        "evidenceRef": "front-view",
+        "confidence": 0.94,
+        "realization": "unreported"
+      },
+      {
+        "id": "gc-detail-18",
+        "kind": "linework",
+        "description": "Thin dark cavity lines separate buttons, grip panels, battery cover and shell halves.",
+        "region": {
+          "x": 0.04,
+          "y": 0.29,
+          "width": 0.92,
+          "height": 0.39,
+          "units": "normalized"
+        },
+        "scale": "micro",
+        "affects": "AO/identity",
+        "mapsTo": {
+          "type": "material.localOverrides",
+          "ref": "cavity-seam-darkening"
+        },
+        "evidenceRef": "all-views",
+        "confidence": 0.94,
+        "realization": "unreported"
+      },
+      {
+        "id": "game-controller-v2-outline-hierarchy",
+        "kind": "contour",
+        "description": "Stable dark-plum outline hierarchy uses main, structure and detail widths with object-space plus/minus 18 percent variation.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "catalog-visible game contour",
+        "affects": "silhouette, materialSurface",
+        "mapsTo": {
+          "type": "material.localOverrides",
+          "ref": "controller-outline-hierarchy"
+        },
+        "evidenceRef": "references/intake-v2/game-controller/views/three-quarter.png",
+        "confidence": 0.98
+      },
+      {
+        "id": "game-controller-v2-shell-facet-band",
+        "kind": "ridge",
+        "description": "Broad planar shell facets step around the shoulder deck and waist without adding a raised panel.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry, materialSurface",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "front-shell"
+        },
+        "evidenceRef": "references/intake-v2/game-controller/views/three-quarter.png",
+        "confidence": 0.96
+      },
+      {
+        "id": "game-controller-v2-shoulder-undercut",
+        "kind": "seam",
+        "description": "A controlled plum undercut separates each bumper from its trigger through the full press arc.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry, materialSurface",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "shoulder-deck"
+        },
+        "evidenceRef": "references/intake-v2/game-controller/views/three-quarter.png",
+        "confidence": 0.96
+      },
+      {
+        "id": "game-controller-v2-stick-thumb-dish",
+        "kind": "bevel",
+        "description": "Each faceted analog cap keeps a clearly recessed thumb dish and readable crown rim.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry, materialSurface",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "left-stick-assembly"
+        },
+        "evidenceRef": "references/intake-v2/game-controller/views/three-quarter.png",
+        "confidence": 0.96
+      }
+    ]
+  },
+  "authoringInstruction": "Open each zone crop under zonesDir and replace every detail stub's kind, description, scale, affects, mapsTo, and confidence with what is actually observed. Add more detail entries per zone if a single zone contains multiple distinct marks; do not leave stubs unfilled or unlinked (mapsTo must reference a real component.localFeatures or material.localOverrides entry).",
+  "sourceViews": [
+    "references/intake-v2/game-controller/views/front.png",
+    "references/intake-v2/game-controller/views/side.png",
+    "references/intake-v2/game-controller/views/back.png",
+    "references/intake-v2/game-controller/views/three-quarter.png"
+  ],
+  "note": "The IMAGEN sheet is visual evidence; the archived runtime contract is authoritative for dimensions and animation anchors."
+}

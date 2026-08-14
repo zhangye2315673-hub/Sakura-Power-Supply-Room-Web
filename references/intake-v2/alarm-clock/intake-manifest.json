@@ -1,0 +1,23 @@
+{
+  "target": "alarm-clock",
+  "status": "conditional-fallback",
+  "generatedReference": {
+    "requestedProvider": "Comfly OpenAI-compatible API",
+    "requestedModel": "gpt-image-2",
+    "attempted": false,
+    "reason": "No OPENAI, COMFLY, or API_KEY credential was present in the process environment.",
+    "claim": "No image in this folder is claimed as GPT Image 2 output."
+  },
+  "views": [
+    { "role": "front", "path": "references/intake-v2/alarm-clock/views/front.png", "source": "docs/history/appliance-model-v1-2026-08-11/references/intake/alarm-clock/front.png", "width": 557, "height": 941, "sha256": "E89D5651CDFF3161203A373FD3C2C342818EEB951FB9C66C4F6006D5F3DC140E", "admission": "conditional" },
+    { "role": "side", "path": "references/intake-v2/alarm-clock/views/side.png", "source": "docs/history/appliance-model-v1-2026-08-11/references/intake/alarm-clock/side.png", "width": 557, "height": 941, "sha256": "D2EAB8C2DE19833F2B3478067683C90E0B60C82D58420E5DF9F69896200049B1", "admission": "conditional" },
+    { "role": "back", "path": "references/intake-v2/alarm-clock/views/back.png", "source": "docs/history/appliance-model-v1-2026-08-11/references/intake/alarm-clock/back.png", "width": 558, "height": 941, "sha256": "6D838C711CC8F740CFAB0B07E70EE081B7AC16E82F8229032DC1985EE39BA02F", "admission": "conditional" },
+    { "role": "three-quarter", "path": "references/intake-v2/alarm-clock/views/three-quarter.png", "source": "docs/history/appliance-model-v1-2026-08-11/screenshots/models/alarm-clock/idle-three-quarter.png", "width": 1200, "height": 830, "sha256": "C0A2BD63E626EA4E11F9D0CF03636DC6BD0087085952E181D9E108653BCEFEC8", "admission": "conditional" }
+  ],
+  "limitations": [
+    "The reference set is an archived procedural v1 presentation, not new concept art.",
+    "Internal clockwork and exact bell underside hardware remain inferred.",
+    "Runtime pivots and sockets take precedence over any apparent image offset."
+  ]
+}
+

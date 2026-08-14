@@ -1,0 +1,47 @@
+{
+  "source": "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake-v2\\game-controller\\game-controller-turnsheet-v2.png",
+  "sourceWidth": 1254,
+  "sourceHeight": 1254,
+  "outputs": [
+    {
+      "view": "front",
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake-v2\\game-controller\\views\\front.png",
+      "crop": [
+        0,
+        0,
+        627,
+        627
+      ]
+    },
+    {
+      "view": "side",
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake-v2\\game-controller\\views\\side.png",
+      "crop": [
+        627,
+        0,
+        1254,
+        627
+      ]
+    },
+    {
+      "view": "back",
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake-v2\\game-controller\\views\\back.png",
+      "crop": [
+        0,
+        627,
+        627,
+        1254
+      ]
+    },
+    {
+      "view": "three-quarter",
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake-v2\\game-controller\\views\\three-quarter.png",
+      "crop": [
+        627,
+        627,
+        1254,
+        1254
+      ]
+    }
+  ]
+}

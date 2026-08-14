@@ -1,0 +1,83 @@
+{
+  "ok": true,
+  "verdict": "pass",
+  "confidence": 0.93,
+  "estimatedFidelity": 0.93,
+  "targetThreshold": 0.7,
+  "materialId": "transparent-shelf",
+  "sourceImage": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\history\\appliance-model-v1-2026-08-11\\screenshots\\models\\refrigerator\\active-startup-0.6.png",
+  "outDir": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs-v2\\refrigerator\\pbr\\transparent-shelf",
+  "palette": [
+    "#D9DBE3",
+    "#B9B9BD",
+    "#FFFFFE",
+    "#82757C",
+    "#F4D7D2"
+  ],
+  "maps": {
+    "albedo": {
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs-v2\\refrigerator\\pbr\\transparent-shelf\\transparent-shelf_albedo.png",
+      "url": "transparent-shelf_albedo.png",
+      "channel": "albedo",
+      "source": "reference-pixel-extraction"
+    },
+    "roughness": {
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs-v2\\refrigerator\\pbr\\transparent-shelf\\transparent-shelf_roughness.png",
+      "url": "transparent-shelf_roughness.png",
+      "channel": "roughness",
+      "source": "reference-pixel-extraction"
+    },
+    "height": {
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs-v2\\refrigerator\\pbr\\transparent-shelf\\transparent-shelf_height.png",
+      "url": "transparent-shelf_height.png",
+      "channel": "height",
+      "source": "reference-pixel-extraction"
+    },
+    "normal": {
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs-v2\\refrigerator\\pbr\\transparent-shelf\\transparent-shelf_normal.png",
+      "url": "transparent-shelf_normal.png",
+      "channel": "normal",
+      "source": "reference-pixel-extraction"
+    },
+    "ao": {
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs-v2\\refrigerator\\pbr\\transparent-shelf\\transparent-shelf_ao.png",
+      "url": "transparent-shelf_ao.png",
+      "channel": "ao",
+      "source": "reference-pixel-extraction"
+    }
+  },
+  "diagnostics": {
+    "sourceWidth": 1200,
+    "sourceHeight": 830,
+    "mapSize": 1024,
+    "cropBBoxPixels": {
+      "x": 20,
+      "y": 104,
+      "width": 1180,
+      "height": 726
+    },
+    "mask": {
+      "backgroundColor": "#EDF1F7",
+      "backgroundNoise": 0.0,
+      "transparentPixelFraction": 0.0,
+      "foregroundCoverage": 0.2928
+    },
+    "mapStats": {
+      "valueRange": 0.5423,
+      "heightP90Gradient": 0.04554,
+      "roughnessBase": 0.68,
+      "roughnessVariation": 0.071,
+      "normalStrength": 0.21,
+      "blurRadius": 21
+    },
+    "palette": [
+      "#D9DBE3",
+      "#B9B9BD",
+      "#FFFFFE",
+      "#82757C",
+      "#F4D7D2"
+    ]
+  },
+  "warnings": [],
+  "limitation": "single-image PBR extraction is an estimate; 70%+ extraction confidence still needs render screenshot review"
+}

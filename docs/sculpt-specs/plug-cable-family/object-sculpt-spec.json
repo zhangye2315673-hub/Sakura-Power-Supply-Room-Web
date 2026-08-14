@@ -1,0 +1,5904 @@
+{
+  "targetName": "SAKURA Plug Cable Family v2",
+  "targetId": "sakura-plug-cable-family-v2",
+  "schemaVersion": "2.1",
+  "terminologyProfile": {
+    "domain": "real-time procedural Three.js asset",
+    "geometryTerms": [
+      "silhouette",
+      "topology",
+      "primitive",
+      "bevel",
+      "chamfer",
+      "taper",
+      "bend",
+      "boolean cut",
+      "edge loop",
+      "surface normal",
+      "displacement"
+    ],
+    "materialTerms": [
+      "albedo",
+      "baseColor",
+      "roughness",
+      "metalness",
+      "normal map",
+      "bump map",
+      "ambient occlusion",
+      "cavity dirt",
+      "edge wear",
+      "clearcoat"
+    ],
+    "lightingTerms": [
+      "key light",
+      "fill light",
+      "rim light",
+      "HDRI/environment reflection",
+      "contact shadow"
+    ],
+    "descriptionRule": "Use measurable 3D graphics terms. Avoid vague words unless they are paired with concrete geometry/material/shader parameters."
+  },
+  "sourceImage": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\plug-cable-family\\reference-v1-round-two-pin.png",
+  "referenceCamera": {
+    "solved": true,
+    "fovDegrees": 32,
+    "aspect": 1,
+    "orientation": {
+      "yaw": -28,
+      "pitch": 16,
+      "roll": 0
+    },
+    "positionHint": [
+      1.15,
+      0.9,
+      2.7
+    ],
+    "note": "Fixed orthographic-equivalent showcase framing; family validation also uses front and side cameras."
+  },
+  "suitability": "pass",
+  "scores": {
+    "object_isolation": 3,
+    "silhouette_readability": 3,
+    "depth_inference": 2,
+    "primitive_decomposition": 3,
+    "material_procedurality": 3,
+    "occlusion_risk": 2,
+    "interaction_fit": 3
+  },
+  "preSpecAssessment": {
+    "objectClass": {
+      "primaryType": "stylized plug-and-cable family",
+      "primaryDomain": "object",
+      "formLanguage": [
+        "low-poly hard-surface",
+        "axially revolved shell",
+        "fiber-strand cable"
+      ],
+      "structureKind": [
+        "compound object",
+        "shared family shell",
+        "replaceable terminal variants"
+      ],
+      "motionPotential": [
+        "whole-object transform",
+        "progressive path extraction",
+        "bendable visual cable",
+        "socket insertion"
+      ],
+      "materialFamilies": [
+        "toon plastic",
+        "toon rubber",
+        "cool gray metal",
+        "dark connector cavity"
+      ],
+      "notes": "Code-only real-time game prop. Preserve current gameplay envelope and seven terminal identities while refining the visible construction."
+    },
+    "complexity": {
+      "tier": "complex",
+      "scores": {
+        "silhouetteComplexity": 1,
+        "componentCount": 3,
+        "hierarchyDepth": 2,
+        "repetitionDensity": 2,
+        "materialLayerCount": 2,
+        "localDetailDensity": 2,
+        "occlusionRisk": 1,
+        "actionReadinessNeed": 3
+      },
+      "estimatedCounts": {
+        "macroComponents": 3,
+        "mesoComponents": 9,
+        "microFeatureGroups": 7,
+        "materialLayers": 4,
+        "repetitionSystems": 2
+      },
+      "reasoning": [
+        "The common shell is simple, but seven terminal variants, two cable-end modes, progressive extraction, runtime picking and repeated geometry rebuilds require a complex action-ready contract.",
+        "Identity depends on preserved terminal layouts and on a rounded-corner cable system that must remain inside the existing collision envelope."
+      ]
+    },
+    "specDepthDecision": {
+      "requiredDepth": "complex",
+      "minimumComponentLevels": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "needsRepetitionSystems": true,
+      "needsMaterialLocalOverrides": true,
+      "needsMultipleReviewViews": true,
+      "needsActionReadyHierarchy": true,
+      "rationale": "One shared authored family must cover seven visible terminal systems and dynamic cable geometry without changing gameplay data."
+    },
+    "unknownsToResolveBeforeImplementation": [],
+    "detailInventory": {
+      "scanMethod": "component-zones-plus-grid-3x3",
+      "targetMinDetails": 10,
+      "details": [
+        {
+          "id": "front-chamfer",
+          "kind": "bevel",
+          "description": "主壳前肩的克制单段倒角形成连续亮边",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "0.04 shell radius",
+          "affects": "procedural geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "outer-shell/front-chamfer"
+          },
+          "evidenceRef": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\plug-cable-family\\detail-zones\\zone-r0c1.png",
+          "confidence": 0.96,
+          "realization": "unreported"
+        },
+        {
+          "id": "terminal-spacing",
+          "kind": "contour",
+          "description": "双圆针保持平行、等长并与中心轴对称",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "pin spacing 0.15",
+          "affects": "procedural geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "terminal-assembly/terminal-layout"
+          },
+          "evidenceRef": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\plug-cable-family\\detail-zones\\zone-r0c1.png",
+          "confidence": 1,
+          "realization": "unreported"
+        },
+        {
+          "id": "faceplate-seam",
+          "kind": "seam",
+          "description": "接口面圈与主壳之间保留清晰但不夸张的构造缝",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "0.01 axial seam",
+          "affects": "procedural geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "interface-faceplate/perimeter-seam"
+          },
+          "evidenceRef": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\plug-cable-family\\detail-zones\\zone-r0c1.png",
+          "confidence": 0.94,
+          "realization": "unreported"
+        },
+        {
+          "id": "shell-facets",
+          "kind": "contour",
+          "description": "主壳竖向低多边形面在三段 Toon 光下形成宽色带",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "12 radial facets",
+          "affects": "procedural geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "outer-shell/radial-facets"
+          },
+          "evidenceRef": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\plug-cable-family\\detail-zones\\zone-r1c1.png",
+          "confidence": 0.98,
+          "realization": "unreported"
+        },
+        {
+          "id": "status-inset",
+          "kind": "emissive",
+          "description": "侧面状态点改为浅内嵌圆点并保留交互发光",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "0.024 radius",
+          "affects": "procedural geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "status-indicator/recessed-dot"
+          },
+          "evidenceRef": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\plug-cable-family\\detail-zones\\zone-r1c2.png",
+          "confidence": 0.92,
+          "realization": "unreported"
+        },
+        {
+          "id": "rear-chamfer",
+          "kind": "bevel",
+          "description": "主壳后缘通过短倒角收向后颈而非球形鼓包",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "0.035 shell radius",
+          "affects": "procedural geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "outer-shell/rear-chamfer"
+          },
+          "evidenceRef": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\plug-cable-family\\detail-zones\\zone-r1c1.png",
+          "confidence": 0.94,
+          "realization": "unreported"
+        },
+        {
+          "id": "strain-relief-rings",
+          "kind": "ridge",
+          "description": "护线套使用两道浅环脊表达真实弯折保护结构",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "0.008 relief",
+          "affects": "procedural geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "strain-relief/shallow-rings"
+          },
+          "evidenceRef": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\plug-cable-family\\detail-zones\\zone-r2c1.png",
+          "confidence": 0.88,
+          "realization": "unreported"
+        },
+        {
+          "id": "cable-socket-overlap",
+          "kind": "seam",
+          "description": "线身嵌入护线套并至少重叠 0.02 世界单位",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "0.02 overlap",
+          "affects": "procedural geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "strain-relief/cable-overlap"
+          },
+          "evidenceRef": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\plug-cable-family\\detail-zones\\zone-r2c1.png",
+          "confidence": 0.98,
+          "realization": "unreported"
+        },
+        {
+          "id": "cable-radial-facets",
+          "kind": "contour",
+          "description": "线身使用八边圆截面以保持城市风格的平面折光",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "8 radial segments",
+          "affects": "procedural geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "cable-body/radial-facets"
+          },
+          "evidenceRef": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\plug-cable-family\\detail-zones\\zone-r2c1.png",
+          "confidence": 0.96,
+          "realization": "unreported"
+        },
+        {
+          "id": "tangent-fillet",
+          "kind": "contour",
+          "description": "每个正交折点使用不越界的相切四分之一圆角",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "0.13 radius clamped to 28 percent",
+          "affects": "procedural geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "cable-body/tangent-fillet"
+          },
+          "evidenceRef": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\plug-cable-family\\detail-zones\\zone-r2c1.png",
+          "confidence": 1,
+          "realization": "unreported"
+        },
+        {
+          "id": "cool-shadow-bands",
+          "kind": "contour",
+          "description": "外壳与线身保持三段色阶并把暗部偏向冷紫",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "3 toon bands",
+          "affects": "toon material response",
+          "mapsTo": {
+            "type": "material.localOverrides",
+            "ref": "shell-toon/cool-violet-shadow-bands"
+          },
+          "evidenceRef": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\plug-cable-family\\detail-zones\\zone-r1c1.png",
+          "confidence": 0.98,
+          "realization": "unreported"
+        },
+        {
+          "id": "ink-outline",
+          "kind": "contour",
+          "description": "主壳、面圈与线身使用深紫倒置壳墨线，微小针脚不重复加粗",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "0.0030-0.0033",
+          "affects": "toon material response",
+          "mapsTo": {
+            "type": "material.localOverrides",
+            "ref": "shell-toon/restrained-ink-outline"
+          },
+          "evidenceRef": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\plug-cable-family\\detail-zones\\zone-r1c1.png",
+          "confidence": 0.98,
+          "realization": "unreported"
+        }
+      ]
+    },
+    "anatomy": {
+      "applies": false,
+      "styleHeads": 0,
+      "proportions": {
+        "headUnit": 0,
+        "torso": 0,
+        "legs": 0,
+        "shoulderWidth": 0,
+        "hipWidth": 0
+      },
+      "pose": {
+        "type": "unassessed",
+        "jointAngles": {}
+      },
+      "faceLandmarks": {
+        "eyeLine": 0,
+        "eyeSpacing": 0,
+        "noseBase": 0,
+        "mouthLine": 0,
+        "hairline": 0
+      },
+      "features": [],
+      "confidence": 0,
+      "note": "Only meaningful when objectClass.primaryDomain is character or hybrid. Set applies=true and fill from forge/stage1_intake/extract_landmarks.py. See grimoire/character/reconstruction.md and grimoire/character/likeness_maximization.md."
+    },
+    "sourceImage": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\plug-cable-family\\reference-v1-round-two-pin.png",
+    "resolvedUnknowns": []
+  },
+  "qualityContract": {
+    "qualityBar": "complex",
+    "definitionOfDone": [
+      "All seven plug styles remain instantly distinguishable by their terminal assembly while sharing one cleaner SAKURA construction language.",
+      "Every style remains inside the current 0.18 radius and 0.64 length envelope in front, side and three-quarter views.",
+      "Cable corners use tangent low-poly fillets without Catmull-Rom overshoot, spherical elbow bulges, gaps or reversed short-segment bends.",
+      "Static, double-ended, showcase and appliance-flight cables share the same section, material hierarchy and plug attachment.",
+      "Hover, blocked, energized, picking, reset, disposal and progressive extraction behavior remain compatible with existing callers."
+    ],
+    "minimumSpecDepth": {
+      "macroComponents": 3,
+      "mesoComponents": 8,
+      "microFeatureGroups": 5,
+      "materialLayers": 4,
+      "repetitionSystems": 2,
+      "reviewViewpoints": 4
+    },
+    "featureGroups": [
+      {
+        "id": "family-shell-silhouette",
+        "name": "Shared shell silhouette and construction",
+        "required": true,
+        "qualityCriteria": [
+          "A restrained five-stage axial profile replaces the generic cylinder without exceeding the legacy envelope."
+        ],
+        "evidenceRefs": [
+          "reference-v1-round-two-pin",
+          "v1-seven-style-board"
+        ],
+        "failureModes": [
+          "bulbous toy silhouette",
+          "straight cylinder remains visually dominant",
+          "shell exceeds collision envelope"
+        ]
+      },
+      {
+        "id": "seven-terminal-identities",
+        "name": "Seven terminal identity systems",
+        "required": true,
+        "qualityCriteria": [
+          "Pin count, slot/cavity layout, orientation and relative spacing remain recognizable for all seven PlugStyleId values."
+        ],
+        "evidenceRefs": [
+          "v1-seven-style-board"
+        ],
+        "failureModes": [
+          "two styles become visually interchangeable",
+          "terminal tip exceeds maximum length",
+          "micro outlines obscure the connector"
+        ]
+      },
+      {
+        "id": "tangent-cable-fillet",
+        "name": "Orthogonal cable fillet system",
+        "required": true,
+        "qualityCriteria": [
+          "A 0.13 radius quarter-turn is clamped to 28 percent of each adjacent leg, remains tangent and never overshoots the polyline cell."
+        ],
+        "evidenceRefs": [
+          "v1-fixed-seed-game"
+        ],
+        "failureModes": [
+          "spherical elbow bulge",
+          "Catmull-Rom corner cutting",
+          "short-segment reversal",
+          "open tube end"
+        ]
+      },
+      {
+        "id": "attachment-runtime",
+        "name": "Cable attachment and runtime hierarchy",
+        "required": true,
+        "qualityCriteria": [
+          "Cable overlaps the strain-relief socket, every visible part has a stable node name, and sculptRuntime publishes nodes, sockets and destruction groups."
+        ],
+        "evidenceRefs": [
+          "reference-v1-round-two-pin"
+        ],
+        "failureModes": [
+          "floating cable",
+          "unnamed mesh",
+          "picking and explode part definitions disagree"
+        ]
+      },
+      {
+        "id": "sakura-toon-response",
+        "name": "SAKURA city toon response",
+        "required": true,
+        "qualityCriteria": [
+          "Narrow saturated palette, cool violet shadow bands, restrained deep-purple ink and low-poly facets match the city source without toy or cyber-mechanical cues."
+        ],
+        "evidenceRefs": [
+          "sakura-crossing-hero-1",
+          "sakura-crossing-hero-2",
+          "sakura-crossing-hero-4"
+        ],
+        "failureModes": [
+          "soft-vinyl toy read",
+          "photoreal PBR mismatch",
+          "excess panel clutter",
+          "thick micro-part outlines"
+        ]
+      }
+    ],
+    "visualDeltaChecks": [
+      "legacy versus v2 shell silhouette and envelope",
+      "seven-style terminal identity at one shared camera",
+      "sharp elbow versus tangent fillet without path overshoot",
+      "cable-to-strain-relief contact and outline continuity",
+      "SAKURA palette and cool-shadow parity across neutral and three-quarter views"
+    ],
+    "antiShallowSpecRules": [
+      "Do not alter puzzle paths, pathLength, clickability, collision constants or appliance mappings to make the new visuals fit.",
+      "Do not use a free Catmull-Rom spline for orthogonal puzzle cable corners.",
+      "Do not represent a terminal hole as a dark decal when a real cavity face is visible.",
+      "Do not merge all terminal variants into one anonymous mesh or omit runtime node names.",
+      "Do not accept a cable-to-plug seam with less than 0.02 world-unit overlap.",
+      "Do not add photo projection or external texture assets for flat SAKURA materials.",
+      "Adjacent components must overlap by at least 0.02 world units at shared seams (source: grimoire/build/geometry_patterns.md).",
+      "Raised or recessed relief and fasteners must be geometry, instanced micro-parts, or displacement; a map alone is an approximation (source: grimoire/build/geometry_patterns.md)."
+    ],
+    "mustNotDo": [
+      "Do not alter puzzle paths, pathLength, clickability, collision constants or appliance mappings to make the new visuals fit.",
+      "Do not use a free Catmull-Rom spline for orthogonal puzzle cable corners.",
+      "Do not represent a terminal hole as a dark decal when a real cavity face is visible.",
+      "Do not merge all terminal variants into one anonymous mesh or omit runtime node names.",
+      "Do not accept a cable-to-plug seam with less than 0.02 world-unit overlap.",
+      "Do not add photo projection or external texture assets for flat SAKURA materials.",
+      "Adjacent components must overlap by at least 0.02 world units at shared seams (source: grimoire/build/geometry_patterns.md).",
+      "Raised or recessed relief and fasteners must be geometry, instanced micro-parts, or displacement; a map alone is an approximation (source: grimoire/build/geometry_patterns.md)."
+    ]
+  },
+  "qualityTargets": {
+    "targetFidelity": 0.82,
+    "mustMatch": [
+      "legacy envelope and terminal identity",
+      "five-stage low-poly plug silhouette",
+      "tangent bounded cable corners",
+      "SAKURA cool-shadow toon response",
+      "runtime socket and named-node contract"
+    ],
+    "niceToHave": [
+      "subtle per-facet color variation",
+      "debug explode readability"
+    ],
+    "fpsTarget": 60,
+    "reviewViewpoints": [
+      "front",
+      "three-quarter",
+      "side",
+      "cable-corner-closeup",
+      "fixed-seed-gameplay"
+    ]
+  },
+  "selfCorrectLoop": {
+    "enabled": true,
+    "visualAcceptance": {
+      "reviewer": "ai-vision",
+      "threshold": 0.7,
+      "comparisonArtifactRequired": true,
+      "layerScoresRequired": true,
+      "codePixelDiffIsAcceptanceAuthority": false,
+      "scoringRule": "AI vision must inspect a side-by-side reference/render sheet and score the current pass from 0 to 1. Pixel-diff code may assist diagnostics but cannot approve a pass.",
+      "requiredLayerScores": [
+        "silhouetteProportion",
+        "componentStructure",
+        "formDetail",
+        "materialSurface",
+        "lightingCamera"
+      ],
+      "featureReviewPolicy": {
+        "enabled": true,
+        "reviewUnit": "semantic-subsystem",
+        "maxCriticalFeaturesPerPass": 5,
+        "maxImportantFeaturesPerPass": 3,
+        "criticalDefaultThreshold": 0.8,
+        "importantAverageThreshold": 0.65,
+        "adaptiveEscalation": true,
+        "singleImagePairOnly": true,
+        "selectionRule": "Choose only the most visually salient, identity-defining, user-prioritized, or high-risk semantic systems. Group repeated parts instead of reviewing every mesh. AI vision scores every selected feature from the same full reference/render pair."
+      }
+    },
+    "reviewAfterPasses": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "surface-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "allowedActions": [
+      "continue",
+      "refine-spec",
+      "refine-code",
+      "request-input",
+      "stop"
+    ],
+    "specRefineTriggers": [
+      "missing component",
+      "wrong primitive family",
+      "wrong proportions",
+      "material layer under-specified",
+      "local feature not traceable to viewEvidence",
+      "reference ambiguity discovered during implementation"
+    ],
+    "codeRefineTriggers": [
+      "spec is adequate but generated geometry/material does not match",
+      "browser render differs from reference",
+      "performance budget exceeded",
+      "lighting hides geometry or material response"
+    ],
+    "stopCriteria": [
+      "target fidelity reached or user accepts current approximation",
+      "remaining gaps require new reference images or manual art"
+    ],
+    "screenshotPolicy": {
+      "requiredForPasses": [
+        "blockout",
+        "structural-pass",
+        "form-refinement",
+        "material-pass",
+        "surface-pass",
+        "lighting-pass",
+        "interaction-pass"
+      ],
+      "preferredCapture": "in-app-browser-screenshot",
+      "fallbackCapture": "user-supplied-screenshot-path",
+      "minimumEvidence": "Each visual pass needs a reference image, rendered screenshot, side-by-side comparison sheet, AI vision score, layer scores, and critique before choosing continue.",
+      "reviewPairRule": "Compare the same camera/viewpoint whenever possible; do not judge a front reference against a random render angle.",
+      "acceptanceAuthority": "AI vision review of the comparison sheet. Code-generated pixel similarity is not sufficient evidence."
+    }
+  },
+  "featureReviewTargets": [
+    {
+      "id": "family-shell-silhouette",
+      "name": "Shared five-stage shell silhouette",
+      "tier": "critical",
+      "passIds": [
+        "blockout",
+        "form-refinement"
+      ],
+      "minimumScore": 0.82,
+      "mustPass": true,
+      "componentRefs": [
+        "plug-assembly",
+        "outer-shell"
+      ],
+      "evidenceRefs": [
+        "reference-v1-round-two-pin",
+        "v1-seven-style-board"
+      ]
+    },
+    {
+      "id": "seven-terminal-identities",
+      "name": "Seven preserved connector identities",
+      "tier": "critical",
+      "passIds": [
+        "structural-pass",
+        "form-refinement"
+      ],
+      "minimumScore": 0.84,
+      "mustPass": true,
+      "componentRefs": [
+        "terminal-assembly",
+        "terminal-layout-feature"
+      ],
+      "evidenceRefs": [
+        "v1-seven-style-board"
+      ]
+    },
+    {
+      "id": "tangent-cable-fillet",
+      "name": "Bounded tangent cable fillets",
+      "tier": "critical",
+      "passIds": [
+        "form-refinement"
+      ],
+      "minimumScore": 0.86,
+      "mustPass": true,
+      "componentRefs": [
+        "cable-body",
+        "cable-fillet-system"
+      ],
+      "evidenceRefs": [
+        "v1-fixed-seed-game"
+      ]
+    },
+    {
+      "id": "sakura-toon-response",
+      "name": "SAKURA toon palette and cool shadows",
+      "tier": "critical",
+      "passIds": [
+        "material-pass",
+        "surface-pass",
+        "lighting-pass"
+      ],
+      "minimumScore": 0.78,
+      "mustPass": true,
+      "componentRefs": [
+        "outer-shell",
+        "cool-shadow-band",
+        "ink-outline-system"
+      ],
+      "evidenceRefs": [
+        "sakura-crossing-hero-1",
+        "sakura-crossing-hero-2",
+        "sakura-crossing-hero-4"
+      ]
+    },
+    {
+      "id": "attachment-runtime",
+      "name": "Socket overlap and stable runtime nodes",
+      "tier": "critical",
+      "passIds": [
+        "structural-pass",
+        "interaction-pass"
+      ],
+      "minimumScore": 0.9,
+      "mustPass": true,
+      "componentRefs": [
+        "plug-assembly",
+        "cable-end-socket",
+        "cable-body"
+      ],
+      "evidenceRefs": [
+        "reference-v1-round-two-pin"
+      ]
+    }
+  ],
+  "sculptPipeline": {
+    "passGateMode": "locked-sequential",
+    "passOrder": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "surface-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "currentPass": "complete",
+    "completedPasses": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "surface-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "lastCompletedPass": "optimization-pass",
+    "blockedReason": "all build passes completed",
+    "nextRequiredEvidence": []
+  },
+  "lookDevTargets": {
+    "qualityPriority": "runtime-stylized",
+    "materialPass": {
+      "albedoPaletteRequired": true,
+      "roughnessVariationRequired": true,
+      "normalOrBumpRequired": true,
+      "localOverridesRequired": true,
+      "independentMapChannels": [],
+      "requiredSurfaceFrequencyBands": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "geometryReliefRequiredWhenSilhouetteAffected": true,
+      "acceptedLimitation": "Flat code-defined toon materials intentionally use no PBR image maps or external textures."
+    },
+    "lightingPass": {
+      "requiredTerms": [
+        "key light",
+        "fill light",
+        "rim light",
+        "ACES tone mapping",
+        "contact shadow"
+      ],
+      "mustAvoid": [
+        "ambient-only lighting",
+        "photoreal HDRI reflections",
+        "soft-vinyl highlights"
+      ]
+    },
+    "screenshotReview": [
+      "Compare all seven identities at one camera.",
+      "Compare front, three-quarter and side silhouettes.",
+      "Inspect a 90-degree cable corner close-up.",
+      "Check fixed seed 2679418801 through extraction and appliance flight."
+    ]
+  },
+  "actionReadiness": {
+    "contract": "Every macro/meso component should be generated as a stable named Object3D pivot node with a mesh child, action metadata, optional sockets, collider proxy, and destruction metadata.",
+    "defaultRigType": "action-ready-static-rig",
+    "rootMotionNode": "root",
+    "requiredComponentFields": [
+      "id",
+      "parent",
+      "transform",
+      "attachment for child appendages, connectors, limbs, tubes, handles, legs, horns, wings, branches, or cables",
+      "actionProfile.animationRole",
+      "actionProfile.pivot",
+      "actionProfile.collider",
+      "actionProfile.destruction"
+    ],
+    "transformChannels": [
+      "translate",
+      "rotate",
+      "scale",
+      "bend",
+      "twist",
+      "detach",
+      "visibility",
+      "material-state"
+    ],
+    "authoringRules": [
+      "Do not collapse independently movable parts into one mesh.",
+      "Put transforms on component pivot groups, not only on raw meshes.",
+      "For attached child parts, put the pivot at the semantic root/socket and build visible geometry from localStart to localEnd.",
+      "Represent hinge, socket, detachable, and breakable intent even when no animation is implemented yet.",
+      "Use simplified collider proxies for runtime physics instead of visual mesh colliders by default."
+    ],
+    "destructionPolicy": {
+      "defaultBreakable": false,
+      "fractureGroupNaming": "Use stable semantic names such as body-shell, left-hinge, glass-panel, branch-segment.",
+      "debrisStrategy": "Prefer detachable component groups and a small number of procedural fragments over random mesh explosion."
+    }
+  },
+  "assumptions": [
+    "PLUG_HEAD_ENVELOPE and puzzle collision constants are authoritative.",
+    "The isolated round-two-pin image establishes the common family proportion, while the seven-style board establishes identity.",
+    "SAKURA city screenshots are style-only evidence and do not override plug dimensions.",
+    "All dynamic path mutations remain owned by existing gameplay systems; the new helpers are rendering-only."
+  ],
+  "coordinateFrame": {
+    "front": "camera-facing side in the reference image",
+    "up": "image up direction",
+    "scaleReference": "unit scale; adjust after first browser render"
+  },
+  "silhouette": {
+    "boundingShape": "",
+    "aspectRatios": [],
+    "symmetry": "",
+    "dominantCurves": [],
+    "negativeSpaces": [],
+    "landmarks": []
+  },
+  "viewEvidence": [
+    {
+      "id": "reference-v1-round-two-pin",
+      "view": "three-quarter isolated v1 plug",
+      "imagePath": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\plug-cable-family\\reference-v1-round-two-pin.png",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "legacy envelope",
+        "terminal spacing",
+        "cable axis",
+        "current generic shell weakness"
+      ],
+      "confidence": 1
+    },
+    {
+      "id": "v1-seven-style-board",
+      "view": "seven-style family board",
+      "imagePath": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\history\\plug-cable-v1-2026-08-10\\screenshots\\plug-cable-v1-showcase.png",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "all seven terminal identities",
+        "shared proportions",
+        "family palette"
+      ],
+      "confidence": 1
+    },
+    {
+      "id": "v1-fixed-seed-game",
+      "view": "fixed-seed gameplay context",
+      "imagePath": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\history\\plug-cable-v1-2026-08-10\\screenshots\\plug-cable-v1-game-seed-2679418801.png",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "orthogonal cable paths",
+        "elbow bulges to remove",
+        "game-scale outline weight"
+      ],
+      "confidence": 1
+    },
+    {
+      "id": "sakura-crossing-hero-1",
+      "view": "SAKURA city style reference 1",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "clean Japanese low-poly construction",
+        "cool violet shadow bands",
+        "restrained dark ink"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "id": "sakura-crossing-hero-2",
+      "view": "SAKURA city style reference 2",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "clean Japanese low-poly construction",
+        "cool violet shadow bands",
+        "restrained dark ink"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "id": "sakura-crossing-hero-4",
+      "view": "SAKURA city style reference 3",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "clean Japanese low-poly construction",
+        "cool violet shadow bands",
+        "restrained dark ink"
+      ],
+      "confidence": 0.9
+    }
+  ],
+  "componentTree": [
+    {
+      "id": "root",
+      "name": "Plug cable family runtime root",
+      "level": "macro",
+      "role": "body",
+      "importance": 1,
+      "confidence": 0.96,
+      "primitive": "lathe",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Plug cable family runtime root is represented by lathe geometry because its visible silhouette and runtime behavior require assembled-solid topology.",
+      "geometryDescriptor": {
+        "topologyIntent": "twelve-sided low-poly hard-surface form",
+        "edgeTreatment": {
+          "type": "restrained-chamfer",
+          "bevelRadius": 0.012,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "none; solid toon albedo",
+        "normalStrategy": "generated faceted vertex normals; no smoothing that erases twelve-sided planes"
+      },
+      "parent": null,
+      "attachment": null,
+      "dimensions": {
+        "width": 0.36,
+        "height": 0.64,
+        "depth": 0.36,
+        "units": "world-units",
+        "confidence": 1
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "root",
+        "pivot": {
+          "mode": "semantic-center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 1
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": false,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [
+          {
+            "id": "plug-origin",
+            "localPosition": [
+              0,
+              0,
+              0
+            ],
+            "localRotation": [
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "id": "cable-path-origin",
+            "localPosition": [
+              0,
+              0,
+              0
+            ],
+            "localRotation": [
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "collider": {
+          "type": "capsule",
+          "offset": [
+            0,
+            0.32,
+            0
+          ],
+          "scale": [
+            0.36,
+            0.64,
+            0.36
+          ],
+          "isTrigger": true
+        },
+        "constraints": [
+          "preserve legacy click and collision envelope"
+        ],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "root",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "none"
+        }
+      },
+      "material": "shell-toon",
+      "materialLayers": [
+        "shell-toon"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(241, 111, 143, 1)",
+        "secondaryAlbedo": "rgba(197, 79, 118, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.95,
+        "colorGradient": {
+          "type": "linear",
+          "stops": [
+            {
+              "offset": 0,
+              "color": "rgba(241, 111, 143, 1)"
+            },
+            {
+              "offset": 1,
+              "color": "rgba(197, 79, 118, 1)"
+            }
+          ]
+        }
+      },
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [],
+      "surfaceDetail": {
+        "macroRoughness": 0.22,
+        "microRoughness": 0.03,
+        "bumpAmplitude": 0.004,
+        "normalPattern": "faceted geometry normals",
+        "displacementPattern": "none",
+        "occlusionPattern": "toon shadow band plus contact AO",
+        "edgeWearPattern": "none",
+        "notes": "Clean city prop; no grime, scratches, or soft-vinyl bulging."
+      },
+      "evidenceRefs": [
+        "reference-v1-round-two-pin",
+        "v1-seven-style-board",
+        "v1-fixed-seed-game"
+      ],
+      "details": [],
+      "fidelityTier": "production"
+    },
+    {
+      "id": "plug-assembly",
+      "name": "Shared low-poly plug assembly",
+      "level": "macro",
+      "role": "assembly",
+      "importance": 1,
+      "confidence": 0.96,
+      "primitive": "lathe",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Shared low-poly plug assembly is represented by lathe geometry because its visible silhouette and runtime behavior require assembled-solid topology.",
+      "geometryDescriptor": {
+        "topologyIntent": "twelve-sided low-poly hard-surface form",
+        "edgeTreatment": {
+          "type": "restrained-chamfer",
+          "bevelRadius": 0.012,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "none; solid toon albedo",
+        "normalStrategy": "generated faceted vertex normals; no smoothing that erases twelve-sided planes"
+      },
+      "parent": "root",
+      "attachment": {
+        "parentId": "root",
+        "parentSocket": "plug-origin",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.46,
+          0
+        ],
+        "contactNormal": [
+          0,
+          1,
+          0
+        ],
+        "overlap": 0.025,
+        "gapTolerance": 0.003,
+        "contactType": "overlap",
+        "evidenceRefs": [
+          "reference-v1-round-two-pin"
+        ]
+      },
+      "dimensions": {
+        "width": 0.36,
+        "height": 0.64,
+        "depth": 0.36,
+        "units": "world-units",
+        "confidence": 1
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "plug",
+        "pivot": {
+          "mode": "semantic-center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 1
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": false,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [
+          {
+            "id": "cable-socket",
+            "localPosition": [
+              0,
+              0,
+              0
+            ],
+            "localRotation": [
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "id": "terminal-socket",
+            "localPosition": [
+              0,
+              0.47,
+              0
+            ],
+            "localRotation": [
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "collider": {
+          "type": "capsule",
+          "offset": [
+            0,
+            0.32,
+            0
+          ],
+          "scale": [
+            0.36,
+            0.64,
+            0.36
+          ],
+          "isTrigger": true
+        },
+        "constraints": [
+          "preserve legacy click and collision envelope"
+        ],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "plug",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "none"
+        }
+      },
+      "material": "shell-toon",
+      "materialLayers": [
+        "shell-toon"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(241, 111, 143, 1)",
+        "secondaryAlbedo": "rgba(197, 79, 118, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.95,
+        "colorGradient": {
+          "type": "linear",
+          "stops": [
+            {
+              "offset": 0,
+              "color": "rgba(241, 111, 143, 1)"
+            },
+            {
+              "offset": 1,
+              "color": "rgba(197, 79, 118, 1)"
+            }
+          ]
+        }
+      },
+      "deformations": [],
+      "joints": [
+        "plug-origin"
+      ],
+      "seams": [],
+      "localFeatures": [],
+      "surfaceDetail": {
+        "macroRoughness": 0.22,
+        "microRoughness": 0.03,
+        "bumpAmplitude": 0.004,
+        "normalPattern": "faceted geometry normals",
+        "displacementPattern": "none",
+        "occlusionPattern": "toon shadow band plus contact AO",
+        "edgeWearPattern": "none",
+        "notes": "Clean city prop; no grime, scratches, or soft-vinyl bulging."
+      },
+      "evidenceRefs": [
+        "reference-v1-round-two-pin",
+        "v1-seven-style-board"
+      ],
+      "details": [],
+      "fidelityTier": "production"
+    },
+    {
+      "id": "cable-body",
+      "name": "Eight-sided tangent-fillet cable",
+      "level": "macro",
+      "role": "cable",
+      "importance": 1,
+      "confidence": 0.96,
+      "primitive": "tube",
+      "topologyClass": "fiber-strand",
+      "topologyRationale": "Eight-sided tangent-fillet cable is represented by tube geometry because its visible silhouette and runtime behavior require fiber-strand topology.",
+      "geometryDescriptor": {
+        "topologyIntent": "eight-sided tangent curve sweep",
+        "edgeTreatment": {
+          "type": "restrained-chamfer",
+          "bevelRadius": 0.012,
+          "segments": 1
+        },
+        "deformationStack": [
+          "orthogonal quarter-circle fillets only"
+        ],
+        "uvStrategy": "none; solid toon albedo",
+        "normalStrategy": "generated faceted vertex normals; no smoothing that erases twelve-sided planes"
+      },
+      "parent": "root",
+      "attachment": {
+        "parentId": "root",
+        "parentSocket": "cable-path-origin",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          -1,
+          0
+        ],
+        "contactNormal": [
+          0,
+          1,
+          0
+        ],
+        "overlap": 0.025,
+        "gapTolerance": 0.003,
+        "contactType": "overlap",
+        "evidenceRefs": [
+          "reference-v1-round-two-pin"
+        ]
+      },
+      "dimensions": {
+        "width": 0.21,
+        "height": 0.21,
+        "depth": 4.5,
+        "radius": 0.105,
+        "units": "world-units",
+        "confidence": 1
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "cable",
+        "pivot": {
+          "mode": "semantic-center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 1
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": false,
+          "bend": true,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "curve-capsule-chain",
+          "offset": [
+            0,
+            0.32,
+            0
+          ],
+          "scale": [
+            0.36,
+            0.64,
+            0.36
+          ],
+          "isTrigger": true
+        },
+        "constraints": [
+          "preserve legacy click and collision envelope"
+        ],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "cable",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "none"
+        }
+      },
+      "material": "rubber-toon",
+      "materialLayers": [
+        "rubber-toon"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(107, 78, 114, 1)",
+        "secondaryAlbedo": "rgba(74, 56, 90, 1)",
+        "materialClass": "rubber",
+        "materialClassConfidence": 0.95,
+        "colorGradient": {
+          "type": "linear",
+          "stops": [
+            {
+              "offset": 0,
+              "color": "rgba(107, 78, 114, 1)"
+            },
+            {
+              "offset": 1,
+              "color": "rgba(74, 56, 90, 1)"
+            }
+          ]
+        }
+      },
+      "deformations": [
+        "fillet radius 0.13 clamped to 28 percent of adjacent legs"
+      ],
+      "joints": [
+        "cable-path-origin"
+      ],
+      "seams": [],
+      "localFeatures": [
+        {
+          "id": "cable-section-facets"
+        },
+        {
+          "id": "radial-facets"
+        },
+        {
+          "id": "tangent-fillet"
+        },
+        {
+          "id": "sealed-end-caps"
+        }
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.22,
+        "microRoughness": 0.03,
+        "bumpAmplitude": 0.004,
+        "normalPattern": "faceted geometry normals",
+        "displacementPattern": "none",
+        "occlusionPattern": "toon shadow band plus contact AO",
+        "edgeWearPattern": "none",
+        "notes": "Clean city prop; no grime, scratches, or soft-vinyl bulging."
+      },
+      "evidenceRefs": [
+        "reference-v1-round-two-pin",
+        "v1-fixed-seed-game"
+      ],
+      "details": [
+        {
+          "id": "cable-section-facets"
+        },
+        {
+          "id": "radial-facets"
+        },
+        {
+          "id": "tangent-fillet"
+        },
+        {
+          "id": "sealed-end-caps"
+        }
+      ],
+      "fidelityTier": "production"
+    },
+    {
+      "id": "strain-relief",
+      "name": "Short stepped strain relief",
+      "level": "meso",
+      "role": "connector",
+      "importance": 0.9,
+      "confidence": 0.96,
+      "primitive": "lathe",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Short stepped strain relief is represented by lathe geometry because its visible silhouette and runtime behavior require assembled-solid topology.",
+      "geometryDescriptor": {
+        "topologyIntent": "twelve-sided low-poly hard-surface form",
+        "edgeTreatment": {
+          "type": "restrained-chamfer",
+          "bevelRadius": 0.012,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "none; solid toon albedo",
+        "normalStrategy": "generated faceted vertex normals; no smoothing that erases twelve-sided planes"
+      },
+      "parent": "plug-assembly",
+      "attachment": {
+        "parentId": "plug-assembly",
+        "parentSocket": "cable-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.15,
+          0
+        ],
+        "contactNormal": [
+          0,
+          1,
+          0
+        ],
+        "overlap": 0.025,
+        "gapTolerance": 0.003,
+        "contactType": "overlap",
+        "evidenceRefs": [
+          "reference-v1-round-two-pin"
+        ]
+      },
+      "dimensions": {
+        "width": 0.27,
+        "height": 0.15,
+        "depth": 0.27,
+        "units": "world-units",
+        "confidence": 1
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "semantic-center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 1
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": false,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "capsule",
+          "offset": [
+            0,
+            0.32,
+            0
+          ],
+          "scale": [
+            0.36,
+            0.64,
+            0.36
+          ],
+          "isTrigger": true
+        },
+        "constraints": [
+          "preserve legacy click and collision envelope"
+        ],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "static-part",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "none"
+        }
+      },
+      "material": "rubber-toon",
+      "materialLayers": [
+        "rubber-toon"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(107, 78, 114, 1)",
+        "secondaryAlbedo": "rgba(74, 56, 90, 1)",
+        "materialClass": "rubber",
+        "materialClassConfidence": 0.95,
+        "colorGradient": {
+          "type": "linear",
+          "stops": [
+            {
+              "offset": 0,
+              "color": "rgba(107, 78, 114, 1)"
+            },
+            {
+              "offset": 1,
+              "color": "rgba(74, 56, 90, 1)"
+            }
+          ]
+        }
+      },
+      "deformations": [],
+      "joints": [
+        "cable-socket"
+      ],
+      "seams": [],
+      "localFeatures": [
+        {
+          "id": "relief-rings"
+        },
+        {
+          "id": "shallow-rings"
+        },
+        {
+          "id": "cable-overlap"
+        }
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.22,
+        "microRoughness": 0.03,
+        "bumpAmplitude": 0.004,
+        "normalPattern": "faceted geometry normals",
+        "displacementPattern": "none",
+        "occlusionPattern": "toon shadow band plus contact AO",
+        "edgeWearPattern": "none",
+        "notes": "Clean city prop; no grime, scratches, or soft-vinyl bulging."
+      },
+      "evidenceRefs": [
+        "reference-v1-round-two-pin"
+      ],
+      "details": [
+        {
+          "id": "relief-rings"
+        },
+        {
+          "id": "shallow-rings"
+        },
+        {
+          "id": "cable-overlap"
+        }
+      ],
+      "fidelityTier": "production"
+    },
+    {
+      "id": "rear-neck",
+      "name": "Rear neck transition",
+      "level": "meso",
+      "role": "connector",
+      "importance": 0.9,
+      "confidence": 0.96,
+      "primitive": "lathe",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rear neck transition is represented by lathe geometry because its visible silhouette and runtime behavior require assembled-solid topology.",
+      "geometryDescriptor": {
+        "topologyIntent": "twelve-sided low-poly hard-surface form",
+        "edgeTreatment": {
+          "type": "restrained-chamfer",
+          "bevelRadius": 0.012,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "none; solid toon albedo",
+        "normalStrategy": "generated faceted vertex normals; no smoothing that erases twelve-sided planes"
+      },
+      "parent": "plug-assembly",
+      "attachment": {
+        "parentId": "plug-assembly",
+        "parentSocket": "cable-socket",
+        "localStart": [
+          0,
+          0.12,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.18,
+          0
+        ],
+        "contactNormal": [
+          0,
+          1,
+          0
+        ],
+        "overlap": 0.025,
+        "gapTolerance": 0.003,
+        "contactType": "overlap",
+        "evidenceRefs": [
+          "reference-v1-round-two-pin"
+        ]
+      },
+      "dimensions": {
+        "width": 0.3,
+        "height": 0.06,
+        "depth": 0.3,
+        "units": "world-units",
+        "confidence": 1
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "semantic-center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 1
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": false,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "capsule",
+          "offset": [
+            0,
+            0.32,
+            0
+          ],
+          "scale": [
+            0.36,
+            0.64,
+            0.36
+          ],
+          "isTrigger": true
+        },
+        "constraints": [
+          "preserve legacy click and collision envelope"
+        ],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "static-part",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "none"
+        }
+      },
+      "material": "shell-toon",
+      "materialLayers": [
+        "shell-toon"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(241, 111, 143, 1)",
+        "secondaryAlbedo": "rgba(197, 79, 118, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.95,
+        "colorGradient": {
+          "type": "linear",
+          "stops": [
+            {
+              "offset": 0,
+              "color": "rgba(241, 111, 143, 1)"
+            },
+            {
+              "offset": 1,
+              "color": "rgba(197, 79, 118, 1)"
+            }
+          ]
+        }
+      },
+      "deformations": [],
+      "joints": [
+        "cable-socket"
+      ],
+      "seams": [],
+      "localFeatures": [
+        {
+          "id": "rear-chamfer"
+        }
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.22,
+        "microRoughness": 0.03,
+        "bumpAmplitude": 0.004,
+        "normalPattern": "faceted geometry normals",
+        "displacementPattern": "none",
+        "occlusionPattern": "toon shadow band plus contact AO",
+        "edgeWearPattern": "none",
+        "notes": "Clean city prop; no grime, scratches, or soft-vinyl bulging."
+      },
+      "evidenceRefs": [
+        "reference-v1-round-two-pin"
+      ],
+      "details": [
+        {
+          "id": "rear-chamfer"
+        }
+      ],
+      "fidelityTier": "production"
+    },
+    {
+      "id": "outer-shell",
+      "name": "Twelve-sided main shell",
+      "level": "meso",
+      "role": "shell",
+      "importance": 0.9,
+      "confidence": 0.96,
+      "primitive": "lathe",
+      "topologyClass": "conforming-shell",
+      "topologyRationale": "Twelve-sided main shell is represented by lathe geometry because its visible silhouette and runtime behavior require conforming-shell topology.",
+      "geometryDescriptor": {
+        "topologyIntent": "twelve-sided low-poly hard-surface form",
+        "edgeTreatment": {
+          "type": "restrained-chamfer",
+          "bevelRadius": 0.012,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "none; solid toon albedo",
+        "normalStrategy": "generated faceted vertex normals; no smoothing that erases twelve-sided planes"
+      },
+      "parent": "plug-assembly",
+      "attachment": {
+        "parentId": "plug-assembly",
+        "parentSocket": "cable-socket",
+        "localStart": [
+          0,
+          0.14,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.46,
+          0
+        ],
+        "contactNormal": [
+          0,
+          1,
+          0
+        ],
+        "overlap": 0.025,
+        "gapTolerance": 0.003,
+        "contactType": "overlap",
+        "evidenceRefs": [
+          "reference-v1-round-two-pin"
+        ]
+      },
+      "dimensions": {
+        "width": 0.36,
+        "height": 0.32,
+        "depth": 0.36,
+        "units": "world-units",
+        "confidence": 1
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "semantic-center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 1
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": false,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "capsule",
+          "offset": [
+            0,
+            0.32,
+            0
+          ],
+          "scale": [
+            0.36,
+            0.64,
+            0.36
+          ],
+          "isTrigger": true
+        },
+        "constraints": [
+          "preserve legacy click and collision envelope"
+        ],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "static-part",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "none"
+        }
+      },
+      "material": "shell-toon",
+      "materialLayers": [
+        "shell-toon"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(241, 111, 143, 1)",
+        "secondaryAlbedo": "rgba(197, 79, 118, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.95,
+        "colorGradient": {
+          "type": "linear",
+          "stops": [
+            {
+              "offset": 0,
+              "color": "rgba(241, 111, 143, 1)"
+            },
+            {
+              "offset": 1,
+              "color": "rgba(197, 79, 118, 1)"
+            }
+          ]
+        }
+      },
+      "deformations": [],
+      "joints": [
+        "cable-socket"
+      ],
+      "seams": [],
+      "localFeatures": [
+        {
+          "id": "front-chamfer"
+        },
+        {
+          "id": "rear-chamfer"
+        },
+        {
+          "id": "radial-facets"
+        }
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.22,
+        "microRoughness": 0.03,
+        "bumpAmplitude": 0.004,
+        "normalPattern": "faceted geometry normals",
+        "displacementPattern": "none",
+        "occlusionPattern": "toon shadow band plus contact AO",
+        "edgeWearPattern": "none",
+        "notes": "Clean city prop; no grime, scratches, or soft-vinyl bulging."
+      },
+      "evidenceRefs": [
+        "reference-v1-round-two-pin",
+        "v1-seven-style-board",
+        "sakura-crossing-hero-1"
+      ],
+      "details": [
+        {
+          "id": "front-chamfer"
+        },
+        {
+          "id": "rear-chamfer"
+        },
+        {
+          "id": "radial-facets"
+        }
+      ],
+      "fidelityTier": "production"
+    },
+    {
+      "id": "front-shoulder",
+      "name": "Restrained front shoulder",
+      "level": "meso",
+      "role": "shell",
+      "importance": 0.9,
+      "confidence": 0.96,
+      "primitive": "lathe",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Restrained front shoulder is represented by lathe geometry because its visible silhouette and runtime behavior require assembled-solid topology.",
+      "geometryDescriptor": {
+        "topologyIntent": "twelve-sided low-poly hard-surface form",
+        "edgeTreatment": {
+          "type": "restrained-chamfer",
+          "bevelRadius": 0.012,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "none; solid toon albedo",
+        "normalStrategy": "generated faceted vertex normals; no smoothing that erases twelve-sided planes"
+      },
+      "parent": "plug-assembly",
+      "attachment": {
+        "parentId": "plug-assembly",
+        "parentSocket": "terminal-socket",
+        "localStart": [
+          0,
+          0.42,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.475,
+          0
+        ],
+        "contactNormal": [
+          0,
+          1,
+          0
+        ],
+        "overlap": 0.025,
+        "gapTolerance": 0.003,
+        "contactType": "overlap",
+        "evidenceRefs": [
+          "reference-v1-round-two-pin"
+        ]
+      },
+      "dimensions": {
+        "width": 0.34,
+        "height": 0.055,
+        "depth": 0.34,
+        "units": "world-units",
+        "confidence": 1
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "semantic-center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 1
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": false,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "capsule",
+          "offset": [
+            0,
+            0.32,
+            0
+          ],
+          "scale": [
+            0.36,
+            0.64,
+            0.36
+          ],
+          "isTrigger": true
+        },
+        "constraints": [
+          "preserve legacy click and collision envelope"
+        ],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "static-part",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "none"
+        }
+      },
+      "material": "shell-toon",
+      "materialLayers": [
+        "shell-toon"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(241, 111, 143, 1)",
+        "secondaryAlbedo": "rgba(197, 79, 118, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.95,
+        "colorGradient": {
+          "type": "linear",
+          "stops": [
+            {
+              "offset": 0,
+              "color": "rgba(241, 111, 143, 1)"
+            },
+            {
+              "offset": 1,
+              "color": "rgba(197, 79, 118, 1)"
+            }
+          ]
+        }
+      },
+      "deformations": [],
+      "joints": [
+        "terminal-socket"
+      ],
+      "seams": [],
+      "localFeatures": [
+        {
+          "id": "shoulder-step"
+        }
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.22,
+        "microRoughness": 0.03,
+        "bumpAmplitude": 0.004,
+        "normalPattern": "faceted geometry normals",
+        "displacementPattern": "none",
+        "occlusionPattern": "toon shadow band plus contact AO",
+        "edgeWearPattern": "none",
+        "notes": "Clean city prop; no grime, scratches, or soft-vinyl bulging."
+      },
+      "evidenceRefs": [
+        "reference-v1-round-two-pin"
+      ],
+      "details": [
+        {
+          "id": "shoulder-step"
+        }
+      ],
+      "fidelityTier": "production"
+    },
+    {
+      "id": "interface-faceplate",
+      "name": "Connector face ring",
+      "level": "meso",
+      "role": "connector",
+      "importance": 0.9,
+      "confidence": 0.96,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Connector face ring is represented by cylinder geometry because its visible silhouette and runtime behavior require assembled-solid topology.",
+      "geometryDescriptor": {
+        "topologyIntent": "twelve-sided low-poly hard-surface form",
+        "edgeTreatment": {
+          "type": "restrained-chamfer",
+          "bevelRadius": 0.012,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "none; solid toon albedo",
+        "normalStrategy": "generated faceted vertex normals; no smoothing that erases twelve-sided planes"
+      },
+      "parent": "plug-assembly",
+      "attachment": {
+        "parentId": "plug-assembly",
+        "parentSocket": "terminal-socket",
+        "localStart": [
+          0,
+          0.452,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.49,
+          0
+        ],
+        "contactNormal": [
+          0,
+          1,
+          0
+        ],
+        "overlap": 0.025,
+        "gapTolerance": 0.003,
+        "contactType": "overlap",
+        "evidenceRefs": [
+          "reference-v1-round-two-pin"
+        ]
+      },
+      "dimensions": {
+        "width": 0.3,
+        "height": 0.028,
+        "depth": 0.3,
+        "units": "world-units",
+        "confidence": 1
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "semantic-center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 1
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": false,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "capsule",
+          "offset": [
+            0,
+            0.32,
+            0
+          ],
+          "scale": [
+            0.36,
+            0.64,
+            0.36
+          ],
+          "isTrigger": true
+        },
+        "constraints": [
+          "preserve legacy click and collision envelope"
+        ],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "static-part",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "none"
+        }
+      },
+      "material": "cavity-toon",
+      "materialLayers": [
+        "cavity-toon"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(58, 41, 72, 1)",
+        "secondaryAlbedo": "rgba(36, 29, 49, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.95,
+        "colorGradient": {
+          "type": "linear",
+          "stops": [
+            {
+              "offset": 0,
+              "color": "rgba(58, 41, 72, 1)"
+            },
+            {
+              "offset": 1,
+              "color": "rgba(36, 29, 49, 1)"
+            }
+          ]
+        }
+      },
+      "deformations": [],
+      "joints": [
+        "terminal-socket"
+      ],
+      "seams": [
+        {
+          "id": "perimeter-seam"
+        }
+      ],
+      "localFeatures": [
+        {
+          "id": "perimeter-seam"
+        }
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.22,
+        "microRoughness": 0.03,
+        "bumpAmplitude": 0.004,
+        "normalPattern": "faceted geometry normals",
+        "displacementPattern": "none",
+        "occlusionPattern": "toon shadow band plus contact AO",
+        "edgeWearPattern": "none",
+        "notes": "Clean city prop; no grime, scratches, or soft-vinyl bulging."
+      },
+      "evidenceRefs": [
+        "reference-v1-round-two-pin"
+      ],
+      "details": [
+        {
+          "id": "perimeter-seam"
+        }
+      ],
+      "fidelityTier": "production"
+    },
+    {
+      "id": "terminal-assembly",
+      "name": "Seven interchangeable terminal layouts",
+      "level": "meso",
+      "role": "connector",
+      "importance": 0.9,
+      "confidence": 0.96,
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Seven interchangeable terminal layouts is represented by instanced-cluster geometry because its visible silhouette and runtime behavior require assembled-solid topology.",
+      "geometryDescriptor": {
+        "topologyIntent": "twelve-sided low-poly hard-surface form",
+        "edgeTreatment": {
+          "type": "restrained-chamfer",
+          "bevelRadius": 0.012,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "none; solid toon albedo",
+        "normalStrategy": "generated faceted vertex normals; no smoothing that erases twelve-sided planes"
+      },
+      "parent": "plug-assembly",
+      "attachment": {
+        "parentId": "plug-assembly",
+        "parentSocket": "terminal-socket",
+        "localStart": [
+          0,
+          0.47,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.64,
+          0
+        ],
+        "contactNormal": [
+          0,
+          1,
+          0
+        ],
+        "overlap": 0.025,
+        "gapTolerance": 0.003,
+        "contactType": "overlap",
+        "evidenceRefs": [
+          "reference-v1-round-two-pin"
+        ]
+      },
+      "dimensions": {
+        "width": 0.3,
+        "height": 0.17,
+        "depth": 0.3,
+        "units": "world-units",
+        "confidence": 1
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "semantic-center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 1
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": false,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "capsule",
+          "offset": [
+            0,
+            0.32,
+            0
+          ],
+          "scale": [
+            0.36,
+            0.64,
+            0.36
+          ],
+          "isTrigger": true
+        },
+        "constraints": [
+          "preserve legacy click and collision envelope"
+        ],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "static-part",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "none"
+        }
+      },
+      "material": "metal-toon",
+      "materialLayers": [
+        "metal-toon"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(184, 183, 201, 1)",
+        "secondaryAlbedo": "rgba(133, 130, 155, 1)",
+        "materialClass": "metal",
+        "materialClassConfidence": 0.95,
+        "colorGradient": {
+          "type": "linear",
+          "stops": [
+            {
+              "offset": 0,
+              "color": "rgba(184, 183, 201, 1)"
+            },
+            {
+              "offset": 1,
+              "color": "rgba(133, 130, 155, 1)"
+            }
+          ]
+        }
+      },
+      "deformations": [],
+      "joints": [
+        "terminal-socket"
+      ],
+      "seams": [],
+      "localFeatures": [
+        {
+          "id": "terminal-layout"
+        },
+        {
+          "id": "terminal-cavity"
+        }
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.22,
+        "microRoughness": 0.03,
+        "bumpAmplitude": 0.004,
+        "normalPattern": "faceted geometry normals",
+        "displacementPattern": "none",
+        "occlusionPattern": "toon shadow band plus contact AO",
+        "edgeWearPattern": "none",
+        "notes": "Clean city prop; no grime, scratches, or soft-vinyl bulging."
+      },
+      "evidenceRefs": [
+        "v1-seven-style-board"
+      ],
+      "details": [
+        {
+          "id": "terminal-layout"
+        },
+        {
+          "id": "terminal-cavity"
+        }
+      ],
+      "fidelityTier": "production"
+    },
+    {
+      "id": "status-indicator",
+      "name": "Recessed status dot",
+      "level": "meso",
+      "role": "indicator",
+      "importance": 0.9,
+      "confidence": 0.96,
+      "primitive": "sphere",
+      "topologyClass": "surface-relief",
+      "topologyRationale": "Recessed status dot is represented by sphere geometry because its visible silhouette and runtime behavior require surface-relief topology.",
+      "geometryDescriptor": {
+        "topologyIntent": "twelve-sided low-poly hard-surface form",
+        "edgeTreatment": {
+          "type": "restrained-chamfer",
+          "bevelRadius": 0.012,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "none; solid toon albedo",
+        "normalStrategy": "generated faceted vertex normals; no smoothing that erases twelve-sided planes"
+      },
+      "parent": "plug-assembly",
+      "attachment": {
+        "parentId": "plug-assembly",
+        "parentSocket": "indicator-socket",
+        "localStart": [
+          0.15,
+          0.31,
+          0
+        ],
+        "localEnd": [
+          0.17,
+          0.31,
+          0
+        ],
+        "contactNormal": [
+          0,
+          1,
+          0
+        ],
+        "overlap": 0.025,
+        "gapTolerance": 0.003,
+        "contactType": "recessed-overlap",
+        "evidenceRefs": [
+          "reference-v1-round-two-pin"
+        ]
+      },
+      "dimensions": {
+        "width": 0.048,
+        "height": 0.012,
+        "depth": 0.048,
+        "units": "world-units",
+        "confidence": 1
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "semantic-center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 1
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": false,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "capsule",
+          "offset": [
+            0,
+            0.32,
+            0
+          ],
+          "scale": [
+            0.36,
+            0.64,
+            0.36
+          ],
+          "isTrigger": true
+        },
+        "constraints": [
+          "preserve legacy click and collision envelope"
+        ],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "static-part",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "none"
+        }
+      },
+      "material": "shell-toon",
+      "materialLayers": [
+        "shell-toon"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(241, 111, 143, 1)",
+        "secondaryAlbedo": "rgba(197, 79, 118, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.95,
+        "colorGradient": {
+          "type": "linear",
+          "stops": [
+            {
+              "offset": 0,
+              "color": "rgba(241, 111, 143, 1)"
+            },
+            {
+              "offset": 1,
+              "color": "rgba(197, 79, 118, 1)"
+            }
+          ]
+        }
+      },
+      "deformations": [],
+      "joints": [
+        "indicator-socket"
+      ],
+      "seams": [],
+      "localFeatures": [
+        {
+          "id": "recessed-dot"
+        }
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.22,
+        "microRoughness": 0.03,
+        "bumpAmplitude": 0.004,
+        "normalPattern": "faceted geometry normals",
+        "displacementPattern": "none",
+        "occlusionPattern": "toon shadow band plus contact AO",
+        "edgeWearPattern": "none",
+        "notes": "Clean city prop; no grime, scratches, or soft-vinyl bulging."
+      },
+      "evidenceRefs": [
+        "reference-v1-round-two-pin"
+      ],
+      "details": [
+        {
+          "id": "recessed-dot"
+        }
+      ],
+      "fidelityTier": "production"
+    },
+    {
+      "id": "cable-end-socket",
+      "name": "Cable insertion socket",
+      "level": "meso",
+      "role": "socket",
+      "importance": 0.9,
+      "confidence": 0.96,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Cable insertion socket is represented by cylinder geometry because its visible silhouette and runtime behavior require assembled-solid topology.",
+      "geometryDescriptor": {
+        "topologyIntent": "twelve-sided low-poly hard-surface form",
+        "edgeTreatment": {
+          "type": "restrained-chamfer",
+          "bevelRadius": 0.012,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "none; solid toon albedo",
+        "normalStrategy": "generated faceted vertex normals; no smoothing that erases twelve-sided planes"
+      },
+      "parent": "plug-assembly",
+      "attachment": {
+        "parentId": "plug-assembly",
+        "parentSocket": "cable-socket",
+        "localStart": [
+          0,
+          -0.02,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactNormal": [
+          0,
+          1,
+          0
+        ],
+        "overlap": 0.025,
+        "gapTolerance": 0.003,
+        "contactType": "overlap",
+        "evidenceRefs": [
+          "reference-v1-round-two-pin"
+        ]
+      },
+      "dimensions": {
+        "width": 0.22,
+        "height": 0.035,
+        "depth": 0.22,
+        "units": "world-units",
+        "confidence": 1
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "semantic-center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 1
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": false,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "capsule",
+          "offset": [
+            0,
+            0.32,
+            0
+          ],
+          "scale": [
+            0.36,
+            0.64,
+            0.36
+          ],
+          "isTrigger": true
+        },
+        "constraints": [
+          "preserve legacy click and collision envelope"
+        ],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "static-part",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "none"
+        }
+      },
+      "material": "rubber-toon",
+      "materialLayers": [
+        "rubber-toon"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(107, 78, 114, 1)",
+        "secondaryAlbedo": "rgba(74, 56, 90, 1)",
+        "materialClass": "rubber",
+        "materialClassConfidence": 0.95,
+        "colorGradient": {
+          "type": "linear",
+          "stops": [
+            {
+              "offset": 0,
+              "color": "rgba(107, 78, 114, 1)"
+            },
+            {
+              "offset": 1,
+              "color": "rgba(74, 56, 90, 1)"
+            }
+          ]
+        }
+      },
+      "deformations": [],
+      "joints": [
+        "cable-socket"
+      ],
+      "seams": [],
+      "localFeatures": [
+        {
+          "id": "plug-cable-overlap"
+        }
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.22,
+        "microRoughness": 0.03,
+        "bumpAmplitude": 0.004,
+        "normalPattern": "faceted geometry normals",
+        "displacementPattern": "none",
+        "occlusionPattern": "toon shadow band plus contact AO",
+        "edgeWearPattern": "none",
+        "notes": "Clean city prop; no grime, scratches, or soft-vinyl bulging."
+      },
+      "evidenceRefs": [
+        "reference-v1-round-two-pin"
+      ],
+      "details": [
+        {
+          "id": "plug-cable-overlap"
+        }
+      ],
+      "fidelityTier": "production"
+    },
+    {
+      "id": "tail-cap",
+      "name": "Single-end cable tail cap",
+      "level": "meso",
+      "role": "connector",
+      "importance": 0.9,
+      "confidence": 0.96,
+      "primitive": "capsule",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Single-end cable tail cap is represented by capsule geometry because its visible silhouette and runtime behavior require assembled-solid topology.",
+      "geometryDescriptor": {
+        "topologyIntent": "twelve-sided low-poly hard-surface form",
+        "edgeTreatment": {
+          "type": "restrained-chamfer",
+          "bevelRadius": 0.012,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "none; solid toon albedo",
+        "normalStrategy": "generated faceted vertex normals; no smoothing that erases twelve-sided planes"
+      },
+      "parent": "cable-body",
+      "attachment": {
+        "parentId": "cable-body",
+        "parentSocket": "tail-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.18,
+          0
+        ],
+        "contactNormal": [
+          0,
+          1,
+          0
+        ],
+        "overlap": 0.025,
+        "gapTolerance": 0.003,
+        "contactType": "overlap",
+        "evidenceRefs": [
+          "reference-v1-round-two-pin"
+        ]
+      },
+      "dimensions": {
+        "width": 0.24,
+        "height": 0.18,
+        "depth": 0.24,
+        "units": "world-units",
+        "confidence": 1
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "semantic-center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 1
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": false,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "capsule",
+          "offset": [
+            0,
+            0.32,
+            0
+          ],
+          "scale": [
+            0.36,
+            0.64,
+            0.36
+          ],
+          "isTrigger": true
+        },
+        "constraints": [
+          "preserve legacy click and collision envelope"
+        ],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "static-part",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "none"
+        }
+      },
+      "material": "rubber-toon",
+      "materialLayers": [
+        "rubber-toon"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(107, 78, 114, 1)",
+        "secondaryAlbedo": "rgba(74, 56, 90, 1)",
+        "materialClass": "rubber",
+        "materialClassConfidence": 0.95,
+        "colorGradient": {
+          "type": "linear",
+          "stops": [
+            {
+              "offset": 0,
+              "color": "rgba(107, 78, 114, 1)"
+            },
+            {
+              "offset": 1,
+              "color": "rgba(74, 56, 90, 1)"
+            }
+          ]
+        }
+      },
+      "deformations": [],
+      "joints": [
+        "tail-socket"
+      ],
+      "seams": [
+        {
+          "id": "tail-cap-seam"
+        }
+      ],
+      "localFeatures": [
+        {
+          "id": "tail-cap-seam"
+        }
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.22,
+        "microRoughness": 0.03,
+        "bumpAmplitude": 0.004,
+        "normalPattern": "faceted geometry normals",
+        "displacementPattern": "none",
+        "occlusionPattern": "toon shadow band plus contact AO",
+        "edgeWearPattern": "none",
+        "notes": "Clean city prop; no grime, scratches, or soft-vinyl bulging."
+      },
+      "evidenceRefs": [
+        "v1-fixed-seed-game"
+      ],
+      "details": [
+        {
+          "id": "tail-cap-seam"
+        }
+      ],
+      "fidelityTier": "production"
+    },
+    {
+      "id": "front-chamfer-feature",
+      "name": "Front chamfer highlight band",
+      "level": "micro",
+      "role": "bevel",
+      "importance": 0.72,
+      "confidence": 0.96,
+      "primitive": "torus",
+      "topologyClass": "surface-relief",
+      "topologyRationale": "Front chamfer highlight band is represented by torus geometry because its visible silhouette and runtime behavior require surface-relief topology.",
+      "geometryDescriptor": {
+        "topologyIntent": "twelve-sided low-poly hard-surface form",
+        "edgeTreatment": {
+          "type": "restrained-chamfer",
+          "bevelRadius": 0.004,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "none; solid toon albedo",
+        "normalStrategy": "generated faceted vertex normals; no smoothing that erases twelve-sided planes"
+      },
+      "parent": "outer-shell",
+      "attachment": {
+        "parentId": "outer-shell",
+        "parentSocket": "front-edge",
+        "localStart": [
+          0,
+          0.42,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.44,
+          0
+        ],
+        "contactNormal": [
+          0,
+          1,
+          0
+        ],
+        "overlap": 0.025,
+        "gapTolerance": 0.003,
+        "contactType": "overlap",
+        "evidenceRefs": [
+          "reference-v1-round-two-pin"
+        ]
+      },
+      "dimensions": {
+        "width": 0.34,
+        "height": 0.012,
+        "depth": 0.34,
+        "units": "world-units",
+        "confidence": 1
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "semantic-center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 1
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": false,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "capsule",
+          "offset": [
+            0,
+            0.32,
+            0
+          ],
+          "scale": [
+            0.36,
+            0.64,
+            0.36
+          ],
+          "isTrigger": true
+        },
+        "constraints": [
+          "preserve legacy click and collision envelope"
+        ],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "static-part",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "none"
+        }
+      },
+      "material": "shell-toon",
+      "materialLayers": [
+        "shell-toon"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(241, 111, 143, 1)",
+        "secondaryAlbedo": "rgba(197, 79, 118, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.95,
+        "colorGradient": {
+          "type": "linear",
+          "stops": [
+            {
+              "offset": 0,
+              "color": "rgba(241, 111, 143, 1)"
+            },
+            {
+              "offset": 1,
+              "color": "rgba(197, 79, 118, 1)"
+            }
+          ]
+        }
+      },
+      "deformations": [],
+      "joints": [
+        "front-edge"
+      ],
+      "seams": [],
+      "localFeatures": [
+        {
+          "id": "front-chamfer-highlight"
+        }
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.22,
+        "microRoughness": 0.03,
+        "bumpAmplitude": 0.004,
+        "normalPattern": "faceted geometry normals",
+        "displacementPattern": "none",
+        "occlusionPattern": "toon shadow band plus contact AO",
+        "edgeWearPattern": "none",
+        "notes": "Clean city prop; no grime, scratches, or soft-vinyl bulging."
+      },
+      "evidenceRefs": [
+        "reference-v1-round-two-pin"
+      ],
+      "details": [
+        {
+          "id": "front-chamfer-highlight"
+        }
+      ],
+      "fidelityTier": "production"
+    },
+    {
+      "id": "rear-chamfer-feature",
+      "name": "Rear chamfer shadow band",
+      "level": "micro",
+      "role": "bevel",
+      "importance": 0.72,
+      "confidence": 0.96,
+      "primitive": "torus",
+      "topologyClass": "surface-relief",
+      "topologyRationale": "Rear chamfer shadow band is represented by torus geometry because its visible silhouette and runtime behavior require surface-relief topology.",
+      "geometryDescriptor": {
+        "topologyIntent": "twelve-sided low-poly hard-surface form",
+        "edgeTreatment": {
+          "type": "restrained-chamfer",
+          "bevelRadius": 0.004,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "none; solid toon albedo",
+        "normalStrategy": "generated faceted vertex normals; no smoothing that erases twelve-sided planes"
+      },
+      "parent": "outer-shell",
+      "attachment": {
+        "parentId": "outer-shell",
+        "parentSocket": "rear-edge",
+        "localStart": [
+          0,
+          0.15,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.17,
+          0
+        ],
+        "contactNormal": [
+          0,
+          1,
+          0
+        ],
+        "overlap": 0.025,
+        "gapTolerance": 0.003,
+        "contactType": "overlap",
+        "evidenceRefs": [
+          "reference-v1-round-two-pin"
+        ]
+      },
+      "dimensions": {
+        "width": 0.31,
+        "height": 0.012,
+        "depth": 0.31,
+        "units": "world-units",
+        "confidence": 1
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "semantic-center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 1
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": false,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "capsule",
+          "offset": [
+            0,
+            0.32,
+            0
+          ],
+          "scale": [
+            0.36,
+            0.64,
+            0.36
+          ],
+          "isTrigger": true
+        },
+        "constraints": [
+          "preserve legacy click and collision envelope"
+        ],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "static-part",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "none"
+        }
+      },
+      "material": "shell-toon",
+      "materialLayers": [
+        "shell-toon"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(241, 111, 143, 1)",
+        "secondaryAlbedo": "rgba(197, 79, 118, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.95,
+        "colorGradient": {
+          "type": "linear",
+          "stops": [
+            {
+              "offset": 0,
+              "color": "rgba(241, 111, 143, 1)"
+            },
+            {
+              "offset": 1,
+              "color": "rgba(197, 79, 118, 1)"
+            }
+          ]
+        }
+      },
+      "deformations": [],
+      "joints": [
+        "rear-edge"
+      ],
+      "seams": [],
+      "localFeatures": [
+        {
+          "id": "rear-chamfer-shadow"
+        }
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.22,
+        "microRoughness": 0.03,
+        "bumpAmplitude": 0.004,
+        "normalPattern": "faceted geometry normals",
+        "displacementPattern": "none",
+        "occlusionPattern": "toon shadow band plus contact AO",
+        "edgeWearPattern": "none",
+        "notes": "Clean city prop; no grime, scratches, or soft-vinyl bulging."
+      },
+      "evidenceRefs": [
+        "reference-v1-round-two-pin"
+      ],
+      "details": [
+        {
+          "id": "rear-chamfer-shadow"
+        }
+      ],
+      "fidelityTier": "production"
+    },
+    {
+      "id": "relief-ring-system",
+      "name": "Strain-relief ring sequence",
+      "level": "micro",
+      "role": "ridge",
+      "importance": 0.72,
+      "confidence": 0.96,
+      "primitive": "lathe",
+      "topologyClass": "surface-relief",
+      "topologyRationale": "Strain-relief ring sequence is represented by lathe geometry because its visible silhouette and runtime behavior require surface-relief topology.",
+      "geometryDescriptor": {
+        "topologyIntent": "twelve-sided low-poly hard-surface form",
+        "edgeTreatment": {
+          "type": "restrained-chamfer",
+          "bevelRadius": 0.004,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "none; solid toon albedo",
+        "normalStrategy": "generated faceted vertex normals; no smoothing that erases twelve-sided planes"
+      },
+      "parent": "strain-relief",
+      "attachment": {
+        "parentId": "strain-relief",
+        "parentSocket": "surface",
+        "localStart": [
+          0,
+          0.02,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.11,
+          0
+        ],
+        "contactNormal": [
+          0,
+          1,
+          0
+        ],
+        "overlap": 0.025,
+        "gapTolerance": 0.003,
+        "contactType": "overlap",
+        "evidenceRefs": [
+          "reference-v1-round-two-pin"
+        ]
+      },
+      "dimensions": {
+        "width": 0.25,
+        "height": 0.08,
+        "depth": 0.25,
+        "units": "world-units",
+        "confidence": 1
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "semantic-center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 1
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": false,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "capsule",
+          "offset": [
+            0,
+            0.32,
+            0
+          ],
+          "scale": [
+            0.36,
+            0.64,
+            0.36
+          ],
+          "isTrigger": true
+        },
+        "constraints": [
+          "preserve legacy click and collision envelope"
+        ],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "static-part",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "none"
+        }
+      },
+      "material": "rubber-toon",
+      "materialLayers": [
+        "rubber-toon"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(107, 78, 114, 1)",
+        "secondaryAlbedo": "rgba(74, 56, 90, 1)",
+        "materialClass": "rubber",
+        "materialClassConfidence": 0.95,
+        "colorGradient": {
+          "type": "linear",
+          "stops": [
+            {
+              "offset": 0,
+              "color": "rgba(107, 78, 114, 1)"
+            },
+            {
+              "offset": 1,
+              "color": "rgba(74, 56, 90, 1)"
+            }
+          ]
+        }
+      },
+      "deformations": [],
+      "joints": [
+        "surface"
+      ],
+      "seams": [],
+      "localFeatures": [
+        {
+          "id": "three-shallow-rings"
+        }
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.22,
+        "microRoughness": 0.03,
+        "bumpAmplitude": 0.004,
+        "normalPattern": "faceted geometry normals",
+        "displacementPattern": "none",
+        "occlusionPattern": "toon shadow band plus contact AO",
+        "edgeWearPattern": "none",
+        "notes": "Clean city prop; no grime, scratches, or soft-vinyl bulging."
+      },
+      "evidenceRefs": [
+        "reference-v1-round-two-pin"
+      ],
+      "details": [
+        {
+          "id": "three-shallow-rings"
+        }
+      ],
+      "fidelityTier": "production"
+    },
+    {
+      "id": "ink-outline-system",
+      "name": "Restrained deep-purple silhouette ink",
+      "level": "micro",
+      "role": "contour",
+      "importance": 0.72,
+      "confidence": 0.96,
+      "primitive": "curve-sweep",
+      "topologyClass": "surface-relief",
+      "topologyRationale": "Restrained deep-purple silhouette ink is represented by curve-sweep geometry because its visible silhouette and runtime behavior require surface-relief topology.",
+      "geometryDescriptor": {
+        "topologyIntent": "twelve-sided low-poly hard-surface form",
+        "edgeTreatment": {
+          "type": "restrained-chamfer",
+          "bevelRadius": 0.004,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "none; solid toon albedo",
+        "normalStrategy": "generated faceted vertex normals; no smoothing that erases twelve-sided planes"
+      },
+      "parent": "plug-assembly",
+      "attachment": {
+        "parentId": "plug-assembly",
+        "parentSocket": "outer-surface",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.64,
+          0
+        ],
+        "contactNormal": [
+          0,
+          1,
+          0
+        ],
+        "overlap": 0.025,
+        "gapTolerance": 0.003,
+        "contactType": "overlap",
+        "evidenceRefs": [
+          "reference-v1-round-two-pin"
+        ]
+      },
+      "dimensions": {
+        "width": 0.37,
+        "height": 0.65,
+        "depth": 0.37,
+        "units": "world-units",
+        "confidence": 1
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "semantic-center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 1
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": false,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "capsule",
+          "offset": [
+            0,
+            0.32,
+            0
+          ],
+          "scale": [
+            0.36,
+            0.64,
+            0.36
+          ],
+          "isTrigger": true
+        },
+        "constraints": [
+          "preserve legacy click and collision envelope"
+        ],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "static-part",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "none"
+        }
+      },
+      "material": "cavity-toon",
+      "materialLayers": [
+        "cavity-toon"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(58, 41, 72, 1)",
+        "secondaryAlbedo": "rgba(36, 29, 49, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.95,
+        "colorGradient": {
+          "type": "linear",
+          "stops": [
+            {
+              "offset": 0,
+              "color": "rgba(58, 41, 72, 1)"
+            },
+            {
+              "offset": 1,
+              "color": "rgba(36, 29, 49, 1)"
+            }
+          ]
+        }
+      },
+      "deformations": [],
+      "joints": [
+        "outer-surface"
+      ],
+      "seams": [],
+      "localFeatures": [
+        {
+          "id": "outline-width-0.014"
+        }
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.22,
+        "microRoughness": 0.03,
+        "bumpAmplitude": 0.004,
+        "normalPattern": "faceted geometry normals",
+        "displacementPattern": "none",
+        "occlusionPattern": "toon shadow band plus contact AO",
+        "edgeWearPattern": "none",
+        "notes": "Clean city prop; no grime, scratches, or soft-vinyl bulging."
+      },
+      "evidenceRefs": [
+        "sakura-crossing-hero-1",
+        "sakura-crossing-hero-2"
+      ],
+      "details": [
+        {
+          "id": "outline-width-0.014"
+        }
+      ],
+      "fidelityTier": "production"
+    },
+    {
+      "id": "cable-fillet-system",
+      "name": "Exact quarter-circle corner fillets",
+      "level": "micro",
+      "role": "cable",
+      "importance": 0.72,
+      "confidence": 0.96,
+      "primitive": "tube",
+      "topologyClass": "fiber-strand",
+      "topologyRationale": "Exact quarter-circle corner fillets is represented by tube geometry because its visible silhouette and runtime behavior require fiber-strand topology.",
+      "geometryDescriptor": {
+        "topologyIntent": "eight-sided tangent curve sweep",
+        "edgeTreatment": {
+          "type": "restrained-chamfer",
+          "bevelRadius": 0.004,
+          "segments": 1
+        },
+        "deformationStack": [
+          "orthogonal quarter-circle fillets only"
+        ],
+        "uvStrategy": "none; solid toon albedo",
+        "normalStrategy": "generated faceted vertex normals; no smoothing that erases twelve-sided planes"
+      },
+      "parent": "cable-body",
+      "attachment": {
+        "parentId": "cable-body",
+        "parentSocket": "corner-tangent",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0.13,
+          0.13,
+          0
+        ],
+        "contactNormal": [
+          0,
+          1,
+          0
+        ],
+        "overlap": 0.025,
+        "gapTolerance": 0.003,
+        "contactType": "overlap",
+        "evidenceRefs": [
+          "reference-v1-round-two-pin"
+        ]
+      },
+      "dimensions": {
+        "width": 0.26,
+        "height": 0.21,
+        "depth": 0.26,
+        "radius": 0.13,
+        "units": "world-units",
+        "confidence": 1
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "cable",
+        "pivot": {
+          "mode": "semantic-center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 1
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": false,
+          "bend": true,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "curve-capsule-chain",
+          "offset": [
+            0,
+            0.32,
+            0
+          ],
+          "scale": [
+            0.36,
+            0.64,
+            0.36
+          ],
+          "isTrigger": true
+        },
+        "constraints": [
+          "preserve legacy click and collision envelope"
+        ],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "cable",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "none"
+        }
+      },
+      "material": "rubber-toon",
+      "materialLayers": [
+        "rubber-toon"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(107, 78, 114, 1)",
+        "secondaryAlbedo": "rgba(74, 56, 90, 1)",
+        "materialClass": "rubber",
+        "materialClassConfidence": 0.95,
+        "colorGradient": {
+          "type": "linear",
+          "stops": [
+            {
+              "offset": 0,
+              "color": "rgba(107, 78, 114, 1)"
+            },
+            {
+              "offset": 1,
+              "color": "rgba(74, 56, 90, 1)"
+            }
+          ]
+        }
+      },
+      "deformations": [
+        "fillet radius 0.13 clamped to 28 percent of adjacent legs"
+      ],
+      "joints": [
+        "corner-tangent"
+      ],
+      "seams": [],
+      "localFeatures": [
+        {
+          "id": "quarter-circle-arc"
+        },
+        {
+          "id": "four-arc-samples"
+        }
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.22,
+        "microRoughness": 0.03,
+        "bumpAmplitude": 0.004,
+        "normalPattern": "faceted geometry normals",
+        "displacementPattern": "none",
+        "occlusionPattern": "toon shadow band plus contact AO",
+        "edgeWearPattern": "none",
+        "notes": "Clean city prop; no grime, scratches, or soft-vinyl bulging."
+      },
+      "evidenceRefs": [
+        "v1-fixed-seed-game"
+      ],
+      "details": [
+        {
+          "id": "quarter-circle-arc"
+        },
+        {
+          "id": "four-arc-samples"
+        }
+      ],
+      "fidelityTier": "production"
+    },
+    {
+      "id": "terminal-layout-feature",
+      "name": "Per-style terminal spacing rules",
+      "level": "micro",
+      "role": "connector",
+      "importance": 0.72,
+      "confidence": 0.96,
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Per-style terminal spacing rules is represented by instanced-cluster geometry because its visible silhouette and runtime behavior require assembled-solid topology.",
+      "geometryDescriptor": {
+        "topologyIntent": "twelve-sided low-poly hard-surface form",
+        "edgeTreatment": {
+          "type": "restrained-chamfer",
+          "bevelRadius": 0.004,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "none; solid toon albedo",
+        "normalStrategy": "generated faceted vertex normals; no smoothing that erases twelve-sided planes"
+      },
+      "parent": "terminal-assembly",
+      "attachment": {
+        "parentId": "terminal-assembly",
+        "parentSocket": "terminal-roots",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.17,
+          0
+        ],
+        "contactNormal": [
+          0,
+          1,
+          0
+        ],
+        "overlap": 0.025,
+        "gapTolerance": 0.003,
+        "contactType": "overlap",
+        "evidenceRefs": [
+          "reference-v1-round-two-pin"
+        ]
+      },
+      "dimensions": {
+        "width": 0.3,
+        "height": 0.17,
+        "depth": 0.3,
+        "units": "world-units",
+        "confidence": 1
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "semantic-center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 1
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": false,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "capsule",
+          "offset": [
+            0,
+            0.32,
+            0
+          ],
+          "scale": [
+            0.36,
+            0.64,
+            0.36
+          ],
+          "isTrigger": true
+        },
+        "constraints": [
+          "preserve legacy click and collision envelope"
+        ],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "static-part",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "none"
+        }
+      },
+      "material": "metal-toon",
+      "materialLayers": [
+        "metal-toon"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(184, 183, 201, 1)",
+        "secondaryAlbedo": "rgba(133, 130, 155, 1)",
+        "materialClass": "metal",
+        "materialClassConfidence": 0.95,
+        "colorGradient": {
+          "type": "linear",
+          "stops": [
+            {
+              "offset": 0,
+              "color": "rgba(184, 183, 201, 1)"
+            },
+            {
+              "offset": 1,
+              "color": "rgba(133, 130, 155, 1)"
+            }
+          ]
+        }
+      },
+      "deformations": [],
+      "joints": [
+        "terminal-roots"
+      ],
+      "seams": [],
+      "localFeatures": [
+        {
+          "id": "seven-layout-contracts"
+        }
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.22,
+        "microRoughness": 0.03,
+        "bumpAmplitude": 0.004,
+        "normalPattern": "faceted geometry normals",
+        "displacementPattern": "none",
+        "occlusionPattern": "toon shadow band plus contact AO",
+        "edgeWearPattern": "none",
+        "notes": "Clean city prop; no grime, scratches, or soft-vinyl bulging."
+      },
+      "evidenceRefs": [
+        "v1-seven-style-board"
+      ],
+      "details": [
+        {
+          "id": "seven-layout-contracts"
+        }
+      ],
+      "fidelityTier": "production"
+    },
+    {
+      "id": "cool-shadow-band",
+      "name": "Two-to-three-step cool shadow response",
+      "level": "micro",
+      "role": "surface",
+      "importance": 0.72,
+      "confidence": 0.96,
+      "primitive": "plane-card",
+      "topologyClass": "material-only",
+      "topologyRationale": "Two-to-three-step cool shadow response is represented by plane-card geometry because its visible silhouette and runtime behavior require material-only topology.",
+      "geometryDescriptor": {
+        "topologyIntent": "twelve-sided low-poly hard-surface form",
+        "edgeTreatment": {
+          "type": "restrained-chamfer",
+          "bevelRadius": 0.004,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "none; solid toon albedo",
+        "normalStrategy": "generated faceted vertex normals; no smoothing that erases twelve-sided planes"
+      },
+      "parent": "outer-shell",
+      "attachment": null,
+      "dimensions": {
+        "width": 0.36,
+        "height": 0.32,
+        "depth": 0.36,
+        "units": "world-units",
+        "confidence": 1
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "semantic-center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 1
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": false,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "capsule",
+          "offset": [
+            0,
+            0.32,
+            0
+          ],
+          "scale": [
+            0.36,
+            0.64,
+            0.36
+          ],
+          "isTrigger": true
+        },
+        "constraints": [
+          "preserve legacy click and collision envelope"
+        ],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "static-part",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "none"
+        }
+      },
+      "material": "shell-toon",
+      "materialLayers": [
+        "shell-toon"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(241, 111, 143, 1)",
+        "secondaryAlbedo": "rgba(197, 79, 118, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.95,
+        "colorGradient": {
+          "type": "linear",
+          "stops": [
+            {
+              "offset": 0,
+              "color": "rgba(241, 111, 143, 1)"
+            },
+            {
+              "offset": 1,
+              "color": "rgba(197, 79, 118, 1)"
+            }
+          ]
+        }
+      },
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        {
+          "id": "cool-violet-shadow-bands"
+        }
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.22,
+        "microRoughness": 0.03,
+        "bumpAmplitude": 0.004,
+        "normalPattern": "faceted geometry normals",
+        "displacementPattern": "none",
+        "occlusionPattern": "toon shadow band plus contact AO",
+        "edgeWearPattern": "none",
+        "notes": "Clean city prop; no grime, scratches, or soft-vinyl bulging."
+      },
+      "evidenceRefs": [
+        "sakura-crossing-hero-1",
+        "sakura-crossing-hero-4"
+      ],
+      "details": [
+        {
+          "id": "cool-violet-shadow-bands"
+        }
+      ],
+      "fidelityTier": "production"
+    }
+  ],
+  "materials": [
+    {
+      "id": "shell-toon",
+      "name": "Sakura shell plastic",
+      "type": "plastic",
+      "shaderModel": "MeshToonMaterial with shared three-step gradient",
+      "baseColor": "#F16F8F",
+      "color": "#F16F8F",
+      "albedo": {
+        "dominant": "#F16F8F",
+        "secondary": [
+          "#D45B82",
+          "#6B3B69"
+        ],
+        "samplingNotes": "Solid code-defined SAKURA palette; no bitmap projection."
+      },
+      "colorVariation": {
+        "palette": [
+          "#F16F8F",
+          "#D45B82",
+          "#6B3B69"
+        ],
+        "pattern": "toon-light-bands",
+        "amplitude": 0.05,
+        "heightCorrelation": 0
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "procedural-object-space-toon-bands",
+        "repeat": [
+          1,
+          1
+        ],
+        "anisotropy": 1,
+        "texelDensityIntent": "No image texture; stable object-space response."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 1,
+          "amplitude": 0.24,
+          "role": "broad key versus cool-shadow separation"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.09,
+          "role": "twelve shell facets or eight cable facets"
+        },
+        {
+          "id": "micro",
+          "frequency": 48,
+          "amplitude": 0.015,
+          "role": "restrained bevel and seam highlights"
+        }
+      ],
+      "roughness": {
+        "base": 0.72,
+        "variation": 0.04,
+        "map": "independent analytic toon response",
+        "localResponse": "slightly lower on chamfers; higher in recessed cavities"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "pattern": "faceted-geometry-normals",
+        "strength": 0.2,
+        "scale": 12,
+        "space": "object"
+      },
+      "bump": {
+        "pattern": "geometry-only-shallow-seams",
+        "amplitude": 0.004,
+        "scale": 1
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.28,
+        "contactShadowBias": 0.34,
+        "notes": "Only seams, socket overlap, and terminal recesses receive AO."
+      },
+      "wear": {
+        "edgeWear": 0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0,
+        "cavityBias": 0,
+        "color": "#251D31"
+      },
+      "localOverrides": [
+        {
+          "id": "cool-violet-shadow-bands",
+          "region": "light-facing facets",
+          "color": "#6B3B69",
+          "roughness": 0.76,
+          "evidenceRefs": [
+            "sakura-crossing-hero-1",
+            "sakura-crossing-hero-4"
+          ]
+        },
+        {
+          "id": "restrained-ink-outline",
+          "region": "silhouette only",
+          "color": "#2B203B",
+          "roughness": 0.9,
+          "evidenceRefs": [
+            "sakura-crossing-hero-2"
+          ]
+        }
+      ],
+      "shaderNotes": [
+        "Use 2-3 toon bands and cool violet shadow response.",
+        "Do not add photo-real maps, clearcoat, grunge, or soft-vinyl highlights."
+      ],
+      "notes": "Pure procedural Three.js material with no runtime texture dependency."
+    },
+    {
+      "id": "rubber-toon",
+      "name": "Cable and strain-relief rubber",
+      "type": "rubber",
+      "shaderModel": "MeshToonMaterial with shared three-step gradient",
+      "baseColor": "#624A70",
+      "color": "#624A70",
+      "albedo": {
+        "dominant": "#624A70",
+        "secondary": [
+          "#4A385A",
+          "#2B253B"
+        ],
+        "samplingNotes": "Solid code-defined SAKURA palette; no bitmap projection."
+      },
+      "colorVariation": {
+        "palette": [
+          "#624A70",
+          "#4A385A",
+          "#2B253B"
+        ],
+        "pattern": "toon-light-bands",
+        "amplitude": 0.05,
+        "heightCorrelation": 0
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "procedural-object-space-toon-bands",
+        "repeat": [
+          1,
+          1
+        ],
+        "anisotropy": 1,
+        "texelDensityIntent": "No image texture; stable object-space response."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 1,
+          "amplitude": 0.24,
+          "role": "broad key versus cool-shadow separation"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.09,
+          "role": "twelve shell facets or eight cable facets"
+        },
+        {
+          "id": "micro",
+          "frequency": 48,
+          "amplitude": 0.015,
+          "role": "restrained bevel and seam highlights"
+        }
+      ],
+      "roughness": {
+        "base": 0.86,
+        "variation": 0.04,
+        "map": "independent analytic toon response",
+        "localResponse": "slightly lower on chamfers; higher in recessed cavities"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "pattern": "faceted-geometry-normals",
+        "strength": 0.2,
+        "scale": 12,
+        "space": "object"
+      },
+      "bump": {
+        "pattern": "geometry-only-shallow-seams",
+        "amplitude": 0.004,
+        "scale": 1
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.28,
+        "contactShadowBias": 0.34,
+        "notes": "Only seams, socket overlap, and terminal recesses receive AO."
+      },
+      "wear": {
+        "edgeWear": 0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0,
+        "cavityBias": 0,
+        "color": "#251D31"
+      },
+      "localOverrides": [
+        {
+          "id": "cable-joint-shadow",
+          "region": "fillet inner radius and socket overlap",
+          "color": "#352B46",
+          "roughness": 0.9,
+          "evidenceRefs": [
+            "v1-fixed-seed-game"
+          ]
+        }
+      ],
+      "shaderNotes": [
+        "Use 2-3 toon bands and cool violet shadow response.",
+        "Do not add photo-real maps, clearcoat, grunge, or soft-vinyl highlights."
+      ],
+      "notes": "Pure procedural Three.js material with no runtime texture dependency."
+    },
+    {
+      "id": "metal-toon",
+      "name": "Cool gray-violet terminal metal",
+      "type": "metal",
+      "shaderModel": "MeshToonMaterial with shared three-step gradient",
+      "baseColor": "#BBB9CB",
+      "color": "#BBB9CB",
+      "albedo": {
+        "dominant": "#BBB9CB",
+        "secondary": [
+          "#8C889F",
+          "#4E4B63"
+        ],
+        "samplingNotes": "Solid code-defined SAKURA palette; no bitmap projection."
+      },
+      "colorVariation": {
+        "palette": [
+          "#BBB9CB",
+          "#8C889F",
+          "#4E4B63"
+        ],
+        "pattern": "toon-light-bands",
+        "amplitude": 0.05,
+        "heightCorrelation": 0
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "procedural-object-space-toon-bands",
+        "repeat": [
+          1,
+          1
+        ],
+        "anisotropy": 1,
+        "texelDensityIntent": "No image texture; stable object-space response."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 1,
+          "amplitude": 0.24,
+          "role": "broad key versus cool-shadow separation"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.09,
+          "role": "twelve shell facets or eight cable facets"
+        },
+        {
+          "id": "micro",
+          "frequency": 48,
+          "amplitude": 0.015,
+          "role": "restrained bevel and seam highlights"
+        }
+      ],
+      "roughness": {
+        "base": 0.54,
+        "variation": 0.04,
+        "map": "independent analytic toon response",
+        "localResponse": "slightly lower on chamfers; higher in recessed cavities"
+      },
+      "metalness": {
+        "base": 0.62,
+        "variation": 0
+      },
+      "normal": {
+        "pattern": "faceted-geometry-normals",
+        "strength": 0.2,
+        "scale": 12,
+        "space": "object"
+      },
+      "bump": {
+        "pattern": "geometry-only-shallow-seams",
+        "amplitude": 0.004,
+        "scale": 1
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.28,
+        "contactShadowBias": 0.34,
+        "notes": "Only seams, socket overlap, and terminal recesses receive AO."
+      },
+      "wear": {
+        "edgeWear": 0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0,
+        "cavityBias": 0,
+        "color": "#251D31"
+      },
+      "localOverrides": [
+        {
+          "id": "terminal-edge-highlight",
+          "region": "terminal front and side edges",
+          "color": "#D2D0DE",
+          "roughness": 0.42,
+          "evidenceRefs": [
+            "v1-seven-style-board"
+          ]
+        }
+      ],
+      "shaderNotes": [
+        "Use 2-3 toon bands and cool violet shadow response.",
+        "Do not add photo-real maps, clearcoat, grunge, or soft-vinyl highlights."
+      ],
+      "notes": "Pure procedural Three.js material with no runtime texture dependency."
+    },
+    {
+      "id": "cavity-toon",
+      "name": "Interface cavity and outline",
+      "type": "plastic",
+      "shaderModel": "MeshToonMaterial with shared three-step gradient",
+      "baseColor": "#35283F",
+      "color": "#35283F",
+      "albedo": {
+        "dominant": "#35283F",
+        "secondary": [
+          "#251D31",
+          "#17131F"
+        ],
+        "samplingNotes": "Solid code-defined SAKURA palette; no bitmap projection."
+      },
+      "colorVariation": {
+        "palette": [
+          "#35283F",
+          "#251D31",
+          "#17131F"
+        ],
+        "pattern": "toon-light-bands",
+        "amplitude": 0.05,
+        "heightCorrelation": 0
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "procedural-object-space-toon-bands",
+        "repeat": [
+          1,
+          1
+        ],
+        "anisotropy": 1,
+        "texelDensityIntent": "No image texture; stable object-space response."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 1,
+          "amplitude": 0.24,
+          "role": "broad key versus cool-shadow separation"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.09,
+          "role": "twelve shell facets or eight cable facets"
+        },
+        {
+          "id": "micro",
+          "frequency": 48,
+          "amplitude": 0.015,
+          "role": "restrained bevel and seam highlights"
+        }
+      ],
+      "roughness": {
+        "base": 0.9,
+        "variation": 0.04,
+        "map": "independent analytic toon response",
+        "localResponse": "slightly lower on chamfers; higher in recessed cavities"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "pattern": "faceted-geometry-normals",
+        "strength": 0.2,
+        "scale": 12,
+        "space": "object"
+      },
+      "bump": {
+        "pattern": "geometry-only-shallow-seams",
+        "amplitude": 0.004,
+        "scale": 1
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.28,
+        "contactShadowBias": 0.34,
+        "notes": "Only seams, socket overlap, and terminal recesses receive AO."
+      },
+      "wear": {
+        "edgeWear": 0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0,
+        "cavityBias": 0,
+        "color": "#251D31"
+      },
+      "localOverrides": [
+        {
+          "id": "faceplate-recess",
+          "region": "interface face and terminal cavities",
+          "color": "#1F192A",
+          "roughness": 0.94,
+          "evidenceRefs": [
+            "v1-seven-style-board"
+          ]
+        }
+      ],
+      "shaderNotes": [
+        "Use 2-3 toon bands and cool violet shadow response.",
+        "Do not add photo-real maps, clearcoat, grunge, or soft-vinyl highlights."
+      ],
+      "notes": "Pure procedural Three.js material with no runtime texture dependency."
+    }
+  ],
+  "repetitionSystems": [
+    {
+      "id": "terminal-layout-variants",
+      "name": "Seven terminal layout recipes",
+      "realization": "geometry",
+      "buildsGeometry": true,
+      "componentRefs": [
+        "terminal-assembly",
+        "terminal-layout-feature"
+      ],
+      "instances": 7,
+      "geometry": "per-style terminal group with preserved count, spacing and orientation",
+      "distribution": "selected by PlugStyleId; never rendered simultaneously on one head",
+      "variation": "round pins, USB-C tongue, flat blades, three-pin, grounded round, DC barrel, magnetic pogo",
+      "evidenceRefs": [
+        "v1-seven-style-board"
+      ]
+    },
+    {
+      "id": "cable-fillet-samples",
+      "name": "Four-sample exact quarter-turn arcs",
+      "realization": "geometry",
+      "buildsGeometry": true,
+      "componentRefs": [
+        "cable-body",
+        "cable-fillet-system"
+      ],
+      "instances": 4,
+      "geometry": "analytic quarter circle sampled by TubeGeometry path evaluation",
+      "distribution": "each valid orthogonal interior corner",
+      "variation": "radius min(0.13, 0.28 incoming, 0.28 outgoing); fallback under 0.025",
+      "evidenceRefs": [
+        "v1-fixed-seed-game"
+      ]
+    }
+  ],
+  "buildPasses": [
+    {
+      "id": "blockout",
+      "goal": "Match macro silhouette and proportions.",
+      "componentRefs": [
+        "root",
+        "plug-assembly",
+        "cable-body"
+      ],
+      "acceptance": [
+        "Silhouette reads correctly without materials.",
+        "Quality contract has named all required macro feature groups before code generation.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "structural-pass",
+      "goal": "Build the component hierarchy implied by the pre-spec complexity assessment.",
+      "componentRefs": [
+        "strain-relief",
+        "rear-neck",
+        "outer-shell",
+        "front-shoulder",
+        "interface-faceplate",
+        "terminal-assembly",
+        "status-indicator",
+        "cable-end-socket",
+        "tail-cap"
+      ],
+      "acceptance": [
+        "Macro, meso, and repeated structures meet qualityContract.minimumSpecDepth.",
+        "Parent-child relations, joints, seams, sockets, and contact points are explicit.",
+        "Every attached child appendage/connector has parentSocket, localStart/localEnd, contactType, embedDepth or overlap, and gapTolerance.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "form-refinement",
+      "goal": "Refine shape, deformation, bevels, tapers, curves, asymmetry, and visible local geometry.",
+      "componentRefs": [
+        "front-chamfer-feature",
+        "rear-chamfer-feature",
+        "relief-ring-system",
+        "cable-fillet-system",
+        "terminal-layout-feature"
+      ],
+      "acceptance": [
+        "Important visible forms are represented in component geometryDescriptor, deformations, localFeatures, or repetitionSystems.",
+        "Endpoint-based child parts are rooted at their attachment sockets and do not visibly float away from parents.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "material-pass",
+      "goal": "Match material color, roughness, bump, and local variation.",
+      "componentRefs": [
+        "outer-shell",
+        "cable-body",
+        "terminal-assembly",
+        "interface-faceplate"
+      ],
+      "acceptance": [
+        "Reference-derived albedo palette records dominant, secondary, and accent colors per visible material.",
+        "Each important material defines roughness variation and at least one normal/bump/displacement response.",
+        "Local material overrides, dirt/wear/stains/moss/chips/scratches or equivalent masks are tied to evidenceRefs.",
+        "Thin, transparent, reflective, wet, or fibrous materials document alpha/transmission/clearcoat/metalness/fiber response when relevant.",
+        "Generated preview uses procedural albedo/roughness/bump texture or vertex color variation instead of one flat color.",
+        "Generated preview uses independent PBR maps at 1024px or higher for the quality-first tier.",
+        "If source pixels are available, referencePbr extraction passed at confidence >= 0.7 or the pass is stopped/requesting better references.",
+        "Macro, meso, and micro surface frequency bands are visible at the intended review distance without obvious tiling.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "surface-pass",
+      "goal": "Add procedural surface locality such as normal/bump/displacement, AO, dirt, stains, chips, grain, moss, scratches, and wear.",
+      "componentRefs": [
+        "ink-outline-system",
+        "cool-shadow-band",
+        "front-chamfer-feature",
+        "interface-faceplate"
+      ],
+      "acceptance": [
+        "Every required material feature group has local overrides or surfaceDetail tied to evidenceRefs.",
+        "A grazing-angle close-up proves that normal/height detail breaks highlights naturally and does not read as smooth plastic.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "lighting-pass",
+      "goal": "Make material and form readable under neutral turntable lighting plus optional reference lighting.",
+      "componentRefs": [
+        "root",
+        "plug-assembly",
+        "cable-body"
+      ],
+      "acceptance": [
+        "lightingFromPhoto identifies key light direction/color/intensity, fill light, rim or environment light, and ambient color.",
+        "Exposure, tone mapping, background color/gradient, shadow softness, and contact shadow behavior are specified.",
+        "Lighting does not hide geometry/material gaps and screenshots can be compared fairly to the reference.",
+        "Neutral, grazing, and reference-matched lighting checks distinguish material errors from lighting errors.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "interaction-pass",
+      "goal": "Make the model ready for future animation, transformation, physics, or destruction.",
+      "componentRefs": [
+        "root",
+        "plug-assembly",
+        "terminal-assembly",
+        "cable-body",
+        "tail-cap"
+      ],
+      "acceptance": [
+        "Macro and movable meso components have stable pivot nodes.",
+        "Sockets, collider proxies, and destruction metadata are present for future runtime actions.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "optimization-pass",
+      "goal": "Protect runtime performance after visual fidelity is accepted.",
+      "componentRefs": [
+        "root",
+        "plug-assembly",
+        "cable-body"
+      ],
+      "acceptance": [
+        "Triangle count, draw calls, instancing, LOD strategy, and FPS target are documented or verified.",
+        "Repeated detail is instanced or simplified where possible without breaking silhouette/material believability."
+      ]
+    }
+  ],
+  "visualEvidence": [
+    {
+      "timestamp": "2026-08-10T16:01:59.937362+00:00",
+      "passId": "blockout",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.88,
+        "componentStructure": 0.84,
+        "formDetail": 0.82,
+        "materialSurface": 0.74,
+        "lightingCamera": 0.8
+      },
+      "featureReviews": [
+        {
+          "id": "family-shell-silhouette",
+          "score": 0.88,
+          "notes": "The old straight cylinder and spherical end bulges are replaced by a readable twelve-facet five-stage shell, restrained shoulder, and stepped strain relief while preserving the family proportions."
+        }
+      ],
+      "referenceScreenshot": ".\\docs\\history\\plug-cable-v1-2026-08-10\\screenshots\\plug-cable-v1-showcase.png",
+      "renderScreenshot": ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\blockout\\render-showcase.png",
+      "comparisonImage": ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\blockout\\comparison-v1-v2.png",
+      "cameraView": "three-quarter-family-board",
+      "notes": "Left is archived v1; right is v2 blockout. Different capture scale does not affect silhouette review.",
+      "aiVisionNotes": "The v2 silhouette has a clearer rear-neck/body/front-shoulder hierarchy and controlled planar facets. It avoids bulbous toy rounding. Terminal details are intentionally unchanged in this pass."
+    },
+    {
+      "timestamp": "2026-08-10T16:05:24.239545+00:00",
+      "passId": "structural-pass",
+      "estimatedFidelity": 0.88,
+      "aiVisionScore": 0.88,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.89,
+        "componentStructure": 0.93,
+        "formDetail": 0.86,
+        "materialSurface": 0.79,
+        "lightingCamera": 0.81
+      },
+      "featureReviews": [
+        {
+          "id": "seven-terminal-identities",
+          "score": 0.93,
+          "notes": "All seven layouts retain their defining count, spacing, cavity, and front-face cues; the new dark interface ring improves separation from the shared shell."
+        },
+        {
+          "id": "attachment-runtime",
+          "score": 0.92,
+          "notes": "The cable, terminal, and indicator sockets are explicit zero-triangle nodes; every visible assembly part has a stable semantic name and destruction group."
+        }
+      ],
+      "referenceScreenshot": ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\blockout\\render-showcase.png",
+      "renderScreenshot": ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\structural-pass\\render-showcase.png",
+      "comparisonImage": ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\structural-pass\\comparison-blockout-structural.png",
+      "cameraView": "three-quarter-family-board",
+      "notes": "The board verifies every PlugStyleId at the same scale and light; runtime sockets and groups are code-verified.",
+      "aiVisionNotes": "The dark faceplate ring makes the terminal assembly read as a real inserted component instead of pins floating from one cylinder. The stepped rear and recessed side indicator remain restrained and inside the family silhouette."
+    },
+    {
+      "timestamp": "2026-08-10T16:13:58.136865+00:00",
+      "passId": "form-refinement",
+      "estimatedFidelity": 0.89,
+      "aiVisionScore": 0.89,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.9,
+        "componentStructure": 0.91,
+        "formDetail": 0.9,
+        "materialSurface": 0.81,
+        "lightingCamera": 0.82
+      },
+      "featureReviews": [
+        {
+          "id": "family-shell-silhouette",
+          "score": 0.9,
+          "notes": "The refined shell reads clearly at gameplay scale and keeps the plug identity without the old straight-cylinder silhouette."
+        },
+        {
+          "id": "seven-terminal-identities",
+          "score": 0.91,
+          "notes": "Round pins, blades, three-pin clusters, barrel cavity, USB-C face, grounding layout and pogo contacts remain distinct in the family and gameplay views."
+        },
+        {
+          "id": "tangent-cable-fillet",
+          "score": 0.9,
+          "notes": "The fixed-seed game view shows controlled low-poly quarter turns without the v1 spherical elbow bulges; analytic tests confirm tangent continuity and bounded centerlines."
+        }
+      ],
+      "referenceScreenshot": ".\\docs\\history\\plug-cable-v1-2026-08-10\\screenshots\\plug-cable-v1-game-seed-2679418801.png",
+      "renderScreenshot": ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\form-refinement\\render-game-seed-2679418801.png",
+      "comparisonImage": ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\form-refinement\\comparison-v1-v2-game.png",
+      "cameraView": "fixed-seed-gameplay-three-quarter",
+      "notes": "Code tests supply the tangent and no-overshoot evidence that cannot be read exactly from the dense gameplay image.",
+      "aiVisionNotes": "The new corners maintain the original orthogonal corridors but replace hard sphere-jointed elbows with compact faceted turns. Dense overlaps stay legible, and plug-to-cable joints remain continuous at gameplay scale."
+    },
+    {
+      "timestamp": "2026-08-10T16:15:49.671831+00:00",
+      "passId": "material-pass",
+      "estimatedFidelity": 0.88,
+      "aiVisionScore": 0.88,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.9,
+        "componentStructure": 0.92,
+        "formDetail": 0.89,
+        "materialSurface": 0.88,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "sakura-toon-response",
+          "score": 0.88,
+          "notes": "Shell, shoulder, rubber relief, dark cavity, cool gray-violet terminals and recessed indicator now form a controlled SAKURA palette with broad three-step facet shading."
+        }
+      ],
+      "referenceScreenshot": ".\\docs\\history\\plug-cable-v1-2026-08-10\\screenshots\\plug-cable-v1-showcase.png",
+      "renderScreenshot": ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\material-pass\\render-showcase.png",
+      "comparisonImage": ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\material-pass\\comparison-v1-v2-material.png",
+      "cameraView": "three-quarter-family-board",
+      "notes": "The material split is visible across seven shell colors under one neutral rig.",
+      "aiVisionNotes": "The broad planar highlights align with the SAKURA city props and avoid photographic roughness noise. The darker connector face and rubber transitions improve construction readability without mechanical panel clutter."
+    },
+    {
+      "timestamp": "2026-08-10T16:18:42.195504+00:00",
+      "passId": "surface-pass",
+      "estimatedFidelity": 0.9,
+      "aiVisionScore": 0.9,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.91,
+        "componentStructure": 0.92,
+        "formDetail": 0.9,
+        "materialSurface": 0.9,
+        "lightingCamera": 0.86
+      },
+      "featureReviews": [
+        {
+          "id": "sakura-toon-response",
+          "score": 0.9,
+          "notes": "Front, three-quarter, and side views show restrained deep-purple silhouette ink, readable planar highlights, shallow relief rings, and a layered status inset without glossy or noisy surface treatment."
+        }
+      ],
+      "referenceScreenshot": ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\material-pass\\render-showcase.png",
+      "renderScreenshot": ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\surface-pass\\render-showcase.png",
+      "comparisonImage": ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\surface-pass\\comparison-material-surface.png",
+      "cameraView": "front-three-quarter-side",
+      "notes": "Three fixed views were captured at one orthographic scale; side view exposes the inset status layer and facet response.",
+      "aiVisionNotes": "The front and side captures reveal broad planar highlight changes instead of smooth plastic rolls. Outline weight remains on macro construction edges and avoids doubling tiny terminal details."
+    },
+    {
+      "timestamp": "2026-08-10T16:21:05.534670+00:00",
+      "passId": "lighting-pass",
+      "estimatedFidelity": 0.91,
+      "aiVisionScore": 0.91,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.91,
+        "componentStructure": 0.92,
+        "formDetail": 0.9,
+        "materialSurface": 0.91,
+        "lightingCamera": 0.91
+      },
+      "featureReviews": [
+        {
+          "id": "sakura-toon-response",
+          "score": 0.91,
+          "notes": "Warm key, cool fill, soft blossom rim and the production renderer's explicit NoToneMapping preserve the game's saturated SAKURA palette without shadow acne or photoreal reflections."
+        }
+      ],
+      "referenceScreenshot": ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\surface-pass\\render-showcase.png",
+      "renderScreenshot": ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\lighting-pass\\render-showcase.png",
+      "comparisonImage": ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\lighting-pass\\comparison-surface-lighting.png",
+      "cameraView": "neutral-three-quarter-family-board",
+      "notes": "Accepted image is the post-refinement render with no self-shadow striping.",
+      "aiVisionNotes": "A rejected intermediate ACES/self-shadow variant introduced muted colors and shadow acne; the accepted render restores the production palette and clean toon bands while retaining a subtle rear rim."
+    },
+    {
+      "timestamp": "2026-08-10T16:24:52.840516+00:00",
+      "passId": "interaction-pass",
+      "estimatedFidelity": 0.94,
+      "aiVisionScore": 0.94,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.9,
+        "componentStructure": 0.96,
+        "formDetail": 0.91,
+        "materialSurface": 0.9,
+        "lightingCamera": 0.89
+      },
+      "featureReviews": [
+        {
+          "id": "attachment-runtime",
+          "score": 0.96,
+          "notes": "The exploded debug capture proves seven selectable semantic parts per head, and the successful raycast selection is published through diagnostics while sockets, colliders, and destruction groups remain available in sculptRuntime."
+        }
+      ],
+      "referenceScreenshot": ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\lighting-pass\\render-showcase.png",
+      "renderScreenshot": ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\interaction-pass\\render-showcase-debug.png",
+      "comparisonImage": ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\interaction-pass\\comparison-assembled-exploded.png",
+      "cameraView": "assembled-and-exploded-three-quarter",
+      "notes": "Debug mode is URL-query-only and adds no button or control to the shipped game.",
+      "aiVisionNotes": "The exploded board clearly separates cable socket, strain relief, rear neck, shell, shoulder, faceplate, terminal and indicator layers. The status overlay confirms round-two-pin:outer-shell was selected by raycast."
+    },
+    {
+      "timestamp": "2026-08-10T16:32:10.367049+00:00",
+      "passId": "optimization-pass",
+      "estimatedFidelity": 0.94,
+      "aiVisionScore": null,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {},
+      "featureReviews": [],
+      "referenceScreenshot": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\plug-cable-family\\reference-v1-round-two-pin.png",
+      "renderScreenshot": "",
+      "comparisonImage": "",
+      "cameraView": "1280x720-three-quarter",
+      "notes": "Optimization acceptance is machine diagnostics plus automated frame-budget tests; no fidelity-reducing geometry changes were needed.",
+      "aiVisionNotes": ""
+    }
+  ],
+  "reviewHistory": [
+    {
+      "timestamp": "2026-08-10T16:01:59.937362+00:00",
+      "passId": "blockout",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.88,
+        "componentStructure": 0.84,
+        "formDetail": 0.82,
+        "materialSurface": 0.74,
+        "lightingCamera": 0.8
+      },
+      "featureReviews": [
+        {
+          "id": "family-shell-silhouette",
+          "score": 0.88,
+          "notes": "The old straight cylinder and spherical end bulges are replaced by a readable twelve-facet five-stage shell, restrained shoulder, and stepped strain relief while preserving the family proportions."
+        }
+      ],
+      "action": "continue",
+      "summary": "The shared plug family now reads as a restrained five-stage twelve-facet shell instead of a generic cylinder, with legacy proportions and all seven silhouettes intact.",
+      "matched": [
+        "five-stage axial silhouette",
+        "restrained low-poly facets",
+        "legacy family proportions",
+        "seven style silhouettes remain readable"
+      ],
+      "mismatches": [
+        "showcase framing differs from the archived capture",
+        "terminal and runtime hierarchy remain for structural-pass"
+      ],
+      "specFixes": [],
+      "codeFixes": [
+        "add stable meso nodes and per-style terminal hierarchy in structural-pass"
+      ],
+      "evidence": [
+        ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\blockout\\render-showcase.png",
+        ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\blockout\\comparison-v1-v2.png"
+      ],
+      "mapStrippedRender": ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\blockout\\render-canvas.png",
+      "reviewViewpoints": [
+        "three-quarter",
+        "family-board",
+        "long-axis",
+        "thickness-axis"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": ".\\docs\\history\\plug-cable-v1-2026-08-10\\screenshots\\plug-cable-v1-showcase.png",
+        "renderScreenshot": ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\blockout\\render-showcase.png",
+        "comparisonImage": ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\blockout\\comparison-v1-v2.png",
+        "cameraView": "three-quarter-family-board",
+        "notes": "Left is archived v1; right is v2 blockout. Different capture scale does not affect silhouette review.",
+        "aiVisionNotes": "The v2 silhouette has a clearer rear-neck/body/front-shoulder hierarchy and controlled planar facets. It avoids bulbous toy rounding. Terminal details are intentionally unchanged in this pass."
+      }
+    },
+    {
+      "timestamp": "2026-08-10T16:05:24.239545+00:00",
+      "passId": "structural-pass",
+      "estimatedFidelity": 0.88,
+      "aiVisionScore": 0.88,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.89,
+        "componentStructure": 0.93,
+        "formDetail": 0.86,
+        "materialSurface": 0.79,
+        "lightingCamera": 0.81
+      },
+      "featureReviews": [
+        {
+          "id": "seven-terminal-identities",
+          "score": 0.93,
+          "notes": "All seven layouts retain their defining count, spacing, cavity, and front-face cues; the new dark interface ring improves separation from the shared shell."
+        },
+        {
+          "id": "attachment-runtime",
+          "score": 0.92,
+          "notes": "The cable, terminal, and indicator sockets are explicit zero-triangle nodes; every visible assembly part has a stable semantic name and destruction group."
+        }
+      ],
+      "action": "continue",
+      "summary": "The v2 family now has explicit strain-relief, rear-neck, outer-shell, front-shoulder, interface-faceplate, terminal and recessed-indicator parts with stable runtime sockets.",
+      "matched": [
+        "all seven terminal identities",
+        "dark interface separation",
+        "continuous plug-to-cable construction",
+        "named action-ready hierarchy"
+      ],
+      "mismatches": [
+        "cable board remains straight and does not yet prove corner fillets",
+        "debug explode and picking are reserved for interaction-pass"
+      ],
+      "specFixes": [],
+      "codeFixes": [
+        "implement analytic cable fillets and shared capped tube geometry in form-refinement"
+      ],
+      "evidence": [
+        ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\structural-pass\\render-showcase.png",
+        ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\structural-pass\\comparison-blockout-structural.png"
+      ],
+      "reviewViewpoints": [
+        "three-quarter",
+        "family-board",
+        "long-axis",
+        "thickness-axis"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\blockout\\render-showcase.png",
+        "renderScreenshot": ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\structural-pass\\render-showcase.png",
+        "comparisonImage": ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\structural-pass\\comparison-blockout-structural.png",
+        "cameraView": "three-quarter-family-board",
+        "notes": "The board verifies every PlugStyleId at the same scale and light; runtime sockets and groups are code-verified.",
+        "aiVisionNotes": "The dark faceplate ring makes the terminal assembly read as a real inserted component instead of pins floating from one cylinder. The stepped rear and recessed side indicator remain restrained and inside the family silhouette."
+      }
+    },
+    {
+      "timestamp": "2026-08-10T16:13:58.136865+00:00",
+      "passId": "form-refinement",
+      "estimatedFidelity": 0.89,
+      "aiVisionScore": 0.89,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.9,
+        "componentStructure": 0.91,
+        "formDetail": 0.9,
+        "materialSurface": 0.81,
+        "lightingCamera": 0.82
+      },
+      "featureReviews": [
+        {
+          "id": "family-shell-silhouette",
+          "score": 0.9,
+          "notes": "The refined shell reads clearly at gameplay scale and keeps the plug identity without the old straight-cylinder silhouette."
+        },
+        {
+          "id": "seven-terminal-identities",
+          "score": 0.91,
+          "notes": "Round pins, blades, three-pin clusters, barrel cavity, USB-C face, grounding layout and pogo contacts remain distinct in the family and gameplay views."
+        },
+        {
+          "id": "tangent-cable-fillet",
+          "score": 0.9,
+          "notes": "The fixed-seed game view shows controlled low-poly quarter turns without the v1 spherical elbow bulges; analytic tests confirm tangent continuity and bounded centerlines."
+        }
+      ],
+      "action": "continue",
+      "summary": "The production cable now uses capped eight-sided tube geometry over exact tangent quarter-circle corners, shared by static, double-ended, showcase and appliance-flight renders.",
+      "matched": [
+        "0.13 tangent fillets",
+        "28 percent leg clamp",
+        "0.025 short-leg fallback",
+        "no spherical elbow bulges",
+        "eight-sided capped section",
+        "seven interface identities"
+      ],
+      "mismatches": [
+        "archived game image was captured during its opening state, so the family board remains the stronger plug comparison",
+        "material hierarchy still needs its dedicated pass"
+      ],
+      "specFixes": [],
+      "codeFixes": [
+        "finish shared SAKURA toon material response and line-weight consistency in material-pass"
+      ],
+      "evidence": [
+        ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\form-refinement\\render-game-seed-2679418801.png",
+        ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\form-refinement\\comparison-v1-v2-game.png",
+        ".\\tests\\plug-cable-v2.spec.ts"
+      ],
+      "reviewViewpoints": [
+        "fixed-seed-gameplay",
+        "three-quarter",
+        "long-axis",
+        "thickness-axis",
+        "cable-corner-closeup"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": ".\\docs\\history\\plug-cable-v1-2026-08-10\\screenshots\\plug-cable-v1-game-seed-2679418801.png",
+        "renderScreenshot": ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\form-refinement\\render-game-seed-2679418801.png",
+        "comparisonImage": ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\form-refinement\\comparison-v1-v2-game.png",
+        "cameraView": "fixed-seed-gameplay-three-quarter",
+        "notes": "Code tests supply the tangent and no-overshoot evidence that cannot be read exactly from the dense gameplay image.",
+        "aiVisionNotes": "The new corners maintain the original orthogonal corridors but replace hard sphere-jointed elbows with compact faceted turns. Dense overlaps stay legible, and plug-to-cable joints remain continuous at gameplay scale."
+      }
+    },
+    {
+      "timestamp": "2026-08-10T16:15:49.671831+00:00",
+      "passId": "material-pass",
+      "estimatedFidelity": 0.88,
+      "aiVisionScore": 0.88,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.9,
+        "componentStructure": 0.92,
+        "formDetail": 0.89,
+        "materialSurface": 0.88,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "sakura-toon-response",
+          "score": 0.88,
+          "notes": "Shell, shoulder, rubber relief, dark cavity, cool gray-violet terminals and recessed indicator now form a controlled SAKURA palette with broad three-step facet shading."
+        }
+      ],
+      "action": "continue",
+      "summary": "The plug family and every cable renderer now use shared code-defined SAKURA Toon roles for shell, shoulder, rubber, cavity, metal and indicator, with no external maps or runtime dependencies.",
+      "matched": [
+        "three-step broad facet shading",
+        "cool violet shadows",
+        "dark interface cavity",
+        "cool gray-violet terminals",
+        "shared cable rubber material",
+        "no glossy toy response"
+      ],
+      "mismatches": [
+        "surface-pass still needs explicit debug outline and part-selection inspection",
+        "lighting remains the existing showcase rig until lighting-pass"
+      ],
+      "specFixes": [],
+      "codeFixes": [
+        "add part-debug explode/picking and verify restrained outline continuity in surface and interaction passes"
+      ],
+      "evidence": [
+        ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\material-pass\\render-showcase.png",
+        ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\material-pass\\comparison-v1-v2-material.png"
+      ],
+      "reviewViewpoints": [
+        "three-quarter",
+        "family-board",
+        "long-axis",
+        "thickness-axis"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": ".\\docs\\history\\plug-cable-v1-2026-08-10\\screenshots\\plug-cable-v1-showcase.png",
+        "renderScreenshot": ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\material-pass\\render-showcase.png",
+        "comparisonImage": ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\material-pass\\comparison-v1-v2-material.png",
+        "cameraView": "three-quarter-family-board",
+        "notes": "The material split is visible across seven shell colors under one neutral rig.",
+        "aiVisionNotes": "The broad planar highlights align with the SAKURA city props and avoid photographic roughness noise. The darker connector face and rubber transitions improve construction readability without mechanical panel clutter."
+      }
+    },
+    {
+      "timestamp": "2026-08-10T16:18:42.195504+00:00",
+      "passId": "surface-pass",
+      "estimatedFidelity": 0.9,
+      "aiVisionScore": 0.9,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.91,
+        "componentStructure": 0.92,
+        "formDetail": 0.9,
+        "materialSurface": 0.9,
+        "lightingCamera": 0.86
+      },
+      "featureReviews": [
+        {
+          "id": "sakura-toon-response",
+          "score": 0.9,
+          "notes": "Front, three-quarter, and side views show restrained deep-purple silhouette ink, readable planar highlights, shallow relief rings, and a layered status inset without glossy or noisy surface treatment."
+        }
+      ],
+      "action": "continue",
+      "summary": "Restrained hull ink now follows the shell, front shoulder and strain-relief silhouette; the status light is a layered inset disk and three fixed views confirm the faceted surface response.",
+      "matched": [
+        "restrained deep-purple ink",
+        "shallow relief ring geometry",
+        "visible twelve-sided facet bands",
+        "layered status inset",
+        "no grunge or soft-vinyl gloss"
+      ],
+      "mismatches": [
+        "no environment reflection is intentionally used",
+        "formal debug part selection remains for interaction-pass"
+      ],
+      "specFixes": [],
+      "codeFixes": [
+        "wire showcase debug explode and raycast part selection to sculptRuntime in interaction-pass"
+      ],
+      "evidence": [
+        ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\surface-pass\\render-showcase-front.png",
+        ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\surface-pass\\render-showcase.png",
+        ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\surface-pass\\render-showcase-side.png",
+        ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\surface-pass\\comparison-material-surface.png"
+      ],
+      "reviewViewpoints": [
+        "front",
+        "three-quarter",
+        "side",
+        "long-axis",
+        "thickness-axis",
+        "grazing-facet"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\material-pass\\render-showcase.png",
+        "renderScreenshot": ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\surface-pass\\render-showcase.png",
+        "comparisonImage": ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\surface-pass\\comparison-material-surface.png",
+        "cameraView": "front-three-quarter-side",
+        "notes": "Three fixed views were captured at one orthographic scale; side view exposes the inset status layer and facet response.",
+        "aiVisionNotes": "The front and side captures reveal broad planar highlight changes instead of smooth plastic rolls. Outline weight remains on macro construction edges and avoids doubling tiny terminal details."
+      }
+    },
+    {
+      "timestamp": "2026-08-10T16:21:05.534670+00:00",
+      "passId": "lighting-pass",
+      "estimatedFidelity": 0.91,
+      "aiVisionScore": 0.91,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.91,
+        "componentStructure": 0.92,
+        "formDetail": 0.9,
+        "materialSurface": 0.91,
+        "lightingCamera": 0.91
+      },
+      "featureReviews": [
+        {
+          "id": "sakura-toon-response",
+          "score": 0.91,
+          "notes": "Warm key, cool fill, soft blossom rim and the production renderer's explicit NoToneMapping preserve the game's saturated SAKURA palette without shadow acne or photoreal reflections."
+        }
+      ],
+      "action": "continue",
+      "summary": "The review rig now separates warm key, cool fill and blossom rim while explicitly matching the production game's NoToneMapping and avoiding self-shadow acne.",
+      "matched": [
+        "warm key direction",
+        "cool violet fill",
+        "subtle blossom rim",
+        "explicit game tone mapping",
+        "clean facets without shadow acne",
+        "stable neutral background"
+      ],
+      "mismatches": [
+        "the family board intentionally has no ground plane, so contact is expressed through component AO rather than cast floor shadows"
+      ],
+      "specFixes": [],
+      "codeFixes": [
+        "none for lighting",
+        "move to runtime debug and lifecycle validation"
+      ],
+      "evidence": [
+        ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\lighting-pass\\render-showcase.png",
+        ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\lighting-pass\\comparison-surface-lighting.png"
+      ],
+      "reviewViewpoints": [
+        "neutral-three-quarter",
+        "front",
+        "side",
+        "long-axis",
+        "thickness-axis",
+        "reference-matched-family-board"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\surface-pass\\render-showcase.png",
+        "renderScreenshot": ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\lighting-pass\\render-showcase.png",
+        "comparisonImage": ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\lighting-pass\\comparison-surface-lighting.png",
+        "cameraView": "neutral-three-quarter-family-board",
+        "notes": "Accepted image is the post-refinement render with no self-shadow striping.",
+        "aiVisionNotes": "A rejected intermediate ACES/self-shadow variant introduced muted colors and shadow acne; the accepted render restores the production palette and clean toon bands while retaining a subtle rear rim."
+      }
+    },
+    {
+      "timestamp": "2026-08-10T16:24:52.840516+00:00",
+      "passId": "interaction-pass",
+      "estimatedFidelity": 0.94,
+      "aiVisionScore": 0.94,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.9,
+        "componentStructure": 0.96,
+        "formDetail": 0.91,
+        "materialSurface": 0.9,
+        "lightingCamera": 0.89
+      },
+      "featureReviews": [
+        {
+          "id": "attachment-runtime",
+          "score": 0.96,
+          "notes": "The exploded debug capture proves seven selectable semantic parts per head, and the successful raycast selection is published through diagnostics while sockets, colliders, and destruction groups remain available in sculptRuntime."
+        }
+      ],
+      "action": "continue",
+      "summary": "Query-only showcase diagnostics now support exploded assembly inspection and raycast part selection across all seven styles; formal gameplay UI remains unchanged.",
+      "matched": [
+        "seven semantic selectable parts",
+        "stable sculptRuntime nodes",
+        "three sockets",
+        "legacy capsule collider proxy",
+        "four destruction groups",
+        "successful raycast selection",
+        "no production button"
+      ],
+      "mismatches": [
+        "none at the interaction contract level"
+      ],
+      "specFixes": [],
+      "codeFixes": [
+        "finalize resource accounting and run full regression suite in optimization-pass"
+      ],
+      "evidence": [
+        ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\interaction-pass\\render-showcase-debug.png",
+        ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\interaction-pass\\comparison-assembled-exploded.png",
+        ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\interaction-pass\\capture-diagnostics-debug.json",
+        ".\\tests\\plug-cable-v2.spec.ts"
+      ],
+      "reviewViewpoints": [
+        "assembled-three-quarter",
+        "exploded-three-quarter",
+        "selected-part",
+        "long-axis",
+        "thickness-axis"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\lighting-pass\\render-showcase.png",
+        "renderScreenshot": ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\interaction-pass\\render-showcase-debug.png",
+        "comparisonImage": ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\interaction-pass\\comparison-assembled-exploded.png",
+        "cameraView": "assembled-and-exploded-three-quarter",
+        "notes": "Debug mode is URL-query-only and adds no button or control to the shipped game.",
+        "aiVisionNotes": "The exploded board clearly separates cable socket, strain relief, rear neck, shell, shoulder, faceplate, terminal and indicator layers. The status overlay confirms round-two-pin:outer-shell was selected by raycast."
+      }
+    },
+    {
+      "timestamp": "2026-08-10T16:32:10.367049+00:00",
+      "passId": "optimization-pass",
+      "estimatedFidelity": 0.94,
+      "aiVisionScore": null,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {},
+      "featureReviews": [],
+      "action": "continue",
+      "summary": "The assembled seven-style board stays within the production budget at 95 draw calls, 8574 triangles, 95 geometries and 2 textures, with a measured 16.945 ms average frame interval at 1280x720 headless rendering.",
+      "matched": [
+        "triangles below 12000",
+        "draw calls below 120",
+        "textures equal 2",
+        "nominal 60 Hz frame cadence",
+        "shared cable material",
+        "8-sided cable and 12-sided shell retained",
+        "deterministic geometry disposal"
+      ],
+      "mismatches": [
+        "headless average is 59.0 estimated FPS rather than an exact 60.0 due requestAnimationFrame quantization",
+        "the project acceptance test uses a 20 ms frame ceiling and passes"
+      ],
+      "specFixes": [],
+      "codeFixes": [
+        "none",
+        "retain current fidelity and budgets"
+      ],
+      "evidence": [
+        ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\optimization-pass\\capture-diagnostics.json",
+        ".\\docs\\sculpt-specs\\plug-cable-family\\reviews\\optimization-pass\\render-showcase.png",
+        ".\\tests\\plug-cable-v2.spec.ts"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\plug-cable-family\\reference-v1-round-two-pin.png",
+        "renderScreenshot": "",
+        "comparisonImage": "",
+        "cameraView": "1280x720-three-quarter",
+        "notes": "Optimization acceptance is machine diagnostics plus automated frame-budget tests; no fidelity-reducing geometry changes were needed.",
+        "aiVisionNotes": ""
+      }
+    }
+  ],
+  "lodPlan": [
+    {
+      "tier": "near",
+      "distance": 0,
+      "strategy": "full component tree and material layers"
+    },
+    {
+      "tier": "far",
+      "distance": 30,
+      "strategy": "merge static components and reduce local feature geometry"
+    }
+  ],
+  "performanceBudget": {
+    "qualityPriority": "real-time-family-asset",
+    "targetTriangles": 12000,
+    "maxDrawCalls": 120,
+    "textureSize": 0,
+    "fpsTarget": 60,
+    "optimizationPolicy": "Keep 12 radial shell sides, 8 radial cable sides, 4 samples per quarter-turn, shared materials, and deterministic disposal."
+  },
+  "lightingFromPhoto": [
+    {
+      "role": "key light",
+      "direction": "upper front-left",
+      "color": "#FFE3D4",
+      "intensity": 1.15,
+      "shadow": "soft map shadow"
+    },
+    {
+      "role": "fill light",
+      "direction": "front-right",
+      "color": "#8F83C6",
+      "intensity": 0.42,
+      "response": "cool violet toon shadow band"
+    },
+    {
+      "role": "rim light and environment",
+      "direction": "rear-left",
+      "color": "#F7B7CC",
+      "intensity": 0.35,
+      "exposure": 1,
+      "toneMapping": "explicit NoToneMapping to match the production game renderer"
+    },
+    {
+      "role": "ground contact shadow",
+      "behavior": "soft contact shadow and restrained AO only at seams and sockets",
+      "background": "#F2E9E8"
+    }
+  ],
+  "proceduralStrategy": [
+    "Use a twelve-segment LatheGeometry profile for the shared shell and strain relief.",
+    "Keep each terminal identity as a named child group selected by PlugStyleId.",
+    "Build orthogonal cable paths from line segments and analytic quarter-circle Curve segments; never use free Catmull-Rom smoothing.",
+    "Merge capped eight-sided TubeGeometry per rebuild and dispose replaced geometry deterministically.",
+    "Publish nodes, sockets, pick groups and destruction groups through root.userData.sculptRuntime.",
+    "Use shared code-defined MeshToonMaterial palettes and restrained hull outlines; no external maps or models."
+  ],
+  "animationAnchors": [
+    "root pivot node supports whole-object translation, rotation, scale, and visibility changes",
+    "component pivot groups support later local transforms without rebuilding geometry"
+  ],
+  "destructionAnchors": [
+    "actionProfile.destruction.fractureGroup marks detachable or breakable component sets",
+    "component seams and sockets define plausible break points instead of random explosions"
+  ],
+  "risks": [
+    {
+      "id": "envelope-overrun",
+      "mitigation": "measure all seven styles across rotated bounds and retain current constants"
+    },
+    {
+      "id": "cable-overshoot",
+      "mitigation": "analytic tangent arcs with 28 percent leg clamp and 0.025 fallback"
+    },
+    {
+      "id": "dirty-worktree-overwrite",
+      "mitigation": "patch only scoped rendering files and keep independent v1 archive"
+    },
+    {
+      "id": "toy-read",
+      "mitigation": "restrained chamfers, faceted silhouettes, cool shadows, no bulbous spheres or glossy PBR"
+    }
+  ],
+  "localSpecSearch": {
+    "collection": "core_3d",
+    "query": "SAKURA Plug Cable Family v2 stylized low-poly plastic plug cable strain relief tube along orthogonal path rounded fillet toon outline plastic connector",
+    "index": {
+      "status": "hit",
+      "reason": "current",
+      "fingerprint": "6857e5ab528b42ac12f4f411f862610a0bffce8e47aee3610a7603c318072fe8"
+    },
+    "matches": [
+      {
+        "record_id": "core.shader-mapping-capsulegeometry-rounded-edge-components",
+        "file_path": "docs/raw/img2threejs-skill-dataset.json",
+        "heading": null,
+        "key_path": "categories.rendering_shader_mapping[6]",
+        "score": 5.386043518442,
+        "snippets": [
+          "Maps to components with hemispherical rounded ends. Ánh xạ tới các bộ phận có đầu bo tròn dạng bán cầu. Recognition cues: Rod-like part with distinctly rounded (not flat-cut) ends, e.g. a knife spine or a safety lever Dấu hiệu nhận diện: Bộ phận ..."
+        ],
+        "source_refs": [
+          {
+            "path": "docs/raw/img2threejs-skill-dataset.json",
+            "heading": null,
+            "key_path": "categories.rendering_shader_mapping[6]"
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "docs/raw/img2threejs-skill-dataset.json",
+            "note": "img2threejs NotebookLM research distillation"
+          }
+        ]
+      },
+      {
+        "record_id": "core.topology-intent",
+        "file_path": "grimoire/glossary/3d_vocabulary.md",
+        "heading": "Geometry And Topology",
+        "key_path": null,
+        "score": 5.143858634031,
+        "snippets": [
+          "Topology intent classifies a surface as hard-surface blockout, subdivision-ready, low-poly prop, organic deformed mesh, or alpha-card cluster."
+        ],
+        "source_refs": [
+          {
+            "path": "grimoire/glossary/3d_vocabulary.md",
+            "heading": "Geometry And Topology",
+            "key_path": null
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "grimoire/glossary/3d_vocabulary.md"
+          },
+          {
+            "kind": "notebooklm-research",
+            "ref": "notebooklm:4b03c2f9-8393-411f-b5b4-039ab9532843",
+            "note": "Validated generic schema vocabulary; numeric claims remain backed by local source_refs."
+          }
+        ]
+      },
+      {
+        "record_id": "core.shader-mapping-tubegeometry-straps-cables-belts",
+        "file_path": "docs/raw/img2threejs-skill-dataset.json",
+        "heading": null,
+        "key_path": "categories.rendering_shader_mapping[10]",
+        "score": 3.699753200989,
+        "snippets": [
+          "... theo một đường cong 3D. Recognition cues: Flexible, curve-following linear component — sling strap, pressure-switch cable, ammo belt draping into a receiver Dấu hiệu nhận diện: Bộ phận tuyến tính mềm dẻo chạy theo đường cong — dây đeo ..."
+        ],
+        "source_refs": [
+          {
+            "path": "docs/raw/img2threejs-skill-dataset.json",
+            "heading": null,
+            "key_path": "categories.rendering_shader_mapping[10]"
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "docs/raw/img2threejs-skill-dataset.json",
+            "note": "img2threejs NotebookLM research distillation"
+          }
+        ]
+      }
+    ]
+  }
+}

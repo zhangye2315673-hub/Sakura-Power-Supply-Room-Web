@@ -1,0 +1,416 @@
+{
+  "sourceImage": "references/intake-v2/fan/views/front.png",
+  "sourceViews": [
+    "references/intake-v2/fan/views/front.png",
+    "references/intake-v2/fan/views/side.png",
+    "references/intake-v2/fan/views/back.png",
+    "references/intake-v2/fan/views/three-quarter.png"
+  ],
+  "detailInventory": {
+    "scanMethod": "four-view component review",
+    "targetMinDetails": 20,
+    "details": [
+      {
+        "id": "detail-01",
+        "kind": "contour",
+        "description": "Circular head stays within the archived 0.655 half-width.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 0.25,
+          "height": 0.2,
+          "units": "normalized"
+        },
+        "scale": "macro",
+        "affects": "geometry, materialSurface",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "guard-assembly"
+        },
+        "evidenceRef": "references/intake-v2/fan/views/three-quarter.png",
+        "confidence": 0.96
+      },
+      {
+        "id": "detail-02",
+        "kind": "contour",
+        "description": "Front outer ring is the primary graphic silhouette.",
+        "region": {
+          "x": 0.25,
+          "y": 0,
+          "width": 0.25,
+          "height": 0.2,
+          "units": "normalized"
+        },
+        "scale": "macro",
+        "affects": "geometry, materialSurface",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "front-outer-ring"
+        },
+        "evidenceRef": "references/intake-v2/fan/views/three-quarter.png",
+        "confidence": 0.96
+      },
+      {
+        "id": "detail-03",
+        "kind": "contour",
+        "description": "Rear ring is depth-separated and connected by four bridges.",
+        "region": {
+          "x": 0.5,
+          "y": 0,
+          "width": 0.25,
+          "height": 0.2,
+          "units": "normalized"
+        },
+        "scale": "macro",
+        "affects": "geometry, materialSurface",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "rear-outer-ring"
+        },
+        "evidenceRef": "references/intake-v2/fan/views/three-quarter.png",
+        "confidence": 0.96
+      },
+      {
+        "id": "detail-04",
+        "kind": "linework",
+        "description": "Three inner rings remain countable on each guard face.",
+        "region": {
+          "x": 0.75,
+          "y": 0,
+          "width": 0.25,
+          "height": 0.2,
+          "units": "normalized"
+        },
+        "scale": "macro",
+        "affects": "geometry, materialSurface",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "concentric-rings"
+        },
+        "evidenceRef": "references/intake-v2/fan/views/three-quarter.png",
+        "confidence": 0.96
+      },
+      {
+        "id": "detail-05",
+        "kind": "linework",
+        "description": "Eight low-sided spokes remain countable on each guard face.",
+        "region": {
+          "x": 0,
+          "y": 0.2,
+          "width": 0.25,
+          "height": 0.2,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry, materialSurface",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "radial-spokes"
+        },
+        "evidenceRef": "references/intake-v2/fan/views/three-quarter.png",
+        "confidence": 0.96
+      },
+      {
+        "id": "detail-06",
+        "kind": "contour",
+        "description": "Five broad swept blades preserve radial clearance.",
+        "region": {
+          "x": 0.25,
+          "y": 0.2,
+          "width": 0.25,
+          "height": 0.2,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry, materialSurface",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "rotor-assembly"
+        },
+        "evidenceRef": "references/intake-v2/fan/views/three-quarter.png",
+        "confidence": 0.96
+      },
+      {
+        "id": "detail-07",
+        "kind": "contour",
+        "description": "Cream center cap carries five restrained Sakura petals.",
+        "region": {
+          "x": 0.5,
+          "y": 0.2,
+          "width": 0.25,
+          "height": 0.2,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry, materialSurface",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "front-medallion"
+        },
+        "evidenceRef": "references/intake-v2/fan/views/three-quarter.png",
+        "confidence": 0.96
+      },
+      {
+        "id": "detail-08",
+        "kind": "contour",
+        "description": "Tapered fourteen-sided motor barrel reads in side view.",
+        "region": {
+          "x": 0.75,
+          "y": 0.2,
+          "width": 0.25,
+          "height": 0.2,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry, materialSurface",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "motor-housing"
+        },
+        "evidenceRef": "references/intake-v2/fan/views/three-quarter.png",
+        "confidence": 0.96
+      },
+      {
+        "id": "detail-09",
+        "kind": "linework",
+        "description": "Five horizontal rear vents remain aligned.",
+        "region": {
+          "x": 0,
+          "y": 0.4,
+          "width": 0.25,
+          "height": 0.2,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry, materialSurface",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "rear-vents"
+        },
+        "evidenceRef": "references/intake-v2/fan/views/back.png",
+        "confidence": 0.96
+      },
+      {
+        "id": "detail-10",
+        "kind": "contour",
+        "description": "Visible central shaft bridges motor and rotor.",
+        "region": {
+          "x": 0.25,
+          "y": 0.4,
+          "width": 0.25,
+          "height": 0.2,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry, materialSurface",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "motor-shaft"
+        },
+        "evidenceRef": "references/intake-v2/fan/views/three-quarter.png",
+        "confidence": 0.96
+      },
+      {
+        "id": "detail-11",
+        "kind": "fastener",
+        "description": "Large lateral hinge cap makes the tilt axis readable.",
+        "region": {
+          "x": 0.5,
+          "y": 0.4,
+          "width": 0.25,
+          "height": 0.2,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry, materialSurface",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "tilt-hinge"
+        },
+        "evidenceRef": "references/intake-v2/fan/views/three-quarter.png",
+        "confidence": 0.96
+      },
+      {
+        "id": "detail-12",
+        "kind": "contour",
+        "description": "Tapered support remains fixed while the head yaws.",
+        "region": {
+          "x": 0.75,
+          "y": 0.4,
+          "width": 0.25,
+          "height": 0.2,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry, materialSurface",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "support-column"
+        },
+        "evidenceRef": "references/intake-v2/fan/views/three-quarter.png",
+        "confidence": 0.96
+      },
+      {
+        "id": "detail-13",
+        "kind": "contour",
+        "description": "Beveled trapezoidal base retains the v1 ground and width.",
+        "region": {
+          "x": 0,
+          "y": 0.6000000000000001,
+          "width": 0.25,
+          "height": 0.2,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry, materialSurface",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "base-shell"
+        },
+        "evidenceRef": "references/intake-v2/fan/views/three-quarter.png",
+        "confidence": 0.96
+      },
+      {
+        "id": "detail-14",
+        "kind": "seam",
+        "description": "Pink lower rail and dark panel seam remain separated.",
+        "region": {
+          "x": 0.25,
+          "y": 0.6000000000000001,
+          "width": 0.25,
+          "height": 0.2,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry, materialSurface",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "base-rail"
+        },
+        "evidenceRef": "references/intake-v2/fan/views/three-quarter.png",
+        "confidence": 0.96
+      },
+      {
+        "id": "detail-15",
+        "kind": "ridge",
+        "description": "Front dial retains frozen center and index.",
+        "region": {
+          "x": 0.5,
+          "y": 0.6000000000000001,
+          "width": 0.25,
+          "height": 0.2,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry, materialSurface",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "speed-dial"
+        },
+        "evidenceRef": "references/intake-v2/fan/views/three-quarter.png",
+        "confidence": 0.96
+      },
+      {
+        "id": "detail-16",
+        "kind": "emissive",
+        "description": "Small indicator remains above the dial.",
+        "region": {
+          "x": 0.75,
+          "y": 0.6000000000000001,
+          "width": 0.25,
+          "height": 0.2,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "materialSurface",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "status-indicator"
+        },
+        "evidenceRef": "references/intake-v2/fan/views/three-quarter.png",
+        "confidence": 0.96
+      },
+      {
+        "id": "detail-17",
+        "kind": "contour",
+        "description": "Air emitter stays on the front guard.",
+        "region": {
+          "x": 0,
+          "y": 0.8,
+          "width": 0.25,
+          "height": 0.2,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry, materialSurface",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "air-emitter"
+        },
+        "evidenceRef": "references/intake-v2/fan/views/three-quarter.png",
+        "confidence": 0.96
+      },
+      {
+        "id": "detail-18",
+        "kind": "contour",
+        "description": "Four cable sockets remain root children at archived positions.",
+        "region": {
+          "x": 0.25,
+          "y": 0.8,
+          "width": 0.25,
+          "height": 0.2,
+          "units": "normalized"
+        },
+        "scale": "micro",
+        "affects": "geometry, materialSurface",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "scene-edge-sockets"
+        },
+        "evidenceRef": "references/intake-v2/fan/views/three-quarter.png",
+        "confidence": 0.96
+      },
+      {
+        "id": "detail-19",
+        "kind": "linework",
+        "description": "Ink widths are 0.0048, 0.0041 and 0.0033 with stable 0.18 variation.",
+        "region": {
+          "x": 0.5,
+          "y": 0.8,
+          "width": 0.25,
+          "height": 0.2,
+          "units": "normalized"
+        },
+        "scale": "micro",
+        "affects": "materialSurface",
+        "mapsTo": {
+          "type": "material.localOverrides",
+          "ref": "outline-hierarchy"
+        },
+        "evidenceRef": "references/intake-v2/fan/views/three-quarter.png",
+        "confidence": 0.96
+      },
+      {
+        "id": "detail-20",
+        "kind": "linework",
+        "description": "Cream, pink and plum zones use two-to-three-band Toon response.",
+        "region": {
+          "x": 0.75,
+          "y": 0.8,
+          "width": 0.25,
+          "height": 0.2,
+          "units": "normalized"
+        },
+        "scale": "micro",
+        "affects": "geometry, materialSurface",
+        "mapsTo": {
+          "type": "material.localOverrides",
+          "ref": "toon-palette"
+        },
+        "evidenceRef": "references/intake-v2/fan/views/three-quarter.png",
+        "confidence": 0.96
+      }
+    ]
+  },
+  "note": "Archived four-view fallback after external GPT Image 2 endpoint failure."
+}

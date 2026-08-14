@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "admitted": true,
+  "views": [
+    { "viewpoint": "front", "path": "references/intake-v2/kettle/views/front.png", "width": 1200, "height": 830, "foregroundCoverage": 0.2341, "largestComponentFraction": 0.9812, "pHash": 16544138603650104374 },
+    { "viewpoint": "side", "path": "references/intake-v2/kettle/views/side.png", "width": 1200, "height": 830, "foregroundCoverage": 0.2769, "largestComponentFraction": 0.9846, "pHash": 16616551052227105899 },
+    { "viewpoint": "back", "path": "references/intake-v2/kettle/views/back.png", "width": 1200, "height": 830, "foregroundCoverage": 0.2979, "largestComponentFraction": 1.0, "pHash": 13028284741678598503 },
+    { "viewpoint": "three-quarter", "path": "references/intake-v2/kettle/views/three-quarter.png", "width": 1200, "height": 830, "foregroundCoverage": 0.2597, "largestComponentFraction": 0.9813, "pHash": 16544134221776869810 }
+  ],
+  "source": "procedural runtime captures admitted as fallback after external GPT Image 2 connection timeout"
+}

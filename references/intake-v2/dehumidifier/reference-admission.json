@@ -1,0 +1,27 @@
+{
+  "model": "dehumidifier",
+  "verdict": "conditional",
+  "technicalProbe": {
+    "front": "pass 557x941",
+    "side": "pass 557x941",
+    "back": "pass 558x941"
+  },
+  "visualInspection": {
+    "identity": "pass",
+    "crossViewProportion": "pass",
+    "partCountConsistency": "pass",
+    "animationAnchorEvidence": "conditional-runtime-contract"
+  },
+  "observed": [
+    "cream upper enclosure over Sakura-pink removable tank",
+    "wide mint crown exhaust",
+    "central circular control and narrow tank level lens",
+    "rear carry recess, two-column intake and centered drain"
+  ],
+  "hiddenOrInferred": [
+    "compressor and refrigeration loop",
+    "internal tank float and filter clips",
+    "lower rear gameplay power inlet"
+  ],
+  "limitation": "The three-quarter source is an archived runtime screenshot rather than a newly generated orthographic concept view."
+}

@@ -1,0 +1,14 @@
+{
+  "passId": "surface-pass",
+  "baseUrl": "http://127.0.0.1:5190",
+  "view": "front",
+  "diagnostics": {
+    "labelCount": 7,
+    "bodyClasses": "showcase-mode",
+    "canvas": {
+      "width": 1728,
+      "height": 972
+    }
+  },
+  "errors": []
+}

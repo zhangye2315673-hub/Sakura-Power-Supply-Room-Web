@@ -1,0 +1,83 @@
+{
+  "ok": true,
+  "verdict": "pass",
+  "confidence": 0.909,
+  "estimatedFidelity": 0.909,
+  "targetThreshold": 0.7,
+  "materialId": "port-dark",
+  "sourceImage": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\desktop-computer\\zones\\back\\tower-rear.png",
+  "outDir": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\desktop-computer\\pbr\\port-dark",
+  "palette": [
+    "#EEC9BC",
+    "#E8B6AB",
+    "#F6E5D4",
+    "#73544B",
+    "#BA9388"
+  ],
+  "maps": {
+    "albedo": {
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\desktop-computer\\pbr\\port-dark\\port-dark_albedo.png",
+      "url": "port-dark_albedo.png",
+      "channel": "albedo",
+      "source": "reference-pixel-extraction"
+    },
+    "roughness": {
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\desktop-computer\\pbr\\port-dark\\port-dark_roughness.png",
+      "url": "port-dark_roughness.png",
+      "channel": "roughness",
+      "source": "reference-pixel-extraction"
+    },
+    "height": {
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\desktop-computer\\pbr\\port-dark\\port-dark_height.png",
+      "url": "port-dark_height.png",
+      "channel": "height",
+      "source": "reference-pixel-extraction"
+    },
+    "normal": {
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\desktop-computer\\pbr\\port-dark\\port-dark_normal.png",
+      "url": "port-dark_normal.png",
+      "channel": "normal",
+      "source": "reference-pixel-extraction"
+    },
+    "ao": {
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\desktop-computer\\pbr\\port-dark\\port-dark_ao.png",
+      "url": "port-dark_ao.png",
+      "channel": "ao",
+      "source": "reference-pixel-extraction"
+    }
+  },
+  "diagnostics": {
+    "sourceWidth": 206,
+    "sourceHeight": 320,
+    "mapSize": 1024,
+    "cropBBoxPixels": {
+      "x": 1,
+      "y": 24,
+      "width": 178,
+      "height": 296
+    },
+    "mask": {
+      "backgroundColor": "#FEF7F1",
+      "backgroundNoise": 1.732,
+      "transparentPixelFraction": 0.0,
+      "foregroundCoverage": 0.7228
+    },
+    "mapStats": {
+      "valueRange": 0.5728,
+      "heightP90Gradient": 0.13083,
+      "roughnessBase": 0.735,
+      "roughnessVariation": 0.211,
+      "normalStrength": 0.31,
+      "blurRadius": 21
+    },
+    "palette": [
+      "#EEC9BC",
+      "#E8B6AB",
+      "#F6E5D4",
+      "#73544B",
+      "#BA9388"
+    ]
+  },
+  "warnings": [],
+  "limitation": "single-image PBR extraction is an estimate; 70%+ extraction confidence still needs render screenshot review"
+}

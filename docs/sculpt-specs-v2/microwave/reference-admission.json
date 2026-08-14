@@ -1,0 +1,22 @@
+{
+  "target": "microwave-v2",
+  "source": "references/intake-v2/microwave/microwave-turnsheet-v2.png",
+  "technicalProbe": {
+    "width": 2048,
+    "height": 2048,
+    "bytes": 2929282,
+    "technicalSuitability": "pass",
+    "warnings": []
+  },
+  "views": [
+    { "viewpoint": "front", "admitted": true, "width": 1024, "height": 1024, "foregroundCoverage": 0.5653, "largestComponentFraction": 0.9825, "pHash": "13799240567206151642" },
+    { "viewpoint": "side", "admitted": true, "width": 1024, "height": 1024, "foregroundCoverage": 0.4109, "largestComponentFraction": 0.954, "pHash": "18051800727780103777" },
+    { "viewpoint": "back", "admitted": true, "width": 1024, "height": 1024, "foregroundCoverage": 0.5272, "largestComponentFraction": 0.9813, "pHash": "18366104924030975168" },
+    { "viewpoint": "three-quarter", "admitted": true, "width": 1024, "height": 1024, "foregroundCoverage": 0.5052, "largestComponentFraction": 0.9625, "pHash": "13805151760172004999" }
+  ],
+  "verdict": "pass",
+  "notes": [
+    "All crops are non-empty, large, mutually distinct and structurally consistent.",
+    "The generated sheet owns visible form language only; the archived v1 runtime contract owns dimensions, anchors and animation state."
+  ]
+}

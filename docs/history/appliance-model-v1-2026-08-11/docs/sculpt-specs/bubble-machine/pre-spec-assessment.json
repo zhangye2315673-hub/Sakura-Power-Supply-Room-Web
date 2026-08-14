@@ -1,0 +1,105 @@
+{
+  "targetName": "SAKURA Bubble Machine",
+  "sourceImage": "D:/下载文件/ChatGPT Image 2026年8月3日 16_17_49 (8).png",
+  "preSpecAssessment": {
+    "objectClass": {
+      "primaryType": "portable electric bubble machine",
+      "primaryDomain": "object",
+      "formLanguage": ["hard-surface", "mechanical", "geometric", "transparent-like"],
+      "structureKind": ["compound object", "layered shell", "articulated assembly", "repeated radial modules"],
+      "motionPotential": ["articulated", "effect-emitter", "rotating mechanism"],
+      "materialFamilies": ["injection-molded plastic", "transparent plastic", "rubber", "mixed"],
+      "notes": "Three admitted views show the housing, front bubble-wheel assembly, side liquid reservoir and rear fan grille. Internal pump, gearing and wiring are inferred."
+    },
+    "complexity": {
+      "tier": "complex",
+      "scores": {"silhouetteComplexity":2,"componentCount":3,"hierarchyDepth":3,"repetitionDensity":3,"materialLayerCount":2,"localDetailDensity":2,"occlusionRisk":2,"actionReadinessNeed":3},
+      "estimatedCounts": {"macroComponents":5,"mesoComponents":12,"microFeatureGroups":8,"materialLayers":7,"repetitionSystems":5},
+      "reasoning": [
+        "Identity depends on a deep front wheel assembly, eight repeated rings and spokes, a rear fan/grille system, transparent layers and an animated bubble emitter.",
+        "Three orthographic-style views reduce silhouette ambiguity, while internal liquid and power systems remain hidden.",
+        "Power-on behavior requires independent control, wheel, fan and emitter pivots."
+      ]
+    },
+    "specDepthDecision": {
+      "requiredDepth": "complex",
+      "minimumComponentLevels": ["macro", "meso", "micro"],
+      "needsRepetitionSystems": true,
+      "needsMaterialLocalOverrides": true,
+      "needsMultipleReviewViews": true,
+      "needsActionReadyHierarchy": true,
+      "rationale": "Complex is required by the articulated compound assembly, five repeated systems, mixed transparent materials and browser-visible effect sockets."
+    },
+    "unknownsToResolveBeforeImplementation": [
+      "Internal pump, motor, gearing and liquid tubing are hidden and must not be presented as observed geometry.",
+      "Power inlet is not shown; a rear-lower interaction socket is explicitly inferred.",
+      "Liquid reservoir hanger and valve geometry are occluded; use a shallow overlap bracket and mark it inferred.",
+      "Exact wheel-to-fan mechanical coupling is unknown; animate independent pivots with plausible synchronized operation."
+    ],
+    "detailInventory": {
+      "scanMethod": "grid-3x3",
+      "targetMinDetails": 16,
+      "note": "Full inventory is stored in detail-inventory.json; every entry maps to a component localFeature or material localOverride.",
+      "details": [
+        {"id":"shell-rounded-corners","kind":"bevel","description":"rounded cream housing","region":{"x":0.10,"y":0.28,"width":0.25,"height":0.46},"scale":"macro","affects":"silhouette","mapsTo":{"type":"component.localFeatures","ref":"housing-shell.localFeatures.rounded-shell"},"evidenceRef":"admitted-views/front-view.png","confidence":0.98},
+        {"id":"front-window-rim","kind":"ridge","description":"thick pink layered rim","region":{"x":0.13,"y":0.31,"width":0.20,"height":0.31},"scale":"meso","affects":"geometry","mapsTo":{"type":"component.localFeatures","ref":"front-window-rim.localFeatures.layered-rim"},"evidenceRef":"admitted-views/front-view.png","confidence":0.99},
+        {"id":"smoked-window","kind":"gloss","description":"smoked transparent work window","region":{"x":0.15,"y":0.34,"width":0.17,"height":0.27},"scale":"meso","affects":"transmission","mapsTo":{"type":"material.localOverrides","ref":"smoked-window.localOverrides.front-gloss"},"evidenceRef":"admitted-views/front-view.png","confidence":0.96},
+        {"id":"eight-bubble-rings","kind":"ridge","description":"eight radial bubble rings","region":{"x":0.16,"y":0.36,"width":0.15,"height":0.24},"scale":"meso","affects":"repetition","mapsTo":{"type":"component.localFeatures","ref":"bubble-ring-array.localFeatures.radial-eight"},"evidenceRef":"admitted-views/front-view.png","confidence":0.99},
+        {"id":"eight-spokes","kind":"ridge","description":"eight radial wheel spokes","region":{"x":0.17,"y":0.39,"width":0.14,"height":0.20},"scale":"meso","affects":"hierarchy","mapsTo":{"type":"component.localFeatures","ref":"bubble-wheel.localFeatures.radial-spokes"},"evidenceRef":"admitted-views/front-view.png","confidence":0.99},
+        {"id":"center-hub","kind":"bevel","description":"concentric center hub cap","region":{"x":0.205,"y":0.455,"width":0.055,"height":0.075},"scale":"meso","affects":"pivot","mapsTo":{"type":"component.localFeatures","ref":"wheel-hub.localFeatures.concentric-cap"},"evidenceRef":"admitted-views/front-view.png","confidence":0.99},
+        {"id":"front-drip-tray","kind":"seam","description":"separate recessed drip tray","region":{"x":0.17,"y":0.59,"width":0.12,"height":0.085},"scale":"meso","affects":"assembly","mapsTo":{"type":"component.localFeatures","ref":"drip-tray.localFeatures.recessed-lip"},"evidenceRef":"admitted-views/front-view.png","confidence":0.97},
+        {"id":"top-control","kind":"bevel","description":"top control knob","region":{"x":0.20,"y":0.25,"width":0.055,"height":0.045},"scale":"micro","affects":"animation","mapsTo":{"type":"component.localFeatures","ref":"control-knob.localFeatures.index-cap"},"evidenceRef":"admitted-views/front-view.png","confidence":0.94},
+        {"id":"side-reservoir","kind":"gloss","description":"translucent side liquid reservoir","region":{"x":0.57,"y":0.34,"width":0.075,"height":0.30},"scale":"macro","affects":"transmission","mapsTo":{"type":"component.localFeatures","ref":"liquid-reservoir.localFeatures.translucent-tank"},"evidenceRef":"admitted-views/side-view.png","confidence":0.97},
+        {"id":"reservoir-cap","kind":"seam","description":"reservoir fill cap seam","region":{"x":0.59,"y":0.33,"width":0.04,"height":0.045},"scale":"micro","affects":"assembly","mapsTo":{"type":"component.localFeatures","ref":"reservoir-cap.localFeatures.cap-seam"},"evidenceRef":"admitted-views/side-view.png","confidence":0.95},
+        {"id":"side-vent-row","kind":"hole","description":"seven rounded side vents","region":{"x":0.47,"y":0.58,"width":0.075,"height":0.10},"scale":"micro","affects":"repetition","mapsTo":{"type":"component.localFeatures","ref":"side-vent-array.localFeatures.seven-slots"},"evidenceRef":"admitted-views/side-view.png","confidence":0.98},
+        {"id":"rear-fan-grille","kind":"hole","description":"rear concentric fan grille","region":{"x":0.80,"y":0.38,"width":0.14,"height":0.22},"scale":"meso","affects":"repetition","mapsTo":{"type":"component.localFeatures","ref":"rear-fan-grille.localFeatures.concentric-grille"},"evidenceRef":"admitted-views/back-view.png","confidence":0.99},
+        {"id":"rear-fan-hub","kind":"bevel","description":"rear fan hub cap","region":{"x":0.845,"y":0.44,"width":0.07,"height":0.105},"scale":"micro","affects":"pivot","mapsTo":{"type":"component.localFeatures","ref":"rear-fan-rotor.localFeatures.hub-cap"},"evidenceRef":"admitted-views/back-view.png","confidence":0.98},
+        {"id":"rear-fasteners","kind":"fastener","description":"four rear corner screws","region":{"x":0.76,"y":0.34,"width":0.20,"height":0.33},"scale":"micro","affects":"repetition","mapsTo":{"type":"component.localFeatures","ref":"rear-fastener-array.localFeatures.four-corners"},"evidenceRef":"admitted-views/back-view.png","confidence":0.99},
+        {"id":"shell-panel-seam","kind":"seam","description":"lower housing panel seam","region":{"x":0.43,"y":0.60,"width":0.53,"height":0.08},"scale":"micro","affects":"AO","mapsTo":{"type":"component.localFeatures","ref":"housing-shell.localFeatures.lower-panel-seam"},"evidenceRef":"admitted-views/side-view.png","confidence":0.94},
+        {"id":"four-feet","kind":"bevel","description":"four splayed pink feet","region":{"x":0.12,"y":0.68,"width":0.84,"height":0.065},"scale":"meso","affects":"contact","mapsTo":{"type":"component.localFeatures","ref":"foot-array.localFeatures.four-splayed-feet"},"evidenceRef":"admitted-views/front-view.png","confidence":0.97},
+        {"id":"soap-bubble-iridescence","kind":"gloss","description":"transparent pastel iridescent bubbles","region":{"x":0.01,"y":0.27,"width":0.18,"height":0.34},"scale":"effect","affects":"opacity,emissive","mapsTo":{"type":"material.localOverrides","ref":"bubble-film.localOverrides.iridescent-rim"},"evidenceRef":"full-sheet-left-effect","confidence":0.96}
+      ]
+    },
+    "anatomy": {"applies":false,"styleHeads":0.0,"proportions":{"headUnit":0.0,"torso":0.0,"legs":0.0,"shoulderWidth":0.0,"hipWidth":0.0},"pose":{"type":"not-applicable","jointAngles":{}},"faceLandmarks":{"eyeLine":0.0,"eyeSpacing":0.0,"noseBase":0.0,"mouthLine":0.0,"hairline":0.0},"features":[],"confidence":1.0,"note":"Not applicable to an appliance."},
+    "sourceImage": "D:/下载文件/ChatGPT Image 2026年8月3日 16_17_49 (8).png"
+  },
+  "qualityContract": {
+    "qualityBar": "complex",
+    "definitionOfDone": [
+      "Front, side, back and three-quarter renders preserve the rounded-square 1.12 height-to-width body, 0.72 depth ratio and asymmetric side reservoir.",
+      "The front wheel shows exactly eight independently named bubble rings and spokes behind a smoked transparent window; the rear shows a rotating fan behind a concentric grille.",
+      "Cream, Sakura pink, smoked transparent and bubble-film materials remain distinct under neutral, grazing and reference lighting.",
+      "Power-on visibly turns the control, wheel and fan while multiple colored transparent bubbles rise and spread; stop/reset restores exact rest state at 5.2 seconds.",
+      "All hidden or internal geometry is marked inferred."
+    ],
+    "minimumSpecDepth": {"macroComponents":5,"mesoComponents":12,"microFeatureGroups":8,"materialLayers":7,"repetitionSystems":5,"reviewViewpoints":5},
+    "featureGroups": [
+      {"id":"rounded-shell-proportion","name":"Rounded shell silhouette and proportion","required":true,"qualityCriteria":["Front height/width approximately 1.12, depth/width approximately 0.72, broad corner radii and four visible feet."],"evidenceRefs":["admitted-views/front-view.png","admitted-views/side-view.png"],"failureModes":["boxy or narrow shell","reservoir changes core silhouette incorrectly"]},
+      {"id":"bubble-wheel-identity","name":"Eight-ring bubble wheel identity","required":true,"qualityCriteria":["Exactly eight rings and eight spokes rotate around a front-axis pivot behind the window."],"evidenceRefs":["admitted-views/front-view.png"],"failureModes":["wrong ring count","rings fused into window","wheel does not rotate"]},
+      {"id":"reservoir-attachment","name":"Side reservoir attachment","required":true,"qualityCriteria":["Translucent tank overlaps rear-right shell through a named socket and remains visually attached from side/back views."],"evidenceRefs":["admitted-views/side-view.png","admitted-views/back-view.png"],"failureModes":["floating tank","opaque tank","missing fill cap"]},
+      {"id":"rear-fan-system","name":"Rear fan and concentric grille","required":true,"qualityCriteria":["Rotor is visible through four concentric grille bands with hub and four rear fasteners."],"evidenceRefs":["admitted-views/back-view.png"],"failureModes":["flat decal grille","fan invisible","wrong rear hierarchy"]},
+      {"id":"material-separation","name":"SAKURA material separation","required":true,"qualityCriteria":["Cream satin shell, pink gloss accents, smoked transparent window, translucent reservoir, dark cavity and bubble film remain distinct."],"evidenceRefs":["full-sheet"],"failureModes":["single flat material","window occludes wheel","bubbles render as opaque balls"]},
+      {"id":"powered-use-readability","name":"Powered-use readability","required":true,"qualityCriteria":["Control rotates, wheel and fan spin, and multi-lane bubbles rise and spread during the 5.2 second active window."],"evidenceRefs":["full-sheet-left-effect"],"failureModes":["generic idle wobble","no visible bubbles","reset leaves transformed parts"]},
+      {"id":"attachment-joint-correctness","name":"Attachment and joint correctness","required":true,"qualityCriteria":["Pivots and sockets exist for wheel, fan, control, liquid tank and power connection; contact overlaps exceed 0.02 model units."],"evidenceRefs":["all admitted views"],"failureModes":["floating joints","wrong pivot origin"]}
+    ],
+    "visualDeltaChecks": ["front silhouette and depth ratio","eight-ring radial count and spacing","window/rim/tray layering","reservoir placement and transparency","rear grille/fan/fastener placement","cream-pink-smoked palette separation","powered bubble count, rise and spread","exact reset after 5.2 seconds"],
+    "antiShallowSpecRules": [
+      "Do not merge the housing, front window, wheel, reservoir, rear fan, controls, feet or socket into one mesh.",
+      "Do not replace the eight-ring wheel or rear grille with a flat texture.",
+      "Do not advance a pass without a browser render and side-by-side comparison.",
+      "Do not describe hidden internals as observed geometry.",
+      "Do not pass interaction if stop/reset fails exact rest transforms.",
+      "Do not alias albedo into roughness, normal or AO channels."
+    ]
+  },
+  "authoringInstruction": "Generate a complete action-ready spec and preserve the local evidence bundle.",
+  "localSpecSearch": {
+    "collection":"core_3d",
+    "query":"SAKURA Bubble Machine compact bubble machine ring wheel fan liquid reservoir transparent window plastic housing real-time browser articulated repeated radial modules transparent soap bubbles",
+    "index":{"status":"hit","reason":"current","fingerprint":"6857e5ab528b42ac12f4f411f862610a0bffce8e47aee3610a7603c318072fe8"},
+    "matches":[
+      {"record_id":"core.pbr-opacity-alpha","file_path":"docs/raw/img2threejs-skill-dataset.json","heading":null,"key_path":"categories.material_pbr[8]","score":6.173944048162,"snippets":["Transparent plastic needs real opacity/transmission separation rather than a dark flat material."],"source_refs":[{"path":"docs/raw/img2threejs-skill-dataset.json","heading":null,"key_path":"categories.material_pbr[8]"}],"evidence_refs":[{"kind":"source","ref":"docs/raw/img2threejs-skill-dataset.json","note":"img2threejs local PBR transparency guidance"}]},
+      {"record_id":"core.shader-mapping-torusgeometry-rings-loops","file_path":"docs/raw/img2threejs-skill-dataset.json","heading":null,"key_path":"categories.rendering_shader_mapping[8]","score":3.982060806801,"snippets":["TorusGeometry is the procedural geometry route for visible circular rings and loops."],"source_refs":[{"path":"docs/raw/img2threejs-skill-dataset.json","heading":null,"key_path":"categories.rendering_shader_mapping[8]"}],"evidence_refs":[{"kind":"source","ref":"docs/raw/img2threejs-skill-dataset.json","note":"img2threejs local torus geometry guidance"}]}
+    ]
+  }
+}

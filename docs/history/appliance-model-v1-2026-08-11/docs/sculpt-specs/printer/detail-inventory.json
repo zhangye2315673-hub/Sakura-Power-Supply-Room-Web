@@ -1,0 +1,380 @@
+{
+  "sourceImage": "references/intake/printer/front.png",
+  "sourceViews": [
+    "references/intake/printer/front.png",
+    "references/intake/printer/side.png",
+    "references/intake/printer/back.png"
+  ],
+  "zonesDir": "docs/sculpt-specs/printer/detail-zones",
+  "detailInventory": {
+    "scanMethod": "three-view component-zones",
+    "targetMinDetails": 16,
+    "note": "Each observed or inferred identity detail maps to a named component local feature or material override.",
+    "details": [
+      {
+        "id": "printer-detail-1",
+        "kind": "contour",
+        "description": "Broad cream rectangular enclosure with strongly rounded shoulders and lower corners.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "macro",
+        "affects": "silhouette/material/interaction",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "main-shell"
+        },
+        "evidenceRef": "front-view",
+        "confidence": 0.98
+      },
+      {
+        "id": "printer-detail-2",
+        "kind": "seam",
+        "description": "Thin horizontal top-lid seam wraps across the front and side.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "silhouette/material/interaction",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "top-lid"
+        },
+        "evidenceRef": "front-view",
+        "confidence": 0.95
+      },
+      {
+        "id": "printer-detail-3",
+        "kind": "contour",
+        "description": "Tall rear paper support leans backward and frames the input sheet.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "macro",
+        "affects": "silhouette/material/interaction",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "rear-paper-support"
+        },
+        "evidenceRef": "side-view",
+        "confidence": 0.97
+      },
+      {
+        "id": "printer-detail-4",
+        "kind": "contour",
+        "description": "Wide Sakura-pink rear backplate with rounded corners and lower finger recess.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "silhouette/material/interaction",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "rear-support-backplate"
+        },
+        "evidenceRef": "back-view",
+        "confidence": 0.96
+      },
+      {
+        "id": "printer-detail-5",
+        "kind": "contour",
+        "description": "Single warm-white paper sheet rises above the rear support.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "silhouette/material/interaction",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "input-paper"
+        },
+        "evidenceRef": "front-view",
+        "confidence": 0.98
+      },
+      {
+        "id": "printer-detail-6",
+        "kind": "hole",
+        "description": "Deep pink inset output bay with dark inner throat.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "macro",
+        "affects": "silhouette/material/interaction",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "output-cavity"
+        },
+        "evidenceRef": "front-view",
+        "confidence": 0.98
+      },
+      {
+        "id": "printer-detail-7",
+        "kind": "bevel",
+        "description": "Projecting Sakura-pink output tray with thick rounded front rim.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "macro",
+        "affects": "silhouette/material/interaction",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "output-tray-pivot"
+        },
+        "evidenceRef": "front-view",
+        "confidence": 0.98
+      },
+      {
+        "id": "printer-detail-8",
+        "kind": "groove",
+        "description": "Centered shallow grip recess in the tray front edge.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "micro",
+        "affects": "silhouette/material/interaction",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "tray-handle"
+        },
+        "evidenceRef": "front-view",
+        "confidence": 0.96
+      },
+      {
+        "id": "printer-detail-9",
+        "kind": "contour",
+        "description": "Warm-white page rests on the output tray and emerges from the throat.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "silhouette/material/interaction",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "printed-paper"
+        },
+        "evidenceRef": "front-view",
+        "confidence": 0.97
+      },
+      {
+        "id": "printer-detail-10",
+        "kind": "bevel",
+        "description": "Large layered circular Sakura-pink power/action button.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "micro",
+        "affects": "silhouette/material/interaction",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "control-button-pivot"
+        },
+        "evidenceRef": "front-view",
+        "confidence": 0.98
+      },
+      {
+        "id": "printer-detail-11",
+        "kind": "fastener",
+        "description": "Small circular indicator sits to the right of the main button.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "micro",
+        "affects": "silhouette/material/interaction",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "status-indicator"
+        },
+        "evidenceRef": "front-view",
+        "confidence": 0.97
+      },
+      {
+        "id": "printer-detail-12",
+        "kind": "ridge",
+        "description": "Paired dark feed rollers are visible inside the output throat during operation.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "micro",
+        "affects": "silhouette/material/interaction",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "feed-roller-array"
+        },
+        "evidenceRef": "front-view",
+        "confidence": 0.64
+      },
+      {
+        "id": "printer-detail-13",
+        "kind": "hole",
+        "description": "Square rear power inlet with black circular core.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "micro",
+        "affects": "silhouette/material/interaction",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "rear-power-inlet"
+        },
+        "evidenceRef": "back-view",
+        "confidence": 0.98
+      },
+      {
+        "id": "printer-detail-14",
+        "kind": "seam",
+        "description": "Continuous pink lower rear band separates shell from feet.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "silhouette/material/interaction",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "rear-lower-band"
+        },
+        "evidenceRef": "back-view",
+        "confidence": 0.95
+      },
+      {
+        "id": "printer-detail-15",
+        "kind": "fastener",
+        "description": "Four shallow Sakura-pink rubberized feet support the enclosure.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "micro",
+        "affects": "silhouette/material/interaction",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "foot-array"
+        },
+        "evidenceRef": "side-view",
+        "confidence": 0.88
+      },
+      {
+        "id": "printer-detail-16",
+        "kind": "gloss",
+        "description": "Pale broad edge highlights follow the shell corner radii.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "micro",
+        "affects": "silhouette/material/interaction",
+        "mapsTo": {
+          "type": "material.localOverrides",
+          "ref": "cream-shell-edge-response"
+        },
+        "evidenceRef": "front-view",
+        "confidence": 0.9
+      },
+      {
+        "id": "printer-detail-17",
+        "kind": "bevel",
+        "description": "Raised pink inner lip follows the rectangular output opening.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "silhouette/material/interaction",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "output-cavity-inner-lip"
+        },
+        "evidenceRef": "front-view",
+        "confidence": 0.96
+      },
+      {
+        "id": "printer-detail-18",
+        "kind": "ridge",
+        "description": "Two pink vertical guides flank the input page.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "silhouette/material/interaction",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "paper-guide-array"
+        },
+        "evidenceRef": "front-view",
+        "confidence": 0.96
+      }
+    ]
+  },
+  "inferredDetailIds": [
+    "printer-detail-12"
+  ],
+  "note": "Feed rollers are inferred from the hidden paper path. All other listed details are directly supported by at least one supplied view."
+}

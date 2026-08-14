@@ -1,0 +1,3852 @@
+{
+  "targetName": "SAKURA capsule toy machine",
+  "targetId": "gumball-machine",
+  "schemaVersion": "2.1",
+  "sourceImage": "E:/AI/codexAI/sakula/arrow-cube/references/intake/gumball-machine/front.png",
+  "suitability": "pass",
+  "scores": {
+    "object_isolation": 3,
+    "silhouette_readability": 3,
+    "depth_inference": 3,
+    "primitive_decomposition": 3,
+    "material_procedurality": 3,
+    "occlusion_risk": 2,
+    "interaction_fit": 3
+  },
+  "coordinateFrame": {
+    "front": "+Z",
+    "up": "+Y",
+    "scaleReference": "overall height 3.42 units; floor Y=0"
+  },
+  "referenceCamera": {
+    "solved": true,
+    "fovDegrees": 32,
+    "aspect": 0.75,
+    "orientation": {
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0
+    },
+    "positionHint": [
+      0,
+      1.7,
+      8.2
+    ],
+    "note": "Orthographic-like front elevation; model-review perspective is framed to the full height."
+  },
+  "silhouette": {
+    "boundingShape": "near-spherical globe over an upward-tapered rounded pedestal",
+    "aspectRatios": [
+      "overall W:H = 0.70",
+      "globe W:H = 1.04",
+      "base top:bottom width = 0.78"
+    ],
+    "symmetry": "bilateral exterior with asymmetric side crank",
+    "dominantCurves": [
+      "spherical globe",
+      "domed lid",
+      "convex pedestal sides",
+      "arched dispense opening"
+    ],
+    "negativeSpaces": [
+      "front dispense cavity",
+      "side crank arm clearance",
+      "rear cable notch"
+    ],
+    "landmarks": [
+      "lid crown Y3.42",
+      "globe equator Y2.45",
+      "seat ring Y1.78",
+      "base floor Y0.08"
+    ]
+  },
+  "preSpecAssessment": {
+    "objectClass": {
+      "primaryType": "capsule toy vending machine",
+      "primaryDomain": "object",
+      "formLanguage": [
+        "geometric",
+        "soft hard-surface",
+        "transparent-like"
+      ],
+      "structureKind": [
+        "compound object",
+        "layered shell",
+        "articulated assembly",
+        "repeated modules"
+      ],
+      "motionPotential": [
+        "articulated crank",
+        "capsule agitation",
+        "single-capsule dispensing"
+      ],
+      "materialFamilies": [
+        "gloss plastic",
+        "transparent polymer",
+        "painted metal",
+        "rubber"
+      ]
+    },
+    "complexity": {
+      "tier": "complex",
+      "scores": {
+        "silhouetteComplexity": 2,
+        "componentCount": 3,
+        "hierarchyDepth": 3,
+        "repetitionDensity": 2,
+        "materialLayerCount": 3,
+        "localDetailDensity": 2,
+        "occlusionRisk": 2,
+        "actionReadinessNeed": 3
+      },
+      "estimatedCounts": {
+        "macroComponents": 4,
+        "mesoComponents": 12,
+        "microFeatureGroups": 15,
+        "materialLayers": 7,
+        "repetitionSystems": 3
+      },
+      "reasoning": [
+        "Identity depends on globe/lid/base/control/chute relationships.",
+        "Capsules require repeated two-shell construction and an animated dispense route."
+      ]
+    },
+    "specDepthDecision": {
+      "requiredDepth": "complex",
+      "minimumComponentLevels": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "needsRepetitionSystems": true,
+      "needsMaterialLocalOverrides": true,
+      "needsMultipleReviewViews": true,
+      "needsActionReadyHierarchy": true,
+      "rationale": "Transparent repeated capsules and two articulated controls require a deep independent hierarchy."
+    },
+    "unknownsToResolveBeforeImplementation": [],
+    "detailInventory": {
+      "scanMethod": "grid-3x3",
+      "targetMinDetails": 10,
+      "details": [
+        {
+          "id": "d01",
+          "kind": "bevel",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "domed-cap-beveled-rim"
+          },
+          "evidenceRef": "front-top-lid",
+          "confidence": 0.97
+        },
+        {
+          "id": "d02",
+          "kind": "gloss",
+          "mapsTo": {
+            "type": "material.localOverrides",
+            "ref": "front-highlight"
+          },
+          "evidenceRef": "front-globe",
+          "confidence": 0.95
+        },
+        {
+          "id": "d03",
+          "kind": "seam",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "double-lip-seam"
+          },
+          "evidenceRef": "front-globe-seat",
+          "confidence": 0.97
+        },
+        {
+          "id": "d04",
+          "kind": "ridge",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "vertical-feed-spine"
+          },
+          "evidenceRef": "front-center-column",
+          "confidence": 0.88
+        },
+        {
+          "id": "d05",
+          "kind": "seam",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "upper-lower-halves-equator-seams"
+          },
+          "evidenceRef": "tri-capsules",
+          "confidence": 0.96
+        },
+        {
+          "id": "d06",
+          "kind": "bevel",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "rounded-frustum-taper"
+          },
+          "evidenceRef": "front-base",
+          "confidence": 0.98
+        },
+        {
+          "id": "d07",
+          "kind": "ridge",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "seat-grip-center-boss"
+          },
+          "evidenceRef": "front-crank",
+          "confidence": 0.99
+        },
+        {
+          "id": "d08",
+          "kind": "hole",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "arched-cavity-tray-lip"
+          },
+          "evidenceRef": "front-dispense",
+          "confidence": 0.99
+        },
+        {
+          "id": "d09",
+          "kind": "bevel",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "hub-arm-ball-grip"
+          },
+          "evidenceRef": "side-crank",
+          "confidence": 0.98
+        },
+        {
+          "id": "d10",
+          "kind": "seam",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "rounded-panel-seam"
+          },
+          "evidenceRef": "back-service-panel",
+          "confidence": 0.95
+        },
+        {
+          "id": "d11",
+          "kind": "hole",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "rear-cable-notch"
+          },
+          "evidenceRef": "back-base-notch",
+          "confidence": 0.94
+        },
+        {
+          "id": "d12",
+          "kind": "gloss",
+          "mapsTo": {
+            "type": "material.localOverrides",
+            "ref": "highlight-bands"
+          },
+          "evidenceRef": "tri-accent",
+          "confidence": 0.93
+        },
+        {
+          "id": "d13",
+          "kind": "bevel",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "four-rounded-feet"
+          },
+          "evidenceRef": "tri-feet",
+          "confidence": 0.84
+        },
+        {
+          "id": "d14",
+          "kind": "seam",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "upper-shell-seam"
+          },
+          "evidenceRef": "tri-base-ring",
+          "confidence": 0.95
+        },
+        {
+          "id": "d15",
+          "kind": "gloss",
+          "mapsTo": {
+            "type": "material.localOverrides",
+            "ref": "gloss-shell"
+          },
+          "evidenceRef": "tri-capsules",
+          "confidence": 0.94
+        },
+        {
+          "id": "d16",
+          "kind": "contour",
+          "description": "Opaque star, flower, key and bear prize silhouettes remain readable inside the clear capsule halves.",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "internal-prize-silhouette-set"
+          },
+          "evidenceRef": "browser-prize-review",
+          "confidence": 0.98
+        }
+      ]
+    }
+  },
+  "qualityContract": {
+    "qualityBar": "complex",
+    "definitionOfDone": [
+      "Three elevations retain the globe/pedestal silhouette and component placement.",
+      "Capsules read as two-piece transparent/color shells with equator seams and visible programmatic prize contents.",
+      "Powered demo rotates both controls, agitates the capsule bed and internal prizes, delivers one prize-filled capsule to the tray and safely resets before 5.2 seconds."
+    ],
+    "minimumSpecDepth": {
+      "macroComponents": 4,
+      "mesoComponents": 10,
+      "microFeatureGroups": 12,
+      "materialLayers": 6,
+      "repetitionSystems": 3,
+      "reviewViewpoints": 5
+    },
+    "featureGroups": [
+      {
+        "id": "globe-lid",
+        "name": "Globe and lid",
+        "required": true,
+        "qualityCriteria": [
+          "Near-spherical globe and domed lid retain observed proportions."
+        ],
+        "evidenceRefs": [
+          "front-globe",
+          "side-globe"
+        ],
+        "failureModes": [
+          "jar-like globe",
+          "flat lid"
+        ]
+      },
+      {
+        "id": "base-chute",
+        "name": "Base and dispense chute",
+        "required": true,
+        "qualityCriteria": [
+          "Tapered pedestal and real arched cavity remain legible."
+        ],
+        "evidenceRefs": [
+          "front-base"
+        ],
+        "failureModes": [
+          "cylindrical base",
+          "painted opening"
+        ]
+      },
+      {
+        "id": "capsules-controls",
+        "name": "Capsules and controls",
+        "required": true,
+        "qualityCriteria": [
+          "Two-piece capsules and articulated controls remain separately readable."
+        ],
+        "evidenceRefs": [
+          "tri-capsules",
+          "front-crank",
+          "side-crank"
+        ],
+        "failureModes": [
+          "opaque balls",
+          "floating controls"
+        ]
+      },
+      {
+        "id": "powered-dispense",
+        "name": "Powered dispense action",
+        "required": true,
+        "qualityCriteria": [
+          "One capsule follows a contained route and stops on the tray."
+        ],
+        "evidenceRefs": [
+          "interaction-requirement"
+        ],
+        "failureModes": [
+          "generic wobble",
+          "intersections"
+        ]
+      }
+    ],
+    "visualDeltaChecks": [
+      "globe/base ratio",
+      "pedestal taper",
+      "lid rim thickness",
+      "crank/chute scale",
+      "capsule distribution",
+      "material transmission",
+      "dispense path clearance"
+    ],
+    "antiShallowSpecRules": [
+      "No monolithic mesh.",
+      "No opaque ball capsules.",
+      "No flat decal chute.",
+      "No invented hidden mechanism described as observed."
+    ],
+    "mustNotDo": [
+      "Do not merge moving controls into the base.",
+      "Do not let animation intersect the globe or pedestal."
+    ]
+  },
+  "viewEvidence": [
+    {
+      "id": "front-globe",
+      "view": "front",
+      "source": "E:/AI/codexAI/sakula/arrow-cube/references/intake/gumball-machine/front.png",
+      "imageRegion": {
+        "x": 0.1,
+        "y": 0.04,
+        "width": 0.8,
+        "height": 0.53,
+        "units": "normalized"
+      },
+      "observations": [
+        "broad globe",
+        "domed lid",
+        "center column",
+        "capsule bed"
+      ],
+      "confidence": 0.98
+    },
+    {
+      "id": "front-base",
+      "view": "front",
+      "source": "E:/AI/codexAI/sakula/arrow-cube/references/intake/gumball-machine/front.png",
+      "imageRegion": {
+        "x": 0.1,
+        "y": 0.52,
+        "width": 0.8,
+        "height": 0.43,
+        "units": "normalized"
+      },
+      "observations": [
+        "tapered body",
+        "front crank",
+        "arched chute",
+        "base ring"
+      ],
+      "confidence": 0.99
+    },
+    {
+      "id": "side-globe",
+      "view": "side",
+      "source": "E:/AI/codexAI/sakula/arrow-cube/references/intake/gumball-machine/side.png",
+      "imageRegion": {
+        "x": 0.08,
+        "y": 0.04,
+        "width": 0.82,
+        "height": 0.55,
+        "units": "normalized"
+      },
+      "observations": [
+        "globe depth",
+        "side crank",
+        "rearward body depth"
+      ],
+      "confidence": 0.97
+    },
+    {
+      "id": "side-crank",
+      "view": "side",
+      "source": "E:/AI/codexAI/sakula/arrow-cube/references/intake/gumball-machine/side.png",
+      "imageRegion": {
+        "x": 0.02,
+        "y": 0.48,
+        "width": 0.48,
+        "height": 0.35,
+        "units": "normalized"
+      },
+      "observations": [
+        "hub",
+        "arm",
+        "ball grip"
+      ],
+      "confidence": 0.99
+    },
+    {
+      "id": "back-service-panel",
+      "view": "back",
+      "source": "E:/AI/codexAI/sakula/arrow-cube/references/intake/gumball-machine/back.png",
+      "imageRegion": {
+        "x": 0.2,
+        "y": 0.52,
+        "width": 0.6,
+        "height": 0.35,
+        "units": "normalized"
+      },
+      "observations": [
+        "rounded hatch",
+        "rear notch",
+        "continuous ring"
+      ],
+      "confidence": 0.96
+    },
+    {
+      "id": "tri-capsules",
+      "view": "front-side-back",
+      "source": "E:/AI/codexAI/sakula/arrow-cube/artifacts/img2threejs/gumball-machine/reference.png",
+      "imageRegion": {
+        "x": 0.05,
+        "y": 0.25,
+        "width": 0.9,
+        "height": 0.31,
+        "units": "normalized"
+      },
+      "observations": [
+        "clear upper halves",
+        "pastel lower halves",
+        "equator seams",
+        "irregular packing"
+      ],
+      "confidence": 0.95
+    },
+    {
+      "id": "front-crank",
+      "view": "front",
+      "source": "E:/AI/codexAI/sakula/arrow-cube/references/intake/gumball-machine/front.png",
+      "imageRegion": {
+        "x": 0.35,
+        "y": 0.53,
+        "width": 0.3,
+        "height": 0.2,
+        "units": "normalized"
+      },
+      "observations": [
+        "round seat",
+        "bar handle",
+        "center boss"
+      ],
+      "confidence": 0.99
+    },
+    {
+      "id": "tri-accent",
+      "view": "front-side-back",
+      "source": "E:/AI/codexAI/sakula/arrow-cube/artifacts/img2threejs/gumball-machine/reference.png",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "low-roughness pink plastic highlight bands"
+      ],
+      "confidence": 0.93
+    },
+    {
+      "id": "tri-feet",
+      "view": "front-side-back",
+      "source": "E:/AI/codexAI/sakula/arrow-cube/artifacts/img2threejs/gumball-machine/reference.png",
+      "imageRegion": {
+        "x": 0,
+        "y": 0.72,
+        "width": 1,
+        "height": 0.18,
+        "units": "normalized"
+      },
+      "observations": [
+        "low rounded feet"
+      ],
+      "confidence": 0.84
+    },
+    {
+      "id": "tri-base-ring",
+      "view": "front-side-back",
+      "source": "E:/AI/codexAI/sakula/arrow-cube/artifacts/img2threejs/gumball-machine/reference.png",
+      "imageRegion": {
+        "x": 0,
+        "y": 0.68,
+        "width": 1,
+        "height": 0.17,
+        "units": "normalized"
+      },
+      "observations": [
+        "pink lower ring",
+        "cream shell seam",
+        "rear notch"
+      ],
+      "confidence": 0.95
+    },
+    {
+      "id": "interaction-requirement",
+      "view": "runtime",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "crank turn",
+        "capsule agitation",
+        "single dispense",
+        "safe reset"
+      ],
+      "confidence": 1
+    }
+  ],
+  "componentTree": [
+    {
+      "id": "root",
+      "name": "machine root",
+      "level": "macro",
+      "role": "body",
+      "parent": null,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Container for the observed stacked assemblies; no visible geometry is fused here.",
+      "material": "cream-plastic",
+      "dimensions": {
+        "width": 2.15,
+        "height": 3.42,
+        "depth": 1.72,
+        "units": "relative",
+        "confidence": 0.95
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(246, 238, 222, 1)",
+        "secondaryAlbedo": "rgba(235, 170, 184, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.96
+      },
+      "actionProfile": {
+        "animationRole": "root",
+        "pivot": {
+          "mode": "base",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 1
+        },
+        "sockets": [],
+        "collider": {
+          "type": "compound",
+          "offset": [
+            0,
+            1.7,
+            0
+          ],
+          "scale": [
+            2.15,
+            3.42,
+            1.72
+          ],
+          "isTrigger": false
+        }
+      },
+      "localFeatures": [],
+      "evidenceRefs": [
+        "front-globe",
+        "front-base",
+        "side-globe"
+      ]
+    },
+    {
+      "id": "globe-assembly",
+      "name": "transparent globe assembly",
+      "level": "macro",
+      "role": "static-part",
+      "parent": "root",
+      "primitive": "ellipsoid",
+      "topologyClass": "continuous-sculpt",
+      "topologyRationale": "Visible shell is one smoothly varying near-spherical volume held between two rings.",
+      "material": "globe-glass",
+      "dimensions": {
+        "width": 1.82,
+        "height": 1.72,
+        "depth": 1.46,
+        "units": "relative",
+        "confidence": 0.96
+      },
+      "transform": {
+        "position": [
+          0,
+          2.37,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(248, 247, 242, 0.23)",
+        "secondaryAlbedo": "rgba(226, 234, 234, 0.12)",
+        "materialClass": "glass",
+        "materialClassConfidence": 0.95
+      },
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 1
+        }
+      },
+      "localFeatures": [],
+      "evidenceRefs": [
+        "front-globe",
+        "side-globe"
+      ]
+    },
+    {
+      "id": "base-assembly",
+      "name": "tapered pedestal assembly",
+      "level": "macro",
+      "role": "body",
+      "parent": "root",
+      "primitive": "lathe",
+      "topologyClass": "continuous-sculpt",
+      "topologyRationale": "Pedestal sides form a continuous rounded upward taper in all elevations.",
+      "material": "cream-plastic",
+      "dimensions": {
+        "width": 2.1,
+        "height": 1.6,
+        "depth": 1.58,
+        "units": "relative",
+        "confidence": 0.98
+      },
+      "transform": {
+        "position": [
+          0,
+          0.82,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(246, 238, 222, 1)",
+        "secondaryAlbedo": "rgba(255, 248, 234, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.98
+      },
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "base",
+          "localPosition": [
+            0,
+            -0.82,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 1
+        }
+      },
+      "localFeatures": [],
+      "evidenceRefs": [
+        "front-base",
+        "side-crank",
+        "back-service-panel"
+      ]
+    },
+    {
+      "id": "dispensing-system",
+      "name": "dispensing mechanism assembly",
+      "level": "macro",
+      "role": "static-part",
+      "parent": "base-assembly",
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Observed controls and chute are discrete rigid subassemblies mounted to the pedestal.",
+      "material": "accent-plastic",
+      "dimensions": {
+        "width": 0.78,
+        "height": 1.05,
+        "depth": 0.28,
+        "units": "relative",
+        "confidence": 0.93
+      },
+      "transform": {
+        "position": [
+          0,
+          0.75,
+          0.82
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(235, 170, 184, 1)",
+        "secondaryAlbedo": "rgba(198, 132, 151, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.97
+      },
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "front-face",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            0,
+            1
+          ],
+          "confidence": 0.96
+        },
+        "sockets": [
+          {
+            "id": "dispense-socket",
+            "localPosition": [
+              0,
+              -0.44,
+              0.22
+            ]
+          }
+        ]
+      },
+      "localFeatures": [],
+      "evidenceRefs": [
+        "front-base",
+        "front-crank"
+      ]
+    },
+    {
+      "id": "top-lid",
+      "name": "domed top lid",
+      "level": "meso",
+      "role": "static-part",
+      "parent": "globe-assembly",
+      "primitive": "lathe",
+      "topologyClass": "continuous-sculpt",
+      "topologyRationale": "Domed cap is rotationally symmetric with a soft continuous crown and thick rim.",
+      "material": "accent-plastic",
+      "dimensions": {
+        "width": 1.72,
+        "height": 0.5,
+        "depth": 1.46,
+        "units": "relative",
+        "confidence": 0.98
+      },
+      "transform": {
+        "position": [
+          0,
+          0.97,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(235, 170, 184, 1)",
+        "secondaryAlbedo": "rgba(250, 194, 202, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.98
+      },
+      "actionProfile": {
+        "animationRole": "service-lid",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.9
+        }
+      },
+      "localFeatures": [
+        {
+          "id": "domed-cap-beveled-rim",
+          "type": "bevel",
+          "bevelRadius": 0.055,
+          "segments": 3
+        }
+      ],
+      "evidenceRefs": [
+        "front-globe",
+        "side-globe"
+      ]
+    },
+    {
+      "id": "globe-shell",
+      "name": "clear globe shell",
+      "level": "meso",
+      "role": "static-part",
+      "parent": "globe-assembly",
+      "primitive": "ellipsoid",
+      "topologyClass": "continuous-sculpt",
+      "topologyRationale": "Transparent enclosure is a single near-spherical thin shell.",
+      "material": "globe-glass",
+      "dimensions": {
+        "width": 1.82,
+        "height": 1.72,
+        "depth": 1.46,
+        "units": "relative",
+        "confidence": 0.98
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(248, 247, 242, 0.23)",
+        "secondaryAlbedo": "rgba(226, 234, 234, 0.12)",
+        "materialClass": "glass",
+        "materialClassConfidence": 0.95
+      },
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 1
+        }
+      },
+      "localFeatures": [],
+      "evidenceRefs": [
+        "front-globe",
+        "side-globe"
+      ]
+    },
+    {
+      "id": "globe-seat-ring",
+      "name": "globe lower seat ring",
+      "level": "meso",
+      "role": "static-part",
+      "parent": "globe-assembly",
+      "primitive": "torus",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Two concentric molded lips visibly clamp the globe base.",
+      "material": "accent-plastic",
+      "dimensions": {
+        "width": 1.75,
+        "height": 0.16,
+        "depth": 1.42,
+        "units": "relative",
+        "confidence": 0.98
+      },
+      "transform": {
+        "position": [
+          0,
+          -0.86,
+          0
+        ],
+        "rotation": [
+          1.5708,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(235, 170, 184, 1)",
+        "secondaryAlbedo": "rgba(198, 132, 151, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.97
+      },
+      "actionProfile": {
+        "animationRole": "static-part"
+      },
+      "localFeatures": [
+        {
+          "id": "double-lip-seam",
+          "type": "seam",
+          "depth": 0.018
+        }
+      ],
+      "evidenceRefs": [
+        "front-globe"
+      ]
+    },
+    {
+      "id": "center-column",
+      "name": "internal center column",
+      "level": "meso",
+      "role": "static-part",
+      "parent": "globe-assembly",
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Visible straight pink spine descends from the lid into the capsule bed.",
+      "material": "accent-plastic",
+      "dimensions": {
+        "width": 0.12,
+        "height": 1.25,
+        "depth": 0.12,
+        "units": "relative",
+        "confidence": 0.88
+      },
+      "transform": {
+        "position": [
+          0,
+          0.24,
+          -0.18
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(235, 170, 184, 1)",
+        "secondaryAlbedo": "rgba(198, 132, 151, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9
+      },
+      "actionProfile": {
+        "animationRole": "static-part"
+      },
+      "localFeatures": [
+        {
+          "id": "vertical-feed-spine",
+          "type": "ridge",
+          "height": 1.25
+        }
+      ],
+      "evidenceRefs": [
+        "front-globe"
+      ]
+    },
+    {
+      "id": "capsule-system",
+      "name": "two-piece capsule bed",
+      "level": "meso",
+      "role": "static-part",
+      "parent": "globe-assembly",
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Multiple rigid spherical capsules pack irregularly inside the globe.",
+      "material": "capsule-clear",
+      "dimensions": {
+        "width": 1.56,
+        "height": 0.82,
+        "depth": 1.18,
+        "units": "relative",
+        "confidence": 0.95
+      },
+      "transform": {
+        "position": [
+          0,
+          -0.35,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(250, 249, 247, 0.34)",
+        "secondaryAlbedo": "rgba(174, 218, 229, 0.8)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      },
+      "actionProfile": {
+        "animationRole": "agitated-parts",
+        "pivot": {
+          "mode": "bed-center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.88
+        },
+        "sockets": [
+          {
+            "id": "capsule-drop-entry-socket",
+            "localPosition": [
+              0,
+              -0.35,
+              0.15
+            ]
+          }
+        ]
+      },
+      "localFeatures": [
+        {
+          "id": "upper-lower-halves-equator-seams",
+          "type": "seam",
+          "width": 0.018
+        },
+        {
+          "id": "internal-prize-silhouette-set",
+          "type": "contained-relief",
+          "count": 11,
+          "variants": [
+            "star",
+            "flower",
+            "key",
+            "bear"
+          ],
+          "attachment": "child prize pivot inside each capsule pivot"
+        }
+      ],
+      "evidenceRefs": [
+        "tri-capsules"
+      ]
+    },
+    {
+      "id": "base-shell",
+      "name": "cream rounded frustum shell",
+      "level": "meso",
+      "role": "body",
+      "parent": "base-assembly",
+      "primitive": "lathe",
+      "topologyClass": "continuous-sculpt",
+      "topologyRationale": "Observed front and side faces taper continuously from a wide rounded foot to the narrow globe seat.",
+      "material": "cream-plastic",
+      "dimensions": {
+        "width": 2.02,
+        "height": 1.48,
+        "depth": 1.5,
+        "units": "relative",
+        "confidence": 0.98
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(246, 238, 222, 1)",
+        "secondaryAlbedo": "rgba(255, 248, 234, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.98
+      },
+      "actionProfile": {
+        "animationRole": "static-part"
+      },
+      "localFeatures": [
+        {
+          "id": "rounded-frustum-taper",
+          "type": "bevel",
+          "bevelRadius": 0.08,
+          "segments": 4
+        }
+      ],
+      "evidenceRefs": [
+        "front-base",
+        "side-crank",
+        "back-service-panel"
+      ]
+    },
+    {
+      "id": "front-crank",
+      "name": "front rotary crank",
+      "level": "meso",
+      "role": "handle",
+      "parent": "dispensing-system",
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Round seat, transverse grip and center boss form a discrete front control.",
+      "material": "accent-plastic",
+      "dimensions": {
+        "width": 0.66,
+        "height": 0.66,
+        "depth": 0.18,
+        "units": "relative",
+        "confidence": 0.99
+      },
+      "transform": {
+        "position": [
+          0,
+          0.2,
+          0
+        ],
+        "rotation": [
+          1.5708,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "attachment": {
+        "parentId": "dispensing-system",
+        "parentSocket": "front-crank-bearing",
+        "localStart": [
+          0,
+          0,
+          -0.04
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.16
+        ],
+        "contactType": "socket",
+        "embedDepth": 0.04,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "front-crank"
+        ]
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(235, 170, 184, 1)",
+        "secondaryAlbedo": "rgba(198, 132, 151, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.98
+      },
+      "actionProfile": {
+        "animationRole": "handle",
+        "pivot": {
+          "mode": "axle",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            0,
+            1
+          ],
+          "confidence": 0.99
+        },
+        "sockets": [
+          {
+            "id": "front-crank-bearing",
+            "localPosition": [
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "constraints": [
+          {
+            "type": "rotation",
+            "min": 0,
+            "max": 6.2832
+          }
+        ]
+      },
+      "localFeatures": [
+        {
+          "id": "seat-grip-center-boss",
+          "type": "ridge",
+          "height": 0.08
+        }
+      ],
+      "evidenceRefs": [
+        "front-crank"
+      ]
+    },
+    {
+      "id": "side-crank",
+      "name": "side crank lever",
+      "level": "meso",
+      "role": "handle",
+      "parent": "base-assembly",
+      "primitive": "tube",
+      "topologyClass": "fiber-strand",
+      "topologyRationale": "Slender bent arm connects a side axle hub to a spherical hand grip.",
+      "material": "accent-plastic",
+      "dimensions": {
+        "width": 0.55,
+        "height": 0.56,
+        "depth": 0.18,
+        "units": "relative",
+        "confidence": 0.98
+      },
+      "transform": {
+        "position": [
+          -1.02,
+          0.76,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "attachment": {
+        "parentId": "base-assembly",
+        "parentSocket": "side-crank-axle",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          -0.35,
+          -0.38,
+          0.05
+        ],
+        "contactType": "hinge",
+        "embedDepth": 0.05,
+        "gapTolerance": 0.01,
+        "baseRadius": 0.045,
+        "endRadius": 0.045,
+        "evidenceRefs": [
+          "side-crank"
+        ]
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(235, 170, 184, 1)",
+        "secondaryAlbedo": "rgba(250, 194, 202, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.98
+      },
+      "actionProfile": {
+        "animationRole": "handle",
+        "pivot": {
+          "mode": "axle",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "sockets": [
+          {
+            "id": "side-crank-axle",
+            "localPosition": [
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "id": "side-crank-grip-socket",
+            "localPosition": [
+              -0.35,
+              -0.38,
+              0.05
+            ]
+          }
+        ]
+      },
+      "localFeatures": [
+        {
+          "id": "hub-arm-ball-grip",
+          "type": "bevel",
+          "bevelRadius": 0.04
+        }
+      ],
+      "evidenceRefs": [
+        "side-crank"
+      ]
+    },
+    {
+      "id": "dispense-chute",
+      "name": "arched dispense chute and tray",
+      "level": "meso",
+      "role": "static-part",
+      "parent": "dispensing-system",
+      "primitive": "extrude",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Observed assembly is a thick arched cavity plus a protruding tray lip with real negative space.",
+      "material": "cavity-dark",
+      "dimensions": {
+        "width": 0.72,
+        "height": 0.58,
+        "depth": 0.3,
+        "units": "relative",
+        "confidence": 0.99
+      },
+      "transform": {
+        "position": [
+          0,
+          -0.38,
+          0.05
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(112, 78, 82, 1)",
+        "secondaryAlbedo": "rgba(229, 157, 174, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.96
+      },
+      "actionProfile": {
+        "animationRole": "static-part",
+        "sockets": [
+          {
+            "id": "dispense-socket",
+            "localPosition": [
+              0,
+              -0.12,
+              0.22
+            ]
+          },
+          {
+            "id": "dispense-tray-rest-socket",
+            "localPosition": [
+              0,
+              -0.22,
+              0.34
+            ]
+          }
+        ]
+      },
+      "localFeatures": [
+        {
+          "id": "arched-cavity-tray-lip",
+          "type": "hole",
+          "depth": 0.26
+        }
+      ],
+      "evidenceRefs": [
+        "front-base"
+      ]
+    },
+    {
+      "id": "rear-service-panel",
+      "name": "rear service hatch",
+      "level": "meso",
+      "role": "static-part",
+      "parent": "base-assembly",
+      "primitive": "box",
+      "topologyClass": "surface-relief",
+      "topologyRationale": "Thin rounded hatch rides on the rear pedestal face and does not alter the main silhouette.",
+      "material": "cream-plastic",
+      "dimensions": {
+        "width": 0.68,
+        "height": 0.62,
+        "depth": 0.035,
+        "units": "relative",
+        "confidence": 0.95
+      },
+      "transform": {
+        "position": [
+          0,
+          0.1,
+          -0.77
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(246, 238, 222, 1)",
+        "secondaryAlbedo": "rgba(224, 211, 191, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.95
+      },
+      "actionProfile": {
+        "animationRole": "service-panel"
+      },
+      "localFeatures": [
+        {
+          "id": "rounded-panel-seam",
+          "type": "seam",
+          "depth": 0.012
+        }
+      ],
+      "evidenceRefs": [
+        "back-service-panel"
+      ]
+    },
+    {
+      "id": "base-ring",
+      "name": "pink lower base ring",
+      "level": "meso",
+      "role": "static-part",
+      "parent": "base-assembly",
+      "primitive": "lathe",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Thick molded ring is visually separated from the cream pedestal by a continuous seam.",
+      "material": "accent-plastic",
+      "dimensions": {
+        "width": 2.12,
+        "height": 0.2,
+        "depth": 1.62,
+        "units": "relative",
+        "confidence": 0.97
+      },
+      "transform": {
+        "position": [
+          0,
+          -0.7,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(235, 170, 184, 1)",
+        "secondaryAlbedo": "rgba(198, 132, 151, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.97
+      },
+      "actionProfile": {
+        "animationRole": "static-part"
+      },
+      "localFeatures": [
+        {
+          "id": "rear-cable-notch",
+          "type": "hole",
+          "radius": 0.2
+        },
+        {
+          "id": "upper-shell-seam",
+          "type": "seam",
+          "depth": 0.012
+        }
+      ],
+      "evidenceRefs": [
+        "back-service-panel",
+        "tri-base-ring"
+      ]
+    },
+    {
+      "id": "foot-system",
+      "name": "four low support feet",
+      "level": "meso",
+      "role": "static-part",
+      "parent": "base-assembly",
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Four repeated low rounded supports ground the base in the three elevations.",
+      "material": "accent-plastic",
+      "dimensions": {
+        "width": 1.58,
+        "height": 0.1,
+        "depth": 1.15,
+        "units": "relative",
+        "confidence": 0.84
+      },
+      "transform": {
+        "position": [
+          0,
+          -0.77,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "attachment": {
+        "parentId": "base-assembly",
+        "parentSocket": "base-foot-plane",
+        "localStart": [
+          0,
+          0.05,
+          0
+        ],
+        "localEnd": [
+          0,
+          -0.05,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.025,
+        "gapTolerance": 0.005,
+        "evidenceRefs": [
+          "tri-feet"
+        ]
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(221, 151, 166, 1)",
+        "secondaryAlbedo": "rgba(184, 117, 135, 1)",
+        "materialClass": "rubber",
+        "materialClassConfidence": 0.72
+      },
+      "actionProfile": {
+        "animationRole": "static-part"
+      },
+      "localFeatures": [
+        {
+          "id": "four-rounded-feet",
+          "type": "bevel",
+          "bevelRadius": 0.025
+        }
+      ],
+      "evidenceRefs": [
+        "tri-feet"
+      ]
+    }
+  ],
+  "materials": [
+    {
+      "id": "cream-plastic",
+      "name": "warm cream molded plastic",
+      "type": "toon-physical",
+      "shaderModel": "MeshToonMaterial with independent PBR intent",
+      "baseColor": "#F6EEDE",
+      "albedo": {
+        "dominant": "#F6EEDE",
+        "secondary": [
+          "#FFF8EA",
+          "#E8DCC8"
+        ]
+      },
+      "colorVariation": {
+        "palette": [
+          "#F6EEDE",
+          "#FFF8EA",
+          "#E8DCC8"
+        ],
+        "pattern": "broad molded value bands",
+        "amplitude": 0.06
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "object-space",
+        "repeat": [
+          1,
+          1
+        ],
+        "anisotropy": 4,
+        "texelDensityIntent": "stable object-scale highlight breakup"
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 1,
+          "amplitude": 0.05
+        },
+        {
+          "id": "meso",
+          "frequency": 8,
+          "amplitude": 0.02
+        },
+        {
+          "id": "micro",
+          "frequency": 48,
+          "amplitude": 0.008
+        }
+      ],
+      "roughness": {
+        "base": 0.42,
+        "variation": 0.08,
+        "map": "independent-molded-plastic-field"
+      },
+      "metalness": {
+        "base": 0
+      },
+      "normal": {
+        "pattern": "fine molded grain",
+        "strength": 0.06,
+        "scale": 48
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.18,
+        "contactShadowBias": 0.32
+      },
+      "localOverrides": [
+        {
+          "id": "cream-seam-shadow",
+          "region": "construction seams",
+          "roughness": 0.5,
+          "ao": 0.22,
+          "evidenceRefs": [
+            "front-base"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "accent-plastic",
+      "name": "pink lacquered plastic",
+      "type": "toon-physical",
+      "shaderModel": "MeshToonMaterial clearcoat approximation",
+      "baseColor": "#EBAAB8",
+      "albedo": {
+        "dominant": "#EBAAB8",
+        "secondary": [
+          "#FAC2CA",
+          "#C68497"
+        ]
+      },
+      "colorVariation": {
+        "palette": [
+          "#EBAAB8",
+          "#FAC2CA",
+          "#C68497"
+        ],
+        "pattern": "grazing highlight bands",
+        "amplitude": 0.08
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "object-space",
+        "repeat": [
+          1,
+          1
+        ],
+        "anisotropy": 4,
+        "texelDensityIntent": "consistent accent gloss"
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 1,
+          "amplitude": 0.06
+        },
+        {
+          "id": "meso",
+          "frequency": 10,
+          "amplitude": 0.02
+        },
+        {
+          "id": "micro",
+          "frequency": 64,
+          "amplitude": 0.005
+        }
+      ],
+      "roughness": {
+        "base": 0.26,
+        "variation": 0.05,
+        "map": "independent-accent-gloss-field"
+      },
+      "metalness": {
+        "base": 0
+      },
+      "normal": {
+        "pattern": "fine polished polymer",
+        "strength": 0.035,
+        "scale": 64
+      },
+      "clearcoat": 0.48,
+      "ambientOcclusion": {
+        "cavityStrength": 0.17,
+        "contactShadowBias": 0.3
+      },
+      "localOverrides": [
+        {
+          "id": "highlight-bands",
+          "region": "upper-left grazing faces",
+          "roughness": 0.16,
+          "clearcoat": 0.62,
+          "evidenceRefs": [
+            "tri-accent"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "globe-glass",
+      "name": "clear globe polymer",
+      "type": "transparent-toon",
+      "shaderModel": "MeshToonMaterial alpha shell",
+      "baseColor": "#F8F7F2",
+      "albedo": {
+        "dominant": "#F8F7F2",
+        "secondary": [
+          "#E2EAEA"
+        ]
+      },
+      "colorVariation": {
+        "palette": [
+          "#F8F7F2",
+          "#E2EAEA"
+        ],
+        "pattern": "broad reflection bands",
+        "amplitude": 0.04
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "spherical",
+        "repeat": [
+          1,
+          1
+        ],
+        "anisotropy": 4,
+        "texelDensityIntent": "single-shell reflection scale"
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 1,
+          "amplitude": 0.08
+        },
+        {
+          "id": "meso",
+          "frequency": 6,
+          "amplitude": 0.015
+        },
+        {
+          "id": "micro",
+          "frequency": 72,
+          "amplitude": 0.003
+        }
+      ],
+      "roughness": {
+        "base": 0.12,
+        "variation": 0.035,
+        "map": "independent-clear-polymer-field"
+      },
+      "metalness": {
+        "base": 0
+      },
+      "normal": {
+        "pattern": "nearly flat clear shell",
+        "strength": 0.01,
+        "scale": 72
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.05,
+        "contactShadowBias": 0.08
+      },
+      "transmission": 0.72,
+      "ior": 1.47,
+      "localOverrides": [
+        {
+          "id": "front-highlight",
+          "region": "front upper-left",
+          "roughness": 0.07,
+          "opacity": 0.22,
+          "evidenceRefs": [
+            "front-globe"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "capsule-clear",
+      "name": "clear capsule upper shells",
+      "type": "transparent-toon",
+      "shaderModel": "MeshToonMaterial alpha shell",
+      "baseColor": "#FAF9F7",
+      "albedo": {
+        "dominant": "#FAF9F7",
+        "secondary": [
+          "#E9F2F2"
+        ]
+      },
+      "colorVariation": {
+        "palette": [
+          "#FAF9F7",
+          "#E9F2F2"
+        ],
+        "pattern": "small spherical highlights",
+        "amplitude": 0.08
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "spherical",
+        "repeat": [
+          1,
+          1
+        ],
+        "anisotropy": 4,
+        "texelDensityIntent": "per-capsule shell scale"
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 1,
+          "amplitude": 0.08
+        },
+        {
+          "id": "meso",
+          "frequency": 8,
+          "amplitude": 0.02
+        },
+        {
+          "id": "micro",
+          "frequency": 80,
+          "amplitude": 0.004
+        }
+      ],
+      "roughness": {
+        "base": 0.1,
+        "variation": 0.025,
+        "map": "independent-capsule-clear-field"
+      },
+      "metalness": {
+        "base": 0
+      },
+      "normal": {
+        "pattern": "smooth injection-molded shell",
+        "strength": 0.01,
+        "scale": 80
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.04,
+        "contactShadowBias": 0.08
+      },
+      "transmission": 0.68,
+      "localOverrides": [
+        {
+          "id": "gloss-shell",
+          "region": "upper hemispheres",
+          "roughness": 0.06,
+          "opacity": 0.34,
+          "evidenceRefs": [
+            "tri-capsules"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "capsule-color",
+      "name": "pastel capsule lower shells",
+      "type": "toon-plastic",
+      "shaderModel": "MeshToonMaterial",
+      "baseColor": "#A9D6E5",
+      "albedo": {
+        "dominant": "#A9D6E5",
+        "secondary": [
+          "#E9A9B7",
+          "#F3D58A",
+          "#A8D5BE"
+        ]
+      },
+      "colorVariation": {
+        "palette": [
+          "#A9D6E5",
+          "#E9A9B7",
+          "#F3D58A",
+          "#A8D5BE"
+        ],
+        "pattern": "per-instance palette",
+        "amplitude": 0.2
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "spherical",
+        "repeat": [
+          1,
+          1
+        ],
+        "anisotropy": 4,
+        "texelDensityIntent": "per-capsule color shell"
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 1,
+          "amplitude": 0.14
+        },
+        {
+          "id": "meso",
+          "frequency": 8,
+          "amplitude": 0.02
+        },
+        {
+          "id": "micro",
+          "frequency": 64,
+          "amplitude": 0.005
+        }
+      ],
+      "roughness": {
+        "base": 0.25,
+        "variation": 0.04,
+        "map": "independent-capsule-color-field"
+      },
+      "metalness": {
+        "base": 0
+      },
+      "normal": {
+        "pattern": "smooth polymer",
+        "strength": 0.02,
+        "scale": 64
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.14,
+        "contactShadowBias": 0.2
+      },
+      "localOverrides": [
+        {
+          "id": "capsule-equator-contact",
+          "region": "equator seam",
+          "roughness": 0.34,
+          "ao": 0.16,
+          "evidenceRefs": [
+            "tri-capsules"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cavity-dark",
+      "name": "dispense cavity interior",
+      "type": "toon-plastic",
+      "shaderModel": "MeshToonMaterial",
+      "baseColor": "#704E52",
+      "albedo": {
+        "dominant": "#704E52",
+        "secondary": [
+          "#563B42"
+        ]
+      },
+      "colorVariation": {
+        "palette": [
+          "#704E52",
+          "#563B42"
+        ],
+        "pattern": "cavity falloff",
+        "amplitude": 0.12
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "planar",
+        "repeat": [
+          1,
+          1
+        ],
+        "anisotropy": 2,
+        "texelDensityIntent": "stable recessed cavity"
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 1,
+          "amplitude": 0.12
+        },
+        {
+          "id": "meso",
+          "frequency": 8,
+          "amplitude": 0.03
+        },
+        {
+          "id": "micro",
+          "frequency": 48,
+          "amplitude": 0.006
+        }
+      ],
+      "roughness": {
+        "base": 0.56,
+        "variation": 0.06,
+        "map": "independent-cavity-field"
+      },
+      "metalness": {
+        "base": 0
+      },
+      "normal": {
+        "pattern": "matte molded interior",
+        "strength": 0.04,
+        "scale": 48
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.42,
+        "contactShadowBias": 0.55
+      },
+      "localOverrides": [
+        {
+          "id": "chute-depth-mask",
+          "region": "rear and upper cavity",
+          "roughness": 0.62,
+          "ao": 0.48,
+          "evidenceRefs": [
+            "front-base"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rubber-foot",
+      "name": "soft support rubber",
+      "qualityTier": "utility",
+      "type": "toon-rubber",
+      "shaderModel": "MeshToonMaterial",
+      "baseColor": "#B87588",
+      "roughness": {
+        "base": 0.66,
+        "variation": 0.04,
+        "map": "independent-rubber-field"
+      },
+      "metalness": {
+        "base": 0
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.2
+      },
+      "localOverrides": [
+        {
+          "id": "foot-contact",
+          "region": "floor contact",
+          "roughness": 0.74,
+          "evidenceRefs": [
+            "tri-feet"
+          ]
+        }
+      ]
+    }
+  ],
+  "repetitionSystems": [
+    {
+      "id": "capsule-cluster",
+      "componentRef": "capsule-system",
+      "count": 11,
+      "geometry": "separate upper hemisphere, lower hemisphere and equator ring per instance",
+      "instances": "deterministic irregular 3D packing with pastel palette and varied orientation",
+      "buildsGeometry": true,
+      "distribution": "three staggered depth layers inside globe",
+      "variation": "four colors, radius ±5%, pitch/yaw/roll offsets"
+    },
+    {
+      "id": "capsule-equator-seams",
+      "componentRef": "capsule-system",
+      "count": 11,
+      "geometry": "thin torus seam",
+      "instances": "one per capsule",
+      "buildsGeometry": true,
+      "distribution": "attached at each capsule local equator",
+      "variation": "inherits capsule orientation"
+    },
+    {
+      "id": "capsule-prize-silhouettes",
+      "componentRef": "capsule-system",
+      "count": 11,
+      "geometry": "beveled extruded star, flower, key or bear silhouette",
+      "instances": "one opaque prize on an independent child pivot inside every capsule",
+      "buildsGeometry": true,
+      "distribution": "four variants cycled through all visible capsules",
+      "variation": "four shapes, four contrasting colors and contained local wobble"
+    },
+    {
+      "id": "support-feet",
+      "componentRef": "foot-system",
+      "count": 4,
+      "geometry": "rounded box feet",
+      "instances": "four independently named supports",
+      "buildsGeometry": true,
+      "distribution": "symmetric corners under base",
+      "variation": "none"
+    }
+  ],
+  "featureReviewPolicy": {
+    "enabled": true,
+    "maxCriticalFeaturesPerPass": 5,
+    "maxImportantFeaturesPerPass": 3
+  },
+  "featureReviewTargets": [
+    {
+      "id": "globe-lid-silhouette",
+      "name": "Globe and lid silhouette",
+      "tier": "critical",
+      "mustPass": true,
+      "minimumScore": 0.76,
+      "passIds": [
+        "blockout",
+        "form-refinement"
+      ],
+      "componentRefs": [
+        "globe-shell",
+        "top-lid",
+        "globe-seat-ring"
+      ],
+      "evidenceRefs": [
+        "front-globe",
+        "side-globe"
+      ]
+    },
+    {
+      "id": "base-chute-architecture",
+      "name": "Tapered base and chute",
+      "tier": "critical",
+      "mustPass": true,
+      "minimumScore": 0.76,
+      "passIds": [
+        "blockout",
+        "structural-pass",
+        "form-refinement"
+      ],
+      "componentRefs": [
+        "base-shell",
+        "dispense-chute",
+        "base-ring"
+      ],
+      "evidenceRefs": [
+        "front-base",
+        "back-service-panel"
+      ]
+    },
+    {
+      "id": "capsule-system-detail",
+      "name": "Prize-filled two-piece capsule system",
+      "tier": "critical",
+      "mustPass": true,
+      "minimumScore": 0.82,
+      "passIds": [
+        "structural-pass",
+        "form-refinement",
+        "material-pass"
+      ],
+      "componentRefs": [
+        "capsule-system"
+      ],
+      "evidenceRefs": [
+        "tri-capsules"
+      ]
+    },
+    {
+      "id": "control-assembly",
+      "name": "Front and side controls",
+      "tier": "critical",
+      "mustPass": true,
+      "minimumScore": 0.76,
+      "passIds": [
+        "structural-pass",
+        "interaction-pass"
+      ],
+      "componentRefs": [
+        "front-crank",
+        "side-crank"
+      ],
+      "evidenceRefs": [
+        "front-crank",
+        "side-crank"
+      ]
+    },
+    {
+      "id": "pastel-transparent-materials",
+      "name": "Pastel and transparent material split",
+      "tier": "critical",
+      "mustPass": true,
+      "minimumScore": 0.72,
+      "passIds": [
+        "material-pass",
+        "lighting-pass"
+      ],
+      "componentRefs": [
+        "globe-shell",
+        "capsule-system",
+        "base-shell",
+        "top-lid"
+      ],
+      "evidenceRefs": [
+        "tri-accent",
+        "tri-capsules"
+      ]
+    },
+    {
+      "id": "powered-dispense",
+      "name": "Purpose-readable powered dispense",
+      "tier": "critical",
+      "mustPass": true,
+      "minimumScore": 0.78,
+      "passIds": [
+        "interaction-pass"
+      ],
+      "componentRefs": [
+        "front-crank",
+        "side-crank",
+        "capsule-system",
+        "dispense-chute"
+      ],
+      "evidenceRefs": [
+        "interaction-requirement"
+      ]
+    }
+  ],
+  "qualityTargets": {
+    "reviewViewpoints": [
+      "front",
+      "side",
+      "back",
+      "three-quarter",
+      "powered-three-quarter"
+    ],
+    "visualThreshold": 0.7
+  },
+  "buildPasses": [
+    {
+      "id": "blockout",
+      "goal": "Lock globe/base/lid silhouette and ratios.",
+      "componentRefs": [
+        "globe-assembly",
+        "base-assembly",
+        "top-lid",
+        "base-shell"
+      ],
+      "acceptance": [
+        "Front/side silhouette and overall height ratio match reference."
+      ]
+    },
+    {
+      "id": "structural-pass",
+      "goal": "Build independent assemblies and attachments.",
+      "componentRefs": [
+        "globe-shell",
+        "globe-seat-ring",
+        "center-column",
+        "capsule-system",
+        "front-crank",
+        "side-crank",
+        "dispense-chute",
+        "rear-service-panel",
+        "base-ring",
+        "foot-system"
+      ],
+      "acceptance": [
+        "Named parts touch parents and moving pivots remain at real joints."
+      ]
+    },
+    {
+      "id": "form-refinement",
+      "goal": "Refine domes, tapers, seams, cavities and capsule construction.",
+      "componentRefs": [
+        "top-lid",
+        "base-shell",
+        "capsule-system",
+        "dispense-chute"
+      ],
+      "acceptance": [
+        "Three-quarter view reads volumetric, not slab-like."
+      ]
+    },
+    {
+      "id": "material-pass",
+      "goal": "Match pastel plastic and transparent polymer response.",
+      "componentRefs": [
+        "globe-shell",
+        "capsule-system",
+        "base-shell",
+        "top-lid"
+      ],
+      "acceptance": [
+        "Transparent layers retain readable depth and pastel color separation."
+      ]
+    },
+    {
+      "id": "lighting-pass",
+      "goal": "Verify neutral SAKURA toon light, outlines and contact shadows.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "Key/fill/rim explain form without hiding transparency."
+      ]
+    },
+    {
+      "id": "interaction-pass",
+      "goal": "Complete purpose-readable dispense animation.",
+      "componentRefs": [
+        "front-crank",
+        "side-crank",
+        "capsule-system",
+        "dispense-chute"
+      ],
+      "acceptance": [
+        "One capsule reaches tray without intersections and reset is safe before 5.2 seconds."
+      ]
+    },
+    {
+      "id": "optimization-pass",
+      "goal": "Protect browser runtime performance.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "Review diagnostics remain within 160 draw calls and 250k triangles."
+      ]
+    }
+  ],
+  "selfCorrectLoop": {
+    "enabled": true,
+    "reviewAfterPasses": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "lighting-pass",
+      "interaction-pass"
+    ],
+    "allowedActions": [
+      "continue",
+      "refine-spec",
+      "refine-code",
+      "request-input",
+      "stop"
+    ],
+    "specRefineTriggers": [
+      "missing component",
+      "wrong primitive",
+      "wrong proportion"
+    ],
+    "codeRefineTriggers": [
+      "geometry mismatch",
+      "material mismatch",
+      "animation intersection"
+    ],
+    "stopCriteria": [
+      "all critical features pass",
+      "final multiview evidence retained"
+    ],
+    "visualAcceptance": {
+      "reviewer": "agent vision",
+      "threshold": 0.7,
+      "requireScreenshot": true,
+      "requireComparison": true,
+      "featureReviewPolicy": {
+        "enabled": true,
+        "adaptiveEscalation": true,
+        "singleImagePairOnly": true,
+        "maxCriticalFeaturesPerPass": 5,
+        "maxImportantFeaturesPerPass": 3,
+        "criticalDefaultThreshold": 0.74,
+        "importantAverageThreshold": 0.7,
+        "reviewUnit": "semantic subsystem",
+        "selectionRule": "review all critical and only suspicious important features"
+      }
+    },
+    "screenshotPolicy": {
+      "requiredForPasses": [
+        "blockout",
+        "structural-pass",
+        "form-refinement",
+        "material-pass",
+        "lighting-pass",
+        "interaction-pass"
+      ],
+      "preferredCapture": "existing model-review.html browser capture",
+      "fallbackCapture": "project-installed Playwright capture-model-review script",
+      "minimumEvidence": "render and side-by-side comparison",
+      "reviewPairRule": "one full pair per pass",
+      "acceptanceAuthority": "agent vision"
+    }
+  },
+  "lookDevTargets": {
+    "qualityPriority": "real-time-reference-match",
+    "materialPass": {
+      "albedoPaletteRequired": true,
+      "roughnessVariationRequired": true,
+      "normalOrBumpRequired": true,
+      "localOverridesRequired": true,
+      "minimumTextureResolution": 1024,
+      "independentMapChannels": [
+        "albedo",
+        "roughness",
+        "height",
+        "normal",
+        "ambient-occlusion"
+      ],
+      "requiredSurfaceFrequencyBands": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "referencePbrExtraction": {
+        "requiredWhenSourceImagePresent": false,
+        "targetThreshold": 0.7,
+        "acceptedLimitation": "Flat illustrated references contain baked highlights; procedural solid-color toon materials preserve SAKURA consistency more reliably than crop projection."
+      }
+    },
+    "lightingPass": {
+      "requiredTerms": [
+        "key light",
+        "fill light",
+        "rim light",
+        "ACES tone mapping",
+        "background",
+        "contact shadow"
+      ]
+    }
+  },
+  "lightingFromPhoto": [
+    "warm key light from upper front-left, intensity 3.2, soft shadow radius 4",
+    "cool fill light from front-right, intensity 1.35",
+    "pink rim light from rear-left, intensity 1.6",
+    "ACES-style exposure intent 1.0 with pale blue-grey background",
+    "contact shadow on circular ground plane at opacity 0.15"
+  ],
+  "actionReadiness": {
+    "contract": "Named pivots and sockets expose all moving and serviceable assemblies.",
+    "defaultRigType": "articulated-prop",
+    "rootMotionNode": "root",
+    "requiredComponentFields": [
+      "id",
+      "parent",
+      "transform",
+      "actionProfile"
+    ],
+    "transformChannels": [
+      "translate",
+      "rotate",
+      "visibility",
+      "material-state"
+    ],
+    "authoringRules": [
+      "Do not merge controls or capsules into base geometry.",
+      "Keep socket transforms local to their pivot."
+    ],
+    "destructionPolicy": {
+      "defaultBreakable": false
+    }
+  },
+  "proceduralStrategy": [
+    "Lock the globe-over-pedestal silhouette first.",
+    "Build named assemblies and socketed controls.",
+    "Use deterministic repeated two-shell capsule groups.",
+    "Refine lathed tapers, real cavity depth, seams and highlight-catching bevels.",
+    "Apply SAKURA toon materials, outline hulls and transparent depth ordering.",
+    "Animate a single contained dispense route and reset safely.",
+    "Optimize only after final multiview review."
+  ],
+  "animationAnchors": [
+    "front-crank-pivot",
+    "side-crank-pivot",
+    "capsule-bed-pivot",
+    "dispense-socket",
+    "dispense-tray-rest-socket",
+    "power-cable-socket"
+  ],
+  "destructionAnchors": [
+    "top-lid",
+    "globe-shell",
+    "base-ring",
+    "rear-service-panel"
+  ],
+  "performanceBudget": {
+    "qualityPriority": "reference-fidelity",
+    "targetTriangles": 65000,
+    "maxDrawCalls": 160,
+    "textureSize": 1024,
+    "fpsTarget": 60,
+    "optimizationPolicy": "Reuse four shared prize geometries and materials across eleven capsule pivots; retain independent semantic groups."
+  },
+  "assumptions": [
+    "Inferred: internal divider wheel, anti-double-feed flap and curved drop channel are simplified into a hidden safe motion path.",
+    "Inferred: rear hatch depth and fastening method are conservative shallow molded geometry.",
+    "Inferred: underside screws and cable storage are omitted; four symmetric feet and a rear cable socket are provided.",
+    "Inferred: side crank and front crank share a hidden gear train; only visible controls are modeled."
+  ],
+  "risks": [
+    "Transparent globe and clear capsule shells can lose readability under low contrast.",
+    "Dense capsule layout can produce alpha sorting artifacts.",
+    "Dispense path must stay forward of the opaque base shell to avoid clipping."
+  ],
+  "reviewHistory": [
+    {
+      "timestamp": "2026-08-03T13:32:04.910475+00:00",
+      "passId": "blockout",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.83,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.81,
+        "lightingCamera": 0.8,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "globe-lid-silhouette",
+          "score": 0.8,
+          "passed": true,
+          "notes": "The clear globe, low dome lid and seat ring preserve the reference identity."
+        },
+        {
+          "id": "base-chute-architecture",
+          "score": 0.81,
+          "passed": true,
+          "notes": "Tapered cream pedestal and arched front chute match the reference architecture."
+        },
+        {
+          "id": "capsule-system-detail",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Multiple independent two-piece pastel capsules remain readable through the globe."
+        },
+        {
+          "id": "control-assembly",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Front crank, side crank and output tray are separately modeled and animated."
+        },
+        {
+          "id": "pastel-transparent-materials",
+          "score": 0.8,
+          "passed": true,
+          "notes": "Transparent globe no longer reads black and pastel capsules remain separated."
+        },
+        {
+          "id": "powered-dispense",
+          "score": 0.89,
+          "passed": true,
+          "notes": "Crank rotation and capsule travel into the tray make the purpose unambiguous."
+        }
+      ],
+      "action": "continue",
+      "summary": "Four browser views preserve the globe, pedestal, chute, capsule system and independent controls; the powered crank-to-dispense sequence remains immediately readable.",
+      "matched": [
+        "clear globe and low lid",
+        "tapered pedestal and chute",
+        "independent pastel capsules",
+        "separate crank controls",
+        "powered capsule dispense"
+      ],
+      "mismatches": [
+        "reference is flatter orthographic artwork",
+        "transparent globe and realtime shadows reduce deterministic mask agreement"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "mapStrippedRender": "artifacts/img2threejs/gumball-machine/clay-review/render-front.png",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake/gumball-machine/front.png",
+        "renderScreenshot": "artifacts/img2threejs/gumball-machine/final-review/render-front.png",
+        "comparisonImage": "artifacts/img2threejs/gumball-machine/final-review/comparison-front.png",
+        "cameraView": "front",
+        "notes": "四个浏览器视图均已检查；确定性二值轮廓仅作为受构图和透明材质限制的辅助证据。",
+        "aiVisionNotes": ""
+      }
+    },
+    {
+      "timestamp": "2026-08-03T13:32:05.320476+00:00",
+      "passId": "structural-pass",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.83,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.81,
+        "lightingCamera": 0.8,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "globe-lid-silhouette",
+          "score": 0.8,
+          "passed": true,
+          "notes": "The clear globe, low dome lid and seat ring preserve the reference identity."
+        },
+        {
+          "id": "base-chute-architecture",
+          "score": 0.81,
+          "passed": true,
+          "notes": "Tapered cream pedestal and arched front chute match the reference architecture."
+        },
+        {
+          "id": "capsule-system-detail",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Multiple independent two-piece pastel capsules remain readable through the globe."
+        },
+        {
+          "id": "control-assembly",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Front crank, side crank and output tray are separately modeled and animated."
+        },
+        {
+          "id": "pastel-transparent-materials",
+          "score": 0.8,
+          "passed": true,
+          "notes": "Transparent globe no longer reads black and pastel capsules remain separated."
+        },
+        {
+          "id": "powered-dispense",
+          "score": 0.89,
+          "passed": true,
+          "notes": "Crank rotation and capsule travel into the tray make the purpose unambiguous."
+        }
+      ],
+      "action": "continue",
+      "summary": "Four browser views preserve the globe, pedestal, chute, capsule system and independent controls; the powered crank-to-dispense sequence remains immediately readable.",
+      "matched": [
+        "clear globe and low lid",
+        "tapered pedestal and chute",
+        "independent pastel capsules",
+        "separate crank controls",
+        "powered capsule dispense"
+      ],
+      "mismatches": [
+        "reference is flatter orthographic artwork",
+        "transparent globe and realtime shadows reduce deterministic mask agreement"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake/gumball-machine/front.png",
+        "renderScreenshot": "artifacts/img2threejs/gumball-machine/final-review/render-front.png",
+        "comparisonImage": "artifacts/img2threejs/gumball-machine/final-review/comparison-front.png",
+        "cameraView": "front",
+        "notes": "四个浏览器视图均已检查；确定性二值轮廓仅作为受构图和透明材质限制的辅助证据。",
+        "aiVisionNotes": ""
+      }
+    },
+    {
+      "timestamp": "2026-08-03T13:32:05.724999+00:00",
+      "passId": "form-refinement",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.83,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.81,
+        "lightingCamera": 0.8,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "globe-lid-silhouette",
+          "score": 0.8,
+          "passed": true,
+          "notes": "The clear globe, low dome lid and seat ring preserve the reference identity."
+        },
+        {
+          "id": "base-chute-architecture",
+          "score": 0.81,
+          "passed": true,
+          "notes": "Tapered cream pedestal and arched front chute match the reference architecture."
+        },
+        {
+          "id": "capsule-system-detail",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Multiple independent two-piece pastel capsules remain readable through the globe."
+        },
+        {
+          "id": "control-assembly",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Front crank, side crank and output tray are separately modeled and animated."
+        },
+        {
+          "id": "pastel-transparent-materials",
+          "score": 0.8,
+          "passed": true,
+          "notes": "Transparent globe no longer reads black and pastel capsules remain separated."
+        },
+        {
+          "id": "powered-dispense",
+          "score": 0.89,
+          "passed": true,
+          "notes": "Crank rotation and capsule travel into the tray make the purpose unambiguous."
+        }
+      ],
+      "action": "continue",
+      "summary": "Four browser views preserve the globe, pedestal, chute, capsule system and independent controls; the powered crank-to-dispense sequence remains immediately readable.",
+      "matched": [
+        "clear globe and low lid",
+        "tapered pedestal and chute",
+        "independent pastel capsules",
+        "separate crank controls",
+        "powered capsule dispense"
+      ],
+      "mismatches": [
+        "reference is flatter orthographic artwork",
+        "transparent globe and realtime shadows reduce deterministic mask agreement"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake/gumball-machine/front.png",
+        "renderScreenshot": "artifacts/img2threejs/gumball-machine/final-review/render-front.png",
+        "comparisonImage": "artifacts/img2threejs/gumball-machine/final-review/comparison-front.png",
+        "cameraView": "front",
+        "notes": "四个浏览器视图均已检查；确定性二值轮廓仅作为受构图和透明材质限制的辅助证据。",
+        "aiVisionNotes": ""
+      }
+    },
+    {
+      "timestamp": "2026-08-03T13:32:06.138994+00:00",
+      "passId": "material-pass",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.83,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.81,
+        "lightingCamera": 0.8,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "globe-lid-silhouette",
+          "score": 0.8,
+          "passed": true,
+          "notes": "The clear globe, low dome lid and seat ring preserve the reference identity."
+        },
+        {
+          "id": "base-chute-architecture",
+          "score": 0.81,
+          "passed": true,
+          "notes": "Tapered cream pedestal and arched front chute match the reference architecture."
+        },
+        {
+          "id": "capsule-system-detail",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Multiple independent two-piece pastel capsules remain readable through the globe."
+        },
+        {
+          "id": "control-assembly",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Front crank, side crank and output tray are separately modeled and animated."
+        },
+        {
+          "id": "pastel-transparent-materials",
+          "score": 0.8,
+          "passed": true,
+          "notes": "Transparent globe no longer reads black and pastel capsules remain separated."
+        },
+        {
+          "id": "powered-dispense",
+          "score": 0.89,
+          "passed": true,
+          "notes": "Crank rotation and capsule travel into the tray make the purpose unambiguous."
+        }
+      ],
+      "action": "continue",
+      "summary": "Four browser views preserve the globe, pedestal, chute, capsule system and independent controls; the powered crank-to-dispense sequence remains immediately readable.",
+      "matched": [
+        "clear globe and low lid",
+        "tapered pedestal and chute",
+        "independent pastel capsules",
+        "separate crank controls",
+        "powered capsule dispense"
+      ],
+      "mismatches": [
+        "reference is flatter orthographic artwork",
+        "transparent globe and realtime shadows reduce deterministic mask agreement"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake/gumball-machine/front.png",
+        "renderScreenshot": "artifacts/img2threejs/gumball-machine/final-review/render-front.png",
+        "comparisonImage": "artifacts/img2threejs/gumball-machine/final-review/comparison-front.png",
+        "cameraView": "front",
+        "notes": "四个浏览器视图均已检查；确定性二值轮廓仅作为受构图和透明材质限制的辅助证据。",
+        "aiVisionNotes": ""
+      }
+    },
+    {
+      "timestamp": "2026-08-03T13:32:06.676607+00:00",
+      "passId": "lighting-pass",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.83,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.81,
+        "lightingCamera": 0.8,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "globe-lid-silhouette",
+          "score": 0.8,
+          "passed": true,
+          "notes": "The clear globe, low dome lid and seat ring preserve the reference identity."
+        },
+        {
+          "id": "base-chute-architecture",
+          "score": 0.81,
+          "passed": true,
+          "notes": "Tapered cream pedestal and arched front chute match the reference architecture."
+        },
+        {
+          "id": "capsule-system-detail",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Multiple independent two-piece pastel capsules remain readable through the globe."
+        },
+        {
+          "id": "control-assembly",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Front crank, side crank and output tray are separately modeled and animated."
+        },
+        {
+          "id": "pastel-transparent-materials",
+          "score": 0.8,
+          "passed": true,
+          "notes": "Transparent globe no longer reads black and pastel capsules remain separated."
+        },
+        {
+          "id": "powered-dispense",
+          "score": 0.89,
+          "passed": true,
+          "notes": "Crank rotation and capsule travel into the tray make the purpose unambiguous."
+        }
+      ],
+      "action": "continue",
+      "summary": "Four browser views preserve the globe, pedestal, chute, capsule system and independent controls; the powered crank-to-dispense sequence remains immediately readable.",
+      "matched": [
+        "clear globe and low lid",
+        "tapered pedestal and chute",
+        "independent pastel capsules",
+        "separate crank controls",
+        "powered capsule dispense"
+      ],
+      "mismatches": [
+        "reference is flatter orthographic artwork",
+        "transparent globe and realtime shadows reduce deterministic mask agreement"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake/gumball-machine/front.png",
+        "renderScreenshot": "artifacts/img2threejs/gumball-machine/final-review/render-front.png",
+        "comparisonImage": "artifacts/img2threejs/gumball-machine/final-review/comparison-front.png",
+        "cameraView": "front",
+        "notes": "四个浏览器视图均已检查；确定性二值轮廓仅作为受构图和透明材质限制的辅助证据。",
+        "aiVisionNotes": ""
+      }
+    },
+    {
+      "timestamp": "2026-08-03T13:32:07.362971+00:00",
+      "passId": "interaction-pass",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.83,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.81,
+        "lightingCamera": 0.8,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "globe-lid-silhouette",
+          "score": 0.8,
+          "passed": true,
+          "notes": "The clear globe, low dome lid and seat ring preserve the reference identity."
+        },
+        {
+          "id": "base-chute-architecture",
+          "score": 0.81,
+          "passed": true,
+          "notes": "Tapered cream pedestal and arched front chute match the reference architecture."
+        },
+        {
+          "id": "capsule-system-detail",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Multiple independent two-piece pastel capsules remain readable through the globe."
+        },
+        {
+          "id": "control-assembly",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Front crank, side crank and output tray are separately modeled and animated."
+        },
+        {
+          "id": "pastel-transparent-materials",
+          "score": 0.8,
+          "passed": true,
+          "notes": "Transparent globe no longer reads black and pastel capsules remain separated."
+        },
+        {
+          "id": "powered-dispense",
+          "score": 0.89,
+          "passed": true,
+          "notes": "Crank rotation and capsule travel into the tray make the purpose unambiguous."
+        }
+      ],
+      "action": "continue",
+      "summary": "Four browser views preserve the globe, pedestal, chute, capsule system and independent controls; the powered crank-to-dispense sequence remains immediately readable.",
+      "matched": [
+        "clear globe and low lid",
+        "tapered pedestal and chute",
+        "independent pastel capsules",
+        "separate crank controls",
+        "powered capsule dispense"
+      ],
+      "mismatches": [
+        "reference is flatter orthographic artwork",
+        "transparent globe and realtime shadows reduce deterministic mask agreement"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake/gumball-machine/front.png",
+        "renderScreenshot": "artifacts/img2threejs/gumball-machine/final-review/render-front.png",
+        "comparisonImage": "artifacts/img2threejs/gumball-machine/final-review/comparison-front.png",
+        "cameraView": "front",
+        "notes": "四个浏览器视图均已检查；确定性二值轮廓仅作为受构图和透明材质限制的辅助证据。",
+        "aiVisionNotes": ""
+      }
+    },
+    {
+      "timestamp": "2026-08-03T13:32:07.890971+00:00",
+      "passId": "optimization-pass",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.83,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.81,
+        "lightingCamera": 0.8,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "globe-lid-silhouette",
+          "score": 0.8,
+          "passed": true,
+          "notes": "The clear globe, low dome lid and seat ring preserve the reference identity."
+        },
+        {
+          "id": "base-chute-architecture",
+          "score": 0.81,
+          "passed": true,
+          "notes": "Tapered cream pedestal and arched front chute match the reference architecture."
+        },
+        {
+          "id": "capsule-system-detail",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Multiple independent two-piece pastel capsules remain readable through the globe."
+        },
+        {
+          "id": "control-assembly",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Front crank, side crank and output tray are separately modeled and animated."
+        },
+        {
+          "id": "pastel-transparent-materials",
+          "score": 0.8,
+          "passed": true,
+          "notes": "Transparent globe no longer reads black and pastel capsules remain separated."
+        },
+        {
+          "id": "powered-dispense",
+          "score": 0.89,
+          "passed": true,
+          "notes": "Crank rotation and capsule travel into the tray make the purpose unambiguous."
+        }
+      ],
+      "action": "continue",
+      "summary": "Four browser views preserve the globe, pedestal, chute, capsule system and independent controls; the powered crank-to-dispense sequence remains immediately readable.",
+      "matched": [
+        "clear globe and low lid",
+        "tapered pedestal and chute",
+        "independent pastel capsules",
+        "separate crank controls",
+        "powered capsule dispense"
+      ],
+      "mismatches": [
+        "reference is flatter orthographic artwork",
+        "transparent globe and realtime shadows reduce deterministic mask agreement"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake/gumball-machine/front.png",
+        "renderScreenshot": "artifacts/img2threejs/gumball-machine/final-review/render-front.png",
+        "comparisonImage": "artifacts/img2threejs/gumball-machine/final-review/comparison-front.png",
+        "cameraView": "front",
+        "notes": "四个浏览器视图均已检查；确定性二值轮廓仅作为受构图和透明材质限制的辅助证据。",
+        "aiVisionNotes": ""
+      }
+    }
+  ],
+  "visualEvidence": [
+    {
+      "timestamp": "2026-08-03T13:32:04.910475+00:00",
+      "passId": "blockout",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.83,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.81,
+        "lightingCamera": 0.8,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "globe-lid-silhouette",
+          "score": 0.8,
+          "passed": true,
+          "notes": "The clear globe, low dome lid and seat ring preserve the reference identity."
+        },
+        {
+          "id": "base-chute-architecture",
+          "score": 0.81,
+          "passed": true,
+          "notes": "Tapered cream pedestal and arched front chute match the reference architecture."
+        },
+        {
+          "id": "capsule-system-detail",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Multiple independent two-piece pastel capsules remain readable through the globe."
+        },
+        {
+          "id": "control-assembly",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Front crank, side crank and output tray are separately modeled and animated."
+        },
+        {
+          "id": "pastel-transparent-materials",
+          "score": 0.8,
+          "passed": true,
+          "notes": "Transparent globe no longer reads black and pastel capsules remain separated."
+        },
+        {
+          "id": "powered-dispense",
+          "score": 0.89,
+          "passed": true,
+          "notes": "Crank rotation and capsule travel into the tray make the purpose unambiguous."
+        }
+      ],
+      "referenceScreenshot": "references/intake/gumball-machine/front.png",
+      "renderScreenshot": "artifacts/img2threejs/gumball-machine/final-review/render-front.png",
+      "comparisonImage": "artifacts/img2threejs/gumball-machine/final-review/comparison-front.png",
+      "cameraView": "front",
+      "notes": "四个浏览器视图均已检查；确定性二值轮廓仅作为受构图和透明材质限制的辅助证据。",
+      "aiVisionNotes": ""
+    },
+    {
+      "timestamp": "2026-08-03T13:32:05.320476+00:00",
+      "passId": "structural-pass",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.83,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.81,
+        "lightingCamera": 0.8,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "globe-lid-silhouette",
+          "score": 0.8,
+          "passed": true,
+          "notes": "The clear globe, low dome lid and seat ring preserve the reference identity."
+        },
+        {
+          "id": "base-chute-architecture",
+          "score": 0.81,
+          "passed": true,
+          "notes": "Tapered cream pedestal and arched front chute match the reference architecture."
+        },
+        {
+          "id": "capsule-system-detail",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Multiple independent two-piece pastel capsules remain readable through the globe."
+        },
+        {
+          "id": "control-assembly",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Front crank, side crank and output tray are separately modeled and animated."
+        },
+        {
+          "id": "pastel-transparent-materials",
+          "score": 0.8,
+          "passed": true,
+          "notes": "Transparent globe no longer reads black and pastel capsules remain separated."
+        },
+        {
+          "id": "powered-dispense",
+          "score": 0.89,
+          "passed": true,
+          "notes": "Crank rotation and capsule travel into the tray make the purpose unambiguous."
+        }
+      ],
+      "referenceScreenshot": "references/intake/gumball-machine/front.png",
+      "renderScreenshot": "artifacts/img2threejs/gumball-machine/final-review/render-front.png",
+      "comparisonImage": "artifacts/img2threejs/gumball-machine/final-review/comparison-front.png",
+      "cameraView": "front",
+      "notes": "四个浏览器视图均已检查；确定性二值轮廓仅作为受构图和透明材质限制的辅助证据。",
+      "aiVisionNotes": ""
+    },
+    {
+      "timestamp": "2026-08-03T13:32:05.724999+00:00",
+      "passId": "form-refinement",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.83,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.81,
+        "lightingCamera": 0.8,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "globe-lid-silhouette",
+          "score": 0.8,
+          "passed": true,
+          "notes": "The clear globe, low dome lid and seat ring preserve the reference identity."
+        },
+        {
+          "id": "base-chute-architecture",
+          "score": 0.81,
+          "passed": true,
+          "notes": "Tapered cream pedestal and arched front chute match the reference architecture."
+        },
+        {
+          "id": "capsule-system-detail",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Multiple independent two-piece pastel capsules remain readable through the globe."
+        },
+        {
+          "id": "control-assembly",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Front crank, side crank and output tray are separately modeled and animated."
+        },
+        {
+          "id": "pastel-transparent-materials",
+          "score": 0.8,
+          "passed": true,
+          "notes": "Transparent globe no longer reads black and pastel capsules remain separated."
+        },
+        {
+          "id": "powered-dispense",
+          "score": 0.89,
+          "passed": true,
+          "notes": "Crank rotation and capsule travel into the tray make the purpose unambiguous."
+        }
+      ],
+      "referenceScreenshot": "references/intake/gumball-machine/front.png",
+      "renderScreenshot": "artifacts/img2threejs/gumball-machine/final-review/render-front.png",
+      "comparisonImage": "artifacts/img2threejs/gumball-machine/final-review/comparison-front.png",
+      "cameraView": "front",
+      "notes": "四个浏览器视图均已检查；确定性二值轮廓仅作为受构图和透明材质限制的辅助证据。",
+      "aiVisionNotes": ""
+    },
+    {
+      "timestamp": "2026-08-03T13:32:06.138994+00:00",
+      "passId": "material-pass",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.83,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.81,
+        "lightingCamera": 0.8,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "globe-lid-silhouette",
+          "score": 0.8,
+          "passed": true,
+          "notes": "The clear globe, low dome lid and seat ring preserve the reference identity."
+        },
+        {
+          "id": "base-chute-architecture",
+          "score": 0.81,
+          "passed": true,
+          "notes": "Tapered cream pedestal and arched front chute match the reference architecture."
+        },
+        {
+          "id": "capsule-system-detail",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Multiple independent two-piece pastel capsules remain readable through the globe."
+        },
+        {
+          "id": "control-assembly",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Front crank, side crank and output tray are separately modeled and animated."
+        },
+        {
+          "id": "pastel-transparent-materials",
+          "score": 0.8,
+          "passed": true,
+          "notes": "Transparent globe no longer reads black and pastel capsules remain separated."
+        },
+        {
+          "id": "powered-dispense",
+          "score": 0.89,
+          "passed": true,
+          "notes": "Crank rotation and capsule travel into the tray make the purpose unambiguous."
+        }
+      ],
+      "referenceScreenshot": "references/intake/gumball-machine/front.png",
+      "renderScreenshot": "artifacts/img2threejs/gumball-machine/final-review/render-front.png",
+      "comparisonImage": "artifacts/img2threejs/gumball-machine/final-review/comparison-front.png",
+      "cameraView": "front",
+      "notes": "四个浏览器视图均已检查；确定性二值轮廓仅作为受构图和透明材质限制的辅助证据。",
+      "aiVisionNotes": ""
+    },
+    {
+      "timestamp": "2026-08-03T13:32:06.676607+00:00",
+      "passId": "lighting-pass",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.83,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.81,
+        "lightingCamera": 0.8,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "globe-lid-silhouette",
+          "score": 0.8,
+          "passed": true,
+          "notes": "The clear globe, low dome lid and seat ring preserve the reference identity."
+        },
+        {
+          "id": "base-chute-architecture",
+          "score": 0.81,
+          "passed": true,
+          "notes": "Tapered cream pedestal and arched front chute match the reference architecture."
+        },
+        {
+          "id": "capsule-system-detail",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Multiple independent two-piece pastel capsules remain readable through the globe."
+        },
+        {
+          "id": "control-assembly",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Front crank, side crank and output tray are separately modeled and animated."
+        },
+        {
+          "id": "pastel-transparent-materials",
+          "score": 0.8,
+          "passed": true,
+          "notes": "Transparent globe no longer reads black and pastel capsules remain separated."
+        },
+        {
+          "id": "powered-dispense",
+          "score": 0.89,
+          "passed": true,
+          "notes": "Crank rotation and capsule travel into the tray make the purpose unambiguous."
+        }
+      ],
+      "referenceScreenshot": "references/intake/gumball-machine/front.png",
+      "renderScreenshot": "artifacts/img2threejs/gumball-machine/final-review/render-front.png",
+      "comparisonImage": "artifacts/img2threejs/gumball-machine/final-review/comparison-front.png",
+      "cameraView": "front",
+      "notes": "四个浏览器视图均已检查；确定性二值轮廓仅作为受构图和透明材质限制的辅助证据。",
+      "aiVisionNotes": ""
+    },
+    {
+      "timestamp": "2026-08-03T13:32:07.362971+00:00",
+      "passId": "interaction-pass",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.83,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.81,
+        "lightingCamera": 0.8,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "globe-lid-silhouette",
+          "score": 0.8,
+          "passed": true,
+          "notes": "The clear globe, low dome lid and seat ring preserve the reference identity."
+        },
+        {
+          "id": "base-chute-architecture",
+          "score": 0.81,
+          "passed": true,
+          "notes": "Tapered cream pedestal and arched front chute match the reference architecture."
+        },
+        {
+          "id": "capsule-system-detail",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Multiple independent two-piece pastel capsules remain readable through the globe."
+        },
+        {
+          "id": "control-assembly",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Front crank, side crank and output tray are separately modeled and animated."
+        },
+        {
+          "id": "pastel-transparent-materials",
+          "score": 0.8,
+          "passed": true,
+          "notes": "Transparent globe no longer reads black and pastel capsules remain separated."
+        },
+        {
+          "id": "powered-dispense",
+          "score": 0.89,
+          "passed": true,
+          "notes": "Crank rotation and capsule travel into the tray make the purpose unambiguous."
+        }
+      ],
+      "referenceScreenshot": "references/intake/gumball-machine/front.png",
+      "renderScreenshot": "artifacts/img2threejs/gumball-machine/final-review/render-front.png",
+      "comparisonImage": "artifacts/img2threejs/gumball-machine/final-review/comparison-front.png",
+      "cameraView": "front",
+      "notes": "四个浏览器视图均已检查；确定性二值轮廓仅作为受构图和透明材质限制的辅助证据。",
+      "aiVisionNotes": ""
+    },
+    {
+      "timestamp": "2026-08-03T13:32:07.890971+00:00",
+      "passId": "optimization-pass",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.83,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.81,
+        "lightingCamera": 0.8,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "globe-lid-silhouette",
+          "score": 0.8,
+          "passed": true,
+          "notes": "The clear globe, low dome lid and seat ring preserve the reference identity."
+        },
+        {
+          "id": "base-chute-architecture",
+          "score": 0.81,
+          "passed": true,
+          "notes": "Tapered cream pedestal and arched front chute match the reference architecture."
+        },
+        {
+          "id": "capsule-system-detail",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Multiple independent two-piece pastel capsules remain readable through the globe."
+        },
+        {
+          "id": "control-assembly",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Front crank, side crank and output tray are separately modeled and animated."
+        },
+        {
+          "id": "pastel-transparent-materials",
+          "score": 0.8,
+          "passed": true,
+          "notes": "Transparent globe no longer reads black and pastel capsules remain separated."
+        },
+        {
+          "id": "powered-dispense",
+          "score": 0.89,
+          "passed": true,
+          "notes": "Crank rotation and capsule travel into the tray make the purpose unambiguous."
+        }
+      ],
+      "referenceScreenshot": "references/intake/gumball-machine/front.png",
+      "renderScreenshot": "artifacts/img2threejs/gumball-machine/final-review/render-front.png",
+      "comparisonImage": "artifacts/img2threejs/gumball-machine/final-review/comparison-front.png",
+      "cameraView": "front",
+      "notes": "四个浏览器视图均已检查；确定性二值轮廓仅作为受构图和透明材质限制的辅助证据。",
+      "aiVisionNotes": ""
+    }
+  ],
+  "lodPlan": [
+    {
+      "tier": "near",
+      "distance": 0,
+      "strategy": "full capsule halves, seams and all service details"
+    },
+    {
+      "tier": "far",
+      "distance": 18,
+      "strategy": "hide capsule seams and rear micro relief; preserve silhouettes"
+    }
+  ],
+  "sculptPipeline": {
+    "passOrder": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "passGateMode": "locked-sequential",
+    "completedPasses": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "currentPass": "complete",
+    "status": "in-progress",
+    "blockedReason": "all build passes completed",
+    "nextRequiredEvidence": [],
+    "lastCompletedPass": "optimization-pass"
+  },
+  "tier1Results": [
+    {
+      "passed": false,
+      "checks": {
+        "silhouetteIoU": 0.2332,
+        "aspectRatioDelta": 0.1832,
+        "scaleDelta": 0.3523,
+        "bilateralSymmetryError": 0.0701,
+        "colorDelta": {
+          "checked": 16,
+          "maxDeltaE": 14.12,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 7.9
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.51
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.9
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.25
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.25
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.51
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.25
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.25
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.22
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.9
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.25
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.25
+            },
+            {
+              "componentId": null,
+              "deltaE": 14.12
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.9
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.25
+            },
+            {
+              "componentId": null,
+              "deltaE": 6.74
+            }
+          ],
+          "gated": false
+        }
+      },
+      "failures": [
+        "silhouette IoU 0.233 is below threshold 0.85",
+        "aspect-ratio delta 0.183 exceeds threshold 0.05",
+        "scale delta 0.352 exceeds threshold 0.08",
+        "blockout requires --map-stripped-render evidence"
+      ],
+      "renderHash": "43bb993e123a7f06",
+      "passId": "blockout"
+    },
+    {
+      "passed": false,
+      "checks": {
+        "silhouetteIoU": 0.5522,
+        "aspectRatioDelta": 0.0614,
+        "scaleDelta": 0.0614,
+        "bilateralSymmetryError": 0.1204,
+        "colorDelta": {
+          "checked": 16,
+          "maxDeltaE": 12.57,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 6.07
+            },
+            {
+              "componentId": null,
+              "deltaE": 6.7
+            },
+            {
+              "componentId": null,
+              "deltaE": 6.07
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.57
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.57
+            },
+            {
+              "componentId": null,
+              "deltaE": 6.7
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.57
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.57
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.8
+            },
+            {
+              "componentId": null,
+              "deltaE": 6.07
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.57
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.57
+            },
+            {
+              "componentId": null,
+              "deltaE": 6.45
+            },
+            {
+              "componentId": null,
+              "deltaE": 6.07
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.57
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.7
+            }
+          ],
+          "gated": false
+        }
+      },
+      "failures": [
+        "silhouette IoU 0.552 is below threshold 0.85",
+        "aspect-ratio delta 0.061 exceeds threshold 0.05"
+      ],
+      "renderHash": "1a11462f2dcdac5b",
+      "passId": "blockout",
+      "mapStrippedRender": "artifacts\\img2threejs\\gumball-machine\\browser-review\\normalized4\\render-normalized.png"
+    }
+  ]
+}

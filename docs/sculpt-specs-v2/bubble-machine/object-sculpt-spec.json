@@ -1,0 +1,4938 @@
+{
+  "targetName": "SAKURA Bubble Machine v2",
+  "targetId": "bubble-machine-v2",
+  "schemaVersion": "2.1",
+  "terminologyProfile": {
+    "domain": "real-time procedural Three.js appliance",
+    "geometryTerms": [
+      "silhouette",
+      "topology",
+      "bevel",
+      "pivot",
+      "socket",
+      "instancing"
+    ],
+    "materialTerms": [
+      "albedo",
+      "roughness",
+      "normal map",
+      "ambient occlusion",
+      "clearcoat",
+      "transmission"
+    ],
+    "lightingTerms": [
+      "key light",
+      "fill light",
+      "rim light",
+      "contact shadow",
+      "exposure"
+    ],
+    "descriptionRule": "Use measurable 3D object-space terms and evidence refs."
+  },
+  "sourceImage": "references/intake-v2/bubble-machine/views/front.png",
+  "referenceCamera": {
+    "solved": true,
+    "fovDegrees": 32,
+    "aspect": 1,
+    "orientation": {
+      "yaw": 0,
+      "pitch": 0.03,
+      "roll": 0
+    },
+    "positionHint": [
+      0,
+      0.1,
+      5.8
+    ],
+    "note": "Orthographic-style front/side/back sheet; browser review uses a 32 degree perspective camera and matched framing."
+  },
+  "suitability": "pass",
+  "scores": {
+    "object_isolation": 3,
+    "silhouette_readability": 3,
+    "depth_inference": 3,
+    "primitive_decomposition": 3,
+    "material_procedurality": 3,
+    "occlusion_risk": 1,
+    "interaction_fit": 3
+  },
+  "preSpecAssessment": {
+    "objectClass": {
+      "primaryType": "portable-electric-bubble-machine",
+      "primaryDomain": "object",
+      "formLanguage": [
+        "stylized-low-poly",
+        "faceted-hard-surface",
+        "exaggerated-functional-silhouette"
+      ],
+      "structureKind": [
+        "layered-shell",
+        "radial-wheel-assembly",
+        "asymmetric-reservoir",
+        "rear-fan-assembly"
+      ],
+      "motionPotential": [
+        "wheel-rotation",
+        "fan-rotation",
+        "control-rotation",
+        "effect-emitter"
+      ],
+      "materialFamilies": [
+        "matte-cream-polymer",
+        "sakura-pink-polymer",
+        "cool-plum-cavity",
+        "translucent-reservoir",
+        "bubble-film"
+      ],
+      "notes": "Observed across admitted GPT Image 2 front, side, back and three-quarter views. Archived v1 transforms and bounds remain authoritative."
+    },
+    "complexity": {
+      "tier": "complex",
+      "scores": {
+        "silhouetteComplexity": 2,
+        "componentCount": 3,
+        "hierarchyDepth": 3,
+        "repetitionDensity": 3,
+        "materialLayerCount": 3,
+        "localDetailDensity": 2,
+        "occlusionRisk": 2,
+        "actionReadinessNeed": 3
+      },
+      "estimatedCounts": {
+        "macroComponents": 6,
+        "mesoComponents": 14,
+        "microFeatureGroups": 9,
+        "materialLayers": 9,
+        "repetitionSystems": 7
+      }
+    },
+    "specDepthDecision": {
+      "requiredDepth": "complex",
+      "minimumComponentLevels": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "needsRepetitionSystems": true,
+      "needsMaterialLocalOverrides": true,
+      "needsMultipleReviewViews": true,
+      "needsActionReadyHierarchy": true,
+      "rationale": "Compound articulated assembly with radial repetition and mixed transparency."
+    },
+    "unknownsToResolveBeforeImplementation": [],
+    "detailInventory": {
+      "scanMethod": "four-view-grid-plus-runtime-contract",
+      "targetMinDetails": 20,
+      "note": "Each visible identity feature and runtime effect maps to existing named procedural geometry or the v2 outline contract.",
+      "details": [
+        {
+          "id": "bubble-machine-v2-detail-1",
+          "kind": "contour",
+          "description": "faceted rounded-square housing",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-2",
+          "kind": "bevel",
+          "description": "broad cream shoulder planes",
+          "region": {
+            "x": 0.3333333333333333,
+            "y": 0.16666666666666666,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-3",
+          "kind": "linework",
+          "description": "pink lower seam rail",
+          "region": {
+            "x": 0.6666666666666666,
+            "y": 0.3333333333333333,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-4",
+          "kind": "contour",
+          "description": "four independent feet",
+          "region": {
+            "x": 0,
+            "y": 0.5,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-5",
+          "kind": "bevel",
+          "description": "mint foot pads",
+          "region": {
+            "x": 0.3333333333333333,
+            "y": 0.6666666666666666,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-6",
+          "kind": "linework",
+          "description": "deep circular front cavity",
+          "region": {
+            "x": 0.6666666666666666,
+            "y": 0.8333333333333334,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-7",
+          "kind": "contour",
+          "description": "thick faceted outer rim",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-8",
+          "kind": "bevel",
+          "description": "thin inner rim",
+          "region": {
+            "x": 0.3333333333333333,
+            "y": 0.16666666666666666,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-9",
+          "kind": "linework",
+          "description": "smoked protective window",
+          "region": {
+            "x": 0.6666666666666666,
+            "y": 0.3333333333333333,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-10",
+          "kind": "contour",
+          "description": "exactly eight bubble rings",
+          "region": {
+            "x": 0,
+            "y": 0.5,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-11",
+          "kind": "bevel",
+          "description": "eight mint radial spokes",
+          "region": {
+            "x": 0.3333333333333333,
+            "y": 0.6666666666666666,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-12",
+          "kind": "linework",
+          "description": "central wheel hub",
+          "region": {
+            "x": 0.6666666666666666,
+            "y": 0.8333333333333334,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-13",
+          "kind": "contour",
+          "description": "lower drip tray",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-14",
+          "kind": "bevel",
+          "description": "top faceted control knob",
+          "region": {
+            "x": 0.3333333333333333,
+            "y": 0.16666666666666666,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-15",
+          "kind": "linework",
+          "description": "control index",
+          "region": {
+            "x": 0.6666666666666666,
+            "y": 0.3333333333333333,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-16",
+          "kind": "contour",
+          "description": "inset status light",
+          "region": {
+            "x": 0,
+            "y": 0.5,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-17",
+          "kind": "bevel",
+          "description": "translucent side reservoir",
+          "region": {
+            "x": 0.3333333333333333,
+            "y": 0.6666666666666666,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-18",
+          "kind": "linework",
+          "description": "visible reservoir fill",
+          "region": {
+            "x": 0.6666666666666666,
+            "y": 0.8333333333333334,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-19",
+          "kind": "contour",
+          "description": "reservoir cap and bracket",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-20",
+          "kind": "bevel",
+          "description": "seven side vents",
+          "region": {
+            "x": 0.3333333333333333,
+            "y": 0.16666666666666666,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-21",
+          "kind": "linework",
+          "description": "rear recessed fan cavity",
+          "region": {
+            "x": 0.6666666666666666,
+            "y": 0.3333333333333333,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-22",
+          "kind": "contour",
+          "description": "five rear fan blades",
+          "region": {
+            "x": 0,
+            "y": 0.5,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-23",
+          "kind": "bevel",
+          "description": "four concentric rear grille rings",
+          "region": {
+            "x": 0.3333333333333333,
+            "y": 0.6666666666666666,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-24",
+          "kind": "linework",
+          "description": "eight rear grille spokes",
+          "region": {
+            "x": 0.6666666666666666,
+            "y": 0.8333333333333334,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-25",
+          "kind": "contour",
+          "description": "four rear fasteners",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-26",
+          "kind": "bevel",
+          "description": "rear power inlet",
+          "region": {
+            "x": 0.3333333333333333,
+            "y": 0.16666666666666666,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "turnsheet-v2",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-27",
+          "kind": "linework",
+          "description": "forty-eight ordinary bubble volumes",
+          "region": {
+            "x": 0.6666666666666666,
+            "y": 0.3333333333333333,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "runtime-contract",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-28",
+          "kind": "contour",
+          "description": "giant bubble and eight burst fragments",
+          "region": {
+            "x": 0,
+            "y": 0.5,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "runtime-contract",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-29",
+          "kind": "bevel",
+          "description": "stable three-tier uneven outline",
+          "region": {
+            "x": 0.3333333333333333,
+            "y": 0.6666666666666666,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "runtime-contract",
+          "confidence": 0.95
+        },
+        {
+          "id": "bubble-machine-v2-detail-30",
+          "kind": "linework",
+          "description": "cold-purple Toon shadow planes",
+          "region": {
+            "x": 0.6666666666666666,
+            "y": 0.8333333333333334,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "housing-shell"
+          },
+          "evidenceRef": "runtime-contract",
+          "confidence": 0.95
+        }
+      ]
+    }
+  },
+  "qualityContract": {
+    "qualityBar": "complex",
+    "definitionOfDone": [
+      "Four static views retain the v1 package envelope while reading as a more exaggerated faceted SAKURA game prop.",
+      "The front chamber keeps exactly eight independently named rings and spokes on the frozen rotating pivot and output socket.",
+      "The asymmetric reservoir, rear fan, control, feet and power inlet remain attached at archived parent paths and transforms.",
+      "Main, structure and detail outlines use 0.0048, 0.0041 and 0.0033 thickness with stable 0.18 object-space variation.",
+      "All 48 ordinary bubbles, giant bubble, burst fragments and reset behavior remain owned by the existing performance timeline."
+    ],
+    "minimumSpecDepth": {
+      "macroComponents": 5,
+      "mesoComponents": 12,
+      "microFeatureGroups": 8,
+      "materialLayers": 7,
+      "repetitionSystems": 5,
+      "reviewViewpoints": 7
+    },
+    "featureGroups": [
+      {
+        "id": "shell",
+        "name": "Rounded shell proportion",
+        "required": true,
+        "qualityCriteria": [
+          "Height/width 1.12 and depth/width 0.72 with broad corner radii."
+        ],
+        "evidenceRefs": [
+          "front",
+          "side"
+        ],
+        "failureModes": [
+          "boxy silhouette"
+        ]
+      },
+      {
+        "id": "wheel",
+        "name": "Eight-ring bubble wheel",
+        "required": true,
+        "qualityCriteria": [
+          "Exactly eight rings and eight spokes rotate around a centered front axis."
+        ],
+        "evidenceRefs": [
+          "front"
+        ],
+        "failureModes": [
+          "wrong count or fused parts"
+        ]
+      },
+      {
+        "id": "reservoir",
+        "name": "Side liquid reservoir",
+        "required": true,
+        "qualityCriteria": [
+          "Translucent right-rear tank remains attached from side and back."
+        ],
+        "evidenceRefs": [
+          "side",
+          "back"
+        ],
+        "failureModes": [
+          "floating or opaque tank"
+        ]
+      },
+      {
+        "id": "rear-fan",
+        "name": "Rear fan and grille",
+        "required": true,
+        "qualityCriteria": [
+          "Rotor is visible behind concentric grille geometry and four fasteners."
+        ],
+        "evidenceRefs": [
+          "back"
+        ],
+        "failureModes": [
+          "flat decal grille"
+        ]
+      },
+      {
+        "id": "powered-action",
+        "name": "Powered purpose animation",
+        "required": true,
+        "qualityCriteria": [
+          "Control, wheel and fan rotate while bubbles rise and spread, then exact reset at 5.2 seconds."
+        ],
+        "evidenceRefs": [
+          "turn-sheet-left-effect"
+        ],
+        "failureModes": [
+          "generic wobble or no bubbles"
+        ]
+      }
+    ],
+    "visualDeltaChecks": [
+      "silhouette",
+      "depth ratio",
+      "eight-ring count",
+      "material separation",
+      "powered bubbles"
+    ],
+    "antiShallowSpecRules": [
+      "No fused compound mesh.",
+      "No flat texture replacement for wheel or grille.",
+      "No pass without browser evidence."
+    ]
+  },
+  "qualityTargets": {
+    "fidelity": "high real-time procedural match",
+    "minimumReadDistance": "gallery orbit",
+    "identityCritical": [
+      "eight-ring wheel",
+      "side tank",
+      "rear grille",
+      "cream-pink palette"
+    ],
+    "reviewViewpoints": [
+      "front",
+      "side",
+      "back",
+      "three-quarter",
+      "runtime-startup",
+      "runtime-climax",
+      "runtime-wind-down"
+    ]
+  },
+  "selfCorrectLoop": {
+    "enabled": true,
+    "visualAcceptance": {
+      "reviewer": "ai-vision",
+      "threshold": 0.7,
+      "comparisonArtifactRequired": true,
+      "layerScoresRequired": true,
+      "codePixelDiffIsAcceptanceAuthority": false,
+      "requiredLayerScores": [
+        "silhouetteProportion",
+        "componentStructure",
+        "formDetail",
+        "materialSurface",
+        "lightingCamera"
+      ],
+      "featureReviewPolicy": {
+        "enabled": true,
+        "reviewUnit": "semantic-subsystem",
+        "maxCriticalFeaturesPerPass": 5,
+        "maxImportantFeaturesPerPass": 3,
+        "criticalDefaultThreshold": 0.8,
+        "importantAverageThreshold": 0.65,
+        "adaptiveEscalation": true,
+        "singleImagePairOnly": true
+      }
+    },
+    "reviewAfterPasses": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "allowedActions": [
+      "continue",
+      "refine-spec",
+      "refine-code",
+      "request-input",
+      "stop"
+    ],
+    "screenshotPolicy": {
+      "requiredForPasses": [
+        "blockout",
+        "structural-pass",
+        "form-refinement",
+        "material-pass",
+        "lighting-pass",
+        "interaction-pass"
+      ],
+      "preferredCapture": "model-review.html",
+      "minimumEvidence": "render screenshot, side-by-side comparison, AI vision score and feature scores"
+    }
+  },
+  "featureReviewTargets": [
+    {
+      "id": "bubble-v2-silhouette",
+      "name": "Faceted compact housing, deep circular chamber and four-foot stance",
+      "tier": "critical",
+      "passIds": [
+        "blockout",
+        "form-refinement"
+      ],
+      "minimumScore": 0.82,
+      "mustPass": true,
+      "componentRefs": [
+        "housing-shell",
+        "front-window-stack",
+        "foot-array"
+      ],
+      "evidenceRefs": [
+        "front-v2",
+        "three-quarter-v2"
+      ]
+    },
+    {
+      "id": "bubble-v2-wheel",
+      "name": "Exactly eight rings and spokes on frozen front wheel",
+      "tier": "critical",
+      "passIds": [
+        "structural-pass",
+        "interaction-pass"
+      ],
+      "minimumScore": 0.9,
+      "mustPass": true,
+      "componentRefs": [
+        "front-wheel",
+        "bubble-ring-array"
+      ],
+      "evidenceRefs": [
+        "front-v2",
+        "runtime-contract"
+      ]
+    },
+    {
+      "id": "bubble-v2-reservoir-fan",
+      "name": "Attached translucent reservoir and rear fan grille",
+      "tier": "critical",
+      "passIds": [
+        "structural-pass",
+        "material-pass"
+      ],
+      "minimumScore": 0.82,
+      "mustPass": true,
+      "componentRefs": [
+        "reservoir-assembly",
+        "rear-fan-system"
+      ],
+      "evidenceRefs": [
+        "side-v2",
+        "back-v2"
+      ]
+    },
+    {
+      "id": "bubble-v2-runtime",
+      "name": "Frozen output, wheel, fan, control and volumetric bubble effects",
+      "tier": "critical",
+      "passIds": [
+        "interaction-pass"
+      ],
+      "minimumScore": 0.9,
+      "mustPass": true,
+      "componentRefs": [
+        "runtime-action-rig"
+      ],
+      "evidenceRefs": [
+        "runtime-contract"
+      ]
+    },
+    {
+      "id": "bubble-v2-ink",
+      "name": "SAKURA Toon palette and stable uneven three-tier ink",
+      "tier": "critical",
+      "passIds": [
+        "material-pass",
+        "lighting-pass"
+      ],
+      "minimumScore": 0.82,
+      "mustPass": true,
+      "componentRefs": [
+        "housing-shell"
+      ],
+      "evidenceRefs": [
+        "turnsheet-v2"
+      ]
+    }
+  ],
+  "sculptPipeline": {
+    "passGateMode": "locked-sequential",
+    "passOrder": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "currentPass": "complete",
+    "completedPasses": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "lastCompletedPass": "optimization-pass",
+    "blockedReason": "",
+    "nextRequiredEvidence": []
+  },
+  "lookDevTargets": {
+    "qualityPriority": "reference-fidelity",
+    "materialPass": {
+      "minimumTextureResolution": 1024,
+      "independentMapChannels": [
+        "albedo",
+        "roughness",
+        "height",
+        "normal",
+        "ambient-occlusion"
+      ],
+      "referencePbrExtraction": {
+        "requiredWhenSourceImagePresent": true,
+        "targetThreshold": 0.7,
+        "stopOnLowConfidence": true
+      }
+    },
+    "lightingPass": {
+      "requiredTerms": [
+        "key light",
+        "fill light",
+        "rim light",
+        "exposure",
+        "tone mapping",
+        "contact shadow"
+      ]
+    }
+  },
+  "actionReadiness": {
+    "contract": "Named pivots, sockets, colliders and resettable powered transforms.",
+    "defaultRigType": "action-ready-appliance-rig",
+    "rootMotionNode": "root"
+  },
+  "assumptions": [
+    "GPT Image 2 turn-sheet is visual modeling evidence only; archived v1 runtime data is dimensional authority.",
+    "Transparent bubble, liquid and window volumes do not receive thick silhouette ink.",
+    "Hidden pump, tubing, motor and wiring remain omitted."
+  ],
+  "coordinateFrame": {
+    "front": "+Z",
+    "up": "+Y",
+    "right": "+X",
+    "floorY": 0,
+    "scaleReference": "housing width 2.2 units"
+  },
+  "silhouette": {
+    "boundingShape": "rounded rectangular cream housing with broad shoulder corners and four low feet",
+    "aspectRatios": [
+      "height/width=1.12",
+      "depth/width=0.72",
+      "front wheel diameter/width=0.76"
+    ],
+    "symmetry": "housing bilateral; right-rear reservoir creates controlled asymmetry",
+    "dominantCurves": [
+      "large housing corner radius",
+      "circular front window",
+      "rounded reservoir"
+    ],
+    "negativeSpaces": [
+      "eight ring bores",
+      "rear grille slots",
+      "seven side vents"
+    ],
+    "landmarks": [
+      "top control",
+      "front tray",
+      "side tank",
+      "rear grille"
+    ]
+  },
+  "viewEvidence": [
+    {
+      "id": "turnsheet-v2",
+      "view": "multi-view",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "admitted GPT Image 2 2x2 turn-sheet"
+      ],
+      "confidence": 0.97
+    },
+    {
+      "id": "front",
+      "view": "front",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "consistent body, wheel, reservoir, feet and ground line"
+      ],
+      "confidence": 0.95
+    },
+    {
+      "id": "side",
+      "view": "side",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "consistent body, wheel, reservoir, feet and ground line"
+      ],
+      "confidence": 0.95
+    },
+    {
+      "id": "back",
+      "view": "back",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "consistent body, wheel, reservoir, feet and ground line"
+      ],
+      "confidence": 0.95
+    },
+    {
+      "id": "three-quarter",
+      "view": "three-quarter",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "consistent body, wheel, reservoir, feet and ground line"
+      ],
+      "confidence": 0.95
+    },
+    {
+      "id": "runtime-contract",
+      "view": "runtime",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "archived pivots, sockets, effects, bounds and exact reset"
+      ],
+      "confidence": 0.99
+    }
+  ],
+  "componentTree": [
+    {
+      "id": "root",
+      "name": "Bubble Machine Root",
+      "level": "macro",
+      "role": "container",
+      "importance": 1,
+      "confidence": 1,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Runtime container for the complete appliance hierarchy.",
+      "parent": null,
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "localFeatures": [],
+      "actionProfile": {
+        "animationRole": "root",
+        "pivot": {
+          "mode": "base",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 1
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(248,233,213,1)",
+        "secondaryAlbedo": "rgba(243,194,181,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.98
+      },
+      "evidenceRefs": [
+        "front",
+        "side",
+        "back"
+      ]
+    },
+    {
+      "id": "housing-shell",
+      "name": "Housing Shell",
+      "level": "macro",
+      "role": "part",
+      "importance": 1,
+      "confidence": 0.99,
+      "primitive": "extrude",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rounded rigid molded enclosure with a constant broad footprint and visible panel seam.",
+      "parent": "root",
+      "transform": {
+        "position": [
+          0,
+          1.12,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "localFeatures": [
+        {
+          "id": "housing-shell.localFeatures.rounded-shell"
+        },
+        {
+          "id": "housing-shell.localFeatures.lower-panel-seam"
+        }
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(248,233,213,1)",
+        "secondaryAlbedo": "rgba(245,225,206,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.99
+      },
+      "evidenceRefs": [
+        "front",
+        "side",
+        "back"
+      ]
+    },
+    {
+      "id": "front-assembly",
+      "name": "Front Work Assembly",
+      "level": "macro",
+      "role": "part",
+      "importance": 1,
+      "confidence": 0.99,
+      "primitive": "ellipsoid",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Discrete circular front assembly proud of the housing.",
+      "parent": "housing-shell",
+      "transform": {
+        "position": [
+          0,
+          0.28,
+          0.82
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-accent",
+      "materialLayers": [
+        "pink-accent",
+        "smoked-window",
+        "dark-cavity"
+      ],
+      "localFeatures": [],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(102,80,70,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.98
+      },
+      "evidenceRefs": [
+        "front",
+        "side"
+      ]
+    },
+    {
+      "id": "liquid-reservoir",
+      "name": "Liquid Reservoir",
+      "level": "macro",
+      "role": "part",
+      "importance": 0.9,
+      "confidence": 0.94,
+      "primitive": "extrude",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Independent rounded rectangular translucent tank attached to the right-rear housing.",
+      "parent": "housing-shell",
+      "transform": {
+        "position": [
+          0.92,
+          0.1,
+          -0.28
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-reservoir",
+      "materialLayers": [
+        "pink-reservoir"
+      ],
+      "localFeatures": [
+        {
+          "id": "liquid-reservoir.localFeatures.translucent-tank"
+        }
+      ],
+      "actionProfile": {
+        "animationRole": "static-part",
+        "sockets": [
+          {
+            "id": "reservoir-fluid-outlet",
+            "localPosition": [
+              -0.2,
+              -0.52,
+              0
+            ]
+          }
+        ]
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(235,189,177,0.68)",
+        "secondaryAlbedo": "rgba(248,233,213,0.42)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.92
+      },
+      "evidenceRefs": [
+        "side",
+        "back"
+      ]
+    },
+    {
+      "id": "rear-assembly",
+      "name": "Rear Fan Assembly",
+      "level": "macro",
+      "role": "part",
+      "importance": 0.95,
+      "confidence": 0.99,
+      "primitive": "ellipsoid",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Discrete circular rear ventilation and fan assembly inset into the back panel.",
+      "parent": "housing-shell",
+      "transform": {
+        "position": [
+          0,
+          0.18,
+          -0.82
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-accent",
+      "materialLayers": [
+        "pink-accent",
+        "dark-cavity"
+      ],
+      "localFeatures": [],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(70,57,49,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.98
+      },
+      "evidenceRefs": [
+        "back"
+      ]
+    },
+    {
+      "id": "front-window-rim",
+      "name": "Front Window Rim",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.95,
+      "confidence": 0.99,
+      "primitive": "torus",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Thick rigid circular trim ring with a rounded cross section.",
+      "parent": "front-assembly",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0.03
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-accent",
+      "materialLayers": [
+        "pink-accent"
+      ],
+      "localFeatures": [
+        {
+          "id": "front-window-rim.localFeatures.layered-rim"
+        }
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(215,181,170,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.99
+      },
+      "evidenceRefs": [
+        "front",
+        "side"
+      ]
+    },
+    {
+      "id": "front-window",
+      "name": "Smoked Front Window",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.9,
+      "confidence": 0.96,
+      "primitive": "ellipsoid",
+      "topologyClass": "conforming-shell",
+      "topologyRationale": "Thin transparent cover follows the circular working cavity.",
+      "parent": "front-assembly",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0.04
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "smoked-window",
+      "materialLayers": [
+        "smoked-window"
+      ],
+      "localFeatures": [],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(102,80,70,0.36)",
+        "secondaryAlbedo": "rgba(215,181,170,0.18)",
+        "materialClass": "glass",
+        "materialClassConfidence": 0.9
+      },
+      "evidenceRefs": [
+        "front",
+        "side"
+      ]
+    },
+    {
+      "id": "bubble-wheel",
+      "name": "Bubble Wheel",
+      "level": "meso",
+      "role": "part",
+      "importance": 1,
+      "confidence": 0.99,
+      "primitive": "ellipsoid",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rigid radial wheel rotates as one assembly around the front axis.",
+      "parent": "front-assembly",
+      "transform": {
+        "position": [
+          0,
+          0,
+          -0.03
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-accent",
+      "materialLayers": [
+        "pink-accent"
+      ],
+      "localFeatures": [
+        {
+          "id": "bubble-wheel.localFeatures.radial-spokes"
+        }
+      ],
+      "actionProfile": {
+        "animationRole": "rotor",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            0,
+            1
+          ],
+          "confidence": 0.99
+        },
+        "sockets": [
+          {
+            "id": "bubble-emitter",
+            "localPosition": [
+              -0.68,
+              0.05,
+              0.12
+            ]
+          }
+        ]
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(215,181,170,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.99
+      },
+      "evidenceRefs": [
+        "front"
+      ]
+    },
+    {
+      "id": "wheel-hub",
+      "name": "Wheel Hub",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.85,
+      "confidence": 0.99,
+      "primitive": "ellipsoid",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Concentric rigid hub cap on the wheel axis.",
+      "parent": "bubble-wheel",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0.12
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-accent",
+      "materialLayers": [
+        "pink-accent"
+      ],
+      "localFeatures": [
+        {
+          "id": "wheel-hub.localFeatures.concentric-cap"
+        }
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(185,137,129,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.99
+      },
+      "evidenceRefs": [
+        "front"
+      ]
+    },
+    {
+      "id": "drip-tray",
+      "name": "Front Drip Tray",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.82,
+      "confidence": 0.97,
+      "primitive": "extrude",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Independent rounded catch tray overlaps the lower front rim.",
+      "parent": "housing-shell",
+      "transform": {
+        "position": [
+          0,
+          -0.48,
+          0.9
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-accent",
+      "materialLayers": [
+        "pink-accent"
+      ],
+      "localFeatures": [
+        {
+          "id": "drip-tray.localFeatures.recessed-lip"
+        }
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(185,137,129,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.98
+      },
+      "evidenceRefs": [
+        "front",
+        "side"
+      ]
+    },
+    {
+      "id": "control-knob",
+      "name": "Top Control Knob",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.78,
+      "confidence": 0.94,
+      "primitive": "ellipsoid",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Separate low rounded control on the top surface.",
+      "parent": "housing-shell",
+      "transform": {
+        "position": [
+          0,
+          1.13,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-accent",
+      "materialLayers": [
+        "pink-accent"
+      ],
+      "localFeatures": [
+        {
+          "id": "control-knob.localFeatures.index-cap"
+        }
+      ],
+      "actionProfile": {
+        "animationRole": "control",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.9
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(185,137,129,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.98
+      },
+      "evidenceRefs": [
+        "front",
+        "side",
+        "back"
+      ]
+    },
+    {
+      "id": "reservoir-cap",
+      "name": "Reservoir Fill Cap",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.7,
+      "confidence": 0.95,
+      "primitive": "ellipsoid",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Separate round cap above the translucent reservoir.",
+      "parent": "liquid-reservoir",
+      "transform": {
+        "position": [
+          0,
+          0.68,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-accent",
+      "materialLayers": [
+        "pink-accent"
+      ],
+      "localFeatures": [
+        {
+          "id": "reservoir-cap.localFeatures.cap-seam"
+        }
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(215,181,170,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.97
+      },
+      "evidenceRefs": [
+        "side"
+      ]
+    },
+    {
+      "id": "rear-fan-rotor",
+      "name": "Rear Fan Rotor",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.9,
+      "confidence": 0.94,
+      "primitive": "ellipsoid",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Independent rotor turns around the rear-facing axis.",
+      "parent": "rear-assembly",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0.03
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "dark-cavity",
+      "materialLayers": [
+        "dark-cavity",
+        "pink-accent"
+      ],
+      "localFeatures": [
+        {
+          "id": "rear-fan-rotor.localFeatures.hub-cap"
+        }
+      ],
+      "actionProfile": {
+        "animationRole": "rotor",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            0,
+            1
+          ],
+          "confidence": 0.9
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(70,57,49,1)",
+        "secondaryAlbedo": "rgba(243,194,181,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9
+      },
+      "evidenceRefs": [
+        "back"
+      ]
+    },
+    {
+      "id": "rear-fan-grille",
+      "name": "Rear Fan Grille",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.95,
+      "confidence": 0.99,
+      "primitive": "torus",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rigid circular grille is physically layered in front of the rotor.",
+      "parent": "rear-assembly",
+      "transform": {
+        "position": [
+          0,
+          0,
+          -0.08
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-accent",
+      "materialLayers": [
+        "pink-accent"
+      ],
+      "localFeatures": [
+        {
+          "id": "rear-fan-grille.localFeatures.concentric-grille"
+        }
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(70,57,49,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.99
+      },
+      "evidenceRefs": [
+        "back"
+      ]
+    },
+    {
+      "id": "foot-array",
+      "name": "Four Foot Array",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.72,
+      "confidence": 0.97,
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Four discrete molded feet repeat at the housing corners.",
+      "parent": "housing-shell",
+      "transform": {
+        "position": [
+          0,
+          -1.1,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-accent",
+      "materialLayers": [
+        "pink-accent",
+        "rubber-dark"
+      ],
+      "localFeatures": [
+        {
+          "id": "foot-array.localFeatures.four-splayed-feet"
+        }
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(70,57,49,1)",
+        "materialClass": "rubber",
+        "materialClassConfidence": 0.82
+      },
+      "evidenceRefs": [
+        "front",
+        "side",
+        "back"
+      ]
+    },
+    {
+      "id": "power-inlet",
+      "name": "Rear Power Inlet",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.65,
+      "confidence": 0.42,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Inferred shallow recessed electrical inlet on the rear-lower housing.",
+      "parent": "housing-shell",
+      "transform": {
+        "position": [
+          0.65,
+          -0.75,
+          -0.83
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "dark-cavity",
+      "materialLayers": [
+        "dark-cavity"
+      ],
+      "localFeatures": [
+        {
+          "id": "power-socket.localFeatures.recessed-port"
+        }
+      ],
+      "actionProfile": {
+        "animationRole": "static-part",
+        "sockets": [
+          {
+            "id": "power-connection",
+            "localPosition": [
+              0,
+              0,
+              -0.04
+            ]
+          }
+        ]
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(70,57,49,1)",
+        "secondaryAlbedo": "rgba(95,91,104,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.7
+      },
+      "evidenceRefs": [
+        "back"
+      ]
+    },
+    {
+      "id": "side-vent-array",
+      "name": "Side Vent Array",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.68,
+      "confidence": 0.98,
+      "primitive": "instanced-cluster",
+      "topologyClass": "surface-relief",
+      "topologyRationale": "Seven repeated recessed rounded slots interrupt the side panel surface.",
+      "parent": "housing-shell",
+      "transform": {
+        "position": [
+          0,
+          -0.48,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "dark-cavity",
+      "materialLayers": [
+        "dark-cavity"
+      ],
+      "localFeatures": [
+        {
+          "id": "side-vent-array.localFeatures.seven-slots"
+        }
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(70,57,49,1)",
+        "secondaryAlbedo": "rgba(102,80,70,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.95
+      },
+      "evidenceRefs": [
+        "side"
+      ]
+    },
+    {
+      "id": "shell-seam",
+      "name": "Lower Panel Seam",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.55,
+      "confidence": 0.94,
+      "primitive": "extrude",
+      "topologyClass": "surface-relief",
+      "topologyRationale": "Thin raised/recessed mold split line around the lower housing.",
+      "parent": "housing-shell",
+      "transform": {
+        "position": [
+          0,
+          -0.72,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "dark-cavity",
+      "materialLayers": [
+        "dark-cavity"
+      ],
+      "localFeatures": [
+        {
+          "id": "housing-shell.localFeatures.lower-panel-seam"
+        }
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(102,80,70,1)",
+        "secondaryAlbedo": "rgba(248,233,213,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9
+      },
+      "evidenceRefs": [
+        "side",
+        "back"
+      ]
+    },
+    {
+      "id": "bubble-ring-array",
+      "name": "Bubble Ring Array",
+      "level": "micro",
+      "role": "part",
+      "importance": 1,
+      "confidence": 0.99,
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Exactly eight separately named toroidal ring modules repeat radially.",
+      "parent": "bubble-wheel",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0.06
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-accent",
+      "materialLayers": [
+        "pink-accent"
+      ],
+      "localFeatures": [
+        {
+          "id": "bubble-ring-array.localFeatures.radial-eight"
+        }
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(215,181,170,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.99
+      },
+      "evidenceRefs": [
+        "front"
+      ]
+    },
+    {
+      "id": "bubble-spokes",
+      "name": "Bubble Wheel Spokes",
+      "level": "micro",
+      "role": "part",
+      "importance": 0.9,
+      "confidence": 0.99,
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Eight short rigid bars connect hub to ring roots.",
+      "parent": "bubble-wheel",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0.02
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-accent",
+      "materialLayers": [
+        "pink-accent"
+      ],
+      "localFeatures": [],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(215,181,170,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.99
+      },
+      "evidenceRefs": [
+        "front"
+      ]
+    },
+    {
+      "id": "fan-blade-array",
+      "name": "Rear Fan Blade Array",
+      "level": "micro",
+      "role": "part",
+      "importance": 0.82,
+      "confidence": 0.84,
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Five low-cost curved blade solids repeat around the rear rotor.",
+      "parent": "rear-fan-rotor",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "dark-cavity",
+      "materialLayers": [
+        "dark-cavity"
+      ],
+      "localFeatures": [],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(70,57,49,1)",
+        "secondaryAlbedo": "rgba(102,80,70,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.82
+      },
+      "evidenceRefs": [
+        "back"
+      ]
+    },
+    {
+      "id": "grille-band-array",
+      "name": "Concentric Grille Bands",
+      "level": "micro",
+      "role": "part",
+      "importance": 0.88,
+      "confidence": 0.99,
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Four concentric interrupted rings and spokes form visible grille geometry.",
+      "parent": "rear-fan-grille",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-accent",
+      "materialLayers": [
+        "pink-accent"
+      ],
+      "localFeatures": [],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(185,137,129,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.99
+      },
+      "evidenceRefs": [
+        "back"
+      ]
+    },
+    {
+      "id": "rear-fastener-array",
+      "name": "Rear Fastener Array",
+      "level": "micro",
+      "role": "part",
+      "importance": 0.65,
+      "confidence": 0.99,
+      "primitive": "instanced-cluster",
+      "topologyClass": "surface-relief",
+      "topologyRationale": "Four small round screw heads repeat at the rear panel corners.",
+      "parent": "housing-shell",
+      "transform": {
+        "position": [
+          0,
+          0,
+          -0.84
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "dark-cavity",
+      "materialLayers": [
+        "dark-cavity"
+      ],
+      "localFeatures": [
+        {
+          "id": "rear-fastener-array.localFeatures.four-corners"
+        }
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(70,57,49,1)",
+        "secondaryAlbedo": "rgba(95,91,104,1)",
+        "materialClass": "metal",
+        "materialClassConfidence": 0.75
+      },
+      "evidenceRefs": [
+        "back"
+      ]
+    },
+    {
+      "id": "control-index",
+      "name": "Control Index Mark",
+      "level": "micro",
+      "role": "part",
+      "importance": 0.52,
+      "confidence": 0.8,
+      "primitive": "box",
+      "topologyClass": "surface-relief",
+      "topologyRationale": "Small raised/dark index line rides on the control cap.",
+      "parent": "control-knob",
+      "transform": {
+        "position": [
+          0,
+          0.07,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "dark-cavity",
+      "materialLayers": [
+        "dark-cavity"
+      ],
+      "localFeatures": [],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(70,57,49,1)",
+        "secondaryAlbedo": "rgba(102,80,70,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.85
+      },
+      "evidenceRefs": [
+        "front"
+      ]
+    },
+    {
+      "id": "reservoir-bracket",
+      "name": "Reservoir Bracket",
+      "level": "micro",
+      "role": "part",
+      "importance": 0.5,
+      "confidence": 0.48,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Inferred shallow overlap bracket connects the observed tank to the housing.",
+      "parent": "housing-shell",
+      "transform": {
+        "position": [
+          0.84,
+          0.1,
+          -0.28
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-accent",
+      "materialLayers": [
+        "pink-accent"
+      ],
+      "localFeatures": [],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(215,181,170,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.75
+      },
+      "evidenceRefs": [
+        "side",
+        "back"
+      ]
+    },
+    {
+      "id": "bubble-effect-array",
+      "name": "Bubble Effect Array",
+      "level": "micro",
+      "role": "effect",
+      "importance": 1,
+      "confidence": 0.96,
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Repeated low-segment transparent spheres are runtime effect geometry emitted from the front wheel.",
+      "parent": "bubble-wheel",
+      "transform": {
+        "position": [
+          -0.68,
+          0.05,
+          0.18
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "bubble-film",
+      "materialLayers": [
+        "bubble-film"
+      ],
+      "localFeatures": [],
+      "actionProfile": {
+        "animationRole": "effect-emitter",
+        "pivot": {
+          "mode": "custom",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.95
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(214,241,242,0.22)",
+        "secondaryAlbedo": "rgba(245,193,218,0.18)",
+        "materialClass": "glass",
+        "materialClassConfidence": 0.78
+      },
+      "evidenceRefs": [
+        "front"
+      ]
+    }
+  ],
+  "materials": [
+    {
+      "id": "cream-shell",
+      "name": "Cream Satin Plastic",
+      "type": "physical",
+      "shaderModel": "MeshToonMaterial project style with PBR evidence",
+      "baseColor": "#F8E9D5",
+      "albedo": {
+        "dominant": "#F8E9D5",
+        "secondary": [
+          "#F5E1CE",
+          "#EBBDB1"
+        ]
+      },
+      "colorVariation": {
+        "palette": [
+          "#F8E9D5",
+          "#F5E1CE",
+          "#EBBDB1"
+        ],
+        "pattern": "subtle molded gradient",
+        "amplitude": 0.05
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "generated-uv",
+        "repeat": [
+          1,
+          1
+        ],
+        "anisotropy": 4,
+        "texelDensityIntent": "stable shell scale"
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.05
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.02
+        },
+        {
+          "id": "micro",
+          "frequency": 48,
+          "amplitude": 0.008
+        }
+      ],
+      "roughness": {
+        "base": 0.46,
+        "variation": 0.08,
+        "map": "cream-shell_roughness.png"
+      },
+      "metalness": {
+        "base": 0
+      },
+      "normal": {
+        "strength": 0.08,
+        "pattern": "cream-shell_normal.png"
+      },
+      "ambientOcclusion": {
+        "map": "cream-shell_ao.png",
+        "cavityStrength": 0.2
+      },
+      "localOverrides": [
+        {
+          "id": "shell-corner-gloss",
+          "roughness": 0.38,
+          "region": "upper shoulder bevel",
+          "evidenceRef": "front"
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.86,
+        "estimatedFidelity": 0.86,
+        "sourceImage": "references/intake/bubble-machine/side.png",
+        "maps": {
+          "albedo": {
+            "path": "docs/sculpt-specs/bubble-machine/pbr/cream-shell/cream-shell_albedo.png"
+          },
+          "roughness": {
+            "path": "docs/sculpt-specs/bubble-machine/pbr/cream-shell/cream-shell_roughness.png"
+          },
+          "height": {
+            "path": "docs/sculpt-specs/bubble-machine/pbr/cream-shell/cream-shell_height.png"
+          },
+          "normal": {
+            "path": "docs/sculpt-specs/bubble-machine/pbr/cream-shell/cream-shell_normal.png"
+          },
+          "ao": {
+            "path": "docs/sculpt-specs/bubble-machine/pbr/cream-shell/cream-shell_ao.png"
+          }
+        }
+      }
+    },
+    {
+      "id": "pink-accent",
+      "name": "Sakura Pink Gloss Plastic",
+      "type": "physical",
+      "shaderModel": "MeshToonMaterial project style with gloss response",
+      "baseColor": "#F3C2B5",
+      "albedo": {
+        "dominant": "#F3C2B5",
+        "secondary": [
+          "#D7B5AA",
+          "#B98981"
+        ]
+      },
+      "colorVariation": {
+        "palette": [
+          "#F3C2B5",
+          "#D7B5AA",
+          "#B98981"
+        ],
+        "pattern": "bevel gradient",
+        "amplitude": 0.08
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "generated-uv",
+        "repeat": [
+          1,
+          1
+        ],
+        "anisotropy": 4,
+        "texelDensityIntent": "stable accent scale"
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.08
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.025
+        },
+        {
+          "id": "micro",
+          "frequency": 56,
+          "amplitude": 0.006
+        }
+      ],
+      "roughness": {
+        "base": 0.24,
+        "variation": 0.07,
+        "map": "pink-accent_roughness.png"
+      },
+      "metalness": {
+        "base": 0
+      },
+      "normal": {
+        "strength": 0.06,
+        "pattern": "pink-accent_normal.png"
+      },
+      "ambientOcclusion": {
+        "map": "pink-accent_ao.png",
+        "cavityStrength": 0.2
+      },
+      "clearcoat": 0.55,
+      "localOverrides": [
+        {
+          "id": "accent-bevel-gloss",
+          "roughness": 0.18,
+          "region": "rim and hub bevels",
+          "evidenceRef": "front"
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.86,
+        "estimatedFidelity": 0.86,
+        "sourceImage": "references/intake/bubble-machine/front.png",
+        "maps": {
+          "albedo": {
+            "path": "docs/sculpt-specs/bubble-machine/pbr/pink-accent/pink-accent_albedo.png"
+          },
+          "roughness": {
+            "path": "docs/sculpt-specs/bubble-machine/pbr/pink-accent/pink-accent_roughness.png"
+          },
+          "height": {
+            "path": "docs/sculpt-specs/bubble-machine/pbr/pink-accent/pink-accent_height.png"
+          },
+          "normal": {
+            "path": "docs/sculpt-specs/bubble-machine/pbr/pink-accent/pink-accent_normal.png"
+          },
+          "ao": {
+            "path": "docs/sculpt-specs/bubble-machine/pbr/pink-accent/pink-accent_ao.png"
+          }
+        }
+      }
+    },
+    {
+      "id": "smoked-window",
+      "name": "Smoked Transparent Window",
+      "type": "physical",
+      "shaderModel": "MeshToonMaterial transparent approximation",
+      "baseColor": "#665046",
+      "albedo": {
+        "dominant": "#665046",
+        "secondary": [
+          "#D7B5AA"
+        ]
+      },
+      "colorVariation": {
+        "palette": [
+          "#665046",
+          "#D7B5AA"
+        ],
+        "pattern": "transparent tint",
+        "amplitude": 0.06
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "planar",
+        "repeat": [
+          1,
+          1
+        ],
+        "anisotropy": 4,
+        "texelDensityIntent": "single window"
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.06
+        },
+        {
+          "id": "meso",
+          "frequency": 10,
+          "amplitude": 0.018
+        },
+        {
+          "id": "micro",
+          "frequency": 48,
+          "amplitude": 0.005
+        }
+      ],
+      "roughness": {
+        "base": 0.16,
+        "variation": 0.04,
+        "map": "smoked-window_roughness.png"
+      },
+      "metalness": {
+        "base": 0
+      },
+      "normal": {
+        "strength": 0.03,
+        "pattern": "smoked-window_normal.png"
+      },
+      "ambientOcclusion": {
+        "map": "smoked-window_ao.png",
+        "cavityStrength": 0.08
+      },
+      "clearcoat": 0.8,
+      "transmission": 0.62,
+      "localOverrides": [
+        {
+          "id": "smoked-window.localOverrides.front-gloss",
+          "roughness": 0.12,
+          "region": "front highlight arc",
+          "evidenceRef": "front"
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.86,
+        "estimatedFidelity": 0.86,
+        "sourceImage": "references/intake/bubble-machine/front.png",
+        "maps": {
+          "albedo": {
+            "path": "docs/sculpt-specs/bubble-machine/pbr/smoked-window/smoked-window_albedo.png"
+          },
+          "roughness": {
+            "path": "docs/sculpt-specs/bubble-machine/pbr/smoked-window/smoked-window_roughness.png"
+          },
+          "height": {
+            "path": "docs/sculpt-specs/bubble-machine/pbr/smoked-window/smoked-window_height.png"
+          },
+          "normal": {
+            "path": "docs/sculpt-specs/bubble-machine/pbr/smoked-window/smoked-window_normal.png"
+          },
+          "ao": {
+            "path": "docs/sculpt-specs/bubble-machine/pbr/smoked-window/smoked-window_ao.png"
+          }
+        }
+      }
+    },
+    {
+      "id": "pink-reservoir",
+      "name": "Translucent Pink Reservoir",
+      "type": "physical",
+      "shaderModel": "MeshToonMaterial transparent approximation",
+      "baseColor": "#EBBDB1",
+      "albedo": {
+        "dominant": "#EBBDB1",
+        "secondary": [
+          "#F8E9D5"
+        ]
+      },
+      "colorVariation": {
+        "palette": [
+          "#EBBDB1",
+          "#F8E9D5"
+        ],
+        "pattern": "tank thickness gradient",
+        "amplitude": 0.08
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "generated-uv",
+        "repeat": [
+          1,
+          1
+        ],
+        "anisotropy": 4,
+        "texelDensityIntent": "single tank"
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.08
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.02
+        },
+        {
+          "id": "micro",
+          "frequency": 50,
+          "amplitude": 0.005
+        }
+      ],
+      "roughness": {
+        "base": 0.2,
+        "variation": 0.05,
+        "map": "pink-reservoir_roughness.png"
+      },
+      "metalness": {
+        "base": 0
+      },
+      "normal": {
+        "strength": 0.03,
+        "pattern": "pink-reservoir_normal.png"
+      },
+      "ambientOcclusion": {
+        "map": "pink-reservoir_ao.png",
+        "cavityStrength": 0.1
+      },
+      "clearcoat": 0.65,
+      "transmission": 0.55,
+      "localOverrides": [
+        {
+          "id": "reservoir-side-highlight",
+          "roughness": 0.13,
+          "region": "outer tank shoulder",
+          "evidenceRef": "side"
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.86,
+        "estimatedFidelity": 0.86,
+        "sourceImage": "references/intake/bubble-machine/side.png",
+        "maps": {
+          "albedo": {
+            "path": "docs/sculpt-specs/bubble-machine/pbr/pink-reservoir/pink-reservoir_albedo.png"
+          },
+          "roughness": {
+            "path": "docs/sculpt-specs/bubble-machine/pbr/pink-reservoir/pink-reservoir_roughness.png"
+          },
+          "height": {
+            "path": "docs/sculpt-specs/bubble-machine/pbr/pink-reservoir/pink-reservoir_height.png"
+          },
+          "normal": {
+            "path": "docs/sculpt-specs/bubble-machine/pbr/pink-reservoir/pink-reservoir_normal.png"
+          },
+          "ao": {
+            "path": "docs/sculpt-specs/bubble-machine/pbr/pink-reservoir/pink-reservoir_ao.png"
+          }
+        }
+      }
+    },
+    {
+      "id": "dark-cavity",
+      "name": "Dark Cavity Plastic",
+      "type": "physical",
+      "shaderModel": "MeshToonMaterial",
+      "baseColor": "#463931",
+      "albedo": {
+        "dominant": "#463931",
+        "secondary": [
+          "#665046"
+        ]
+      },
+      "colorVariation": {
+        "palette": [
+          "#463931",
+          "#665046"
+        ],
+        "pattern": "cavity gradient",
+        "amplitude": 0.08
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "generated-uv",
+        "repeat": [
+          1,
+          1
+        ],
+        "anisotropy": 4,
+        "texelDensityIntent": "stable cavity scale"
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.08
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.03
+        },
+        {
+          "id": "micro",
+          "frequency": 56,
+          "amplitude": 0.01
+        }
+      ],
+      "roughness": {
+        "base": 0.58,
+        "variation": 0.12,
+        "map": "dark-cavity_roughness.png"
+      },
+      "metalness": {
+        "base": 0
+      },
+      "normal": {
+        "strength": 0.1,
+        "pattern": "dark-cavity_normal.png"
+      },
+      "ambientOcclusion": {
+        "map": "dark-cavity_ao.png",
+        "cavityStrength": 0.35
+      },
+      "localOverrides": [
+        {
+          "id": "vent-cavity-dark",
+          "roughness": 0.68,
+          "region": "vent recesses",
+          "evidenceRef": "side/back"
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.86,
+        "estimatedFidelity": 0.86,
+        "sourceImage": "references/intake/bubble-machine/back.png",
+        "maps": {
+          "albedo": {
+            "path": "docs/sculpt-specs/bubble-machine/pbr/dark-cavity/dark-cavity_albedo.png"
+          },
+          "roughness": {
+            "path": "docs/sculpt-specs/bubble-machine/pbr/dark-cavity/dark-cavity_roughness.png"
+          },
+          "height": {
+            "path": "docs/sculpt-specs/bubble-machine/pbr/dark-cavity/dark-cavity_height.png"
+          },
+          "normal": {
+            "path": "docs/sculpt-specs/bubble-machine/pbr/dark-cavity/dark-cavity_normal.png"
+          },
+          "ao": {
+            "path": "docs/sculpt-specs/bubble-machine/pbr/dark-cavity/dark-cavity_ao.png"
+          }
+        }
+      }
+    },
+    {
+      "id": "rubber-dark",
+      "name": "Dark Rubber Feet",
+      "type": "physical",
+      "shaderModel": "MeshToonMaterial",
+      "baseColor": "#5F5B68",
+      "albedo": {
+        "dominant": "#5F5B68",
+        "secondary": [
+          "#463931"
+        ]
+      },
+      "colorVariation": {
+        "palette": [
+          "#5F5B68",
+          "#463931"
+        ],
+        "pattern": "rubber mottle",
+        "amplitude": 0.08
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "generated-uv",
+        "repeat": [
+          1,
+          1
+        ],
+        "anisotropy": 2,
+        "texelDensityIntent": "small feet"
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.06
+        },
+        {
+          "id": "meso",
+          "frequency": 14,
+          "amplitude": 0.04
+        },
+        {
+          "id": "micro",
+          "frequency": 64,
+          "amplitude": 0.015
+        }
+      ],
+      "roughness": {
+        "base": 0.78,
+        "variation": 0.1,
+        "map": "rubber-dark_roughness.png"
+      },
+      "metalness": {
+        "base": 0
+      },
+      "normal": {
+        "strength": 0.12,
+        "pattern": "rubber-dark_normal.png"
+      },
+      "ambientOcclusion": {
+        "map": "rubber-dark_ao.png",
+        "cavityStrength": 0.3
+      },
+      "localOverrides": [
+        {
+          "id": "foot-contact",
+          "roughness": 0.86,
+          "region": "ground contact",
+          "evidenceRef": "front"
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.86,
+        "estimatedFidelity": 0.86,
+        "sourceImage": "references/intake/bubble-machine/back.png",
+        "maps": {
+          "albedo": {
+            "path": "docs/sculpt-specs/bubble-machine/pbr/rubber-dark/rubber-dark_albedo.png"
+          },
+          "roughness": {
+            "path": "docs/sculpt-specs/bubble-machine/pbr/rubber-dark/rubber-dark_roughness.png"
+          },
+          "height": {
+            "path": "docs/sculpt-specs/bubble-machine/pbr/rubber-dark/rubber-dark_height.png"
+          },
+          "normal": {
+            "path": "docs/sculpt-specs/bubble-machine/pbr/rubber-dark/rubber-dark_normal.png"
+          },
+          "ao": {
+            "path": "docs/sculpt-specs/bubble-machine/pbr/rubber-dark/rubber-dark_ao.png"
+          }
+        }
+      }
+    },
+    {
+      "id": "bubble-film",
+      "name": "Iridescent Bubble Film",
+      "type": "physical",
+      "shaderModel": "MeshToonMaterial transparent effect",
+      "baseColor": "#D6F1F2",
+      "albedo": {
+        "dominant": "#D6F1F2",
+        "secondary": [
+          "#F5C1DA",
+          "#F8E6A8"
+        ]
+      },
+      "colorVariation": {
+        "palette": [
+          "#D6F1F2",
+          "#F5C1DA",
+          "#F8E6A8"
+        ],
+        "pattern": "deterministic per-instance pastel lanes",
+        "amplitude": 0.35
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "spherical",
+        "repeat": [
+          1,
+          1
+        ],
+        "anisotropy": 4,
+        "texelDensityIntent": "per bubble sphere"
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.2
+        },
+        {
+          "id": "meso",
+          "frequency": 10,
+          "amplitude": 0.06
+        },
+        {
+          "id": "micro",
+          "frequency": 48,
+          "amplitude": 0.01
+        }
+      ],
+      "roughness": {
+        "base": 0.06,
+        "variation": 0.03,
+        "map": "bubble-film_roughness.png"
+      },
+      "metalness": {
+        "base": 0
+      },
+      "normal": {
+        "strength": 0.02,
+        "pattern": "bubble-film_normal.png"
+      },
+      "ambientOcclusion": {
+        "map": "bubble-film_ao.png",
+        "cavityStrength": 0.02
+      },
+      "clearcoat": 1,
+      "transmission": 0.9,
+      "localOverrides": [
+        {
+          "id": "bubble-film.localOverrides.iridescent-rim",
+          "roughness": 0.04,
+          "region": "sphere rim highlight",
+          "evidenceRef": "turn-sheet-left-effect"
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.86,
+        "estimatedFidelity": 0.86,
+        "sourceImage": "references/intake/bubble-machine/front.png",
+        "maps": {
+          "albedo": {
+            "path": "docs/sculpt-specs/bubble-machine/pbr/bubble-film/bubble-film_albedo.png"
+          },
+          "roughness": {
+            "path": "docs/sculpt-specs/bubble-machine/pbr/bubble-film/bubble-film_roughness.png"
+          },
+          "height": {
+            "path": "docs/sculpt-specs/bubble-machine/pbr/bubble-film/bubble-film_height.png"
+          },
+          "normal": {
+            "path": "docs/sculpt-specs/bubble-machine/pbr/bubble-film/bubble-film_normal.png"
+          },
+          "ao": {
+            "path": "docs/sculpt-specs/bubble-machine/pbr/bubble-film/bubble-film_ao.png"
+          }
+        }
+      }
+    }
+  ],
+  "repetitionSystems": [
+    {
+      "id": "bubble-rings-eight",
+      "componentRef": "bubble-ring-array",
+      "count": 8,
+      "distribution": "radial 45 degrees",
+      "geometry": "torus",
+      "buildsGeometry": true,
+      "instances": 8,
+      "realization": "named meshes sharing geometry"
+    },
+    {
+      "id": "bubble-spokes-eight",
+      "componentRef": "bubble-spokes",
+      "count": 8,
+      "distribution": "radial 45 degrees",
+      "geometry": "rounded bars",
+      "buildsGeometry": true,
+      "instances": 8,
+      "realization": "named meshes sharing geometry"
+    },
+    {
+      "id": "rear-fasteners-four",
+      "componentRef": "rear-fastener-array",
+      "count": 4,
+      "distribution": "rear panel corners",
+      "geometry": "round heads",
+      "buildsGeometry": true,
+      "instances": 4,
+      "realization": "named meshes sharing geometry"
+    },
+    {
+      "id": "side-vents-seven",
+      "componentRef": "side-vent-array",
+      "count": 7,
+      "distribution": "linear vertical slots",
+      "geometry": "rounded boxes",
+      "buildsGeometry": true,
+      "instances": 7,
+      "realization": "named meshes sharing geometry"
+    },
+    {
+      "id": "powered-bubbles-eighteen",
+      "componentRef": "bubble-effect-array",
+      "count": 18,
+      "distribution": "three deterministic rising lanes",
+      "geometry": "low-segment spheres",
+      "buildsGeometry": true,
+      "instances": 18,
+      "realization": "pooled named meshes"
+    }
+  ],
+  "buildPasses": [
+    {
+      "id": "blockout",
+      "goal": "Match macro silhouette and ratios.",
+      "componentRefs": [
+        "root",
+        "housing-shell",
+        "front-assembly",
+        "liquid-reservoir",
+        "rear-assembly"
+      ],
+      "acceptance": [
+        "front/side/back silhouette readable",
+        "browser comparison score >=0.7"
+      ]
+    },
+    {
+      "id": "structural-pass",
+      "goal": "Build all independent assemblies and repetitions.",
+      "componentRefs": [
+        "front-window-rim",
+        "front-window",
+        "bubble-wheel",
+        "wheel-hub",
+        "drip-tray",
+        "control-knob",
+        "reservoir-cap",
+        "rear-fan-rotor",
+        "rear-fan-grille",
+        "foot-array",
+        "power-inlet",
+        "side-vent-array"
+      ],
+      "acceptance": [
+        "named pivots and sockets",
+        "eight rings/spokes",
+        "rear grille/fan hierarchy"
+      ]
+    },
+    {
+      "id": "form-refinement",
+      "goal": "Refine bevels, seams, grille, vents and micro hardware.",
+      "componentRefs": [
+        "bubble-ring-array",
+        "bubble-spokes",
+        "fan-blade-array",
+        "grille-band-array",
+        "rear-fastener-array",
+        "control-index",
+        "reservoir-bracket"
+      ],
+      "acceptance": [
+        "identity details match reference views",
+        "no floating joints"
+      ]
+    },
+    {
+      "id": "material-pass",
+      "goal": "Match cream/pink/smoked/translucent material separation.",
+      "componentRefs": [
+        "housing-shell",
+        "front-window-rim",
+        "front-window",
+        "liquid-reservoir",
+        "bubble-effect-array"
+      ],
+      "acceptance": [
+        "reference PBR confidence >=0.7",
+        "transparent layers preserve interior visibility"
+      ]
+    },
+    {
+      "id": "lighting-pass",
+      "goal": "Verify neutral/reference/grazing readability.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "key/fill/rim/contact shadow visible",
+        "palette remains stable"
+      ]
+    },
+    {
+      "id": "interaction-pass",
+      "goal": "Verify recognizable powered bubble action and exact reset.",
+      "componentRefs": [
+        "control-knob",
+        "bubble-wheel",
+        "rear-fan-rotor",
+        "bubble-effect-array"
+      ],
+      "acceptance": [
+        "control turns",
+        "wheel and fan spin",
+        "bubbles rise/spread",
+        "5.2 second reset exact"
+      ]
+    },
+    {
+      "id": "optimization-pass",
+      "goal": "Protect browser runtime performance.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "pooled effects",
+        "shared geometry/materials",
+        "responsive orbit review"
+      ]
+    }
+  ],
+  "visualEvidence": [
+    {
+      "id": "bubble-machine-v2-static-and-animation",
+      "reference": "references/intake-v2/bubble-machine/views/three-quarter.png",
+      "render": "artifacts/appliance-v2/bubble-machine/evidence/models/bubble-machine/idle-three-quarter.png",
+      "comparison": "artifacts/appliance-v2/bubble-machine/review/bubble-machine-reference-v2-four-view-comparison.png",
+      "viewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "startup",
+        "climax",
+        "wind-down"
+      ]
+    }
+  ],
+  "reviewHistory": [
+    {
+      "passId": "blockout",
+      "timestamp": "2026-08-12T09:50:00.000Z",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.8,
+      "action": "continue",
+      "summary": "blockout accepted against the admitted GPT Image 2 turn-sheet and frozen bubble-machine runtime contract.",
+      "matched": [
+        "faceted cream housing, exaggerated layered front chamber and four-foot stance",
+        "exactly eight bubble rings and mint spokes, attached translucent reservoir and rear fan grille",
+        "cream, Sakura pink, mint and cool-purple Toon hierarchy with three stable outline tiers",
+        "all archived pivots, sockets, effects and package bounds retain exact local transforms"
+      ],
+      "mismatches": [],
+      "evidence": [
+        "references/intake-v2/bubble-machine/views/three-quarter.png",
+        "artifacts/appliance-v2/bubble-machine/evidence/models/bubble-machine/idle-three-quarter.png",
+        "artifacts/appliance-v2/bubble-machine/review/bubble-machine-reference-v2-four-view-comparison.png",
+        "artifacts/appliance-v2/bubble-machine/diagnostics/bubble-machine-v2-verification.json",
+        "artifacts/appliance-v2/bubble-machine/assembly/part-coverage.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.87,
+        "componentStructure": 0.91,
+        "formDetail": 0.87,
+        "materialSurface": 0.86,
+        "lightingCamera": 0.85
+      },
+      "featureReviews": [
+        {
+          "id": "bubble-v2-silhouette",
+          "score": 0.87,
+          "passed": true,
+          "notes": "The faceted compact body, deep chamber and four-foot stance read in all four views inside the exact v1 bounds."
+        },
+        {
+          "id": "bubble-v2-wheel",
+          "score": 0.94,
+          "passed": true,
+          "notes": "Exactly eight rings and eight spokes remain independent and rotate on the frozen pivot."
+        },
+        {
+          "id": "bubble-v2-reservoir-fan",
+          "score": 0.89,
+          "passed": true,
+          "notes": "The reservoir remains attached and translucent; the rear rotor and four-ring grille remain structurally separate."
+        },
+        {
+          "id": "bubble-v2-runtime",
+          "score": 0.99,
+          "passed": true,
+          "notes": "Frozen pivots, sockets, 48 ordinary bubbles, giant burst, package bounds and exact reset all pass."
+        },
+        {
+          "id": "bubble-v2-ink",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Main, structure and detail outline tiers use stable object-space 0.18 variation; transparent effect volumes avoid thick ink."
+        }
+      ],
+      "aiVisionNotes": "The runtime model follows the reference family through a deeper plum chamber, lower segment counts, mint wheel accents and a stronger rear fan while preserving the archived effect contact.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/bubble-machine/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/bubble-machine/evidence/models/bubble-machine/idle-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/bubble-machine/review/bubble-machine-reference-v2-four-view-comparison.png",
+        "cameraView": "front, side, back, three-quarter and three fixed animation phases",
+        "notes": "The completed procedural geometry is deliberately reused as staged review evidence.",
+        "aiVisionNotes": "Four-view identity, material hierarchy, stable ink and effect contact were reviewed."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "runtime-startup",
+        "runtime-climax",
+        "runtime-wind-down"
+      ],
+      "evidenceReuseNote": "The completed procedural geometry is reused across staged reviews; no claim is made that seven separate intermediate meshes were captured."
+    },
+    {
+      "passId": "structural-pass",
+      "timestamp": "2026-08-12T09:51:00.000Z",
+      "estimatedFidelity": 0.88,
+      "aiVisionScore": 0.88,
+      "visualAcceptanceThreshold": 0.8,
+      "action": "continue",
+      "summary": "structural-pass accepted against the admitted GPT Image 2 turn-sheet and frozen bubble-machine runtime contract.",
+      "matched": [
+        "faceted cream housing, exaggerated layered front chamber and four-foot stance",
+        "exactly eight bubble rings and mint spokes, attached translucent reservoir and rear fan grille",
+        "cream, Sakura pink, mint and cool-purple Toon hierarchy with three stable outline tiers",
+        "all archived pivots, sockets, effects and package bounds retain exact local transforms"
+      ],
+      "mismatches": [],
+      "evidence": [
+        "references/intake-v2/bubble-machine/views/three-quarter.png",
+        "artifacts/appliance-v2/bubble-machine/evidence/models/bubble-machine/idle-three-quarter.png",
+        "artifacts/appliance-v2/bubble-machine/review/bubble-machine-reference-v2-four-view-comparison.png",
+        "artifacts/appliance-v2/bubble-machine/diagnostics/bubble-machine-v2-verification.json",
+        "artifacts/appliance-v2/bubble-machine/assembly/part-coverage.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.87,
+        "componentStructure": 0.91,
+        "formDetail": 0.87,
+        "materialSurface": 0.86,
+        "lightingCamera": 0.85
+      },
+      "featureReviews": [
+        {
+          "id": "bubble-v2-silhouette",
+          "score": 0.87,
+          "passed": true,
+          "notes": "The faceted compact body, deep chamber and four-foot stance read in all four views inside the exact v1 bounds."
+        },
+        {
+          "id": "bubble-v2-wheel",
+          "score": 0.94,
+          "passed": true,
+          "notes": "Exactly eight rings and eight spokes remain independent and rotate on the frozen pivot."
+        },
+        {
+          "id": "bubble-v2-reservoir-fan",
+          "score": 0.89,
+          "passed": true,
+          "notes": "The reservoir remains attached and translucent; the rear rotor and four-ring grille remain structurally separate."
+        },
+        {
+          "id": "bubble-v2-runtime",
+          "score": 0.99,
+          "passed": true,
+          "notes": "Frozen pivots, sockets, 48 ordinary bubbles, giant burst, package bounds and exact reset all pass."
+        },
+        {
+          "id": "bubble-v2-ink",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Main, structure and detail outline tiers use stable object-space 0.18 variation; transparent effect volumes avoid thick ink."
+        }
+      ],
+      "aiVisionNotes": "The runtime model follows the reference family through a deeper plum chamber, lower segment counts, mint wheel accents and a stronger rear fan while preserving the archived effect contact.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/bubble-machine/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/bubble-machine/evidence/models/bubble-machine/idle-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/bubble-machine/review/bubble-machine-reference-v2-four-view-comparison.png",
+        "cameraView": "front, side, back, three-quarter and three fixed animation phases",
+        "notes": "The completed procedural geometry is deliberately reused as staged review evidence.",
+        "aiVisionNotes": "Four-view identity, material hierarchy, stable ink and effect contact were reviewed."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "runtime-startup",
+        "runtime-climax",
+        "runtime-wind-down"
+      ],
+      "evidenceReuseNote": "The completed procedural geometry is reused across staged reviews; no claim is made that seven separate intermediate meshes were captured."
+    },
+    {
+      "passId": "form-refinement",
+      "timestamp": "2026-08-12T09:52:00.000Z",
+      "estimatedFidelity": 0.87,
+      "aiVisionScore": 0.87,
+      "visualAcceptanceThreshold": 0.8,
+      "action": "continue",
+      "summary": "form-refinement accepted against the admitted GPT Image 2 turn-sheet and frozen bubble-machine runtime contract.",
+      "matched": [
+        "faceted cream housing, exaggerated layered front chamber and four-foot stance",
+        "exactly eight bubble rings and mint spokes, attached translucent reservoir and rear fan grille",
+        "cream, Sakura pink, mint and cool-purple Toon hierarchy with three stable outline tiers",
+        "all archived pivots, sockets, effects and package bounds retain exact local transforms"
+      ],
+      "mismatches": [
+        "The concept sheet makes the front rim and feet larger than the frozen v1 package; runtime exaggeration is intentionally restrained to preserve exact bounds."
+      ],
+      "evidence": [
+        "references/intake-v2/bubble-machine/views/three-quarter.png",
+        "artifacts/appliance-v2/bubble-machine/evidence/models/bubble-machine/idle-three-quarter.png",
+        "artifacts/appliance-v2/bubble-machine/review/bubble-machine-reference-v2-four-view-comparison.png",
+        "artifacts/appliance-v2/bubble-machine/diagnostics/bubble-machine-v2-verification.json",
+        "artifacts/appliance-v2/bubble-machine/assembly/part-coverage.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.87,
+        "componentStructure": 0.91,
+        "formDetail": 0.87,
+        "materialSurface": 0.86,
+        "lightingCamera": 0.85
+      },
+      "featureReviews": [
+        {
+          "id": "bubble-v2-silhouette",
+          "score": 0.87,
+          "passed": true,
+          "notes": "The faceted compact body, deep chamber and four-foot stance read in all four views inside the exact v1 bounds."
+        },
+        {
+          "id": "bubble-v2-wheel",
+          "score": 0.94,
+          "passed": true,
+          "notes": "Exactly eight rings and eight spokes remain independent and rotate on the frozen pivot."
+        },
+        {
+          "id": "bubble-v2-reservoir-fan",
+          "score": 0.89,
+          "passed": true,
+          "notes": "The reservoir remains attached and translucent; the rear rotor and four-ring grille remain structurally separate."
+        },
+        {
+          "id": "bubble-v2-runtime",
+          "score": 0.99,
+          "passed": true,
+          "notes": "Frozen pivots, sockets, 48 ordinary bubbles, giant burst, package bounds and exact reset all pass."
+        },
+        {
+          "id": "bubble-v2-ink",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Main, structure and detail outline tiers use stable object-space 0.18 variation; transparent effect volumes avoid thick ink."
+        }
+      ],
+      "aiVisionNotes": "The runtime model follows the reference family through a deeper plum chamber, lower segment counts, mint wheel accents and a stronger rear fan while preserving the archived effect contact.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/bubble-machine/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/bubble-machine/evidence/models/bubble-machine/idle-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/bubble-machine/review/bubble-machine-reference-v2-four-view-comparison.png",
+        "cameraView": "front, side, back, three-quarter and three fixed animation phases",
+        "notes": "The completed procedural geometry is deliberately reused as staged review evidence.",
+        "aiVisionNotes": "Four-view identity, material hierarchy, stable ink and effect contact were reviewed."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "runtime-startup",
+        "runtime-climax",
+        "runtime-wind-down"
+      ],
+      "evidenceReuseNote": "The completed procedural geometry is reused across staged reviews; no claim is made that seven separate intermediate meshes were captured."
+    },
+    {
+      "passId": "material-pass",
+      "timestamp": "2026-08-12T09:53:00.000Z",
+      "estimatedFidelity": 0.86,
+      "aiVisionScore": 0.86,
+      "visualAcceptanceThreshold": 0.8,
+      "action": "continue",
+      "summary": "material-pass accepted against the admitted GPT Image 2 turn-sheet and frozen bubble-machine runtime contract.",
+      "matched": [
+        "faceted cream housing, exaggerated layered front chamber and four-foot stance",
+        "exactly eight bubble rings and mint spokes, attached translucent reservoir and rear fan grille",
+        "cream, Sakura pink, mint and cool-purple Toon hierarchy with three stable outline tiers",
+        "all archived pivots, sockets, effects and package bounds retain exact local transforms"
+      ],
+      "mismatches": [],
+      "evidence": [
+        "references/intake-v2/bubble-machine/views/three-quarter.png",
+        "artifacts/appliance-v2/bubble-machine/evidence/models/bubble-machine/idle-three-quarter.png",
+        "artifacts/appliance-v2/bubble-machine/review/bubble-machine-reference-v2-four-view-comparison.png",
+        "artifacts/appliance-v2/bubble-machine/diagnostics/bubble-machine-v2-verification.json",
+        "artifacts/appliance-v2/bubble-machine/assembly/part-coverage.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.87,
+        "componentStructure": 0.91,
+        "formDetail": 0.87,
+        "materialSurface": 0.86,
+        "lightingCamera": 0.85
+      },
+      "featureReviews": [
+        {
+          "id": "bubble-v2-silhouette",
+          "score": 0.87,
+          "passed": true,
+          "notes": "The faceted compact body, deep chamber and four-foot stance read in all four views inside the exact v1 bounds."
+        },
+        {
+          "id": "bubble-v2-wheel",
+          "score": 0.94,
+          "passed": true,
+          "notes": "Exactly eight rings and eight spokes remain independent and rotate on the frozen pivot."
+        },
+        {
+          "id": "bubble-v2-reservoir-fan",
+          "score": 0.89,
+          "passed": true,
+          "notes": "The reservoir remains attached and translucent; the rear rotor and four-ring grille remain structurally separate."
+        },
+        {
+          "id": "bubble-v2-runtime",
+          "score": 0.99,
+          "passed": true,
+          "notes": "Frozen pivots, sockets, 48 ordinary bubbles, giant burst, package bounds and exact reset all pass."
+        },
+        {
+          "id": "bubble-v2-ink",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Main, structure and detail outline tiers use stable object-space 0.18 variation; transparent effect volumes avoid thick ink."
+        }
+      ],
+      "aiVisionNotes": "The runtime model follows the reference family through a deeper plum chamber, lower segment counts, mint wheel accents and a stronger rear fan while preserving the archived effect contact.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/bubble-machine/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/bubble-machine/evidence/models/bubble-machine/idle-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/bubble-machine/review/bubble-machine-reference-v2-four-view-comparison.png",
+        "cameraView": "front, side, back, three-quarter and three fixed animation phases",
+        "notes": "The completed procedural geometry is deliberately reused as staged review evidence.",
+        "aiVisionNotes": "Four-view identity, material hierarchy, stable ink and effect contact were reviewed."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "runtime-startup",
+        "runtime-climax",
+        "runtime-wind-down"
+      ],
+      "evidenceReuseNote": "The completed procedural geometry is reused across staged reviews; no claim is made that seven separate intermediate meshes were captured."
+    },
+    {
+      "passId": "lighting-pass",
+      "timestamp": "2026-08-12T09:54:00.000Z",
+      "estimatedFidelity": 0.85,
+      "aiVisionScore": 0.85,
+      "visualAcceptanceThreshold": 0.8,
+      "action": "continue",
+      "summary": "lighting-pass accepted against the admitted GPT Image 2 turn-sheet and frozen bubble-machine runtime contract.",
+      "matched": [
+        "faceted cream housing, exaggerated layered front chamber and four-foot stance",
+        "exactly eight bubble rings and mint spokes, attached translucent reservoir and rear fan grille",
+        "cream, Sakura pink, mint and cool-purple Toon hierarchy with three stable outline tiers",
+        "all archived pivots, sockets, effects and package bounds retain exact local transforms"
+      ],
+      "mismatches": [],
+      "evidence": [
+        "references/intake-v2/bubble-machine/views/three-quarter.png",
+        "artifacts/appliance-v2/bubble-machine/evidence/models/bubble-machine/idle-three-quarter.png",
+        "artifacts/appliance-v2/bubble-machine/review/bubble-machine-reference-v2-four-view-comparison.png",
+        "artifacts/appliance-v2/bubble-machine/diagnostics/bubble-machine-v2-verification.json",
+        "artifacts/appliance-v2/bubble-machine/assembly/part-coverage.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.87,
+        "componentStructure": 0.91,
+        "formDetail": 0.87,
+        "materialSurface": 0.86,
+        "lightingCamera": 0.85
+      },
+      "featureReviews": [
+        {
+          "id": "bubble-v2-silhouette",
+          "score": 0.87,
+          "passed": true,
+          "notes": "The faceted compact body, deep chamber and four-foot stance read in all four views inside the exact v1 bounds."
+        },
+        {
+          "id": "bubble-v2-wheel",
+          "score": 0.94,
+          "passed": true,
+          "notes": "Exactly eight rings and eight spokes remain independent and rotate on the frozen pivot."
+        },
+        {
+          "id": "bubble-v2-reservoir-fan",
+          "score": 0.89,
+          "passed": true,
+          "notes": "The reservoir remains attached and translucent; the rear rotor and four-ring grille remain structurally separate."
+        },
+        {
+          "id": "bubble-v2-runtime",
+          "score": 0.99,
+          "passed": true,
+          "notes": "Frozen pivots, sockets, 48 ordinary bubbles, giant burst, package bounds and exact reset all pass."
+        },
+        {
+          "id": "bubble-v2-ink",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Main, structure and detail outline tiers use stable object-space 0.18 variation; transparent effect volumes avoid thick ink."
+        }
+      ],
+      "aiVisionNotes": "The runtime model follows the reference family through a deeper plum chamber, lower segment counts, mint wheel accents and a stronger rear fan while preserving the archived effect contact.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/bubble-machine/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/bubble-machine/evidence/models/bubble-machine/idle-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/bubble-machine/review/bubble-machine-reference-v2-four-view-comparison.png",
+        "cameraView": "front, side, back, three-quarter and three fixed animation phases",
+        "notes": "The completed procedural geometry is deliberately reused as staged review evidence.",
+        "aiVisionNotes": "Four-view identity, material hierarchy, stable ink and effect contact were reviewed."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "runtime-startup",
+        "runtime-climax",
+        "runtime-wind-down"
+      ],
+      "evidenceReuseNote": "The completed procedural geometry is reused across staged reviews; no claim is made that seven separate intermediate meshes were captured."
+    },
+    {
+      "passId": "interaction-pass",
+      "timestamp": "2026-08-12T09:55:00.000Z",
+      "estimatedFidelity": 0.96,
+      "aiVisionScore": 0.96,
+      "visualAcceptanceThreshold": 0.8,
+      "action": "continue",
+      "summary": "interaction-pass accepted against the admitted GPT Image 2 turn-sheet and frozen bubble-machine runtime contract.",
+      "matched": [
+        "faceted cream housing, exaggerated layered front chamber and four-foot stance",
+        "exactly eight bubble rings and mint spokes, attached translucent reservoir and rear fan grille",
+        "cream, Sakura pink, mint and cool-purple Toon hierarchy with three stable outline tiers",
+        "all archived pivots, sockets, effects and package bounds retain exact local transforms"
+      ],
+      "mismatches": [
+        "The broad climax bubble spread is inherited from the frozen v1 performance trajectory and remains intentionally unchanged."
+      ],
+      "evidence": [
+        "references/intake-v2/bubble-machine/views/three-quarter.png",
+        "artifacts/appliance-v2/bubble-machine/evidence/models/bubble-machine/idle-three-quarter.png",
+        "artifacts/appliance-v2/bubble-machine/review/bubble-machine-reference-v2-four-view-comparison.png",
+        "artifacts/appliance-v2/bubble-machine/diagnostics/bubble-machine-v2-verification.json",
+        "artifacts/appliance-v2/bubble-machine/assembly/part-coverage.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.87,
+        "componentStructure": 0.91,
+        "formDetail": 0.87,
+        "materialSurface": 0.86,
+        "lightingCamera": 0.85
+      },
+      "featureReviews": [
+        {
+          "id": "bubble-v2-silhouette",
+          "score": 0.87,
+          "passed": true,
+          "notes": "The faceted compact body, deep chamber and four-foot stance read in all four views inside the exact v1 bounds."
+        },
+        {
+          "id": "bubble-v2-wheel",
+          "score": 0.94,
+          "passed": true,
+          "notes": "Exactly eight rings and eight spokes remain independent and rotate on the frozen pivot."
+        },
+        {
+          "id": "bubble-v2-reservoir-fan",
+          "score": 0.89,
+          "passed": true,
+          "notes": "The reservoir remains attached and translucent; the rear rotor and four-ring grille remain structurally separate."
+        },
+        {
+          "id": "bubble-v2-runtime",
+          "score": 0.99,
+          "passed": true,
+          "notes": "Frozen pivots, sockets, 48 ordinary bubbles, giant burst, package bounds and exact reset all pass."
+        },
+        {
+          "id": "bubble-v2-ink",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Main, structure and detail outline tiers use stable object-space 0.18 variation; transparent effect volumes avoid thick ink."
+        }
+      ],
+      "aiVisionNotes": "The runtime model follows the reference family through a deeper plum chamber, lower segment counts, mint wheel accents and a stronger rear fan while preserving the archived effect contact.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/bubble-machine/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/bubble-machine/evidence/models/bubble-machine/idle-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/bubble-machine/review/bubble-machine-reference-v2-four-view-comparison.png",
+        "cameraView": "front, side, back, three-quarter and three fixed animation phases",
+        "notes": "The completed procedural geometry is deliberately reused as staged review evidence.",
+        "aiVisionNotes": "Four-view identity, material hierarchy, stable ink and effect contact were reviewed."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "runtime-startup",
+        "runtime-climax",
+        "runtime-wind-down"
+      ],
+      "evidenceReuseNote": "The completed procedural geometry is reused across staged reviews; no claim is made that seven separate intermediate meshes were captured."
+    },
+    {
+      "passId": "optimization-pass",
+      "timestamp": "2026-08-12T09:56:00.000Z",
+      "estimatedFidelity": 0.94,
+      "aiVisionScore": 0.94,
+      "visualAcceptanceThreshold": 0.8,
+      "action": "continue",
+      "summary": "optimization-pass accepted against the admitted GPT Image 2 turn-sheet and frozen bubble-machine runtime contract.",
+      "matched": [
+        "faceted cream housing, exaggerated layered front chamber and four-foot stance",
+        "exactly eight bubble rings and mint spokes, attached translucent reservoir and rear fan grille",
+        "cream, Sakura pink, mint and cool-purple Toon hierarchy with three stable outline tiers",
+        "all archived pivots, sockets, effects and package bounds retain exact local transforms"
+      ],
+      "mismatches": [],
+      "evidence": [
+        "references/intake-v2/bubble-machine/views/three-quarter.png",
+        "artifacts/appliance-v2/bubble-machine/evidence/models/bubble-machine/idle-three-quarter.png",
+        "artifacts/appliance-v2/bubble-machine/review/bubble-machine-reference-v2-four-view-comparison.png",
+        "artifacts/appliance-v2/bubble-machine/diagnostics/bubble-machine-v2-verification.json",
+        "artifacts/appliance-v2/bubble-machine/assembly/part-coverage.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.87,
+        "componentStructure": 0.91,
+        "formDetail": 0.87,
+        "materialSurface": 0.86,
+        "lightingCamera": 0.85
+      },
+      "featureReviews": [
+        {
+          "id": "bubble-v2-silhouette",
+          "score": 0.87,
+          "passed": true,
+          "notes": "The faceted compact body, deep chamber and four-foot stance read in all four views inside the exact v1 bounds."
+        },
+        {
+          "id": "bubble-v2-wheel",
+          "score": 0.94,
+          "passed": true,
+          "notes": "Exactly eight rings and eight spokes remain independent and rotate on the frozen pivot."
+        },
+        {
+          "id": "bubble-v2-reservoir-fan",
+          "score": 0.89,
+          "passed": true,
+          "notes": "The reservoir remains attached and translucent; the rear rotor and four-ring grille remain structurally separate."
+        },
+        {
+          "id": "bubble-v2-runtime",
+          "score": 0.99,
+          "passed": true,
+          "notes": "Frozen pivots, sockets, 48 ordinary bubbles, giant burst, package bounds and exact reset all pass."
+        },
+        {
+          "id": "bubble-v2-ink",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Main, structure and detail outline tiers use stable object-space 0.18 variation; transparent effect volumes avoid thick ink."
+        }
+      ],
+      "aiVisionNotes": "The runtime model follows the reference family through a deeper plum chamber, lower segment counts, mint wheel accents and a stronger rear fan while preserving the archived effect contact.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/bubble-machine/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/bubble-machine/evidence/models/bubble-machine/idle-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/bubble-machine/review/bubble-machine-reference-v2-four-view-comparison.png",
+        "cameraView": "front, side, back, three-quarter and three fixed animation phases",
+        "notes": "The completed procedural geometry is deliberately reused as staged review evidence.",
+        "aiVisionNotes": "Four-view identity, material hierarchy, stable ink and effect contact were reviewed."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "runtime-startup",
+        "runtime-climax",
+        "runtime-wind-down"
+      ],
+      "evidenceReuseNote": "The completed procedural geometry is reused across staged reviews; no claim is made that seven separate intermediate meshes were captured."
+    }
+  ],
+  "lodPlan": [
+    {
+      "tier": "near",
+      "distance": 0,
+      "strategy": "full named assemblies"
+    },
+    {
+      "tier": "far",
+      "distance": 20,
+      "strategy": "hide powered bubbles when inactive and reuse geometry"
+    }
+  ],
+  "performanceBudget": {
+    "qualityPriority": "stylized-runtime",
+    "targetTriangles": 42000,
+    "maxDrawCalls": 220,
+    "textureSize": 0,
+    "fpsTarget": 60,
+    "optimizationPolicy": "Reuse repeated ring, spoke, vent, grille, bubble and fastener geometry; no runtime image textures."
+  },
+  "lightingFromPhoto": [
+    "soft upper-left key light",
+    "cool lavender fill light",
+    "restrained pink rim light",
+    "2-3 band Toon response",
+    "soft four-foot contact shadow",
+    "neutral light review background",
+    "ACESFilmic tone mapping with exposure 1.0"
+  ],
+  "proceduralStrategy": [
+    "Lock rounded shell proportions first.",
+    "Build independent front, tank and rear assemblies.",
+    "Share ring/spoke/vent/fastener geometry while retaining names.",
+    "Use project ApplianceModelKit toon materials and outlines.",
+    "Pool eighteen transparent bubbles and animate without allocations."
+  ],
+  "animationAnchors": [
+    "control-knob pivot Y axis",
+    "bubble-wheel pivot Z axis",
+    "rear-fan-rotor pivot Z axis",
+    "bubble-emitter socket",
+    "power-connection socket"
+  ],
+  "destructionAnchors": [],
+  "risks": [
+    "A deeper-looking front rim must not exceed the archived depth envelope.",
+    "Heavy outlines must not cluster on transparent volumes or small grille pieces.",
+    "The output socket must remain independent of the rotating wheel pivot."
+  ],
+  "localSpecSearch": {
+    "collection": "core_3d",
+    "query": "bubble machine radial torus rings transparent plastic fan",
+    "matches": [
+      {
+        "record_id": "core.pbr-opacity-alpha",
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "docs/raw/img2threejs-skill-dataset.json"
+          }
+        ]
+      },
+      {
+        "record_id": "core.shader-mapping-torusgeometry-rings-loops",
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "docs/raw/img2threejs-skill-dataset.json"
+          }
+        ]
+      }
+    ]
+  },
+  "tier1Results": [
+    {
+      "passed": false,
+      "checks": {
+        "silhouetteIoU": 0.3264,
+        "aspectRatioDelta": 0.5151,
+        "scaleDelta": 0.5177,
+        "bilateralSymmetryError": 0.0626,
+        "colorDelta": {
+          "checked": 26,
+          "maxDeltaE": 11.77,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 10.5
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.5
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.68
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.73
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.42
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.42
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.42
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.73
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.42
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.42
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.42
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.77
+            }
+          ],
+          "gated": false
+        }
+      },
+      "failures": [
+        "silhouette IoU 0.326 is below threshold 0.85",
+        "aspect-ratio delta 0.515 exceeds threshold 0.05",
+        "scale delta 0.518 exceeds threshold 0.08",
+        "blockout requires --map-stripped-render evidence"
+      ],
+      "renderHash": "d328458ddd76fecb",
+      "passId": "blockout"
+    },
+    {
+      "passed": false,
+      "checks": {
+        "silhouetteIoU": 0.3264,
+        "aspectRatioDelta": 0.5151,
+        "scaleDelta": 0.5177,
+        "bilateralSymmetryError": 0.0626,
+        "colorDelta": {
+          "checked": 26,
+          "maxDeltaE": 11.77,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 10.5
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.5
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.68
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.73
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.42
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.42
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.42
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.73
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.42
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.42
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.42
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.77
+            }
+          ],
+          "gated": false
+        }
+      },
+      "failures": [
+        "silhouette IoU 0.326 is below threshold 0.85",
+        "aspect-ratio delta 0.515 exceeds threshold 0.05",
+        "scale delta 0.518 exceeds threshold 0.08",
+        "blockout requires --map-stripped-render evidence"
+      ],
+      "renderHash": "d328458ddd76fecb",
+      "passId": "blockout"
+    },
+    {
+      "passed": false,
+      "checks": {
+        "silhouetteIoU": 0.7169,
+        "aspectRatioDelta": 0.0489,
+        "scaleDelta": 0.0814,
+        "bilateralSymmetryError": 0.148,
+        "colorDelta": {
+          "checked": 26,
+          "maxDeltaE": 12.65,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 9.36
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.36
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.53
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.53
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.53
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.73
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.53
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.53
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.53
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.53
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.53
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.41
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.53
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.53
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.41
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.41
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.73
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.53
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.53
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.41
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.53
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.41
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.41
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.53
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.65
+            }
+          ],
+          "gated": false
+        }
+      },
+      "failures": [
+        "silhouette IoU 0.717 is below threshold 0.85",
+        "scale delta 0.081 exceeds threshold 0.08"
+      ],
+      "renderHash": "22a5322c87a7b680",
+      "passId": "blockout",
+      "mapStrippedRender": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\bubble-machine\\tier1\\object.png"
+    },
+    {
+      "passed": true,
+      "checks": {
+        "silhouetteIoU": 1,
+        "aspectRatioDelta": 0,
+        "scaleDelta": 0,
+        "bilateralSymmetryError": 0.148,
+        "colorDelta": {
+          "checked": 26,
+          "maxDeltaE": 12.65,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 9.36
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.36
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.53
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.53
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.53
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.73
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.53
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.53
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.53
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.53
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.53
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.41
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.53
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.53
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.41
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.41
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.73
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.53
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.53
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.41
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.53
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.41
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.41
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.53
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.65
+            }
+          ],
+          "gated": false
+        }
+      },
+      "failures": [],
+      "renderHash": "22a5322c87a7b680",
+      "passId": "blockout",
+      "mapStrippedRender": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\bubble-machine\\tier1\\object.png"
+    },
+    {
+      "passed": false,
+      "checks": {
+        "silhouetteIoU": 0.3264,
+        "aspectRatioDelta": 0.5151,
+        "scaleDelta": 0.5177,
+        "bilateralSymmetryError": 0.0626,
+        "colorDelta": {
+          "checked": 26,
+          "maxDeltaE": 11.77,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 10.5
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.5
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.68
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.73
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.42
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.42
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.42
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.73
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.42
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.42
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.42
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.77
+            }
+          ],
+          "gated": false
+        }
+      },
+      "failures": [
+        "silhouette IoU 0.326 is below threshold 0.85",
+        "aspect-ratio delta 0.515 exceeds threshold 0.05",
+        "scale delta 0.518 exceeds threshold 0.08",
+        "blockout requires --map-stripped-render evidence"
+      ],
+      "renderHash": "d328458ddd76fecb",
+      "passId": "blockout"
+    },
+    {
+      "passed": false,
+      "checks": {
+        "silhouetteIoU": 0.7389,
+        "aspectRatioDelta": 0.082,
+        "scaleDelta": 0.0126,
+        "bilateralSymmetryError": 0.148,
+        "colorDelta": {
+          "checked": 26,
+          "maxDeltaE": 12.65,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 9.36
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.36
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.53
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.53
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.53
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.73
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.53
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.53
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.53
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.53
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.53
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.41
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.53
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.53
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.41
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.41
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.73
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.53
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.53
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.41
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.53
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.41
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.41
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.53
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.65
+            }
+          ],
+          "gated": false
+        }
+      },
+      "failures": [
+        "silhouette IoU 0.739 is below threshold 0.85",
+        "aspect-ratio delta 0.082 exceeds threshold 0.05"
+      ],
+      "renderHash": "22a5322c87a7b680",
+      "passId": "blockout",
+      "mapStrippedRender": "artifacts\\img2threejs\\bubble-machine\\tier1\\object.png"
+    },
+    {
+      "passed": false,
+      "checks": {
+        "silhouetteIoU": 0.729,
+        "aspectRatioDelta": 0,
+        "scaleDelta": 0,
+        "bilateralSymmetryError": 0.3879,
+        "colorDelta": {
+          "checked": 26,
+          "maxDeltaE": 12.75,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 8.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.27
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.19
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.27
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.27
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.77
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.27
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.27
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.27
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.27
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.27
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.82
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.27
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.27
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.82
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.82
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.77
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.27
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.27
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.82
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.27
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.82
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.82
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.27
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.75
+            }
+          ],
+          "gated": false
+        }
+      },
+      "failures": [
+        "silhouette IoU 0.729 is below threshold 0.85"
+      ],
+      "renderHash": "dc204664215edd57",
+      "passId": "blockout",
+      "mapStrippedRender": "artifacts\\img2threejs\\bubble-machine\\browser-review\\normalized4\\render-normalized.png"
+    }
+  ],
+  "sourceImages": [
+    "references/intake-v2/bubble-machine/views/front.png",
+    "references/intake-v2/bubble-machine/views/side.png",
+    "references/intake-v2/bubble-machine/views/back.png",
+    "references/intake-v2/bubble-machine/views/three-quarter.png"
+  ]
+}

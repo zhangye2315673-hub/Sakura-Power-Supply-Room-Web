@@ -1,0 +1,170 @@
+﻿{
+  "sourceImage": "D:\\涓嬭浇鏂囦欢\\ChatGPT Image 2026骞?鏈?鏃?19_55_17 (3).png",
+  "zonesDir": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\radio\\detail-zones",
+  "detailInventory": {
+    "scanMethod": "grid-3x3-plus-multiview",
+    "targetMinDetails": 10,
+    "details": [
+      {
+        "id": "shell-rounded-bevel",
+        "kind": "bevel",
+        "description": "绫崇櫧涓绘満澹充负瀹芥墎鍦嗚闀挎柟浣擄紝鍥涜澶у崐寰勩€佸墠鍚庤竟缂樻湁杩炵画鍊掕楂樺厜銆?,
+        "region": { "x": 0.03, "y": 0.27, "width": 0.91, "height": 0.66, "units": "normalized" },
+        "scale": "macro",
+        "affects": "outer-shell silhouette and edge treatment",
+        "mapsTo": { "type": "component.localFeatures", "ref": "outer-shell.edgeTreatment" },
+        "evidenceRef": "view-crops/front.png",
+        "confidence": 0.98
+      },
+      {
+        "id": "front-panel-inset",
+        "kind": "linework",
+        "description": "绮夎壊鍓嶉潰鏉夸互鍐呭祵鍦嗚妗嗗祵鍏ョ背鐧芥満澹筹紝鍛ㄥ湀淇濈暀娓呮鎺ョ紳銆?,
+        "region": { "x": 0.08, "y": 0.38, "width": 0.82, "height": 0.48, "units": "normalized" },
+        "scale": "meso",
+        "affects": "front-panel seam and depth",
+        "mapsTo": { "type": "component.localFeatures", "ref": "front-panel.inset-seam" },
+        "evidenceRef": "view-crops/front.png",
+        "confidence": 0.98
+      },
+      {
+        "id": "speaker-frame",
+        "kind": "contour",
+        "description": "鎵０鍣ㄥ尯鍩熸湁鐙珛绫崇櫧鍦嗚妗嗭紝妗嗗唴涓烘繁绱粦鑹插０鑵斻€?,
+        "region": { "x": 0.09, "y": 0.42, "width": 0.42, "height": 0.4, "units": "normalized" },
+        "scale": "meso",
+        "affects": "speaker module silhouette",
+        "mapsTo": { "type": "component.localFeatures", "ref": "speaker-frame.raised-rim" },
+        "evidenceRef": "view-crops/front.png",
+        "confidence": 0.98
+      },
+      {
+        "id": "speaker-horizontal-slats",
+        "kind": "linework",
+        "description": "鎵０鍣ㄦ牸鏍呯敱绾?6鏉＄瓑璺濇í鍚戠背鐧芥爡鏉℃瀯鎴愶紝鏍呮潯涔嬮棿闇插嚭娣辫壊澹拌厰銆?,
+        "region": { "x": 0.1, "y": 0.43, "width": 0.39, "height": 0.37, "units": "normalized" },
+        "scale": "micro-repeated",
+        "affects": "speaker grille repetition",
+        "mapsTo": { "type": "component.localFeatures", "ref": "speaker-grille.horizontal-slats" },
+        "evidenceRef": "view-crops/front.png",
+        "confidence": 0.97
+      },
+      {
+        "id": "frequency-window",
+        "kind": "bevel",
+        "description": "鍙充笂棰戠巼绐椾负妯悜鍦嗚鐭╁舰锛屾祬鑹插帤杈规鍖呭洿娣辩伆鍗婇€忔槑鏄剧ず闈€?,
+        "region": { "x": 0.55, "y": 0.42, "width": 0.32, "height": 0.2, "units": "normalized" },
+        "scale": "meso",
+        "affects": "frequency display housing",
+        "mapsTo": { "type": "component.localFeatures", "ref": "frequency-window.beveled-frame" },
+        "evidenceRef": "view-crops/front.png",
+        "confidence": 0.98
+      },
+      {
+        "id": "frequency-ticks-pointer",
+        "kind": "linework",
+        "description": "棰戠巼绐椾腑鏈夋祬鐏扮煭鍒诲害涓庣矇鑹叉按骞?鍨傜洿娓告爣锛屼腑蹇冧氦鐐圭暐鍔犵矖銆?,
+        "region": { "x": 0.58, "y": 0.46, "width": 0.27, "height": 0.12, "units": "normalized" },
+        "scale": "micro",
+        "affects": "frequency scale identity",
+        "mapsTo": { "type": "component.localFeatures", "ref": "frequency-display.scale-and-pointer" },
+        "evidenceRef": "view-crops/front.png",
+        "confidence": 0.95
+      },
+      {
+        "id": "dual-control-knobs",
+        "kind": "contour",
+        "description": "鍓嶉潰鏉垮彸涓嬩负涓€灏忎竴澶т袱涓渾褰㈡棆閽紝澶ф棆閽湁鍙屽眰鍚屽績鎶ゅ湀锛屽皬鏃嬮挳鏈夋繁鑹蹭腑蹇冩爣璁般€?,
+        "region": { "x": 0.54, "y": 0.63, "width": 0.34, "height": 0.22, "units": "normalized" },
+        "scale": "meso",
+        "affects": "control cluster silhouette",
+        "mapsTo": { "type": "component.localFeatures", "ref": "control-cluster.dual-knob-hierarchy" },
+        "evidenceRef": "view-crops/front.png",
+        "confidence": 0.98
+      },
+      {
+        "id": "indicator-dots",
+        "kind": "linework",
+        "description": "灏忔棆閽笂鏂瑰強涓ゆ棆閽箣闂翠笅鏂瑰悇鏈変綆鐭渾鐐规寚绀虹伅銆?,
+        "region": { "x": 0.58, "y": 0.59, "width": 0.13, "height": 0.24, "units": "normalized" },
+        "scale": "micro",
+        "affects": "status indicators",
+        "mapsTo": { "type": "component.localFeatures", "ref": "control-cluster.status-lights" },
+        "evidenceRef": "view-crops/front.png",
+        "confidence": 0.93
+      },
+      {
+        "id": "telescopic-antenna",
+        "kind": "contour",
+        "description": "澶╃嚎鐢变笁娈甸€愮骇鏀剁粏鐨勯噾灞炲渾鏉嗙粍鎴愶紝鏈鏈夌煭绮楀附澶淬€?,
+        "region": { "x": 0.13, "y": 0.02, "width": 0.7, "height": 0.34, "units": "normalized" },
+        "scale": "meso-articulated",
+        "affects": "antenna silhouette and telescoping hierarchy",
+        "mapsTo": { "type": "component.localFeatures", "ref": "antenna.telescoping-segments" },
+        "evidenceRef": "view-crops/front.png",
+        "confidence": 0.97
+      },
+      {
+        "id": "antenna-hinge",
+        "kind": "fastener",
+        "description": "鑳岄潰鍙充笂澶╃嚎鏍归儴涓烘き鍦嗘敮鏋躲€佸渾褰㈤摪杞村拰涓嬫柟灏忓浐瀹氱偣锛屾潌浣撳彲鎶樺彔鏀剁撼銆?,
+        "region": { "x": 0.7, "y": 0.06, "width": 0.18, "height": 0.24, "units": "normalized" },
+        "scale": "meso-articulated",
+        "affects": "antenna pivot and rear bracket",
+        "mapsTo": { "type": "component.localFeatures", "ref": "antenna-hinge.pivot-bracket" },
+        "evidenceRef": "view-crops/back.png",
+        "confidence": 0.97
+      },
+      {
+        "id": "rear-access-panel",
+        "kind": "linework",
+        "description": "鑳岄儴涓ぎ鏈変竴鍧楀ぇ鍦嗚妫€淇洊鏉匡紝杞粨鐣ュ唴鍑广€?,
+        "region": { "x": 0.13, "y": 0.31, "width": 0.72, "height": 0.5, "units": "normalized" },
+        "scale": "meso",
+        "affects": "rear cover seam",
+        "mapsTo": { "type": "component.localFeatures", "ref": "rear-panel.recessed-cover" },
+        "evidenceRef": "view-crops/back.png",
+        "confidence": 0.96
+      },
+      {
+        "id": "rear-vent-grid",
+        "kind": "linework",
+        "description": "妫€淇洊鏉夸笂鍗婇儴鏈夊洓鍒楀洓琛屻€佸渾绔í妲界粍鎴愮殑鏁ｇ儹瀛旈樀鍒椼€?,
+        "region": { "x": 0.29, "y": 0.39, "width": 0.43, "height": 0.22, "units": "normalized" },
+        "scale": "micro-repeated",
+        "affects": "rear vent repetition",
+        "mapsTo": { "type": "component.localFeatures", "ref": "rear-panel.vent-grid" },
+        "evidenceRef": "view-crops/back.png",
+        "confidence": 0.95
+      },
+      {
+        "id": "rear-fasteners",
+        "kind": "fastener",
+        "description": "鑳岄儴妫€淇洊鏉垮乏鍙充笅瑙掑悇鏈変竴棰楀渾澶村浐瀹氳灪閽夈€?,
+        "region": { "x": 0.12, "y": 0.69, "width": 0.73, "height": 0.13, "units": "normalized" },
+        "scale": "micro",
+        "affects": "rear cover fasteners",
+        "mapsTo": { "type": "component.localFeatures", "ref": "rear-panel.fasteners" },
+        "evidenceRef": "view-crops/back.png",
+        "confidence": 0.96
+      },
+      {
+        "id": "feet-set",
+        "kind": "contour",
+        "description": "鏈哄３搴曢儴鏈夊洓涓矇鑹蹭綆鐭渾瑙掕剼鍨紝姝ｉ潰鍜岃儗闈㈠悇鍙涓ゅ彧銆?,
+        "region": { "x": 0.08, "y": 0.89, "width": 0.82, "height": 0.08, "units": "normalized" },
+        "scale": "micro-repeated",
+        "affects": "grounding and lower silhouette",
+        "mapsTo": { "type": "component.localFeatures", "ref": "feet.four-pad-layout" },
+        "evidenceRef": "view-crops/front.png",
+        "confidence": 0.96
+      }
+    ]
+  },
+  "unknowns": [
+    "鍐呴儴鎵０鍣ㄣ€佽皟璋愭満鏋勫拰鐢靛瓙鍏冧欢涓嶅彲瑙侊紝鍧囦笉閲嶅缓銆?,
+    "搴曢潰铻轰笣涓庣數姹犱粨鏈彁渚涳紝搴曢儴浠呮寜鍥涜剼涓庡皝闂３浣撳悎鐞嗘帹娴嬨€?,
+    "鑳岄儴妫€淇洊鏉垮帤搴︺€佸紑鍚堟柟寮忓拰鍐呴儴绌洪棿灞炰簬鍚堢悊鎺ㄦ祴銆?
+  ]
+}
+

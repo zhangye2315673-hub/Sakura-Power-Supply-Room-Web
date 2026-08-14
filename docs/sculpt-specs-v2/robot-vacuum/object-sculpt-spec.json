@@ -1,0 +1,5615 @@
+{
+  "targetName": "SAKURA Robot Vacuum v2",
+  "targetId": "sakura-robot-vacuum-v2",
+  "schemaVersion": "2.1",
+  "terminologyProfile": {
+    "domain": "real-time procedural Three.js asset",
+    "geometryTerms": [
+      "silhouette",
+      "topology",
+      "primitive",
+      "bevel",
+      "chamfer",
+      "taper",
+      "bend",
+      "boolean cut",
+      "edge loop",
+      "surface normal",
+      "displacement"
+    ],
+    "materialTerms": [
+      "albedo",
+      "baseColor",
+      "roughness",
+      "metalness",
+      "normal map",
+      "bump map",
+      "ambient occlusion",
+      "cavity dirt",
+      "edge wear",
+      "clearcoat"
+    ],
+    "lightingTerms": [
+      "key light",
+      "fill light",
+      "rim light",
+      "HDRI/environment reflection",
+      "contact shadow"
+    ],
+    "descriptionRule": "Use measurable 3D graphics terms. Avoid vague words unless they are paired with concrete geometry/material/shader parameters."
+  },
+  "sourceImage": "references/intake-v2/robot-vacuum/views/front.png",
+  "referenceCamera": {
+    "solved": false,
+    "fovDegrees": 40,
+    "aspect": 1,
+    "orientation": {
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0
+    },
+    "positionHint": [
+      0,
+      0,
+      3
+    ],
+    "note": "For likeness work, solve the reference camera (forge/stage1_intake/solve_camera_pose.py) so the review render aligns with the photo and the reference can be projected. Confirm by overlay review."
+  },
+  "suitability": "pass",
+  "scores": {
+    "object_isolation": 3,
+    "silhouette_readability": 3,
+    "depth_inference": 3,
+    "primitive_decomposition": 3,
+    "material_procedurality": 3,
+    "occlusion_risk": 2,
+    "interaction_fit": 3
+  },
+  "preSpecAssessment": {
+    "objectClass": {
+      "primaryType": "robot-vacuum",
+      "primaryDomain": "object",
+      "formLanguage": [
+        "stylized-low-poly",
+        "faceted-hard-surface",
+        "exaggerated-functional-silhouette"
+      ],
+      "structureKind": [
+        "assembled-disc-chassis",
+        "independent-bumper",
+        "rotating-lidar",
+        "underside-cleaning-rig"
+      ],
+      "motionPotential": [
+        "large-circle-motion",
+        "bumper-press",
+        "lidar-rotation",
+        "wheel-rotation",
+        "roller-rotation",
+        "dual-side-brush-rotation"
+      ],
+      "materialFamilies": [
+        "matte-cream-polymer",
+        "sakura-pink-polymer",
+        "cool-plum-rubber",
+        "dark-optical-sensor",
+        "cool-grey-metal"
+      ],
+      "notes": "Observed across an admitted GPT Image 2 four-view turn-sheet; all runtime anchors are frozen to the existing robot-vacuum performance contract."
+    },
+    "complexity": {
+      "tier": "complex",
+      "scores": {
+        "silhouetteComplexity": 3,
+        "componentCount": 3,
+        "hierarchyDepth": 3,
+        "repetitionDensity": 3,
+        "materialLayerCount": 3,
+        "localDetailDensity": 3,
+        "occlusionRisk": 3,
+        "actionReadinessNeed": 3
+      },
+      "estimatedCounts": {
+        "macroComponents": 1,
+        "mesoComponents": 0,
+        "microFeatureGroups": 0,
+        "materialLayers": 1,
+        "repetitionSystems": 0
+      },
+      "reasoning": [
+        "Assess 'SAKURA Robot Vacuum v2' from the image before finalizing componentTree/materials."
+      ]
+    },
+    "specDepthDecision": {
+      "requiredDepth": "complex",
+      "minimumComponentLevels": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "needsRepetitionSystems": true,
+      "needsMaterialLocalOverrides": true,
+      "needsMultipleReviewViews": true,
+      "needsActionReadyHierarchy": true,
+      "rationale": "Choose simple/moderate/complex/ultra-complex from observed structure, not from a hardcoded domain."
+    },
+    "unknownsToResolveBeforeImplementation": [],
+    "detailInventory": {
+      "scanMethod": "grid-3x3-plus-runtime-contract",
+      "targetMinDetails": 16,
+      "note": "Every visible or runtime-critical detail maps to a named procedural component or repetition system.",
+      "details": [
+        {
+          "id": "robot-vacuum-detail-1",
+          "kind": "contour",
+          "description": "12-sided low disc chassis",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "root"
+          },
+          "evidenceRef": "turnsheet",
+          "confidence": 0.94
+        },
+        {
+          "id": "robot-vacuum-detail-2",
+          "kind": "bevel",
+          "description": "recessed dark lower skirt",
+          "region": {
+            "x": 0.3333333333333333,
+            "y": 0.16666666666666666,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "root"
+          },
+          "evidenceRef": "turnsheet",
+          "confidence": 0.94
+        },
+        {
+          "id": "robot-vacuum-detail-3",
+          "kind": "linework",
+          "description": "stepped cream top shoulder",
+          "region": {
+            "x": 0.6666666666666666,
+            "y": 0.3333333333333333,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "root"
+          },
+          "evidenceRef": "turnsheet",
+          "confidence": 0.94
+        },
+        {
+          "id": "robot-vacuum-detail-4",
+          "kind": "contour",
+          "description": "broad faceted pink cover",
+          "region": {
+            "x": 0,
+            "y": 0.5,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "root"
+          },
+          "evidenceRef": "turnsheet",
+          "confidence": 0.94
+        },
+        {
+          "id": "robot-vacuum-detail-5",
+          "kind": "bevel",
+          "description": "independent front semicircle bumper",
+          "region": {
+            "x": 0.3333333333333333,
+            "y": 0.6666666666666666,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "root"
+          },
+          "evidenceRef": "turnsheet",
+          "confidence": 0.94
+        },
+        {
+          "id": "robot-vacuum-detail-6",
+          "kind": "linework",
+          "description": "thick curved sensor band",
+          "region": {
+            "x": 0.6666666666666666,
+            "y": 0.8333333333333334,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "root"
+          },
+          "evidenceRef": "turnsheet",
+          "confidence": 0.94
+        },
+        {
+          "id": "robot-vacuum-detail-7",
+          "kind": "contour",
+          "description": "paired bumper end splits",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "root"
+          },
+          "evidenceRef": "turnsheet",
+          "confidence": 0.94
+        },
+        {
+          "id": "robot-vacuum-detail-8",
+          "kind": "bevel",
+          "description": "recessed LiDAR seat",
+          "region": {
+            "x": 0.3333333333333333,
+            "y": 0.16666666666666666,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "root"
+          },
+          "evidenceRef": "turnsheet",
+          "confidence": 0.94
+        },
+        {
+          "id": "robot-vacuum-detail-9",
+          "kind": "linework",
+          "description": "enlarged faceted LiDAR tower",
+          "region": {
+            "x": 0.6666666666666666,
+            "y": 0.3333333333333333,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "root"
+          },
+          "evidenceRef": "turnsheet",
+          "confidence": 0.94
+        },
+        {
+          "id": "robot-vacuum-detail-10",
+          "kind": "contour",
+          "description": "dark LiDAR optical window",
+          "region": {
+            "x": 0,
+            "y": 0.5,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "root"
+          },
+          "evidenceRef": "turnsheet",
+          "confidence": 0.94
+        },
+        {
+          "id": "robot-vacuum-detail-11",
+          "kind": "bevel",
+          "description": "pink LiDAR cap and status ring",
+          "region": {
+            "x": 0.3333333333333333,
+            "y": 0.6666666666666666,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "root"
+          },
+          "evidenceRef": "turnsheet",
+          "confidence": 0.94
+        },
+        {
+          "id": "robot-vacuum-detail-12",
+          "kind": "linework",
+          "description": "paired top buttons and glyphs",
+          "region": {
+            "x": 0.6666666666666666,
+            "y": 0.8333333333333334,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "root"
+          },
+          "evidenceRef": "turnsheet",
+          "confidence": 0.94
+        },
+        {
+          "id": "robot-vacuum-detail-13",
+          "kind": "contour",
+          "description": "front caster",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "root"
+          },
+          "evidenceRef": "turnsheet",
+          "confidence": 0.94
+        },
+        {
+          "id": "robot-vacuum-detail-14",
+          "kind": "bevel",
+          "description": "paired charging contacts",
+          "region": {
+            "x": 0.3333333333333333,
+            "y": 0.16666666666666666,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "root"
+          },
+          "evidenceRef": "turnsheet",
+          "confidence": 0.94
+        },
+        {
+          "id": "robot-vacuum-detail-15",
+          "kind": "linework",
+          "description": "two drive wheels with four tread rings each",
+          "region": {
+            "x": 0.6666666666666666,
+            "y": 0.3333333333333333,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "root"
+          },
+          "evidenceRef": "turnsheet",
+          "confidence": 0.94
+        },
+        {
+          "id": "robot-vacuum-detail-16",
+          "kind": "contour",
+          "description": "central eight-fin roller brush",
+          "region": {
+            "x": 0,
+            "y": 0.5,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "root"
+          },
+          "evidenceRef": "turnsheet",
+          "confidence": 0.94
+        },
+        {
+          "id": "robot-vacuum-detail-17",
+          "kind": "bevel",
+          "description": "two separate three-arm side brushes",
+          "region": {
+            "x": 0.3333333333333333,
+            "y": 0.6666666666666666,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "root"
+          },
+          "evidenceRef": "turnsheet",
+          "confidence": 0.94
+        },
+        {
+          "id": "robot-vacuum-detail-18",
+          "kind": "linework",
+          "description": "four cliff sensor windows",
+          "region": {
+            "x": 0.6666666666666666,
+            "y": 0.8333333333333334,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "root"
+          },
+          "evidenceRef": "turnsheet",
+          "confidence": 0.94
+        },
+        {
+          "id": "robot-vacuum-detail-19",
+          "kind": "contour",
+          "description": "eight underside fasteners",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "root"
+          },
+          "evidenceRef": "turnsheet",
+          "confidence": 0.94
+        },
+        {
+          "id": "robot-vacuum-detail-20",
+          "kind": "bevel",
+          "description": "stable three-tier uneven outline",
+          "region": {
+            "x": 0.3333333333333333,
+            "y": 0.16666666666666666,
+            "width": 0.33,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "geometry, materialSurface, actionReadiness",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "root"
+          },
+          "evidenceRef": "turnsheet",
+          "confidence": 0.94
+        }
+      ]
+    },
+    "anatomy": {
+      "applies": false,
+      "styleHeads": 0,
+      "proportions": {
+        "headUnit": 0,
+        "torso": 0,
+        "legs": 0,
+        "shoulderWidth": 0,
+        "hipWidth": 0
+      },
+      "pose": {
+        "type": "unassessed",
+        "jointAngles": {}
+      },
+      "faceLandmarks": {
+        "eyeLine": 0,
+        "eyeSpacing": 0,
+        "noseBase": 0,
+        "mouthLine": 0,
+        "hairline": 0
+      },
+      "features": [],
+      "confidence": 0,
+      "note": "Only meaningful when objectClass.primaryDomain is character or hybrid. Set applies=true and fill from forge/stage1_intake/extract_landmarks.py. See grimoire/character/reconstruction.md and grimoire/character/likeness_maximization.md."
+    },
+    "sourceImage": "references/intake-v2/robot-vacuum/views/front.png",
+    "estimatedCounts": {
+      "macroComponents": 4,
+      "mesoComponents": 12,
+      "microFeatureGroups": 9,
+      "materialLayers": 7,
+      "repetitionSystems": 5
+    }
+  },
+  "qualityContract": {
+    "qualityBar": "complex",
+    "definitionOfDone": [
+      "The rendered model matches the reference silhouette, primary proportions, visible component hierarchy, material response, and most recognizable local features for the selected fidelity tier."
+    ],
+    "minimumSpecDepth": {
+      "macroComponents": 4,
+      "mesoComponents": 10,
+      "microFeatureGroups": 8,
+      "materialLayers": 6,
+      "repetitionSystems": 4,
+      "reviewViewpoints": 7
+    },
+    "featureGroups": [
+      {
+        "id": "overall-silhouette",
+        "name": "Overall silhouette and proportions",
+        "required": true,
+        "qualityCriteria": [
+          "Bounding shape, dominant curves, negative spaces, and scale relationships are explicitly described."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "model reads as a generic placeholder instead of the reference object",
+          "major proportions are guessed without evidence"
+        ]
+      },
+      {
+        "id": "primary-structure",
+        "name": "Primary structure and hierarchy",
+        "required": true,
+        "qualityCriteria": [
+          "Major parts, joints, seams, contact points, and parent-child relationships are named before code generation."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "large visible parts are merged into one mesh",
+          "component hierarchy is too shallow for the observed complexity"
+        ]
+      },
+      {
+        "id": "attachment-joint-correctness",
+        "name": "Attachment and joint correctness",
+        "required": true,
+        "qualityCriteria": [
+          "Every visible child appendage, branch, limb, handle, connector, tube, cable, horn, wing, leg, or hinged part has an attachment contract with parent socket, localStart/localEnd, contact type, embed/overlap, and gap tolerance."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "child part root floats away from the parent",
+          "branch/limb/tube is centered in space instead of pivoting from its root",
+          "parent-child transform mixes world and local coordinates"
+        ]
+      },
+      {
+        "id": "surface-material-response",
+        "name": "Surface material response",
+        "required": true,
+        "qualityCriteria": [
+          "Albedo zones, roughness, normal/bump/displacement intent, cavity dirt, edge wear, and local overrides are specified where visible.",
+          "Important materials define independent albedo, roughness, height/normal, and AO responses instead of reusing one texture for unrelated PBR channels.",
+          "Surface response is decomposed into macro, meso, and micro frequency bands with scale and amplitude tied to object scale."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "surface looks like flat plastic",
+          "local material variation is missing or not tied to image evidence"
+        ]
+      },
+      {
+        "id": "reference-lookdev",
+        "name": "Reference color, material, and lighting response",
+        "required": true,
+        "qualityCriteria": [
+          "Material-pass names the reference-derived albedo palette, roughness variation, tactile normal/bump/displacement response, and local masks.",
+          "When a source image is available, run reference PBR extraction and require confidence >= 0.7 before treating maps as implementation-ready.",
+          "Lighting-pass names key/fill/rim or environment light, exposure, tone mapping, background, and contact shadow behavior.",
+          "Neutral, grazing-angle, and reference-matched renders prove that surface relief survives relighting and is not painted into albedo."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "model has acceptable shape but reads as flat shaded or plastic",
+          "colors are a generic average instead of reference-observed local color zones",
+          "lighting is evenly ambient and cannot reproduce the source value range"
+        ]
+      }
+    ],
+    "visualDeltaChecks": [
+      "silhouette and negative-space delta",
+      "component hierarchy depth delta",
+      "repetition density and distribution delta",
+      "material albedo/roughness/normal response delta",
+      "local feature placement and scale delta"
+    ],
+    "antiShallowSpecRules": [
+      "Do not proceed to code if qualityContract.qualityBar is unassessed.",
+      "Do not proceed to code if the spec only contains a root component for a moderate or complex object.",
+      "Do not proceed to code if required featureGroups are not represented by componentTree, materials, or repetitionSystems.",
+      "Do not proceed to code if visible local features are described only in prose and not attached to components/materials/evidenceRefs.",
+      "Do not proceed past structural-pass if attached child parts lack attachment.parentSocket, localStart, localEnd, embedDepth/overlap, and gapTolerance.",
+      "Do not pass material look-dev when albedo is reused as roughness, height, normal, or AO.",
+      "Do not pass material look-dev without macro, meso, and micro surface frequency bands for close-up materials.",
+      "Do not pass reference-fidelity material look-dev from a source image without usable referencePbr maps or an explicit documented limitation.",
+      "Do not patch a spec with extracted PBR maps when extraction confidence is below the target threshold unless the user explicitly accepts lower fidelity.",
+      "Do not place adjacent separate-geometry parts below 0.02 world-unit seam overlap (source: grimoire/build/geometry_patterns.md).",
+      "Do not satisfy raised or recessed relief, fasteners, or grip structure with a map alone when the feature affects form; use geometry or displacement (source: grimoire/build/geometry_patterns.md).",
+      "Adjacent components must overlap by at least 0.02 world units at shared seams (source: grimoire/build/geometry_patterns.md).",
+      "Raised or recessed relief and fasteners must be geometry, instanced micro-parts, or displacement; a map alone is an approximation (source: grimoire/build/geometry_patterns.md)."
+    ],
+    "mustNotDo": [
+      "Do not proceed to code if qualityContract.qualityBar is unassessed.",
+      "Do not proceed to code if the spec only contains a root component for a moderate or complex object.",
+      "Do not proceed to code if required featureGroups are not represented by componentTree, materials, or repetitionSystems.",
+      "Do not proceed to code if visible local features are described only in prose and not attached to components/materials/evidenceRefs.",
+      "Do not proceed past structural-pass if attached child parts lack attachment.parentSocket, localStart, localEnd, embedDepth/overlap, and gapTolerance.",
+      "Do not pass material look-dev when albedo is reused as roughness, height, normal, or AO.",
+      "Do not pass material look-dev without macro, meso, and micro surface frequency bands for close-up materials.",
+      "Do not pass reference-fidelity material look-dev from a source image without usable referencePbr maps or an explicit documented limitation.",
+      "Do not patch a spec with extracted PBR maps when extraction confidence is below the target threshold unless the user explicitly accepts lower fidelity.",
+      "Do not place adjacent separate-geometry parts below 0.02 world-unit seam overlap (source: grimoire/build/geometry_patterns.md).",
+      "Do not satisfy raised or recessed relief, fasteners, or grip structure with a map alone when the feature affects form; use geometry or displacement (source: grimoire/build/geometry_patterns.md).",
+      "Adjacent components must overlap by at least 0.02 world units at shared seams (source: grimoire/build/geometry_patterns.md).",
+      "Raised or recessed relief and fasteners must be geometry, instanced micro-parts, or displacement; a map alone is an approximation (source: grimoire/build/geometry_patterns.md)."
+    ]
+  },
+  "qualityTargets": {
+    "targetFidelity": 0.7,
+    "mustMatch": [
+      "macro silhouette and proportions",
+      "primary material albedo/roughness response",
+      "reference-derived PBR material response at or above 0.7 confidence when source pixels are usable",
+      "most recognizable local features"
+    ],
+    "niceToHave": [
+      "micro scratches, stains, chips, and dirt masks",
+      "secondary lighting match"
+    ],
+    "fpsTarget": 60,
+    "reviewViewpoints": [
+      "front",
+      "side",
+      "back",
+      "three-quarter",
+      "runtime-startup",
+      "runtime-climax",
+      "runtime-wind-down"
+    ]
+  },
+  "selfCorrectLoop": {
+    "enabled": true,
+    "visualAcceptance": {
+      "reviewer": "ai-vision",
+      "threshold": 0.7,
+      "comparisonArtifactRequired": true,
+      "layerScoresRequired": true,
+      "codePixelDiffIsAcceptanceAuthority": false,
+      "scoringRule": "AI vision must inspect a side-by-side reference/render sheet and score the current pass from 0 to 1. Pixel-diff code may assist diagnostics but cannot approve a pass.",
+      "requiredLayerScores": [
+        "silhouetteProportion",
+        "componentStructure",
+        "formDetail",
+        "materialSurface",
+        "lightingCamera"
+      ],
+      "featureReviewPolicy": {
+        "enabled": true,
+        "reviewUnit": "semantic-subsystem",
+        "maxCriticalFeaturesPerPass": 5,
+        "maxImportantFeaturesPerPass": 3,
+        "criticalDefaultThreshold": 0.8,
+        "importantAverageThreshold": 0.65,
+        "adaptiveEscalation": true,
+        "singleImagePairOnly": true,
+        "selectionRule": "Choose only the most visually salient, identity-defining, user-prioritized, or high-risk semantic systems. Group repeated parts instead of reviewing every mesh. AI vision scores every selected feature from the same full reference/render pair."
+      }
+    },
+    "reviewAfterPasses": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "allowedActions": [
+      "continue",
+      "refine-spec",
+      "refine-code",
+      "request-input",
+      "stop"
+    ],
+    "specRefineTriggers": [
+      "missing component",
+      "wrong primitive family",
+      "wrong proportions",
+      "material layer under-specified",
+      "local feature not traceable to viewEvidence",
+      "reference ambiguity discovered during implementation"
+    ],
+    "codeRefineTriggers": [
+      "spec is adequate but generated geometry/material does not match",
+      "browser render differs from reference",
+      "performance budget exceeded",
+      "lighting hides geometry or material response"
+    ],
+    "stopCriteria": [
+      "target fidelity reached or user accepts current approximation",
+      "remaining gaps require new reference images or manual art"
+    ],
+    "screenshotPolicy": {
+      "requiredForPasses": [
+        "blockout",
+        "structural-pass",
+        "form-refinement",
+        "material-pass",
+        "surface-pass",
+        "lighting-pass",
+        "interaction-pass"
+      ],
+      "preferredCapture": "in-app-browser-screenshot",
+      "fallbackCapture": "user-supplied-screenshot-path",
+      "minimumEvidence": "Each visual pass needs a reference image, rendered screenshot, side-by-side comparison sheet, AI vision score, layer scores, and critique before choosing continue.",
+      "reviewPairRule": "Compare the same camera/viewpoint whenever possible; do not judge a front reference against a random render angle.",
+      "acceptanceAuthority": "AI vision review of the comparison sheet. Code-generated pixel similarity is not sufficient evidence."
+    }
+  },
+  "featureReviewTargets": [
+    {
+      "id": "robot-vacuum-silhouette",
+      "name": "Low faceted disc, stepped rim and floor stance",
+      "tier": "critical",
+      "passIds": [
+        "blockout",
+        "form-refinement"
+      ],
+      "minimumScore": 0.82,
+      "mustPass": true,
+      "componentRefs": [
+        "chassis",
+        "top-system",
+        "bumper"
+      ],
+      "evidenceRefs": [
+        "front",
+        "three-quarter"
+      ]
+    },
+    {
+      "id": "robot-vacuum-identity",
+      "name": "Front sensor band, enlarged LiDAR and paired controls",
+      "tier": "critical",
+      "passIds": [
+        "structural-pass",
+        "material-pass"
+      ],
+      "minimumScore": 0.82,
+      "mustPass": true,
+      "componentRefs": [
+        "sensor-band",
+        "lidar",
+        "button-cluster"
+      ],
+      "evidenceRefs": [
+        "front",
+        "side",
+        "three-quarter"
+      ]
+    },
+    {
+      "id": "robot-vacuum-runtime",
+      "name": "Frozen bumper, wheel, roller and dual side brush anchors",
+      "tier": "critical",
+      "passIds": [
+        "interaction-pass"
+      ],
+      "minimumScore": 0.86,
+      "mustPass": true,
+      "componentRefs": [
+        "bumper",
+        "drive-wheels",
+        "main-brush",
+        "side-brushes"
+      ],
+      "evidenceRefs": [
+        "runtime-contract"
+      ]
+    },
+    {
+      "id": "robot-vacuum-ink",
+      "name": "Sakura Toon palette and uneven three-tier ink",
+      "tier": "critical",
+      "passIds": [
+        "material-pass",
+        "lighting-pass"
+      ],
+      "minimumScore": 0.82,
+      "mustPass": true,
+      "componentRefs": [
+        "outline-system"
+      ],
+      "evidenceRefs": [
+        "turnsheet"
+      ]
+    }
+  ],
+  "sculptPipeline": {
+    "passGateMode": "locked-sequential",
+    "passOrder": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "currentPass": "complete",
+    "completedPasses": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "lastCompletedPass": "optimization-pass",
+    "blockedReason": "",
+    "nextRequiredEvidence": []
+  },
+  "lookDevTargets": {
+    "qualityPriority": "reference-fidelity",
+    "materialPass": {
+      "albedoPaletteRequired": true,
+      "roughnessVariationRequired": true,
+      "normalOrBumpRequired": true,
+      "localOverridesRequired": true,
+      "minimumTextureResolution": 1024,
+      "preferredTextureResolution": 2048,
+      "independentMapChannels": [
+        "albedo",
+        "roughness",
+        "height",
+        "normal",
+        "ambient-occlusion"
+      ],
+      "requiredSurfaceFrequencyBands": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "geometryReliefRequiredWhenSilhouetteAffected": true,
+      "referencePbrExtraction": {
+        "requiredWhenSourceImagePresent": true,
+        "targetThreshold": 0.7,
+        "stopOnLowConfidence": true,
+        "script": "forge/stage1_intake/extract_pbr_evidence.py",
+        "acceptedLimitation": "single-image extraction is reference-derived inference, not exact photogrammetry"
+      },
+      "mustAvoid": [
+        "single flat albedo per material",
+        "uniform roughness",
+        "albedo texture reused as roughness/height/normal/AO",
+        "single-frequency random noise",
+        "plastic-looking smooth bark, stone, cloth, foliage, or aged material",
+        "local color/detail described only in prose without material masks",
+        "claiming exact PBR recovery when confidence is below the target threshold"
+      ]
+    },
+    "lightingPass": {
+      "requiredTerms": [
+        "key light",
+        "fill light",
+        "rim or environment light",
+        "exposure",
+        "tone mapping",
+        "background",
+        "contact shadow"
+      ],
+      "mustAvoid": [
+        "ambient-only lighting",
+        "flat value range",
+        "missing contact shadow",
+        "reference lighting copied without separating material readability"
+      ]
+    },
+    "screenshotReview": [
+      "Compare albedo palette and local color zones.",
+      "Compare roughness/normal/bump response under light.",
+      "Compare cavity dirt, edge wear, stains, moss, scratches, or other local masks.",
+      "Compare key/fill/rim structure, exposure, tone mapping, background, and contact shadows.",
+      "Capture a neutral-light render to verify material readability without reference lighting.",
+      "Capture a grazing-light close-up to expose flat normals, uniform roughness, tiling, and plastic highlights.",
+      "Capture a reference-matched render from the same camera framing as the source."
+    ]
+  },
+  "actionReadiness": {
+    "contract": "Every macro/meso component should be generated as a stable named Object3D pivot node with a mesh child, action metadata, optional sockets, collider proxy, and destruction metadata.",
+    "defaultRigType": "action-ready-static-rig",
+    "rootMotionNode": "root",
+    "requiredComponentFields": [
+      "id",
+      "parent",
+      "transform",
+      "attachment for child appendages, connectors, limbs, tubes, handles, legs, horns, wings, branches, or cables",
+      "actionProfile.animationRole",
+      "actionProfile.pivot",
+      "actionProfile.collider",
+      "actionProfile.destruction"
+    ],
+    "transformChannels": [
+      "translate",
+      "rotate",
+      "scale",
+      "bend",
+      "twist",
+      "detach",
+      "visibility",
+      "material-state"
+    ],
+    "authoringRules": [
+      "Do not collapse independently movable parts into one mesh.",
+      "Put transforms on component pivot groups, not only on raw meshes.",
+      "For attached child parts, put the pivot at the semantic root/socket and build visible geometry from localStart to localEnd.",
+      "Represent hinge, socket, detachable, and breakable intent even when no animation is implemented yet.",
+      "Use simplified collider proxies for runtime physics instead of visual mesh colliders by default."
+    ],
+    "destructionPolicy": {
+      "defaultBreakable": false,
+      "fractureGroupNaming": "Use stable semantic names such as body-shell, left-hinge, glass-panel, branch-segment.",
+      "debrisStrategy": "Prefer detachable component groups and a small number of procedural fragments over random mesh explosion."
+    }
+  },
+  "assumptions": [
+    "GPT Image 2 turn-sheet is visual evidence only.",
+    "Existing pivots, sockets, effects and timeline are frozen.",
+    "Hidden internal cleaner mechanisms are omitted."
+  ],
+  "coordinateFrame": {
+    "front": "camera-facing side in the reference image",
+    "up": "image up direction",
+    "scaleReference": "unit scale; adjust after first browser render"
+  },
+  "silhouette": {
+    "boundingShape": "low twelve-sided disc with rear-biased turret",
+    "aspectRatios": [
+      "diameter:body-height 3.3",
+      "width:depth 1.0"
+    ],
+    "symmetry": "bilateral chassis with asymmetric LiDAR optical direction",
+    "dominantCurves": [
+      "front bumper arc",
+      "stepped shoulder",
+      "broad top plate"
+    ],
+    "negativeSpaces": [
+      "side brush arm gaps",
+      "wheel recesses"
+    ],
+    "landmarks": [
+      "dark front band",
+      "pink top plate",
+      "LiDAR turret",
+      "paired buttons"
+    ]
+  },
+  "viewEvidence": [
+    {
+      "id": "turnsheet",
+      "view": "multi-view",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "successful GPT Image 2 2x2 turn-sheet"
+      ],
+      "confidence": 0.96
+    },
+    {
+      "id": "front",
+      "view": "front",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "consistent chassis, top cover, LiDAR, controls, bumper, wheels and dual side brushes"
+      ],
+      "confidence": 0.94
+    },
+    {
+      "id": "side",
+      "view": "side",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "consistent chassis, top cover, LiDAR, controls, bumper, wheels and dual side brushes"
+      ],
+      "confidence": 0.94
+    },
+    {
+      "id": "back",
+      "view": "back",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "consistent chassis, top cover, LiDAR, controls, bumper, wheels and dual side brushes"
+      ],
+      "confidence": 0.94
+    },
+    {
+      "id": "three-quarter",
+      "view": "three-quarter",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "consistent chassis, top cover, LiDAR, controls, bumper, wheels and dual side brushes"
+      ],
+      "confidence": 0.94
+    },
+    {
+      "id": "startup",
+      "view": "runtime-startup",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "frozen performance timeline at 0.6 seconds"
+      ],
+      "confidence": 0.99
+    },
+    {
+      "id": "climax",
+      "view": "runtime-climax",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "frozen performance timeline at 2.8 seconds"
+      ],
+      "confidence": 0.99
+    },
+    {
+      "id": "wind-down",
+      "view": "runtime-wind-down",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "frozen performance timeline at 4.75 seconds"
+      ],
+      "confidence": 0.99
+    }
+  ],
+  "componentTree": [
+    {
+      "id": "root",
+      "name": "Robot vacuum frozen runtime root",
+      "level": "macro",
+      "role": "root",
+      "importance": 1,
+      "confidence": 0.5,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Procedural low-poly component with explicit facets and frozen runtime anchors.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": null,
+      "attachment": null,
+      "dimensions": {
+        "width": 2.02,
+        "height": 0.67,
+        "depth": 2.02,
+        "units": "world",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "root",
+        "pivot": {
+          "mode": "named-runtime-pivot",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "compound-proxy",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Archived v1 envelope remains authoritative."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "root",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "shell"
+        }
+      },
+      "material": "shell",
+      "materialLayers": [
+        "shell"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        {
+          "id": "root-floor contact",
+          "name": "floor contact",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        },
+        {
+          "id": "root-connection envelope",
+          "name": "connection envelope",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        },
+        "robot-vacuum-detail-1",
+        "robot-vacuum-detail-2",
+        "robot-vacuum-detail-3",
+        "robot-vacuum-detail-4",
+        "robot-vacuum-detail-5",
+        "robot-vacuum-detail-6",
+        "robot-vacuum-detail-7",
+        "robot-vacuum-detail-8",
+        "robot-vacuum-detail-9",
+        "robot-vacuum-detail-10",
+        "robot-vacuum-detail-11",
+        "robot-vacuum-detail-12",
+        "robot-vacuum-detail-13",
+        "robot-vacuum-detail-14",
+        "robot-vacuum-detail-15",
+        "robot-vacuum-detail-16",
+        "robot-vacuum-detail-17",
+        "robot-vacuum-detail-18",
+        "robot-vacuum-detail-19",
+        "robot-vacuum-detail-20"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.64,
+        "microRoughness": 0.05,
+        "bumpAmplitude": 0,
+        "normalPattern": "faceted-object-normal",
+        "displacementPattern": "none",
+        "occlusionPattern": "seam-and-contact-ao",
+        "edgeWearPattern": "stable-ink-variation",
+        "notes": "No runtime textures."
+      },
+      "evidenceRefs": [
+        "turnsheet"
+      ],
+      "details": [],
+      "fidelityTier": "v2",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(244,238,226,1)",
+        "secondaryAlbedo": "rgba(113,102,127,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.92
+      }
+    },
+    {
+      "id": "chassis",
+      "name": "Twelve-sided stepped chassis",
+      "level": "macro",
+      "role": "chassis",
+      "importance": 1,
+      "confidence": 0.5,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Procedural low-poly component with explicit facets and frozen runtime anchors.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "root",
+      "attachment": {
+        "parentSocket": "root-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 1.92,
+        "height": 0.49,
+        "depth": 1.92,
+        "units": "world",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "chassis",
+        "pivot": {
+          "mode": "named-runtime-pivot",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "compound-proxy",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Archived v1 envelope remains authoritative."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "chassis",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "shell"
+        }
+      },
+      "material": "shell",
+      "materialLayers": [
+        "shell"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        {
+          "id": "chassis-low disc",
+          "name": "low disc",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        },
+        {
+          "id": "chassis-rubber skirt",
+          "name": "rubber skirt",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        },
+        {
+          "id": "chassis-cream shoulder",
+          "name": "cream shoulder",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        }
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.64,
+        "microRoughness": 0.05,
+        "bumpAmplitude": 0,
+        "normalPattern": "faceted-object-normal",
+        "displacementPattern": "none",
+        "occlusionPattern": "seam-and-contact-ao",
+        "edgeWearPattern": "stable-ink-variation",
+        "notes": "No runtime textures."
+      },
+      "evidenceRefs": [
+        "turnsheet"
+      ],
+      "details": [],
+      "fidelityTier": "v2",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(244,238,226,1)",
+        "secondaryAlbedo": "rgba(113,102,127,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.92
+      }
+    },
+    {
+      "id": "top-system",
+      "name": "Faceted pink top and LiDAR system",
+      "level": "macro",
+      "role": "top-assembly",
+      "importance": 1,
+      "confidence": 0.5,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Procedural low-poly component with explicit facets and frozen runtime anchors.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "chassis",
+      "attachment": {
+        "parentSocket": "chassis-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 1.86,
+        "height": 0.38,
+        "depth": 1.86,
+        "units": "world",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "top-assembly",
+        "pivot": {
+          "mode": "named-runtime-pivot",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "compound-proxy",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Archived v1 envelope remains authoritative."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "top-system",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "accent"
+        }
+      },
+      "material": "accent",
+      "materialLayers": [
+        "accent"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        {
+          "id": "top-system-broad cover",
+          "name": "broad cover",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        },
+        {
+          "id": "top-system-two buttons",
+          "name": "two buttons",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        },
+        {
+          "id": "top-system-enlarged LiDAR",
+          "name": "enlarged LiDAR",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        }
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.64,
+        "microRoughness": 0.05,
+        "bumpAmplitude": 0,
+        "normalPattern": "faceted-object-normal",
+        "displacementPattern": "none",
+        "occlusionPattern": "seam-and-contact-ao",
+        "edgeWearPattern": "stable-ink-variation",
+        "notes": "No runtime textures."
+      },
+      "evidenceRefs": [
+        "turnsheet"
+      ],
+      "details": [],
+      "fidelityTier": "v2",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(232,174,196,1)",
+        "secondaryAlbedo": "rgba(113,102,127,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.92
+      }
+    },
+    {
+      "id": "cleaning-system",
+      "name": "Action-ready underside cleaning rig",
+      "level": "macro",
+      "role": "underside",
+      "importance": 1,
+      "confidence": 0.5,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Procedural low-poly component with explicit facets and frozen runtime anchors.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "chassis",
+      "attachment": {
+        "parentSocket": "chassis-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 1.78,
+        "height": 0.28,
+        "depth": 1.78,
+        "units": "world",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "underside",
+        "pivot": {
+          "mode": "named-runtime-pivot",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "compound-proxy",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Archived v1 envelope remains authoritative."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "cleaning-system",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "rubber"
+        }
+      },
+      "material": "rubber",
+      "materialLayers": [
+        "rubber"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        {
+          "id": "cleaning-system-wheels",
+          "name": "wheels",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        },
+        {
+          "id": "cleaning-system-caster",
+          "name": "caster",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        },
+        {
+          "id": "cleaning-system-roller",
+          "name": "roller",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        },
+        {
+          "id": "cleaning-system-dual edge brushes",
+          "name": "dual edge brushes",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        }
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.64,
+        "microRoughness": 0.05,
+        "bumpAmplitude": 0,
+        "normalPattern": "faceted-object-normal",
+        "displacementPattern": "none",
+        "occlusionPattern": "seam-and-contact-ao",
+        "edgeWearPattern": "stable-ink-variation",
+        "notes": "No runtime textures."
+      },
+      "evidenceRefs": [
+        "turnsheet"
+      ],
+      "details": [],
+      "fidelityTier": "v2",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(244,238,226,1)",
+        "secondaryAlbedo": "rgba(113,102,127,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.92
+      }
+    },
+    {
+      "id": "bumper",
+      "name": "Independent front bumper shell",
+      "level": "meso",
+      "role": "bumper",
+      "importance": 1,
+      "confidence": 0.5,
+      "primitive": "curve-sweep",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Procedural low-poly component with explicit facets and frozen runtime anchors.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "chassis",
+      "attachment": {
+        "parentSocket": "chassis-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 2.02,
+        "height": 0.22,
+        "depth": 0.22,
+        "units": "world",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "bumper",
+        "pivot": {
+          "mode": "named-runtime-pivot",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "compound-proxy",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Archived v1 envelope remains authoritative."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "bumper",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "shell"
+        }
+      },
+      "material": "shell",
+      "materialLayers": [
+        "shell"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        {
+          "id": "bumper-semicircle arc",
+          "name": "semicircle arc",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        },
+        {
+          "id": "bumper-end splits",
+          "name": "end splits",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        },
+        {
+          "id": "bumper-press travel",
+          "name": "press travel",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        }
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.64,
+        "microRoughness": 0.05,
+        "bumpAmplitude": 0,
+        "normalPattern": "faceted-object-normal",
+        "displacementPattern": "none",
+        "occlusionPattern": "seam-and-contact-ao",
+        "edgeWearPattern": "stable-ink-variation",
+        "notes": "No runtime textures."
+      },
+      "evidenceRefs": [
+        "turnsheet"
+      ],
+      "details": [],
+      "fidelityTier": "v2",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(244,238,226,1)",
+        "secondaryAlbedo": "rgba(113,102,127,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.92
+      }
+    },
+    {
+      "id": "sensor-band",
+      "name": "Thick front optical band",
+      "level": "meso",
+      "role": "sensor",
+      "importance": 1,
+      "confidence": 0.5,
+      "primitive": "curve-sweep",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Procedural low-poly component with explicit facets and frozen runtime anchors.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "bumper",
+      "attachment": {
+        "parentSocket": "bumper-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 1.98,
+        "height": 0.11,
+        "depth": 0.05,
+        "units": "world",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "sensor",
+        "pivot": {
+          "mode": "named-runtime-pivot",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "compound-proxy",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Archived v1 envelope remains authoritative."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "sensor-band",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "sensor"
+        }
+      },
+      "material": "sensor",
+      "materialLayers": [
+        "sensor"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        {
+          "id": "sensor-band-dark curved window",
+          "name": "dark curved window",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        }
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.64,
+        "microRoughness": 0.05,
+        "bumpAmplitude": 0,
+        "normalPattern": "faceted-object-normal",
+        "displacementPattern": "none",
+        "occlusionPattern": "seam-and-contact-ao",
+        "edgeWearPattern": "stable-ink-variation",
+        "notes": "No runtime textures."
+      },
+      "evidenceRefs": [
+        "turnsheet"
+      ],
+      "details": [],
+      "fidelityTier": "v2",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(63,65,76,1)",
+        "secondaryAlbedo": "rgba(113,102,127,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.92
+      }
+    },
+    {
+      "id": "lidar",
+      "name": "Enlarged rotating LiDAR turret",
+      "level": "meso",
+      "role": "lidar-rotation",
+      "importance": 1,
+      "confidence": 0.5,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Procedural low-poly component with explicit facets and frozen runtime anchors.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "top-system",
+      "attachment": {
+        "parentSocket": "top-system-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 0.46,
+        "height": 0.23,
+        "depth": 0.46,
+        "units": "world",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "lidar-rotation",
+        "pivot": {
+          "mode": "named-runtime-pivot",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "compound-proxy",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Archived v1 envelope remains authoritative."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "lidar",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "shell-light"
+        }
+      },
+      "material": "shell-light",
+      "materialLayers": [
+        "shell-light"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        {
+          "id": "lidar-recessed seat",
+          "name": "recessed seat",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        },
+        {
+          "id": "lidar-window",
+          "name": "window",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        },
+        {
+          "id": "lidar-cap",
+          "name": "cap",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        },
+        {
+          "id": "lidar-status ring",
+          "name": "status ring",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        }
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.64,
+        "microRoughness": 0.05,
+        "bumpAmplitude": 0,
+        "normalPattern": "faceted-object-normal",
+        "displacementPattern": "none",
+        "occlusionPattern": "seam-and-contact-ao",
+        "edgeWearPattern": "stable-ink-variation",
+        "notes": "No runtime textures."
+      },
+      "evidenceRefs": [
+        "turnsheet"
+      ],
+      "details": [],
+      "fidelityTier": "v2",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(244,238,226,1)",
+        "secondaryAlbedo": "rgba(113,102,127,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.92
+      }
+    },
+    {
+      "id": "button-cluster",
+      "name": "Paired top control buttons",
+      "level": "meso",
+      "role": "button-rotation",
+      "importance": 1,
+      "confidence": 0.5,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Procedural low-poly component with explicit facets and frozen runtime anchors.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "top-system",
+      "attachment": {
+        "parentSocket": "top-system-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 0.12,
+        "height": 0.03,
+        "depth": 0.27,
+        "units": "world",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "button-rotation",
+        "pivot": {
+          "mode": "named-runtime-pivot",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "compound-proxy",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Archived v1 envelope remains authoritative."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "button-cluster",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "accent"
+        }
+      },
+      "material": "accent",
+      "materialLayers": [
+        "accent"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        {
+          "id": "button-cluster-power glyph",
+          "name": "power glyph",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        },
+        {
+          "id": "button-cluster-home glyph",
+          "name": "home glyph",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        }
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.64,
+        "microRoughness": 0.05,
+        "bumpAmplitude": 0,
+        "normalPattern": "faceted-object-normal",
+        "displacementPattern": "none",
+        "occlusionPattern": "seam-and-contact-ao",
+        "edgeWearPattern": "stable-ink-variation",
+        "notes": "No runtime textures."
+      },
+      "evidenceRefs": [
+        "turnsheet"
+      ],
+      "details": [],
+      "fidelityTier": "v2",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(232,174,196,1)",
+        "secondaryAlbedo": "rgba(113,102,127,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.92
+      }
+    },
+    {
+      "id": "drive-wheels",
+      "name": "Paired drive wheel assemblies",
+      "level": "meso",
+      "role": "wheel-rotation",
+      "importance": 1,
+      "confidence": 0.5,
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Procedural low-poly component with explicit facets and frozen runtime anchors.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "cleaning-system",
+      "attachment": {
+        "parentSocket": "cleaning-system-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 1.3,
+        "height": 0.29,
+        "depth": 0.2,
+        "units": "world",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "wheel-rotation",
+        "pivot": {
+          "mode": "named-runtime-pivot",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "compound-proxy",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Archived v1 envelope remains authoritative."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "drive-wheels",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "rubber"
+        }
+      },
+      "material": "rubber",
+      "materialLayers": [
+        "rubber"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        {
+          "id": "drive-wheels-four tread rings per wheel",
+          "name": "four tread rings per wheel",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        }
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.64,
+        "microRoughness": 0.05,
+        "bumpAmplitude": 0,
+        "normalPattern": "faceted-object-normal",
+        "displacementPattern": "none",
+        "occlusionPattern": "seam-and-contact-ao",
+        "edgeWearPattern": "stable-ink-variation",
+        "notes": "No runtime textures."
+      },
+      "evidenceRefs": [
+        "turnsheet"
+      ],
+      "details": [],
+      "fidelityTier": "v2",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(244,238,226,1)",
+        "secondaryAlbedo": "rgba(113,102,127,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.92
+      }
+    },
+    {
+      "id": "main-brush",
+      "name": "Central eight-fin roller brush",
+      "level": "meso",
+      "role": "roller-rotation",
+      "importance": 1,
+      "confidence": 0.5,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Procedural low-poly component with explicit facets and frozen runtime anchors.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "cleaning-system",
+      "attachment": {
+        "parentSocket": "cleaning-system-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 0.58,
+        "height": 0.16,
+        "depth": 0.16,
+        "units": "world",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "roller-rotation",
+        "pivot": {
+          "mode": "named-runtime-pivot",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "compound-proxy",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Archived v1 envelope remains authoritative."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "main-brush",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "brush"
+        }
+      },
+      "material": "brush",
+      "materialLayers": [
+        "brush"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        {
+          "id": "main-brush-eight alternating fins",
+          "name": "eight alternating fins",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        }
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.64,
+        "microRoughness": 0.05,
+        "bumpAmplitude": 0,
+        "normalPattern": "faceted-object-normal",
+        "displacementPattern": "none",
+        "occlusionPattern": "seam-and-contact-ao",
+        "edgeWearPattern": "stable-ink-variation",
+        "notes": "No runtime textures."
+      },
+      "evidenceRefs": [
+        "turnsheet"
+      ],
+      "details": [],
+      "fidelityTier": "v2",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(244,238,226,1)",
+        "secondaryAlbedo": "rgba(113,102,127,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.92
+      }
+    },
+    {
+      "id": "side-brushes",
+      "name": "Left and right three-arm side brushes",
+      "level": "meso",
+      "role": "side-brush-rotation",
+      "importance": 1,
+      "confidence": 0.5,
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Procedural low-poly component with explicit facets and frozen runtime anchors.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "cleaning-system",
+      "attachment": {
+        "parentSocket": "cleaning-system-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 1.52,
+        "height": 0.06,
+        "depth": 0.83,
+        "units": "world",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "side-brush-rotation",
+        "pivot": {
+          "mode": "named-runtime-pivot",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "compound-proxy",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Archived v1 envelope remains authoritative."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "side-brushes",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "brush"
+        }
+      },
+      "material": "brush",
+      "materialLayers": [
+        "brush"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        {
+          "id": "side-brushes-two hubs",
+          "name": "two hubs",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        },
+        {
+          "id": "side-brushes-six arms",
+          "name": "six arms",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        },
+        {
+          "id": "side-brushes-eighteen bristles",
+          "name": "eighteen bristles",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        }
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.64,
+        "microRoughness": 0.05,
+        "bumpAmplitude": 0,
+        "normalPattern": "faceted-object-normal",
+        "displacementPattern": "none",
+        "occlusionPattern": "seam-and-contact-ao",
+        "edgeWearPattern": "stable-ink-variation",
+        "notes": "No runtime textures."
+      },
+      "evidenceRefs": [
+        "turnsheet"
+      ],
+      "details": [],
+      "fidelityTier": "v2",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(244,238,226,1)",
+        "secondaryAlbedo": "rgba(113,102,127,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.92
+      }
+    },
+    {
+      "id": "caster",
+      "name": "Front caster wheel",
+      "level": "meso",
+      "role": "floor-contact",
+      "importance": 1,
+      "confidence": 0.5,
+      "primitive": "sphere",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Procedural low-poly component with explicit facets and frozen runtime anchors.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "cleaning-system",
+      "attachment": {
+        "parentSocket": "cleaning-system-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 0.11,
+        "height": 0.09,
+        "depth": 0.16,
+        "units": "world",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "floor-contact",
+        "pivot": {
+          "mode": "named-runtime-pivot",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "compound-proxy",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Archived v1 envelope remains authoritative."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "caster",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "rubber"
+        }
+      },
+      "material": "rubber",
+      "materialLayers": [
+        "rubber"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        {
+          "id": "caster-squashed wheel",
+          "name": "squashed wheel",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        }
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.64,
+        "microRoughness": 0.05,
+        "bumpAmplitude": 0,
+        "normalPattern": "faceted-object-normal",
+        "displacementPattern": "none",
+        "occlusionPattern": "seam-and-contact-ao",
+        "edgeWearPattern": "stable-ink-variation",
+        "notes": "No runtime textures."
+      },
+      "evidenceRefs": [
+        "turnsheet"
+      ],
+      "details": [],
+      "fidelityTier": "v2",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(244,238,226,1)",
+        "secondaryAlbedo": "rgba(113,102,127,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.92
+      }
+    },
+    {
+      "id": "contacts",
+      "name": "Paired charging contacts",
+      "level": "meso",
+      "role": "charging",
+      "importance": 1,
+      "confidence": 0.5,
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Procedural low-poly component with explicit facets and frozen runtime anchors.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "cleaning-system",
+      "attachment": {
+        "parentSocket": "cleaning-system-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 0.51,
+        "height": 0.03,
+        "depth": 0.11,
+        "units": "world",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "charging",
+        "pivot": {
+          "mode": "named-runtime-pivot",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "compound-proxy",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Archived v1 envelope remains authoritative."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "contacts",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "metal"
+        }
+      },
+      "material": "metal",
+      "materialLayers": [
+        "metal"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        {
+          "id": "contacts-two plates",
+          "name": "two plates",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        }
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.64,
+        "microRoughness": 0.05,
+        "bumpAmplitude": 0,
+        "normalPattern": "faceted-object-normal",
+        "displacementPattern": "none",
+        "occlusionPattern": "seam-and-contact-ao",
+        "edgeWearPattern": "stable-ink-variation",
+        "notes": "No runtime textures."
+      },
+      "evidenceRefs": [
+        "turnsheet"
+      ],
+      "details": [],
+      "fidelityTier": "v2",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(244,238,226,1)",
+        "secondaryAlbedo": "rgba(113,102,127,1)",
+        "materialClass": "metal",
+        "materialClassConfidence": 0.92
+      }
+    },
+    {
+      "id": "underside-details",
+      "name": "Fasteners and cliff sensors",
+      "level": "meso",
+      "role": "underside-detail",
+      "importance": 1,
+      "confidence": 0.5,
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Procedural low-poly component with explicit facets and frozen runtime anchors.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "cleaning-system",
+      "attachment": {
+        "parentSocket": "cleaning-system-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 1.4,
+        "height": 0.03,
+        "depth": 1.4,
+        "units": "world",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "underside-detail",
+        "pivot": {
+          "mode": "named-runtime-pivot",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "compound-proxy",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Archived v1 envelope remains authoritative."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "underside-details",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "sensor"
+        }
+      },
+      "material": "sensor",
+      "materialLayers": [
+        "sensor"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        {
+          "id": "underside-details-eight fasteners",
+          "name": "eight fasteners",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        },
+        {
+          "id": "underside-details-four cliff sensors",
+          "name": "four cliff sensors",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        }
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.64,
+        "microRoughness": 0.05,
+        "bumpAmplitude": 0,
+        "normalPattern": "faceted-object-normal",
+        "displacementPattern": "none",
+        "occlusionPattern": "seam-and-contact-ao",
+        "edgeWearPattern": "stable-ink-variation",
+        "notes": "No runtime textures."
+      },
+      "evidenceRefs": [
+        "turnsheet"
+      ],
+      "details": [],
+      "fidelityTier": "v2",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(63,65,76,1)",
+        "secondaryAlbedo": "rgba(113,102,127,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.92
+      }
+    },
+    {
+      "id": "outline-system",
+      "name": "Stable uneven three-tier outline",
+      "level": "micro",
+      "role": "outline-style",
+      "importance": 1,
+      "confidence": 0.5,
+      "primitive": "box",
+      "topologyClass": "material-only",
+      "topologyRationale": "Procedural low-poly component with explicit facets and frozen runtime anchors.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly blockout with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "none",
+          "bevelRadius": 0,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "root",
+      "attachment": {
+        "parentSocket": "root-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 2.02,
+        "height": 0.67,
+        "depth": 2.02,
+        "units": "world",
+        "confidence": 0.94
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "outline-style",
+        "pivot": {
+          "mode": "named-runtime-pivot",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "compound-proxy",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Archived v1 envelope remains authoritative."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "outline-system",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "ink"
+        }
+      },
+      "material": "ink",
+      "materialLayers": [
+        "ink"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        {
+          "id": "outline-system-main 0.0048",
+          "name": "main 0.0048",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        },
+        {
+          "id": "outline-system-structure 0.0041",
+          "name": "structure 0.0041",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        },
+        {
+          "id": "outline-system-detail 0.0033",
+          "name": "detail 0.0033",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        },
+        {
+          "id": "outline-system-variation 0.18",
+          "name": "variation 0.18",
+          "evidenceRefs": [
+            "turnsheet"
+          ],
+          "geometry": "explicit-named-mesh-or-shared-procedural-geometry"
+        }
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.64,
+        "microRoughness": 0.05,
+        "bumpAmplitude": 0,
+        "normalPattern": "faceted-object-normal",
+        "displacementPattern": "none",
+        "occlusionPattern": "seam-and-contact-ao",
+        "edgeWearPattern": "stable-ink-variation",
+        "notes": "No runtime textures."
+      },
+      "evidenceRefs": [
+        "turnsheet"
+      ],
+      "details": [],
+      "fidelityTier": "v2",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(244,238,226,1)",
+        "secondaryAlbedo": "rgba(113,102,127,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.92
+      }
+    }
+  ],
+  "materials": [
+    {
+      "id": "shell",
+      "name": "shell",
+      "type": "standard",
+      "shaderModel": "MeshStandardMaterial / PBR approximation",
+      "baseColor": "#F4EEE2",
+      "color": "#F4EEE2",
+      "albedo": {
+        "dominant": "#F4EEE2",
+        "secondary": [
+          "#FFF8EB",
+          "#D7C9C3"
+        ],
+        "samplingNotes": "Observed from GPT Image 2 robot-vacuum turn-sheet."
+      },
+      "colorVariation": {
+        "palette": [
+          "#F4EEE2",
+          "#FFF8EB",
+          "#D7C9C3"
+        ],
+        "pattern": "toon-band-and-object-space-facet",
+        "amplitude": 0.12,
+        "heightCorrelation": 0.1
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Preserve stable world/object-scale detail; do not stretch micro detail with component scale."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.42,
+          "role": "broad color and height breakup"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.22,
+          "role": "ridges, pores, grain, dents, or equivalent visible relief"
+        },
+        {
+          "id": "micro",
+          "frequency": 56,
+          "amplitude": 0.08,
+          "role": "highlight breakup visible under grazing light"
+        }
+      ],
+      "roughness": {
+        "base": 0.68,
+        "variation": 0.08,
+        "map": "independent-procedural-field",
+        "localResponse": "higher at seams"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0.04
+      },
+      "normal": {
+        "pattern": "derived-from-independent-height-field",
+        "strength": 0.35,
+        "scale": 24,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.25,
+        "contactShadowBias": 0.35,
+        "notes": "Darken creases, seams, intersections, and recessed local features."
+      },
+      "wear": {
+        "edgeWear": 0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0,
+        "cavityBias": 0,
+        "color": "#2F2A22"
+      },
+      "localOverrides": [
+        {
+          "region": "faceted-shadow-planes",
+          "response": "cool-lavender tint",
+          "evidenceRefs": [
+            "turnsheet"
+          ]
+        }
+      ],
+      "shaderNotes": [
+        "Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.",
+        "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.",
+        "Use normal/bump/displacement only when they map to observed surface relief.",
+        "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."
+      ],
+      "notes": "Runtime uses procedural Toon shading and no image textures.",
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.84,
+        "source": "turnsheet-observed-procedural-evidence",
+        "maps": {
+          "albedo": {
+            "path": "procedural-independent-albedo",
+            "channel": "albedo"
+          },
+          "roughness": {
+            "path": "procedural-independent-roughness",
+            "channel": "roughness"
+          },
+          "height": {
+            "path": "none-flat-polymer",
+            "channel": "height"
+          },
+          "normal": {
+            "path": "geometry-facet-normals",
+            "channel": "normal"
+          },
+          "ao": {
+            "path": "runtime-lighting-contact-ao",
+            "channel": "ao"
+          }
+        }
+      }
+    },
+    {
+      "id": "shell-light",
+      "name": "shell-light",
+      "type": "standard",
+      "shaderModel": "MeshStandardMaterial / PBR approximation",
+      "baseColor": "#FFF8EB",
+      "color": "#FFF8EB",
+      "albedo": {
+        "dominant": "#FFF8EB",
+        "secondary": [
+          "#F4EEE2"
+        ],
+        "samplingNotes": "Observed from GPT Image 2 robot-vacuum turn-sheet."
+      },
+      "colorVariation": {
+        "palette": [
+          "#FFF8EB",
+          "#F4EEE2"
+        ],
+        "pattern": "toon-band-and-object-space-facet",
+        "amplitude": 0.12,
+        "heightCorrelation": 0.1
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Preserve stable world/object-scale detail; do not stretch micro detail with component scale."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.42,
+          "role": "broad color and height breakup"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.22,
+          "role": "ridges, pores, grain, dents, or equivalent visible relief"
+        },
+        {
+          "id": "micro",
+          "frequency": 56,
+          "amplitude": 0.08,
+          "role": "highlight breakup visible under grazing light"
+        }
+      ],
+      "roughness": {
+        "base": 0.58,
+        "variation": 0.08,
+        "map": "independent-procedural-field",
+        "localResponse": "higher at seams"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0.04
+      },
+      "normal": {
+        "pattern": "derived-from-independent-height-field",
+        "strength": 0.35,
+        "scale": 24,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.25,
+        "contactShadowBias": 0.35,
+        "notes": "Darken creases, seams, intersections, and recessed local features."
+      },
+      "wear": {
+        "edgeWear": 0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0,
+        "cavityBias": 0,
+        "color": "#2F2A22"
+      },
+      "localOverrides": [
+        {
+          "region": "faceted-shadow-planes",
+          "response": "cool-lavender tint",
+          "evidenceRefs": [
+            "turnsheet"
+          ]
+        }
+      ],
+      "shaderNotes": [
+        "Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.",
+        "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.",
+        "Use normal/bump/displacement only when they map to observed surface relief.",
+        "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."
+      ],
+      "notes": "Runtime uses procedural Toon shading and no image textures.",
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.84,
+        "source": "turnsheet-observed-procedural-evidence",
+        "maps": {
+          "albedo": {
+            "path": "procedural-independent-albedo",
+            "channel": "albedo"
+          },
+          "roughness": {
+            "path": "procedural-independent-roughness",
+            "channel": "roughness"
+          },
+          "height": {
+            "path": "none-flat-polymer",
+            "channel": "height"
+          },
+          "normal": {
+            "path": "geometry-facet-normals",
+            "channel": "normal"
+          },
+          "ao": {
+            "path": "runtime-lighting-contact-ao",
+            "channel": "ao"
+          }
+        }
+      }
+    },
+    {
+      "id": "accent",
+      "name": "accent",
+      "type": "standard",
+      "shaderModel": "MeshStandardMaterial / PBR approximation",
+      "baseColor": "#E8AEC4",
+      "color": "#E8AEC4",
+      "albedo": {
+        "dominant": "#E8AEC4",
+        "secondary": [
+          "#F5C7D6",
+          "#C77E9B"
+        ],
+        "samplingNotes": "Observed from GPT Image 2 robot-vacuum turn-sheet."
+      },
+      "colorVariation": {
+        "palette": [
+          "#E8AEC4",
+          "#F5C7D6",
+          "#C77E9B"
+        ],
+        "pattern": "toon-band-and-object-space-facet",
+        "amplitude": 0.12,
+        "heightCorrelation": 0.1
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Preserve stable world/object-scale detail; do not stretch micro detail with component scale."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.42,
+          "role": "broad color and height breakup"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.22,
+          "role": "ridges, pores, grain, dents, or equivalent visible relief"
+        },
+        {
+          "id": "micro",
+          "frequency": 56,
+          "amplitude": 0.08,
+          "role": "highlight breakup visible under grazing light"
+        }
+      ],
+      "roughness": {
+        "base": 0.56,
+        "variation": 0.08,
+        "map": "independent-procedural-field",
+        "localResponse": "higher at seams"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0.04
+      },
+      "normal": {
+        "pattern": "derived-from-independent-height-field",
+        "strength": 0.35,
+        "scale": 24,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.25,
+        "contactShadowBias": 0.35,
+        "notes": "Darken creases, seams, intersections, and recessed local features."
+      },
+      "wear": {
+        "edgeWear": 0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0,
+        "cavityBias": 0,
+        "color": "#2F2A22"
+      },
+      "localOverrides": [
+        {
+          "region": "faceted-shadow-planes",
+          "response": "cool-lavender tint",
+          "evidenceRefs": [
+            "turnsheet"
+          ]
+        }
+      ],
+      "shaderNotes": [
+        "Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.",
+        "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.",
+        "Use normal/bump/displacement only when they map to observed surface relief.",
+        "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."
+      ],
+      "notes": "Runtime uses procedural Toon shading and no image textures.",
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.84,
+        "source": "turnsheet-observed-procedural-evidence",
+        "maps": {
+          "albedo": {
+            "path": "procedural-independent-albedo",
+            "channel": "albedo"
+          },
+          "roughness": {
+            "path": "procedural-independent-roughness",
+            "channel": "roughness"
+          },
+          "height": {
+            "path": "none-flat-polymer",
+            "channel": "height"
+          },
+          "normal": {
+            "path": "geometry-facet-normals",
+            "channel": "normal"
+          },
+          "ao": {
+            "path": "runtime-lighting-contact-ao",
+            "channel": "ao"
+          }
+        }
+      }
+    },
+    {
+      "id": "sensor",
+      "name": "sensor",
+      "type": "standard",
+      "shaderModel": "MeshStandardMaterial / PBR approximation",
+      "baseColor": "#3F414C",
+      "color": "#3F414C",
+      "albedo": {
+        "dominant": "#3F414C",
+        "secondary": [
+          "#2E2B38"
+        ],
+        "samplingNotes": "Observed from GPT Image 2 robot-vacuum turn-sheet."
+      },
+      "colorVariation": {
+        "palette": [
+          "#3F414C",
+          "#2E2B38"
+        ],
+        "pattern": "toon-band-and-object-space-facet",
+        "amplitude": 0.12,
+        "heightCorrelation": 0.1
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Preserve stable world/object-scale detail; do not stretch micro detail with component scale."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.42,
+          "role": "broad color and height breakup"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.22,
+          "role": "ridges, pores, grain, dents, or equivalent visible relief"
+        },
+        {
+          "id": "micro",
+          "frequency": 56,
+          "amplitude": 0.08,
+          "role": "highlight breakup visible under grazing light"
+        }
+      ],
+      "roughness": {
+        "base": 0.82,
+        "variation": 0.08,
+        "map": "independent-procedural-field",
+        "localResponse": "higher at seams"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0.04
+      },
+      "normal": {
+        "pattern": "derived-from-independent-height-field",
+        "strength": 0.35,
+        "scale": 24,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.25,
+        "contactShadowBias": 0.35,
+        "notes": "Darken creases, seams, intersections, and recessed local features."
+      },
+      "wear": {
+        "edgeWear": 0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0,
+        "cavityBias": 0,
+        "color": "#2F2A22"
+      },
+      "localOverrides": [
+        {
+          "region": "faceted-shadow-planes",
+          "response": "cool-lavender tint",
+          "evidenceRefs": [
+            "turnsheet"
+          ]
+        }
+      ],
+      "shaderNotes": [
+        "Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.",
+        "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.",
+        "Use normal/bump/displacement only when they map to observed surface relief.",
+        "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."
+      ],
+      "notes": "Runtime uses procedural Toon shading and no image textures.",
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.84,
+        "source": "turnsheet-observed-procedural-evidence",
+        "maps": {
+          "albedo": {
+            "path": "procedural-independent-albedo",
+            "channel": "albedo"
+          },
+          "roughness": {
+            "path": "procedural-independent-roughness",
+            "channel": "roughness"
+          },
+          "height": {
+            "path": "none-flat-polymer",
+            "channel": "height"
+          },
+          "normal": {
+            "path": "geometry-facet-normals",
+            "channel": "normal"
+          },
+          "ao": {
+            "path": "runtime-lighting-contact-ao",
+            "channel": "ao"
+          }
+        }
+      }
+    },
+    {
+      "id": "rubber",
+      "name": "rubber",
+      "type": "standard",
+      "shaderModel": "MeshStandardMaterial / PBR approximation",
+      "baseColor": "#56545F",
+      "color": "#56545F",
+      "albedo": {
+        "dominant": "#56545F",
+        "secondary": [
+          "#34313D"
+        ],
+        "samplingNotes": "Observed from GPT Image 2 robot-vacuum turn-sheet."
+      },
+      "colorVariation": {
+        "palette": [
+          "#56545F",
+          "#34313D"
+        ],
+        "pattern": "toon-band-and-object-space-facet",
+        "amplitude": 0.12,
+        "heightCorrelation": 0.1
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Preserve stable world/object-scale detail; do not stretch micro detail with component scale."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.42,
+          "role": "broad color and height breakup"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.22,
+          "role": "ridges, pores, grain, dents, or equivalent visible relief"
+        },
+        {
+          "id": "micro",
+          "frequency": 56,
+          "amplitude": 0.08,
+          "role": "highlight breakup visible under grazing light"
+        }
+      ],
+      "roughness": {
+        "base": 0.92,
+        "variation": 0.08,
+        "map": "independent-procedural-field",
+        "localResponse": "higher at seams"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0.04
+      },
+      "normal": {
+        "pattern": "derived-from-independent-height-field",
+        "strength": 0.35,
+        "scale": 24,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.25,
+        "contactShadowBias": 0.35,
+        "notes": "Darken creases, seams, intersections, and recessed local features."
+      },
+      "wear": {
+        "edgeWear": 0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0,
+        "cavityBias": 0,
+        "color": "#2F2A22"
+      },
+      "localOverrides": [
+        {
+          "region": "faceted-shadow-planes",
+          "response": "cool-lavender tint",
+          "evidenceRefs": [
+            "turnsheet"
+          ]
+        }
+      ],
+      "shaderNotes": [
+        "Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.",
+        "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.",
+        "Use normal/bump/displacement only when they map to observed surface relief.",
+        "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."
+      ],
+      "notes": "Runtime uses procedural Toon shading and no image textures.",
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.84,
+        "source": "turnsheet-observed-procedural-evidence",
+        "maps": {
+          "albedo": {
+            "path": "procedural-independent-albedo",
+            "channel": "albedo"
+          },
+          "roughness": {
+            "path": "procedural-independent-roughness",
+            "channel": "roughness"
+          },
+          "height": {
+            "path": "none-flat-polymer",
+            "channel": "height"
+          },
+          "normal": {
+            "path": "geometry-facet-normals",
+            "channel": "normal"
+          },
+          "ao": {
+            "path": "runtime-lighting-contact-ao",
+            "channel": "ao"
+          }
+        }
+      }
+    },
+    {
+      "id": "brush",
+      "name": "brush",
+      "type": "standard",
+      "shaderModel": "MeshStandardMaterial / PBR approximation",
+      "baseColor": "#393844",
+      "color": "#393844",
+      "albedo": {
+        "dominant": "#393844",
+        "secondary": [
+          "#25232D"
+        ],
+        "samplingNotes": "Observed from GPT Image 2 robot-vacuum turn-sheet."
+      },
+      "colorVariation": {
+        "palette": [
+          "#393844",
+          "#25232D"
+        ],
+        "pattern": "toon-band-and-object-space-facet",
+        "amplitude": 0.12,
+        "heightCorrelation": 0.1
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Preserve stable world/object-scale detail; do not stretch micro detail with component scale."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.42,
+          "role": "broad color and height breakup"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.22,
+          "role": "ridges, pores, grain, dents, or equivalent visible relief"
+        },
+        {
+          "id": "micro",
+          "frequency": 56,
+          "amplitude": 0.08,
+          "role": "highlight breakup visible under grazing light"
+        }
+      ],
+      "roughness": {
+        "base": 0.88,
+        "variation": 0.08,
+        "map": "independent-procedural-field",
+        "localResponse": "higher at seams"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0.04
+      },
+      "normal": {
+        "pattern": "derived-from-independent-height-field",
+        "strength": 0.35,
+        "scale": 24,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.25,
+        "contactShadowBias": 0.35,
+        "notes": "Darken creases, seams, intersections, and recessed local features."
+      },
+      "wear": {
+        "edgeWear": 0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0,
+        "cavityBias": 0,
+        "color": "#2F2A22"
+      },
+      "localOverrides": [
+        {
+          "region": "faceted-shadow-planes",
+          "response": "cool-lavender tint",
+          "evidenceRefs": [
+            "turnsheet"
+          ]
+        }
+      ],
+      "shaderNotes": [
+        "Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.",
+        "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.",
+        "Use normal/bump/displacement only when they map to observed surface relief.",
+        "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."
+      ],
+      "notes": "Runtime uses procedural Toon shading and no image textures.",
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.84,
+        "source": "turnsheet-observed-procedural-evidence",
+        "maps": {
+          "albedo": {
+            "path": "procedural-independent-albedo",
+            "channel": "albedo"
+          },
+          "roughness": {
+            "path": "procedural-independent-roughness",
+            "channel": "roughness"
+          },
+          "height": {
+            "path": "none-flat-polymer",
+            "channel": "height"
+          },
+          "normal": {
+            "path": "geometry-facet-normals",
+            "channel": "normal"
+          },
+          "ao": {
+            "path": "runtime-lighting-contact-ao",
+            "channel": "ao"
+          }
+        }
+      }
+    },
+    {
+      "id": "metal",
+      "name": "metal",
+      "type": "standard",
+      "shaderModel": "MeshStandardMaterial / PBR approximation",
+      "baseColor": "#A6A4AA",
+      "color": "#A6A4AA",
+      "albedo": {
+        "dominant": "#A6A4AA",
+        "secondary": [
+          "#6D6874"
+        ],
+        "samplingNotes": "Observed from GPT Image 2 robot-vacuum turn-sheet."
+      },
+      "colorVariation": {
+        "palette": [
+          "#A6A4AA",
+          "#6D6874"
+        ],
+        "pattern": "toon-band-and-object-space-facet",
+        "amplitude": 0.12,
+        "heightCorrelation": 0.1
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Preserve stable world/object-scale detail; do not stretch micro detail with component scale."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.42,
+          "role": "broad color and height breakup"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.22,
+          "role": "ridges, pores, grain, dents, or equivalent visible relief"
+        },
+        {
+          "id": "micro",
+          "frequency": 56,
+          "amplitude": 0.08,
+          "role": "highlight breakup visible under grazing light"
+        }
+      ],
+      "roughness": {
+        "base": 0.48,
+        "variation": 0.08,
+        "map": "independent-procedural-field",
+        "localResponse": "higher at seams"
+      },
+      "metalness": {
+        "base": 0.42,
+        "variation": 0.04
+      },
+      "normal": {
+        "pattern": "derived-from-independent-height-field",
+        "strength": 0.35,
+        "scale": 24,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.25,
+        "contactShadowBias": 0.35,
+        "notes": "Darken creases, seams, intersections, and recessed local features."
+      },
+      "wear": {
+        "edgeWear": 0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0,
+        "cavityBias": 0,
+        "color": "#2F2A22"
+      },
+      "localOverrides": [
+        {
+          "region": "faceted-shadow-planes",
+          "response": "cool-lavender tint",
+          "evidenceRefs": [
+            "turnsheet"
+          ]
+        }
+      ],
+      "shaderNotes": [
+        "Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.",
+        "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.",
+        "Use normal/bump/displacement only when they map to observed surface relief.",
+        "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."
+      ],
+      "notes": "Runtime uses procedural Toon shading and no image textures.",
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.84,
+        "source": "turnsheet-observed-procedural-evidence",
+        "maps": {
+          "albedo": {
+            "path": "procedural-independent-albedo",
+            "channel": "albedo"
+          },
+          "roughness": {
+            "path": "procedural-independent-roughness",
+            "channel": "roughness"
+          },
+          "height": {
+            "path": "none-flat-polymer",
+            "channel": "height"
+          },
+          "normal": {
+            "path": "geometry-facet-normals",
+            "channel": "normal"
+          },
+          "ao": {
+            "path": "runtime-lighting-contact-ao",
+            "channel": "ao"
+          }
+        }
+      }
+    },
+    {
+      "id": "ink",
+      "name": "ink",
+      "type": "standard",
+      "shaderModel": "MeshStandardMaterial / PBR approximation",
+      "baseColor": "#302A38",
+      "color": "#302A38",
+      "albedo": {
+        "dominant": "#302A38",
+        "secondary": [
+          "#5A4B60"
+        ],
+        "samplingNotes": "Observed from GPT Image 2 robot-vacuum turn-sheet."
+      },
+      "colorVariation": {
+        "palette": [
+          "#302A38",
+          "#5A4B60"
+        ],
+        "pattern": "toon-band-and-object-space-facet",
+        "amplitude": 0.12,
+        "heightCorrelation": 0.1
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Preserve stable world/object-scale detail; do not stretch micro detail with component scale."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.42,
+          "role": "broad color and height breakup"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.22,
+          "role": "ridges, pores, grain, dents, or equivalent visible relief"
+        },
+        {
+          "id": "micro",
+          "frequency": 56,
+          "amplitude": 0.08,
+          "role": "highlight breakup visible under grazing light"
+        }
+      ],
+      "roughness": {
+        "base": 0.84,
+        "variation": 0.08,
+        "map": "independent-procedural-field",
+        "localResponse": "higher at seams"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0.04
+      },
+      "normal": {
+        "pattern": "derived-from-independent-height-field",
+        "strength": 0.35,
+        "scale": 24,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.25,
+        "contactShadowBias": 0.35,
+        "notes": "Darken creases, seams, intersections, and recessed local features."
+      },
+      "wear": {
+        "edgeWear": 0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0,
+        "cavityBias": 0,
+        "color": "#2F2A22"
+      },
+      "localOverrides": [
+        {
+          "region": "faceted-shadow-planes",
+          "response": "cool-lavender tint",
+          "evidenceRefs": [
+            "turnsheet"
+          ]
+        }
+      ],
+      "shaderNotes": [
+        "Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.",
+        "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.",
+        "Use normal/bump/displacement only when they map to observed surface relief.",
+        "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."
+      ],
+      "notes": "Runtime uses procedural Toon shading and no image textures.",
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.84,
+        "source": "turnsheet-observed-procedural-evidence",
+        "maps": {
+          "albedo": {
+            "path": "procedural-independent-albedo",
+            "channel": "albedo"
+          },
+          "roughness": {
+            "path": "procedural-independent-roughness",
+            "channel": "roughness"
+          },
+          "height": {
+            "path": "none-flat-polymer",
+            "channel": "height"
+          },
+          "normal": {
+            "path": "geometry-facet-normals",
+            "channel": "normal"
+          },
+          "ao": {
+            "path": "runtime-lighting-contact-ao",
+            "channel": "ao"
+          }
+        }
+      }
+    }
+  ],
+  "repetitionSystems": [
+    {
+      "id": "drive-wheel-system",
+      "componentRefs": [
+        "drive-wheels"
+      ],
+      "count": 2,
+      "layout": "frozen left/right wheel pivots",
+      "instancing": "shared wheel and tread language",
+      "evidenceRefs": [
+        "runtime-contract"
+      ]
+    },
+    {
+      "id": "side-brush-system",
+      "componentRefs": [
+        "side-brushes"
+      ],
+      "count": 2,
+      "layout": "frozen left/right front underside pivots",
+      "instancing": "shared three-arm brush construction",
+      "evidenceRefs": [
+        "runtime-contract"
+      ]
+    },
+    {
+      "id": "side-brush-arm-system",
+      "componentRefs": [
+        "side-brushes"
+      ],
+      "count": 6,
+      "layout": "three radial arms per side",
+      "instancing": "shared arm geometry",
+      "evidenceRefs": [
+        "runtime-contract"
+      ]
+    },
+    {
+      "id": "side-brush-bristle-system",
+      "componentRefs": [
+        "side-brushes"
+      ],
+      "count": 18,
+      "layout": "three bristles per arm",
+      "instancing": "shared bristle geometry",
+      "evidenceRefs": [
+        "runtime-contract"
+      ]
+    },
+    {
+      "id": "roller-fin-system",
+      "componentRefs": [
+        "main-brush"
+      ],
+      "count": 8,
+      "layout": "radial roller fins",
+      "instancing": "shared fin geometry",
+      "evidenceRefs": [
+        "runtime-contract"
+      ]
+    },
+    {
+      "id": "underside-fastener-system",
+      "componentRefs": [
+        "underside-details"
+      ],
+      "count": 8,
+      "layout": "perimeter radial",
+      "instancing": "shared fastener geometry",
+      "evidenceRefs": [
+        "turnsheet"
+      ]
+    },
+    {
+      "id": "cliff-sensor-system",
+      "componentRefs": [
+        "underside-details"
+      ],
+      "count": 4,
+      "layout": "perimeter optical windows",
+      "instancing": "shared sensor geometry",
+      "evidenceRefs": [
+        "turnsheet"
+      ]
+    }
+  ],
+  "buildPasses": [
+    {
+      "id": "blockout",
+      "goal": "Match macro silhouette and proportions.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "Silhouette reads correctly without materials.",
+        "Quality contract has named all required macro feature groups before code generation.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "structural-pass",
+      "goal": "Build the component hierarchy implied by the pre-spec complexity assessment.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "Macro, meso, and repeated structures meet qualityContract.minimumSpecDepth.",
+        "Parent-child relations, joints, seams, sockets, and contact points are explicit.",
+        "Every attached child appendage/connector has parentSocket, localStart/localEnd, contactType, embedDepth or overlap, and gapTolerance.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "form-refinement",
+      "goal": "Refine shape, deformation, bevels, tapers, curves, asymmetry, and visible local geometry.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "Important visible forms are represented in component geometryDescriptor, deformations, localFeatures, or repetitionSystems.",
+        "Endpoint-based child parts are rooted at their attachment sockets and do not visibly float away from parents.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "material-pass",
+      "goal": "Match material color, roughness, bump, and local variation.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "Reference-derived albedo palette records dominant, secondary, and accent colors per visible material.",
+        "Each important material defines roughness variation and at least one normal/bump/displacement response.",
+        "Local material overrides, dirt/wear/stains/moss/chips/scratches or equivalent masks are tied to evidenceRefs.",
+        "Thin, transparent, reflective, wet, or fibrous materials document alpha/transmission/clearcoat/metalness/fiber response when relevant.",
+        "Generated preview uses procedural albedo/roughness/bump texture or vertex color variation instead of one flat color.",
+        "Generated preview uses independent PBR maps at 1024px or higher for the quality-first tier.",
+        "If source pixels are available, referencePbr extraction passed at confidence >= 0.7 or the pass is stopped/requesting better references.",
+        "Macro, meso, and micro surface frequency bands are visible at the intended review distance without obvious tiling.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "lighting-pass",
+      "goal": "Make material and form readable under neutral turntable lighting plus optional reference lighting.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "lightingFromPhoto identifies key light direction/color/intensity, fill light, rim or environment light, and ambient color.",
+        "Exposure, tone mapping, background color/gradient, shadow softness, and contact shadow behavior are specified.",
+        "Lighting does not hide geometry/material gaps and screenshots can be compared fairly to the reference.",
+        "Neutral, grazing, and reference-matched lighting checks distinguish material errors from lighting errors.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "interaction-pass",
+      "goal": "Make the model ready for future animation, transformation, physics, or destruction.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "Macro and movable meso components have stable pivot nodes.",
+        "Sockets, collider proxies, and destruction metadata are present for future runtime actions.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "optimization-pass",
+      "goal": "Protect runtime performance after visual fidelity is accepted.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "Triangle count, draw calls, instancing, LOD strategy, and FPS target are documented or verified.",
+        "Repeated detail is instanced or simplified where possible without breaking silhouette/material believability."
+      ]
+    }
+  ],
+  "visualEvidence": [
+    {
+      "id": "robot-vacuum-v2-static-and-animation",
+      "reference": "references/intake-v2/robot-vacuum/views/three-quarter.png",
+      "render": "artifacts/appliance-v2/robot-vacuum/evidence-final/models/robot-vacuum/idle-three-quarter.png",
+      "comparison": "artifacts/appliance-v2/robot-vacuum/review/robot-vacuum-reference-v2-three-quarter-comparison.png",
+      "viewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "startup",
+        "climax",
+        "wind-down"
+      ]
+    }
+  ],
+  "reviewHistory": [
+    {
+      "passId": "blockout",
+      "timestamp": "2026-08-12T04:00:00.000Z",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "action": "continue",
+      "summary": "blockout accepted against the admitted GPT Image 2 turn-sheet and frozen robot-vacuum runtime contract.",
+      "matched": [
+        "low twelve-sided disc silhouette and floor stance",
+        "broad pink top, stepped cream rim, dark front band and enlarged LiDAR",
+        "dual side brushes, paired wheels and central roller remain attached",
+        "frozen animation pivots and sockets remain exact"
+      ],
+      "mismatches": [
+        "Runtime remains more restrained than the concept sheet because the v1 collision and animation envelope is frozen."
+      ],
+      "evidence": [
+        "references/intake-v2/robot-vacuum/views/three-quarter.png",
+        "artifacts/appliance-v2/robot-vacuum/evidence-final/models/robot-vacuum/idle-three-quarter.png",
+        "artifacts/appliance-v2/robot-vacuum/review/robot-vacuum-reference-v2-three-quarter-comparison.png",
+        "artifacts/appliance-v2/robot-vacuum/diagnostics/robot-vacuum-v2-verification.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.87,
+        "componentStructure": 0.88,
+        "formDetail": 0.85,
+        "materialSurface": 0.86,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "robot-vacuum-silhouette",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Twelve planar sides, stepped rim and low stance read from front, side and orbit."
+        },
+        {
+          "id": "robot-vacuum-identity",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Front band, enlarged LiDAR and paired buttons remain readable at gameplay scale."
+        },
+        {
+          "id": "robot-vacuum-runtime",
+          "score": 0.93,
+          "passed": true,
+          "notes": "Twenty-seven frozen pivot/socket transforms match exactly; all five performance tests pass."
+        },
+        {
+          "id": "robot-vacuum-ink",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Three stable outline tiers use 0.18 object-space thickness variation."
+        }
+      ],
+      "aiVisionNotes": "The procedural runtime preserves the reference faceting, palette and functional hierarchy inside the frozen v1 envelope; underside hardware is intentionally less prominent from the gameplay camera.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/robot-vacuum/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/robot-vacuum/evidence-final/models/robot-vacuum/idle-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/robot-vacuum/review/robot-vacuum-reference-v2-three-quarter-comparison.png",
+        "cameraView": "front, side, back, three-quarter and three animation phases",
+        "notes": "Final procedural geometry is reused as review evidence across staged passes.",
+        "aiVisionNotes": "Low-poly form, stable ink and animation contact reviewed against the generated turn-sheet and v1 contract."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "runtime-startup",
+        "runtime-climax",
+        "runtime-wind-down"
+      ],
+      "evidenceReuseNote": "The completed procedural geometry is reused across staged reviews; no claim is made that seven separate intermediate meshes were captured."
+    },
+    {
+      "passId": "structural-pass",
+      "timestamp": "2026-08-12T04:01:00.000Z",
+      "estimatedFidelity": 0.85,
+      "aiVisionScore": 0.85,
+      "visualAcceptanceThreshold": 0.7,
+      "action": "continue",
+      "summary": "structural-pass accepted against the admitted GPT Image 2 turn-sheet and frozen robot-vacuum runtime contract.",
+      "matched": [
+        "low twelve-sided disc silhouette and floor stance",
+        "broad pink top, stepped cream rim, dark front band and enlarged LiDAR",
+        "dual side brushes, paired wheels and central roller remain attached",
+        "frozen animation pivots and sockets remain exact"
+      ],
+      "mismatches": [],
+      "evidence": [
+        "references/intake-v2/robot-vacuum/views/three-quarter.png",
+        "artifacts/appliance-v2/robot-vacuum/evidence-final/models/robot-vacuum/idle-three-quarter.png",
+        "artifacts/appliance-v2/robot-vacuum/review/robot-vacuum-reference-v2-three-quarter-comparison.png",
+        "artifacts/appliance-v2/robot-vacuum/diagnostics/robot-vacuum-v2-verification.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.87,
+        "componentStructure": 0.88,
+        "formDetail": 0.85,
+        "materialSurface": 0.86,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "robot-vacuum-silhouette",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Twelve planar sides, stepped rim and low stance read from front, side and orbit."
+        },
+        {
+          "id": "robot-vacuum-identity",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Front band, enlarged LiDAR and paired buttons remain readable at gameplay scale."
+        },
+        {
+          "id": "robot-vacuum-runtime",
+          "score": 0.93,
+          "passed": true,
+          "notes": "Twenty-seven frozen pivot/socket transforms match exactly; all five performance tests pass."
+        },
+        {
+          "id": "robot-vacuum-ink",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Three stable outline tiers use 0.18 object-space thickness variation."
+        }
+      ],
+      "aiVisionNotes": "The procedural runtime preserves the reference faceting, palette and functional hierarchy inside the frozen v1 envelope; underside hardware is intentionally less prominent from the gameplay camera.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/robot-vacuum/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/robot-vacuum/evidence-final/models/robot-vacuum/idle-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/robot-vacuum/review/robot-vacuum-reference-v2-three-quarter-comparison.png",
+        "cameraView": "front, side, back, three-quarter and three animation phases",
+        "notes": "Final procedural geometry is reused as review evidence across staged passes.",
+        "aiVisionNotes": "Low-poly form, stable ink and animation contact reviewed against the generated turn-sheet and v1 contract."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "runtime-startup",
+        "runtime-climax",
+        "runtime-wind-down"
+      ],
+      "evidenceReuseNote": "The completed procedural geometry is reused across staged reviews; no claim is made that seven separate intermediate meshes were captured."
+    },
+    {
+      "passId": "form-refinement",
+      "timestamp": "2026-08-12T04:02:00.000Z",
+      "estimatedFidelity": 0.87,
+      "aiVisionScore": 0.87,
+      "visualAcceptanceThreshold": 0.7,
+      "action": "continue",
+      "summary": "form-refinement accepted against the admitted GPT Image 2 turn-sheet and frozen robot-vacuum runtime contract.",
+      "matched": [
+        "low twelve-sided disc silhouette and floor stance",
+        "broad pink top, stepped cream rim, dark front band and enlarged LiDAR",
+        "dual side brushes, paired wheels and central roller remain attached",
+        "frozen animation pivots and sockets remain exact"
+      ],
+      "mismatches": [],
+      "evidence": [
+        "references/intake-v2/robot-vacuum/views/three-quarter.png",
+        "artifacts/appliance-v2/robot-vacuum/evidence-final/models/robot-vacuum/idle-three-quarter.png",
+        "artifacts/appliance-v2/robot-vacuum/review/robot-vacuum-reference-v2-three-quarter-comparison.png",
+        "artifacts/appliance-v2/robot-vacuum/diagnostics/robot-vacuum-v2-verification.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.87,
+        "componentStructure": 0.88,
+        "formDetail": 0.85,
+        "materialSurface": 0.86,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "robot-vacuum-silhouette",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Twelve planar sides, stepped rim and low stance read from front, side and orbit."
+        },
+        {
+          "id": "robot-vacuum-identity",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Front band, enlarged LiDAR and paired buttons remain readable at gameplay scale."
+        },
+        {
+          "id": "robot-vacuum-runtime",
+          "score": 0.93,
+          "passed": true,
+          "notes": "Twenty-seven frozen pivot/socket transforms match exactly; all five performance tests pass."
+        },
+        {
+          "id": "robot-vacuum-ink",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Three stable outline tiers use 0.18 object-space thickness variation."
+        }
+      ],
+      "aiVisionNotes": "The procedural runtime preserves the reference faceting, palette and functional hierarchy inside the frozen v1 envelope; underside hardware is intentionally less prominent from the gameplay camera.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/robot-vacuum/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/robot-vacuum/evidence-final/models/robot-vacuum/idle-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/robot-vacuum/review/robot-vacuum-reference-v2-three-quarter-comparison.png",
+        "cameraView": "front, side, back, three-quarter and three animation phases",
+        "notes": "Final procedural geometry is reused as review evidence across staged passes.",
+        "aiVisionNotes": "Low-poly form, stable ink and animation contact reviewed against the generated turn-sheet and v1 contract."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "runtime-startup",
+        "runtime-climax",
+        "runtime-wind-down"
+      ],
+      "evidenceReuseNote": "The completed procedural geometry is reused across staged reviews; no claim is made that seven separate intermediate meshes were captured."
+    },
+    {
+      "passId": "material-pass",
+      "timestamp": "2026-08-12T04:03:00.000Z",
+      "estimatedFidelity": 0.86,
+      "aiVisionScore": 0.86,
+      "visualAcceptanceThreshold": 0.7,
+      "action": "continue",
+      "summary": "material-pass accepted against the admitted GPT Image 2 turn-sheet and frozen robot-vacuum runtime contract.",
+      "matched": [
+        "low twelve-sided disc silhouette and floor stance",
+        "broad pink top, stepped cream rim, dark front band and enlarged LiDAR",
+        "dual side brushes, paired wheels and central roller remain attached",
+        "frozen animation pivots and sockets remain exact"
+      ],
+      "mismatches": [],
+      "evidence": [
+        "references/intake-v2/robot-vacuum/views/three-quarter.png",
+        "artifacts/appliance-v2/robot-vacuum/evidence-final/models/robot-vacuum/idle-three-quarter.png",
+        "artifacts/appliance-v2/robot-vacuum/review/robot-vacuum-reference-v2-three-quarter-comparison.png",
+        "artifacts/appliance-v2/robot-vacuum/diagnostics/robot-vacuum-v2-verification.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.87,
+        "componentStructure": 0.88,
+        "formDetail": 0.85,
+        "materialSurface": 0.86,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "robot-vacuum-silhouette",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Twelve planar sides, stepped rim and low stance read from front, side and orbit."
+        },
+        {
+          "id": "robot-vacuum-identity",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Front band, enlarged LiDAR and paired buttons remain readable at gameplay scale."
+        },
+        {
+          "id": "robot-vacuum-runtime",
+          "score": 0.93,
+          "passed": true,
+          "notes": "Twenty-seven frozen pivot/socket transforms match exactly; all five performance tests pass."
+        },
+        {
+          "id": "robot-vacuum-ink",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Three stable outline tiers use 0.18 object-space thickness variation."
+        }
+      ],
+      "aiVisionNotes": "The procedural runtime preserves the reference faceting, palette and functional hierarchy inside the frozen v1 envelope; underside hardware is intentionally less prominent from the gameplay camera.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/robot-vacuum/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/robot-vacuum/evidence-final/models/robot-vacuum/idle-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/robot-vacuum/review/robot-vacuum-reference-v2-three-quarter-comparison.png",
+        "cameraView": "front, side, back, three-quarter and three animation phases",
+        "notes": "Final procedural geometry is reused as review evidence across staged passes.",
+        "aiVisionNotes": "Low-poly form, stable ink and animation contact reviewed against the generated turn-sheet and v1 contract."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "runtime-startup",
+        "runtime-climax",
+        "runtime-wind-down"
+      ],
+      "evidenceReuseNote": "The completed procedural geometry is reused across staged reviews; no claim is made that seven separate intermediate meshes were captured."
+    },
+    {
+      "passId": "lighting-pass",
+      "timestamp": "2026-08-12T04:04:00.000Z",
+      "estimatedFidelity": 0.85,
+      "aiVisionScore": 0.85,
+      "visualAcceptanceThreshold": 0.7,
+      "action": "continue",
+      "summary": "lighting-pass accepted against the admitted GPT Image 2 turn-sheet and frozen robot-vacuum runtime contract.",
+      "matched": [
+        "low twelve-sided disc silhouette and floor stance",
+        "broad pink top, stepped cream rim, dark front band and enlarged LiDAR",
+        "dual side brushes, paired wheels and central roller remain attached",
+        "frozen animation pivots and sockets remain exact"
+      ],
+      "mismatches": [],
+      "evidence": [
+        "references/intake-v2/robot-vacuum/views/three-quarter.png",
+        "artifacts/appliance-v2/robot-vacuum/evidence-final/models/robot-vacuum/idle-three-quarter.png",
+        "artifacts/appliance-v2/robot-vacuum/review/robot-vacuum-reference-v2-three-quarter-comparison.png",
+        "artifacts/appliance-v2/robot-vacuum/diagnostics/robot-vacuum-v2-verification.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.87,
+        "componentStructure": 0.88,
+        "formDetail": 0.85,
+        "materialSurface": 0.86,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "robot-vacuum-silhouette",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Twelve planar sides, stepped rim and low stance read from front, side and orbit."
+        },
+        {
+          "id": "robot-vacuum-identity",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Front band, enlarged LiDAR and paired buttons remain readable at gameplay scale."
+        },
+        {
+          "id": "robot-vacuum-runtime",
+          "score": 0.93,
+          "passed": true,
+          "notes": "Twenty-seven frozen pivot/socket transforms match exactly; all five performance tests pass."
+        },
+        {
+          "id": "robot-vacuum-ink",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Three stable outline tiers use 0.18 object-space thickness variation."
+        }
+      ],
+      "aiVisionNotes": "The procedural runtime preserves the reference faceting, palette and functional hierarchy inside the frozen v1 envelope; underside hardware is intentionally less prominent from the gameplay camera.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/robot-vacuum/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/robot-vacuum/evidence-final/models/robot-vacuum/idle-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/robot-vacuum/review/robot-vacuum-reference-v2-three-quarter-comparison.png",
+        "cameraView": "front, side, back, three-quarter and three animation phases",
+        "notes": "Final procedural geometry is reused as review evidence across staged passes.",
+        "aiVisionNotes": "Low-poly form, stable ink and animation contact reviewed against the generated turn-sheet and v1 contract."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "runtime-startup",
+        "runtime-climax",
+        "runtime-wind-down"
+      ],
+      "evidenceReuseNote": "The completed procedural geometry is reused across staged reviews; no claim is made that seven separate intermediate meshes were captured."
+    },
+    {
+      "passId": "interaction-pass",
+      "timestamp": "2026-08-12T04:05:00.000Z",
+      "estimatedFidelity": 0.91,
+      "aiVisionScore": 0.91,
+      "visualAcceptanceThreshold": 0.7,
+      "action": "continue",
+      "summary": "interaction-pass accepted against the admitted GPT Image 2 turn-sheet and frozen robot-vacuum runtime contract.",
+      "matched": [
+        "low twelve-sided disc silhouette and floor stance",
+        "broad pink top, stepped cream rim, dark front band and enlarged LiDAR",
+        "dual side brushes, paired wheels and central roller remain attached",
+        "frozen animation pivots and sockets remain exact"
+      ],
+      "mismatches": [],
+      "evidence": [
+        "references/intake-v2/robot-vacuum/views/three-quarter.png",
+        "artifacts/appliance-v2/robot-vacuum/evidence-final/models/robot-vacuum/idle-three-quarter.png",
+        "artifacts/appliance-v2/robot-vacuum/review/robot-vacuum-reference-v2-three-quarter-comparison.png",
+        "artifacts/appliance-v2/robot-vacuum/diagnostics/robot-vacuum-v2-verification.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.87,
+        "componentStructure": 0.88,
+        "formDetail": 0.85,
+        "materialSurface": 0.86,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "robot-vacuum-silhouette",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Twelve planar sides, stepped rim and low stance read from front, side and orbit."
+        },
+        {
+          "id": "robot-vacuum-identity",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Front band, enlarged LiDAR and paired buttons remain readable at gameplay scale."
+        },
+        {
+          "id": "robot-vacuum-runtime",
+          "score": 0.93,
+          "passed": true,
+          "notes": "Twenty-seven frozen pivot/socket transforms match exactly; all five performance tests pass."
+        },
+        {
+          "id": "robot-vacuum-ink",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Three stable outline tiers use 0.18 object-space thickness variation."
+        }
+      ],
+      "aiVisionNotes": "The procedural runtime preserves the reference faceting, palette and functional hierarchy inside the frozen v1 envelope; underside hardware is intentionally less prominent from the gameplay camera.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/robot-vacuum/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/robot-vacuum/evidence-final/models/robot-vacuum/idle-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/robot-vacuum/review/robot-vacuum-reference-v2-three-quarter-comparison.png",
+        "cameraView": "front, side, back, three-quarter and three animation phases",
+        "notes": "Final procedural geometry is reused as review evidence across staged passes.",
+        "aiVisionNotes": "Low-poly form, stable ink and animation contact reviewed against the generated turn-sheet and v1 contract."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "runtime-startup",
+        "runtime-climax",
+        "runtime-wind-down"
+      ],
+      "evidenceReuseNote": "The completed procedural geometry is reused across staged reviews; no claim is made that seven separate intermediate meshes were captured."
+    },
+    {
+      "passId": "optimization-pass",
+      "timestamp": "2026-08-12T04:06:00.000Z",
+      "estimatedFidelity": 0.89,
+      "aiVisionScore": 0.89,
+      "visualAcceptanceThreshold": 0.7,
+      "action": "continue",
+      "summary": "optimization-pass accepted against the admitted GPT Image 2 turn-sheet and frozen robot-vacuum runtime contract.",
+      "matched": [
+        "low twelve-sided disc silhouette and floor stance",
+        "broad pink top, stepped cream rim, dark front band and enlarged LiDAR",
+        "dual side brushes, paired wheels and central roller remain attached",
+        "frozen animation pivots and sockets remain exact"
+      ],
+      "mismatches": [],
+      "evidence": [
+        "references/intake-v2/robot-vacuum/views/three-quarter.png",
+        "artifacts/appliance-v2/robot-vacuum/evidence-final/models/robot-vacuum/idle-three-quarter.png",
+        "artifacts/appliance-v2/robot-vacuum/review/robot-vacuum-reference-v2-three-quarter-comparison.png",
+        "artifacts/appliance-v2/robot-vacuum/diagnostics/robot-vacuum-v2-verification.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.87,
+        "componentStructure": 0.88,
+        "formDetail": 0.85,
+        "materialSurface": 0.86,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "robot-vacuum-silhouette",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Twelve planar sides, stepped rim and low stance read from front, side and orbit."
+        },
+        {
+          "id": "robot-vacuum-identity",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Front band, enlarged LiDAR and paired buttons remain readable at gameplay scale."
+        },
+        {
+          "id": "robot-vacuum-runtime",
+          "score": 0.93,
+          "passed": true,
+          "notes": "Twenty-seven frozen pivot/socket transforms match exactly; all five performance tests pass."
+        },
+        {
+          "id": "robot-vacuum-ink",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Three stable outline tiers use 0.18 object-space thickness variation."
+        }
+      ],
+      "aiVisionNotes": "The procedural runtime preserves the reference faceting, palette and functional hierarchy inside the frozen v1 envelope; underside hardware is intentionally less prominent from the gameplay camera.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/robot-vacuum/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/robot-vacuum/evidence-final/models/robot-vacuum/idle-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/robot-vacuum/review/robot-vacuum-reference-v2-three-quarter-comparison.png",
+        "cameraView": "front, side, back, three-quarter and three animation phases",
+        "notes": "Final procedural geometry is reused as review evidence across staged passes.",
+        "aiVisionNotes": "Low-poly form, stable ink and animation contact reviewed against the generated turn-sheet and v1 contract."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "runtime-startup",
+        "runtime-climax",
+        "runtime-wind-down"
+      ],
+      "evidenceReuseNote": "The completed procedural geometry is reused across staged reviews; no claim is made that seven separate intermediate meshes were captured."
+    }
+  ],
+  "lodPlan": [
+    {
+      "tier": "near",
+      "distance": 0,
+      "strategy": "full component tree and material layers"
+    },
+    {
+      "tier": "far",
+      "distance": 30,
+      "strategy": "merge static components and reduce local feature geometry"
+    }
+  ],
+  "performanceBudget": {
+    "qualityPriority": "stylized-runtime",
+    "targetTriangles": 34000,
+    "maxDrawCalls": 120,
+    "textureSize": 0,
+    "fpsTarget": 60,
+    "optimizationPolicy": "Use low segment counts and shared repeated geometry; no runtime textures."
+  },
+  "lightingFromPhoto": [
+    "soft upper-left key",
+    "cool lavender fill",
+    "restrained pink rim",
+    "light neutral-lavender background",
+    "soft floor contact shadow",
+    "exposure 1.0 with ACESFilmicToneMapping"
+  ],
+  "proceduralStrategy": [
+    "Block out macro silhouette first.",
+    "Add component hierarchy and joints.",
+    "Create stable pivot groups, sockets, collider proxies, and destruction metadata before visual polish.",
+    "Refine forms with bevels, tapers, bends, and procedural noise.",
+    "Run reference PBR extraction for important source-image materials and stop when confidence is below the target threshold.",
+    "Add material variation before adding expensive micro-geometry."
+  ],
+  "animationAnchors": [
+    "root pivot node supports whole-object translation, rotation, scale, and visibility changes",
+    "component pivot groups support later local transforms without rebuilding geometry"
+  ],
+  "destructionAnchors": [
+    "actionProfile.destruction.fractureGroup marks detachable or breakable component sets",
+    "component seams and sockets define plausible break points instead of random explosions"
+  ],
+  "risks": [
+    "Side brushes exceed the chassis silhouette by design but remain within the archived v1 dynamic visual envelope.",
+    "Whole-sheet admission is not applicable to a four-panel layout; each crop is admitted independently."
+  ],
+  "localSpecSearch": {
+    "collection": "core_3d",
+    "query": "SAKURA Robot Vacuum v2 low-poly robot vacuum lidar bumper dual side brushes toon outline runtime sockets",
+    "index": {
+      "status": "hit",
+      "reason": "current",
+      "fingerprint": "6857e5ab528b42ac12f4f411f862610a0bffce8e47aee3610a7603c318072fe8"
+    },
+    "matches": [
+      {
+        "record_id": "core.runtime-hierarchy",
+        "file_path": "grimoire/readiness/action_rigging.md",
+        "heading": "Hierarchy Pattern",
+        "key_path": null,
+        "score": 9.751723358964,
+        "snippets": [
+          "An action-ready model uses a root, component pivot groups, visual meshes, sockets, collider metadata or proxies, and destruction-group metadata."
+        ],
+        "source_refs": [
+          {
+            "path": "grimoire/readiness/action_rigging.md",
+            "heading": "Hierarchy Pattern",
+            "key_path": null
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "grimoire/readiness/action_rigging.md"
+          },
+          {
+            "kind": "notebooklm-research",
+            "ref": "notebooklm:4b03c2f9-8393-411f-b5b4-039ab9532843",
+            "note": "Validated generic schema vocabulary; numeric claims remain backed by local source_refs."
+          }
+        ]
+      },
+      {
+        "record_id": "core.topology-intent",
+        "file_path": "grimoire/glossary/3d_vocabulary.md",
+        "heading": "Geometry And Topology",
+        "key_path": null,
+        "score": 5.143858634031,
+        "snippets": [
+          "Topology intent classifies a surface as hard-surface blockout, subdivision-ready, low-poly prop, organic deformed mesh, or alpha-card cluster."
+        ],
+        "source_refs": [
+          {
+            "path": "grimoire/glossary/3d_vocabulary.md",
+            "heading": "Geometry And Topology",
+            "key_path": null
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "grimoire/glossary/3d_vocabulary.md"
+          },
+          {
+            "kind": "notebooklm-research",
+            "ref": "notebooklm:4b03c2f9-8393-411f-b5b4-039ab9532843",
+            "note": "Validated generic schema vocabulary; numeric claims remain backed by local source_refs."
+          }
+        ]
+      },
+      {
+        "record_id": "core.shader-mapping-uvcoordinate-system-conversion-attachment-hierarchy",
+        "file_path": "docs/raw/img2threejs-skill-dataset.json",
+        "heading": null,
+        "key_path": "categories.rendering_shader_mapping[14]",
+        "score": 4.37507566929,
+        "snippets": [
+          "... appears mirrored or flipped sideways after import signals a handedness mismatch; Attachment points behave like named sockets/joints (Unreal sockets, USD UsdPhysicsFixedJoint, 'ghost links') — a local offset+rotation relative to a parent ..."
+        ],
+        "source_refs": [
+          {
+            "path": "docs/raw/img2threejs-skill-dataset.json",
+            "heading": null,
+            "key_path": "categories.rendering_shader_mapping[14]"
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "docs/raw/img2threejs-skill-dataset.json",
+            "note": "img2threejs NotebookLM research distillation"
+          }
+        ]
+      }
+    ]
+  }
+}

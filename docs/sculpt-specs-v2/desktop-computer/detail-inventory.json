@@ -1,0 +1,411 @@
+{
+  "sourceImage": "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake-v2\\desktop-computer\\desktop-computer-turnsheet-v2.png",
+  "zonesDir": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs-v2\\desktop-computer\\detail-zones",
+  "detailInventory": {
+    "scanMethod": "grid-4x4 plus component cross-view review",
+    "targetMinDetails": 16,
+    "details": [
+      {
+        "id": "desktop-v2-inventory-01",
+        "kind": "bevel",
+        "description": "Chunky stepped cream CRT bezel with broad chamfer bands.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "catalog-visible low-poly game detail",
+        "affects": "silhouette, formDetail",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "monitor-bezel"
+        },
+        "evidenceRef": "references/intake-v2/desktop-computer/views/front.png",
+        "confidence": 0.96
+      },
+      {
+        "id": "desktop-v2-inventory-02",
+        "kind": "contour",
+        "description": "Deep swollen CRT belly behind the front shell.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "catalog-visible low-poly game detail",
+        "affects": "silhouette, depth",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "monitor-crt-belly"
+        },
+        "evidenceRef": "references/intake-v2/desktop-computer/views/side.png",
+        "confidence": 0.96
+      },
+      {
+        "id": "desktop-v2-inventory-03",
+        "kind": "contour",
+        "description": "Tapered 8–10 facet rear CRT bell.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "catalog-visible low-poly game detail",
+        "affects": "silhouette, depth",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "monitor-crt-rear-bell"
+        },
+        "evidenceRef": "references/intake-v2/desktop-computer/views/side.png",
+        "confidence": 0.96
+      },
+      {
+        "id": "desktop-v2-inventory-04",
+        "kind": "seam",
+        "description": "Shallow pink rear service cap nested into the CRT bell.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "catalog-visible low-poly game detail",
+        "affects": "formDetail, material zone",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "monitor-crt-rear-cap"
+        },
+        "evidenceRef": "references/intake-v2/desktop-computer/views/back.png",
+        "confidence": 0.96
+      },
+      {
+        "id": "desktop-v2-inventory-05",
+        "kind": "hole",
+        "description": "Repeated top and side CRT ventilation slots with dark cavities.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "catalog-visible low-poly game detail",
+        "affects": "formDetail, cavity response",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "monitor-crt-vent-system"
+        },
+        "evidenceRef": "references/intake-v2/desktop-computer/views/side.png",
+        "confidence": 0.96
+      },
+      {
+        "id": "desktop-v2-inventory-06",
+        "kind": "emissive",
+        "description": "Recessed charcoal screen with cyan/pink state layers.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "catalog-visible low-poly game detail",
+        "affects": "materialSurface, interaction",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "screen-panel"
+        },
+        "evidenceRef": "references/intake-v2/desktop-computer/views/front.png",
+        "confidence": 0.96
+      },
+      {
+        "id": "desktop-v2-inventory-07",
+        "kind": "emissive",
+        "description": "Small cyan monitor and tower status dots.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "catalog-visible low-poly game detail",
+        "affects": "materialSurface, interaction",
+        "mapsTo": {
+          "type": "material.localOverrides",
+          "ref": "screen-emissive"
+        },
+        "evidenceRef": "references/intake-v2/desktop-computer/views/front.png",
+        "confidence": 0.96
+      },
+      {
+        "id": "desktop-v2-inventory-08",
+        "kind": "ridge",
+        "description": "Short thick stand column and two-stage base remain visibly attached.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "catalog-visible low-poly game detail",
+        "affects": "componentStructure, attachment",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "monitor-stand-base"
+        },
+        "evidenceRef": "references/intake-v2/desktop-computer/views/side.png",
+        "confidence": 0.96
+      },
+      {
+        "id": "desktop-v2-inventory-09",
+        "kind": "bevel",
+        "description": "Slightly tapered tower shell with broad low-poly corner facets.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "catalog-visible low-poly game detail",
+        "affects": "silhouette, formDetail",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "tower-shell"
+        },
+        "evidenceRef": "references/intake-v2/desktop-computer/views/three-quarter.png",
+        "confidence": 0.96
+      },
+      {
+        "id": "desktop-v2-inventory-10",
+        "kind": "seam",
+        "description": "Overhanging Sakura-pink tower top cap and top smoke opening.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "catalog-visible low-poly game detail",
+        "affects": "formDetail, interaction",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "tower-top-cap"
+        },
+        "evidenceRef": "references/intake-v2/desktop-computer/views/three-quarter.png",
+        "confidence": 0.96
+      },
+      {
+        "id": "desktop-v2-inventory-11",
+        "kind": "decal",
+        "description": "Raised Sakura flower emblems on tower front and CRT rear.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "catalog-visible low-poly game detail",
+        "affects": "identity, material zone",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "tower-front-emblem"
+        },
+        "evidenceRef": "references/intake-v2/desktop-computer/views/front.png",
+        "confidence": 0.96
+      },
+      {
+        "id": "desktop-v2-inventory-12",
+        "kind": "hole",
+        "description": "Vertical tower front I/O strip with power button and port cavities.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "catalog-visible low-poly game detail",
+        "affects": "identity, interaction",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "tower-front-io"
+        },
+        "evidenceRef": "references/intake-v2/desktop-computer/views/front.png",
+        "confidence": 0.96
+      },
+      {
+        "id": "desktop-v2-inventory-13",
+        "kind": "hole",
+        "description": "Regular side ventilation grid with real cavity depth.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "catalog-visible low-poly game detail",
+        "affects": "formDetail, repetition",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "tower-side-vents"
+        },
+        "evidenceRef": "references/intake-v2/desktop-computer/views/side.png",
+        "confidence": 0.96
+      },
+      {
+        "id": "desktop-v2-inventory-14",
+        "kind": "hole",
+        "description": "Two rear ventilation fields and service-panel separation.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "catalog-visible low-poly game detail",
+        "affects": "formDetail, repetition",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "tower-rear-vents"
+        },
+        "evidenceRef": "references/intake-v2/desktop-computer/views/back.png",
+        "confidence": 0.96
+      },
+      {
+        "id": "desktop-v2-inventory-15",
+        "kind": "hole",
+        "description": "Rear power inlet and I/O sockets remain distinct cavities.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "catalog-visible low-poly game detail",
+        "affects": "identity, attachment",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "tower-power-inlet"
+        },
+        "evidenceRef": "references/intake-v2/desktop-computer/views/back.png",
+        "confidence": 0.96
+      },
+      {
+        "id": "desktop-v2-inventory-16",
+        "kind": "fastener",
+        "description": "Six-row cream/pink key matrix uses repeated faceted keycaps.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "catalog-visible low-poly game detail",
+        "affects": "repetition, interaction",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "keyboard-key-system"
+        },
+        "evidenceRef": "references/intake-v2/desktop-computer/views/front.png",
+        "confidence": 0.96
+      },
+      {
+        "id": "desktop-v2-inventory-17",
+        "kind": "ridge",
+        "description": "Large pink spacebar is a separate animated part.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "catalog-visible low-poly game detail",
+        "affects": "identity, interaction",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "keyboard-spacebar"
+        },
+        "evidenceRef": "references/intake-v2/desktop-computer/views/front.png",
+        "confidence": 0.96
+      },
+      {
+        "id": "desktop-v2-inventory-18",
+        "kind": "contour",
+        "description": "Faceted arched mouse upper shell over a cream lower shell.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "catalog-visible low-poly game detail",
+        "affects": "silhouette, formDetail",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "mouse-shell"
+        },
+        "evidenceRef": "references/intake-v2/desktop-computer/views/three-quarter.png",
+        "confidence": 0.96
+      },
+      {
+        "id": "desktop-v2-inventory-19",
+        "kind": "seam",
+        "description": "Mouse button split and enlarged wheel remain independently animated.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "catalog-visible low-poly game detail",
+        "affects": "formDetail, interaction",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "mouse-button-system"
+        },
+        "evidenceRef": "references/intake-v2/desktop-computer/views/three-quarter.png",
+        "confidence": 0.96
+      },
+      {
+        "id": "desktop-v2-inventory-20",
+        "kind": "contour",
+        "description": "Stable dark-plum outline hierarchy with subtle object-space width variation.",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "catalog-visible low-poly game detail",
+        "affects": "silhouette, materialSurface",
+        "mapsTo": {
+          "type": "material.localOverrides",
+          "ref": "cream-shell"
+        },
+        "evidenceRef": "references/intake-v2/desktop-computer/views/three-quarter.png",
+        "confidence": 0.96
+      }
+    ]
+  },
+  "authoringInstruction": "Open each zone crop under zonesDir and replace every detail stub's kind, description, scale, affects, mapsTo, and confidence with what is actually observed. Add more detail entries per zone if a single zone contains multiple distinct marks; do not leave stubs unfilled or unlinked (mapsTo must reference a real component.localFeatures or material.localOverrides entry)."
+}

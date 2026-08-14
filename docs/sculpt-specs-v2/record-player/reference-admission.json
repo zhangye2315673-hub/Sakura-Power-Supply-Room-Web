@@ -1,0 +1,13 @@
+{
+  "target": "record-player-v2",
+  "status": "conditional-fallback",
+  "provider": "archived-sakura-v1-runtime-capture",
+  "isGptImage2": false,
+  "reason": "No OPENAI or COMFLY credential is configured in the process environment; archived front, side, back and three-quarter renders are used without changing provenance.",
+  "views": [
+    { "role": "front", "path": "references/intake-v2/record-player/views/front.png", "admitted": true, "sha256": "2FAA17AB71F053E035CC9D62AB8CD9B6BAABCB09CA2FA5AAD01F78A45CAD3BC7" },
+    { "role": "side", "path": "references/intake-v2/record-player/views/side.png", "admitted": true, "sha256": "D8A223E5CEAEE74B8188B7D4A085CC3B37DA59AED3E86AC5A91587FA56AAFC1F" },
+    { "role": "back", "path": "references/intake-v2/record-player/views/back.png", "admitted": true, "sha256": "32A7F062F137CE7588112B5F8E71B08B302BD299D1D3001D36CAA07128F0B783" },
+    { "role": "three-quarter", "path": "references/intake-v2/record-player/views/three-quarter.png", "admitted": true, "sha256": "BA13A3C1EB04315CBE971E6F1A35DF195CA21FC8FF772E9317B5D9E8DCA0387A" }
+  ]
+}

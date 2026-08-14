@@ -1,0 +1,176 @@
+[
+  {
+    "id": "lamp",
+    "code": 0,
+    "stdout": "STATUS pass=complete completed=7 blocked=none next=none (pipeline complete)\npipeline: complete",
+    "stderr": ""
+  },
+  {
+    "id": "fan",
+    "code": 0,
+    "stdout": "STATUS pass=complete completed=7 blocked=all build passes completed next=none (pipeline complete)\npipeline: complete",
+    "stderr": ""
+  },
+  {
+    "id": "radio",
+    "code": 0,
+    "stdout": "STATUS pass=optimization-pass completed=7 blocked=none next=forge/next.py <spec>\npipeline: complete",
+    "stderr": ""
+  },
+  {
+    "id": "television",
+    "code": 0,
+    "stdout": "STATUS pass=complete completed=7 blocked=all build passes completed next=none (pipeline complete)\npipeline: complete",
+    "stderr": ""
+  },
+  {
+    "id": "humidifier",
+    "code": 0,
+    "stdout": "STATUS pass=complete completed=7 blocked=none next=none (pipeline complete)\npipeline: complete",
+    "stderr": ""
+  },
+  {
+    "id": "toaster",
+    "code": 0,
+    "stdout": "STATUS pass=complete completed=7 blocked=none next=none (pipeline complete)\npipeline: complete",
+    "stderr": ""
+  },
+  {
+    "id": "refrigerator",
+    "code": 0,
+    "stdout": "STATUS pass=complete completed=7 blocked=all build passes completed next=none (pipeline complete)\npipeline: complete",
+    "stderr": ""
+  },
+  {
+    "id": "washer",
+    "code": 0,
+    "stdout": "STATUS pass=complete completed=7 blocked=all build passes completed next=none (pipeline complete)\npipeline: complete",
+    "stderr": ""
+  },
+  {
+    "id": "microwave",
+    "code": 0,
+    "stdout": "STATUS pass=complete completed=7 blocked=all build passes completed next=none (pipeline complete)\npipeline: complete",
+    "stderr": ""
+  },
+  {
+    "id": "coffee-maker",
+    "code": 0,
+    "stdout": "STATUS pass=complete completed=7 blocked=none next=none (pipeline complete)\npipeline: complete",
+    "stderr": ""
+  },
+  {
+    "id": "kettle",
+    "code": 0,
+    "stdout": "STATUS pass=complete completed=7 blocked=all build passes completed next=none (pipeline complete)\npipeline: complete",
+    "stderr": ""
+  },
+  {
+    "id": "rice-cooker",
+    "code": 0,
+    "stdout": "STATUS pass=complete completed=7 blocked=all build passes completed next=none (pipeline complete)\npipeline: complete",
+    "stderr": ""
+  },
+  {
+    "id": "phone",
+    "code": 0,
+    "stdout": "STATUS pass=complete completed=7 blocked=none next=none (pipeline complete)\npipeline: complete",
+    "stderr": ""
+  },
+  {
+    "id": "robot-vacuum",
+    "code": 0,
+    "stdout": "STATUS pass=complete completed=7 blocked=none next=none (pipeline complete)\npipeline: complete",
+    "stderr": ""
+  },
+  {
+    "id": "bubble-machine",
+    "code": 0,
+    "stdout": "STATUS pass=complete completed=7 blocked=none next=none (pipeline complete)\npipeline: complete",
+    "stderr": ""
+  },
+  {
+    "id": "gumball-machine",
+    "code": 0,
+    "stdout": "STATUS pass=complete completed=7 blocked=none next=none (pipeline complete)\npipeline: complete",
+    "stderr": ""
+  },
+  {
+    "id": "popcorn-machine",
+    "code": 0,
+    "stdout": "STATUS pass=complete completed=7 blocked=none next=none (pipeline complete)\npipeline: complete",
+    "stderr": ""
+  },
+  {
+    "id": "alarm-clock",
+    "code": 0,
+    "stdout": "STATUS pass=complete completed=7 blocked=all build passes completed next=none (pipeline complete)\npipeline: complete",
+    "stderr": ""
+  },
+  {
+    "id": "smart-bin",
+    "code": 0,
+    "stdout": "STATUS pass=complete completed=7 blocked=all build passes completed next=none (pipeline complete)\npipeline: complete",
+    "stderr": ""
+  },
+  {
+    "id": "record-player",
+    "code": 0,
+    "stdout": "STATUS pass=complete completed=7 blocked=all build passes completed next=none (pipeline complete)\npipeline: complete",
+    "stderr": ""
+  },
+  {
+    "id": "stand-mixer",
+    "code": 0,
+    "stdout": "STATUS pass=complete completed=7 blocked=none next=none (pipeline complete)\npipeline: complete",
+    "stderr": ""
+  },
+  {
+    "id": "printer",
+    "code": 0,
+    "stdout": "STATUS pass=complete completed=7 blocked=none next=none (pipeline complete)\npipeline: complete",
+    "stderr": ""
+  },
+  {
+    "id": "induction-cooktop",
+    "code": 0,
+    "stdout": "STATUS pass=complete completed=7 blocked=none next=none (pipeline complete)\npipeline: complete",
+    "stderr": ""
+  },
+  {
+    "id": "blender",
+    "code": 0,
+    "stdout": "STATUS pass=complete completed=7 blocked=all build passes completed next=none (pipeline complete)\npipeline: complete",
+    "stderr": ""
+  },
+  {
+    "id": "dehumidifier",
+    "code": 0,
+    "stdout": "STATUS pass=complete completed=7 blocked=none next=none (pipeline complete)\npipeline: complete",
+    "stderr": ""
+  },
+  {
+    "id": "portable-speaker",
+    "code": 0,
+    "stdout": "STATUS pass=complete completed=7 blocked=all build passes completed next=none (pipeline complete)\npipeline: complete",
+    "stderr": ""
+  },
+  {
+    "id": "hair-dryer",
+    "code": 0,
+    "stdout": "STATUS pass=complete completed=8 blocked=all build passes completed next=none (pipeline complete)\npipeline: complete",
+    "stderr": ""
+  },
+  {
+    "id": "desktop-computer",
+    "code": 0,
+    "stdout": "STATUS pass=complete completed=7 blocked=all build passes completed next=none (pipeline complete)\npipeline: complete",
+    "stderr": ""
+  },
+  {
+    "id": "game-controller",
+    "code": 0,
+    "stdout": "STATUS pass=complete completed=7 blocked=all build passes completed next=none (pipeline complete)\npipeline: complete",
+    "stderr": ""
+  }
+]

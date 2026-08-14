@@ -1,0 +1,321 @@
+/// <reference types="vite/client" />
+
+interface ThreeGameDiagnostics {
+  frame: number;
+  seed: number;
+  puzzleRevision: number;
+  layoutSignature: string;
+  mode: 'campaign' | 'random' | 'skill' | 'rush';
+  challengeKind: 'standard' | 'double-ended' | null;
+  levelId: number | null;
+  shape: 'cube' | 'cuboid' | 'octahedron' | 'pyramid' | 'cylinder' | 'sphere' | 'torus' | 'arch' | null;
+  totalArrows: number;
+  doubleEndedCables: number;
+  remainingArrows: number;
+  initiallyFree: number;
+  lengthMix: {
+    short: number;
+    medium: number;
+    long: number;
+  };
+  availableArrows: number;
+  clickTarget: {
+    id: string;
+    end: 'head' | 'tail';
+    color: number;
+    x: number;
+    y: number;
+  } | null;
+  availableClickTargets: Array<{
+    id: string;
+    end: 'head' | 'tail';
+    color: number;
+    x: number;
+    y: number;
+  }>;
+  blockedClickTarget: {
+    id: string;
+    end: 'head' | 'tail';
+    color: number;
+    x: number;
+    y: number;
+  } | null;
+  activeAnimations: number;
+  queuedConnections: number;
+  activeConnections: number;
+  activeMotion: {
+    id: string;
+    end: 'head' | 'tail';
+    kind: 'exit' | 'bump';
+    color: number;
+    targetId: string | null;
+    targetAccent: number | null;
+    pathDistance: number;
+    rootOffset: number;
+  } | null;
+  routing: {
+    requiredColors: number[];
+    coveredColors: number[];
+    assignableColors: number[];
+    allRequiredCovered: boolean;
+    reservations: Array<{ cableId: string; color: number; targetId: string }>;
+  };
+  hoveredArrow: string | null;
+  hoveredCableEnd: 'head' | 'tail' | null;
+  activeBurstPetals: number;
+  theme: {
+    mode: import('./theme/ThemeController').ThemeMode;
+    targetMode: import('./theme/ThemeController').ThemeMode;
+    progress: number;
+    transitioning: boolean;
+    reducedMotion: boolean;
+    source: 'query' | 'saved' | 'default' | 'manual';
+    stars: number;
+    lantern: import('./theme/NightEnvironment').LanternSnapshot;
+    quality: {
+      tier: import('./theme/ThemeController').NightQualityTier;
+      lowDuration: number;
+      highDuration: number;
+    };
+  };
+  audio: {
+    unlocked: boolean;
+    muted: boolean;
+    state: AudioContextState | 'unavailable';
+    buses: Record<import('./audio/AudioManager').AudioBusName, number>;
+    activeNodes: number;
+    activeAppliances: import('./systems/ApplianceCatalog').ApplianceKind[];
+  };
+  sensory: Array<{
+    kind: string;
+    state: import('./systems/ApplianceCatalog').ApplianceState;
+    matchedNodes: string[];
+    missingFunctionalNode: boolean;
+    lightIntensity: number;
+  }>;
+  performances: {
+    sessions: number;
+    timelineOwners: number;
+    kinds: string[];
+    elapsedByKind: Record<string, number | undefined>;
+    signalsByKind: Record<string, number | undefined>;
+    activeTotal: number;
+    activeByKind: Record<string, number>;
+    capacityByKind: Record<string, number>;
+    activeToastNdc: [number, number, number] | null;
+    lampBeam: {
+      timelineTime: number;
+      headPhase: string;
+      headPitch: number;
+      headRoll: number;
+      sourceRadius: number;
+      farRadius: number;
+      farToNearRatio: number;
+      length: number;
+      spotAngle: number;
+      socket: [number, number, number];
+      direction: [number, number, number];
+      groundSpot: [number, number, number];
+      geometryAxis: '-Y-near/+Y-far';
+    } | null;
+    radio: import('./appliances/performance/RadioPerformance').RadioPerformanceDiagnostics;
+    hairDryer: import('./appliances/performance/HairDryerPerformance').HairDryerPerformanceDiagnostics | null;
+  };
+  opening: {
+    active: boolean;
+    ready: boolean;
+    progress: number;
+    transitioning: boolean;
+    cameraPhase: 'idle' | 'insert' | 'hold' | 'fade-out' | 'background-hold' | 'reveal' | 'pull';
+    screenX: number;
+    screenY: number;
+    trailLength: number;
+    petalMotion: number;
+    impactCount: number;
+    jellyScale: [number, number, number];
+  };
+  locale: 'zh' | 'en';
+  randomLives: number;
+  randomGameOver: boolean;
+  skill: {
+    registrySize: number;
+    phase: import('./skill/SkillChallengeEngine').SkillChallengePhase;
+    inputLocked: boolean;
+    lives: number;
+    maxLives: number;
+    buff: import('./skill/SkillChallengeEngine').SkillStatusId | null;
+    debuff: import('./skill/SkillChallengeEngine').SkillStatusId | null;
+    printerCopyReady: boolean;
+    cardCount: number;
+    presentation: import('./skill/SkillPresentationController').SkillPresentationDiagnostics;
+  } | null;
+  rush: {
+    challengeId: string;
+    flow: 'sequence' | 'random-pool' | null;
+    phase: import('./game/RushRound').RushRoundPhase;
+    timeLimitSeconds: number;
+    remainingSeconds: number;
+    removals: number;
+    mistakes: number;
+  } | null;
+  doubleEndedHints: {
+    briefingVisible: boolean;
+    visibleEnds: number;
+    visibleClickTargets: number;
+  };
+  hint: {
+    enabled: boolean;
+    target: { id: string; end: 'head' | 'tail' } | null;
+    remaining: number;
+    maximum: number;
+    visibleEnds: number;
+    scale: number;
+  };
+  sceneVisibility: {
+    arrows: boolean;
+    appliances: boolean;
+    connections: boolean;
+    opening: boolean;
+  };
+  appliances: Array<{
+    id: string;
+    kind: string;
+    accent: number;
+    sizeTier: 'S' | 'M' | 'L' | 'XL';
+    plugStyleId:
+      | 'round-two-pin'
+      | 'usb-c'
+      | 'flat-two-blade'
+      | 'three-pin'
+      | 'grounded-round'
+      | 'dc-barrel'
+      | 'magnetic-pogo';
+    state: 'idle' | 'connected' | 'active' | 'inflating' | 'hidden' | 'spawning';
+    connections: number;
+    activeTimeRemaining: number;
+    animationSignal: number;
+    screenX: number;
+    screenY: number;
+    screenWidth: number;
+    screenHeight: number;
+    rootScreenY: number;
+    instanceId: string;
+    dragging: boolean;
+    dropping: boolean;
+    dropOffset: number;
+    landingSway: number;
+    landingTilt: number;
+    landingImpactCount: number;
+    landingContactSide: -1 | 0 | 1;
+    lifecycleScale: number;
+    inflationPeakCount: number;
+    deforming: boolean;
+    deformPull: number;
+    deformSignedPull: number;
+    screenUpAlignment: number;
+    orientationQuaternion: [number, number, number, number];
+    facingSide: -1 | 1;
+    outwardEdge: 'left' | 'right' | 'top' | 'bottom';
+  }>;
+  context: {
+    losses: number;
+    restores: number;
+    lossAtMs: number | null;
+  };
+  timings: {
+    generationMs: number;
+    modelBuildMs: number;
+    preloadMaxSliceMs: number;
+  };
+  renderer: {
+    calls: number;
+    triangles: number;
+    geometries: number;
+    textures: number;
+  };
+  canvas: {
+    clientWidth: number;
+    clientHeight: number;
+    width: number;
+    height: number;
+  };
+  orbit: {
+    yaw: number;
+    pitch: number;
+    appliancePitch: number;
+    radius: number;
+  };
+}
+
+interface Window {
+  __PLUG_SHOWCASE_DIAGNOSTICS__?: {
+    styleCount: number;
+    view: string;
+    debugEnabled: boolean;
+    explodeAmount: number;
+    selectableParts: string[];
+    selectedPart: string | null;
+    drawCalls: number;
+    triangles: number;
+    geometries: number;
+    textures: number;
+  };
+  __ACTIVATE_APPLIANCE_FOR_EVIDENCE__?: (kind: string) => boolean;
+    __ACTIVATE_RUSH_CABLE_FOR_EVIDENCE__?: (id: string) => boolean;
+    __SHOW_SKILL_EFFECT_FOR_EVIDENCE__?: (asset: string, yaw?: number) => boolean;
+  __SHOW_SKILL_PRESENTATION_FOR_EVIDENCE__?: (
+    skill: 'radio' | 'robot-vacuum' | 'rice-cooker',
+  ) => boolean;
+  __FREEZE_SKILL_PRESENTATION_FOR_EVIDENCE__?: (timeMs: number) => boolean;
+  __SKILL_REVIEW_READY__?: boolean;
+  __CONTEXT_RECOVERY_EXTENSION__?: WEBGL_lose_context;
+  /** Deterministic visual-regression clock for the shared appliance timeline. */
+  __APPLIANCE_PERFORMANCE_TIME_OVERRIDE__?: number;
+  /** Exact ballistic age used by fixed-time appliance visual evidence. */
+  __APPLIANCE_PERFORMANCE_FLIGHT_TIME_OVERRIDE__?: number;
+  __THREE_GAME_DIAGNOSTICS__?: ThreeGameDiagnostics;
+  __APPLIANCE_GALLERY_DIAGNOSTICS__?: {
+    open: boolean;
+    selected: string;
+    catalogSize: number;
+    active: boolean;
+    cycle: number;
+    power: number;
+    animationSignal: number;
+    lidRotationX: number | null;
+    refrigeratorDoorRotationY: number | null;
+    refrigeratorInteriorVisible: boolean | null;
+    deforming: boolean;
+    deformPull: number;
+    deformSignedPull: number;
+    deformReboundPullRatio: number;
+    deformReboundResponse: number;
+    deformEnabled: boolean;
+    deformRenderableMeshes: number;
+    deformBoundRenderableMeshes: number;
+    deformGrabEdgeFactor: number;
+    deformGrabCornerFactor: number;
+    deformGrabCenterFactor: number;
+    deformWholeCoupling: number;
+    deformLocalGain: number;
+    deformIndentStrength: number;
+    orbitAzimuth: number;
+    performanceSessions: number;
+    performanceTimelineOwners: number;
+    performanceElapsed: number;
+    performanceActiveByKind: Record<string, number>;
+    performanceCapacityByKind: Record<string, number>;
+    activeToastNdc: [number, number, number] | null;
+    lampBeam: ThreeGameDiagnostics['performances']['lampBeam'];
+    radio: ThreeGameDiagnostics['performances']['radio'];
+    hairDryer: ThreeGameDiagnostics['performances']['hairDryer'];
+    refrigerator: ThreeGameDiagnostics['performances']['refrigerator'];
+    spectacleSessions: number;
+    spectacleActiveTotal: number;
+    petalBurstCount: number;
+    drawCalls: number;
+    triangles: number;
+    geometries: number;
+    textures: number;
+  };
+}

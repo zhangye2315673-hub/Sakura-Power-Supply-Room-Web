@@ -1,0 +1,23 @@
+import { chromium } from '@playwright/test';
+import { mkdir, writeFile } from 'node:fs/promises';
+
+const outputDirectory = 'artifacts/img2threejs/desktop-computer';
+await mkdir(outputDirectory, { recursive: true });
+const browser = await chromium.launch({ args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
+const page = await browser.newPage({ viewport: { width: 1200, height: 900 }, deviceScaleFactor: 1 });
+const errors = [];
+page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text()); });
+page.on('pageerror', (error) => errors.push(error.message));
+await page.goto('http://127.0.0.1:5190/model-review.html?model=desktop-computer&view=three-quarter&spin=0&power=0', { waitUntil: 'domcontentloaded' });
+await page.waitForFunction(() => window.__MODEL_REVIEW_DIAGNOSTICS__?.ready === true);
+const off = await page.evaluate(() => window.__MODEL_REVIEW_DIAGNOSTICS__);
+await page.evaluate(() => window.__MODEL_REVIEW_SET_POWER__?.(true));
+await page.waitForTimeout(2200);
+const powered = await page.evaluate(() => window.__MODEL_REVIEW_DIAGNOSTICS__);
+await page.evaluate(() => window.__MODEL_REVIEW_SET_POWER__?.(false));
+await page.waitForTimeout(120);
+const reset = await page.evaluate(() => window.__MODEL_REVIEW_DIAGNOSTICS__);
+const report = { off, powered, reset, errors };
+await writeFile(`${outputDirectory}/browser-diagnostics.json`, `${JSON.stringify(report, null, 2)}\n`);
+console.log(JSON.stringify(report, null, 2));
+await browser.close();

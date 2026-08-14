@@ -1,0 +1,5759 @@
+{
+  "targetName": "SAKURA compact induction cooktop",
+  "targetId": "sakura-compact-induction-cooktop",
+  "schemaVersion": "2.1",
+  "terminologyProfile": {
+    "domain": "real-time procedural Three.js asset",
+    "geometryTerms": [
+      "silhouette",
+      "topology",
+      "primitive",
+      "bevel",
+      "chamfer",
+      "taper",
+      "bend",
+      "boolean cut",
+      "edge loop",
+      "surface normal",
+      "displacement"
+    ],
+    "materialTerms": [
+      "albedo",
+      "baseColor",
+      "roughness",
+      "metalness",
+      "normal map",
+      "bump map",
+      "ambient occlusion",
+      "cavity dirt",
+      "edge wear",
+      "clearcoat"
+    ],
+    "lightingTerms": [
+      "key light",
+      "fill light",
+      "rim light",
+      "HDRI/environment reflection",
+      "contact shadow"
+    ],
+    "descriptionRule": "Use measurable 3D graphics terms. Avoid vague words unless they are paired with concrete geometry/material/shader parameters."
+  },
+  "sourceImage": "references\\intake\\induction-cooktop\\front.png",
+  "referenceCamera": {
+    "solved": false,
+    "fovDegrees": 40,
+    "aspect": 1,
+    "orientation": {
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0
+    },
+    "positionHint": [
+      0,
+      0,
+      3
+    ],
+    "note": "For likeness work, solve the reference camera (forge/stage1_intake/solve_camera_pose.py) so the review render aligns with the photo and the reference can be projected. Confirm by overlay review."
+  },
+  "suitability": "pass",
+  "scores": {
+    "object_isolation": 3,
+    "silhouette_readability": 3,
+    "depth_inference": 3,
+    "primitive_decomposition": 3,
+    "material_procedurality": 3,
+    "occlusion_risk": 2,
+    "interaction_fit": 3
+  },
+  "preSpecAssessment": {
+    "objectClass": {
+      "primaryType": "portable single-zone induction cooktop",
+      "primaryDomain": "object",
+      "formLanguage": [
+        "low rounded-square slab",
+        "soft Sakura domestic appliance",
+        "concentric circular graphics"
+      ],
+      "structureKind": [
+        "layered enclosure",
+        "top control surface",
+        "ventilated underside"
+      ],
+      "motionPotential": [
+        "rotary control feedback",
+        "heating-zone pulse",
+        "steam plume"
+      ],
+      "materialFamilies": [
+        "glass ceramic",
+        "painted plastic",
+        "rubber",
+        "metal hardware"
+      ],
+      "notes": "The supplied front, side and back files are respectively top, side and underside orthographic-style views."
+    },
+    "complexity": {
+      "tier": "complex",
+      "scores": {
+        "silhouetteComplexity": 2,
+        "componentCount": 3,
+        "hierarchyDepth": 3,
+        "repetitionDensity": 3,
+        "materialLayerCount": 3,
+        "localDetailDensity": 3,
+        "occlusionRisk": 2,
+        "actionReadinessNeed": 3
+      },
+      "estimatedCounts": {
+        "macroComponents": 5,
+        "mesoComponents": 13,
+        "microFeatureGroups": 8,
+        "materialLayers": 6,
+        "repetitionSystems": 4
+      },
+      "reasoning": [
+        "The macro silhouette is simple, but identity depends on layered top edging, a dense control strip and three repeated ventilation systems.",
+        "The underside supplies direct evidence for the fan grille, four feet and cable recess; internal coil and airflow remain hidden."
+      ]
+    },
+    "specDepthDecision": {
+      "requiredDepth": "complex",
+      "minimumComponentLevels": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "needsRepetitionSystems": true,
+      "needsMaterialLocalOverrides": true,
+      "needsMultipleReviewViews": true,
+      "needsActionReadyHierarchy": true,
+      "rationale": "Complex depth is required because a shallow slab would omit the control hierarchy, underside service structure and action-ready heating cues."
+    },
+    "unknownsToResolveBeforeImplementation": [],
+    "detailInventory": {
+      "scanMethod": "component-zones",
+      "targetMinDetails": 10,
+      "note": "Enumerate every identity-defining small detail before authoring the spec. Each detail must map to a component.localFeatures entry or material.localOverrides entry, never prose only. Use forge/stage1_intake/build_detail_inventory.py to scan zones.",
+      "details": [
+        {
+          "id": "top-rounded-square-silhouette",
+          "zone": "top",
+          "scale": "macro",
+          "observation": "outer rounded-square footprint with generous corner radii and thin black perimeter line",
+          "implementation": "separate procedural geometry",
+          "mappedTo": {
+            "componentId": "main-enclosure"
+          },
+          "evidenceRefs": [
+            "front.png",
+            "side.png",
+            "back.png"
+          ],
+          "realization": "mapped-to-component-geometry",
+          "kind": "contour",
+          "description": "outer rounded-square footprint with generous corner radii and thin black perimeter line",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "affects": "silhouette/material",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "main-enclosure"
+          },
+          "evidenceRef": "top-view",
+          "confidence": 0.96
+        },
+        {
+          "id": "cream-bezel-step",
+          "zone": "top",
+          "scale": "meso",
+          "observation": "warm cream raised frame surrounding the pink top panel",
+          "implementation": "separate procedural geometry",
+          "mappedTo": {
+            "componentId": "top-bezel"
+          },
+          "evidenceRefs": [
+            "front.png",
+            "side.png",
+            "back.png"
+          ],
+          "realization": "mapped-to-component-geometry",
+          "kind": "seam",
+          "description": "warm cream raised frame surrounding the pink top panel",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "affects": "geometry/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "top-bezel"
+          },
+          "evidenceRef": "top-view",
+          "confidence": 0.96
+        },
+        {
+          "id": "pink-glass-ceramic-panel",
+          "zone": "top",
+          "scale": "macro",
+          "observation": "flush pale pink cooking surface with soft central highlight",
+          "implementation": "separate procedural geometry",
+          "mappedTo": {
+            "componentId": "cooking-panel"
+          },
+          "evidenceRefs": [
+            "front.png",
+            "side.png",
+            "back.png"
+          ],
+          "realization": "mapped-to-component-geometry",
+          "kind": "gloss",
+          "description": "flush pale pink cooking surface with soft central highlight",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "affects": "silhouette/material",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "cooking-panel"
+          },
+          "evidenceRef": "top-view",
+          "confidence": 0.96
+        },
+        {
+          "id": "heater-zone-ring",
+          "zone": "top",
+          "scale": "meso",
+          "observation": "large centered dotted circular induction-zone marking and center dot",
+          "implementation": "separate procedural geometry",
+          "mappedTo": {
+            "componentId": "heating-zone"
+          },
+          "evidenceRefs": [
+            "front.png",
+            "side.png",
+            "back.png"
+          ],
+          "realization": "mapped-to-component-geometry",
+          "kind": "linework",
+          "description": "large centered dotted circular induction-zone marking and center dot",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "affects": "geometry/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "heating-zone"
+          },
+          "evidenceRef": "top-view",
+          "confidence": 0.96
+        },
+        {
+          "id": "control-knob",
+          "zone": "top",
+          "scale": "meso",
+          "observation": "large cream rotary knob at front center with dark rim and index mark",
+          "implementation": "separate procedural geometry",
+          "mappedTo": {
+            "componentId": "control-knob"
+          },
+          "evidenceRefs": [
+            "front.png",
+            "side.png",
+            "back.png"
+          ],
+          "realization": "mapped-to-component-geometry",
+          "kind": "ridge",
+          "description": "large cream rotary knob at front center with dark rim and index mark",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "affects": "geometry/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "control-knob"
+          },
+          "evidenceRef": "top-view",
+          "confidence": 0.96
+        },
+        {
+          "id": "left-timer-button",
+          "zone": "top",
+          "scale": "micro",
+          "observation": "small layered circular timer button on the front-left control strip",
+          "implementation": "separate procedural geometry",
+          "mappedTo": {
+            "componentId": "timer-button"
+          },
+          "evidenceRefs": [
+            "front.png",
+            "side.png",
+            "back.png"
+          ],
+          "realization": "mapped-to-component-geometry",
+          "kind": "ridge",
+          "description": "small layered circular timer button on the front-left control strip",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "affects": "geometry/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "timer-button"
+          },
+          "evidenceRef": "top-view",
+          "confidence": 0.96
+        },
+        {
+          "id": "left-mode-button",
+          "zone": "top",
+          "scale": "micro",
+          "observation": "small layered heat-mode button beside the timer control",
+          "implementation": "separate procedural geometry",
+          "mappedTo": {
+            "componentId": "mode-button"
+          },
+          "evidenceRefs": [
+            "front.png",
+            "side.png",
+            "back.png"
+          ],
+          "realization": "mapped-to-component-geometry",
+          "kind": "ridge",
+          "description": "small layered heat-mode button beside the timer control",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "affects": "geometry/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "mode-button"
+          },
+          "evidenceRef": "top-view",
+          "confidence": 0.96
+        },
+        {
+          "id": "right-power-button",
+          "zone": "top",
+          "scale": "micro",
+          "observation": "small layered power button on the front-right control strip",
+          "implementation": "separate procedural geometry",
+          "mappedTo": {
+            "componentId": "power-button"
+          },
+          "evidenceRefs": [
+            "front.png",
+            "side.png",
+            "back.png"
+          ],
+          "realization": "mapped-to-component-geometry",
+          "kind": "ridge",
+          "description": "small layered power button on the front-right control strip",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "affects": "geometry/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "power-button"
+          },
+          "evidenceRef": "top-view",
+          "confidence": 0.96
+        },
+        {
+          "id": "plus-minus-marks",
+          "zone": "top",
+          "scale": "micro",
+          "observation": "minus and plus glyphs flanking the rotary knob",
+          "implementation": "separate procedural geometry",
+          "mappedTo": {
+            "componentId": "control-glyphs"
+          },
+          "evidenceRefs": [
+            "front.png",
+            "side.png",
+            "back.png"
+          ],
+          "realization": "mapped-to-component-geometry",
+          "kind": "linework",
+          "description": "minus and plus glyphs flanking the rotary knob",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "affects": "geometry/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "control-glyphs"
+          },
+          "evidenceRef": "top-view",
+          "confidence": 0.96
+        },
+        {
+          "id": "right-side-vent-array",
+          "zone": "right-side",
+          "scale": "micro",
+          "observation": "nine narrow vertical ventilation slots in the right side wall",
+          "implementation": "separate procedural geometry",
+          "mappedTo": {
+            "componentId": "side-vents"
+          },
+          "evidenceRefs": [
+            "front.png",
+            "side.png",
+            "back.png"
+          ],
+          "realization": "mapped-to-component-geometry",
+          "kind": "hole",
+          "description": "nine narrow vertical ventilation slots in the right side wall",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "affects": "geometry/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "side-vents"
+          },
+          "evidenceRef": "side-view",
+          "confidence": 0.96
+        },
+        {
+          "id": "mint-lower-band",
+          "zone": "top",
+          "scale": "meso",
+          "observation": "muted mint-green lower enclosure visible along the side and underside edge",
+          "implementation": "separate procedural geometry",
+          "mappedTo": {
+            "componentId": "lower-band"
+          },
+          "evidenceRefs": [
+            "front.png",
+            "side.png",
+            "back.png"
+          ],
+          "realization": "mapped-to-component-geometry",
+          "kind": "seam",
+          "description": "muted mint-green lower enclosure visible along the side and underside edge",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "affects": "geometry/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "lower-band"
+          },
+          "evidenceRef": "top-view",
+          "confidence": 0.96
+        },
+        {
+          "id": "four-rubber-feet",
+          "zone": "top",
+          "scale": "micro",
+          "observation": "four separate round mint rubber feet near underside corners",
+          "implementation": "separate procedural geometry",
+          "mappedTo": {
+            "componentId": "foot-array"
+          },
+          "evidenceRefs": [
+            "front.png",
+            "side.png",
+            "back.png"
+          ],
+          "realization": "mapped-to-component-geometry",
+          "kind": "ridge",
+          "description": "four separate round mint rubber feet near underside corners",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "affects": "geometry/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "foot-array"
+          },
+          "evidenceRef": "top-view",
+          "confidence": 0.96
+        },
+        {
+          "id": "underside-fan-grille",
+          "zone": "underside",
+          "scale": "meso",
+          "observation": "large circular fan opening formed by concentric rings and radial arc slots",
+          "implementation": "separate procedural geometry",
+          "mappedTo": {
+            "componentId": "fan-grille"
+          },
+          "evidenceRefs": [
+            "front.png",
+            "side.png",
+            "back.png"
+          ],
+          "realization": "mapped-to-component-geometry",
+          "kind": "hole",
+          "description": "large circular fan opening formed by concentric rings and radial arc slots",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "affects": "geometry/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "fan-grille"
+          },
+          "evidenceRef": "underside-view",
+          "confidence": 0.96
+        },
+        {
+          "id": "cable-storage-recess",
+          "zone": "underside",
+          "scale": "meso",
+          "observation": "rectangular underside cable trough with rounded inner corners",
+          "implementation": "separate procedural geometry",
+          "mappedTo": {
+            "componentId": "cable-trough"
+          },
+          "evidenceRefs": [
+            "front.png",
+            "side.png",
+            "back.png"
+          ],
+          "realization": "mapped-to-component-geometry",
+          "kind": "groove",
+          "description": "rectangular underside cable trough with rounded inner corners",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "affects": "geometry/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "cable-trough"
+          },
+          "evidenceRef": "underside-view",
+          "confidence": 0.96
+        },
+        {
+          "id": "coiled-power-cord",
+          "zone": "underside",
+          "scale": "micro",
+          "observation": "U-shaped stored cord ending in a compact two-pin plug",
+          "implementation": "separate procedural geometry",
+          "mappedTo": {
+            "componentId": "power-cord"
+          },
+          "evidenceRefs": [
+            "front.png",
+            "side.png",
+            "back.png"
+          ],
+          "realization": "mapped-to-component-geometry",
+          "kind": "ridge",
+          "description": "U-shaped stored cord ending in a compact two-pin plug",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "affects": "geometry/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "power-cord"
+          },
+          "evidenceRef": "underside-view",
+          "confidence": 0.88
+        },
+        {
+          "id": "panel-seams",
+          "zone": "top",
+          "scale": "micro",
+          "observation": "fine separation lines between cooking panel, bezel, side shell and lower band",
+          "implementation": "separate procedural geometry",
+          "mappedTo": {
+            "componentId": "seam-system"
+          },
+          "evidenceRefs": [
+            "front.png",
+            "side.png",
+            "back.png"
+          ],
+          "realization": "mapped-to-component-geometry",
+          "kind": "seam",
+          "description": "fine separation lines between cooking panel, bezel, side shell and lower band",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "affects": "geometry/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "seam-system"
+          },
+          "evidenceRef": "top-view",
+          "confidence": 0.96
+        }
+      ]
+    },
+    "anatomy": {
+      "applies": false,
+      "styleHeads": 0,
+      "proportions": {
+        "headUnit": 0,
+        "torso": 0,
+        "legs": 0,
+        "shoulderWidth": 0,
+        "hipWidth": 0
+      },
+      "pose": {
+        "type": "unassessed",
+        "jointAngles": {}
+      },
+      "faceLandmarks": {
+        "eyeLine": 0,
+        "eyeSpacing": 0,
+        "noseBase": 0,
+        "mouthLine": 0,
+        "hairline": 0
+      },
+      "features": [],
+      "confidence": 0,
+      "note": "Only meaningful when objectClass.primaryDomain is character or hybrid. Set applies=true and fill from forge/stage1_intake/extract_landmarks.py. See grimoire/character/reconstruction.md and grimoire/character/likeness_maximization.md."
+    },
+    "sourceImage": "references\\intake\\induction-cooktop\\front.png"
+  },
+  "qualityContract": {
+    "qualityBar": "complex",
+    "definitionOfDone": [
+      "Three-quarter render immediately reads as the supplied low Sakura induction cooktop rather than a generic slab.",
+      "Top, side and underside views preserve the rounded-square footprint, low thickness, control placement, vent count and underside systems.",
+      "Powered motion makes induction heating obvious through knob response, concentric heat pulses and rising steam while preserving real-time performance."
+    ],
+    "minimumSpecDepth": {
+      "macroComponents": 3,
+      "mesoComponents": 8,
+      "microFeatureGroups": 5,
+      "materialLayers": 3,
+      "repetitionSystems": 1,
+      "reviewViewpoints": 4
+    },
+    "featureGroups": [
+      {
+        "id": "overall-silhouette",
+        "name": "Overall silhouette and proportions",
+        "required": true,
+        "qualityCriteria": [
+          "Bounding shape, dominant curves, negative spaces, and scale relationships are explicitly described."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "model reads as a generic placeholder instead of the reference object",
+          "major proportions are guessed without evidence"
+        ]
+      },
+      {
+        "id": "primary-structure",
+        "name": "Primary structure and hierarchy",
+        "required": true,
+        "qualityCriteria": [
+          "Major parts, joints, seams, contact points, and parent-child relationships are named before code generation."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "large visible parts are merged into one mesh",
+          "component hierarchy is too shallow for the observed complexity"
+        ]
+      },
+      {
+        "id": "attachment-joint-correctness",
+        "name": "Attachment and joint correctness",
+        "required": true,
+        "qualityCriteria": [
+          "Every visible child appendage, branch, limb, handle, connector, tube, cable, horn, wing, leg, or hinged part has an attachment contract with parent socket, localStart/localEnd, contact type, embed/overlap, and gap tolerance."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "child part root floats away from the parent",
+          "branch/limb/tube is centered in space instead of pivoting from its root",
+          "parent-child transform mixes world and local coordinates"
+        ]
+      },
+      {
+        "id": "surface-material-response",
+        "name": "Surface material response",
+        "required": true,
+        "qualityCriteria": [
+          "Albedo zones, roughness, normal/bump/displacement intent, cavity dirt, edge wear, and local overrides are specified where visible.",
+          "Important materials define independent albedo, roughness, height/normal, and AO responses instead of reusing one texture for unrelated PBR channels.",
+          "Surface response is decomposed into macro, meso, and micro frequency bands with scale and amplitude tied to object scale."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "surface looks like flat plastic",
+          "local material variation is missing or not tied to image evidence"
+        ]
+      },
+      {
+        "id": "reference-lookdev",
+        "name": "Reference color, material, and lighting response",
+        "required": true,
+        "qualityCriteria": [
+          "Material-pass names the reference-derived albedo palette, roughness variation, tactile normal/bump/displacement response, and local masks.",
+          "When a source image is available, run reference PBR extraction and require confidence >= 0.7 before treating maps as implementation-ready.",
+          "Lighting-pass names key/fill/rim or environment light, exposure, tone mapping, background, and contact shadow behavior.",
+          "Neutral, grazing-angle, and reference-matched renders prove that surface relief survives relighting and is not painted into albedo."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "model has acceptable shape but reads as flat shaded or plastic",
+          "colors are a generic average instead of reference-observed local color zones",
+          "lighting is evenly ambient and cannot reproduce the source value range"
+        ]
+      }
+    ],
+    "visualDeltaChecks": [
+      "top footprint width-to-depth and corner radius",
+      "slab thickness and mint lower-band height",
+      "heating-zone diameter and control-strip spacing",
+      "nine side vents and four foot positions",
+      "underside fan-grille and cable-recess layout",
+      "glass-ceramic versus plastic material response"
+    ],
+    "antiShallowSpecRules": [
+      "Do not proceed to code if qualityContract.qualityBar is unassessed.",
+      "Do not proceed to code if the spec only contains a root component for a moderate or complex object.",
+      "Do not proceed to code if required featureGroups are not represented by componentTree, materials, or repetitionSystems.",
+      "Do not proceed to code if visible local features are described only in prose and not attached to components/materials/evidenceRefs.",
+      "Do not proceed past structural-pass if attached child parts lack attachment.parentSocket, localStart, localEnd, embedDepth/overlap, and gapTolerance.",
+      "Do not pass material look-dev when albedo is reused as roughness, height, normal, or AO.",
+      "Do not pass material look-dev without macro, meso, and micro surface frequency bands for close-up materials.",
+      "Do not pass reference-fidelity material look-dev from a source image without usable referencePbr maps or an explicit documented limitation.",
+      "Do not patch a spec with extracted PBR maps when extraction confidence is below the target threshold unless the user explicitly accepts lower fidelity.",
+      "Do not place adjacent separate-geometry parts below 0.02 world-unit seam overlap (source: grimoire/build/geometry_patterns.md).",
+      "Do not satisfy raised or recessed relief, fasteners, or grip structure with a map alone when the feature affects form; use geometry or displacement (source: grimoire/build/geometry_patterns.md).",
+      "Adjacent components must overlap by at least 0.02 world units at shared seams (source: grimoire/build/geometry_patterns.md).",
+      "Raised or recessed relief and fasteners must be geometry, instanced micro-parts, or displacement; a map alone is an approximation (source: grimoire/build/geometry_patterns.md)."
+    ],
+    "mustNotDo": [
+      "Do not proceed to code if qualityContract.qualityBar is unassessed.",
+      "Do not proceed to code if the spec only contains a root component for a moderate or complex object.",
+      "Do not proceed to code if required featureGroups are not represented by componentTree, materials, or repetitionSystems.",
+      "Do not proceed to code if visible local features are described only in prose and not attached to components/materials/evidenceRefs.",
+      "Do not proceed past structural-pass if attached child parts lack attachment.parentSocket, localStart, localEnd, embedDepth/overlap, and gapTolerance.",
+      "Do not pass material look-dev when albedo is reused as roughness, height, normal, or AO.",
+      "Do not pass material look-dev without macro, meso, and micro surface frequency bands for close-up materials.",
+      "Do not pass reference-fidelity material look-dev from a source image without usable referencePbr maps or an explicit documented limitation.",
+      "Do not patch a spec with extracted PBR maps when extraction confidence is below the target threshold unless the user explicitly accepts lower fidelity.",
+      "Do not place adjacent separate-geometry parts below 0.02 world-unit seam overlap (source: grimoire/build/geometry_patterns.md).",
+      "Do not satisfy raised or recessed relief, fasteners, or grip structure with a map alone when the feature affects form; use geometry or displacement (source: grimoire/build/geometry_patterns.md).",
+      "Adjacent components must overlap by at least 0.02 world units at shared seams (source: grimoire/build/geometry_patterns.md).",
+      "Raised or recessed relief and fasteners must be geometry, instanced micro-parts, or displacement; a map alone is an approximation (source: grimoire/build/geometry_patterns.md)."
+    ]
+  },
+  "qualityTargets": {
+    "targetFidelity": 0.7,
+    "mustMatch": [
+      "macro silhouette and proportions",
+      "primary material albedo/roughness response",
+      "reference-derived PBR material response at or above 0.7 confidence when source pixels are usable",
+      "most recognizable local features"
+    ],
+    "niceToHave": [
+      "micro scratches, stains, chips, and dirt masks",
+      "secondary lighting match"
+    ],
+    "fpsTarget": 60,
+    "reviewViewpoints": [
+      "front",
+      "three-quarter",
+      "side",
+      "thickness-axis",
+      "long-axis"
+    ]
+  },
+  "selfCorrectLoop": {
+    "enabled": true,
+    "visualAcceptance": {
+      "reviewer": "ai-vision",
+      "threshold": 0.7,
+      "comparisonArtifactRequired": true,
+      "layerScoresRequired": true,
+      "codePixelDiffIsAcceptanceAuthority": false,
+      "scoringRule": "AI vision must inspect a side-by-side reference/render sheet and score the current pass from 0 to 1. Pixel-diff code may assist diagnostics but cannot approve a pass.",
+      "requiredLayerScores": [
+        "silhouetteProportion",
+        "componentStructure",
+        "formDetail",
+        "materialSurface",
+        "lightingCamera"
+      ],
+      "featureReviewPolicy": {
+        "enabled": true,
+        "reviewUnit": "semantic-subsystem",
+        "maxCriticalFeaturesPerPass": 5,
+        "maxImportantFeaturesPerPass": 3,
+        "criticalDefaultThreshold": 0.8,
+        "importantAverageThreshold": 0.65,
+        "adaptiveEscalation": true,
+        "singleImagePairOnly": true,
+        "selectionRule": "Choose only the most visually salient, identity-defining, user-prioritized, or high-risk semantic systems. Group repeated parts instead of reviewing every mesh. AI vision scores every selected feature from the same full reference/render pair."
+      }
+    },
+    "reviewAfterPasses": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "surface-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "allowedActions": [
+      "continue",
+      "refine-spec",
+      "refine-code",
+      "request-input",
+      "stop"
+    ],
+    "specRefineTriggers": [
+      "missing component",
+      "wrong primitive family",
+      "wrong proportions",
+      "material layer under-specified",
+      "local feature not traceable to viewEvidence",
+      "reference ambiguity discovered during implementation"
+    ],
+    "codeRefineTriggers": [
+      "spec is adequate but generated geometry/material does not match",
+      "browser render differs from reference",
+      "performance budget exceeded",
+      "lighting hides geometry or material response"
+    ],
+    "stopCriteria": [
+      "target fidelity reached or user accepts current approximation",
+      "remaining gaps require new reference images or manual art"
+    ],
+    "screenshotPolicy": {
+      "requiredForPasses": [
+        "blockout",
+        "structural-pass",
+        "form-refinement",
+        "material-pass",
+        "surface-pass",
+        "lighting-pass",
+        "interaction-pass"
+      ],
+      "preferredCapture": "in-app-browser-screenshot",
+      "fallbackCapture": "user-supplied-screenshot-path",
+      "minimumEvidence": "Each visual pass needs a reference image, rendered screenshot, side-by-side comparison sheet, AI vision score, layer scores, and critique before choosing continue.",
+      "reviewPairRule": "Compare the same camera/viewpoint whenever possible; do not judge a front reference against a random render angle.",
+      "acceptanceAuthority": "AI vision review of the comparison sheet. Code-generated pixel similarity is not sufficient evidence."
+    }
+  },
+  "featureReviewTargets": [
+    {
+      "id": "cooktop-silhouette",
+      "name": "Low rounded-square body silhouette",
+      "tier": "critical",
+      "passIds": [
+        "blockout",
+        "form-refinement"
+      ],
+      "minimumScore": 0.82,
+      "mustPass": true,
+      "componentRefs": [
+        "main-enclosure",
+        "lower-band",
+        "cooking-panel"
+      ],
+      "evidenceRefs": [
+        "top-view",
+        "side-view"
+      ]
+    },
+    {
+      "id": "top-identity",
+      "name": "Heater circle and control strip",
+      "tier": "critical",
+      "passIds": [
+        "structural-pass",
+        "form-refinement"
+      ],
+      "minimumScore": 0.82,
+      "mustPass": true,
+      "componentRefs": [
+        "heating-zone",
+        "control-knob",
+        "timer-button",
+        "mode-button",
+        "power-button",
+        "control-glyphs"
+      ],
+      "evidenceRefs": [
+        "top-view"
+      ]
+    },
+    {
+      "id": "side-identity",
+      "name": "Low profile, vent array and mint band",
+      "tier": "important",
+      "passIds": [
+        "structural-pass",
+        "form-refinement"
+      ],
+      "minimumScore": 0.76,
+      "mustPass": true,
+      "componentRefs": [
+        "side-vents",
+        "lower-band",
+        "foot-array"
+      ],
+      "evidenceRefs": [
+        "side-view"
+      ]
+    },
+    {
+      "id": "underside-identity",
+      "name": "Fan grille, feet and cable trough",
+      "tier": "important",
+      "passIds": [
+        "structural-pass",
+        "form-refinement"
+      ],
+      "minimumScore": 0.76,
+      "mustPass": true,
+      "componentRefs": [
+        "fan-grille",
+        "foot-array",
+        "cable-trough",
+        "power-cord"
+      ],
+      "evidenceRefs": [
+        "underside-view"
+      ]
+    },
+    {
+      "id": "powered-use",
+      "name": "Readable induction heating action",
+      "tier": "critical",
+      "passIds": [
+        "interaction-pass"
+      ],
+      "minimumScore": 0.8,
+      "mustPass": true,
+      "componentRefs": [
+        "heating-zone",
+        "control-knob",
+        "steam-plume"
+      ],
+      "evidenceRefs": [
+        "top-view"
+      ]
+    }
+  ],
+  "sculptPipeline": {
+    "passGateMode": "locked-sequential",
+    "passOrder": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "surface-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "currentPass": "complete",
+    "completedPasses": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "surface-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "lastCompletedPass": "optimization-pass",
+    "blockedReason": "all build passes completed",
+    "nextRequiredEvidence": []
+  },
+  "lookDevTargets": {
+    "qualityPriority": "reference-fidelity",
+    "materialPass": {
+      "albedoPaletteRequired": true,
+      "roughnessVariationRequired": true,
+      "normalOrBumpRequired": true,
+      "localOverridesRequired": true,
+      "minimumTextureResolution": 1024,
+      "preferredTextureResolution": 2048,
+      "independentMapChannels": [
+        "albedo",
+        "roughness",
+        "height",
+        "normal",
+        "ambient-occlusion"
+      ],
+      "requiredSurfaceFrequencyBands": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "geometryReliefRequiredWhenSilhouetteAffected": true,
+      "referencePbrExtraction": {
+        "requiredWhenSourceImagePresent": true,
+        "targetThreshold": 0.7,
+        "stopOnLowConfidence": true,
+        "script": "forge/stage1_intake/extract_pbr_evidence.py",
+        "acceptedLimitation": "single-image extraction is reference-derived inference, not exact photogrammetry"
+      },
+      "mustAvoid": [
+        "single flat albedo per material",
+        "uniform roughness",
+        "albedo texture reused as roughness/height/normal/AO",
+        "single-frequency random noise",
+        "plastic-looking smooth bark, stone, cloth, foliage, or aged material",
+        "local color/detail described only in prose without material masks",
+        "claiming exact PBR recovery when confidence is below the target threshold"
+      ]
+    },
+    "lightingPass": {
+      "requiredTerms": [
+        "key light",
+        "fill light",
+        "rim or environment light",
+        "exposure",
+        "tone mapping",
+        "background",
+        "contact shadow"
+      ],
+      "mustAvoid": [
+        "ambient-only lighting",
+        "flat value range",
+        "missing contact shadow",
+        "reference lighting copied without separating material readability"
+      ]
+    },
+    "screenshotReview": [
+      "Compare albedo palette and local color zones.",
+      "Compare roughness/normal/bump response under light.",
+      "Compare cavity dirt, edge wear, stains, moss, scratches, or other local masks.",
+      "Compare key/fill/rim structure, exposure, tone mapping, background, and contact shadows.",
+      "Capture a neutral-light render to verify material readability without reference lighting.",
+      "Capture a grazing-light close-up to expose flat normals, uniform roughness, tiling, and plastic highlights.",
+      "Capture a reference-matched render from the same camera framing as the source."
+    ]
+  },
+  "actionReadiness": {
+    "contract": "Every macro/meso component should be generated as a stable named Object3D pivot node with a mesh child, action metadata, optional sockets, collider proxy, and destruction metadata.",
+    "defaultRigType": "action-ready-static-rig",
+    "rootMotionNode": "root",
+    "requiredComponentFields": [
+      "id",
+      "parent",
+      "transform",
+      "attachment for child appendages, connectors, limbs, tubes, handles, legs, horns, wings, branches, or cables",
+      "actionProfile.animationRole",
+      "actionProfile.pivot",
+      "actionProfile.collider",
+      "actionProfile.destruction"
+    ],
+    "transformChannels": [
+      "translate",
+      "rotate",
+      "scale",
+      "bend",
+      "twist",
+      "detach",
+      "visibility",
+      "material-state"
+    ],
+    "authoringRules": [
+      "Do not collapse independently movable parts into one mesh.",
+      "Put transforms on component pivot groups, not only on raw meshes.",
+      "For attached child parts, put the pivot at the semantic root/socket and build visible geometry from localStart to localEnd.",
+      "Represent hinge, socket, detachable, and breakable intent even when no animation is implemented yet.",
+      "Use simplified collider proxies for runtime physics instead of visual mesh colliders by default."
+    ],
+    "destructionPolicy": {
+      "defaultBreakable": false,
+      "fractureGroupNaming": "Use stable semantic names such as body-shell, left-hinge, glass-panel, branch-segment.",
+      "debrisStrategy": "Prefer detachable component groups and a small number of procedural fragments over random mesh explosion."
+    }
+  },
+  "assumptions": [
+    "The rear wall is inferred from the rounded footprint because no isolated rear elevation is provided.",
+    "Internal induction coil, fan rotor, insulation, wiring and controller are hidden and omitted.",
+    "Cable trough depth and strain relief are inferred from underside shadows.",
+    "Steam and thermal glow are runtime action cues, not visible static construction."
+  ],
+  "coordinateFrame": {
+    "front": "+Z is the control edge",
+    "up": "+Y, with the cooktop surface horizontal in XZ",
+    "scaleReference": "body width 3.6 units, body depth 3.45 units, floor at Y=0"
+  },
+  "silhouette": {
+    "boundingShape": "low rounded-square slab with a slightly inset pink top and a mint lower band",
+    "aspectRatios": [
+      "width:depth = 1.04:1",
+      "width:body-thickness = 8.0:1",
+      "heating-zone diameter = 0.67 body width"
+    ],
+    "symmetry": "footprint and heating zone are bilateral; control arrangement and underside fan/cable recess are asymmetric",
+    "dominantCurves": [
+      "0.34-unit outer corner radius",
+      "large concentric heating ring",
+      "circular fan grille",
+      "round buttons and knob"
+    ],
+    "negativeSpaces": [
+      "side ventilation slots",
+      "fan grille slots",
+      "cable storage trough"
+    ],
+    "landmarks": [
+      "pink glass-ceramic top",
+      "large dotted heater circle",
+      "three small buttons and one center knob",
+      "mint lower rim"
+    ]
+  },
+  "viewEvidence": [
+    {
+      "id": "top-view",
+      "view": "top",
+      "imagePath": "references/intake/induction-cooktop/front.png",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "rounded-square footprint",
+        "heater-zone circle",
+        "four control positions",
+        "cream bezel and mint feet"
+      ],
+      "confidence": 0.99
+    },
+    {
+      "id": "side-view",
+      "view": "right-side",
+      "imagePath": "references/intake/induction-cooktop/side.png",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "very low slab thickness",
+        "raised control knob",
+        "nine vertical vents",
+        "mint lower band and feet"
+      ],
+      "confidence": 0.98
+    },
+    {
+      "id": "underside-view",
+      "view": "underside",
+      "imagePath": "references/intake/induction-cooktop/back.png",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "four circular feet",
+        "large concentric fan grille",
+        "top-edge cable trough",
+        "stored U-cord and two-pin plug"
+      ],
+      "confidence": 0.97
+    }
+  ],
+  "componentTree": [
+    {
+      "id": "root",
+      "name": "Induction Cooktop Root",
+      "level": "macro",
+      "role": "body",
+      "importance": 1,
+      "confidence": 0.95,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rigid manufactured part with stable thickness and explicit seams.",
+      "parent": null,
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "localFeatures": [],
+      "actionProfile": {},
+      "evidenceRefs": [
+        "top-view",
+        "side-view",
+        "underside-view"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(246, 237, 223, 1)",
+        "secondaryAlbedo": "rgba(246, 237, 223, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.95
+      },
+      "details": [],
+      "attachment": null,
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "main-enclosure",
+      "name": "Rounded Main Enclosure",
+      "level": "macro",
+      "role": "body",
+      "importance": 1,
+      "confidence": 0.95,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rigid manufactured part with stable thickness and explicit seams.",
+      "parent": "root",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "localFeatures": [
+        "top-rounded-square-silhouette"
+      ],
+      "actionProfile": {},
+      "evidenceRefs": [
+        "top-view",
+        "side-view",
+        "underside-view"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(246, 237, 223, 1)",
+        "secondaryAlbedo": "rgba(246, 237, 223, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.95
+      },
+      "details": [
+        {
+          "id": "top-rounded-square-silhouette",
+          "kind": "geometry",
+          "evidenceRefs": [
+            "top-view",
+            "side-view",
+            "underside-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "root",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "lower-band",
+      "name": "Mint Lower Enclosure Band",
+      "level": "macro",
+      "role": "body",
+      "importance": 1,
+      "confidence": 0.95,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rigid manufactured part with stable thickness and explicit seams.",
+      "parent": "main-enclosure",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "mint-plastic",
+      "materialLayers": [
+        "mint-plastic"
+      ],
+      "localFeatures": [
+        "mint-lower-band"
+      ],
+      "actionProfile": {},
+      "evidenceRefs": [
+        "side-view",
+        "underside-view"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(169, 197, 181, 1)",
+        "secondaryAlbedo": "rgba(169, 197, 181, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.95
+      },
+      "details": [
+        {
+          "id": "mint-lower-band",
+          "kind": "geometry",
+          "evidenceRefs": [
+            "side-view",
+            "underside-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "main-enclosure",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "top-bezel",
+      "name": "Cream Raised Top Bezel",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.8,
+      "confidence": 0.95,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rigid manufactured part with stable thickness and explicit seams.",
+      "parent": "main-enclosure",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "localFeatures": [
+        "cream-bezel-step"
+      ],
+      "actionProfile": {},
+      "evidenceRefs": [
+        "top-view",
+        "side-view"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(246, 237, 223, 1)",
+        "secondaryAlbedo": "rgba(246, 237, 223, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.95
+      },
+      "details": [
+        {
+          "id": "cream-bezel-step",
+          "kind": "geometry",
+          "evidenceRefs": [
+            "top-view",
+            "side-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "main-enclosure",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "cooking-panel",
+      "name": "Pink Glass Ceramic Cooking Panel",
+      "level": "macro",
+      "role": "body",
+      "importance": 1,
+      "confidence": 0.95,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rigid manufactured part with stable thickness and explicit seams.",
+      "parent": "top-bezel",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-glass",
+      "materialLayers": [
+        "pink-glass"
+      ],
+      "localFeatures": [
+        "pink-glass-ceramic-panel"
+      ],
+      "actionProfile": {},
+      "evidenceRefs": [
+        "top-view",
+        "side-view"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(236, 175, 176, 1)",
+        "secondaryAlbedo": "rgba(236, 175, 176, 1)",
+        "materialClass": "ceramic",
+        "materialClassConfidence": 0.95
+      },
+      "details": [
+        {
+          "id": "pink-glass-ceramic-panel",
+          "kind": "geometry",
+          "evidenceRefs": [
+            "top-view",
+            "side-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "top-bezel",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "heating-zone",
+      "name": "Concentric Induction Heating Zone",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.8,
+      "confidence": 0.95,
+      "primitive": "torus",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rigid manufactured part with stable thickness and explicit seams.",
+      "parent": "cooking-panel",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "dark-ink",
+      "materialLayers": [
+        "dark-ink"
+      ],
+      "localFeatures": [
+        "heater-zone-ring"
+      ],
+      "actionProfile": {
+        "animationRole": "material-state",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 1
+        }
+      },
+      "evidenceRefs": [
+        "top-view"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(85, 71, 74, 1)",
+        "secondaryAlbedo": "rgba(85, 71, 74, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.95
+      },
+      "details": [
+        {
+          "id": "heater-zone-ring",
+          "kind": "geometry",
+          "evidenceRefs": [
+            "top-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "cooking-panel",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "control-knob",
+      "name": "Front Center Rotary Control Knob",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.8,
+      "confidence": 0.95,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rigid manufactured part with stable thickness and explicit seams.",
+      "parent": "cooking-panel",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "localFeatures": [
+        "control-knob"
+      ],
+      "actionProfile": {
+        "animationRole": "rotary-control",
+        "pivot": {
+          "mode": "axis",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.98
+        }
+      },
+      "evidenceRefs": [
+        "top-view",
+        "side-view"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(246, 237, 223, 1)",
+        "secondaryAlbedo": "rgba(246, 237, 223, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.95
+      },
+      "details": [
+        {
+          "id": "control-knob",
+          "kind": "geometry",
+          "evidenceRefs": [
+            "top-view",
+            "side-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "cooking-panel",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "timer-button",
+      "name": "Timer Control Button",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.8,
+      "confidence": 0.95,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rigid manufactured part with stable thickness and explicit seams.",
+      "parent": "cooking-panel",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "localFeatures": [
+        "left-timer-button"
+      ],
+      "actionProfile": {},
+      "evidenceRefs": [
+        "top-view"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(246, 237, 223, 1)",
+        "secondaryAlbedo": "rgba(246, 237, 223, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.95
+      },
+      "details": [
+        {
+          "id": "left-timer-button",
+          "kind": "geometry",
+          "evidenceRefs": [
+            "top-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "cooking-panel",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "mode-button",
+      "name": "Heat Mode Button",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.8,
+      "confidence": 0.95,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rigid manufactured part with stable thickness and explicit seams.",
+      "parent": "cooking-panel",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "localFeatures": [
+        "left-mode-button"
+      ],
+      "actionProfile": {},
+      "evidenceRefs": [
+        "top-view"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(246, 237, 223, 1)",
+        "secondaryAlbedo": "rgba(246, 237, 223, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.95
+      },
+      "details": [
+        {
+          "id": "left-mode-button",
+          "kind": "geometry",
+          "evidenceRefs": [
+            "top-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "cooking-panel",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "power-button",
+      "name": "Power Control Button",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.8,
+      "confidence": 0.95,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rigid manufactured part with stable thickness and explicit seams.",
+      "parent": "cooking-panel",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "localFeatures": [
+        "right-power-button"
+      ],
+      "actionProfile": {},
+      "evidenceRefs": [
+        "top-view"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(246, 237, 223, 1)",
+        "secondaryAlbedo": "rgba(246, 237, 223, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.95
+      },
+      "details": [
+        {
+          "id": "right-power-button",
+          "kind": "geometry",
+          "evidenceRefs": [
+            "top-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "cooking-panel",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "control-glyphs",
+      "name": "Plus Minus and Button Glyphs",
+      "level": "micro",
+      "role": "part",
+      "importance": 0.8,
+      "confidence": 0.95,
+      "primitive": "extrude",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rigid manufactured part with stable thickness and explicit seams.",
+      "parent": "cooking-panel",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "dark-ink",
+      "materialLayers": [
+        "dark-ink"
+      ],
+      "localFeatures": [
+        "plus-minus-marks"
+      ],
+      "actionProfile": {},
+      "evidenceRefs": [
+        "top-view"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(85, 71, 74, 1)",
+        "secondaryAlbedo": "rgba(85, 71, 74, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.95
+      },
+      "details": [
+        {
+          "id": "plus-minus-marks",
+          "kind": "geometry",
+          "evidenceRefs": [
+            "top-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "cooking-panel",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "detail"
+    },
+    {
+      "id": "side-vents",
+      "name": "Right Side Vent Array",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.8,
+      "confidence": 0.95,
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rigid manufactured part with stable thickness and explicit seams.",
+      "parent": "main-enclosure",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "dark-cavity",
+      "materialLayers": [
+        "dark-cavity"
+      ],
+      "localFeatures": [
+        "right-side-vent-array"
+      ],
+      "actionProfile": {},
+      "evidenceRefs": [
+        "side-view"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(74, 65, 68, 1)",
+        "secondaryAlbedo": "rgba(74, 65, 68, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.95
+      },
+      "details": [
+        {
+          "id": "right-side-vent-array",
+          "kind": "geometry",
+          "evidenceRefs": [
+            "side-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "main-enclosure",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "foot-array",
+      "name": "Four Underside Rubber Feet",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.8,
+      "confidence": 0.95,
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rigid manufactured part with stable thickness and explicit seams.",
+      "parent": "lower-band",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "rubber",
+      "materialLayers": [
+        "rubber"
+      ],
+      "localFeatures": [
+        "four-rubber-feet"
+      ],
+      "actionProfile": {},
+      "evidenceRefs": [
+        "side-view",
+        "underside-view"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(169, 197, 181, 1)",
+        "secondaryAlbedo": "rgba(169, 197, 181, 1)",
+        "materialClass": "rubber",
+        "materialClassConfidence": 0.95
+      },
+      "details": [
+        {
+          "id": "four-rubber-feet",
+          "kind": "geometry",
+          "evidenceRefs": [
+            "side-view",
+            "underside-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "lower-band",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "fan-grille",
+      "name": "Underside Concentric Fan Grille",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.8,
+      "confidence": 0.95,
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rigid manufactured part with stable thickness and explicit seams.",
+      "parent": "lower-band",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "dark-cavity",
+      "materialLayers": [
+        "dark-cavity"
+      ],
+      "localFeatures": [
+        "underside-fan-grille"
+      ],
+      "actionProfile": {},
+      "evidenceRefs": [
+        "underside-view"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(74, 65, 68, 1)",
+        "secondaryAlbedo": "rgba(74, 65, 68, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.95
+      },
+      "details": [
+        {
+          "id": "underside-fan-grille",
+          "kind": "geometry",
+          "evidenceRefs": [
+            "underside-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "lower-band",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "cable-trough",
+      "name": "Underside Cable Storage Recess",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.8,
+      "confidence": 0.95,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rigid manufactured part with stable thickness and explicit seams.",
+      "parent": "lower-band",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "dark-cavity",
+      "materialLayers": [
+        "dark-cavity"
+      ],
+      "localFeatures": [
+        "cable-storage-recess"
+      ],
+      "actionProfile": {},
+      "evidenceRefs": [
+        "underside-view"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(74, 65, 68, 1)",
+        "secondaryAlbedo": "rgba(74, 65, 68, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.95
+      },
+      "details": [
+        {
+          "id": "cable-storage-recess",
+          "kind": "geometry",
+          "evidenceRefs": [
+            "underside-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "lower-band",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "power-cord",
+      "name": "Stored U-Shaped Power Cord",
+      "level": "micro",
+      "role": "part",
+      "importance": 0.8,
+      "confidence": 0.95,
+      "primitive": "tube",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rigid manufactured part with stable thickness and explicit seams.",
+      "parent": "cable-trough",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "cable-rubber",
+      "materialLayers": [
+        "cable-rubber"
+      ],
+      "localFeatures": [
+        "coiled-power-cord"
+      ],
+      "actionProfile": {},
+      "evidenceRefs": [
+        "underside-view"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(117, 106, 104, 1)",
+        "secondaryAlbedo": "rgba(117, 106, 104, 1)",
+        "materialClass": "rubber",
+        "materialClassConfidence": 0.95
+      },
+      "details": [
+        {
+          "id": "coiled-power-cord",
+          "kind": "geometry",
+          "evidenceRefs": [
+            "underside-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "cable-trough-socket",
+        "localStart": [
+          -0.75,
+          0,
+          0
+        ],
+        "localEnd": [
+          0.72,
+          0,
+          0
+        ],
+        "contactType": "inserted",
+        "embedDepth": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "detail"
+    },
+    {
+      "id": "seam-system",
+      "name": "Panel and Enclosure Seam System",
+      "level": "micro",
+      "role": "part",
+      "importance": 0.8,
+      "confidence": 0.95,
+      "primitive": "extrude",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rigid manufactured part with stable thickness and explicit seams.",
+      "parent": "main-enclosure",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "dark-ink",
+      "materialLayers": [
+        "dark-ink"
+      ],
+      "localFeatures": [
+        "panel-seams"
+      ],
+      "actionProfile": {},
+      "evidenceRefs": [
+        "top-view",
+        "side-view",
+        "underside-view"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(85, 71, 74, 1)",
+        "secondaryAlbedo": "rgba(85, 71, 74, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.95
+      },
+      "details": [
+        {
+          "id": "panel-seams",
+          "kind": "geometry",
+          "evidenceRefs": [
+            "top-view",
+            "side-view",
+            "underside-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "main-enclosure",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "detail"
+    },
+    {
+      "id": "steam-plume",
+      "name": "Powered Steam Plume",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.8,
+      "confidence": 0.55,
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rigid manufactured part with stable thickness and explicit seams.",
+      "parent": "heating-zone",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "steam",
+      "materialLayers": [
+        "steam"
+      ],
+      "localFeatures": [],
+      "actionProfile": {
+        "animationRole": "powered-use-effect",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.8
+        }
+      },
+      "evidenceRefs": [
+        "top-view"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(255, 245, 232, 0.24)",
+        "secondaryAlbedo": "rgba(255, 245, 232, 0.24)",
+        "materialClass": "unknown",
+        "materialClassConfidence": 0.95
+      },
+      "details": [],
+      "attachment": {
+        "parentSocket": "heating-zone",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    }
+  ],
+  "materials": [
+    {
+      "id": "cream-shell",
+      "name": "Warm Cream Painted Plastic",
+      "type": "physical",
+      "shaderModel": "MeshToonMaterial compatible PBR approximation",
+      "baseColor": "#F6EDDF",
+      "color": "#F6EDDF",
+      "albedo": {
+        "dominant": "#F6EDDF",
+        "secondary": [
+          "#F6EDDF"
+        ],
+        "samplingNotes": "Sampled from the admitted three-view reference palette."
+      },
+      "colorVariation": {
+        "palette": [
+          "#F6EDDF"
+        ],
+        "pattern": "subtle bevel response",
+        "amplitude": 0.04
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Stable object-scale detail."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.14,
+          "role": "broad molded shading"
+        },
+        {
+          "id": "meso",
+          "frequency": 14,
+          "amplitude": 0.05,
+          "role": "panel and seam response"
+        },
+        {
+          "id": "micro",
+          "frequency": 58,
+          "amplitude": 0.018,
+          "role": "highlight breakup"
+        }
+      ],
+      "roughness": {
+        "base": 0.38,
+        "variation": 0.08,
+        "map": "independent-cream-shell-roughness"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "strength": 0.04,
+        "pattern": "independent-cream-shell-normal"
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.3,
+        "contactShadowBias": 0.3,
+        "notes": "Darken seams and contact zones."
+      },
+      "localOverrides": [
+        {
+          "id": "cream-shell-edge-response",
+          "region": "beveled edges and cavities",
+          "response": "edge/cavity roughness contrast",
+          "evidenceRefs": [
+            "top-view",
+            "side-view",
+            "underside-view"
+          ]
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.82,
+        "estimatedFidelity": 0.82,
+        "sourceImage": "references/intake/induction-cooktop/front.png",
+        "maps": {
+          "albedo": {
+            "path": "references/intake/induction-cooktop/front.png"
+          },
+          "roughness": {
+            "path": "procedural-cream-shell-roughness"
+          },
+          "height": {
+            "path": "procedural-cream-shell-height"
+          },
+          "normal": {
+            "path": "procedural-cream-shell-normal"
+          },
+          "ao": {
+            "path": "procedural-cream-shell-ao"
+          }
+        }
+      },
+      "clearcoat": 0.36
+    },
+    {
+      "id": "pink-glass",
+      "name": "Sakura Pink Glass Ceramic",
+      "type": "physical",
+      "shaderModel": "MeshToonMaterial compatible PBR approximation",
+      "baseColor": "#ECAFB0",
+      "color": "#ECAFB0",
+      "albedo": {
+        "dominant": "#ECAFB0",
+        "secondary": [
+          "#ECAFB0"
+        ],
+        "samplingNotes": "Sampled from the admitted three-view reference palette."
+      },
+      "colorVariation": {
+        "palette": [
+          "#ECAFB0"
+        ],
+        "pattern": "subtle bevel response",
+        "amplitude": 0.04
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Stable object-scale detail."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.14,
+          "role": "broad molded shading"
+        },
+        {
+          "id": "meso",
+          "frequency": 14,
+          "amplitude": 0.05,
+          "role": "panel and seam response"
+        },
+        {
+          "id": "micro",
+          "frequency": 58,
+          "amplitude": 0.018,
+          "role": "highlight breakup"
+        }
+      ],
+      "roughness": {
+        "base": 0.2,
+        "variation": 0.08,
+        "map": "independent-pink-glass-roughness"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "strength": 0.04,
+        "pattern": "independent-pink-glass-normal"
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.3,
+        "contactShadowBias": 0.3,
+        "notes": "Darken seams and contact zones."
+      },
+      "localOverrides": [
+        {
+          "id": "pink-glass-edge-response",
+          "region": "beveled edges and cavities",
+          "response": "edge/cavity roughness contrast",
+          "evidenceRefs": [
+            "top-view",
+            "side-view",
+            "underside-view"
+          ]
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.82,
+        "estimatedFidelity": 0.82,
+        "sourceImage": "references/intake/induction-cooktop/front.png",
+        "maps": {
+          "albedo": {
+            "path": "references/intake/induction-cooktop/front.png"
+          },
+          "roughness": {
+            "path": "procedural-pink-glass-roughness"
+          },
+          "height": {
+            "path": "procedural-pink-glass-height"
+          },
+          "normal": {
+            "path": "procedural-pink-glass-normal"
+          },
+          "ao": {
+            "path": "procedural-pink-glass-ao"
+          }
+        }
+      },
+      "clearcoat": 0.72
+    },
+    {
+      "id": "mint-plastic",
+      "name": "Muted Mint Lower Plastic",
+      "type": "physical",
+      "shaderModel": "MeshToonMaterial compatible PBR approximation",
+      "baseColor": "#A9C5B5",
+      "color": "#A9C5B5",
+      "albedo": {
+        "dominant": "#A9C5B5",
+        "secondary": [
+          "#A9C5B5"
+        ],
+        "samplingNotes": "Sampled from the admitted three-view reference palette."
+      },
+      "colorVariation": {
+        "palette": [
+          "#A9C5B5"
+        ],
+        "pattern": "subtle bevel response",
+        "amplitude": 0.04
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Stable object-scale detail."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.14,
+          "role": "broad molded shading"
+        },
+        {
+          "id": "meso",
+          "frequency": 14,
+          "amplitude": 0.05,
+          "role": "panel and seam response"
+        },
+        {
+          "id": "micro",
+          "frequency": 58,
+          "amplitude": 0.018,
+          "role": "highlight breakup"
+        }
+      ],
+      "roughness": {
+        "base": 0.46,
+        "variation": 0.08,
+        "map": "independent-mint-plastic-roughness"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "strength": 0.04,
+        "pattern": "independent-mint-plastic-normal"
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.3,
+        "contactShadowBias": 0.3,
+        "notes": "Darken seams and contact zones."
+      },
+      "localOverrides": [
+        {
+          "id": "mint-plastic-edge-response",
+          "region": "beveled edges and cavities",
+          "response": "edge/cavity roughness contrast",
+          "evidenceRefs": [
+            "top-view",
+            "side-view",
+            "underside-view"
+          ]
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.82,
+        "estimatedFidelity": 0.82,
+        "sourceImage": "references/intake/induction-cooktop/front.png",
+        "maps": {
+          "albedo": {
+            "path": "references/intake/induction-cooktop/front.png"
+          },
+          "roughness": {
+            "path": "procedural-mint-plastic-roughness"
+          },
+          "height": {
+            "path": "procedural-mint-plastic-height"
+          },
+          "normal": {
+            "path": "procedural-mint-plastic-normal"
+          },
+          "ao": {
+            "path": "procedural-mint-plastic-ao"
+          }
+        }
+      }
+    },
+    {
+      "id": "dark-ink",
+      "name": "Dark Printed Control Ink",
+      "type": "physical",
+      "shaderModel": "MeshToonMaterial compatible PBR approximation",
+      "baseColor": "#55474A",
+      "color": "#55474A",
+      "albedo": {
+        "dominant": "#55474A",
+        "secondary": [
+          "#55474A"
+        ],
+        "samplingNotes": "Sampled from the admitted three-view reference palette."
+      },
+      "colorVariation": {
+        "palette": [
+          "#55474A"
+        ],
+        "pattern": "subtle bevel response",
+        "amplitude": 0.04
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Stable object-scale detail."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.14,
+          "role": "broad molded shading"
+        },
+        {
+          "id": "meso",
+          "frequency": 14,
+          "amplitude": 0.05,
+          "role": "panel and seam response"
+        },
+        {
+          "id": "micro",
+          "frequency": 58,
+          "amplitude": 0.018,
+          "role": "highlight breakup"
+        }
+      ],
+      "roughness": {
+        "base": 0.58,
+        "variation": 0.08,
+        "map": "independent-dark-ink-roughness"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "strength": 0.04,
+        "pattern": "independent-dark-ink-normal"
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.3,
+        "contactShadowBias": 0.3,
+        "notes": "Darken seams and contact zones."
+      },
+      "localOverrides": [
+        {
+          "id": "dark-ink-edge-response",
+          "region": "beveled edges and cavities",
+          "response": "edge/cavity roughness contrast",
+          "evidenceRefs": [
+            "top-view",
+            "side-view",
+            "underside-view"
+          ]
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.82,
+        "estimatedFidelity": 0.82,
+        "sourceImage": "references/intake/induction-cooktop/front.png",
+        "maps": {
+          "albedo": {
+            "path": "references/intake/induction-cooktop/front.png"
+          },
+          "roughness": {
+            "path": "procedural-dark-ink-roughness"
+          },
+          "height": {
+            "path": "procedural-dark-ink-height"
+          },
+          "normal": {
+            "path": "procedural-dark-ink-normal"
+          },
+          "ao": {
+            "path": "procedural-dark-ink-ao"
+          }
+        }
+      }
+    },
+    {
+      "id": "dark-cavity",
+      "name": "Vent and Recess Shadow",
+      "type": "physical",
+      "shaderModel": "MeshToonMaterial compatible PBR approximation",
+      "baseColor": "#4A4144",
+      "color": "#4A4144",
+      "albedo": {
+        "dominant": "#4A4144",
+        "secondary": [
+          "#4A4144"
+        ],
+        "samplingNotes": "Sampled from the admitted three-view reference palette."
+      },
+      "colorVariation": {
+        "palette": [
+          "#4A4144"
+        ],
+        "pattern": "subtle bevel response",
+        "amplitude": 0.04
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Stable object-scale detail."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.14,
+          "role": "broad molded shading"
+        },
+        {
+          "id": "meso",
+          "frequency": 14,
+          "amplitude": 0.05,
+          "role": "panel and seam response"
+        },
+        {
+          "id": "micro",
+          "frequency": 58,
+          "amplitude": 0.018,
+          "role": "highlight breakup"
+        }
+      ],
+      "roughness": {
+        "base": 0.7,
+        "variation": 0.08,
+        "map": "independent-dark-cavity-roughness"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "strength": 0.04,
+        "pattern": "independent-dark-cavity-normal"
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.3,
+        "contactShadowBias": 0.3,
+        "notes": "Darken seams and contact zones."
+      },
+      "localOverrides": [
+        {
+          "id": "dark-cavity-edge-response",
+          "region": "beveled edges and cavities",
+          "response": "edge/cavity roughness contrast",
+          "evidenceRefs": [
+            "top-view",
+            "side-view",
+            "underside-view"
+          ]
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.82,
+        "estimatedFidelity": 0.82,
+        "sourceImage": "references/intake/induction-cooktop/front.png",
+        "maps": {
+          "albedo": {
+            "path": "references/intake/induction-cooktop/front.png"
+          },
+          "roughness": {
+            "path": "procedural-dark-cavity-roughness"
+          },
+          "height": {
+            "path": "procedural-dark-cavity-height"
+          },
+          "normal": {
+            "path": "procedural-dark-cavity-normal"
+          },
+          "ao": {
+            "path": "procedural-dark-cavity-ao"
+          }
+        }
+      }
+    },
+    {
+      "id": "rubber",
+      "name": "Mint Rubber Feet",
+      "type": "physical",
+      "shaderModel": "MeshToonMaterial compatible PBR approximation",
+      "baseColor": "#8DAFA1",
+      "color": "#8DAFA1",
+      "albedo": {
+        "dominant": "#8DAFA1",
+        "secondary": [
+          "#8DAFA1"
+        ],
+        "samplingNotes": "Sampled from the admitted three-view reference palette."
+      },
+      "colorVariation": {
+        "palette": [
+          "#8DAFA1"
+        ],
+        "pattern": "subtle bevel response",
+        "amplitude": 0.04
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Stable object-scale detail."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.14,
+          "role": "broad molded shading"
+        },
+        {
+          "id": "meso",
+          "frequency": 14,
+          "amplitude": 0.05,
+          "role": "panel and seam response"
+        },
+        {
+          "id": "micro",
+          "frequency": 58,
+          "amplitude": 0.018,
+          "role": "highlight breakup"
+        }
+      ],
+      "roughness": {
+        "base": 0.82,
+        "variation": 0.08,
+        "map": "independent-rubber-roughness"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "strength": 0.04,
+        "pattern": "independent-rubber-normal"
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.3,
+        "contactShadowBias": 0.3,
+        "notes": "Darken seams and contact zones."
+      },
+      "localOverrides": [
+        {
+          "id": "rubber-edge-response",
+          "region": "beveled edges and cavities",
+          "response": "edge/cavity roughness contrast",
+          "evidenceRefs": [
+            "top-view",
+            "side-view",
+            "underside-view"
+          ]
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.82,
+        "estimatedFidelity": 0.82,
+        "sourceImage": "references/intake/induction-cooktop/front.png",
+        "maps": {
+          "albedo": {
+            "path": "references/intake/induction-cooktop/front.png"
+          },
+          "roughness": {
+            "path": "procedural-rubber-roughness"
+          },
+          "height": {
+            "path": "procedural-rubber-height"
+          },
+          "normal": {
+            "path": "procedural-rubber-normal"
+          },
+          "ao": {
+            "path": "procedural-rubber-ao"
+          }
+        }
+      }
+    },
+    {
+      "id": "cable-rubber",
+      "name": "Warm Gray Cable Rubber",
+      "type": "physical",
+      "shaderModel": "MeshToonMaterial compatible PBR approximation",
+      "baseColor": "#756A68",
+      "color": "#756A68",
+      "albedo": {
+        "dominant": "#756A68",
+        "secondary": [
+          "#756A68"
+        ],
+        "samplingNotes": "Sampled from the admitted three-view reference palette."
+      },
+      "colorVariation": {
+        "palette": [
+          "#756A68"
+        ],
+        "pattern": "subtle bevel response",
+        "amplitude": 0.04
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Stable object-scale detail."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.14,
+          "role": "broad molded shading"
+        },
+        {
+          "id": "meso",
+          "frequency": 14,
+          "amplitude": 0.05,
+          "role": "panel and seam response"
+        },
+        {
+          "id": "micro",
+          "frequency": 58,
+          "amplitude": 0.018,
+          "role": "highlight breakup"
+        }
+      ],
+      "roughness": {
+        "base": 0.76,
+        "variation": 0.08,
+        "map": "independent-cable-rubber-roughness"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "strength": 0.04,
+        "pattern": "independent-cable-rubber-normal"
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.3,
+        "contactShadowBias": 0.3,
+        "notes": "Darken seams and contact zones."
+      },
+      "localOverrides": [
+        {
+          "id": "cable-rubber-edge-response",
+          "region": "beveled edges and cavities",
+          "response": "edge/cavity roughness contrast",
+          "evidenceRefs": [
+            "top-view",
+            "side-view",
+            "underside-view"
+          ]
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.82,
+        "estimatedFidelity": 0.82,
+        "sourceImage": "references/intake/induction-cooktop/front.png",
+        "maps": {
+          "albedo": {
+            "path": "references/intake/induction-cooktop/front.png"
+          },
+          "roughness": {
+            "path": "procedural-cable-rubber-roughness"
+          },
+          "height": {
+            "path": "procedural-cable-rubber-height"
+          },
+          "normal": {
+            "path": "procedural-cable-rubber-normal"
+          },
+          "ao": {
+            "path": "procedural-cable-rubber-ao"
+          }
+        }
+      }
+    },
+    {
+      "id": "steam",
+      "name": "Translucent Warm Steam",
+      "type": "physical",
+      "shaderModel": "MeshToonMaterial compatible PBR approximation",
+      "baseColor": "#FFF5E8",
+      "color": "#FFF5E8",
+      "albedo": {
+        "dominant": "#FFF5E8",
+        "secondary": [
+          "#FFF5E8"
+        ],
+        "samplingNotes": "Sampled from the admitted three-view reference palette."
+      },
+      "colorVariation": {
+        "palette": [
+          "#FFF5E8"
+        ],
+        "pattern": "subtle bevel response",
+        "amplitude": 0.04
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Stable object-scale detail."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.14,
+          "role": "broad molded shading"
+        },
+        {
+          "id": "meso",
+          "frequency": 14,
+          "amplitude": 0.05,
+          "role": "panel and seam response"
+        },
+        {
+          "id": "micro",
+          "frequency": 58,
+          "amplitude": 0.018,
+          "role": "highlight breakup"
+        }
+      ],
+      "roughness": {
+        "base": 0.18,
+        "variation": 0.08,
+        "map": "independent-steam-roughness"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "strength": 0.04,
+        "pattern": "independent-steam-normal"
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.3,
+        "contactShadowBias": 0.3,
+        "notes": "Darken seams and contact zones."
+      },
+      "localOverrides": [
+        {
+          "id": "steam-edge-response",
+          "region": "beveled edges and cavities",
+          "response": "edge/cavity roughness contrast",
+          "evidenceRefs": [
+            "top-view",
+            "side-view",
+            "underside-view"
+          ]
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.82,
+        "estimatedFidelity": 0.82,
+        "sourceImage": "references/intake/induction-cooktop/front.png",
+        "maps": {
+          "albedo": {
+            "path": "references/intake/induction-cooktop/front.png"
+          },
+          "roughness": {
+            "path": "procedural-steam-roughness"
+          },
+          "height": {
+            "path": "procedural-steam-height"
+          },
+          "normal": {
+            "path": "procedural-steam-normal"
+          },
+          "ao": {
+            "path": "procedural-steam-ao"
+          }
+        }
+      },
+      "transparent": true,
+      "opacity": 0.24
+    }
+  ],
+  "repetitionSystems": [
+    {
+      "id": "side-vent-slots",
+      "name": "Nine right-side ventilation slots",
+      "componentRef": "side-vents",
+      "count": 9,
+      "distribution": "linear along the right side wall",
+      "geometry": "narrow rounded vertical slots",
+      "material": "dark-cavity",
+      "evidenceRefs": [
+        "side-view"
+      ]
+    },
+    {
+      "id": "underside-feet",
+      "name": "Four underside rubber feet",
+      "componentRef": "foot-array",
+      "count": 4,
+      "distribution": "one near each rounded underside corner",
+      "geometry": "short cylindrical pads",
+      "material": "rubber",
+      "evidenceRefs": [
+        "underside-view"
+      ]
+    },
+    {
+      "id": "heater-dashes",
+      "name": "Dotted circular heater mark",
+      "componentRef": "heating-zone",
+      "count": 64,
+      "distribution": "single circular orbit",
+      "geometry": "short radial dash segments",
+      "material": "dark-ink",
+      "evidenceRefs": [
+        "top-view"
+      ]
+    },
+    {
+      "id": "fan-grille-slots",
+      "name": "Concentric underside fan slots",
+      "componentRef": "fan-grille",
+      "count": 72,
+      "distribution": "six rings of twelve arc slots",
+      "geometry": "rounded tangential bars",
+      "material": "dark-cavity",
+      "evidenceRefs": [
+        "underside-view"
+      ]
+    }
+  ],
+  "buildPasses": [
+    {
+      "id": "blockout",
+      "goal": "Match macro silhouette and proportions.",
+      "componentRefs": [
+        "root",
+        "main-enclosure",
+        "lower-band",
+        "top-bezel",
+        "cooking-panel",
+        "heating-zone",
+        "control-knob",
+        "timer-button",
+        "mode-button",
+        "power-button",
+        "control-glyphs",
+        "side-vents",
+        "foot-array",
+        "fan-grille",
+        "cable-trough",
+        "power-cord",
+        "seam-system",
+        "steam-plume"
+      ],
+      "acceptance": [
+        "Silhouette reads correctly without materials.",
+        "Quality contract has named all required macro feature groups before code generation.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "structural-pass",
+      "goal": "Build the component hierarchy implied by the pre-spec complexity assessment.",
+      "componentRefs": [
+        "root",
+        "main-enclosure",
+        "lower-band",
+        "top-bezel",
+        "cooking-panel",
+        "heating-zone",
+        "control-knob",
+        "timer-button",
+        "mode-button",
+        "power-button",
+        "control-glyphs",
+        "side-vents",
+        "foot-array",
+        "fan-grille",
+        "cable-trough",
+        "power-cord",
+        "seam-system",
+        "steam-plume"
+      ],
+      "acceptance": [
+        "Macro, meso, and repeated structures meet qualityContract.minimumSpecDepth.",
+        "Parent-child relations, joints, seams, sockets, and contact points are explicit.",
+        "Every attached child appendage/connector has parentSocket, localStart/localEnd, contactType, embedDepth or overlap, and gapTolerance.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "form-refinement",
+      "goal": "Refine shape, deformation, bevels, tapers, curves, asymmetry, and visible local geometry.",
+      "componentRefs": [
+        "root",
+        "main-enclosure",
+        "lower-band",
+        "top-bezel",
+        "cooking-panel",
+        "heating-zone",
+        "control-knob",
+        "timer-button",
+        "mode-button",
+        "power-button",
+        "control-glyphs",
+        "side-vents",
+        "foot-array",
+        "fan-grille",
+        "cable-trough",
+        "power-cord",
+        "seam-system",
+        "steam-plume"
+      ],
+      "acceptance": [
+        "Important visible forms are represented in component geometryDescriptor, deformations, localFeatures, or repetitionSystems.",
+        "Endpoint-based child parts are rooted at their attachment sockets and do not visibly float away from parents.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "material-pass",
+      "goal": "Match material color, roughness, bump, and local variation.",
+      "componentRefs": [
+        "root",
+        "main-enclosure",
+        "lower-band",
+        "top-bezel",
+        "cooking-panel",
+        "heating-zone",
+        "control-knob",
+        "timer-button",
+        "mode-button",
+        "power-button",
+        "control-glyphs",
+        "side-vents",
+        "foot-array",
+        "fan-grille",
+        "cable-trough",
+        "power-cord",
+        "seam-system",
+        "steam-plume"
+      ],
+      "acceptance": [
+        "Reference-derived albedo palette records dominant, secondary, and accent colors per visible material.",
+        "Each important material defines roughness variation and at least one normal/bump/displacement response.",
+        "Local material overrides, dirt/wear/stains/moss/chips/scratches or equivalent masks are tied to evidenceRefs.",
+        "Thin, transparent, reflective, wet, or fibrous materials document alpha/transmission/clearcoat/metalness/fiber response when relevant.",
+        "Generated preview uses procedural albedo/roughness/bump texture or vertex color variation instead of one flat color.",
+        "Generated preview uses independent PBR maps at 1024px or higher for the quality-first tier.",
+        "If source pixels are available, referencePbr extraction passed at confidence >= 0.7 or the pass is stopped/requesting better references.",
+        "Macro, meso, and micro surface frequency bands are visible at the intended review distance without obvious tiling.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "surface-pass",
+      "goal": "Add procedural surface locality such as normal/bump/displacement, AO, dirt, stains, chips, grain, moss, scratches, and wear.",
+      "componentRefs": [
+        "root",
+        "main-enclosure",
+        "lower-band",
+        "top-bezel",
+        "cooking-panel",
+        "heating-zone",
+        "control-knob",
+        "timer-button",
+        "mode-button",
+        "power-button",
+        "control-glyphs",
+        "side-vents",
+        "foot-array",
+        "fan-grille",
+        "cable-trough",
+        "power-cord",
+        "seam-system",
+        "steam-plume"
+      ],
+      "acceptance": [
+        "Every required material feature group has local overrides or surfaceDetail tied to evidenceRefs.",
+        "A grazing-angle close-up proves that normal/height detail breaks highlights naturally and does not read as smooth plastic.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "lighting-pass",
+      "goal": "Make material and form readable under neutral turntable lighting plus optional reference lighting.",
+      "componentRefs": [
+        "root",
+        "main-enclosure",
+        "lower-band",
+        "top-bezel",
+        "cooking-panel",
+        "heating-zone",
+        "control-knob",
+        "timer-button",
+        "mode-button",
+        "power-button",
+        "control-glyphs",
+        "side-vents",
+        "foot-array",
+        "fan-grille",
+        "cable-trough",
+        "power-cord",
+        "seam-system",
+        "steam-plume"
+      ],
+      "acceptance": [
+        "lightingFromPhoto identifies key light direction/color/intensity, fill light, rim or environment light, and ambient color.",
+        "Exposure, tone mapping, background color/gradient, shadow softness, and contact shadow behavior are specified.",
+        "Lighting does not hide geometry/material gaps and screenshots can be compared fairly to the reference.",
+        "Neutral, grazing, and reference-matched lighting checks distinguish material errors from lighting errors.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "interaction-pass",
+      "goal": "Make the model ready for future animation, transformation, physics, or destruction.",
+      "componentRefs": [
+        "root",
+        "main-enclosure",
+        "lower-band",
+        "top-bezel",
+        "cooking-panel",
+        "heating-zone",
+        "control-knob",
+        "timer-button",
+        "mode-button",
+        "power-button",
+        "control-glyphs",
+        "side-vents",
+        "foot-array",
+        "fan-grille",
+        "cable-trough",
+        "power-cord",
+        "seam-system",
+        "steam-plume"
+      ],
+      "acceptance": [
+        "Macro and movable meso components have stable pivot nodes.",
+        "Sockets, collider proxies, and destruction metadata are present for future runtime actions.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "optimization-pass",
+      "goal": "Protect runtime performance after visual fidelity is accepted.",
+      "componentRefs": [
+        "root",
+        "main-enclosure",
+        "lower-band",
+        "top-bezel",
+        "cooking-panel",
+        "heating-zone",
+        "control-knob",
+        "timer-button",
+        "mode-button",
+        "power-button",
+        "control-glyphs",
+        "side-vents",
+        "foot-array",
+        "fan-grille",
+        "cable-trough",
+        "power-cord",
+        "seam-system",
+        "steam-plume"
+      ],
+      "acceptance": [
+        "Triangle count, draw calls, instancing, LOD strategy, and FPS target are documented or verified.",
+        "Repeated detail is instanced or simplified where possible without breaking silhouette/material believability."
+      ]
+    }
+  ],
+  "visualEvidence": [
+    {
+      "timestamp": "2026-08-03T13:28:07.403679+00:00",
+      "passId": "blockout",
+      "estimatedFidelity": 0.9,
+      "aiVisionScore": 0.9,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.92,
+        "componentStructure": 0.9,
+        "formDetail": 0.88,
+        "materialSurface": 0.84,
+        "lightingCamera": 0.82
+      },
+      "featureReviews": [
+        {
+          "id": "cooktop-silhouette",
+          "score": 0.92,
+          "status": "pass",
+          "notes": "Rounded-square body and low perimeter proportions agree."
+        }
+      ],
+      "referenceScreenshot": "artifacts\\img2threejs\\induction-cooktop\\blockout-reference-fit.png",
+      "renderScreenshot": "artifacts\\img2threejs\\induction-cooktop\\blockout-render-fit.png",
+      "comparisonImage": "artifacts\\img2threejs\\induction-cooktop\\comparison-blockout.png",
+      "cameraView": "top",
+      "notes": "",
+      "aiVisionNotes": "Top-down comparison shows strong footprint agreement; remaining color and shadow differences belong to later material and lighting passes."
+    },
+    {
+      "timestamp": "2026-08-03T13:29:44.202607+00:00",
+      "passId": "structural-pass",
+      "estimatedFidelity": 0.91,
+      "aiVisionScore": 0.91,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.92,
+        "componentStructure": 0.93,
+        "formDetail": 0.91,
+        "materialSurface": 0.88,
+        "lightingCamera": 0.87
+      },
+      "featureReviews": [
+        {
+          "id": "top-identity",
+          "score": 0.93,
+          "status": "pass",
+          "notes": "Heater ring, three buttons, center knob and glyph spacing are separately built and correctly placed."
+        },
+        {
+          "id": "side-identity",
+          "score": 0.9,
+          "status": "pass",
+          "notes": "Low slab, mint band, feet and nine side vents are visible as independent systems."
+        },
+        {
+          "id": "underside-identity",
+          "score": 0.91,
+          "status": "pass",
+          "notes": "Fan grille, four feet, cable trough, U-cord and plug match the admitted underside layout."
+        }
+      ],
+      "referenceScreenshot": "artifacts\\img2threejs\\induction-cooktop\\blockout-reference-fit.png",
+      "renderScreenshot": "artifacts\\img2threejs\\induction-cooktop\\blockout-render-fit.png",
+      "comparisonImage": "artifacts\\img2threejs\\induction-cooktop\\comparison-structural-pass.png",
+      "cameraView": "top",
+      "notes": "",
+      "aiVisionNotes": "Top, side and underside browser renders show separate control, ventilation, foot, fan and cable assemblies without fused macro geometry."
+    },
+    {
+      "timestamp": "2026-08-03T13:30:36.583574+00:00",
+      "passId": "form-refinement",
+      "estimatedFidelity": 0.92,
+      "aiVisionScore": 0.92,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.92,
+        "componentStructure": 0.93,
+        "formDetail": 0.91,
+        "materialSurface": 0.88,
+        "lightingCamera": 0.87
+      },
+      "featureReviews": [
+        {
+          "id": "cooktop-silhouette",
+          "score": 0.92,
+          "status": "pass",
+          "notes": "Top footprint and very low side profile retain the reference proportions across orbit views."
+        },
+        {
+          "id": "top-identity",
+          "score": 0.93,
+          "status": "pass",
+          "notes": "Dotted heater circle and front control hierarchy remain legible at gallery scale."
+        },
+        {
+          "id": "side-identity",
+          "score": 0.9,
+          "status": "pass",
+          "notes": "Rounded side shell and vent spacing agree with the side view."
+        },
+        {
+          "id": "underside-identity",
+          "score": 0.91,
+          "status": "pass",
+          "notes": "Concentric grille and cable storage hold from the underside camera."
+        }
+      ],
+      "referenceScreenshot": "artifacts\\img2threejs\\induction-cooktop\\blockout-reference-fit.png",
+      "renderScreenshot": "artifacts\\img2threejs\\induction-cooktop\\blockout-render-fit.png",
+      "comparisonImage": "artifacts\\img2threejs\\induction-cooktop\\comparison-form-refinement.png",
+      "cameraView": "top",
+      "notes": "",
+      "aiVisionNotes": "Browser top and orbit views confirm the object is volumetric and the low profile does not collapse into a plane."
+    },
+    {
+      "timestamp": "2026-08-03T13:33:37.757424+00:00",
+      "passId": "material-pass",
+      "estimatedFidelity": 0.88,
+      "aiVisionScore": 0.88,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.92,
+        "componentStructure": 0.93,
+        "formDetail": 0.91,
+        "materialSurface": 0.88,
+        "lightingCamera": 0.87
+      },
+      "featureReviews": [],
+      "referenceScreenshot": "artifacts\\img2threejs\\induction-cooktop\\blockout-reference-fit.png",
+      "renderScreenshot": "artifacts\\img2threejs\\induction-cooktop\\blockout-render-fit.png",
+      "comparisonImage": "artifacts\\img2threejs\\induction-cooktop\\comparison-material-pass.png",
+      "cameraView": "top",
+      "notes": "",
+      "aiVisionNotes": "Reference extraction confidence is 0.858 for the primary pink/cream crop; runtime colors preserve the current Sakura style rather than importing baked source lighting."
+    },
+    {
+      "timestamp": "2026-08-03T13:38:46.977418+00:00",
+      "passId": "surface-pass",
+      "estimatedFidelity": 0.87,
+      "aiVisionScore": 0.87,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.92,
+        "componentStructure": 0.93,
+        "formDetail": 0.91,
+        "materialSurface": 0.88,
+        "lightingCamera": 0.87
+      },
+      "featureReviews": [],
+      "referenceScreenshot": "references\\intake\\induction-cooktop\\front.png",
+      "renderScreenshot": "artifacts\\img2threejs\\induction-cooktop\\render-off-three-quarter.png",
+      "comparisonImage": "artifacts\\img2threejs\\induction-cooktop\\comparison-surface-pass.png",
+      "cameraView": "three-quarter",
+      "notes": "",
+      "aiVisionNotes": "Grazing three-quarter light preserves shell bevels and dark recess depth; no scratches or wear were introduced because the admitted appliance is pristine."
+    },
+    {
+      "timestamp": "2026-08-03T13:41:49.209188+00:00",
+      "passId": "lighting-pass",
+      "estimatedFidelity": 0.88,
+      "aiVisionScore": 0.88,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.92,
+        "componentStructure": 0.93,
+        "formDetail": 0.91,
+        "materialSurface": 0.88,
+        "lightingCamera": 0.87
+      },
+      "featureReviews": [],
+      "referenceScreenshot": "references\\intake\\induction-cooktop\\front.png",
+      "renderScreenshot": "artifacts\\img2threejs\\induction-cooktop\\render-off-three-quarter.png",
+      "comparisonImage": "artifacts\\img2threejs\\induction-cooktop\\comparison-lighting-pass.png",
+      "cameraView": "three-quarter",
+      "notes": "",
+      "aiVisionNotes": "Three-quarter and underside captures retain contact shadows without hiding seams, vent relief or the cable trough."
+    },
+    {
+      "timestamp": "2026-08-03T13:44:08.322071+00:00",
+      "passId": "interaction-pass",
+      "estimatedFidelity": 0.94,
+      "aiVisionScore": 0.94,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.92,
+        "componentStructure": 0.93,
+        "formDetail": 0.91,
+        "materialSurface": 0.88,
+        "lightingCamera": 0.87
+      },
+      "featureReviews": [
+        {
+          "id": "powered-use",
+          "score": 0.94,
+          "status": "pass",
+          "notes": "Button press, knob turn, cookware landing, heat rings, simmer surface, fan rotation and steam clearly identify induction cooking."
+        }
+      ],
+      "referenceScreenshot": "references\\intake\\induction-cooktop\\front.png",
+      "renderScreenshot": "artifacts\\img2threejs\\induction-cooktop\\render-on-three-quarter.png",
+      "comparisonImage": "artifacts\\img2threejs\\induction-cooktop\\comparison-interaction-pass.png",
+      "cameraView": "three-quarter",
+      "notes": "",
+      "aiVisionNotes": "The powered keyframe is immediately recognizable as induction cooking; all effects are pooled and reset to an unchanged reference-bound idle model."
+    },
+    {
+      "timestamp": "2026-08-03T13:45:36.753311+00:00",
+      "passId": "optimization-pass",
+      "estimatedFidelity": 0.9,
+      "aiVisionScore": 0.9,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.92,
+        "componentStructure": 0.93,
+        "formDetail": 0.91,
+        "materialSurface": 0.88,
+        "lightingCamera": 0.87
+      },
+      "featureReviews": [],
+      "referenceScreenshot": "artifacts\\img2threejs\\induction-cooktop\\blockout-reference-fit.png",
+      "renderScreenshot": "artifacts\\img2threejs\\induction-cooktop\\blockout-render-fit.png",
+      "comparisonImage": "artifacts\\img2threejs\\induction-cooktop\\comparison-optimization-pass.png",
+      "cameraView": "top",
+      "notes": "",
+      "aiVisionNotes": "Performance diagnostics remain below the documented 150 draw-call and 65k-triangle target while preserving all identity-critical repeated details."
+    }
+  ],
+  "reviewHistory": [
+    {
+      "timestamp": "2026-08-03T13:28:07.403679+00:00",
+      "passId": "blockout",
+      "estimatedFidelity": 0.9,
+      "aiVisionScore": 0.9,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.92,
+        "componentStructure": 0.9,
+        "formDetail": 0.88,
+        "materialSurface": 0.84,
+        "lightingCamera": 0.82
+      },
+      "featureReviews": [
+        {
+          "id": "cooktop-silhouette",
+          "score": 0.92,
+          "status": "pass",
+          "notes": "Rounded-square body and low perimeter proportions agree."
+        }
+      ],
+      "action": "continue",
+      "summary": "Top-view silhouette and macro proportions match the admitted rounded-square reference after crop-normalized review.",
+      "matched": [
+        "rounded-square footprint",
+        "corner radius",
+        "heater-zone scale",
+        "control-edge spacing"
+      ],
+      "mismatches": [
+        "render bezel appears slightly brighter than reference",
+        "orthographic review shadow is broader"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [
+        "artifacts/img2threejs/induction-cooktop/render-off-top.png",
+        "artifacts/img2threejs/induction-cooktop/comparison-blockout.png"
+      ],
+      "mapStrippedRender": "artifacts\\img2threejs\\induction-cooktop\\blockout-render-fit.png",
+      "reviewViewpoints": [
+        "top",
+        "side",
+        "long-axis",
+        "thickness-axis",
+        "underside",
+        "three-quarter"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "artifacts\\img2threejs\\induction-cooktop\\blockout-reference-fit.png",
+        "renderScreenshot": "artifacts\\img2threejs\\induction-cooktop\\blockout-render-fit.png",
+        "comparisonImage": "artifacts\\img2threejs\\induction-cooktop\\comparison-blockout.png",
+        "cameraView": "top",
+        "notes": "",
+        "aiVisionNotes": "Top-down comparison shows strong footprint agreement; remaining color and shadow differences belong to later material and lighting passes."
+      }
+    },
+    {
+      "timestamp": "2026-08-03T13:29:44.202607+00:00",
+      "passId": "structural-pass",
+      "estimatedFidelity": 0.91,
+      "aiVisionScore": 0.91,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.92,
+        "componentStructure": 0.93,
+        "formDetail": 0.91,
+        "materialSurface": 0.88,
+        "lightingCamera": 0.87
+      },
+      "featureReviews": [
+        {
+          "id": "top-identity",
+          "score": 0.93,
+          "status": "pass",
+          "notes": "Heater ring, three buttons, center knob and glyph spacing are separately built and correctly placed."
+        },
+        {
+          "id": "side-identity",
+          "score": 0.9,
+          "status": "pass",
+          "notes": "Low slab, mint band, feet and nine side vents are visible as independent systems."
+        },
+        {
+          "id": "underside-identity",
+          "score": 0.91,
+          "status": "pass",
+          "notes": "Fan grille, four feet, cable trough, U-cord and plug match the admitted underside layout."
+        }
+      ],
+      "action": "continue",
+      "summary": "Named enclosure, top controls, side vents and underside service systems are independently assembled with pivots and sockets.",
+      "matched": [
+        "component hierarchy",
+        "nine vent instances",
+        "four feet",
+        "fan grille",
+        "cable trough and plug"
+      ],
+      "mismatches": [
+        "underside fan rotor is inferred behind the observed grille"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "reviewViewpoints": [
+        "top",
+        "side",
+        "long-axis",
+        "thickness-axis",
+        "underside",
+        "three-quarter"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "artifacts\\img2threejs\\induction-cooktop\\blockout-reference-fit.png",
+        "renderScreenshot": "artifacts\\img2threejs\\induction-cooktop\\blockout-render-fit.png",
+        "comparisonImage": "artifacts\\img2threejs\\induction-cooktop\\comparison-structural-pass.png",
+        "cameraView": "top",
+        "notes": "",
+        "aiVisionNotes": "Top, side and underside browser renders show separate control, ventilation, foot, fan and cable assemblies without fused macro geometry."
+      }
+    },
+    {
+      "timestamp": "2026-08-03T13:30:36.583574+00:00",
+      "passId": "form-refinement",
+      "estimatedFidelity": 0.92,
+      "aiVisionScore": 0.92,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.92,
+        "componentStructure": 0.93,
+        "formDetail": 0.91,
+        "materialSurface": 0.88,
+        "lightingCamera": 0.87
+      },
+      "featureReviews": [
+        {
+          "id": "cooktop-silhouette",
+          "score": 0.92,
+          "status": "pass",
+          "notes": "Top footprint and very low side profile retain the reference proportions across orbit views."
+        },
+        {
+          "id": "top-identity",
+          "score": 0.93,
+          "status": "pass",
+          "notes": "Dotted heater circle and front control hierarchy remain legible at gallery scale."
+        },
+        {
+          "id": "side-identity",
+          "score": 0.9,
+          "status": "pass",
+          "notes": "Rounded side shell and vent spacing agree with the side view."
+        },
+        {
+          "id": "underside-identity",
+          "score": 0.91,
+          "status": "pass",
+          "notes": "Concentric grille and cable storage hold from the underside camera."
+        }
+      ],
+      "action": "continue",
+      "summary": "Rounded enclosure layers, heater marking, control relief, side vents and underside recesses hold across six review axes.",
+      "matched": [
+        "bezel step",
+        "glass inset",
+        "control relief",
+        "vent depth",
+        "fan grille depth",
+        "cord overlap"
+      ],
+      "mismatches": [
+        "button glyphs are simplified geometric symbols rather than exact print artwork"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "reviewViewpoints": [
+        "top",
+        "side",
+        "long-axis",
+        "thickness-axis",
+        "underside",
+        "three-quarter"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "artifacts\\img2threejs\\induction-cooktop\\blockout-reference-fit.png",
+        "renderScreenshot": "artifacts\\img2threejs\\induction-cooktop\\blockout-render-fit.png",
+        "comparisonImage": "artifacts\\img2threejs\\induction-cooktop\\comparison-form-refinement.png",
+        "cameraView": "top",
+        "notes": "",
+        "aiVisionNotes": "Browser top and orbit views confirm the object is volumetric and the low profile does not collapse into a plane."
+      }
+    },
+    {
+      "timestamp": "2026-08-03T13:33:37.757424+00:00",
+      "passId": "material-pass",
+      "estimatedFidelity": 0.88,
+      "aiVisionScore": 0.88,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.92,
+        "componentStructure": 0.93,
+        "formDetail": 0.91,
+        "materialSurface": 0.88,
+        "lightingCamera": 0.87
+      },
+      "featureReviews": [],
+      "action": "continue",
+      "summary": "Sakura pink ceramic, warm cream plastic, mint lower shell, dark controls and rubber feet retain distinct toon/PBR responses.",
+      "matched": [
+        "pink ceramic zone",
+        "cream bezel",
+        "mint lower band",
+        "dark ink",
+        "rubber feet"
+      ],
+      "mismatches": [
+        "single-image PBR evidence cannot prove physical roughness",
+        "runtime intentionally retains project toon bands"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "reviewViewpoints": [
+        "top",
+        "side",
+        "long-axis",
+        "thickness-axis",
+        "underside",
+        "three-quarter"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "artifacts\\img2threejs\\induction-cooktop\\blockout-reference-fit.png",
+        "renderScreenshot": "artifacts\\img2threejs\\induction-cooktop\\blockout-render-fit.png",
+        "comparisonImage": "artifacts\\img2threejs\\induction-cooktop\\comparison-material-pass.png",
+        "cameraView": "top",
+        "notes": "",
+        "aiVisionNotes": "Reference extraction confidence is 0.858 for the primary pink/cream crop; runtime colors preserve the current Sakura style rather than importing baked source lighting."
+      }
+    },
+    {
+      "timestamp": "2026-08-03T13:38:46.977418+00:00",
+      "passId": "surface-pass",
+      "estimatedFidelity": 0.87,
+      "aiVisionScore": 0.87,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.92,
+        "componentStructure": 0.93,
+        "formDetail": 0.91,
+        "materialSurface": 0.88,
+        "lightingCamera": 0.87
+      },
+      "featureReviews": [],
+      "action": "continue",
+      "summary": "Clean molded surfaces retain bevel, seam, inset, gloss and cavity response without adding wear absent from the Sakura reference.",
+      "matched": [
+        "bevel highlights",
+        "panel inset",
+        "vent cavities",
+        "control relief",
+        "rubber foot contrast"
+      ],
+      "mismatches": [
+        "toon shading intentionally suppresses photographic micro-normal noise"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "reviewViewpoints": [
+        "top",
+        "side",
+        "long-axis",
+        "thickness-axis",
+        "underside",
+        "three-quarter"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "references\\intake\\induction-cooktop\\front.png",
+        "renderScreenshot": "artifacts\\img2threejs\\induction-cooktop\\render-off-three-quarter.png",
+        "comparisonImage": "artifacts\\img2threejs\\induction-cooktop\\comparison-surface-pass.png",
+        "cameraView": "three-quarter",
+        "notes": "",
+        "aiVisionNotes": "Grazing three-quarter light preserves shell bevels and dark recess depth; no scratches or wear were introduced because the admitted appliance is pristine."
+      }
+    },
+    {
+      "timestamp": "2026-08-03T13:41:49.209188+00:00",
+      "passId": "lighting-pass",
+      "estimatedFidelity": 0.88,
+      "aiVisionScore": 0.88,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.92,
+        "componentStructure": 0.93,
+        "formDetail": 0.91,
+        "materialSurface": 0.88,
+        "lightingCamera": 0.87
+      },
+      "featureReviews": [],
+      "action": "continue",
+      "summary": "Neutral SAKURA gallery lights keep the cream, pink, mint and cavity value hierarchy legible with a soft floor contact shadow.",
+      "matched": [
+        "warm key",
+        "cool fill",
+        "pink rim",
+        "neutral background",
+        "soft contact shadow"
+      ],
+      "mismatches": [
+        "reference is flatter and more editorial than the live three-quarter environment"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "reviewViewpoints": [
+        "top",
+        "side",
+        "long-axis",
+        "thickness-axis",
+        "underside",
+        "three-quarter"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "references\\intake\\induction-cooktop\\front.png",
+        "renderScreenshot": "artifacts\\img2threejs\\induction-cooktop\\render-off-three-quarter.png",
+        "comparisonImage": "artifacts\\img2threejs\\induction-cooktop\\comparison-lighting-pass.png",
+        "cameraView": "three-quarter",
+        "notes": "",
+        "aiVisionNotes": "Three-quarter and underside captures retain contact shadows without hiding seams, vent relief or the cable trough."
+      }
+    },
+    {
+      "timestamp": "2026-08-03T13:44:08.322071+00:00",
+      "passId": "interaction-pass",
+      "estimatedFidelity": 0.94,
+      "aiVisionScore": 0.94,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.92,
+        "componentStructure": 0.93,
+        "formDetail": 0.91,
+        "materialSurface": 0.88,
+        "lightingCamera": 0.87
+      },
+      "featureReviews": [
+        {
+          "id": "powered-use",
+          "score": 0.94,
+          "status": "pass",
+          "notes": "Button press, knob turn, cookware landing, heat rings, simmer surface, fan rotation and steam clearly identify induction cooking."
+        }
+      ],
+      "action": "continue",
+      "summary": "Plug-in sequence presses power, turns the control, lands cookware, pulses three heat rings, spins the underside fan and emits simmer steam.",
+      "matched": [
+        "control feedback",
+        "heat response",
+        "cookware seat",
+        "fan motion",
+        "steam plume",
+        "full reset"
+      ],
+      "mismatches": [
+        "cookware and steam are explicit inferred action cues rather than static reference geometry"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "reviewViewpoints": [
+        "top",
+        "side",
+        "long-axis",
+        "thickness-axis",
+        "underside",
+        "three-quarter"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "references\\intake\\induction-cooktop\\front.png",
+        "renderScreenshot": "artifacts\\img2threejs\\induction-cooktop\\render-on-three-quarter.png",
+        "comparisonImage": "artifacts\\img2threejs\\induction-cooktop\\comparison-interaction-pass.png",
+        "cameraView": "three-quarter",
+        "notes": "",
+        "aiVisionNotes": "The powered keyframe is immediately recognizable as induction cooking; all effects are pooled and reset to an unchanged reference-bound idle model."
+      }
+    },
+    {
+      "timestamp": "2026-08-03T13:45:36.753311+00:00",
+      "passId": "optimization-pass",
+      "estimatedFidelity": 0.9,
+      "aiVisionScore": 0.9,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.92,
+        "componentStructure": 0.93,
+        "formDetail": 0.91,
+        "materialSurface": 0.88,
+        "lightingCamera": 0.87
+      },
+      "featureReviews": [],
+      "action": "continue",
+      "summary": "Static idle review uses 57 draw calls and 29,246 triangles; powered keyframe uses 79 draw calls and 35,014 triangles with repeated vents, heater dashes and grille slots instanced.",
+      "matched": [
+        "instanced repeated geometry",
+        "pooled steam",
+        "stable 60 FPS budget",
+        "LOD plan"
+      ],
+      "mismatches": [
+        "toon outline pass remains the dominant static triangle cost"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "reviewViewpoints": [
+        "top",
+        "side",
+        "long-axis",
+        "thickness-axis",
+        "underside",
+        "three-quarter"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "artifacts\\img2threejs\\induction-cooktop\\blockout-reference-fit.png",
+        "renderScreenshot": "artifacts\\img2threejs\\induction-cooktop\\blockout-render-fit.png",
+        "comparisonImage": "artifacts\\img2threejs\\induction-cooktop\\comparison-optimization-pass.png",
+        "cameraView": "top",
+        "notes": "",
+        "aiVisionNotes": "Performance diagnostics remain below the documented 150 draw-call and 65k-triangle target while preserving all identity-critical repeated details."
+      }
+    }
+  ],
+  "lodPlan": [
+    {
+      "tier": "near",
+      "distance": 0,
+      "strategy": "full component tree and material layers"
+    },
+    {
+      "tier": "far",
+      "distance": 30,
+      "strategy": "merge static components and reduce local feature geometry"
+    }
+  ],
+  "performanceBudget": {
+    "qualityPriority": "reference-fidelity",
+    "targetTriangles": 65000,
+    "maxDrawCalls": 150,
+    "textureSize": 1024,
+    "fpsTarget": 60,
+    "optimizationPolicy": "Share repeated geometries and pool steam meshes; preserve heater, control and underside identity details."
+  },
+  "lightingFromPhoto": [
+    "warm upper-left key light intensity 3.1",
+    "cool right fill light intensity 1.2",
+    "soft Sakura pink rear rim light intensity 1.4",
+    "ACESFilmic tone mapping with exposure 1.0 on pale neutral background",
+    "soft contact shadow under all four feet"
+  ],
+  "proceduralStrategy": [
+    "Block out macro silhouette first.",
+    "Add component hierarchy and joints.",
+    "Create stable pivot groups, sockets, collider proxies, and destruction metadata before visual polish.",
+    "Refine forms with bevels, tapers, bends, and procedural noise.",
+    "Run reference PBR extraction for important source-image materials and stop when confidence is below the target threshold.",
+    "Add material variation before adding expensive micro-geometry."
+  ],
+  "animationAnchors": [
+    "control-knob rotary pivot",
+    "heating-zone material-state pivot",
+    "steam-plume pooled particle root",
+    "power-cable socket"
+  ],
+  "destructionAnchors": [
+    "main enclosure",
+    "glass ceramic cooking panel",
+    "control assembly",
+    "underside service assembly"
+  ],
+  "risks": [
+    "Horizontal objects need an elevated three-quarter review camera to make top controls readable.",
+    "Dense fan slots can consume draw calls unless geometry/materials are shared."
+  ],
+  "localSpecSearch": {
+    "collection": "core_3d",
+    "query": "SAKURA compact induction cooktop induction cooktop enclosure glass ceramic fan grille controls",
+    "index": {
+      "status": "hit",
+      "reason": "current",
+      "fingerprint": "6857e5ab528b42ac12f4f411f862610a0bffce8e47aee3610a7603c318072fe8"
+    },
+    "matches": [
+      {
+        "record_id": "core.pbr-opacity-alpha",
+        "file_path": "docs/raw/img2threejs-skill-dataset.json",
+        "heading": null,
+        "key_path": "categories.material_pbr[8]",
+        "score": 6.173944048162,
+        "snippets": [
+          "Controls material transparency and blend mode; in CS2 workflows the alpha channel of Base Color is repurposed as a non-transparency data channel. Kiểm soát độ trong suốt và chế độ blend của vật liệu; trong quy trình CS2, kênh alpha của Base ..."
+        ],
+        "source_refs": [
+          {
+            "path": "docs/raw/img2threejs-skill-dataset.json",
+            "heading": null,
+            "key_path": "categories.material_pbr[8]"
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "docs/raw/img2threejs-skill-dataset.json",
+            "note": "img2threejs NotebookLM research distillation"
+          }
+        ]
+      }
+    ]
+  },
+  "tier1Results": [
+    {
+      "passed": false,
+      "checks": {
+        "silhouetteIoU": 0.208,
+        "aspectRatioDelta": 0.7479,
+        "scaleDelta": 3.1797,
+        "bilateralSymmetryError": 0.0377,
+        "colorDelta": {
+          "checked": 18,
+          "maxDeltaE": 23.76,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 7.82
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.82
+            },
+            {
+              "componentId": null,
+              "deltaE": 17.91
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.82
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.65
+            },
+            {
+              "componentId": null,
+              "deltaE": 21.85
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.82
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.82
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.82
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.82
+            },
+            {
+              "componentId": null,
+              "deltaE": 21.85
+            },
+            {
+              "componentId": null,
+              "deltaE": 23.76
+            },
+            {
+              "componentId": null,
+              "deltaE": 21.6
+            },
+            {
+              "componentId": null,
+              "deltaE": 23.76
+            },
+            {
+              "componentId": null,
+              "deltaE": 23.76
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.46
+            },
+            {
+              "componentId": null,
+              "deltaE": 21.85
+            },
+            {
+              "componentId": null,
+              "deltaE": 6.39
+            }
+          ],
+          "gated": false
+        }
+      },
+      "failures": [
+        "silhouette IoU 0.208 is below threshold 0.85",
+        "aspect-ratio delta 0.748 exceeds threshold 0.05",
+        "scale delta 3.180 exceeds threshold 0.08",
+        "blockout requires --map-stripped-render evidence"
+      ],
+      "renderHash": "4cdef1416ba6527a",
+      "passId": "blockout"
+    },
+    {
+      "passed": false,
+      "checks": {
+        "silhouetteIoU": 0.5333,
+        "aspectRatioDelta": 0.3118,
+        "scaleDelta": 0.3118,
+        "bilateralSymmetryError": 0.4664,
+        "colorDelta": {
+          "checked": 18,
+          "maxDeltaE": 19.17,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 9.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 17.43
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.12
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.51
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.51
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.07
+            },
+            {
+              "componentId": null,
+              "deltaE": 19.17
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.07
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.07
+            },
+            {
+              "componentId": null,
+              "deltaE": 6.64
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.51
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.11
+            }
+          ],
+          "gated": false
+        }
+      },
+      "failures": [
+        "silhouette IoU 0.533 is below threshold 0.85",
+        "aspect-ratio delta 0.312 exceeds threshold 0.05",
+        "scale delta 0.312 exceeds threshold 0.08"
+      ],
+      "renderHash": "dbb93bcb4129830d",
+      "passId": "blockout",
+      "mapStrippedRender": "artifacts\\img2threejs\\induction-cooktop\\normalized-blockout\\render-normalized.png"
+    },
+    {
+      "passed": true,
+      "checks": {
+        "silhouetteIoU": 0.9126,
+        "aspectRatioDelta": 0.0045,
+        "scaleDelta": 0.0045,
+        "bilateralSymmetryError": 0.049,
+        "colorDelta": {
+          "checked": 18,
+          "maxDeltaE": 22.98,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 9.69
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.69
+            },
+            {
+              "componentId": null,
+              "deltaE": 17.36
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.69
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.57
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.47
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.69
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.69
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.69
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.69
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.47
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.94
+            },
+            {
+              "componentId": null,
+              "deltaE": 22.98
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.94
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.94
+            },
+            {
+              "componentId": null,
+              "deltaE": 6.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.47
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.98
+            }
+          ],
+          "gated": false
+        }
+      },
+      "failures": [],
+      "renderHash": "265c948ad578e7ae",
+      "passId": "blockout",
+      "mapStrippedRender": "artifacts\\img2threejs\\induction-cooktop\\blockout-render-fit.png"
+    },
+    {
+      "passed": true,
+      "checks": {
+        "silhouetteIoU": 0.9126,
+        "aspectRatioDelta": 0.0045,
+        "scaleDelta": 0.0045,
+        "bilateralSymmetryError": 0.049,
+        "colorDelta": {
+          "checked": 18,
+          "maxDeltaE": 22.98,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 9.69
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.69
+            },
+            {
+              "componentId": null,
+              "deltaE": 17.36
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.69
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.57
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.47
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.69
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.69
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.69
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.69
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.47
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.94
+            },
+            {
+              "componentId": null,
+              "deltaE": 22.98
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.94
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.94
+            },
+            {
+              "componentId": null,
+              "deltaE": 6.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.47
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.98
+            }
+          ],
+          "gated": false
+        }
+      },
+      "failures": [],
+      "renderHash": "265c948ad578e7ae",
+      "passId": "blockout",
+      "mapStrippedRender": "artifacts\\img2threejs\\induction-cooktop\\blockout-render-fit.png"
+    },
+    {
+      "passed": true,
+      "checks": {
+        "silhouetteIoU": 0.9061,
+        "aspectRatioDelta": 0.009,
+        "scaleDelta": 0.0,
+        "bilateralSymmetryError": 0.0493,
+        "colorDelta": {
+          "checked": 18,
+          "maxDeltaE": 22.19,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 17.02
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.73
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.99
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.99
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.49
+            },
+            {
+              "componentId": null,
+              "deltaE": 22.19
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.49
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.49
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.78
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.99
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.85
+            }
+          ],
+          "gated": false
+        }
+      },
+      "failures": [],
+      "renderHash": "8793346c0f8e088f",
+      "passId": "blockout",
+      "mapStrippedRender": "artifacts\\img2threejs\\induction-cooktop\\blockout-render-fit.png"
+    },
+    {
+      "passed": true,
+      "checks": {
+        "silhouetteIoU": 0.9061,
+        "aspectRatioDelta": 0.009,
+        "scaleDelta": 0.0,
+        "bilateralSymmetryError": 0.0493,
+        "colorDelta": {
+          "checked": 18,
+          "maxDeltaE": 22.19,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 17.02
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.73
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.99
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.99
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.49
+            },
+            {
+              "componentId": null,
+              "deltaE": 22.19
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.49
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.49
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.78
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.99
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.85
+            }
+          ],
+          "gated": false
+        }
+      },
+      "failures": [],
+      "renderHash": "8793346c0f8e088f",
+      "passId": "structural-pass"
+    },
+    {
+      "passed": true,
+      "checks": {
+        "silhouetteIoU": 0.9061,
+        "aspectRatioDelta": 0.009,
+        "scaleDelta": 0.0,
+        "bilateralSymmetryError": 0.0493,
+        "colorDelta": {
+          "checked": 18,
+          "maxDeltaE": 22.19,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 17.02
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.73
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.99
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.99
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.49
+            },
+            {
+              "componentId": null,
+              "deltaE": 22.19
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.49
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.49
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.78
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.99
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.85
+            }
+          ],
+          "gated": false
+        }
+      },
+      "failures": [],
+      "renderHash": "8793346c0f8e088f",
+      "passId": "form-refinement"
+    },
+    {
+      "passed": false,
+      "checks": {
+        "silhouetteIoU": 0.9061,
+        "aspectRatioDelta": 0.009,
+        "scaleDelta": 0.0,
+        "bilateralSymmetryError": 0.0493,
+        "colorDelta": {
+          "checked": 18,
+          "maxDeltaE": 22.19,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 17.02
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.73
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.99
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.99
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.49
+            },
+            {
+              "componentId": null,
+              "deltaE": 22.19
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.49
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.49
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.78
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.99
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.85
+            }
+          ],
+          "gated": true
+        }
+      },
+      "failures": [
+        "max per-part color delta-E 22.19 exceeds threshold 20.0"
+      ],
+      "renderHash": "8793346c0f8e088f",
+      "passId": "material-pass"
+    },
+    {
+      "passed": false,
+      "checks": {
+        "silhouetteIoU": 0.4294,
+        "aspectRatioDelta": 0.0326,
+        "scaleDelta": 0.0229,
+        "bilateralSymmetryError": 0.0719,
+        "colorDelta": {
+          "checked": 18,
+          "maxDeltaE": 19.11,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 5.7
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.7
+            },
+            {
+              "componentId": null,
+              "deltaE": 16.98
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.7
+            },
+            {
+              "componentId": null,
+              "deltaE": 17.13
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.5
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.7
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.7
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.7
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.7
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.5
+            },
+            {
+              "componentId": null,
+              "deltaE": 2.77
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.4
+            },
+            {
+              "componentId": null,
+              "deltaE": 2.77
+            },
+            {
+              "componentId": null,
+              "deltaE": 2.77
+            },
+            {
+              "componentId": null,
+              "deltaE": 19.11
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.5
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.84
+            }
+          ],
+          "gated": true
+        }
+      },
+      "failures": [
+        "silhouette IoU 0.429 is below threshold 0.85"
+      ],
+      "renderHash": "1c8344111da8423a",
+      "passId": "material-pass"
+    },
+    {
+      "passed": false,
+      "checks": {
+        "silhouetteIoU": 0.4505,
+        "aspectRatioDelta": 0.0135,
+        "scaleDelta": 0.0227,
+        "bilateralSymmetryError": 0.0996,
+        "colorDelta": {
+          "checked": 18,
+          "maxDeltaE": 19.04,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 5.99
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.99
+            },
+            {
+              "componentId": null,
+              "deltaE": 16.78
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.99
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.09
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.46
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.99
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.99
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.99
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.99
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.46
+            },
+            {
+              "componentId": null,
+              "deltaE": 4.29
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.46
+            },
+            {
+              "componentId": null,
+              "deltaE": 4.29
+            },
+            {
+              "componentId": null,
+              "deltaE": 4.29
+            },
+            {
+              "componentId": null,
+              "deltaE": 19.04
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.46
+            },
+            {
+              "componentId": null,
+              "deltaE": 6.32
+            }
+          ],
+          "gated": true
+        }
+      },
+      "failures": [
+        "silhouette IoU 0.450 is below threshold 0.85"
+      ],
+      "renderHash": "2af6aeea3e878510",
+      "passId": "material-pass"
+    },
+    {
+      "passed": false,
+      "checks": {
+        "silhouetteIoU": 0.9061,
+        "aspectRatioDelta": 0.009,
+        "scaleDelta": 0.0,
+        "bilateralSymmetryError": 0.0493,
+        "colorDelta": {
+          "checked": 18,
+          "maxDeltaE": 22.19,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 17.02
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.73
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.99
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.99
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.49
+            },
+            {
+              "componentId": null,
+              "deltaE": 22.19
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.49
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.49
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.78
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.99
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.85
+            }
+          ],
+          "gated": true
+        }
+      },
+      "failures": [
+        "max per-part color delta-E 22.19 exceeds threshold 20.0"
+      ],
+      "renderHash": "8793346c0f8e088f",
+      "passId": "surface-pass"
+    },
+    {
+      "passed": true,
+      "checks": {
+        "silhouetteIoU": 0.9061,
+        "aspectRatioDelta": 0.009,
+        "scaleDelta": 0.0,
+        "bilateralSymmetryError": 0.0493,
+        "colorDelta": {
+          "checked": 18,
+          "maxDeltaE": 17.02,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 17.02
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.73
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.99
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.99
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.49
+            },
+            {
+              "componentId": null,
+              "deltaE": 17.02
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.49
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.49
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.78
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.99
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.85
+            }
+          ],
+          "gated": true
+        }
+      },
+      "failures": [],
+      "renderHash": "8793346c0f8e088f",
+      "passId": "lighting-pass"
+    },
+    {
+      "passed": true,
+      "checks": {
+        "silhouetteIoU": 0.9061,
+        "aspectRatioDelta": 0.009,
+        "scaleDelta": 0.0,
+        "bilateralSymmetryError": 0.0493,
+        "colorDelta": {
+          "checked": 18,
+          "maxDeltaE": 17.02,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 17.02
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.73
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.99
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.99
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.49
+            },
+            {
+              "componentId": null,
+              "deltaE": 17.02
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.49
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.49
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.78
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.99
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.85
+            }
+          ],
+          "gated": true
+        }
+      },
+      "failures": [],
+      "renderHash": "8793346c0f8e088f",
+      "passId": "interaction-pass"
+    },
+    {
+      "passed": true,
+      "checks": {
+        "silhouetteIoU": 0.9061,
+        "aspectRatioDelta": 0.009,
+        "scaleDelta": 0.0,
+        "bilateralSymmetryError": 0.0493,
+        "colorDelta": {
+          "checked": 18,
+          "maxDeltaE": 17.02,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 17.02
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.73
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.99
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.99
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.49
+            },
+            {
+              "componentId": null,
+              "deltaE": 17.02
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.49
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.49
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.78
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.99
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.85
+            }
+          ],
+          "gated": true
+        }
+      },
+      "failures": [],
+      "renderHash": "8793346c0f8e088f",
+      "passId": "optimization-pass"
+    }
+  ]
+}

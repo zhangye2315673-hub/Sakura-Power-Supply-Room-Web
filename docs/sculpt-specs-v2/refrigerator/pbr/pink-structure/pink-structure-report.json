@@ -1,0 +1,83 @@
+{
+  "ok": true,
+  "verdict": "pass",
+  "confidence": 0.93,
+  "estimatedFidelity": 0.93,
+  "targetThreshold": 0.7,
+  "materialId": "pink-structure",
+  "sourceImage": "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake-v2\\refrigerator\\views\\back.png",
+  "outDir": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs-v2\\refrigerator\\pbr\\pink-structure",
+  "palette": [
+    "#B29DA8",
+    "#EEBBC2",
+    "#7F6277",
+    "#2A1F28",
+    "#D0BEC1"
+  ],
+  "maps": {
+    "albedo": {
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs-v2\\refrigerator\\pbr\\pink-structure\\pink-structure_albedo.png",
+      "url": "pink-structure_albedo.png",
+      "channel": "albedo",
+      "source": "reference-pixel-extraction"
+    },
+    "roughness": {
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs-v2\\refrigerator\\pbr\\pink-structure\\pink-structure_roughness.png",
+      "url": "pink-structure_roughness.png",
+      "channel": "roughness",
+      "source": "reference-pixel-extraction"
+    },
+    "height": {
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs-v2\\refrigerator\\pbr\\pink-structure\\pink-structure_height.png",
+      "url": "pink-structure_height.png",
+      "channel": "height",
+      "source": "reference-pixel-extraction"
+    },
+    "normal": {
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs-v2\\refrigerator\\pbr\\pink-structure\\pink-structure_normal.png",
+      "url": "pink-structure_normal.png",
+      "channel": "normal",
+      "source": "reference-pixel-extraction"
+    },
+    "ao": {
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs-v2\\refrigerator\\pbr\\pink-structure\\pink-structure_ao.png",
+      "url": "pink-structure_ao.png",
+      "channel": "ao",
+      "source": "reference-pixel-extraction"
+    }
+  },
+  "diagnostics": {
+    "sourceWidth": 627,
+    "sourceHeight": 627,
+    "mapSize": 1024,
+    "cropBBoxPixels": {
+      "x": 87,
+      "y": 10,
+      "width": 540,
+      "height": 575
+    },
+    "mask": {
+      "backgroundColor": "#F5EFEA",
+      "backgroundNoise": 1.414,
+      "transparentPixelFraction": 0.0,
+      "foregroundCoverage": 0.4595
+    },
+    "mapStats": {
+      "valueRange": 0.6149,
+      "heightP90Gradient": 0.07261,
+      "roughnessBase": 0.682,
+      "roughnessVariation": 0.112,
+      "normalStrength": 0.241,
+      "blurRadius": 21
+    },
+    "palette": [
+      "#B29DA8",
+      "#EEBBC2",
+      "#7F6277",
+      "#2A1F28",
+      "#D0BEC1"
+    ]
+  },
+  "warnings": [],
+  "limitation": "single-image PBR extraction is an estimate; 70%+ extraction confidence still needs render screenshot review"
+}

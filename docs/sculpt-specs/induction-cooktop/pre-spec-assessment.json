@@ -1,0 +1,505 @@
+{
+  "targetName": "SAKURA compact induction cooktop",
+  "sourceImage": "references\\intake\\induction-cooktop\\front.png",
+  "preSpecAssessment": {
+    "objectClass": {
+      "primaryType": "portable single-zone induction cooktop",
+      "primaryDomain": "object",
+      "formLanguage": [
+        "low rounded-square slab",
+        "soft Sakura domestic appliance",
+        "concentric circular graphics"
+      ],
+      "structureKind": [
+        "layered enclosure",
+        "top control surface",
+        "ventilated underside"
+      ],
+      "motionPotential": [
+        "rotary control feedback",
+        "heating-zone pulse",
+        "steam plume"
+      ],
+      "materialFamilies": [
+        "glass ceramic",
+        "painted plastic",
+        "rubber",
+        "metal hardware"
+      ],
+      "notes": "The supplied front, side and back files are respectively top, side and underside orthographic-style views."
+    },
+    "complexity": {
+      "tier": "complex",
+      "scores": {
+        "silhouetteComplexity": 0.45,
+        "componentCount": 0.74,
+        "hierarchyDepth": 0.62,
+        "repetitionDensity": 0.78,
+        "materialLayerCount": 0.65,
+        "localDetailDensity": 0.76,
+        "occlusionRisk": 0.58,
+        "actionReadinessNeed": 0.7
+      },
+      "estimatedCounts": {
+        "macroComponents": 5,
+        "mesoComponents": 13,
+        "microFeatureGroups": 8,
+        "materialLayers": 6,
+        "repetitionSystems": 4
+      },
+      "reasoning": [
+        "The macro silhouette is simple, but identity depends on layered top edging, a dense control strip and three repeated ventilation systems.",
+        "The underside supplies direct evidence for the fan grille, four feet and cable recess; internal coil and airflow remain hidden."
+      ]
+    },
+    "specDepthDecision": {
+      "requiredDepth": "complex",
+      "minimumComponentLevels": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "needsRepetitionSystems": true,
+      "needsMaterialLocalOverrides": true,
+      "needsMultipleReviewViews": true,
+      "needsActionReadyHierarchy": true,
+      "rationale": "Complex depth is required because a shallow slab would omit the control hierarchy, underside service structure and action-ready heating cues."
+    },
+    "unknownsToResolveBeforeImplementation": [
+      "The exact rear wall is not shown independently; rear seam and inlet routing are inferred from the side and underside views.",
+      "The induction coil, fan impeller, controller board and thermal insulation are hidden and will not be fabricated.",
+      "Button legend artwork is represented by simple geometric glyphs, not exact printed typography.",
+      "Cable trough depth and strain-relief attachment are inferred from the underside view."
+    ],
+    "detailInventory": {
+      "scanMethod": "component-zones",
+      "targetMinDetails": 10,
+      "note": "Enumerate every identity-defining small detail before authoring the spec. Each detail must map to a component.localFeatures entry or material.localOverrides entry, never prose only. Use forge/stage1_intake/build_detail_inventory.py to scan zones.",
+      "details": [
+        {
+          "id": "top-rounded-square-silhouette",
+          "zone": "top",
+          "scale": "macro",
+          "observation": "outer rounded-square footprint with generous corner radii and thin black perimeter line",
+          "implementation": "separate procedural geometry",
+          "mappedTo": {
+            "componentId": "main-enclosure"
+          },
+          "evidenceRefs": [
+            "front.png",
+            "side.png",
+            "back.png"
+          ]
+        },
+        {
+          "id": "cream-bezel-step",
+          "zone": "top",
+          "scale": "meso",
+          "observation": "warm cream raised frame surrounding the pink top panel",
+          "implementation": "separate procedural geometry",
+          "mappedTo": {
+            "componentId": "top-bezel"
+          },
+          "evidenceRefs": [
+            "front.png",
+            "side.png",
+            "back.png"
+          ]
+        },
+        {
+          "id": "pink-glass-ceramic-panel",
+          "zone": "top",
+          "scale": "macro",
+          "observation": "flush pale pink cooking surface with soft central highlight",
+          "implementation": "separate procedural geometry",
+          "mappedTo": {
+            "componentId": "cooking-panel"
+          },
+          "evidenceRefs": [
+            "front.png",
+            "side.png",
+            "back.png"
+          ]
+        },
+        {
+          "id": "heater-zone-ring",
+          "zone": "top",
+          "scale": "meso",
+          "observation": "large centered dotted circular induction-zone marking and center dot",
+          "implementation": "separate procedural geometry",
+          "mappedTo": {
+            "componentId": "heating-zone"
+          },
+          "evidenceRefs": [
+            "front.png",
+            "side.png",
+            "back.png"
+          ]
+        },
+        {
+          "id": "control-knob",
+          "zone": "top",
+          "scale": "meso",
+          "observation": "large cream rotary knob at front center with dark rim and index mark",
+          "implementation": "separate procedural geometry",
+          "mappedTo": {
+            "componentId": "control-knob"
+          },
+          "evidenceRefs": [
+            "front.png",
+            "side.png",
+            "back.png"
+          ]
+        },
+        {
+          "id": "left-timer-button",
+          "zone": "top",
+          "scale": "micro",
+          "observation": "small layered circular timer button on the front-left control strip",
+          "implementation": "separate procedural geometry",
+          "mappedTo": {
+            "componentId": "timer-button"
+          },
+          "evidenceRefs": [
+            "front.png",
+            "side.png",
+            "back.png"
+          ]
+        },
+        {
+          "id": "left-mode-button",
+          "zone": "top",
+          "scale": "micro",
+          "observation": "small layered heat-mode button beside the timer control",
+          "implementation": "separate procedural geometry",
+          "mappedTo": {
+            "componentId": "mode-button"
+          },
+          "evidenceRefs": [
+            "front.png",
+            "side.png",
+            "back.png"
+          ]
+        },
+        {
+          "id": "right-power-button",
+          "zone": "top",
+          "scale": "micro",
+          "observation": "small layered power button on the front-right control strip",
+          "implementation": "separate procedural geometry",
+          "mappedTo": {
+            "componentId": "power-button"
+          },
+          "evidenceRefs": [
+            "front.png",
+            "side.png",
+            "back.png"
+          ]
+        },
+        {
+          "id": "plus-minus-marks",
+          "zone": "top",
+          "scale": "micro",
+          "observation": "minus and plus glyphs flanking the rotary knob",
+          "implementation": "separate procedural geometry",
+          "mappedTo": {
+            "componentId": "control-glyphs"
+          },
+          "evidenceRefs": [
+            "front.png",
+            "side.png",
+            "back.png"
+          ]
+        },
+        {
+          "id": "right-side-vent-array",
+          "zone": "right-side",
+          "scale": "micro",
+          "observation": "nine narrow vertical ventilation slots in the right side wall",
+          "implementation": "separate procedural geometry",
+          "mappedTo": {
+            "componentId": "side-vents"
+          },
+          "evidenceRefs": [
+            "front.png",
+            "side.png",
+            "back.png"
+          ]
+        },
+        {
+          "id": "mint-lower-band",
+          "zone": "top",
+          "scale": "meso",
+          "observation": "muted mint-green lower enclosure visible along the side and underside edge",
+          "implementation": "separate procedural geometry",
+          "mappedTo": {
+            "componentId": "lower-band"
+          },
+          "evidenceRefs": [
+            "front.png",
+            "side.png",
+            "back.png"
+          ]
+        },
+        {
+          "id": "four-rubber-feet",
+          "zone": "top",
+          "scale": "micro",
+          "observation": "four separate round mint rubber feet near underside corners",
+          "implementation": "separate procedural geometry",
+          "mappedTo": {
+            "componentId": "foot-array"
+          },
+          "evidenceRefs": [
+            "front.png",
+            "side.png",
+            "back.png"
+          ]
+        },
+        {
+          "id": "underside-fan-grille",
+          "zone": "underside",
+          "scale": "meso",
+          "observation": "large circular fan opening formed by concentric rings and radial arc slots",
+          "implementation": "separate procedural geometry",
+          "mappedTo": {
+            "componentId": "fan-grille"
+          },
+          "evidenceRefs": [
+            "front.png",
+            "side.png",
+            "back.png"
+          ]
+        },
+        {
+          "id": "cable-storage-recess",
+          "zone": "underside",
+          "scale": "meso",
+          "observation": "rectangular underside cable trough with rounded inner corners",
+          "implementation": "separate procedural geometry",
+          "mappedTo": {
+            "componentId": "cable-trough"
+          },
+          "evidenceRefs": [
+            "front.png",
+            "side.png",
+            "back.png"
+          ]
+        },
+        {
+          "id": "coiled-power-cord",
+          "zone": "underside",
+          "scale": "micro",
+          "observation": "U-shaped stored cord ending in a compact two-pin plug",
+          "implementation": "separate procedural geometry",
+          "mappedTo": {
+            "componentId": "power-cord"
+          },
+          "evidenceRefs": [
+            "front.png",
+            "side.png",
+            "back.png"
+          ]
+        },
+        {
+          "id": "panel-seams",
+          "zone": "top",
+          "scale": "micro",
+          "observation": "fine separation lines between cooking panel, bezel, side shell and lower band",
+          "implementation": "separate procedural geometry",
+          "mappedTo": {
+            "componentId": "seam-system"
+          },
+          "evidenceRefs": [
+            "front.png",
+            "side.png",
+            "back.png"
+          ]
+        }
+      ]
+    },
+    "anatomy": {
+      "applies": false,
+      "styleHeads": 0,
+      "proportions": {
+        "headUnit": 0,
+        "torso": 0,
+        "legs": 0,
+        "shoulderWidth": 0,
+        "hipWidth": 0
+      },
+      "pose": {
+        "type": "unassessed",
+        "jointAngles": {}
+      },
+      "faceLandmarks": {
+        "eyeLine": 0,
+        "eyeSpacing": 0,
+        "noseBase": 0,
+        "mouthLine": 0,
+        "hairline": 0
+      },
+      "features": [],
+      "confidence": 0,
+      "note": "Only meaningful when objectClass.primaryDomain is character or hybrid. Set applies=true and fill from forge/stage1_intake/extract_landmarks.py. See grimoire/character/reconstruction.md and grimoire/character/likeness_maximization.md."
+    },
+    "sourceImage": "references\\intake\\induction-cooktop\\front.png"
+  },
+  "qualityContract": {
+    "qualityBar": "complex",
+    "definitionOfDone": [
+      "Three-quarter render immediately reads as the supplied low Sakura induction cooktop rather than a generic slab.",
+      "Top, side and underside views preserve the rounded-square footprint, low thickness, control placement, vent count and underside systems.",
+      "Powered motion makes induction heating obvious through knob response, concentric heat pulses and rising steam while preserving real-time performance."
+    ],
+    "minimumSpecDepth": {
+      "macroComponents": 3,
+      "mesoComponents": 8,
+      "microFeatureGroups": 5,
+      "materialLayers": 3,
+      "repetitionSystems": 1,
+      "reviewViewpoints": 4
+    },
+    "featureGroups": [
+      {
+        "id": "overall-silhouette",
+        "name": "Overall silhouette and proportions",
+        "required": true,
+        "qualityCriteria": [
+          "Bounding shape, dominant curves, negative spaces, and scale relationships are explicitly described."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "model reads as a generic placeholder instead of the reference object",
+          "major proportions are guessed without evidence"
+        ]
+      },
+      {
+        "id": "primary-structure",
+        "name": "Primary structure and hierarchy",
+        "required": true,
+        "qualityCriteria": [
+          "Major parts, joints, seams, contact points, and parent-child relationships are named before code generation."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "large visible parts are merged into one mesh",
+          "component hierarchy is too shallow for the observed complexity"
+        ]
+      },
+      {
+        "id": "attachment-joint-correctness",
+        "name": "Attachment and joint correctness",
+        "required": true,
+        "qualityCriteria": [
+          "Every visible child appendage, branch, limb, handle, connector, tube, cable, horn, wing, leg, or hinged part has an attachment contract with parent socket, localStart/localEnd, contact type, embed/overlap, and gap tolerance."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "child part root floats away from the parent",
+          "branch/limb/tube is centered in space instead of pivoting from its root",
+          "parent-child transform mixes world and local coordinates"
+        ]
+      },
+      {
+        "id": "surface-material-response",
+        "name": "Surface material response",
+        "required": true,
+        "qualityCriteria": [
+          "Albedo zones, roughness, normal/bump/displacement intent, cavity dirt, edge wear, and local overrides are specified where visible.",
+          "Important materials define independent albedo, roughness, height/normal, and AO responses instead of reusing one texture for unrelated PBR channels.",
+          "Surface response is decomposed into macro, meso, and micro frequency bands with scale and amplitude tied to object scale."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "surface looks like flat plastic",
+          "local material variation is missing or not tied to image evidence"
+        ]
+      },
+      {
+        "id": "reference-lookdev",
+        "name": "Reference color, material, and lighting response",
+        "required": true,
+        "qualityCriteria": [
+          "Material-pass names the reference-derived albedo palette, roughness variation, tactile normal/bump/displacement response, and local masks.",
+          "When a source image is available, run reference PBR extraction and require confidence >= 0.7 before treating maps as implementation-ready.",
+          "Lighting-pass names key/fill/rim or environment light, exposure, tone mapping, background, and contact shadow behavior.",
+          "Neutral, grazing-angle, and reference-matched renders prove that surface relief survives relighting and is not painted into albedo."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "model has acceptable shape but reads as flat shaded or plastic",
+          "colors are a generic average instead of reference-observed local color zones",
+          "lighting is evenly ambient and cannot reproduce the source value range"
+        ]
+      }
+    ],
+    "visualDeltaChecks": [
+      "top footprint width-to-depth and corner radius",
+      "slab thickness and mint lower-band height",
+      "heating-zone diameter and control-strip spacing",
+      "nine side vents and four foot positions",
+      "underside fan-grille and cable-recess layout",
+      "glass-ceramic versus plastic material response"
+    ],
+    "antiShallowSpecRules": [
+      "Do not proceed to code if qualityContract.qualityBar is unassessed.",
+      "Do not proceed to code if the spec only contains a root component for a moderate or complex object.",
+      "Do not proceed to code if required featureGroups are not represented by componentTree, materials, or repetitionSystems.",
+      "Do not proceed to code if visible local features are described only in prose and not attached to components/materials/evidenceRefs.",
+      "Do not proceed past structural-pass if attached child parts lack attachment.parentSocket, localStart, localEnd, embedDepth/overlap, and gapTolerance.",
+      "Do not pass material look-dev when albedo is reused as roughness, height, normal, or AO.",
+      "Do not pass material look-dev without macro, meso, and micro surface frequency bands for close-up materials.",
+      "Do not pass reference-fidelity material look-dev from a source image without usable referencePbr maps or an explicit documented limitation.",
+      "Do not patch a spec with extracted PBR maps when extraction confidence is below the target threshold unless the user explicitly accepts lower fidelity.",
+      "Do not place adjacent separate-geometry parts below 0.02 world-unit seam overlap (source: grimoire/build/geometry_patterns.md).",
+      "Do not satisfy raised or recessed relief, fasteners, or grip structure with a map alone when the feature affects form; use geometry or displacement (source: grimoire/build/geometry_patterns.md)."
+    ]
+  },
+  "authoringInstruction": "Fill observed object class, complexity reasoning, featureGroups, visualDeltaChecks, and unknowns before generating or implementing ObjectSculptSpec.",
+  "localSpecSearch": {
+    "collection": "core_3d",
+    "query": "SAKURA compact induction cooktop induction cooktop enclosure glass ceramic fan grille controls",
+    "index": {
+      "status": "hit",
+      "reason": "current",
+      "fingerprint": "6857e5ab528b42ac12f4f411f862610a0bffce8e47aee3610a7603c318072fe8"
+    },
+    "matches": [
+      {
+        "record_id": "core.pbr-opacity-alpha",
+        "file_path": "docs/raw/img2threejs-skill-dataset.json",
+        "heading": null,
+        "key_path": "categories.material_pbr[8]",
+        "score": 6.173944048162,
+        "snippets": [
+          "Controls material transparency and blend mode; in CS2 workflows the alpha channel of Base Color is repurposed as a non-transparency data channel. Kiểm soát độ trong suốt và chế độ blend của vật liệu; trong quy trình CS2, kênh alpha của Base ..."
+        ],
+        "source_refs": [
+          {
+            "path": "docs/raw/img2threejs-skill-dataset.json",
+            "heading": null,
+            "key_path": "categories.material_pbr[8]"
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "docs/raw/img2threejs-skill-dataset.json",
+            "note": "img2threejs NotebookLM research distillation"
+          }
+        ]
+      }
+    ]
+  }
+}

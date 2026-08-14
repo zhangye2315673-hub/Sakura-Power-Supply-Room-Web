@@ -1,0 +1,11 @@
+{
+  "requestedProvider": "openai-compatible-comfly",
+  "requestedModel": "gpt-image-2",
+  "baseUrl": "https://ai.comfly.org/v1",
+  "quality": "high",
+  "size": "2048x2048",
+  "status": "conditional-fallback",
+  "reason": "OPENAI_API_KEY and a project-local secure credential source were unavailable in this process.",
+  "fallback": "Archived v1 front, side, back and three-quarter runtime captures were admitted as conditional modeling evidence.",
+  "keyStored": false
+}

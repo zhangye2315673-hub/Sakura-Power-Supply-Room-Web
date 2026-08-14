@@ -1,0 +1,91 @@
+{
+  "sourceImage": "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake\\desktop-computer\\front.png",
+  "zonesDir": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\desktop-computer\\zones\\front",
+  "detailInventory": {
+    "scanMethod": "component-zones",
+    "targetMinDetails": 16,
+    "details": [
+      {
+        "id": "monitor",
+        "kind": "",
+        "description": "",
+        "region": {
+          "x": 0.05,
+          "y": 0.27,
+          "width": 0.63,
+          "height": 0.3,
+          "units": "normalized"
+        },
+        "scale": "",
+        "affects": "",
+        "mapsTo": {
+          "type": "",
+          "ref": ""
+        },
+        "evidenceRef": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\desktop-computer\\zones\\front\\monitor.png",
+        "confidence": 0.0
+      },
+      {
+        "id": "tower",
+        "kind": "",
+        "description": "",
+        "region": {
+          "x": 0.72,
+          "y": 0.29,
+          "width": 0.28,
+          "height": 0.33,
+          "units": "normalized"
+        },
+        "scale": "",
+        "affects": "",
+        "mapsTo": {
+          "type": "",
+          "ref": ""
+        },
+        "evidenceRef": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\desktop-computer\\zones\\front\\tower.png",
+        "confidence": 0.0
+      },
+      {
+        "id": "keyboard",
+        "kind": "",
+        "description": "",
+        "region": {
+          "x": 0.05,
+          "y": 0.6,
+          "width": 0.63,
+          "height": 0.13,
+          "units": "normalized"
+        },
+        "scale": "",
+        "affects": "",
+        "mapsTo": {
+          "type": "",
+          "ref": ""
+        },
+        "evidenceRef": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\desktop-computer\\zones\\front\\keyboard.png",
+        "confidence": 0.0
+      },
+      {
+        "id": "mouse",
+        "kind": "",
+        "description": "",
+        "region": {
+          "x": 0.67,
+          "y": 0.61,
+          "width": 0.18,
+          "height": 0.12,
+          "units": "normalized"
+        },
+        "scale": "",
+        "affects": "",
+        "mapsTo": {
+          "type": "",
+          "ref": ""
+        },
+        "evidenceRef": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\desktop-computer\\zones\\front\\mouse.png",
+        "confidence": 0.0
+      }
+    ]
+  },
+  "authoringInstruction": "Open each zone crop under zonesDir and replace every detail stub's kind, description, scale, affects, mapsTo, and confidence with what is actually observed. Add more detail entries per zone if a single zone contains multiple distinct marks; do not leave stubs unfilled or unlinked (mapsTo must reference a real component.localFeatures or material.localOverrides entry)."
+}

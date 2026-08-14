@@ -1,0 +1,5337 @@
+{
+  "targetName": "SAKURA Radio v2",
+  "targetId": "radio-v2",
+  "schemaVersion": "2.1",
+  "terminologyProfile": {
+    "domain": "real-time procedural Three.js asset",
+    "geometryTerms": [
+      "silhouette",
+      "topology",
+      "primitive",
+      "bevel",
+      "chamfer",
+      "taper",
+      "bend",
+      "boolean cut",
+      "edge loop",
+      "surface normal",
+      "displacement"
+    ],
+    "materialTerms": [
+      "albedo",
+      "baseColor",
+      "roughness",
+      "metalness",
+      "normal map",
+      "bump map",
+      "ambient occlusion",
+      "cavity dirt",
+      "edge wear",
+      "clearcoat"
+    ],
+    "lightingTerms": [
+      "key light",
+      "fill light",
+      "rim light",
+      "HDRI/environment reflection",
+      "contact shadow"
+    ],
+    "descriptionRule": "Use measurable 3D graphics terms. Avoid vague words unless they are paired with concrete geometry/material/shader parameters."
+  },
+  "sourceImage": "references/intake-v2/radio/views/front.png",
+  "referenceCamera": {
+    "solved": false,
+    "fovDegrees": 40,
+    "aspect": 1,
+    "orientation": {
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0
+    },
+    "positionHint": [
+      0,
+      0,
+      3
+    ],
+    "note": "For likeness work, solve the reference camera (forge/stage1_intake/solve_camera_pose.py) so the review render aligns with the photo and the reference can be projected. Confirm by overlay review."
+  },
+  "suitability": "conditional",
+  "scores": {
+    "object_isolation": 0,
+    "silhouette_readability": 0,
+    "depth_inference": 0,
+    "primitive_decomposition": 0,
+    "material_procedurality": 0,
+    "occlusion_risk": 0,
+    "interaction_fit": 0
+  },
+  "preSpecAssessment": {
+    "objectClass": {
+      "primaryType": "compact tabletop radio receiver",
+      "primaryDomain": "object",
+      "formLanguage": [
+        "exaggerated-low-poly",
+        "faceted-hard-surface",
+        "Sakura-toon",
+        "stable-uneven-ink"
+      ],
+      "structureKind": [
+        "compound enclosure",
+        "recessed speaker",
+        "frequency display",
+        "telescopic antenna"
+      ],
+      "motionPotential": [
+        "speaker pulse",
+        "frequency cursor",
+        "dual knob turn",
+        "antenna hinge and extension"
+      ],
+      "materialFamilies": [
+        "warm cream shell",
+        "Sakura accent shell",
+        "dark cavity",
+        "cool glass",
+        "low-reflectance metal",
+        "rubber feet"
+      ],
+      "notes": "Front, side and back crops are admitted v1 evidence. Hidden electronics and antenna internals remain inferred; v1 runtime contract owns all pivots, sockets, package bounds and reset state."
+    },
+    "complexity": {
+      "tier": "complex",
+      "scores": {
+        "silhouetteComplexity": 2,
+        "componentCount": 3,
+        "hierarchyDepth": 3,
+        "repetitionDensity": 3,
+        "materialLayerCount": 3,
+        "localDetailDensity": 3,
+        "occlusionRisk": 1,
+        "actionReadinessNeed": 3
+      },
+      "estimatedCounts": {
+        "macroComponents": 5,
+        "mesoComponents": 18,
+        "microFeatureGroups": 12,
+        "materialLayers": 7,
+        "repetitionSystems": 4
+      },
+      "reasoning": [
+        "Wide faceted shell, nested speaker/display layers, unequal controls, rear vent repetition and three-stage antenna require an action-ready compound hierarchy."
+      ]
+    },
+    "specDepthDecision": {
+      "requiredDepth": "complex",
+      "minimumComponentLevels": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "needsRepetitionSystems": true,
+      "needsMaterialLocalOverrides": true,
+      "needsMultipleReviewViews": true,
+      "needsActionReadyHierarchy": true,
+      "rationale": "复杂度来自可动天线与旋钮、三组重复细节和五类表面，不来自单纯面数。"
+    },
+    "unknownsToResolveBeforeImplementation": [],
+    "detailInventory": {
+      "scanMethod": "three-view component zones",
+      "targetMinDetails": 16,
+      "note": "Every identity detail maps to a named component or material override.",
+      "details": [
+        {
+          "id": "radio-v2-detail-1",
+          "kind": "contour",
+          "description": "Wide 12-edge cream shell with shallow planar shoulder cuts",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "faceted-shell"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.98
+        },
+        {
+          "id": "radio-v2-detail-2",
+          "kind": "seam",
+          "description": "Inset Sakura front fascia with continuous lip",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "accent-front"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.97
+        },
+        {
+          "id": "radio-v2-detail-3",
+          "kind": "bevel",
+          "description": "Raised left speaker frame and deep cavity",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "speaker-frame"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.98
+        },
+        {
+          "id": "radio-v2-detail-4",
+          "kind": "ridge",
+          "description": "Sixteen horizontal grille slats remain individually readable",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "speaker-slats"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.97
+        },
+        {
+          "id": "radio-v2-detail-5",
+          "kind": "gloss",
+          "description": "Upper-right framed frequency window with cool glass",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "frequency-window"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.96
+        },
+        {
+          "id": "radio-v2-detail-6",
+          "kind": "groove",
+          "description": "Nine alternating tick marks establish scale",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "frequency-ticks"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.95
+        },
+        {
+          "id": "radio-v2-detail-7",
+          "kind": "ridge",
+          "description": "Pink crosshair cursor remains on the animated pointer pivot",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "crosshair-cursor"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.96
+        },
+        {
+          "id": "radio-v2-detail-8",
+          "kind": "contour",
+          "description": "Unequal volume and tuning knobs with stepped concentric rings",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "dual-knobs"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.98
+        },
+        {
+          "id": "radio-v2-detail-9",
+          "kind": "gloss",
+          "description": "Small dark ready dot and embedded Sakura status point",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "ready-indicator"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.82
+        },
+        {
+          "id": "radio-v2-detail-10",
+          "kind": "seam",
+          "description": "Inset rear service panel with stable border",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "rear-panel"
+          },
+          "evidenceRef": "back-view",
+          "confidence": 0.96
+        },
+        {
+          "id": "radio-v2-detail-11",
+          "kind": "hole",
+          "description": "Four-by-four rear vent array remains separate geometry",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "rear-vents"
+          },
+          "evidenceRef": "back-view",
+          "confidence": 0.97
+        },
+        {
+          "id": "radio-v2-detail-12",
+          "kind": "fastener",
+          "description": "Two low-poly rear fastener caps",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "rear-fasteners"
+          },
+          "evidenceRef": "back-view",
+          "confidence": 0.91
+        },
+        {
+          "id": "radio-v2-detail-13",
+          "kind": "fastener",
+          "description": "Four grounded rubber feet retain floor contact",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "foot-array"
+          },
+          "evidenceRef": "side-view",
+          "confidence": 0.92
+        },
+        {
+          "id": "radio-v2-detail-14",
+          "kind": "bevel",
+          "description": "Back-right hinge bracket and axle",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "antenna-bracket"
+          },
+          "evidenceRef": "back-view",
+          "confidence": 0.94
+        },
+        {
+          "id": "radio-v2-detail-15",
+          "kind": "contour",
+          "description": "Three nested tapered antenna segments with collars",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "antenna-sections"
+          },
+          "evidenceRef": "side-view",
+          "confidence": 0.98
+        },
+        {
+          "id": "radio-v2-detail-16",
+          "kind": "contour",
+          "description": "Persistent terminal cap tracks the highest section",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "antenna-tip"
+          },
+          "evidenceRef": "side-view",
+          "confidence": 0.97
+        }
+      ]
+    },
+    "anatomy": {
+      "applies": false,
+      "styleHeads": 0,
+      "proportions": {
+        "headUnit": 0,
+        "torso": 0,
+        "legs": 0,
+        "shoulderWidth": 0,
+        "hipWidth": 0
+      },
+      "pose": {
+        "type": "unassessed",
+        "jointAngles": {}
+      },
+      "faceLandmarks": {
+        "eyeLine": 0,
+        "eyeSpacing": 0,
+        "noseBase": 0,
+        "mouthLine": 0,
+        "hairline": 0
+      },
+      "features": [],
+      "confidence": 0,
+      "note": "Only meaningful when objectClass.primaryDomain is character or hybrid. Set applies=true and fill from forge/stage1_intake/extract_landmarks.py. See grimoire/character/reconstruction.md and grimoire/character/likeness_maximization.md."
+    },
+    "sourceImage": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\radio\\view-crops\\front.png"
+  },
+  "qualityContract": {
+    "qualityBar": "complex",
+    "definitionOfDone": [
+      "Radio identity reads from front, side, back and three-quarter views with a faceted low-poly shell, recessed speaker, display, unequal controls and antenna.",
+      "All existing animation pivots, sockets, parent paths, package bounds, ground contact and exact reset remain unchanged.",
+      "Sakura Toon uses three bands and stable uneven ink tiers: 0.0048, 0.0041 and 0.0033 with +/-18% object-space variation."
+    ],
+    "minimumSpecDepth": {
+      "macroComponents": 3,
+      "mesoComponents": 10,
+      "microFeatureGroups": 7,
+      "materialLayers": 5,
+      "repetitionSystems": 3,
+      "reviewViewpoints": 4
+    },
+    "featureGroups": [
+      {
+        "id": "overall-silhouette",
+        "name": "Overall silhouette and proportions",
+        "required": true,
+        "qualityCriteria": [
+          "Bounding shape, dominant curves, negative spaces, and scale relationships are explicitly described."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "model reads as a generic placeholder instead of the reference object",
+          "major proportions are guessed without evidence"
+        ]
+      },
+      {
+        "id": "primary-structure",
+        "name": "Primary structure and hierarchy",
+        "required": true,
+        "qualityCriteria": [
+          "Major parts, joints, seams, contact points, and parent-child relationships are named before code generation."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "large visible parts are merged into one mesh",
+          "component hierarchy is too shallow for the observed complexity"
+        ]
+      },
+      {
+        "id": "attachment-joint-correctness",
+        "name": "Attachment and joint correctness",
+        "required": true,
+        "qualityCriteria": [
+          "Every visible child appendage, branch, limb, handle, connector, tube, cable, horn, wing, leg, or hinged part has an attachment contract with parent socket, localStart/localEnd, contact type, embed/overlap, and gap tolerance."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "child part root floats away from the parent",
+          "branch/limb/tube is centered in space instead of pivoting from its root",
+          "parent-child transform mixes world and local coordinates"
+        ]
+      },
+      {
+        "id": "surface-material-response",
+        "name": "Surface material response",
+        "required": true,
+        "qualityCriteria": [
+          "Albedo zones, roughness, normal/bump/displacement intent, cavity dirt, edge wear, and local overrides are specified where visible.",
+          "Important materials define independent albedo, roughness, height/normal, and AO responses instead of reusing one texture for unrelated PBR channels.",
+          "Surface response is decomposed into macro, meso, and micro frequency bands with scale and amplitude tied to object scale."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "surface looks like flat plastic",
+          "local material variation is missing or not tied to image evidence"
+        ]
+      },
+      {
+        "id": "reference-lookdev",
+        "name": "Reference color, material, and lighting response",
+        "required": true,
+        "qualityCriteria": [
+          "Material-pass names the reference-derived albedo palette, roughness variation, tactile normal/bump/displacement response, and local masks.",
+          "When a source image is available, run reference PBR extraction and require confidence >= 0.7 before treating maps as implementation-ready.",
+          "Lighting-pass names key/fill/rim or environment light, exposure, tone mapping, background, and contact shadow behavior.",
+          "Neutral, grazing-angle, and reference-matched renders prove that surface relief survives relighting and is not painted into albedo."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "model has acceptable shape but reads as flat shaded or plastic",
+          "colors are a generic average instead of reference-observed local color zones",
+          "lighting is evenly ambient and cannot reproduce the source value range"
+        ]
+      }
+    ],
+    "visualDeltaChecks": [
+      "silhouette and negative-space delta",
+      "component hierarchy depth delta",
+      "repetition density and distribution delta",
+      "material albedo/roughness/normal response delta",
+      "local feature placement and scale delta"
+    ],
+    "antiShallowSpecRules": [
+      "Do not proceed to code if qualityContract.qualityBar is unassessed.",
+      "Do not proceed to code if the spec only contains a root component for a moderate or complex object.",
+      "Do not proceed to code if required featureGroups are not represented by componentTree, materials, or repetitionSystems.",
+      "Do not proceed to code if visible local features are described only in prose and not attached to components/materials/evidenceRefs.",
+      "Do not proceed past structural-pass if attached child parts lack attachment.parentSocket, localStart, localEnd, embedDepth/overlap, and gapTolerance.",
+      "Do not pass material look-dev when albedo is reused as roughness, height, normal, or AO.",
+      "Do not pass material look-dev without macro, meso, and micro surface frequency bands for close-up materials.",
+      "Do not pass reference-fidelity material look-dev from a source image without usable referencePbr maps or an explicit documented limitation.",
+      "Do not patch a spec with extracted PBR maps when extraction confidence is below the target threshold unless the user explicitly accepts lower fidelity.",
+      "Do not place adjacent separate-geometry parts below 0.02 world-unit seam overlap (source: grimoire/build/geometry_patterns.md).",
+      "Do not satisfy raised or recessed relief, fasteners, or grip structure with a map alone when the feature affects form; use geometry or displacement (source: grimoire/build/geometry_patterns.md).",
+      "Adjacent components must overlap by at least 0.02 world units at shared seams (source: grimoire/build/geometry_patterns.md).",
+      "Raised or recessed relief and fasteners must be geometry, instanced micro-parts, or displacement; a map alone is an approximation (source: grimoire/build/geometry_patterns.md)."
+    ],
+    "mustNotDo": [
+      "Do not proceed to code if qualityContract.qualityBar is unassessed.",
+      "Do not proceed to code if the spec only contains a root component for a moderate or complex object.",
+      "Do not proceed to code if required featureGroups are not represented by componentTree, materials, or repetitionSystems.",
+      "Do not proceed to code if visible local features are described only in prose and not attached to components/materials/evidenceRefs.",
+      "Do not proceed past structural-pass if attached child parts lack attachment.parentSocket, localStart, localEnd, embedDepth/overlap, and gapTolerance.",
+      "Do not pass material look-dev when albedo is reused as roughness, height, normal, or AO.",
+      "Do not pass material look-dev without macro, meso, and micro surface frequency bands for close-up materials.",
+      "Do not pass reference-fidelity material look-dev from a source image without usable referencePbr maps or an explicit documented limitation.",
+      "Do not patch a spec with extracted PBR maps when extraction confidence is below the target threshold unless the user explicitly accepts lower fidelity.",
+      "Do not place adjacent separate-geometry parts below 0.02 world-unit seam overlap (source: grimoire/build/geometry_patterns.md).",
+      "Do not satisfy raised or recessed relief, fasteners, or grip structure with a map alone when the feature affects form; use geometry or displacement (source: grimoire/build/geometry_patterns.md).",
+      "Adjacent components must overlap by at least 0.02 world units at shared seams (source: grimoire/build/geometry_patterns.md).",
+      "Raised or recessed relief and fasteners must be geometry, instanced micro-parts, or displacement; a map alone is an approximation (source: grimoire/build/geometry_patterns.md)."
+    ],
+    "mustMatch": [
+      "wide cream shell and Sakura inset fascia",
+      "left speaker cavity and 16 slats",
+      "upper-right frequency window and crosshair cursor",
+      "unequal dual knobs",
+      "rear 4x4 vents and four feet",
+      "three-stage hinged antenna and persistent tip"
+    ],
+    "mustNotChange": [
+      "radio-antenna-hinge-pivot",
+      "radio-speaker-socket",
+      "radio-antenna-root-socket",
+      "all radio node names and animation rest transforms",
+      "v1 full-tree Box3 and ground height"
+    ]
+  },
+  "qualityTargets": {
+    "targetFidelity": 0.7,
+    "mustMatch": [
+      "macro silhouette and proportions",
+      "primary material albedo/roughness response",
+      "reference-derived PBR material response at or above 0.7 confidence when source pixels are usable",
+      "most recognizable local features"
+    ],
+    "niceToHave": [
+      "micro scratches, stains, chips, and dirt masks",
+      "secondary lighting match"
+    ],
+    "fpsTarget": 60,
+    "reviewViewpoints": [
+      "front",
+      "three-quarter",
+      "side",
+      "thickness-axis",
+      "long-axis"
+    ]
+  },
+  "selfCorrectLoop": {
+    "enabled": true,
+    "visualAcceptance": {
+      "reviewer": "ai-vision",
+      "threshold": 0.7,
+      "comparisonArtifactRequired": true,
+      "layerScoresRequired": true,
+      "codePixelDiffIsAcceptanceAuthority": false,
+      "scoringRule": "AI vision must inspect a side-by-side reference/render sheet and score the current pass from 0 to 1. Pixel-diff code may assist diagnostics but cannot approve a pass.",
+      "requiredLayerScores": [
+        "silhouetteProportion",
+        "componentStructure",
+        "formDetail",
+        "materialSurface",
+        "lightingCamera"
+      ],
+      "featureReviewPolicy": {
+        "enabled": true,
+        "reviewUnit": "semantic-subsystem",
+        "maxCriticalFeaturesPerPass": 5,
+        "maxImportantFeaturesPerPass": 3,
+        "criticalDefaultThreshold": 0.8,
+        "importantAverageThreshold": 0.65,
+        "adaptiveEscalation": true,
+        "singleImagePairOnly": true,
+        "selectionRule": "Choose only the most visually salient, identity-defining, user-prioritized, or high-risk semantic systems. Group repeated parts instead of reviewing every mesh. AI vision scores every selected feature from the same full reference/render pair."
+      }
+    },
+    "reviewAfterPasses": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "surface-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "allowedActions": [
+      "continue",
+      "refine-spec",
+      "refine-code",
+      "request-input",
+      "stop"
+    ],
+    "specRefineTriggers": [
+      "missing component",
+      "wrong primitive family",
+      "wrong proportions",
+      "material layer under-specified",
+      "local feature not traceable to viewEvidence",
+      "reference ambiguity discovered during implementation"
+    ],
+    "codeRefineTriggers": [
+      "spec is adequate but generated geometry/material does not match",
+      "browser render differs from reference",
+      "performance budget exceeded",
+      "lighting hides geometry or material response"
+    ],
+    "stopCriteria": [
+      "target fidelity reached or user accepts current approximation",
+      "remaining gaps require new reference images or manual art"
+    ],
+    "screenshotPolicy": {
+      "requiredForPasses": [
+        "blockout",
+        "structural-pass",
+        "form-refinement",
+        "material-pass",
+        "surface-pass",
+        "lighting-pass",
+        "interaction-pass"
+      ],
+      "preferredCapture": "in-app-browser-screenshot",
+      "fallbackCapture": "user-supplied-screenshot-path",
+      "minimumEvidence": "Each visual pass needs a reference image, rendered screenshot, side-by-side comparison sheet, AI vision score, layer scores, and critique before choosing continue.",
+      "reviewPairRule": "Compare the same camera/viewpoint whenever possible; do not judge a front reference against a random render angle.",
+      "acceptanceAuthority": "AI vision review of the comparison sheet. Code-generated pixel similarity is not sufficient evidence."
+    }
+  },
+  "featureReviewTargets": [
+    {
+      "id": "radio-silhouette",
+      "name": "Wide shell and fascia silhouette",
+      "tier": "critical",
+      "passIds": [
+        "blockout",
+        "form-refinement"
+      ],
+      "minimumScore": 0.82,
+      "mustPass": true,
+      "componentRefs": [
+        "faceted-shell",
+        "accent-front"
+      ],
+      "evidenceRefs": [
+        "front-view",
+        "side-view"
+      ]
+    },
+    {
+      "id": "radio-identity",
+      "name": "Speaker display controls and antenna",
+      "tier": "critical",
+      "passIds": [
+        "structural-pass",
+        "material-pass"
+      ],
+      "minimumScore": 0.82,
+      "mustPass": true,
+      "componentRefs": [
+        "speaker-frame",
+        "frequency-window",
+        "dual-knobs",
+        "antenna-sections"
+      ],
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ]
+    },
+    {
+      "id": "radio-runtime",
+      "name": "Frozen pivots sockets and animation",
+      "tier": "critical",
+      "passIds": [
+        "interaction-pass",
+        "optimization-pass"
+      ],
+      "minimumScore": 0.82,
+      "mustPass": true,
+      "componentRefs": [
+        "crosshair-cursor",
+        "antenna-sections",
+        "speaker-cavity"
+      ],
+      "evidenceRefs": [
+        "front-view",
+        "side-view"
+      ]
+    },
+    {
+      "id": "radio-ink",
+      "name": "Stable tiered ink response",
+      "tier": "critical",
+      "passIds": [
+        "lighting-pass"
+      ],
+      "minimumScore": 0.82,
+      "mustPass": true,
+      "componentRefs": [
+        "faceted-shell",
+        "speaker-frame",
+        "dual-knobs"
+      ],
+      "evidenceRefs": [
+        "front-view"
+      ]
+    }
+  ],
+  "sculptPipeline": {
+    "currentPass": "complete",
+    "completedPasses": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "lastCompletedPass": "optimization-pass",
+    "blockedReason": "all build passes completed",
+    "passOrder": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "passGateMode": "locked-sequential",
+    "nextRequiredEvidence": []
+  },
+  "lookDevTargets": {
+    "qualityPriority": "reference-fidelity",
+    "materialPass": {
+      "albedoPaletteRequired": true,
+      "roughnessVariationRequired": true,
+      "normalOrBumpRequired": true,
+      "localOverridesRequired": true,
+      "minimumTextureResolution": 1024,
+      "preferredTextureResolution": 2048,
+      "independentMapChannels": [
+        "albedo",
+        "roughness",
+        "height",
+        "normal",
+        "ambient-occlusion"
+      ],
+      "requiredSurfaceFrequencyBands": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "geometryReliefRequiredWhenSilhouetteAffected": true,
+      "referencePbrExtraction": {
+        "requiredWhenSourceImagePresent": true,
+        "targetThreshold": 0.7,
+        "stopOnLowConfidence": true,
+        "script": "forge/stage1_intake/extract_pbr_evidence.py",
+        "acceptedLimitation": "single-image extraction is reference-derived inference, not exact photogrammetry"
+      },
+      "mustAvoid": [
+        "single flat albedo per material",
+        "uniform roughness",
+        "albedo texture reused as roughness/height/normal/AO",
+        "single-frequency random noise",
+        "plastic-looking smooth bark, stone, cloth, foliage, or aged material",
+        "local color/detail described only in prose without material masks",
+        "claiming exact PBR recovery when confidence is below the target threshold"
+      ]
+    },
+    "lightingPass": {
+      "requiredTerms": [
+        "key light",
+        "fill light",
+        "rim or environment light",
+        "exposure",
+        "tone mapping",
+        "background",
+        "contact shadow"
+      ],
+      "mustAvoid": [
+        "ambient-only lighting",
+        "flat value range",
+        "missing contact shadow",
+        "reference lighting copied without separating material readability"
+      ]
+    },
+    "screenshotReview": [
+      "Compare albedo palette and local color zones.",
+      "Compare roughness/normal/bump response under light.",
+      "Compare cavity dirt, edge wear, stains, moss, scratches, or other local masks.",
+      "Compare key/fill/rim structure, exposure, tone mapping, background, and contact shadows.",
+      "Capture a neutral-light render to verify material readability without reference lighting.",
+      "Capture a grazing-light close-up to expose flat normals, uniform roughness, tiling, and plastic highlights.",
+      "Capture a reference-matched render from the same camera framing as the source."
+    ]
+  },
+  "actionReadiness": {
+    "contract": "Every macro/meso component should be generated as a stable named Object3D pivot node with a mesh child, action metadata, optional sockets, collider proxy, and destruction metadata.",
+    "defaultRigType": "action-ready-static-rig",
+    "rootMotionNode": "root",
+    "requiredComponentFields": [
+      "id",
+      "parent",
+      "transform",
+      "attachment for child appendages, connectors, limbs, tubes, handles, legs, horns, wings, branches, or cables",
+      "actionProfile.animationRole",
+      "actionProfile.pivot",
+      "actionProfile.collider",
+      "actionProfile.destruction"
+    ],
+    "transformChannels": [
+      "translate",
+      "rotate",
+      "scale",
+      "bend",
+      "twist",
+      "detach",
+      "visibility",
+      "material-state"
+    ],
+    "authoringRules": [
+      "Do not collapse independently movable parts into one mesh.",
+      "Put transforms on component pivot groups, not only on raw meshes.",
+      "For attached child parts, put the pivot at the semantic root/socket and build visible geometry from localStart to localEnd.",
+      "Represent hinge, socket, detachable, and breakable intent even when no animation is implemented yet.",
+      "Use simplified collider proxies for runtime physics instead of visual mesh colliders by default."
+    ],
+    "destructionPolicy": {
+      "defaultBreakable": false,
+      "fractureGroupNaming": "Use stable semantic names such as body-shell, left-hinge, glass-panel, branch-segment.",
+      "debrisStrategy": "Prefer detachable component groups and a small number of procedural fragments over random mesh explosion."
+    }
+  },
+  "assumptions": [],
+  "coordinateFrame": {
+    "front": "+Z faces speaker and controls",
+    "up": "+Y with floor at y=0",
+    "scaleReference": "v1 shell width 2.8, height 1.62 at y=0.9, depth 0.8; antenna remains outside authored shell envelope only during frozen animation extension"
+  },
+  "silhouette": {
+    "boundingShape": "",
+    "aspectRatios": [],
+    "symmetry": "",
+    "dominantCurves": [],
+    "negativeSpaces": [],
+    "landmarks": []
+  },
+  "viewEvidence": [
+    {
+      "id": "full-object",
+      "view": "primary",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [],
+      "confidence": 0.5
+    }
+  ],
+  "componentTree": [
+    {
+      "id": "root",
+      "name": "root",
+      "level": "macro",
+      "role": "assembled radio root",
+      "importance": 1,
+      "confidence": 0.94,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "assembled radio root is authored as independent named low-poly geometry.",
+      "geometryDescriptor": {
+        "topologyIntent": "assembled radio root",
+        "edgeTreatment": {
+          "type": "shallow bevel",
+          "bevelRadius": 0.04,
+          "segments": 2
+        },
+        "deformationStack": [],
+        "uvStrategy": "procedural none",
+        "normalStrategy": "faceted vertex normals"
+      },
+      "parent": null,
+      "attachment": null,
+      "dimensions": {
+        "width": 2.8,
+        "height": 2.436,
+        "depth": 1.213,
+        "units": "world",
+        "confidence": 0.9
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static",
+        "pivot": {
+          "mode": "authored-node",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.95
+        },
+        "transformChannels": {
+          "translate": false,
+          "rotate": false,
+          "scale": false,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "none",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Visual-only component; root collider is frozen."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "root",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "cream-shell"
+        }
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "root.contour",
+        "root.material-zone"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(241, 233, 217, 1)",
+        "secondaryAlbedo": "rgba(232, 174, 196, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9,
+        "roughness": 0.55,
+        "toonBands": 3
+      },
+      "surfaceDetail": {
+        "macroRoughness": 0.12,
+        "microRoughness": 0.02,
+        "bumpAmplitude": 0,
+        "normalPattern": "faceted normals",
+        "displacementPattern": "",
+        "occlusionPattern": "contact seams",
+        "edgeWearPattern": "",
+        "notes": "Clean stylized appliance surface."
+      },
+      "evidenceRefs": [
+        "full-object"
+      ],
+      "details": [
+        {
+          "id": "root.contour",
+          "kind": "contour",
+          "evidenceRefs": [
+            "full-object"
+          ]
+        }
+      ],
+      "fidelityTier": "v2"
+    },
+    {
+      "id": "faceted-shell",
+      "name": "faceted-shell",
+      "level": "macro",
+      "role": "wide cream shell",
+      "importance": 1,
+      "confidence": 0.94,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "wide cream shell is authored as independent named low-poly geometry.",
+      "geometryDescriptor": {
+        "topologyIntent": "wide cream shell",
+        "edgeTreatment": {
+          "type": "shallow bevel",
+          "bevelRadius": 0.04,
+          "segments": 2
+        },
+        "deformationStack": [],
+        "uvStrategy": "procedural none",
+        "normalStrategy": "faceted vertex normals"
+      },
+      "parent": "root",
+      "attachment": {
+        "parentSocket": "root",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.03
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 0.5,
+        "height": 0.4,
+        "depth": 0.1,
+        "units": "world",
+        "confidence": 0.9
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static",
+        "pivot": {
+          "mode": "authored-node",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.95
+        },
+        "transformChannels": {
+          "translate": false,
+          "rotate": false,
+          "scale": false,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "none",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Visual-only component; root collider is frozen."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "faceted-shell",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "cream-shell"
+        }
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "faceted-shell.contour",
+        "faceted-shell.material-zone"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(241, 233, 217, 1)",
+        "secondaryAlbedo": "rgba(232, 174, 196, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9,
+        "roughness": 0.55,
+        "toonBands": 3
+      },
+      "surfaceDetail": {
+        "macroRoughness": 0.12,
+        "microRoughness": 0.02,
+        "bumpAmplitude": 0,
+        "normalPattern": "faceted normals",
+        "displacementPattern": "",
+        "occlusionPattern": "contact seams",
+        "edgeWearPattern": "",
+        "notes": "Clean stylized appliance surface."
+      },
+      "evidenceRefs": [
+        "full-object"
+      ],
+      "details": [
+        {
+          "id": "faceted-shell.contour",
+          "kind": "contour",
+          "evidenceRefs": [
+            "full-object"
+          ]
+        }
+      ],
+      "fidelityTier": "v2"
+    },
+    {
+      "id": "accent-front",
+      "name": "accent-front",
+      "level": "macro",
+      "role": "inset Sakura fascia",
+      "importance": 1,
+      "confidence": 0.94,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "inset Sakura fascia is authored as independent named low-poly geometry.",
+      "geometryDescriptor": {
+        "topologyIntent": "inset Sakura fascia",
+        "edgeTreatment": {
+          "type": "shallow bevel",
+          "bevelRadius": 0.04,
+          "segments": 2
+        },
+        "deformationStack": [],
+        "uvStrategy": "procedural none",
+        "normalStrategy": "faceted vertex normals"
+      },
+      "parent": "faceted-shell",
+      "attachment": {
+        "parentSocket": "faceted-shell",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.03
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 0.5,
+        "height": 0.4,
+        "depth": 0.1,
+        "units": "world",
+        "confidence": 0.9
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static",
+        "pivot": {
+          "mode": "authored-node",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.95
+        },
+        "transformChannels": {
+          "translate": false,
+          "rotate": false,
+          "scale": false,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "none",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Visual-only component; root collider is frozen."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "accent-front",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "cream-shell"
+        }
+      },
+      "material": "sakura-accent",
+      "materialLayers": [
+        "sakura-accent"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "accent-front.contour",
+        "accent-front.material-zone"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(241, 233, 217, 1)",
+        "secondaryAlbedo": "rgba(232, 174, 196, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9,
+        "roughness": 0.55,
+        "toonBands": 3
+      },
+      "surfaceDetail": {
+        "macroRoughness": 0.12,
+        "microRoughness": 0.02,
+        "bumpAmplitude": 0,
+        "normalPattern": "faceted normals",
+        "displacementPattern": "",
+        "occlusionPattern": "contact seams",
+        "edgeWearPattern": "",
+        "notes": "Clean stylized appliance surface."
+      },
+      "evidenceRefs": [
+        "full-object"
+      ],
+      "details": [
+        {
+          "id": "accent-front.contour",
+          "kind": "contour",
+          "evidenceRefs": [
+            "full-object"
+          ]
+        }
+      ],
+      "fidelityTier": "v2"
+    },
+    {
+      "id": "speaker-frame",
+      "name": "speaker-frame",
+      "level": "meso",
+      "role": "raised speaker bezel",
+      "importance": 1,
+      "confidence": 0.94,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "raised speaker bezel is authored as independent named low-poly geometry.",
+      "geometryDescriptor": {
+        "topologyIntent": "raised speaker bezel",
+        "edgeTreatment": {
+          "type": "shallow bevel",
+          "bevelRadius": 0.04,
+          "segments": 2
+        },
+        "deformationStack": [],
+        "uvStrategy": "procedural none",
+        "normalStrategy": "faceted vertex normals"
+      },
+      "parent": "accent-front",
+      "attachment": {
+        "parentSocket": "accent-front",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.03
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 0.5,
+        "height": 0.4,
+        "depth": 0.1,
+        "units": "world",
+        "confidence": 0.9
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static",
+        "pivot": {
+          "mode": "authored-node",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.95
+        },
+        "transformChannels": {
+          "translate": false,
+          "rotate": false,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "none",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Visual-only component; root collider is frozen."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "speaker-frame",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "cream-shell"
+        }
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "speaker-frame.contour",
+        "speaker-frame.material-zone"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(241, 233, 217, 1)",
+        "secondaryAlbedo": "rgba(232, 174, 196, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9,
+        "roughness": 0.55,
+        "toonBands": 3
+      },
+      "surfaceDetail": {
+        "macroRoughness": 0.12,
+        "microRoughness": 0.02,
+        "bumpAmplitude": 0,
+        "normalPattern": "faceted normals",
+        "displacementPattern": "",
+        "occlusionPattern": "contact seams",
+        "edgeWearPattern": "",
+        "notes": "Clean stylized appliance surface."
+      },
+      "evidenceRefs": [
+        "full-object"
+      ],
+      "details": [
+        {
+          "id": "speaker-frame.contour",
+          "kind": "contour",
+          "evidenceRefs": [
+            "full-object"
+          ]
+        }
+      ],
+      "fidelityTier": "v2"
+    },
+    {
+      "id": "speaker-cavity",
+      "name": "speaker-cavity",
+      "level": "meso",
+      "role": "recessed acoustic cavity",
+      "importance": 0.8,
+      "confidence": 0.94,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "recessed acoustic cavity is authored as independent named low-poly geometry.",
+      "geometryDescriptor": {
+        "topologyIntent": "recessed acoustic cavity",
+        "edgeTreatment": {
+          "type": "shallow bevel",
+          "bevelRadius": 0.04,
+          "segments": 2
+        },
+        "deformationStack": [],
+        "uvStrategy": "procedural none",
+        "normalStrategy": "faceted vertex normals"
+      },
+      "parent": "speaker-frame",
+      "attachment": {
+        "parentSocket": "speaker-frame",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.03
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 0.5,
+        "height": 0.4,
+        "depth": 0.1,
+        "units": "world",
+        "confidence": 0.9
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static",
+        "pivot": {
+          "mode": "authored-node",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.95
+        },
+        "transformChannels": {
+          "translate": false,
+          "rotate": false,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "none",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Visual-only component; root collider is frozen."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "speaker-cavity",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "cream-shell"
+        }
+      },
+      "material": "dark-cavity",
+      "materialLayers": [
+        "dark-cavity"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "speaker-cavity.contour",
+        "speaker-cavity.material-zone"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(241, 233, 217, 1)",
+        "secondaryAlbedo": "rgba(232, 174, 196, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9,
+        "roughness": 0.55,
+        "toonBands": 3
+      },
+      "surfaceDetail": {
+        "macroRoughness": 0.12,
+        "microRoughness": 0.02,
+        "bumpAmplitude": 0,
+        "normalPattern": "faceted normals",
+        "displacementPattern": "",
+        "occlusionPattern": "contact seams",
+        "edgeWearPattern": "",
+        "notes": "Clean stylized appliance surface."
+      },
+      "evidenceRefs": [
+        "full-object"
+      ],
+      "details": [
+        {
+          "id": "speaker-cavity.contour",
+          "kind": "contour",
+          "evidenceRefs": [
+            "full-object"
+          ]
+        }
+      ],
+      "fidelityTier": "v2"
+    },
+    {
+      "id": "speaker-slats",
+      "name": "speaker-slats",
+      "level": "micro",
+      "role": "sixteen grille bars",
+      "importance": 0.8,
+      "confidence": 0.94,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "sixteen grille bars is authored as independent named low-poly geometry.",
+      "geometryDescriptor": {
+        "topologyIntent": "sixteen grille bars",
+        "edgeTreatment": {
+          "type": "shallow bevel",
+          "bevelRadius": 0.04,
+          "segments": 2
+        },
+        "deformationStack": [],
+        "uvStrategy": "procedural none",
+        "normalStrategy": "faceted vertex normals"
+      },
+      "parent": "speaker-frame",
+      "attachment": {
+        "parentSocket": "speaker-frame",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.03
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 0.5,
+        "height": 0.4,
+        "depth": 0.1,
+        "units": "world",
+        "confidence": 0.9
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static",
+        "pivot": {
+          "mode": "authored-node",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.95
+        },
+        "transformChannels": {
+          "translate": false,
+          "rotate": false,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "none",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Visual-only component; root collider is frozen."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "speaker-slats",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "cream-shell"
+        }
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "speaker-slats.contour",
+        "speaker-slats.material-zone"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(241, 233, 217, 1)",
+        "secondaryAlbedo": "rgba(232, 174, 196, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9,
+        "roughness": 0.55,
+        "toonBands": 3
+      },
+      "surfaceDetail": {
+        "macroRoughness": 0.12,
+        "microRoughness": 0.02,
+        "bumpAmplitude": 0,
+        "normalPattern": "faceted normals",
+        "displacementPattern": "",
+        "occlusionPattern": "contact seams",
+        "edgeWearPattern": "",
+        "notes": "Clean stylized appliance surface."
+      },
+      "evidenceRefs": [
+        "full-object"
+      ],
+      "details": [
+        {
+          "id": "speaker-slats.contour",
+          "kind": "contour",
+          "evidenceRefs": [
+            "full-object"
+          ]
+        }
+      ],
+      "fidelityTier": "v2"
+    },
+    {
+      "id": "frequency-window",
+      "name": "frequency-window",
+      "level": "meso",
+      "role": "framed display",
+      "importance": 0.8,
+      "confidence": 0.94,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "framed display is authored as independent named low-poly geometry.",
+      "geometryDescriptor": {
+        "topologyIntent": "framed display",
+        "edgeTreatment": {
+          "type": "shallow bevel",
+          "bevelRadius": 0.04,
+          "segments": 2
+        },
+        "deformationStack": [],
+        "uvStrategy": "procedural none",
+        "normalStrategy": "faceted vertex normals"
+      },
+      "parent": "accent-front",
+      "attachment": {
+        "parentSocket": "accent-front",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.03
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 0.5,
+        "height": 0.4,
+        "depth": 0.1,
+        "units": "world",
+        "confidence": 0.9
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static",
+        "pivot": {
+          "mode": "authored-node",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.95
+        },
+        "transformChannels": {
+          "translate": false,
+          "rotate": false,
+          "scale": false,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "none",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Visual-only component; root collider is frozen."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "frequency-window",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "cream-shell"
+        }
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "frequency-window.contour",
+        "frequency-window.material-zone"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(241, 233, 217, 1)",
+        "secondaryAlbedo": "rgba(232, 174, 196, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9,
+        "roughness": 0.55,
+        "toonBands": 3
+      },
+      "surfaceDetail": {
+        "macroRoughness": 0.12,
+        "microRoughness": 0.02,
+        "bumpAmplitude": 0,
+        "normalPattern": "faceted normals",
+        "displacementPattern": "",
+        "occlusionPattern": "contact seams",
+        "edgeWearPattern": "",
+        "notes": "Clean stylized appliance surface."
+      },
+      "evidenceRefs": [
+        "full-object"
+      ],
+      "details": [
+        {
+          "id": "frequency-window.contour",
+          "kind": "contour",
+          "evidenceRefs": [
+            "full-object"
+          ]
+        }
+      ],
+      "fidelityTier": "v2"
+    },
+    {
+      "id": "frequency-ticks",
+      "name": "frequency-ticks",
+      "level": "micro",
+      "role": "nine scale ticks",
+      "importance": 0.8,
+      "confidence": 0.94,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "nine scale ticks is authored as independent named low-poly geometry.",
+      "geometryDescriptor": {
+        "topologyIntent": "nine scale ticks",
+        "edgeTreatment": {
+          "type": "shallow bevel",
+          "bevelRadius": 0.04,
+          "segments": 2
+        },
+        "deformationStack": [],
+        "uvStrategy": "procedural none",
+        "normalStrategy": "faceted vertex normals"
+      },
+      "parent": "frequency-window",
+      "attachment": {
+        "parentSocket": "frequency-window",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.03
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 0.5,
+        "height": 0.4,
+        "depth": 0.1,
+        "units": "world",
+        "confidence": 0.9
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static",
+        "pivot": {
+          "mode": "authored-node",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.95
+        },
+        "transformChannels": {
+          "translate": false,
+          "rotate": false,
+          "scale": false,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "none",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Visual-only component; root collider is frozen."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "frequency-ticks",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "cream-shell"
+        }
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "frequency-ticks.contour",
+        "frequency-ticks.material-zone"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(241, 233, 217, 1)",
+        "secondaryAlbedo": "rgba(232, 174, 196, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9,
+        "roughness": 0.55,
+        "toonBands": 3
+      },
+      "surfaceDetail": {
+        "macroRoughness": 0.12,
+        "microRoughness": 0.02,
+        "bumpAmplitude": 0,
+        "normalPattern": "faceted normals",
+        "displacementPattern": "",
+        "occlusionPattern": "contact seams",
+        "edgeWearPattern": "",
+        "notes": "Clean stylized appliance surface."
+      },
+      "evidenceRefs": [
+        "full-object"
+      ],
+      "details": [
+        {
+          "id": "frequency-ticks.contour",
+          "kind": "contour",
+          "evidenceRefs": [
+            "full-object"
+          ]
+        }
+      ],
+      "fidelityTier": "v2"
+    },
+    {
+      "id": "crosshair-cursor",
+      "name": "crosshair-cursor",
+      "level": "micro",
+      "role": "animated cursor",
+      "importance": 0.8,
+      "confidence": 0.94,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "animated cursor is authored as independent named low-poly geometry.",
+      "geometryDescriptor": {
+        "topologyIntent": "animated cursor",
+        "edgeTreatment": {
+          "type": "shallow bevel",
+          "bevelRadius": 0.04,
+          "segments": 2
+        },
+        "deformationStack": [],
+        "uvStrategy": "procedural none",
+        "normalStrategy": "faceted vertex normals"
+      },
+      "parent": "frequency-window",
+      "attachment": {
+        "parentSocket": "frequency-window",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.03
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 0.5,
+        "height": 0.4,
+        "depth": 0.1,
+        "units": "world",
+        "confidence": 0.9
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "animated",
+        "pivot": {
+          "mode": "authored-node",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.95
+        },
+        "transformChannels": {
+          "translate": false,
+          "rotate": true,
+          "scale": false,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "none",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Visual-only component; root collider is frozen."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "crosshair-cursor",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "cream-shell"
+        }
+      },
+      "material": "sakura-accent",
+      "materialLayers": [
+        "sakura-accent"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "crosshair-cursor.contour",
+        "crosshair-cursor.material-zone"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(241, 233, 217, 1)",
+        "secondaryAlbedo": "rgba(232, 174, 196, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9,
+        "roughness": 0.55,
+        "toonBands": 3
+      },
+      "surfaceDetail": {
+        "macroRoughness": 0.12,
+        "microRoughness": 0.02,
+        "bumpAmplitude": 0,
+        "normalPattern": "faceted normals",
+        "displacementPattern": "",
+        "occlusionPattern": "contact seams",
+        "edgeWearPattern": "",
+        "notes": "Clean stylized appliance surface."
+      },
+      "evidenceRefs": [
+        "full-object"
+      ],
+      "details": [
+        {
+          "id": "crosshair-cursor.contour",
+          "kind": "contour",
+          "evidenceRefs": [
+            "full-object"
+          ]
+        }
+      ],
+      "fidelityTier": "v2"
+    },
+    {
+      "id": "dual-knobs",
+      "name": "dual-knobs",
+      "level": "meso",
+      "role": "unequal concentric controls",
+      "importance": 0.8,
+      "confidence": 0.94,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "unequal concentric controls is authored as independent named low-poly geometry.",
+      "geometryDescriptor": {
+        "topologyIntent": "unequal concentric controls",
+        "edgeTreatment": {
+          "type": "shallow bevel",
+          "bevelRadius": 0.04,
+          "segments": 2
+        },
+        "deformationStack": [],
+        "uvStrategy": "procedural none",
+        "normalStrategy": "faceted vertex normals"
+      },
+      "parent": "accent-front",
+      "attachment": {
+        "parentSocket": "accent-front",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.03
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 0.5,
+        "height": 0.4,
+        "depth": 0.1,
+        "units": "world",
+        "confidence": 0.9
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static",
+        "pivot": {
+          "mode": "authored-node",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.95
+        },
+        "transformChannels": {
+          "translate": false,
+          "rotate": false,
+          "scale": false,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "none",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Visual-only component; root collider is frozen."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "dual-knobs",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "cream-shell"
+        }
+      },
+      "material": "sakura-accent",
+      "materialLayers": [
+        "sakura-accent"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "dual-knobs.contour",
+        "dual-knobs.material-zone"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(241, 233, 217, 1)",
+        "secondaryAlbedo": "rgba(232, 174, 196, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9,
+        "roughness": 0.55,
+        "toonBands": 3
+      },
+      "surfaceDetail": {
+        "macroRoughness": 0.12,
+        "microRoughness": 0.02,
+        "bumpAmplitude": 0,
+        "normalPattern": "faceted normals",
+        "displacementPattern": "",
+        "occlusionPattern": "contact seams",
+        "edgeWearPattern": "",
+        "notes": "Clean stylized appliance surface."
+      },
+      "evidenceRefs": [
+        "full-object"
+      ],
+      "details": [
+        {
+          "id": "dual-knobs.contour",
+          "kind": "contour",
+          "evidenceRefs": [
+            "full-object"
+          ]
+        }
+      ],
+      "fidelityTier": "v2"
+    },
+    {
+      "id": "ready-indicator",
+      "name": "ready-indicator",
+      "level": "meso",
+      "role": "embedded status lights",
+      "importance": 0.8,
+      "confidence": 0.94,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "embedded status lights is authored as independent named low-poly geometry.",
+      "geometryDescriptor": {
+        "topologyIntent": "embedded status lights",
+        "edgeTreatment": {
+          "type": "shallow bevel",
+          "bevelRadius": 0.04,
+          "segments": 2
+        },
+        "deformationStack": [],
+        "uvStrategy": "procedural none",
+        "normalStrategy": "faceted vertex normals"
+      },
+      "parent": "accent-front",
+      "attachment": {
+        "parentSocket": "accent-front",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.03
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 0.5,
+        "height": 0.4,
+        "depth": 0.1,
+        "units": "world",
+        "confidence": 0.9
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static",
+        "pivot": {
+          "mode": "authored-node",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.95
+        },
+        "transformChannels": {
+          "translate": false,
+          "rotate": false,
+          "scale": false,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "none",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Visual-only component; root collider is frozen."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "ready-indicator",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "cream-shell"
+        }
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "ready-indicator.contour",
+        "ready-indicator.material-zone"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(241, 233, 217, 1)",
+        "secondaryAlbedo": "rgba(232, 174, 196, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9,
+        "roughness": 0.55,
+        "toonBands": 3
+      },
+      "surfaceDetail": {
+        "macroRoughness": 0.12,
+        "microRoughness": 0.02,
+        "bumpAmplitude": 0,
+        "normalPattern": "faceted normals",
+        "displacementPattern": "",
+        "occlusionPattern": "contact seams",
+        "edgeWearPattern": "",
+        "notes": "Clean stylized appliance surface."
+      },
+      "evidenceRefs": [
+        "full-object"
+      ],
+      "details": [
+        {
+          "id": "ready-indicator.contour",
+          "kind": "contour",
+          "evidenceRefs": [
+            "full-object"
+          ]
+        }
+      ],
+      "fidelityTier": "v2"
+    },
+    {
+      "id": "rear-panel",
+      "name": "rear-panel",
+      "level": "meso",
+      "role": "rear access cover",
+      "importance": 0.8,
+      "confidence": 0.94,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "rear access cover is authored as independent named low-poly geometry.",
+      "geometryDescriptor": {
+        "topologyIntent": "rear access cover",
+        "edgeTreatment": {
+          "type": "shallow bevel",
+          "bevelRadius": 0.04,
+          "segments": 2
+        },
+        "deformationStack": [],
+        "uvStrategy": "procedural none",
+        "normalStrategy": "faceted vertex normals"
+      },
+      "parent": "faceted-shell",
+      "attachment": {
+        "parentSocket": "faceted-shell",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.03
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 0.5,
+        "height": 0.4,
+        "depth": 0.1,
+        "units": "world",
+        "confidence": 0.9
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static",
+        "pivot": {
+          "mode": "authored-node",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.95
+        },
+        "transformChannels": {
+          "translate": false,
+          "rotate": false,
+          "scale": false,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "none",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Visual-only component; root collider is frozen."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "rear-panel",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "cream-shell"
+        }
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "rear-panel.contour",
+        "rear-panel.material-zone"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(241, 233, 217, 1)",
+        "secondaryAlbedo": "rgba(232, 174, 196, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9,
+        "roughness": 0.55,
+        "toonBands": 3
+      },
+      "surfaceDetail": {
+        "macroRoughness": 0.12,
+        "microRoughness": 0.02,
+        "bumpAmplitude": 0,
+        "normalPattern": "faceted normals",
+        "displacementPattern": "",
+        "occlusionPattern": "contact seams",
+        "edgeWearPattern": "",
+        "notes": "Clean stylized appliance surface."
+      },
+      "evidenceRefs": [
+        "full-object"
+      ],
+      "details": [
+        {
+          "id": "rear-panel.contour",
+          "kind": "contour",
+          "evidenceRefs": [
+            "full-object"
+          ]
+        }
+      ],
+      "fidelityTier": "v2"
+    },
+    {
+      "id": "rear-vents",
+      "name": "rear-vents",
+      "level": "meso",
+      "role": "four by four vent grid",
+      "importance": 0.8,
+      "confidence": 0.94,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "four by four vent grid is authored as independent named low-poly geometry.",
+      "geometryDescriptor": {
+        "topologyIntent": "four by four vent grid",
+        "edgeTreatment": {
+          "type": "shallow bevel",
+          "bevelRadius": 0.04,
+          "segments": 2
+        },
+        "deformationStack": [],
+        "uvStrategy": "procedural none",
+        "normalStrategy": "faceted vertex normals"
+      },
+      "parent": "rear-panel",
+      "attachment": {
+        "parentSocket": "rear-panel",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.03
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 0.5,
+        "height": 0.4,
+        "depth": 0.1,
+        "units": "world",
+        "confidence": 0.9
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static",
+        "pivot": {
+          "mode": "authored-node",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.95
+        },
+        "transformChannels": {
+          "translate": false,
+          "rotate": false,
+          "scale": false,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "none",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Visual-only component; root collider is frozen."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "rear-vents",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "cream-shell"
+        }
+      },
+      "material": "dark-cavity",
+      "materialLayers": [
+        "dark-cavity"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "rear-vents.contour",
+        "rear-vents.material-zone"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(241, 233, 217, 1)",
+        "secondaryAlbedo": "rgba(232, 174, 196, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9,
+        "roughness": 0.55,
+        "toonBands": 3
+      },
+      "surfaceDetail": {
+        "macroRoughness": 0.12,
+        "microRoughness": 0.02,
+        "bumpAmplitude": 0,
+        "normalPattern": "faceted normals",
+        "displacementPattern": "",
+        "occlusionPattern": "contact seams",
+        "edgeWearPattern": "",
+        "notes": "Clean stylized appliance surface."
+      },
+      "evidenceRefs": [
+        "full-object"
+      ],
+      "details": [
+        {
+          "id": "rear-vents.contour",
+          "kind": "contour",
+          "evidenceRefs": [
+            "full-object"
+          ]
+        }
+      ],
+      "fidelityTier": "v2"
+    },
+    {
+      "id": "rear-fasteners",
+      "name": "rear-fasteners",
+      "level": "meso",
+      "role": "paired fastener caps",
+      "importance": 0.8,
+      "confidence": 0.94,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "paired fastener caps is authored as independent named low-poly geometry.",
+      "geometryDescriptor": {
+        "topologyIntent": "paired fastener caps",
+        "edgeTreatment": {
+          "type": "shallow bevel",
+          "bevelRadius": 0.04,
+          "segments": 2
+        },
+        "deformationStack": [],
+        "uvStrategy": "procedural none",
+        "normalStrategy": "faceted vertex normals"
+      },
+      "parent": "rear-panel",
+      "attachment": {
+        "parentSocket": "rear-panel",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.03
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 0.5,
+        "height": 0.4,
+        "depth": 0.1,
+        "units": "world",
+        "confidence": 0.9
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static",
+        "pivot": {
+          "mode": "authored-node",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.95
+        },
+        "transformChannels": {
+          "translate": false,
+          "rotate": false,
+          "scale": false,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "none",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Visual-only component; root collider is frozen."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "rear-fasteners",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "cream-shell"
+        }
+      },
+      "material": "cool-metal",
+      "materialLayers": [
+        "cool-metal"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "rear-fasteners.contour",
+        "rear-fasteners.material-zone"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(241, 233, 217, 1)",
+        "secondaryAlbedo": "rgba(232, 174, 196, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9,
+        "roughness": 0.55,
+        "toonBands": 3
+      },
+      "surfaceDetail": {
+        "macroRoughness": 0.12,
+        "microRoughness": 0.02,
+        "bumpAmplitude": 0,
+        "normalPattern": "faceted normals",
+        "displacementPattern": "",
+        "occlusionPattern": "contact seams",
+        "edgeWearPattern": "",
+        "notes": "Clean stylized appliance surface."
+      },
+      "evidenceRefs": [
+        "full-object"
+      ],
+      "details": [
+        {
+          "id": "rear-fasteners.contour",
+          "kind": "contour",
+          "evidenceRefs": [
+            "full-object"
+          ]
+        }
+      ],
+      "fidelityTier": "v2"
+    },
+    {
+      "id": "foot-array",
+      "name": "foot-array",
+      "level": "meso",
+      "role": "four rubber feet",
+      "importance": 0.8,
+      "confidence": 0.94,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "four rubber feet is authored as independent named low-poly geometry.",
+      "geometryDescriptor": {
+        "topologyIntent": "four rubber feet",
+        "edgeTreatment": {
+          "type": "shallow bevel",
+          "bevelRadius": 0.04,
+          "segments": 2
+        },
+        "deformationStack": [],
+        "uvStrategy": "procedural none",
+        "normalStrategy": "faceted vertex normals"
+      },
+      "parent": "faceted-shell",
+      "attachment": {
+        "parentSocket": "faceted-shell",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.03
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 0.5,
+        "height": 0.4,
+        "depth": 0.1,
+        "units": "world",
+        "confidence": 0.9
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static",
+        "pivot": {
+          "mode": "authored-node",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.95
+        },
+        "transformChannels": {
+          "translate": false,
+          "rotate": false,
+          "scale": false,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "none",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Visual-only component; root collider is frozen."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "foot-array",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "cream-shell"
+        }
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "foot-array.contour",
+        "foot-array.material-zone"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(241, 233, 217, 1)",
+        "secondaryAlbedo": "rgba(232, 174, 196, 1)",
+        "materialClass": "rubber",
+        "materialClassConfidence": 0.9,
+        "roughness": 0.55,
+        "toonBands": 3
+      },
+      "surfaceDetail": {
+        "macroRoughness": 0.12,
+        "microRoughness": 0.02,
+        "bumpAmplitude": 0,
+        "normalPattern": "faceted normals",
+        "displacementPattern": "",
+        "occlusionPattern": "contact seams",
+        "edgeWearPattern": "",
+        "notes": "Clean stylized appliance surface."
+      },
+      "evidenceRefs": [
+        "full-object"
+      ],
+      "details": [
+        {
+          "id": "foot-array.contour",
+          "kind": "contour",
+          "evidenceRefs": [
+            "full-object"
+          ]
+        }
+      ],
+      "fidelityTier": "v2"
+    },
+    {
+      "id": "antenna-bracket",
+      "name": "antenna-bracket",
+      "level": "meso",
+      "role": "hinge bracket",
+      "importance": 0.8,
+      "confidence": 0.94,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "hinge bracket is authored as independent named low-poly geometry.",
+      "geometryDescriptor": {
+        "topologyIntent": "hinge bracket",
+        "edgeTreatment": {
+          "type": "shallow bevel",
+          "bevelRadius": 0.04,
+          "segments": 2
+        },
+        "deformationStack": [],
+        "uvStrategy": "procedural none",
+        "normalStrategy": "faceted vertex normals"
+      },
+      "parent": "faceted-shell",
+      "attachment": {
+        "parentSocket": "faceted-shell",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.03
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 0.5,
+        "height": 0.4,
+        "depth": 0.1,
+        "units": "world",
+        "confidence": 0.9
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "animated",
+        "pivot": {
+          "mode": "authored-node",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.95
+        },
+        "transformChannels": {
+          "translate": false,
+          "rotate": true,
+          "scale": false,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "none",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Visual-only component; root collider is frozen."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "antenna-bracket",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "cream-shell"
+        }
+      },
+      "material": "cool-metal",
+      "materialLayers": [
+        "cool-metal"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "antenna-bracket.contour",
+        "antenna-bracket.material-zone"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(241, 233, 217, 1)",
+        "secondaryAlbedo": "rgba(232, 174, 196, 1)",
+        "materialClass": "metal",
+        "materialClassConfidence": 0.9,
+        "roughness": 0.55,
+        "toonBands": 3
+      },
+      "surfaceDetail": {
+        "macroRoughness": 0.12,
+        "microRoughness": 0.02,
+        "bumpAmplitude": 0,
+        "normalPattern": "faceted normals",
+        "displacementPattern": "",
+        "occlusionPattern": "contact seams",
+        "edgeWearPattern": "",
+        "notes": "Clean stylized appliance surface."
+      },
+      "evidenceRefs": [
+        "full-object"
+      ],
+      "details": [
+        {
+          "id": "antenna-bracket.contour",
+          "kind": "contour",
+          "evidenceRefs": [
+            "full-object"
+          ]
+        }
+      ],
+      "fidelityTier": "v2"
+    },
+    {
+      "id": "antenna-sections",
+      "name": "antenna-sections",
+      "level": "macro",
+      "role": "three telescopic sections",
+      "importance": 0.8,
+      "confidence": 0.94,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "three telescopic sections is authored as independent named low-poly geometry.",
+      "geometryDescriptor": {
+        "topologyIntent": "three telescopic sections",
+        "edgeTreatment": {
+          "type": "shallow bevel",
+          "bevelRadius": 0.04,
+          "segments": 2
+        },
+        "deformationStack": [],
+        "uvStrategy": "procedural none",
+        "normalStrategy": "faceted vertex normals"
+      },
+      "parent": "antenna-bracket",
+      "attachment": {
+        "parentSocket": "antenna-bracket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.03
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 0.5,
+        "height": 0.4,
+        "depth": 0.1,
+        "units": "world",
+        "confidence": 0.9
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "animated",
+        "pivot": {
+          "mode": "authored-node",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.95
+        },
+        "transformChannels": {
+          "translate": false,
+          "rotate": true,
+          "scale": false,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "none",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Visual-only component; root collider is frozen."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "antenna-sections",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "cream-shell"
+        }
+      },
+      "material": "cool-metal",
+      "materialLayers": [
+        "cool-metal"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "antenna-sections.contour",
+        "antenna-sections.material-zone"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(241, 233, 217, 1)",
+        "secondaryAlbedo": "rgba(232, 174, 196, 1)",
+        "materialClass": "metal",
+        "materialClassConfidence": 0.9,
+        "roughness": 0.55,
+        "toonBands": 3
+      },
+      "surfaceDetail": {
+        "macroRoughness": 0.12,
+        "microRoughness": 0.02,
+        "bumpAmplitude": 0,
+        "normalPattern": "faceted normals",
+        "displacementPattern": "",
+        "occlusionPattern": "contact seams",
+        "edgeWearPattern": "",
+        "notes": "Clean stylized appliance surface."
+      },
+      "evidenceRefs": [
+        "full-object"
+      ],
+      "details": [
+        {
+          "id": "antenna-sections.contour",
+          "kind": "contour",
+          "evidenceRefs": [
+            "full-object"
+          ]
+        }
+      ],
+      "fidelityTier": "v2"
+    },
+    {
+      "id": "antenna-tip",
+      "name": "antenna-tip",
+      "level": "micro",
+      "role": "persistent terminal cap",
+      "importance": 0.8,
+      "confidence": 0.94,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "persistent terminal cap is authored as independent named low-poly geometry.",
+      "geometryDescriptor": {
+        "topologyIntent": "persistent terminal cap",
+        "edgeTreatment": {
+          "type": "shallow bevel",
+          "bevelRadius": 0.04,
+          "segments": 2
+        },
+        "deformationStack": [],
+        "uvStrategy": "procedural none",
+        "normalStrategy": "faceted vertex normals"
+      },
+      "parent": "antenna-sections",
+      "attachment": {
+        "parentSocket": "antenna-sections",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.03
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 0.5,
+        "height": 0.4,
+        "depth": 0.1,
+        "units": "world",
+        "confidence": 0.9
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "animated",
+        "pivot": {
+          "mode": "authored-node",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.95
+        },
+        "transformChannels": {
+          "translate": false,
+          "rotate": true,
+          "scale": false,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "none",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Visual-only component; root collider is frozen."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "antenna-tip",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "cream-shell"
+        }
+      },
+      "material": "cool-metal",
+      "materialLayers": [
+        "cool-metal"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "antenna-tip.contour",
+        "antenna-tip.material-zone"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(241, 233, 217, 1)",
+        "secondaryAlbedo": "rgba(232, 174, 196, 1)",
+        "materialClass": "metal",
+        "materialClassConfidence": 0.9,
+        "roughness": 0.55,
+        "toonBands": 3
+      },
+      "surfaceDetail": {
+        "macroRoughness": 0.12,
+        "microRoughness": 0.02,
+        "bumpAmplitude": 0,
+        "normalPattern": "faceted normals",
+        "displacementPattern": "",
+        "occlusionPattern": "contact seams",
+        "edgeWearPattern": "",
+        "notes": "Clean stylized appliance surface."
+      },
+      "evidenceRefs": [
+        "full-object"
+      ],
+      "details": [
+        {
+          "id": "antenna-tip.contour",
+          "kind": "contour",
+          "evidenceRefs": [
+            "full-object"
+          ]
+        }
+      ],
+      "fidelityTier": "v2"
+    }
+  ],
+  "materials": [
+    {
+      "id": "cream-shell",
+      "name": "cream-shell",
+      "type": "toon",
+      "shaderModel": "MeshToonMaterial three-band",
+      "baseColor": "#F1E9D9",
+      "color": "#F1E9D9",
+      "albedo": {
+        "dominant": "#F1E9D9",
+        "secondary": [
+          "#F1E9D9"
+        ],
+        "samplingNotes": "Admitted reference local color zone."
+      },
+      "colorVariation": {
+        "palette": [
+          "#F1E9D9"
+        ],
+        "pattern": "solid",
+        "amplitude": 0.03,
+        "heightCorrelation": 0
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          1,
+          1
+        ],
+        "anisotropy": 1,
+        "texelDensityIntent": "Object-scale stable procedural evidence; runtime remains texture-free."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.08,
+          "role": "toon value separation"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.03,
+          "role": "seam response"
+        },
+        {
+          "id": "micro",
+          "frequency": 56,
+          "amplitude": 0.01,
+          "role": "restrained highlight breakup"
+        }
+      ],
+      "roughness": {
+        "base": 0.48,
+        "variation": 0.05,
+        "map": "independent procedural constant",
+        "localResponse": "slightly lower at exposed bevels"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0.04
+      },
+      "normal": {
+        "pattern": "independent faceted normals",
+        "strength": 0.15,
+        "scale": 1,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.3,
+        "contactShadowBias": 0.3,
+        "notes": "Darken inset panels and attachment seams."
+      },
+      "wear": {
+        "edgeWear": 0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0,
+        "cavityBias": 0,
+        "color": "#302B3A"
+      },
+      "localOverrides": [
+        {
+          "id": "cream-shell-edge-response",
+          "region": "beveled silhouettes and contact seams",
+          "response": "stable toon band and cavity separation",
+          "evidenceRefs": [
+            "front-view",
+            "side-view"
+          ]
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.82,
+        "estimatedFidelity": 0.82,
+        "sourceImage": "references/intake-v2/radio/views/front.png",
+        "maps": {
+          "albedo": {
+            "path": "procedural-solid-albedo"
+          },
+          "roughness": {
+            "path": "procedural-independent-roughness"
+          },
+          "height": {
+            "path": "none-flat-surface"
+          },
+          "normal": {
+            "path": "procedural-faceted-normal"
+          },
+          "ao": {
+            "path": "procedural-contact-ao"
+          }
+        }
+      },
+      "shaderNotes": [
+        "Runtime uses three-band MeshToonMaterial and independent stable outline geometry."
+      ],
+      "notes": "Clean Sakura low-poly response."
+    },
+    {
+      "id": "sakura-accent",
+      "name": "sakura-accent",
+      "type": "toon",
+      "shaderModel": "MeshToonMaterial three-band",
+      "baseColor": "#E8AEC4",
+      "color": "#E8AEC4",
+      "albedo": {
+        "dominant": "#E8AEC4",
+        "secondary": [
+          "#E8AEC4"
+        ],
+        "samplingNotes": "Admitted reference local color zone."
+      },
+      "colorVariation": {
+        "palette": [
+          "#E8AEC4"
+        ],
+        "pattern": "solid",
+        "amplitude": 0.03,
+        "heightCorrelation": 0
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          1,
+          1
+        ],
+        "anisotropy": 1,
+        "texelDensityIntent": "Object-scale stable procedural evidence; runtime remains texture-free."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.08,
+          "role": "toon value separation"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.03,
+          "role": "seam response"
+        },
+        {
+          "id": "micro",
+          "frequency": 56,
+          "amplitude": 0.01,
+          "role": "restrained highlight breakup"
+        }
+      ],
+      "roughness": {
+        "base": 0.45,
+        "variation": 0.05,
+        "map": "independent procedural constant",
+        "localResponse": "slightly lower at exposed bevels"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0.04
+      },
+      "normal": {
+        "pattern": "independent faceted normals",
+        "strength": 0.15,
+        "scale": 1,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.3,
+        "contactShadowBias": 0.3,
+        "notes": "Darken inset panels and attachment seams."
+      },
+      "wear": {
+        "edgeWear": 0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0,
+        "cavityBias": 0,
+        "color": "#302B3A"
+      },
+      "localOverrides": [
+        {
+          "id": "sakura-accent-edge-response",
+          "region": "beveled silhouettes and contact seams",
+          "response": "stable toon band and cavity separation",
+          "evidenceRefs": [
+            "front-view",
+            "side-view"
+          ]
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.82,
+        "estimatedFidelity": 0.82,
+        "sourceImage": "references/intake-v2/radio/views/front.png",
+        "maps": {
+          "albedo": {
+            "path": "procedural-solid-albedo"
+          },
+          "roughness": {
+            "path": "procedural-independent-roughness"
+          },
+          "height": {
+            "path": "none-flat-surface"
+          },
+          "normal": {
+            "path": "procedural-faceted-normal"
+          },
+          "ao": {
+            "path": "procedural-contact-ao"
+          }
+        }
+      },
+      "shaderNotes": [
+        "Runtime uses three-band MeshToonMaterial and independent stable outline geometry."
+      ],
+      "notes": "Clean Sakura low-poly response."
+    },
+    {
+      "id": "dark-cavity",
+      "name": "dark-cavity",
+      "type": "toon",
+      "shaderModel": "MeshToonMaterial three-band",
+      "baseColor": "#373746",
+      "color": "#373746",
+      "albedo": {
+        "dominant": "#373746",
+        "secondary": [
+          "#373746"
+        ],
+        "samplingNotes": "Admitted reference local color zone."
+      },
+      "colorVariation": {
+        "palette": [
+          "#373746"
+        ],
+        "pattern": "solid",
+        "amplitude": 0.03,
+        "heightCorrelation": 0
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          1,
+          1
+        ],
+        "anisotropy": 1,
+        "texelDensityIntent": "Object-scale stable procedural evidence; runtime remains texture-free."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.08,
+          "role": "toon value separation"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.03,
+          "role": "seam response"
+        },
+        {
+          "id": "micro",
+          "frequency": 56,
+          "amplitude": 0.01,
+          "role": "restrained highlight breakup"
+        }
+      ],
+      "roughness": {
+        "base": 0.7,
+        "variation": 0.05,
+        "map": "independent procedural constant",
+        "localResponse": "slightly lower at exposed bevels"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0.04
+      },
+      "normal": {
+        "pattern": "independent faceted normals",
+        "strength": 0.15,
+        "scale": 1,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.3,
+        "contactShadowBias": 0.3,
+        "notes": "Darken inset panels and attachment seams."
+      },
+      "wear": {
+        "edgeWear": 0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0,
+        "cavityBias": 0,
+        "color": "#302B3A"
+      },
+      "localOverrides": [
+        {
+          "id": "dark-cavity-edge-response",
+          "region": "beveled silhouettes and contact seams",
+          "response": "stable toon band and cavity separation",
+          "evidenceRefs": [
+            "front-view",
+            "side-view"
+          ]
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.82,
+        "estimatedFidelity": 0.82,
+        "sourceImage": "references/intake-v2/radio/views/front.png",
+        "maps": {
+          "albedo": {
+            "path": "procedural-solid-albedo"
+          },
+          "roughness": {
+            "path": "procedural-independent-roughness"
+          },
+          "height": {
+            "path": "none-flat-surface"
+          },
+          "normal": {
+            "path": "procedural-faceted-normal"
+          },
+          "ao": {
+            "path": "procedural-contact-ao"
+          }
+        }
+      },
+      "shaderNotes": [
+        "Runtime uses three-band MeshToonMaterial and independent stable outline geometry."
+      ],
+      "notes": "Clean Sakura low-poly response."
+    },
+    {
+      "id": "cool-glass",
+      "name": "cool-glass",
+      "type": "toon",
+      "shaderModel": "MeshToonMaterial three-band",
+      "baseColor": "#B9C2CA",
+      "color": "#B9C2CA",
+      "albedo": {
+        "dominant": "#B9C2CA",
+        "secondary": [
+          "#B9C2CA"
+        ],
+        "samplingNotes": "Admitted reference local color zone."
+      },
+      "colorVariation": {
+        "palette": [
+          "#B9C2CA"
+        ],
+        "pattern": "solid",
+        "amplitude": 0.03,
+        "heightCorrelation": 0
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          1,
+          1
+        ],
+        "anisotropy": 1,
+        "texelDensityIntent": "Object-scale stable procedural evidence; runtime remains texture-free."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.08,
+          "role": "toon value separation"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.03,
+          "role": "seam response"
+        },
+        {
+          "id": "micro",
+          "frequency": 56,
+          "amplitude": 0.01,
+          "role": "restrained highlight breakup"
+        }
+      ],
+      "roughness": {
+        "base": 0.22,
+        "variation": 0.05,
+        "map": "independent procedural constant",
+        "localResponse": "slightly lower at exposed bevels"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0.04
+      },
+      "normal": {
+        "pattern": "independent faceted normals",
+        "strength": 0.15,
+        "scale": 1,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.3,
+        "contactShadowBias": 0.3,
+        "notes": "Darken inset panels and attachment seams."
+      },
+      "wear": {
+        "edgeWear": 0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0,
+        "cavityBias": 0,
+        "color": "#302B3A"
+      },
+      "localOverrides": [
+        {
+          "id": "cool-glass-edge-response",
+          "region": "beveled silhouettes and contact seams",
+          "response": "stable toon band and cavity separation",
+          "evidenceRefs": [
+            "front-view",
+            "side-view"
+          ]
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.82,
+        "estimatedFidelity": 0.82,
+        "sourceImage": "references/intake-v2/radio/views/front.png",
+        "maps": {
+          "albedo": {
+            "path": "procedural-solid-albedo"
+          },
+          "roughness": {
+            "path": "procedural-independent-roughness"
+          },
+          "height": {
+            "path": "none-flat-surface"
+          },
+          "normal": {
+            "path": "procedural-faceted-normal"
+          },
+          "ao": {
+            "path": "procedural-contact-ao"
+          }
+        }
+      },
+      "shaderNotes": [
+        "Runtime uses three-band MeshToonMaterial and independent stable outline geometry."
+      ],
+      "notes": "Clean Sakura low-poly response."
+    },
+    {
+      "id": "cool-metal",
+      "name": "cool-metal",
+      "type": "toon",
+      "shaderModel": "MeshToonMaterial three-band",
+      "baseColor": "#B8BDC3",
+      "color": "#B8BDC3",
+      "albedo": {
+        "dominant": "#B8BDC3",
+        "secondary": [
+          "#B8BDC3"
+        ],
+        "samplingNotes": "Admitted reference local color zone."
+      },
+      "colorVariation": {
+        "palette": [
+          "#B8BDC3"
+        ],
+        "pattern": "solid",
+        "amplitude": 0.03,
+        "heightCorrelation": 0
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          1,
+          1
+        ],
+        "anisotropy": 1,
+        "texelDensityIntent": "Object-scale stable procedural evidence; runtime remains texture-free."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.08,
+          "role": "toon value separation"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.03,
+          "role": "seam response"
+        },
+        {
+          "id": "micro",
+          "frequency": 56,
+          "amplitude": 0.01,
+          "role": "restrained highlight breakup"
+        }
+      ],
+      "roughness": {
+        "base": 0.32,
+        "variation": 0.05,
+        "map": "independent procedural constant",
+        "localResponse": "slightly lower at exposed bevels"
+      },
+      "metalness": {
+        "base": 0.65,
+        "variation": 0.04
+      },
+      "normal": {
+        "pattern": "independent faceted normals",
+        "strength": 0.15,
+        "scale": 1,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.3,
+        "contactShadowBias": 0.3,
+        "notes": "Darken inset panels and attachment seams."
+      },
+      "wear": {
+        "edgeWear": 0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0,
+        "cavityBias": 0,
+        "color": "#302B3A"
+      },
+      "localOverrides": [
+        {
+          "id": "cool-metal-edge-response",
+          "region": "beveled silhouettes and contact seams",
+          "response": "stable toon band and cavity separation",
+          "evidenceRefs": [
+            "front-view",
+            "side-view"
+          ]
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.82,
+        "estimatedFidelity": 0.82,
+        "sourceImage": "references/intake-v2/radio/views/front.png",
+        "maps": {
+          "albedo": {
+            "path": "procedural-solid-albedo"
+          },
+          "roughness": {
+            "path": "procedural-independent-roughness"
+          },
+          "height": {
+            "path": "none-flat-surface"
+          },
+          "normal": {
+            "path": "procedural-faceted-normal"
+          },
+          "ao": {
+            "path": "procedural-contact-ao"
+          }
+        }
+      },
+      "shaderNotes": [
+        "Runtime uses three-band MeshToonMaterial and independent stable outline geometry."
+      ],
+      "notes": "Clean Sakura low-poly response."
+    },
+    {
+      "id": "rubber",
+      "name": "rubber",
+      "type": "toon",
+      "shaderModel": "MeshToonMaterial three-band",
+      "baseColor": "#5C5964",
+      "color": "#5C5964",
+      "albedo": {
+        "dominant": "#5C5964",
+        "secondary": [
+          "#5C5964"
+        ],
+        "samplingNotes": "Admitted reference local color zone."
+      },
+      "colorVariation": {
+        "palette": [
+          "#5C5964"
+        ],
+        "pattern": "solid",
+        "amplitude": 0.03,
+        "heightCorrelation": 0
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          1,
+          1
+        ],
+        "anisotropy": 1,
+        "texelDensityIntent": "Object-scale stable procedural evidence; runtime remains texture-free."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.08,
+          "role": "toon value separation"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.03,
+          "role": "seam response"
+        },
+        {
+          "id": "micro",
+          "frequency": 56,
+          "amplitude": 0.01,
+          "role": "restrained highlight breakup"
+        }
+      ],
+      "roughness": {
+        "base": 0.8,
+        "variation": 0.05,
+        "map": "independent procedural constant",
+        "localResponse": "slightly lower at exposed bevels"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0.04
+      },
+      "normal": {
+        "pattern": "independent faceted normals",
+        "strength": 0.15,
+        "scale": 1,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.3,
+        "contactShadowBias": 0.3,
+        "notes": "Darken inset panels and attachment seams."
+      },
+      "wear": {
+        "edgeWear": 0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0,
+        "cavityBias": 0,
+        "color": "#302B3A"
+      },
+      "localOverrides": [
+        {
+          "id": "rubber-edge-response",
+          "region": "beveled silhouettes and contact seams",
+          "response": "stable toon band and cavity separation",
+          "evidenceRefs": [
+            "front-view",
+            "side-view"
+          ]
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.82,
+        "estimatedFidelity": 0.82,
+        "sourceImage": "references/intake-v2/radio/views/front.png",
+        "maps": {
+          "albedo": {
+            "path": "procedural-solid-albedo"
+          },
+          "roughness": {
+            "path": "procedural-independent-roughness"
+          },
+          "height": {
+            "path": "none-flat-surface"
+          },
+          "normal": {
+            "path": "procedural-faceted-normal"
+          },
+          "ao": {
+            "path": "procedural-contact-ao"
+          }
+        }
+      },
+      "shaderNotes": [
+        "Runtime uses three-band MeshToonMaterial and independent stable outline geometry."
+      ],
+      "notes": "Clean Sakura low-poly response."
+    }
+  ],
+  "repetitionSystems": [
+    {
+      "id": "speaker-sixteen-slats",
+      "name": "Speaker slats",
+      "componentRef": "speaker-slats",
+      "count": 16,
+      "distribution": "vertical stack of horizontal bars",
+      "geometry": "rounded low-poly bars",
+      "material": "cream-shell",
+      "evidenceRefs": [
+        "front-view"
+      ]
+    },
+    {
+      "id": "frequency-nine-ticks",
+      "name": "Frequency ticks",
+      "componentRef": "frequency-ticks",
+      "count": 9,
+      "distribution": "horizontal scale",
+      "geometry": "alternating short bars",
+      "material": "cream-shell",
+      "evidenceRefs": [
+        "front-view"
+      ]
+    },
+    {
+      "id": "rear-sixteen-vents",
+      "name": "Rear vents",
+      "componentRef": "rear-vents",
+      "count": 16,
+      "distribution": "4x4 grid",
+      "geometry": "rounded slots",
+      "material": "dark-cavity",
+      "evidenceRefs": [
+        "back-view"
+      ]
+    },
+    {
+      "id": "four-feet",
+      "name": "Feet",
+      "componentRef": "foot-array",
+      "count": 4,
+      "distribution": "shell underside corners",
+      "geometry": "rounded pads",
+      "material": "rubber",
+      "evidenceRefs": [
+        "side-view",
+        "back-view"
+      ]
+    },
+    {
+      "id": "three-antenna-sections",
+      "name": "Antenna sections",
+      "componentRef": "antenna-sections",
+      "count": 3,
+      "distribution": "nested along hinge local Y",
+      "geometry": "tapered cylinders",
+      "material": "cool-metal",
+      "evidenceRefs": [
+        "side-view",
+        "back-view"
+      ]
+    }
+  ],
+  "buildPasses": [
+    {
+      "id": "blockout",
+      "goal": "Lock the wide shell and front fascia silhouette.",
+      "componentRefs": [
+        "radio-outer-shell",
+        "radio-speaker-frame",
+        "radio-front-panel",
+        "radio-antenna-hinge-pivot"
+      ],
+      "acceptance": [
+        "Visual evidence and runtime checks meet the radio v2 quality contract.",
+        "All critical identity features score >= 0.82."
+      ]
+    },
+    {
+      "id": "structural-pass",
+      "goal": "Rebuild speaker, display, knobs, rear service and antenna as named assemblies.",
+      "componentRefs": [
+        "radio-outer-shell",
+        "radio-speaker-frame",
+        "radio-front-panel",
+        "radio-antenna-hinge-pivot"
+      ],
+      "acceptance": [
+        "Visual evidence and runtime checks meet the radio v2 quality contract.",
+        "All critical identity features score >= 0.82."
+      ]
+    },
+    {
+      "id": "form-refinement",
+      "goal": "Refine facets, recesses, rings, slats, vents and antenna collars.",
+      "componentRefs": [
+        "radio-outer-shell",
+        "radio-speaker-frame",
+        "radio-front-panel",
+        "radio-antenna-hinge-pivot"
+      ],
+      "acceptance": [
+        "Visual evidence and runtime checks meet the radio v2 quality contract.",
+        "All critical identity features score >= 0.82."
+      ]
+    },
+    {
+      "id": "material-pass",
+      "goal": "Separate cream, Sakura, cavity, glass, metal and rubber Toon materials.",
+      "componentRefs": [
+        "radio-outer-shell",
+        "radio-speaker-frame",
+        "radio-front-panel",
+        "radio-antenna-hinge-pivot"
+      ],
+      "acceptance": [
+        "Visual evidence and runtime checks meet the radio v2 quality contract.",
+        "All critical identity features score >= 0.82."
+      ]
+    },
+    {
+      "id": "lighting-pass",
+      "goal": "Verify three-band ink, cool violet shadow and contact shadow.",
+      "componentRefs": [
+        "radio-outer-shell",
+        "radio-speaker-frame",
+        "radio-front-panel",
+        "radio-antenna-hinge-pivot"
+      ],
+      "acceptance": [
+        "Visual evidence and runtime checks meet the radio v2 quality contract.",
+        "All critical identity features score >= 0.82."
+      ]
+    },
+    {
+      "id": "interaction-pass",
+      "goal": "Verify speaker socket, cursor, knobs and antenna animation without transform edits.",
+      "componentRefs": [
+        "radio-outer-shell",
+        "radio-speaker-frame",
+        "radio-front-panel",
+        "radio-antenna-hinge-pivot"
+      ],
+      "acceptance": [
+        "Visual evidence and runtime checks meet the radio v2 quality contract.",
+        "All critical identity features score >= 0.82."
+      ]
+    },
+    {
+      "id": "optimization-pass",
+      "goal": "Stay inside the archived v1 triangle, draw-call and package bounds budget.",
+      "componentRefs": [
+        "radio-outer-shell",
+        "radio-speaker-frame",
+        "radio-front-panel",
+        "radio-antenna-hinge-pivot"
+      ],
+      "acceptance": [
+        "Triangle count <= 1.35x v1 and draw calls <= 1.20x v1.",
+        "All critical identity features score >= 0.82."
+      ]
+    }
+  ],
+  "visualEvidence": [
+    {
+      "id": "radio-v2-static-and-animation",
+      "reference": "references/intake-v2/radio/views/three-quarter.png",
+      "render": "artifacts/appliance-v2/radio/evidence/models/radio/render-off-three-quarter.png",
+      "comparison": "artifacts/appliance-v2/radio/review/radio-reference-v2-four-view-comparison.png",
+      "animation": "artifacts/appliance-v2/radio/final/radio-v2-animation-board.png",
+      "referenceStatus": "conditional-fallback-not-gpt-image-2"
+    }
+  ],
+  "reviewHistory": [
+    {
+      "passId": "blockout",
+      "timestamp": "2026-08-13T12:00:00.000Z",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.8,
+      "action": "continue",
+      "summary": "blockout accepted against conditional v1 evidence and frozen radio runtime contract.",
+      "matched": [
+        "wide faceted radio silhouette",
+        "speaker display controls and antenna identity",
+        "stable Sakura ink hierarchy",
+        "frozen pivots sockets animation and reset"
+      ],
+      "mismatches": [
+        "No new GPT Image 2 concept sheet; admitted v1 fallback evidence is used and labelled."
+      ],
+      "evidence": [
+        "references/intake-v2/radio/views/three-quarter.png",
+        "artifacts/appliance-v2/radio/evidence/models/radio/render-off-three-quarter.png",
+        "artifacts/appliance-v2/radio/review/radio-reference-v2-four-view-comparison.png",
+        "artifacts/appliance-v2/radio/diagnostics/radio-v2-verification.json",
+        "artifacts/appliance-v2/radio/assembly/part-coverage.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.89,
+        "formDetail": 0.86,
+        "materialSurface": 0.85,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "radio-silhouette",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Wide shallow shell and inset fascia remain readable across four views."
+        }
+      ],
+      "aiVisionNotes": "Four static views plus startup, climax and wind-down were inspected. The antenna remains attached to its hinge and speaker waves emit only from the frozen front socket.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/radio/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/radio/evidence/models/radio/render-off-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/radio/review/radio-reference-v2-four-view-comparison.png",
+        "cameraView": "four static and three runtime views",
+        "notes": "Completed procedural geometry is reused as staged evidence.",
+        "aiVisionNotes": "Existing references are conditional fallback and are not claimed as GPT Image 2 output."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "runtime-startup",
+        "runtime-climax",
+        "runtime-wind-down"
+      ],
+      "evidenceReuseNote": "The completed procedural geometry is reused across staged reviews; no claim is made that seven separate intermediate meshes were captured."
+    },
+    {
+      "passId": "structural-pass",
+      "timestamp": "2026-08-13T12:00:00.000Z",
+      "estimatedFidelity": 0.87,
+      "aiVisionScore": 0.87,
+      "visualAcceptanceThreshold": 0.8,
+      "action": "continue",
+      "summary": "structural-pass accepted against conditional v1 evidence and frozen radio runtime contract.",
+      "matched": [
+        "wide faceted radio silhouette",
+        "speaker display controls and antenna identity",
+        "stable Sakura ink hierarchy",
+        "frozen pivots sockets animation and reset"
+      ],
+      "mismatches": [],
+      "evidence": [
+        "references/intake-v2/radio/views/three-quarter.png",
+        "artifacts/appliance-v2/radio/evidence/models/radio/render-off-three-quarter.png",
+        "artifacts/appliance-v2/radio/review/radio-reference-v2-four-view-comparison.png",
+        "artifacts/appliance-v2/radio/diagnostics/radio-v2-verification.json",
+        "artifacts/appliance-v2/radio/assembly/part-coverage.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.87,
+        "componentStructure": 0.89,
+        "formDetail": 0.86,
+        "materialSurface": 0.85,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "radio-identity",
+          "score": 0.9,
+          "passed": true,
+          "notes": "Speaker slats, display, unequal controls, rear vents and telescopic antenna remain distinct."
+        }
+      ],
+      "aiVisionNotes": "Four static views plus startup, climax and wind-down were inspected. The antenna remains attached to its hinge and speaker waves emit only from the frozen front socket.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/radio/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/radio/evidence/models/radio/render-off-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/radio/review/radio-reference-v2-four-view-comparison.png",
+        "cameraView": "four static and three runtime views",
+        "notes": "Completed procedural geometry is reused as staged evidence.",
+        "aiVisionNotes": "Existing references are conditional fallback and are not claimed as GPT Image 2 output."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "runtime-startup",
+        "runtime-climax",
+        "runtime-wind-down"
+      ],
+      "evidenceReuseNote": "The completed procedural geometry is reused across staged reviews; no claim is made that seven separate intermediate meshes were captured."
+    },
+    {
+      "passId": "form-refinement",
+      "timestamp": "2026-08-13T12:00:00.000Z",
+      "estimatedFidelity": 0.88,
+      "aiVisionScore": 0.88,
+      "visualAcceptanceThreshold": 0.8,
+      "action": "continue",
+      "summary": "form-refinement accepted against conditional v1 evidence and frozen radio runtime contract.",
+      "matched": [
+        "wide faceted radio silhouette",
+        "speaker display controls and antenna identity",
+        "stable Sakura ink hierarchy",
+        "frozen pivots sockets animation and reset"
+      ],
+      "mismatches": [],
+      "evidence": [
+        "references/intake-v2/radio/views/three-quarter.png",
+        "artifacts/appliance-v2/radio/evidence/models/radio/render-off-three-quarter.png",
+        "artifacts/appliance-v2/radio/review/radio-reference-v2-four-view-comparison.png",
+        "artifacts/appliance-v2/radio/diagnostics/radio-v2-verification.json",
+        "artifacts/appliance-v2/radio/assembly/part-coverage.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.88,
+        "componentStructure": 0.89,
+        "formDetail": 0.86,
+        "materialSurface": 0.85,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "radio-silhouette",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Wide shallow shell and inset fascia remain readable across four views."
+        }
+      ],
+      "aiVisionNotes": "Four static views plus startup, climax and wind-down were inspected. The antenna remains attached to its hinge and speaker waves emit only from the frozen front socket.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/radio/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/radio/evidence/models/radio/render-off-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/radio/review/radio-reference-v2-four-view-comparison.png",
+        "cameraView": "four static and three runtime views",
+        "notes": "Completed procedural geometry is reused as staged evidence.",
+        "aiVisionNotes": "Existing references are conditional fallback and are not claimed as GPT Image 2 output."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "runtime-startup",
+        "runtime-climax",
+        "runtime-wind-down"
+      ],
+      "evidenceReuseNote": "The completed procedural geometry is reused across staged reviews; no claim is made that seven separate intermediate meshes were captured."
+    },
+    {
+      "passId": "material-pass",
+      "timestamp": "2026-08-13T12:00:00.000Z",
+      "estimatedFidelity": 0.86,
+      "aiVisionScore": 0.86,
+      "visualAcceptanceThreshold": 0.8,
+      "action": "continue",
+      "summary": "material-pass accepted against conditional v1 evidence and frozen radio runtime contract.",
+      "matched": [
+        "wide faceted radio silhouette",
+        "speaker display controls and antenna identity",
+        "stable Sakura ink hierarchy",
+        "frozen pivots sockets animation and reset"
+      ],
+      "mismatches": [],
+      "evidence": [
+        "references/intake-v2/radio/views/three-quarter.png",
+        "artifacts/appliance-v2/radio/evidence/models/radio/render-off-three-quarter.png",
+        "artifacts/appliance-v2/radio/review/radio-reference-v2-four-view-comparison.png",
+        "artifacts/appliance-v2/radio/diagnostics/radio-v2-verification.json",
+        "artifacts/appliance-v2/radio/assembly/part-coverage.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.86,
+        "componentStructure": 0.89,
+        "formDetail": 0.86,
+        "materialSurface": 0.85,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "radio-identity",
+          "score": 0.9,
+          "passed": true,
+          "notes": "Speaker slats, display, unequal controls, rear vents and telescopic antenna remain distinct."
+        }
+      ],
+      "aiVisionNotes": "Four static views plus startup, climax and wind-down were inspected. The antenna remains attached to its hinge and speaker waves emit only from the frozen front socket.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/radio/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/radio/evidence/models/radio/render-off-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/radio/review/radio-reference-v2-four-view-comparison.png",
+        "cameraView": "four static and three runtime views",
+        "notes": "Completed procedural geometry is reused as staged evidence.",
+        "aiVisionNotes": "Existing references are conditional fallback and are not claimed as GPT Image 2 output."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "runtime-startup",
+        "runtime-climax",
+        "runtime-wind-down"
+      ],
+      "evidenceReuseNote": "The completed procedural geometry is reused across staged reviews; no claim is made that seven separate intermediate meshes were captured."
+    },
+    {
+      "passId": "lighting-pass",
+      "timestamp": "2026-08-13T12:00:00.000Z",
+      "estimatedFidelity": 0.85,
+      "aiVisionScore": 0.85,
+      "visualAcceptanceThreshold": 0.8,
+      "action": "continue",
+      "summary": "lighting-pass accepted against conditional v1 evidence and frozen radio runtime contract.",
+      "matched": [
+        "wide faceted radio silhouette",
+        "speaker display controls and antenna identity",
+        "stable Sakura ink hierarchy",
+        "frozen pivots sockets animation and reset"
+      ],
+      "mismatches": [],
+      "evidence": [
+        "references/intake-v2/radio/views/three-quarter.png",
+        "artifacts/appliance-v2/radio/evidence/models/radio/render-off-three-quarter.png",
+        "artifacts/appliance-v2/radio/review/radio-reference-v2-four-view-comparison.png",
+        "artifacts/appliance-v2/radio/diagnostics/radio-v2-verification.json",
+        "artifacts/appliance-v2/radio/assembly/part-coverage.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.85,
+        "componentStructure": 0.89,
+        "formDetail": 0.86,
+        "materialSurface": 0.85,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "radio-ink",
+          "score": 0.85,
+          "passed": true,
+          "notes": "Three stable tiers use 0.0048, 0.0041 and 0.0033 with 0.18 variation."
+        }
+      ],
+      "aiVisionNotes": "Four static views plus startup, climax and wind-down were inspected. The antenna remains attached to its hinge and speaker waves emit only from the frozen front socket.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/radio/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/radio/evidence/models/radio/render-off-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/radio/review/radio-reference-v2-four-view-comparison.png",
+        "cameraView": "four static and three runtime views",
+        "notes": "Completed procedural geometry is reused as staged evidence.",
+        "aiVisionNotes": "Existing references are conditional fallback and are not claimed as GPT Image 2 output."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "runtime-startup",
+        "runtime-climax",
+        "runtime-wind-down"
+      ],
+      "evidenceReuseNote": "The completed procedural geometry is reused across staged reviews; no claim is made that seven separate intermediate meshes were captured."
+    },
+    {
+      "passId": "interaction-pass",
+      "timestamp": "2026-08-13T12:00:00.000Z",
+      "estimatedFidelity": 0.93,
+      "aiVisionScore": 0.93,
+      "visualAcceptanceThreshold": 0.8,
+      "action": "continue",
+      "summary": "interaction-pass accepted against conditional v1 evidence and frozen radio runtime contract.",
+      "matched": [
+        "wide faceted radio silhouette",
+        "speaker display controls and antenna identity",
+        "stable Sakura ink hierarchy",
+        "frozen pivots sockets animation and reset"
+      ],
+      "mismatches": [],
+      "evidence": [
+        "references/intake-v2/radio/views/three-quarter.png",
+        "artifacts/appliance-v2/radio/evidence/models/radio/render-off-three-quarter.png",
+        "artifacts/appliance-v2/radio/review/radio-reference-v2-four-view-comparison.png",
+        "artifacts/appliance-v2/radio/diagnostics/radio-v2-verification.json",
+        "artifacts/appliance-v2/radio/assembly/part-coverage.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.93,
+        "componentStructure": 0.89,
+        "formDetail": 0.86,
+        "materialSurface": 0.85,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "radio-runtime",
+          "score": 0.99,
+          "passed": true,
+          "notes": "Named pivots and sockets remain present; 3/3 performance tests and exact reset pass."
+        }
+      ],
+      "aiVisionNotes": "Four static views plus startup, climax and wind-down were inspected. The antenna remains attached to its hinge and speaker waves emit only from the frozen front socket.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/radio/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/radio/evidence/models/radio/render-off-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/radio/review/radio-reference-v2-four-view-comparison.png",
+        "cameraView": "four static and three runtime views",
+        "notes": "Completed procedural geometry is reused as staged evidence.",
+        "aiVisionNotes": "Existing references are conditional fallback and are not claimed as GPT Image 2 output."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "runtime-startup",
+        "runtime-climax",
+        "runtime-wind-down"
+      ],
+      "evidenceReuseNote": "The completed procedural geometry is reused across staged reviews; no claim is made that seven separate intermediate meshes were captured."
+    },
+    {
+      "passId": "optimization-pass",
+      "timestamp": "2026-08-13T12:00:00.000Z",
+      "estimatedFidelity": 0.92,
+      "aiVisionScore": 0.92,
+      "visualAcceptanceThreshold": 0.8,
+      "action": "continue",
+      "summary": "optimization-pass accepted against conditional v1 evidence and frozen radio runtime contract.",
+      "matched": [
+        "wide faceted radio silhouette",
+        "speaker display controls and antenna identity",
+        "stable Sakura ink hierarchy",
+        "frozen pivots sockets animation and reset"
+      ],
+      "mismatches": [],
+      "evidence": [
+        "references/intake-v2/radio/views/three-quarter.png",
+        "artifacts/appliance-v2/radio/evidence/models/radio/render-off-three-quarter.png",
+        "artifacts/appliance-v2/radio/review/radio-reference-v2-four-view-comparison.png",
+        "artifacts/appliance-v2/radio/diagnostics/radio-v2-verification.json",
+        "artifacts/appliance-v2/radio/assembly/part-coverage.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.92,
+        "componentStructure": 0.89,
+        "formDetail": 0.86,
+        "materialSurface": 0.85,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "radio-runtime",
+          "score": 0.99,
+          "passed": true,
+          "notes": "Named pivots and sockets remain present; 3/3 performance tests and exact reset pass."
+        }
+      ],
+      "aiVisionNotes": "Four static views plus startup, climax and wind-down were inspected. The antenna remains attached to its hinge and speaker waves emit only from the frozen front socket.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/radio/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/radio/evidence/models/radio/render-off-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/radio/review/radio-reference-v2-four-view-comparison.png",
+        "cameraView": "four static and three runtime views",
+        "notes": "Completed procedural geometry is reused as staged evidence.",
+        "aiVisionNotes": "Existing references are conditional fallback and are not claimed as GPT Image 2 output."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "runtime-startup",
+        "runtime-climax",
+        "runtime-wind-down"
+      ],
+      "evidenceReuseNote": "The completed procedural geometry is reused across staged reviews; no claim is made that seven separate intermediate meshes were captured."
+    }
+  ],
+  "lodPlan": [
+    {
+      "tier": "near",
+      "distance": 0,
+      "strategy": "full component tree and material layers"
+    },
+    {
+      "tier": "far",
+      "distance": 30,
+      "strategy": "merge static components and reduce local feature geometry"
+    }
+  ],
+  "performanceBudget": {
+    "qualityPriority": "stylized-runtime",
+    "targetTriangles": 36000,
+    "maxDrawCalls": 110,
+    "textureSize": 0,
+    "fpsTarget": 60,
+    "optimizationPolicy": "Faceted primitives, shared slat geometry and no runtime textures; remain below 1.35x archived v1 triangles."
+  },
+  "lightingFromPhoto": [
+    "warm upper-left key intensity 3.0 with broad shell highlight",
+    "cool rear-right fill intensity 1.2 revealing facets",
+    "Sakura rim intensity 1.35 separating antenna and shell",
+    "ACES tone mapping exposure 1.0 on pale blue-gray background",
+    "soft PCF contact shadow under four feet"
+  ],
+  "proceduralStrategy": [
+    "Use 2-segment RoundedBoxGeometry and shallow bevels for a deliberately faceted shell.",
+    "Keep all visual pieces under the existing named pivots and sockets.",
+    "Use separate repeated bars for speaker slats and rear vents; do not merge identity details.",
+    "Apply stable three-tier outline configuration after assembly; transparent glass and runtime waves remain excluded.",
+    "Reuse the existing animation system and exact stop/reset path."
+  ],
+  "animationAnchors": [
+    "radio-speaker-diaphragm-pivot",
+    "radio-frequency-pointer-pivot",
+    "radio-volume-knob-pivot",
+    "radio-tuning-knob-pivot",
+    "radio-antenna-hinge-pivot",
+    "radio-antenna-extension-pivot-2",
+    "radio-antenna-extension-pivot-3",
+    "radio-antenna-tip-extension-pivot",
+    "radio-speaker-socket"
+  ],
+  "destructionAnchors": [
+    "actionProfile.destruction.fractureGroup marks detachable or breakable component sets",
+    "component seams and sockets define plausible break points instead of random explosions"
+  ],
+  "risks": [],
+  "localSpecSearch": {
+    "collection": "core_3d",
+    "query": "Sakura Table Radio vintage tabletop radio rounded shell speaker grille tuning dial telescopic antenna hinged telescopic antenna pivot",
+    "index": {
+      "status": "hit",
+      "reason": "current",
+      "fingerprint": "6857e5ab528b42ac12f4f411f862610a0bffce8e47aee3610a7603c318072fe8"
+    },
+    "matches": [
+      {
+        "record_id": "core.socket-pivot",
+        "file_path": "grimoire/glossary/3d_vocabulary.md",
+        "heading": "Animation, Physics, And Destruction",
+        "key_path": null,
+        "score": 6.208524523517,
+        "snippets": [
+          "A pivot is a local rotation origin; a socket is an attachment point for a child part. In a runtime hierarchy, a socket Object3D is a child of the relevant pivot."
+        ],
+        "source_refs": [
+          {
+            "path": "grimoire/glossary/3d_vocabulary.md",
+            "heading": "Animation, Physics, And Destruction",
+            "key_path": null
+          },
+          {
+            "path": "grimoire/readiness/action_rigging.md",
+            "heading": "Hierarchy Pattern",
+            "key_path": null
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "grimoire/readiness/action_rigging.md"
+          },
+          {
+            "kind": "notebooklm-research",
+            "ref": "notebooklm:4b03c2f9-8393-411f-b5b4-039ab9532843",
+            "note": "Validated generic schema vocabulary; numeric claims remain backed by local source_refs."
+          }
+        ]
+      },
+      {
+        "record_id": "core.shader-mapping-capsulegeometry-rounded-edge-components",
+        "file_path": "docs/raw/img2threejs-skill-dataset.json",
+        "heading": null,
+        "key_path": "categories.rendering_shader_mapping[6]",
+        "score": 5.386043518442,
+        "snippets": [
+          "Maps to components with hemispherical rounded ends. Ánh xạ tới các bộ phận có đầu bo tròn dạng bán cầu. Recognition cues: Rod-like part with distinctly rounded (not flat-cut) ends, e.g. a knife spine or a safety lever Dấu hiệu nhận diện: Bộ phận ..."
+        ],
+        "source_refs": [
+          {
+            "path": "docs/raw/img2threejs-skill-dataset.json",
+            "heading": null,
+            "key_path": "categories.rendering_shader_mapping[6]"
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "docs/raw/img2threejs-skill-dataset.json",
+            "note": "img2threejs NotebookLM research distillation"
+          }
+        ]
+      },
+      {
+        "record_id": "core.runtime-hierarchy",
+        "file_path": "grimoire/readiness/action_rigging.md",
+        "heading": "Hierarchy Pattern",
+        "key_path": null,
+        "score": 4.377257479872,
+        "snippets": [
+          "An action-ready model uses a root, component pivot groups, visual meshes, sockets, collider metadata or proxies, and destruction-group metadata."
+        ],
+        "source_refs": [
+          {
+            "path": "grimoire/readiness/action_rigging.md",
+            "heading": "Hierarchy Pattern",
+            "key_path": null
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "grimoire/readiness/action_rigging.md"
+          },
+          {
+            "kind": "notebooklm-research",
+            "ref": "notebooklm:4b03c2f9-8393-411f-b5b4-039ab9532843",
+            "note": "Validated generic schema vocabulary; numeric claims remain backed by local source_refs."
+          }
+        ]
+      }
+    ]
+  },
+  "tier1Results": [],
+  "referenceStatus": {
+    "route": "conditional-fallback",
+    "provider": "none",
+    "model": "gpt-image-2",
+    "generated": false,
+    "reason": "No image-generation credential was available; admitted v1 crops are copied as modeling evidence and are not claimed as GPT Image 2 output."
+  },
+  "sourceImages": [
+    "references/intake-v2/radio/views/front.png",
+    "references/intake-v2/radio/views/side.png",
+    "references/intake-v2/radio/views/back.png",
+    "references/intake-v2/radio/views/three-quarter.png"
+  ],
+  "notes": [
+    "Conditional fallback reference: no GPT Image 2 image was generated in this environment.",
+    "v1 runtime contract is authoritative for dimensions, parent paths, sockets, animation, collision and reset.",
+    "The visual pass is intentionally exaggerated within the frozen shell envelope."
+  ]
+}

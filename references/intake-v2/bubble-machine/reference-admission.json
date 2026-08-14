@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "targetId": "bubble-machine",
+  "source": "bubble-machine-turnsheet-v2.png",
+  "provider": "Comfly OpenAI-compatible images API",
+  "model": "gpt-image-2",
+  "generation": {
+    "size": "2048x2048",
+    "quality": "high",
+    "format": "png",
+    "opaqueBackground": true
+  },
+  "verdict": "proceed",
+  "visualReview": {
+    "objectIdentity": "pass",
+    "crossViewConsistency": "pass",
+    "orthographicCoverage": "pass",
+    "styleContract": "pass",
+    "notes": [
+      "All four cells depict the same upright bubble machine with a consistent cream shell, pink frame, eight-opening front wheel, side reservoir and rear fan system.",
+      "Front, side and back views share the same ground line and comparable scale; the three-quarter view provides depth evidence.",
+      "The generated front rim and feet are more exaggerated than v1 and are treated as visual direction only; archived bounds and frozen runtime transforms remain authoritative."
+    ]
+  },
+  "views": [
+    { "id": "front", "path": "views/front.png", "width": 1024, "height": 1024, "foregroundCoverage": 0.471, "largestComponentFraction": 1.0, "admitted": true },
+    { "id": "side", "path": "views/side.png", "width": 1024, "height": 1024, "foregroundCoverage": 0.3207, "largestComponentFraction": 1.0, "admitted": true },
+    { "id": "back", "path": "views/back.png", "width": 1024, "height": 1024, "foregroundCoverage": 0.3682, "largestComponentFraction": 0.9954, "admitted": true },
+    { "id": "three-quarter", "path": "views/three-quarter.png", "width": 1024, "height": 1024, "foregroundCoverage": 0.4963, "largestComponentFraction": 1.0, "admitted": true }
+  ]
+}

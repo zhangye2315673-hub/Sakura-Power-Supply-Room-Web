@@ -1,0 +1,847 @@
+{
+  "targetName": "SAKURA Game Controller v2",
+  "sourceImage": "references/intake-v2/game-controller/game-controller-turnsheet-v2.png",
+  "preSpecAssessment": {
+    "objectClass": {
+      "primaryType": "faceted wireless game controller",
+      "primaryDomain": "object",
+      "formLanguage": [
+        "hard-surface",
+        "low-poly",
+        "faceted",
+        "ergonomic"
+      ],
+      "structureKind": [
+        "compound object",
+        "layered shell",
+        "articulated controls",
+        "repeated modules"
+      ],
+      "motionPotential": [
+        "articulated",
+        "button-press",
+        "stick-orbit",
+        "effect-emitter",
+        "destructible"
+      ],
+      "materialFamilies": [
+        "matte plastic",
+        "dark cavity plastic",
+        "indicator lens",
+        "fastener metal"
+      ],
+      "notes": "The archived runtime rig and v1 Box3 are compatibility truth. The IMAGEN sheet reallocates visual masses only inside that contract."
+    },
+    "complexity": {
+      "tier": "ultra-complex",
+      "scores": {
+        "silhouetteComplexity": 3,
+        "componentCount": 3,
+        "hierarchyDepth": 3,
+        "repetitionDensity": 3,
+        "materialLayerCount": 3,
+        "localDetailDensity": 3,
+        "occlusionRisk": 3,
+        "actionReadinessNeed": 3
+      },
+      "estimatedCounts": {
+        "macroComponents": 5,
+        "mesoComponents": 20,
+        "microFeatureGroups": 22,
+        "materialLayers": 10,
+        "repetitionSystems": 7
+      },
+      "reasoning": [
+        "Eleven front-control pivots and four shoulder pivots must retain exact local transforms and full animation clearance.",
+        "Five stars, four bolts, eight shards and six energy points form a model-owned volumetric ultimate effect.",
+        "Front, rear, side and three-quarter identity depend on consistent shell, control and rear-service relationships.",
+        "The shared performance system requires deterministic seeking, one timeline owner and exact stop reset."
+      ]
+    },
+    "specDepthDecision": {
+      "requiredDepth": "ultra-complex",
+      "minimumComponentLevels": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "needsRepetitionSystems": true,
+      "needsMaterialLocalOverrides": true,
+      "needsMultipleReviewViews": true,
+      "needsActionReadyHierarchy": true,
+      "rationale": "The redesign changes visual geometry and outline styling while preserving an animation-rich runtime contract."
+    },
+    "unknownsToResolveBeforeImplementation": [],
+    "detailInventory": {
+      "scanMethod": "grid-4x4 plus four-view component review",
+      "targetMinDetails": 22,
+      "details": [
+        {
+          "id": "gc-detail-01",
+          "kind": "contour",
+          "description": "Broad cream upper shell with inward lower notch and symmetric handle shoulders.",
+          "region": {
+            "x": 0.06,
+            "y": 0.29,
+            "width": 0.88,
+            "height": 0.35,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "silhouette",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "front-shell"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.94,
+          "realization": "unreported"
+        },
+        {
+          "id": "gc-detail-02",
+          "kind": "contour",
+          "description": "Two long rounded grips descend and flare toward the palm ends.",
+          "region": {
+            "x": 0.05,
+            "y": 0.43,
+            "width": 0.9,
+            "height": 0.25,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "silhouette",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "grip-shell-pair"
+          },
+          "evidenceRef": "front/back-view",
+          "confidence": 0.96,
+          "realization": "unreported"
+        },
+        {
+          "id": "gc-detail-03",
+          "kind": "seam",
+          "description": "Continuous front-to-rear perimeter shell seam.",
+          "region": {
+            "x": 0.06,
+            "y": 0.29,
+            "width": 0.88,
+            "height": 0.39,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "form/AO",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "perimeter-shell-seam"
+          },
+          "evidenceRef": "side-view",
+          "confidence": 0.94,
+          "realization": "unreported"
+        },
+        {
+          "id": "gc-detail-04",
+          "kind": "seam",
+          "description": "Diagonal curved cream-to-pink boundary across each grip.",
+          "region": {
+            "x": 0.05,
+            "y": 0.46,
+            "width": 0.9,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "material/form",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "pink-grip-panel-pair"
+          },
+          "evidenceRef": "front/back-view",
+          "confidence": 0.96,
+          "realization": "unreported"
+        },
+        {
+          "id": "gc-detail-05",
+          "kind": "bevel",
+          "description": "Raised rounded cross D-pad with broad arm fillets.",
+          "region": {
+            "x": 0.23,
+            "y": 0.36,
+            "width": 0.21,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "form/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "dpad-cross"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.98,
+          "realization": "unreported"
+        },
+        {
+          "id": "gc-detail-06",
+          "kind": "bevel",
+          "description": "Four round unlabeled face buttons arranged in a diamond.",
+          "region": {
+            "x": 0.69,
+            "y": 0.35,
+            "width": 0.24,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "form/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "face-button-array"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.98,
+          "realization": "unreported"
+        },
+        {
+          "id": "gc-detail-07",
+          "kind": "ridge",
+          "description": "Left analog stick rises from a cream socket ring with a recessed cap centre.",
+          "region": {
+            "x": 0.38,
+            "y": 0.49,
+            "width": 0.17,
+            "height": 0.14,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "form/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "left-stick-assembly"
+          },
+          "evidenceRef": "front/side-view",
+          "confidence": 0.97,
+          "realization": "unreported"
+        },
+        {
+          "id": "gc-detail-08",
+          "kind": "ridge",
+          "description": "Right analog stick mirrors the left with its own socket ring and cap recess.",
+          "region": {
+            "x": 0.61,
+            "y": 0.49,
+            "width": 0.17,
+            "height": 0.14,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "form/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "right-stick-assembly"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.97,
+          "realization": "unreported"
+        },
+        {
+          "id": "gc-detail-09",
+          "kind": "gloss",
+          "description": "Small rose status/home lens centred above the select button.",
+          "region": {
+            "x": 0.54,
+            "y": 0.36,
+            "width": 0.08,
+            "height": 0.07,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "material/interaction",
+          "mapsTo": {
+            "type": "material.localOverrides",
+            "ref": "status-lens-powered-glow"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.94,
+          "realization": "unreported"
+        },
+        {
+          "id": "gc-detail-10",
+          "kind": "bevel",
+          "description": "Small horizontal rounded select button below the status lens.",
+          "region": {
+            "x": 0.55,
+            "y": 0.43,
+            "width": 0.07,
+            "height": 0.04,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "form/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "select-button"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.96,
+          "realization": "unreported"
+        },
+        {
+          "id": "gc-detail-11",
+          "kind": "contour",
+          "description": "Left and right upper bumpers sit proud of the shoulder deck.",
+          "region": {
+            "x": 0.2,
+            "y": 0.27,
+            "width": 0.65,
+            "height": 0.08,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "silhouette/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "bumper-pair"
+          },
+          "evidenceRef": "front/back/side-view",
+          "confidence": 0.95,
+          "realization": "unreported"
+        },
+        {
+          "id": "gc-detail-12",
+          "kind": "contour",
+          "description": "Second pink trigger layer is visible behind and below each bumper.",
+          "region": {
+            "x": 0.2,
+            "y": 0.27,
+            "width": 0.65,
+            "height": 0.1,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "silhouette/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "trigger-pair"
+          },
+          "evidenceRef": "back/side-view",
+          "confidence": 0.94,
+          "realization": "unreported"
+        },
+        {
+          "id": "gc-detail-13",
+          "kind": "linework",
+          "description": "Rounded rectangular rear battery/service cover centred on the back shell.",
+          "region": {
+            "x": 0.36,
+            "y": 0.43,
+            "width": 0.26,
+            "height": 0.13,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "form/AO",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "rear-battery-cover"
+          },
+          "evidenceRef": "back-view",
+          "confidence": 0.97,
+          "realization": "unreported"
+        },
+        {
+          "id": "gc-detail-14",
+          "kind": "fastener",
+          "description": "Four countersunk circular screw heads repeat across the rear lower shell and grip ends.",
+          "region": {
+            "x": 0.02,
+            "y": 0.44,
+            "width": 0.96,
+            "height": 0.24,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "form/material",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "rear-screw-array"
+          },
+          "evidenceRef": "back-view",
+          "confidence": 0.95,
+          "realization": "unreported"
+        },
+        {
+          "id": "gc-detail-15",
+          "kind": "linework",
+          "description": "Pink rounded rear upper-centre inset interrupts the cream shoulder deck.",
+          "region": {
+            "x": 0.42,
+            "y": 0.31,
+            "width": 0.18,
+            "height": 0.07,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "form/material",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "rear-port-cover"
+          },
+          "evidenceRef": "back-view",
+          "confidence": 0.94,
+          "realization": "unreported"
+        },
+        {
+          "id": "gc-detail-16",
+          "kind": "bevel",
+          "description": "Cream analog socket rings carry a narrow catch-light bevel around each pink stick.",
+          "region": {
+            "x": 0.37,
+            "y": 0.48,
+            "width": 0.42,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "form/lighting",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "stick-socket-ring-pair"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.96,
+          "realization": "unreported"
+        },
+        {
+          "id": "gc-detail-17",
+          "kind": "gloss",
+          "description": "Pink button crowns and grip panels have slightly glossier highlights than the cream shell.",
+          "region": {
+            "x": 0.05,
+            "y": 0.34,
+            "width": 0.9,
+            "height": 0.34,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "material",
+          "mapsTo": {
+            "type": "material.localOverrides",
+            "ref": "pink-crown-roughness"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.94,
+          "realization": "unreported"
+        },
+        {
+          "id": "gc-detail-18",
+          "kind": "linework",
+          "description": "Thin dark cavity lines separate buttons, grip panels, battery cover and shell halves.",
+          "region": {
+            "x": 0.04,
+            "y": 0.29,
+            "width": 0.92,
+            "height": 0.39,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "AO/identity",
+          "mapsTo": {
+            "type": "material.localOverrides",
+            "ref": "cavity-seam-darkening"
+          },
+          "evidenceRef": "all-views",
+          "confidence": 0.94,
+          "realization": "unreported"
+        },
+        {
+          "id": "game-controller-v2-outline-hierarchy",
+          "kind": "contour",
+          "description": "Stable dark-plum outline hierarchy uses main, structure and detail widths with object-space plus/minus 18 percent variation.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "catalog-visible game contour",
+          "affects": "silhouette, materialSurface",
+          "mapsTo": {
+            "type": "material.localOverrides",
+            "ref": "controller-outline-hierarchy"
+          },
+          "evidenceRef": "references/intake-v2/game-controller/views/three-quarter.png",
+          "confidence": 0.98
+        },
+        {
+          "id": "game-controller-v2-shell-facet-band",
+          "kind": "ridge",
+          "description": "Broad planar shell facets step around the shoulder deck and waist without adding a raised panel.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "front-shell"
+          },
+          "evidenceRef": "references/intake-v2/game-controller/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "game-controller-v2-shoulder-undercut",
+          "kind": "seam",
+          "description": "A controlled plum undercut separates each bumper from its trigger through the full press arc.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "shoulder-deck"
+          },
+          "evidenceRef": "references/intake-v2/game-controller/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "game-controller-v2-stick-thumb-dish",
+          "kind": "bevel",
+          "description": "Each faceted analog cap keeps a clearly recessed thumb dish and readable crown rim.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "left-stick-assembly"
+          },
+          "evidenceRef": "references/intake-v2/game-controller/views/three-quarter.png",
+          "confidence": 0.96
+        }
+      ]
+    },
+    "anatomy": {
+      "applies": false,
+      "styleHeads": 0,
+      "proportions": {
+        "headUnit": 0,
+        "torso": 0,
+        "legs": 0,
+        "shoulderWidth": 0,
+        "hipWidth": 0
+      },
+      "pose": {
+        "type": "unassessed",
+        "jointAngles": {}
+      },
+      "faceLandmarks": {
+        "eyeLine": 0,
+        "eyeSpacing": 0,
+        "noseBase": 0,
+        "mouthLine": 0,
+        "hairline": 0
+      },
+      "features": [],
+      "confidence": 0,
+      "note": "Only meaningful when objectClass.primaryDomain is character or hybrid. Set applies=true and fill from forge/stage1_intake/extract_landmarks.py. See grimoire/character/reconstruction.md and grimoire/character/likeness_maximization.md."
+    },
+    "sourceImage": "references/intake-v2/game-controller/game-controller-turnsheet-v2.png"
+  },
+  "qualityContract": {
+    "qualityBar": "ultra-complex",
+    "definitionOfDone": [
+      "The broad shoulder deck, narrow waist, deep lower notch and flared grips match the v2 sheet while staying within the v1 full-tree bounds.",
+      "All existing animation pivots, semantic sockets, colliders, destruction groups and idle transforms remain compatible.",
+      "The model uses broad 6-12 sided facets, restrained stepped bevels and a stable 0.0048/0.0041/0.0033 outline hierarchy.",
+      "Anticipation, heartbeat, frenzy, ultimate, ready finale, settle and stop retain one animation owner and exact reset."
+    ],
+    "minimumSpecDepth": {
+      "macroComponents": 5,
+      "mesoComponents": 18,
+      "microFeatureGroups": 22,
+      "materialLayers": 5,
+      "repetitionSystems": 6,
+      "reviewViewpoints": 7
+    },
+    "featureGroups": [
+      {
+        "id": "controller-envelope-silhouette",
+        "name": "Frozen controller envelope and silhouette",
+        "required": true,
+        "qualityCriteria": [
+          "V1 full-tree Box3, ground height, four edge anchors, broad shoulders, deep notch and grip extremes stay compatible."
+        ],
+        "evidenceRefs": [
+          "front-view",
+          "side-view",
+          "back-view",
+          "three-quarter-view"
+        ],
+        "failureModes": [
+          "Box3 drift",
+          "straight slab side profile",
+          "notch closes",
+          "grips exceed envelope"
+        ]
+      },
+      {
+        "id": "grip-shell-system",
+        "name": "Faceted shell and grip system",
+        "required": true,
+        "qualityCriteria": [
+          "Cream shell and four pink wrap panels form broad readable facets with crisp boundaries and no floating seams."
+        ],
+        "evidenceRefs": [
+          "front-view",
+          "side-view",
+          "back-view",
+          "three-quarter-view"
+        ],
+        "failureModes": [
+          "soft rubber toy form",
+          "flat painted grip panels",
+          "uniform tube-like handles"
+        ]
+      },
+      {
+        "id": "front-control-system",
+        "name": "Frozen front control system",
+        "required": true,
+        "qualityCriteria": [
+          "D-pad, four face buttons, two sticks, home, select and status keep their exact pivots and full press/orbit clearance."
+        ],
+        "evidenceRefs": [
+          "front-view",
+          "three-quarter-view"
+        ],
+        "failureModes": [
+          "control count changes",
+          "pivot moves",
+          "press travel penetrates shell",
+          "cavities become black clumps"
+        ]
+      },
+      {
+        "id": "shoulder-system",
+        "name": "Two-layer shoulder system",
+        "required": true,
+        "qualityCriteria": [
+          "Bumpers and triggers remain distinct faceted wedges around the frozen hinges and clear the shell at maximum press."
+        ],
+        "evidenceRefs": [
+          "side-view",
+          "back-view",
+          "three-quarter-view"
+        ],
+        "failureModes": [
+          "layers merge",
+          "hinges move",
+          "pressed key clips shell"
+        ]
+      },
+      {
+        "id": "controller-animation-contact",
+        "name": "Frozen powered animation and effect contact",
+        "required": true,
+        "qualityCriteria": [
+          "All input actions and 23 ultimate effect bodies retain parentage, emission placement, one timeline owner and exact reset."
+        ],
+        "evidenceRefs": [
+          "front-view",
+          "three-quarter-view"
+        ],
+        "failureModes": [
+          "effect duplication",
+          "old-position emission",
+          "multiple timeline owners",
+          "reset drift"
+        ]
+      },
+      {
+        "id": "controller-outline-hierarchy",
+        "name": "Stable unequal outline hierarchy",
+        "required": true,
+        "qualityCriteria": [
+          "Main, structural and detail contours use stable 0.0048/0.0041/0.0033 widths with plus/minus 18 percent object-space variation."
+        ],
+        "evidenceRefs": [
+          "front-view",
+          "side-view",
+          "back-view",
+          "three-quarter-view"
+        ],
+        "failureModes": [
+          "uniform technical outline",
+          "temporal wobble",
+          "small controls become black clumps"
+        ]
+      }
+    ],
+    "visualDeltaChecks": [
+      "v1 full-tree Box3, center and ground contact within declared tolerance",
+      "four frozen scene-edge cable anchors and all semantic socket transforms",
+      "D-pad, face-button, stick, home, select and shoulder screen-space contacts",
+      "faceted shell, S-curve grips and deep lower notch across four views",
+      "rear battery cover, port cover and four screw count",
+      "single timeline owner, model-owned ultimate effects and exact stop reset",
+      "outline width hierarchy and stability under rotation"
+    ],
+    "antiShallowSpecRules": [
+      "Do not proceed to code if qualityContract.qualityBar is unassessed.",
+      "Do not proceed to code if the spec only contains a root component for a moderate or complex object.",
+      "Do not proceed to code if required featureGroups are not represented by componentTree, materials, or repetitionSystems.",
+      "Do not proceed to code if visible local features are described only in prose and not attached to components/materials/evidenceRefs.",
+      "Do not proceed past structural-pass if attached child parts lack attachment.parentSocket, localStart, localEnd, embedDepth/overlap, and gapTolerance.",
+      "Do not pass material look-dev when albedo is reused as roughness, height, normal, or AO.",
+      "Do not pass material look-dev without macro, meso, and micro surface frequency bands for close-up materials.",
+      "Do not pass reference-fidelity material look-dev from a source image without usable referencePbr maps or an explicit documented limitation.",
+      "Do not patch a spec with extracted PBR maps when extraction confidence is below the target threshold unless the user explicitly accepts lower fidelity.",
+      "Do not place adjacent separate-geometry parts below 0.02 world-unit seam overlap (source: grimoire/build/geometry_patterns.md).",
+      "Do not satisfy raised or recessed relief, fasteners, or grip structure with a map alone when the feature affects form; use geometry or displacement (source: grimoire/build/geometry_patterns.md).",
+      "Adjacent components must overlap by at least 0.02 world units at shared seams (source: grimoire/build/geometry_patterns.md).",
+      "Raised or recessed relief and fasteners must be geometry, instanced micro-parts, or displacement; a map alone is an approximation (source: grimoire/build/geometry_patterns.md)."
+    ],
+    "mustNotDo": [
+      "Do not proceed to code if qualityContract.qualityBar is unassessed.",
+      "Do not proceed to code if the spec only contains a root component for a moderate or complex object.",
+      "Do not proceed to code if required featureGroups are not represented by componentTree, materials, or repetitionSystems.",
+      "Do not proceed to code if visible local features are described only in prose and not attached to components/materials/evidenceRefs.",
+      "Do not proceed past structural-pass if attached child parts lack attachment.parentSocket, localStart, localEnd, embedDepth/overlap, and gapTolerance.",
+      "Do not pass material look-dev when albedo is reused as roughness, height, normal, or AO.",
+      "Do not pass material look-dev without macro, meso, and micro surface frequency bands for close-up materials.",
+      "Do not pass reference-fidelity material look-dev from a source image without usable referencePbr maps or an explicit documented limitation.",
+      "Do not patch a spec with extracted PBR maps when extraction confidence is below the target threshold unless the user explicitly accepts lower fidelity.",
+      "Do not place adjacent separate-geometry parts below 0.02 world-unit seam overlap (source: grimoire/build/geometry_patterns.md).",
+      "Do not satisfy raised or recessed relief, fasteners, or grip structure with a map alone when the feature affects form; use geometry or displacement (source: grimoire/build/geometry_patterns.md).",
+      "Adjacent components must overlap by at least 0.02 world units at shared seams (source: grimoire/build/geometry_patterns.md).",
+      "Raised or recessed relief and fasteners must be geometry, instanced micro-parts, or displacement; a map alone is an approximation (source: grimoire/build/geometry_patterns.md)."
+    ]
+  },
+  "authoringInstruction": "Fill observed object class, complexity reasoning, featureGroups, visualDeltaChecks, and unknowns before generating or implementing ObjectSculptSpec.",
+  "localSpecSearch": {
+    "collection": "core_3d",
+    "query": "SAKURA Game Controller v2 faceted ergonomic game controller shell grip low poly animated buttons sticks shoulder triggers frozen pivots stable toon outline hierarchy pastel plastic",
+    "index": {
+      "status": "hit",
+      "reason": "current",
+      "fingerprint": "ac4f0bc9028e34083dbb5d5531ae3df7699c8e7641d5f8e6d42e7492ea1be1d0"
+    },
+    "matches": [
+      {
+        "record_id": "core.pbr-roughness",
+        "file_path": "grimoire/glossary/3d_vocabulary.md",
+        "heading": "Material And PBR",
+        "key_path": null,
+        "score": 4.283141571387,
+        "snippets": [
+          "Roughness is microfacet scatter: high roughness reads matte and low roughness reads glossy. Recognition cues: low roughness reads as a sharp, mirror-like, tight specular highlight; high roughness reads as a blurry, wide, dim highlight and matte ..."
+        ],
+        "source_refs": [
+          {
+            "path": "grimoire/glossary/3d_vocabulary.md",
+            "heading": "Material And PBR",
+            "key_path": null
+          },
+          {
+            "path": "grimoire/intake/image_analysis.md",
+            "heading": "Layer 5 — Materials & surface (PBR)",
+            "key_path": null
+          },
+          {
+            "path": "docs/raw/img2threejs-skill-dataset.json",
+            "heading": null,
+            "key_path": "categories.material_pbr[1]"
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "grimoire/glossary/3d_vocabulary.md"
+          },
+          {
+            "kind": "notebooklm-research",
+            "ref": "notebooklm:4b03c2f9-8393-411f-b5b4-039ab9532843",
+            "note": "Validated generic schema vocabulary; numeric claims remain backed by local source_refs."
+          },
+          {
+            "kind": "source",
+            "ref": "docs/raw/img2threejs-skill-dataset.json",
+            "note": "img2threejs NotebookLM research distillation — merged recognition cues + Three.js target instead of duplicating this entity."
+          }
+        ]
+      },
+      {
+        "record_id": "core.component-hierarchy",
+        "file_path": "grimoire/intake/image_analysis.md",
+        "heading": "Layer 3 — Macro → meso → micro decomposition",
+        "key_path": null,
+        "score": 4.195809258387,
+        "snippets": [
+          "Decompose an object into macro independent major parts, meso sub-assemblies, and micro feature groups in a parent-child hierarchy."
+        ],
+        "source_refs": [
+          {
+            "path": "grimoire/intake/image_analysis.md",
+            "heading": "Layer 3 — Macro → meso → micro decomposition",
+            "key_path": null
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "grimoire/intake/image_analysis.md"
+          },
+          {
+            "kind": "notebooklm-research",
+            "ref": "notebooklm:4b03c2f9-8393-411f-b5b4-039ab9532843",
+            "note": "Validated generic schema vocabulary; numeric claims remain backed by local source_refs."
+          }
+        ]
+      },
+      {
+        "record_id": "core.runtime-hierarchy",
+        "file_path": "grimoire/readiness/action_rigging.md",
+        "heading": "Hierarchy Pattern",
+        "key_path": null,
+        "score": 4.071014553873,
+        "snippets": [
+          "An action-ready model uses a root, component pivot groups, visual meshes, sockets, collider metadata or proxies, and destruction-group metadata."
+        ],
+        "source_refs": [
+          {
+            "path": "grimoire/readiness/action_rigging.md",
+            "heading": "Hierarchy Pattern",
+            "key_path": null
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "grimoire/readiness/action_rigging.md"
+          },
+          {
+            "kind": "notebooklm-research",
+            "ref": "notebooklm:4b03c2f9-8393-411f-b5b4-039ab9532843",
+            "note": "Validated generic schema vocabulary; numeric claims remain backed by local source_refs."
+          }
+        ]
+      }
+    ]
+  }
+}

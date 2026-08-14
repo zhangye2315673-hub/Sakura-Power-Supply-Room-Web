@@ -1,0 +1,559 @@
+{
+  "model": "robot-vacuum",
+  "captures": [
+    {
+      "state": "idle",
+      "view": "front",
+      "screenshotPath": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\history\\appliance-model-v1-2026-08-11\\screenshots\\models\\robot-vacuum\\idle-front.png",
+      "diagnostics": {
+        "ready": true,
+        "model": "robot-vacuum",
+        "modelRootName": "appliance-model-robot-vacuum",
+        "view": "front",
+        "power": 0,
+        "animationSignal": 0,
+        "performance": {
+          "sessions": 0,
+          "timelineOwners": 0,
+          "kinds": [],
+          "elapsedByKind": {},
+          "signalsByKind": {},
+          "activeTotal": 0,
+          "activeByKind": {
+            "petal": 0,
+            "steam": 0,
+            "rain": 0,
+            "drop": 0,
+            "sheet": 0,
+            "bubble": 0,
+            "note": 0,
+            "paper": 0,
+            "trash": 0,
+            "popcorn": 0,
+            "rice": 0,
+            "ribbon": 0,
+            "debris": 0,
+            "toast": 0,
+            "wave": 0,
+            "spark": 0,
+            "blender-drop": 0,
+            "blender-splash": 0
+          },
+          "capacityByKind": {
+            "petal": 28,
+            "steam": 26,
+            "rain": 28,
+            "drop": 12,
+            "sheet": 12,
+            "bubble": 30,
+            "note": 22,
+            "paper": 18,
+            "trash": 18,
+            "popcorn": 30,
+            "rice": 30,
+            "ribbon": 24,
+            "debris": 22,
+            "toast": 6,
+            "wave": 18,
+            "spark": 18,
+            "blender-drop": 28,
+            "blender-splash": 12
+          },
+          "activeToastNdc": null,
+          "lampBeam": null,
+          "radio": {
+            "mechanics": null,
+            "wave": null
+          },
+          "blender": {
+            "mechanics": null,
+            "splash": null
+          },
+          "hairDryer": null,
+          "refrigerator": null
+        },
+        "radioAntenna": null,
+        "drawCalls": 99,
+        "triangles": 7976
+      }
+    },
+    {
+      "state": "idle",
+      "view": "side",
+      "screenshotPath": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\history\\appliance-model-v1-2026-08-11\\screenshots\\models\\robot-vacuum\\idle-side.png",
+      "diagnostics": {
+        "ready": true,
+        "model": "robot-vacuum",
+        "modelRootName": "appliance-model-robot-vacuum",
+        "view": "side",
+        "power": 0,
+        "animationSignal": 0,
+        "performance": {
+          "sessions": 0,
+          "timelineOwners": 0,
+          "kinds": [],
+          "elapsedByKind": {},
+          "signalsByKind": {},
+          "activeTotal": 0,
+          "activeByKind": {
+            "petal": 0,
+            "steam": 0,
+            "rain": 0,
+            "drop": 0,
+            "sheet": 0,
+            "bubble": 0,
+            "note": 0,
+            "paper": 0,
+            "trash": 0,
+            "popcorn": 0,
+            "rice": 0,
+            "ribbon": 0,
+            "debris": 0,
+            "toast": 0,
+            "wave": 0,
+            "spark": 0,
+            "blender-drop": 0,
+            "blender-splash": 0
+          },
+          "capacityByKind": {
+            "petal": 28,
+            "steam": 26,
+            "rain": 28,
+            "drop": 12,
+            "sheet": 12,
+            "bubble": 30,
+            "note": 22,
+            "paper": 18,
+            "trash": 18,
+            "popcorn": 30,
+            "rice": 30,
+            "ribbon": 24,
+            "debris": 22,
+            "toast": 6,
+            "wave": 18,
+            "spark": 18,
+            "blender-drop": 28,
+            "blender-splash": 12
+          },
+          "activeToastNdc": null,
+          "lampBeam": null,
+          "radio": {
+            "mechanics": null,
+            "wave": null
+          },
+          "blender": {
+            "mechanics": null,
+            "splash": null
+          },
+          "hairDryer": null,
+          "refrigerator": null
+        },
+        "radioAntenna": null,
+        "drawCalls": 99,
+        "triangles": 7976
+      }
+    },
+    {
+      "state": "idle",
+      "view": "back",
+      "screenshotPath": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\history\\appliance-model-v1-2026-08-11\\screenshots\\models\\robot-vacuum\\idle-back.png",
+      "diagnostics": {
+        "ready": true,
+        "model": "robot-vacuum",
+        "modelRootName": "appliance-model-robot-vacuum",
+        "view": "back",
+        "power": 0,
+        "animationSignal": 0,
+        "performance": {
+          "sessions": 0,
+          "timelineOwners": 0,
+          "kinds": [],
+          "elapsedByKind": {},
+          "signalsByKind": {},
+          "activeTotal": 0,
+          "activeByKind": {
+            "petal": 0,
+            "steam": 0,
+            "rain": 0,
+            "drop": 0,
+            "sheet": 0,
+            "bubble": 0,
+            "note": 0,
+            "paper": 0,
+            "trash": 0,
+            "popcorn": 0,
+            "rice": 0,
+            "ribbon": 0,
+            "debris": 0,
+            "toast": 0,
+            "wave": 0,
+            "spark": 0,
+            "blender-drop": 0,
+            "blender-splash": 0
+          },
+          "capacityByKind": {
+            "petal": 28,
+            "steam": 26,
+            "rain": 28,
+            "drop": 12,
+            "sheet": 12,
+            "bubble": 30,
+            "note": 22,
+            "paper": 18,
+            "trash": 18,
+            "popcorn": 30,
+            "rice": 30,
+            "ribbon": 24,
+            "debris": 22,
+            "toast": 6,
+            "wave": 18,
+            "spark": 18,
+            "blender-drop": 28,
+            "blender-splash": 12
+          },
+          "activeToastNdc": null,
+          "lampBeam": null,
+          "radio": {
+            "mechanics": null,
+            "wave": null
+          },
+          "blender": {
+            "mechanics": null,
+            "splash": null
+          },
+          "hairDryer": null,
+          "refrigerator": null
+        },
+        "radioAntenna": null,
+        "drawCalls": 99,
+        "triangles": 7976
+      }
+    },
+    {
+      "state": "idle",
+      "view": "three-quarter",
+      "screenshotPath": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\history\\appliance-model-v1-2026-08-11\\screenshots\\models\\robot-vacuum\\idle-three-quarter.png",
+      "diagnostics": {
+        "ready": true,
+        "model": "robot-vacuum",
+        "modelRootName": "appliance-model-robot-vacuum",
+        "view": "three-quarter",
+        "power": 0,
+        "animationSignal": 0,
+        "performance": {
+          "sessions": 0,
+          "timelineOwners": 0,
+          "kinds": [],
+          "elapsedByKind": {},
+          "signalsByKind": {},
+          "activeTotal": 0,
+          "activeByKind": {
+            "petal": 0,
+            "steam": 0,
+            "rain": 0,
+            "drop": 0,
+            "sheet": 0,
+            "bubble": 0,
+            "note": 0,
+            "paper": 0,
+            "trash": 0,
+            "popcorn": 0,
+            "rice": 0,
+            "ribbon": 0,
+            "debris": 0,
+            "toast": 0,
+            "wave": 0,
+            "spark": 0,
+            "blender-drop": 0,
+            "blender-splash": 0
+          },
+          "capacityByKind": {
+            "petal": 28,
+            "steam": 26,
+            "rain": 28,
+            "drop": 12,
+            "sheet": 12,
+            "bubble": 30,
+            "note": 22,
+            "paper": 18,
+            "trash": 18,
+            "popcorn": 30,
+            "rice": 30,
+            "ribbon": 24,
+            "debris": 22,
+            "toast": 6,
+            "wave": 18,
+            "spark": 18,
+            "blender-drop": 28,
+            "blender-splash": 12
+          },
+          "activeToastNdc": null,
+          "lampBeam": null,
+          "radio": {
+            "mechanics": null,
+            "wave": null
+          },
+          "blender": {
+            "mechanics": null,
+            "splash": null
+          },
+          "hairDryer": null,
+          "refrigerator": null
+        },
+        "radioAntenna": null,
+        "drawCalls": 99,
+        "triangles": 7976
+      }
+    },
+    {
+      "state": "startup",
+      "time": 0.6,
+      "view": "three-quarter",
+      "screenshotPath": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\history\\appliance-model-v1-2026-08-11\\screenshots\\models\\robot-vacuum\\active-startup-0.6.png",
+      "diagnostics": {
+        "ready": true,
+        "model": "robot-vacuum",
+        "modelRootName": "appliance-model-robot-vacuum",
+        "view": "three-quarter",
+        "power": 1,
+        "animationSignal": 1,
+        "performance": {
+          "sessions": 1,
+          "timelineOwners": 1,
+          "kinds": [
+            "robot-vacuum"
+          ],
+          "elapsedByKind": {
+            "robot-vacuum": 0.6
+          },
+          "signalsByKind": {
+            "robot-vacuum": 1
+          },
+          "activeTotal": 0,
+          "activeByKind": {
+            "petal": 0,
+            "steam": 0,
+            "rain": 0,
+            "drop": 0,
+            "sheet": 0,
+            "bubble": 0,
+            "note": 0,
+            "paper": 0,
+            "trash": 0,
+            "popcorn": 0,
+            "rice": 0,
+            "ribbon": 0,
+            "debris": 0,
+            "toast": 0,
+            "wave": 0,
+            "spark": 0,
+            "blender-drop": 0,
+            "blender-splash": 0
+          },
+          "capacityByKind": {
+            "petal": 28,
+            "steam": 26,
+            "rain": 28,
+            "drop": 12,
+            "sheet": 12,
+            "bubble": 30,
+            "note": 22,
+            "paper": 18,
+            "trash": 18,
+            "popcorn": 30,
+            "rice": 30,
+            "ribbon": 24,
+            "debris": 22,
+            "toast": 6,
+            "wave": 18,
+            "spark": 18,
+            "blender-drop": 28,
+            "blender-splash": 12
+          },
+          "activeToastNdc": null,
+          "lampBeam": null,
+          "radio": {
+            "mechanics": null,
+            "wave": null
+          },
+          "blender": {
+            "mechanics": null,
+            "splash": null
+          },
+          "hairDryer": null,
+          "refrigerator": null
+        },
+        "radioAntenna": null,
+        "drawCalls": 112,
+        "triangles": 8560
+      }
+    },
+    {
+      "state": "climax",
+      "time": 2.8,
+      "view": "three-quarter",
+      "screenshotPath": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\history\\appliance-model-v1-2026-08-11\\screenshots\\models\\robot-vacuum\\active-climax-2.8.png",
+      "diagnostics": {
+        "ready": true,
+        "model": "robot-vacuum",
+        "modelRootName": "appliance-model-robot-vacuum",
+        "view": "three-quarter",
+        "power": 1,
+        "animationSignal": 1,
+        "performance": {
+          "sessions": 1,
+          "timelineOwners": 1,
+          "kinds": [
+            "robot-vacuum"
+          ],
+          "elapsedByKind": {
+            "robot-vacuum": 2.8
+          },
+          "signalsByKind": {
+            "robot-vacuum": 1
+          },
+          "activeTotal": 0,
+          "activeByKind": {
+            "petal": 0,
+            "steam": 0,
+            "rain": 0,
+            "drop": 0,
+            "sheet": 0,
+            "bubble": 0,
+            "note": 0,
+            "paper": 0,
+            "trash": 0,
+            "popcorn": 0,
+            "rice": 0,
+            "ribbon": 0,
+            "debris": 0,
+            "toast": 0,
+            "wave": 0,
+            "spark": 0,
+            "blender-drop": 0,
+            "blender-splash": 0
+          },
+          "capacityByKind": {
+            "petal": 28,
+            "steam": 26,
+            "rain": 28,
+            "drop": 12,
+            "sheet": 12,
+            "bubble": 30,
+            "note": 22,
+            "paper": 18,
+            "trash": 18,
+            "popcorn": 30,
+            "rice": 30,
+            "ribbon": 24,
+            "debris": 22,
+            "toast": 6,
+            "wave": 18,
+            "spark": 18,
+            "blender-drop": 28,
+            "blender-splash": 12
+          },
+          "activeToastNdc": null,
+          "lampBeam": null,
+          "radio": {
+            "mechanics": null,
+            "wave": null
+          },
+          "blender": {
+            "mechanics": null,
+            "splash": null
+          },
+          "hairDryer": null,
+          "refrigerator": null
+        },
+        "radioAntenna": null,
+        "drawCalls": 109,
+        "triangles": 8484
+      }
+    },
+    {
+      "state": "wind-down",
+      "time": 4.75,
+      "view": "three-quarter",
+      "screenshotPath": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\history\\appliance-model-v1-2026-08-11\\screenshots\\models\\robot-vacuum\\active-wind-down-4.75.png",
+      "diagnostics": {
+        "ready": true,
+        "model": "robot-vacuum",
+        "modelRootName": "appliance-model-robot-vacuum",
+        "view": "three-quarter",
+        "power": 0.8181818181818185,
+        "animationSignal": 0.6673766634828705,
+        "performance": {
+          "sessions": 1,
+          "timelineOwners": 1,
+          "kinds": [
+            "robot-vacuum"
+          ],
+          "elapsedByKind": {
+            "robot-vacuum": 4.75
+          },
+          "signalsByKind": {
+            "robot-vacuum": 0.6673766634828705
+          },
+          "activeTotal": 0,
+          "activeByKind": {
+            "petal": 0,
+            "steam": 0,
+            "rain": 0,
+            "drop": 0,
+            "sheet": 0,
+            "bubble": 0,
+            "note": 0,
+            "paper": 0,
+            "trash": 0,
+            "popcorn": 0,
+            "rice": 0,
+            "ribbon": 0,
+            "debris": 0,
+            "toast": 0,
+            "wave": 0,
+            "spark": 0,
+            "blender-drop": 0,
+            "blender-splash": 0
+          },
+          "capacityByKind": {
+            "petal": 28,
+            "steam": 26,
+            "rain": 28,
+            "drop": 12,
+            "sheet": 12,
+            "bubble": 30,
+            "note": 22,
+            "paper": 18,
+            "trash": 18,
+            "popcorn": 30,
+            "rice": 30,
+            "ribbon": 24,
+            "debris": 22,
+            "toast": 6,
+            "wave": 18,
+            "spark": 18,
+            "blender-drop": 28,
+            "blender-splash": 12
+          },
+          "activeToastNdc": null,
+          "lampBeam": null,
+          "radio": {
+            "mechanics": null,
+            "wave": null
+          },
+          "blender": {
+            "mechanics": null,
+            "splash": null
+          },
+          "hairDryer": null,
+          "refrigerator": null
+        },
+        "radioAntenna": null,
+        "drawCalls": 99,
+        "triangles": 7976
+      }
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,223 @@
+{
+  "scanMethod": "three-admitted-view component-zone inspection",
+  "targetMinDetails": 18,
+  "details": [
+    {
+      "id": "clock-detail-01",
+      "kind": "contour",
+      "description": "Round pink body shell with shallow side depth.",
+      "mapsTo": {
+        "type": "component.localFeatures",
+        "ref": "shell-round-profile"
+      },
+      "evidenceRef": "front-view",
+      "confidence": 0.99,
+      "realization": "implemented by shell-round-profile"
+    },
+    {
+      "id": "clock-detail-02",
+      "kind": "bevel",
+      "description": "Thick raised front shell band.",
+      "mapsTo": {
+        "type": "component.localFeatures",
+        "ref": "front-band-bevel"
+      },
+      "evidenceRef": "front-view",
+      "confidence": 0.98,
+      "realization": "implemented by front-band-bevel"
+    },
+    {
+      "id": "clock-detail-03",
+      "kind": "seam",
+      "description": "Thin concentric inner shell seam.",
+      "mapsTo": {
+        "type": "component.localFeatures",
+        "ref": "inner-seam-ring"
+      },
+      "evidenceRef": "front-view",
+      "confidence": 0.98,
+      "realization": "implemented by inner-seam-ring"
+    },
+    {
+      "id": "clock-detail-04",
+      "kind": "gloss",
+      "description": "Transparent dial cover above the ivory face.",
+      "mapsTo": {
+        "type": "material.localOverrides",
+        "ref": "dial-glass-edge-highlight"
+      },
+      "evidenceRef": "front-view",
+      "confidence": 0.94,
+      "realization": "implemented by dial-glass-edge-highlight"
+    },
+    {
+      "id": "clock-detail-05",
+      "kind": "linework",
+      "description": "Twelve separate radial hour ticks.",
+      "mapsTo": {
+        "type": "component.localFeatures",
+        "ref": "twelve-radial-ticks"
+      },
+      "evidenceRef": "front-view",
+      "confidence": 0.99,
+      "realization": "implemented by twelve-radial-ticks"
+    },
+    {
+      "id": "clock-detail-06",
+      "kind": "ridge",
+      "description": "Independent hour and minute hands on a central cap.",
+      "mapsTo": {
+        "type": "component.localFeatures",
+        "ref": "independent-clock-hands"
+      },
+      "evidenceRef": "front-view",
+      "confidence": 0.99,
+      "realization": "implemented by independent-clock-hands"
+    },
+    {
+      "id": "clock-detail-07",
+      "kind": "contour",
+      "description": "Two cream bell domes with flattened lower openings.",
+      "mapsTo": {
+        "type": "component.localFeatures",
+        "ref": "paired-bell-domes"
+      },
+      "evidenceRef": "front-view",
+      "confidence": 0.99,
+      "realization": "implemented by paired-bell-domes"
+    },
+    {
+      "id": "clock-detail-08",
+      "kind": "groove",
+      "description": "Dark under-bell cavities and raised lower lips.",
+      "mapsTo": {
+        "type": "component.localFeatures",
+        "ref": "bell-lip-cavity"
+      },
+      "evidenceRef": "front-view",
+      "confidence": 0.96,
+      "realization": "implemented by bell-lip-cavity"
+    },
+    {
+      "id": "clock-detail-09",
+      "kind": "ridge",
+      "description": "Two separate support posts beneath the bells.",
+      "mapsTo": {
+        "type": "component.localFeatures",
+        "ref": "paired-bell-supports"
+      },
+      "evidenceRef": "front-view",
+      "confidence": 0.97,
+      "realization": "implemented by paired-bell-supports"
+    },
+    {
+      "id": "clock-detail-10",
+      "kind": "contour",
+      "description": "Two opposed bell hammers with cream caps.",
+      "mapsTo": {
+        "type": "component.localFeatures",
+        "ref": "opposed-bell-hammers"
+      },
+      "evidenceRef": "front-view",
+      "confidence": 0.92,
+      "realization": "implemented by opposed-bell-hammers"
+    },
+    {
+      "id": "clock-detail-11",
+      "kind": "contour",
+      "description": "Arched carry handle joining the upper sides.",
+      "mapsTo": {
+        "type": "component.localFeatures",
+        "ref": "arched-handle-profile"
+      },
+      "evidenceRef": "front-view",
+      "confidence": 0.99,
+      "realization": "implemented by arched-handle-profile"
+    },
+    {
+      "id": "clock-detail-12",
+      "kind": "ridge",
+      "description": "Centered T-shaped alarm lever.",
+      "mapsTo": {
+        "type": "component.localFeatures",
+        "ref": "top-alarm-lever"
+      },
+      "evidenceRef": "front-view",
+      "confidence": 0.99,
+      "realization": "implemented by top-alarm-lever"
+    },
+    {
+      "id": "clock-detail-13",
+      "kind": "bevel",
+      "description": "Two outward-splayed rounded feet.",
+      "mapsTo": {
+        "type": "component.localFeatures",
+        "ref": "paired-angled-feet"
+      },
+      "evidenceRef": "front-view",
+      "confidence": 0.98,
+      "realization": "implemented by paired-angled-feet"
+    },
+    {
+      "id": "clock-detail-14",
+      "kind": "seam",
+      "description": "Rear circular service plate and concentric seam.",
+      "mapsTo": {
+        "type": "component.localFeatures",
+        "ref": "rear-service-ring"
+      },
+      "evidenceRef": "back-view",
+      "confidence": 0.99,
+      "realization": "implemented by rear-service-ring"
+    },
+    {
+      "id": "clock-detail-15",
+      "kind": "fastener",
+      "description": "Two rear winding knobs on independent rotary pivots.",
+      "mapsTo": {
+        "type": "component.localFeatures",
+        "ref": "paired-rear-knobs"
+      },
+      "evidenceRef": "back-view",
+      "confidence": 0.99,
+      "realization": "implemented by paired-rear-knobs"
+    },
+    {
+      "id": "clock-detail-16",
+      "kind": "emissive",
+      "description": "Pink dial backlight becomes legible under power.",
+      "mapsTo": {
+        "type": "material.localOverrides",
+        "ref": "powered-dial-emission"
+      },
+      "evidenceRef": "behavior-requirement",
+      "confidence": 0.98,
+      "realization": "implemented by powered-dial-emission"
+    },
+    {
+      "id": "clock-detail-17",
+      "kind": "contour",
+      "description": "Narrow side profile preserves shell, bell and foot projection.",
+      "mapsTo": {
+        "type": "component.localFeatures",
+        "ref": "side-depth-profile"
+      },
+      "evidenceRef": "side-view",
+      "confidence": 0.97,
+      "realization": "implemented by side-depth-profile"
+    },
+    {
+      "id": "clock-detail-18",
+      "kind": "hole",
+      "description": "Rear-lower power inlet is provided for appliance interaction.",
+      "mapsTo": {
+        "type": "component.localFeatures",
+        "ref": "inferred-power-inlet"
+      },
+      "evidenceRef": "inferred-rear-lower",
+      "confidence": 0.45,
+      "realization": "implemented by inferred-power-inlet"
+    }
+  ],
+  "note": "Archived multi-view inspection plus runtime contract. Every observed detail maps to an existing named component or material override."
+}

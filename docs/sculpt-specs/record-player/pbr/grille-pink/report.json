@@ -1,0 +1,86 @@
+{
+  "ok": true,
+  "verdict": "pass",
+  "confidence": 0.827,
+  "estimatedFidelity": 0.827,
+  "targetThreshold": 0.7,
+  "materialId": "grille-pink",
+  "sourceImage": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\record-player\\pbr\\grille-pink\\source-crop.png",
+  "outDir": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\record-player\\pbr\\grille-pink",
+  "palette": [
+    "#F0BAB1",
+    "#B27E76",
+    "#C9948B",
+    "#875E55",
+    "#F9CFC5"
+  ],
+  "maps": {
+    "albedo": {
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\record-player\\pbr\\grille-pink\\grille-pink_albedo.png",
+      "url": "grille-pink_albedo.png",
+      "channel": "albedo",
+      "source": "reference-pixel-extraction"
+    },
+    "roughness": {
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\record-player\\pbr\\grille-pink\\grille-pink_roughness.png",
+      "url": "grille-pink_roughness.png",
+      "channel": "roughness",
+      "source": "reference-pixel-extraction"
+    },
+    "height": {
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\record-player\\pbr\\grille-pink\\grille-pink_height.png",
+      "url": "grille-pink_height.png",
+      "channel": "height",
+      "source": "reference-pixel-extraction"
+    },
+    "normal": {
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\record-player\\pbr\\grille-pink\\grille-pink_normal.png",
+      "url": "grille-pink_normal.png",
+      "channel": "normal",
+      "source": "reference-pixel-extraction"
+    },
+    "ao": {
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\record-player\\pbr\\grille-pink\\grille-pink_ao.png",
+      "url": "grille-pink_ao.png",
+      "channel": "ao",
+      "source": "reference-pixel-extraction"
+    }
+  },
+  "diagnostics": {
+    "sourceWidth": 480,
+    "sourceHeight": 92,
+    "mapSize": 1024,
+    "cropBBoxPixels": {
+      "x": 0,
+      "y": 0,
+      "width": 480,
+      "height": 92
+    },
+    "mask": {
+      "backgroundColor": "#F3E3CE",
+      "backgroundNoise": 90.144,
+      "transparentPixelFraction": 0.0,
+      "foregroundCoverage": 0.9447
+    },
+    "mapStats": {
+      "valueRange": 0.4711,
+      "heightP90Gradient": 0.10022,
+      "roughnessBase": 0.752,
+      "roughnessVariation": 0.188,
+      "normalStrength": 0.274,
+      "blurRadius": 21
+    },
+    "palette": [
+      "#F0BAB1",
+      "#B27E76",
+      "#C9948B",
+      "#875E55",
+      "#F9CFC5"
+    ]
+  },
+  "warnings": [
+    "image is not clearly isolated from background; using most pixels as material evidence",
+    "object/background separation is weak"
+  ],
+  "limitation": "single-image PBR extraction is an estimate; 70%+ extraction confidence still needs render screenshot review"
+}

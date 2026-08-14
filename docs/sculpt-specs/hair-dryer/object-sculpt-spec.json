@@ -1,0 +1,5153 @@
+{
+  "targetName": "SAKURA Handheld Hair Dryer",
+  "targetId": "hair-dryer",
+  "schemaVersion": "2.1",
+  "terminologyProfile": {
+    "domain": "real-time procedural Three.js asset",
+    "geometryTerms": [
+      "silhouette",
+      "topology",
+      "primitive",
+      "bevel",
+      "chamfer",
+      "taper",
+      "bend",
+      "boolean cut",
+      "edge loop",
+      "surface normal",
+      "displacement"
+    ],
+    "materialTerms": [
+      "albedo",
+      "baseColor",
+      "roughness",
+      "metalness",
+      "normal map",
+      "bump map",
+      "ambient occlusion",
+      "cavity dirt",
+      "edge wear",
+      "clearcoat"
+    ],
+    "lightingTerms": [
+      "key light",
+      "fill light",
+      "rim light",
+      "HDRI/environment reflection",
+      "contact shadow"
+    ],
+    "descriptionRule": "Use measurable 3D graphics terms. Avoid vague words unless they are paired with concrete geometry/material/shader parameters."
+  },
+  "sourceImage": "references\\intake\\hair-dryer\\front.png",
+  "referenceCamera": {
+    "solved": true,
+    "fovDegrees": 40.0,
+    "aspect": 0.592,
+    "orientation": {
+      "yaw": 0.0,
+      "pitch": 0.0,
+      "roll": 0.0
+    },
+    "positionHint": [
+      0.0,
+      0.0,
+      3.0
+    ],
+    "note": "Near-orthographic illustrated profile; review camera uses a 32 degree perspective at long distance with the barrel axis horizontal."
+  },
+  "suitability": "pass",
+  "scores": {
+    "object_isolation": 3,
+    "silhouette_readability": 3,
+    "depth_inference": 3,
+    "primitive_decomposition": 3,
+    "material_procedurality": 3,
+    "occlusion_risk": 2,
+    "interaction_fit": 3
+  },
+  "preSpecAssessment": {
+    "objectClass": {
+      "primaryType": "handheld hair dryer",
+      "primaryDomain": "object",
+      "formLanguage": [
+        "hard-surface",
+        "rounded geometric",
+        "continuous loft"
+      ],
+      "structureKind": [
+        "compound object",
+        "layered shell",
+        "articulated assembly",
+        "repeated modules"
+      ],
+      "motionPotential": [
+        "rotary fan",
+        "linear switch",
+        "button press",
+        "effect emitter"
+      ],
+      "materialFamilies": [
+        "plastic",
+        "rubber",
+        "painted polymer",
+        "emissive effect"
+      ],
+      "notes": "Three admitted views define the profile, controls and rear intake; occluded internal systems remain explicit inferences."
+    },
+    "complexity": {
+      "tier": "complex",
+      "scores": {
+        "silhouetteComplexity": 2,
+        "componentCount": 3,
+        "hierarchyDepth": 3,
+        "repetitionDensity": 3,
+        "materialLayerCount": 2,
+        "localDetailDensity": 2,
+        "occlusionRisk": 2,
+        "actionReadinessNeed": 3
+      },
+      "estimatedCounts": {
+        "macroComponents": 4,
+        "mesoComponents": 14,
+        "microFeatureGroups": 19,
+        "materialLayers": 7,
+        "repetitionSystems": 4
+      },
+      "reasoning": [
+        "The T silhouette is simple, but the variable-section nozzle, layered intake, repeated holes, fan, controls, cable hierarchy and purpose effect require complex action-ready structure."
+      ]
+    },
+    "specDepthDecision": {
+      "requiredDepth": "complex",
+      "minimumComponentLevels": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "needsRepetitionSystems": true,
+      "needsMaterialLocalOverrides": true,
+      "needsMultipleReviewViews": true,
+      "needsActionReadyHierarchy": true,
+      "rationale": "Identity depends on the nozzle cross-section, rear intake repetition, independent controls and powered airflow action."
+    },
+    "unknownsToResolveBeforeImplementation": [],
+    "detailInventory": {
+      "scanMethod": "grid-4x4-plus-three-admitted-views",
+      "targetMinDetails": 18,
+      "details": [
+        {
+          "id": "shell-soft-bevel",
+          "kind": "bevel",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "shell-soft-bevel"
+          },
+          "evidenceRef": "profile-view",
+          "confidence": 0.98
+        },
+        {
+          "id": "nozzle-variable-loft",
+          "kind": "contour",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "nozzle-variable-loft"
+          },
+          "evidenceRef": "profile-view",
+          "confidence": 0.98
+        },
+        {
+          "id": "nozzle-socket-seam",
+          "kind": "seam",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "nozzle-socket-seam"
+          },
+          "evidenceRef": "profile-view",
+          "confidence": 0.96
+        },
+        {
+          "id": "flat-outlet-hole",
+          "kind": "hole",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "flat-outlet-hole"
+          },
+          "evidenceRef": "profile-view",
+          "confidence": 0.86
+        },
+        {
+          "id": "rear-bezel-bevel",
+          "kind": "bevel",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "rear-bezel-bevel"
+          },
+          "evidenceRef": "rear-view",
+          "confidence": 0.99
+        },
+        {
+          "id": "mint-ring-highlight",
+          "kind": "gloss",
+          "mapsTo": {
+            "type": "material.localOverrides",
+            "ref": "mint-ring-highlight"
+          },
+          "evidenceRef": "rear-view",
+          "confidence": 0.94
+        },
+        {
+          "id": "perforation-array",
+          "kind": "hole",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "perforation-array"
+          },
+          "evidenceRef": "rear-view",
+          "confidence": 0.99
+        },
+        {
+          "id": "seven-blade-rotor",
+          "kind": "contour",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "seven-blade-rotor"
+          },
+          "evidenceRef": "rear-view",
+          "confidence": 0.72
+        },
+        {
+          "id": "handle-rounded-shoulder",
+          "kind": "contour",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "handle-rounded-shoulder"
+          },
+          "evidenceRef": "profile-view",
+          "confidence": 0.98
+        },
+        {
+          "id": "handle-mould-seam",
+          "kind": "seam",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "handle-mould-seam"
+          },
+          "evidenceRef": "rear-view",
+          "confidence": 0.91
+        },
+        {
+          "id": "cool-shot-button",
+          "kind": "contour",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "cool-shot-button"
+          },
+          "evidenceRef": "control-view",
+          "confidence": 0.99
+        },
+        {
+          "id": "power-slider-groove",
+          "kind": "groove",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "power-slider-groove"
+          },
+          "evidenceRef": "control-view",
+          "confidence": 0.99
+        },
+        {
+          "id": "status-led",
+          "kind": "emissive",
+          "mapsTo": {
+            "type": "material.localOverrides",
+            "ref": "status-led-powered"
+          },
+          "evidenceRef": "control-view",
+          "confidence": 0.84
+        },
+        {
+          "id": "lower-collar-seam",
+          "kind": "seam",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "lower-collar-seam"
+          },
+          "evidenceRef": "profile-view",
+          "confidence": 0.97
+        },
+        {
+          "id": "strain-relief-ribs",
+          "kind": "ridge",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "strain-relief-ribs"
+          },
+          "evidenceRef": "profile-view",
+          "confidence": 0.99
+        },
+        {
+          "id": "visible-power-cord",
+          "kind": "contour",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "visible-power-cord"
+          },
+          "evidenceRef": "profile-view",
+          "confidence": 0.98
+        },
+        {
+          "id": "plastic-lacquer-highlight",
+          "kind": "gloss",
+          "mapsTo": {
+            "type": "material.localOverrides",
+            "ref": "pink-lacquer-highlight"
+          },
+          "evidenceRef": "profile-view",
+          "confidence": 0.93
+        },
+        {
+          "id": "solid-wind-ribbons",
+          "kind": "emissive",
+          "mapsTo": {
+            "type": "material.localOverrides",
+            "ref": "socket-bound-ribbon-field"
+          },
+          "evidenceRef": "animation-requirement",
+          "confidence": 0.95
+        },
+        {
+          "id": "released-ribbon-flight",
+          "kind": "contour",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "released-ribbon-flight"
+          },
+          "evidenceRef": "animation-requirement",
+          "confidence": 0.9
+        }
+      ]
+    },
+    "anatomy": {
+      "applies": false,
+      "styleHeads": 0.0,
+      "proportions": {
+        "headUnit": 0.0,
+        "torso": 0.0,
+        "legs": 0.0,
+        "shoulderWidth": 0.0,
+        "hipWidth": 0.0
+      },
+      "pose": {
+        "type": "unassessed",
+        "jointAngles": {}
+      },
+      "faceLandmarks": {
+        "eyeLine": 0.0,
+        "eyeSpacing": 0.0,
+        "noseBase": 0.0,
+        "mouthLine": 0.0,
+        "hairline": 0.0
+      },
+      "features": [],
+      "confidence": 0.0,
+      "note": "Only meaningful when objectClass.primaryDomain is character or hybrid. Set applies=true and fill from forge/stage1_intake/extract_landmarks.py. See grimoire/character/reconstruction.md and grimoire/character/likeness_maximization.md."
+    },
+    "sourceImage": "references\\intake\\hair-dryer\\front.png"
+  },
+  "qualityContract": {
+    "qualityBar": "complex",
+    "definitionOfDone": [
+      "Profile preserves the cream barrel, pink variable-section concentrator and vertical handle proportions from the admitted views.",
+      "Rear view preserves the cream bezel, mint ring, perforation density and centred rotor axis.",
+      "Controls, collar, six-step strain relief and cord are separate named parts.",
+      "Powered state rotates the fan and drives five socket-bound solid ribbons with unique propagated wave, twist and turbulence profiles; release is continuous and stop restores exact idle state."
+    ],
+    "minimumSpecDepth": {
+      "macroComponents": 4,
+      "mesoComponents": 12,
+      "microFeatureGroups": 18,
+      "materialLayers": 7,
+      "repetitionSystems": 4,
+      "reviewViewpoints": 5
+    },
+    "featureGroups": [
+      {
+        "id": "overall-silhouette",
+        "name": "Overall silhouette and proportions",
+        "required": true,
+        "qualityCriteria": [
+          "Bounding shape, dominant curves, negative spaces, and scale relationships are explicitly described."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "model reads as a generic placeholder instead of the reference object",
+          "major proportions are guessed without evidence"
+        ]
+      },
+      {
+        "id": "primary-structure",
+        "name": "Primary structure and hierarchy",
+        "required": true,
+        "qualityCriteria": [
+          "Major parts, joints, seams, contact points, and parent-child relationships are named before code generation."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "large visible parts are merged into one mesh",
+          "component hierarchy is too shallow for the observed complexity"
+        ]
+      },
+      {
+        "id": "attachment-joint-correctness",
+        "name": "Attachment and joint correctness",
+        "required": true,
+        "qualityCriteria": [
+          "Every visible child appendage, branch, limb, handle, connector, tube, cable, horn, wing, leg, or hinged part has an attachment contract with parent socket, localStart/localEnd, contact type, embed/overlap, and gap tolerance."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "child part root floats away from the parent",
+          "branch/limb/tube is centered in space instead of pivoting from its root",
+          "parent-child transform mixes world and local coordinates"
+        ]
+      },
+      {
+        "id": "surface-material-response",
+        "name": "Surface material response",
+        "required": true,
+        "qualityCriteria": [
+          "Albedo zones, roughness, normal/bump/displacement intent, cavity dirt, edge wear, and local overrides are specified where visible.",
+          "Important materials define independent albedo, roughness, height/normal, and AO responses instead of reusing one texture for unrelated PBR channels.",
+          "Surface response is decomposed into macro, meso, and micro frequency bands with scale and amplitude tied to object scale."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "surface looks like flat plastic",
+          "local material variation is missing or not tied to image evidence"
+        ]
+      },
+      {
+        "id": "reference-lookdev",
+        "name": "Reference color, material, and lighting response",
+        "required": true,
+        "qualityCriteria": [
+          "Material-pass names the reference-derived albedo palette, roughness variation, tactile normal/bump/displacement response, and local masks.",
+          "When a source image is available, run reference PBR extraction and require confidence >= 0.7 before treating maps as implementation-ready.",
+          "Lighting-pass names key/fill/rim or environment light, exposure, tone mapping, background, and contact shadow behavior.",
+          "Neutral, grazing-angle, and reference-matched renders prove that surface relief survives relighting and is not painted into albedo."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "model has acceptable shape but reads as flat shaded or plastic",
+          "colors are a generic average instead of reference-observed local color zones",
+          "lighting is evenly ambient and cannot reproduce the source value range"
+        ]
+      }
+    ],
+    "visualDeltaChecks": [
+      "silhouette and negative-space delta",
+      "component hierarchy depth delta",
+      "repetition density and distribution delta",
+      "material albedo/roughness/normal response delta",
+      "local feature placement and scale delta"
+    ],
+    "antiShallowSpecRules": [
+      "Do not proceed to code if qualityContract.qualityBar is unassessed.",
+      "Do not proceed to code if the spec only contains a root component for a moderate or complex object.",
+      "Do not proceed to code if required featureGroups are not represented by componentTree, materials, or repetitionSystems.",
+      "Do not proceed to code if visible local features are described only in prose and not attached to components/materials/evidenceRefs.",
+      "Do not proceed past structural-pass if attached child parts lack attachment.parentSocket, localStart, localEnd, embedDepth/overlap, and gapTolerance.",
+      "Do not pass material look-dev when albedo is reused as roughness, height, normal, or AO.",
+      "Do not pass material look-dev without macro, meso, and micro surface frequency bands for close-up materials.",
+      "Do not pass reference-fidelity material look-dev from a source image without usable referencePbr maps or an explicit documented limitation.",
+      "Do not patch a spec with extracted PBR maps when extraction confidence is below the target threshold unless the user explicitly accepts lower fidelity.",
+      "Do not place adjacent separate-geometry parts below 0.02 world-unit seam overlap (source: grimoire/build/geometry_patterns.md).",
+      "Do not satisfy raised or recessed relief, fasteners, or grip structure with a map alone when the feature affects form; use geometry or displacement (source: grimoire/build/geometry_patterns.md).",
+      "Adjacent components must overlap by at least 0.02 world units at shared seams (source: grimoire/build/geometry_patterns.md).",
+      "Raised or recessed relief and fasteners must be geometry, instanced micro-parts, or displacement; a map alone is an approximation (source: grimoire/build/geometry_patterns.md)."
+    ],
+    "mustNotDo": [
+      "Do not proceed to code if qualityContract.qualityBar is unassessed.",
+      "Do not proceed to code if the spec only contains a root component for a moderate or complex object.",
+      "Do not proceed to code if required featureGroups are not represented by componentTree, materials, or repetitionSystems.",
+      "Do not proceed to code if visible local features are described only in prose and not attached to components/materials/evidenceRefs.",
+      "Do not proceed past structural-pass if attached child parts lack attachment.parentSocket, localStart, localEnd, embedDepth/overlap, and gapTolerance.",
+      "Do not pass material look-dev when albedo is reused as roughness, height, normal, or AO.",
+      "Do not pass material look-dev without macro, meso, and micro surface frequency bands for close-up materials.",
+      "Do not pass reference-fidelity material look-dev from a source image without usable referencePbr maps or an explicit documented limitation.",
+      "Do not patch a spec with extracted PBR maps when extraction confidence is below the target threshold unless the user explicitly accepts lower fidelity.",
+      "Do not place adjacent separate-geometry parts below 0.02 world-unit seam overlap (source: grimoire/build/geometry_patterns.md).",
+      "Do not satisfy raised or recessed relief, fasteners, or grip structure with a map alone when the feature affects form; use geometry or displacement (source: grimoire/build/geometry_patterns.md).",
+      "Adjacent components must overlap by at least 0.02 world units at shared seams (source: grimoire/build/geometry_patterns.md).",
+      "Raised or recessed relief and fasteners must be geometry, instanced micro-parts, or displacement; a map alone is an approximation (source: grimoire/build/geometry_patterns.md)."
+    ]
+  },
+  "qualityTargets": {
+    "targetFidelity": 0.79,
+    "mustMatch": [
+      "T-shaped profile and nozzle waist",
+      "rear intake rings and perforation field",
+      "handle controls and cable boot",
+      "cream, pink, mint, cavity and cord material separation",
+      "purpose-readable five-ribbon wind field with continuous anchor release and gravity fall"
+    ],
+    "niceToHave": [
+      "micro scratches, stains, chips, and dirt masks",
+      "secondary lighting match"
+    ],
+    "fpsTarget": 60,
+    "reviewViewpoints": [
+      "profile-view",
+      "rear-view",
+      "control-view",
+      "three-quarter",
+      "powered"
+    ]
+  },
+  "selfCorrectLoop": {
+    "enabled": true,
+    "visualAcceptance": {
+      "reviewer": "ai-vision",
+      "threshold": 0.7,
+      "comparisonArtifactRequired": true,
+      "layerScoresRequired": true,
+      "codePixelDiffIsAcceptanceAuthority": false,
+      "scoringRule": "AI vision must inspect a side-by-side reference/render sheet and score the current pass from 0 to 1. Pixel-diff code may assist diagnostics but cannot approve a pass.",
+      "requiredLayerScores": [
+        "silhouetteProportion",
+        "componentStructure",
+        "formDetail",
+        "materialSurface",
+        "lightingCamera"
+      ],
+      "featureReviewPolicy": {
+        "enabled": true,
+        "reviewUnit": "semantic-subsystem",
+        "maxCriticalFeaturesPerPass": 5,
+        "maxImportantFeaturesPerPass": 3,
+        "criticalDefaultThreshold": 0.8,
+        "importantAverageThreshold": 0.65,
+        "adaptiveEscalation": true,
+        "singleImagePairOnly": true,
+        "selectionRule": "Choose only the most visually salient, identity-defining, user-prioritized, or high-risk semantic systems. Group repeated parts instead of reviewing every mesh. AI vision scores every selected feature from the same full reference/render pair."
+      }
+    },
+    "reviewAfterPasses": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "allowedActions": [
+      "continue",
+      "refine-spec",
+      "refine-code",
+      "request-input",
+      "stop"
+    ],
+    "specRefineTriggers": [
+      "missing component",
+      "wrong primitive family",
+      "wrong proportions",
+      "material layer under-specified",
+      "local feature not traceable to viewEvidence",
+      "reference ambiguity discovered during implementation"
+    ],
+    "codeRefineTriggers": [
+      "spec is adequate but generated geometry/material does not match",
+      "browser render differs from reference",
+      "performance budget exceeded",
+      "lighting hides geometry or material response"
+    ],
+    "stopCriteria": [
+      "target fidelity reached or user accepts current approximation",
+      "remaining gaps require new reference images or manual art"
+    ],
+    "screenshotPolicy": {
+      "requiredForPasses": [
+        "blockout",
+        "structural-pass",
+        "form-refinement",
+        "material-pass",
+        "lighting-pass",
+        "interaction-pass"
+      ],
+      "preferredCapture": "in-app-browser-screenshot",
+      "fallbackCapture": "user-supplied-screenshot-path",
+      "minimumEvidence": "Each visual pass needs a reference image, rendered screenshot, side-by-side comparison sheet, AI vision score, layer scores, and critique before choosing continue.",
+      "reviewPairRule": "Compare the same camera/viewpoint whenever possible; do not judge a front reference against a random render angle.",
+      "acceptanceAuthority": "AI vision review of the comparison sheet. Code-generated pixel similarity is not sufficient evidence."
+    }
+  },
+  "featureReviewTargets": [
+    {
+      "id": "dryer-profile",
+      "name": "Cream barrel, pink waist nozzle and vertical handle silhouette",
+      "tier": "critical",
+      "passIds": [
+        "blockout",
+        "form-refinement"
+      ],
+      "minimumScore": 0.78,
+      "mustPass": true,
+      "componentRefs": [
+        "motor-shell",
+        "concentrator-nozzle",
+        "handle-shell"
+      ],
+      "evidenceRefs": [
+        "profile-view"
+      ]
+    },
+    {
+      "id": "rear-intake-system",
+      "name": "Cream bezel, mint ring, perforations and rotor axis",
+      "tier": "critical",
+      "passIds": [
+        "structural-pass",
+        "form-refinement"
+      ],
+      "minimumScore": 0.76,
+      "mustPass": true,
+      "componentRefs": [
+        "rear-intake",
+        "perforation-field",
+        "fan-rotor"
+      ],
+      "evidenceRefs": [
+        "rear-view"
+      ]
+    },
+    {
+      "id": "control-system",
+      "name": "Round cool-shot control and vertical power slider",
+      "tier": "critical",
+      "passIds": [
+        "structural-pass",
+        "interaction-pass"
+      ],
+      "minimumScore": 0.76,
+      "mustPass": true,
+      "componentRefs": [
+        "cool-shot-control",
+        "power-slider"
+      ],
+      "evidenceRefs": [
+        "control-view"
+      ]
+    },
+    {
+      "id": "cable-system",
+      "name": "Lower collar, six ribs and visible cord",
+      "tier": "important",
+      "passIds": [
+        "form-refinement"
+      ],
+      "minimumScore": 0.7,
+      "mustPass": false,
+      "componentRefs": [
+        "cable-collar",
+        "strain-relief",
+        "power-cord"
+      ],
+      "evidenceRefs": [
+        "profile-view",
+        "rear-view"
+      ]
+    },
+    {
+      "id": "sakura-material-system",
+      "name": "Cream, pink, mint, cavity and rubber separation",
+      "tier": "critical",
+      "passIds": [
+        "material-pass",
+        "lighting-pass"
+      ],
+      "minimumScore": 0.73,
+      "mustPass": true,
+      "componentRefs": [
+        "motor-shell",
+        "handle-shell",
+        "rear-intake"
+      ],
+      "evidenceRefs": [
+        "profile-view",
+        "rear-view"
+      ]
+    },
+    {
+      "id": "purpose-action",
+      "name": "Switch press, visible rotor and five solid wind ribbons releasing without a position jump",
+      "tier": "critical",
+      "passIds": [
+        "interaction-pass"
+      ],
+      "minimumScore": 0.78,
+      "mustPass": true,
+      "componentRefs": [
+        "power-slider",
+        "fan-rotor",
+        "airflow-effect",
+        "blown-strands"
+      ],
+      "evidenceRefs": [
+        "powered-view"
+      ]
+    }
+  ],
+  "sculptPipeline": {
+    "passGateMode": "locked-sequential",
+    "passOrder": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "currentPass": "complete",
+    "completedPasses": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "lastCompletedPass": "optimization-pass",
+    "blockedReason": "all build passes completed",
+    "nextRequiredEvidence": []
+  },
+  "lookDevTargets": {
+    "qualityPriority": "reference-fidelity",
+    "materialPass": {
+      "albedoPaletteRequired": true,
+      "roughnessVariationRequired": true,
+      "normalOrBumpRequired": true,
+      "localOverridesRequired": true,
+      "minimumTextureResolution": 1024,
+      "preferredTextureResolution": 2048,
+      "independentMapChannels": [
+        "albedo",
+        "roughness",
+        "height",
+        "normal",
+        "ambient-occlusion"
+      ],
+      "requiredSurfaceFrequencyBands": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "geometryReliefRequiredWhenSilhouetteAffected": true,
+      "referencePbrExtraction": {
+        "requiredWhenSourceImagePresent": true,
+        "targetThreshold": 0.7,
+        "stopOnLowConfidence": true,
+        "script": "forge/stage1_intake/extract_pbr_evidence.py",
+        "acceptedLimitation": "single-image extraction is reference-derived inference, not exact photogrammetry"
+      },
+      "mustAvoid": [
+        "single flat albedo per material",
+        "uniform roughness",
+        "albedo texture reused as roughness/height/normal/AO",
+        "single-frequency random noise",
+        "plastic-looking smooth bark, stone, cloth, foliage, or aged material",
+        "local color/detail described only in prose without material masks",
+        "claiming exact PBR recovery when confidence is below the target threshold"
+      ]
+    },
+    "lightingPass": {
+      "requiredTerms": [
+        "key light",
+        "fill light",
+        "rim or environment light",
+        "exposure",
+        "tone mapping",
+        "background",
+        "contact shadow"
+      ],
+      "mustAvoid": [
+        "ambient-only lighting",
+        "flat value range",
+        "missing contact shadow",
+        "reference lighting copied without separating material readability"
+      ]
+    },
+    "screenshotReview": [
+      "Compare albedo palette and local color zones.",
+      "Compare roughness/normal/bump response under light.",
+      "Compare cavity dirt, edge wear, stains, moss, scratches, or other local masks.",
+      "Compare key/fill/rim structure, exposure, tone mapping, background, and contact shadows.",
+      "Capture a neutral-light render to verify material readability without reference lighting.",
+      "Capture a grazing-light close-up to expose flat normals, uniform roughness, tiling, and plastic highlights.",
+      "Capture a reference-matched render from the same camera framing as the source."
+    ]
+  },
+  "actionReadiness": {
+    "contract": "Every macro/meso component should be generated as a stable named Object3D pivot node with a mesh child, action metadata, optional sockets, collider proxy, and destruction metadata.",
+    "defaultRigType": "action-ready-static-rig",
+    "rootMotionNode": "root",
+    "requiredComponentFields": [
+      "id",
+      "parent",
+      "transform",
+      "attachment for child appendages, connectors, limbs, tubes, handles, legs, horns, wings, branches, or cables",
+      "actionProfile.animationRole",
+      "actionProfile.pivot",
+      "actionProfile.collider",
+      "actionProfile.destruction"
+    ],
+    "transformChannels": [
+      "translate",
+      "rotate",
+      "scale",
+      "bend",
+      "twist",
+      "detach",
+      "visibility",
+      "material-state"
+    ],
+    "authoringRules": [
+      "Do not collapse independently movable parts into one mesh.",
+      "Put transforms on component pivot groups, not only on raw meshes.",
+      "For attached child parts, put the pivot at the semantic root/socket and build visible geometry from localStart to localEnd.",
+      "Represent hinge, socket, detachable, and breakable intent even when no animation is implemented yet.",
+      "Use simplified collider proxies for runtime physics instead of visual mesh colliders by default."
+    ],
+    "destructionPolicy": {
+      "defaultBreakable": false,
+      "fractureGroupNaming": "Use stable semantic names such as body-shell, left-hinge, glass-panel, branch-segment.",
+      "debrisStrategy": "Prefer detachable component groups and a small number of procedural fragments over random mesh explosion."
+    }
+  },
+  "assumptions": [],
+  "coordinateFrame": {
+    "front": "camera-facing side in the reference image",
+    "up": "image up direction",
+    "scaleReference": "unit scale; adjust after first browser render"
+  },
+  "silhouette": {
+    "boundingShape": "horizontal rounded cylinder with vertical rounded handle and flattened flared nozzle",
+    "aspectRatios": [
+      "physical width:height 0.94",
+      "body diameter:handle length 0.74",
+      "handle width:body diameter 0.45"
+    ],
+    "symmetry": "radial barrel and bilateral handle; asymmetric T-shaped assembly",
+    "dominantCurves": [
+      "circular motor shell",
+      "nozzle waist then flare",
+      "rounded handle shoulders"
+    ],
+    "negativeSpaces": [
+      "open flattened outlet",
+      "perforated rear intake"
+    ],
+    "landmarks": [
+      "nozzle socket x=-1.18",
+      "handle root below rear half",
+      "rear rotor axis x=1.38"
+    ]
+  },
+  "viewEvidence": [
+    {
+      "id": "profile-view",
+      "view": "profile",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "T silhouette",
+        "nozzle waist and flare",
+        "handle controls",
+        "cable boot"
+      ],
+      "confidence": 0.98
+    },
+    {
+      "id": "control-view",
+      "view": "barrel-axis control side",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "round cool-shot button",
+        "vertical slider",
+        "cream lower collar"
+      ],
+      "confidence": 0.97
+    },
+    {
+      "id": "rear-view",
+      "view": "rear intake",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "cream bezel",
+        "mint ring",
+        "dense perforations",
+        "rear handle seam"
+      ],
+      "confidence": 0.99
+    },
+    {
+      "id": "powered-view",
+      "view": "purpose animation",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "solid ribbon propagation, thickness and release-continuity requirement"
+      ],
+      "confidence": 0.95
+    }
+  ],
+  "componentTree": [
+    {
+      "id": "root",
+      "name": "Hair Dryer Root",
+      "level": "macro",
+      "role": "body",
+      "importance": 1,
+      "confidence": 0.99,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Runtime container for a compound manufactured appliance.",
+      "parent": null,
+      "attachment": null,
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "root"
+      },
+      "material": "cream-plastic",
+      "materialLayers": [
+        "cream-plastic"
+      ],
+      "localFeatures": [],
+      "evidenceRefs": [
+        "profile-view",
+        "rear-view"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(247, 234, 214, 1)",
+        "secondaryAlbedo": "rgba(234, 167, 183, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.98
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "motor-shell",
+      "name": "Cream Cylindrical Motor Shell",
+      "level": "macro",
+      "role": "body-shell",
+      "importance": 1,
+      "confidence": 0.99,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rigid constant-radius molded shell with explicit end seams.",
+      "parent": "root",
+      "attachment": {
+        "parentId": "root",
+        "parentSocket": "root",
+        "localStart": [
+          0,
+          1.35,
+          0
+        ],
+        "localEnd": [
+          0,
+          1.36,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "profile-view"
+        ]
+      },
+      "transform": {
+        "position": [
+          0,
+          1.35,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          1.571
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-shell",
+        "collider": {
+          "type": "cylinder",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            2.52,
+            1.64,
+            1.64
+          ],
+          "isTrigger": false
+        }
+      },
+      "material": "cream-plastic",
+      "materialLayers": [
+        "cream-plastic"
+      ],
+      "localFeatures": [
+        "shell-soft-bevel",
+        "shell-upper-highlight"
+      ],
+      "evidenceRefs": [
+        "profile-view",
+        "rear-view"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(247, 234, 214, 1)",
+        "secondaryAlbedo": "rgba(255, 244, 228, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.99
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "concentrator-nozzle",
+      "name": "Flattened Pink Concentrator",
+      "level": "macro",
+      "role": "detachable-nozzle",
+      "importance": 1,
+      "confidence": 0.97,
+      "primitive": "curve-sweep",
+      "topologyClass": "continuous-sculpt",
+      "topologyRationale": "One continuous variable elliptical section contracts then flares and flattens.",
+      "parent": "motor-shell",
+      "attachment": {
+        "parentId": "motor-shell",
+        "parentSocket": "nozzle-bayonet-socket",
+        "localStart": [
+          -1.13,
+          0,
+          0
+        ],
+        "localEnd": [
+          -2.37,
+          0,
+          0
+        ],
+        "contactType": "socket",
+        "embedDepth": 0.08,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "profile-view"
+        ]
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "detachable-nozzle",
+        "pivot": {
+          "mode": "socket",
+          "localPosition": [
+            -1.18,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 0.95
+        }
+      },
+      "material": "pink-plastic",
+      "materialLayers": [
+        "pink-plastic"
+      ],
+      "localFeatures": [
+        "nozzle-variable-loft",
+        "nozzle-socket-seam",
+        "flattened-outlet-rim"
+      ],
+      "evidenceRefs": [
+        "profile-view"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(234, 167, 183, 1)",
+        "secondaryAlbedo": "rgba(255, 206, 216, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.98
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "handle-shell",
+      "name": "Rounded Pink Handle",
+      "level": "macro",
+      "role": "handle",
+      "importance": 1,
+      "confidence": 0.99,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rigid rounded rectangular molded grip with a stable three-axis volume.",
+      "parent": "root",
+      "attachment": {
+        "parentId": "root",
+        "parentSocket": "handle-root-socket",
+        "localStart": [
+          0.45,
+          0.64,
+          0
+        ],
+        "localEnd": [
+          0.45,
+          -1.12,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.12,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "profile-view",
+          "rear-view"
+        ]
+      },
+      "transform": {
+        "position": [
+          0.45,
+          -0.08,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "handle",
+        "pivot": {
+          "mode": "root-socket",
+          "localPosition": [
+            0.45,
+            0.76,
+            0
+          ],
+          "axis": [
+            0,
+            0,
+            1
+          ],
+          "confidence": 0.98
+        },
+        "collider": {
+          "type": "box",
+          "offset": [
+            0,
+            -0.84,
+            0
+          ],
+          "scale": [
+            0.74,
+            2.22,
+            0.66
+          ],
+          "isTrigger": false
+        }
+      },
+      "material": "pink-plastic",
+      "materialLayers": [
+        "pink-plastic"
+      ],
+      "localFeatures": [
+        "handle-rounded-shoulder",
+        "handle-mould-seam",
+        "handle-front-highlight"
+      ],
+      "evidenceRefs": [
+        "profile-view",
+        "rear-view"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(234, 167, 183, 1)",
+        "secondaryAlbedo": "rgba(255, 206, 216, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.99
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "outlet-cavity",
+      "name": "Flat Outlet Cavity",
+      "level": "meso",
+      "role": "air-outlet",
+      "importance": 0.94,
+      "confidence": 0.86,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Thin dark rigid opening plate at the nozzle terminal section.",
+      "parent": "concentrator-nozzle",
+      "attachment": {
+        "parentId": "concentrator-nozzle",
+        "parentSocket": "airflow-emitter-socket",
+        "localStart": [
+          -2.37,
+          0,
+          0
+        ],
+        "localEnd": [
+          -2.43,
+          0,
+          0
+        ],
+        "contactType": "embedded",
+        "embedDepth": 0.025,
+        "gapTolerance": 0.005,
+        "evidenceRefs": [
+          "profile-view"
+        ]
+      },
+      "transform": {
+        "position": [
+          -2.385,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "effect-socket"
+      },
+      "material": "dark-cavity",
+      "materialLayers": [
+        "dark-cavity"
+      ],
+      "localFeatures": [
+        "flat-outlet-hole"
+      ],
+      "evidenceRefs": [
+        "profile-view"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(76, 74, 75, 1)",
+        "secondaryAlbedo": "rgba(117, 111, 109, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.82
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "nozzle-band",
+      "name": "Nozzle Socket Band",
+      "level": "meso",
+      "role": "seam-band",
+      "importance": 0.72,
+      "confidence": 0.96,
+      "primitive": "torus",
+      "topologyClass": "surface-relief",
+      "topologyRationale": "Raised annular seam relief following the nozzle socket.",
+      "parent": "concentrator-nozzle",
+      "attachment": {
+        "parentId": "concentrator-nozzle",
+        "parentSocket": "nozzle-bayonet-socket",
+        "localStart": [
+          -1.17,
+          0,
+          0
+        ],
+        "localEnd": [
+          -1.16,
+          0,
+          0
+        ],
+        "contactType": "surface-contact",
+        "overlap": 0.02,
+        "gapTolerance": 0.005,
+        "evidenceRefs": [
+          "profile-view"
+        ]
+      },
+      "transform": {
+        "position": [
+          -1.17,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          1.571,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "surface-detail"
+      },
+      "material": "pink-plastic",
+      "materialLayers": [
+        "pink-plastic"
+      ],
+      "localFeatures": [],
+      "evidenceRefs": [
+        "profile-view"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(255, 206, 216, 1)",
+        "secondaryAlbedo": "rgba(234, 167, 183, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.96
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "rear-intake",
+      "name": "Layered Rear Intake",
+      "level": "meso",
+      "role": "rear-service-assembly",
+      "importance": 0.98,
+      "confidence": 0.99,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Concentric rigid bezel, ring and perforated plate share the barrel axis.",
+      "parent": "motor-shell",
+      "attachment": {
+        "parentId": "motor-shell",
+        "parentSocket": "rear-service-socket",
+        "localStart": [
+          1.22,
+          0,
+          0
+        ],
+        "localEnd": [
+          1.4,
+          0,
+          0
+        ],
+        "contactType": "socket",
+        "embedDepth": 0.05,
+        "gapTolerance": 0.005,
+        "evidenceRefs": [
+          "rear-view"
+        ]
+      },
+      "transform": {
+        "position": [
+          1.25,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "service-panel"
+      },
+      "material": "mint-plastic",
+      "materialLayers": [
+        "cream-plastic",
+        "mint-plastic",
+        "dark-cavity"
+      ],
+      "localFeatures": [
+        "rear-bezel-bevel",
+        "mint-intake-ring"
+      ],
+      "evidenceRefs": [
+        "rear-view"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(247, 234, 214, 1)",
+        "secondaryAlbedo": "rgba(191, 225, 218, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.99
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "perforation-field",
+      "name": "Rear Perforation Field",
+      "level": "meso",
+      "role": "intake-holes",
+      "importance": 0.94,
+      "confidence": 0.99,
+      "primitive": "instanced-cluster",
+      "topologyClass": "surface-relief",
+      "topologyRationale": "Dense repeated circular holes form one geometric instancing system.",
+      "parent": "rear-intake",
+      "attachment": {
+        "parentId": "rear-intake",
+        "parentSocket": "rear-service-socket",
+        "localStart": [
+          0.14,
+          0,
+          0
+        ],
+        "localEnd": [
+          0.155,
+          0,
+          0
+        ],
+        "contactType": "surface-contact",
+        "overlap": 0.01,
+        "gapTolerance": 0.003,
+        "evidenceRefs": [
+          "rear-view"
+        ]
+      },
+      "transform": {
+        "position": [
+          0.155,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          1.571,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "surface-detail"
+      },
+      "material": "dark-cavity",
+      "materialLayers": [
+        "dark-cavity"
+      ],
+      "localFeatures": [
+        "perforation-array",
+        "circular-hole-profile"
+      ],
+      "evidenceRefs": [
+        "rear-view"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(76, 74, 75, 1)",
+        "secondaryAlbedo": "rgba(51, 50, 58, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.95
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "fan-rotor",
+      "name": "Seven Blade Fan Rotor",
+      "level": "meso",
+      "role": "rotor",
+      "importance": 0.88,
+      "confidence": 0.72,
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Seven discrete rigid blades repeat radially around a central hub.",
+      "parent": "rear-intake",
+      "attachment": {
+        "parentId": "rear-intake",
+        "parentSocket": "fan-axis-socket",
+        "localStart": [
+          0.13,
+          0,
+          0
+        ],
+        "localEnd": [
+          0.15,
+          0,
+          0
+        ],
+        "contactType": "socket",
+        "embedDepth": 0.03,
+        "gapTolerance": 0.005,
+        "evidenceRefs": [
+          "rear-view"
+        ]
+      },
+      "transform": {
+        "position": [
+          0.13,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "rotor",
+        "pivot": {
+          "mode": "axis",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 0.9
+        }
+      },
+      "material": "dark-cavity",
+      "materialLayers": [
+        "dark-cavity"
+      ],
+      "localFeatures": [
+        "seven-blade-rotor"
+      ],
+      "evidenceRefs": [
+        "rear-view"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(85, 80, 82, 1)",
+        "secondaryAlbedo": "rgba(76, 74, 75, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.76
+      },
+      "fidelityTier": "inferred"
+    },
+    {
+      "id": "body-seam",
+      "name": "Moulded Body Seam",
+      "level": "meso",
+      "role": "construction-seam",
+      "importance": 0.56,
+      "confidence": 0.83,
+      "primitive": "torus",
+      "topologyClass": "surface-relief",
+      "topologyRationale": "Thin annular seam is relief on the barrel surface, not an independent mass.",
+      "parent": "motor-shell",
+      "attachment": {
+        "parentId": "motor-shell",
+        "parentSocket": "motor-shell",
+        "localStart": [
+          0.18,
+          0,
+          0
+        ],
+        "localEnd": [
+          0.19,
+          0,
+          0
+        ],
+        "contactType": "surface-contact",
+        "overlap": 0.01,
+        "gapTolerance": 0.003,
+        "evidenceRefs": [
+          "profile-view"
+        ]
+      },
+      "transform": {
+        "position": [
+          0.18,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          1.571,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "surface-detail"
+      },
+      "material": "pink-plastic",
+      "materialLayers": [
+        "pink-plastic"
+      ],
+      "localFeatures": [],
+      "evidenceRefs": [
+        "profile-view"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(180, 122, 139, 1)",
+        "secondaryAlbedo": "rgba(234, 167, 183, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.83
+      },
+      "fidelityTier": "inferred"
+    },
+    {
+      "id": "cool-shot-control",
+      "name": "Round Cool Shot Button",
+      "level": "meso",
+      "role": "button",
+      "importance": 0.9,
+      "confidence": 0.99,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Independent rigid button translates normal to the handle face.",
+      "parent": "handle-shell",
+      "attachment": {
+        "parentId": "handle-shell",
+        "parentSocket": "cool-button-socket",
+        "localStart": [
+          0,
+          -0.43,
+          0.34
+        ],
+        "localEnd": [
+          0,
+          -0.43,
+          0.4
+        ],
+        "contactType": "socket",
+        "embedDepth": 0.025,
+        "gapTolerance": 0.004,
+        "evidenceRefs": [
+          "control-view"
+        ]
+      },
+      "transform": {
+        "position": [
+          0,
+          -0.43,
+          0.365
+        ],
+        "rotation": [
+          1.571,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "button",
+        "pivot": {
+          "mode": "linear",
+          "localPosition": [
+            0,
+            -0.43,
+            0.365
+          ],
+          "axis": [
+            0,
+            0,
+            -1
+          ],
+          "confidence": 0.99
+        }
+      },
+      "material": "cream-plastic",
+      "materialLayers": [
+        "cream-plastic"
+      ],
+      "localFeatures": [
+        "cool-shot-button"
+      ],
+      "evidenceRefs": [
+        "control-view"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(255, 244, 228, 1)",
+        "secondaryAlbedo": "rgba(247, 234, 214, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.99
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "power-slider",
+      "name": "Vertical Power Slider",
+      "level": "meso",
+      "role": "slider",
+      "importance": 0.94,
+      "confidence": 0.99,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Layered rigid track and thumb form an independent linear control.",
+      "parent": "handle-shell",
+      "attachment": {
+        "parentId": "handle-shell",
+        "parentSocket": "power-switch-socket",
+        "localStart": [
+          0,
+          -1.03,
+          0.34
+        ],
+        "localEnd": [
+          0,
+          -1.03,
+          0.42
+        ],
+        "contactType": "socket",
+        "embedDepth": 0.025,
+        "gapTolerance": 0.004,
+        "evidenceRefs": [
+          "control-view"
+        ]
+      },
+      "transform": {
+        "position": [
+          0,
+          -1.03,
+          0.365
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "slider",
+        "pivot": {
+          "mode": "linear",
+          "localPosition": [
+            0,
+            -1.03,
+            0.365
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.99
+        }
+      },
+      "material": "cream-plastic",
+      "materialLayers": [
+        "cream-plastic"
+      ],
+      "localFeatures": [
+        "power-slider-groove"
+      ],
+      "evidenceRefs": [
+        "control-view"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(255, 244, 228, 1)",
+        "secondaryAlbedo": "rgba(247, 234, 214, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.99
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "cable-collar",
+      "name": "Cream Cable Collar",
+      "level": "meso",
+      "role": "cable-socket",
+      "importance": 0.78,
+      "confidence": 0.98,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rigid annular collar caps the handle and supports the strain relief.",
+      "parent": "handle-shell",
+      "attachment": {
+        "parentId": "handle-shell",
+        "parentSocket": "power-cable-socket",
+        "localStart": [
+          0,
+          -1.92,
+          0
+        ],
+        "localEnd": [
+          0,
+          -2.07,
+          0
+        ],
+        "contactType": "socket",
+        "embedDepth": 0.04,
+        "gapTolerance": 0.004,
+        "evidenceRefs": [
+          "profile-view",
+          "rear-view"
+        ]
+      },
+      "transform": {
+        "position": [
+          0,
+          -1.96,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "cable-socket"
+      },
+      "material": "cream-plastic",
+      "materialLayers": [
+        "cream-plastic"
+      ],
+      "localFeatures": [
+        "lower-collar-seam"
+      ],
+      "evidenceRefs": [
+        "profile-view",
+        "rear-view"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(247, 234, 214, 1)",
+        "secondaryAlbedo": "rgba(234, 223, 206, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.98
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "strain-relief",
+      "name": "Six Step Strain Relief",
+      "level": "meso",
+      "role": "cable-boot",
+      "importance": 0.84,
+      "confidence": 0.99,
+      "primitive": "instanced-cluster",
+      "topologyClass": "fiber-strand",
+      "topologyRationale": "Repeated flexible annular ribs taper along the cable axis.",
+      "parent": "cable-collar",
+      "attachment": {
+        "parentId": "cable-collar",
+        "parentSocket": "power-cable-socket",
+        "localStart": [
+          0,
+          -0.1,
+          0
+        ],
+        "localEnd": [
+          0,
+          -0.66,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.004,
+        "evidenceRefs": [
+          "profile-view"
+        ]
+      },
+      "transform": {
+        "position": [
+          0,
+          -0.15,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "flexible-boot"
+      },
+      "material": "cord-rubber",
+      "materialLayers": [
+        "cord-rubber"
+      ],
+      "localFeatures": [
+        "strain-relief-ribs"
+      ],
+      "evidenceRefs": [
+        "profile-view"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(234, 223, 206, 1)",
+        "secondaryAlbedo": "rgba(210, 199, 185, 1)",
+        "materialClass": "rubber",
+        "materialClassConfidence": 0.94
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "power-cord",
+      "name": "Visible Power Cord",
+      "level": "meso",
+      "role": "cable",
+      "importance": 0.72,
+      "confidence": 0.98,
+      "primitive": "tube",
+      "topologyClass": "fiber-strand",
+      "topologyRationale": "Long thin flexible dielectric cable follows an endpoint-defined path.",
+      "parent": "strain-relief",
+      "attachment": {
+        "parentId": "strain-relief",
+        "parentSocket": "power-cable-socket",
+        "localStart": [
+          0,
+          -0.62,
+          0
+        ],
+        "localEnd": [
+          0,
+          -1.22,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.05,
+        "gapTolerance": 0.004,
+        "evidenceRefs": [
+          "profile-view"
+        ]
+      },
+      "transform": {
+        "position": [
+          0,
+          -0.8,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "cable"
+      },
+      "material": "cord-rubber",
+      "materialLayers": [
+        "cord-rubber"
+      ],
+      "localFeatures": [
+        "visible-power-cord"
+      ],
+      "evidenceRefs": [
+        "profile-view"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(234, 223, 206, 1)",
+        "secondaryAlbedo": "rgba(210, 199, 185, 1)",
+        "materialClass": "rubber",
+        "materialClassConfidence": 0.92
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "solid-ribbon-field",
+      "name": "Five Socket-Bound Solid Wind Ribbons",
+      "level": "meso",
+      "role": "purpose-prop",
+      "importance": 1.0,
+      "confidence": 0.95,
+      "primitive": "dynamic-buffer-solid",
+      "topologyClass": "segmented-solid-ribbon",
+      "topologyRationale": "Each of five long narrow meshes has a four-corner rectangular cross-section, front/back/edge faces and end caps; it is not a Plane, Line or single synchronised tube.",
+      "parent": "concentrator-nozzle",
+      "attachment": {
+        "parentId": "concentrator-nozzle",
+        "parentSocket": "airflow-emitter-socket",
+        "localStart": [-2.445, 0, 0],
+        "localEnd": [-8.095, 0, 0],
+        "contactType": "releaseable-socket",
+        "overlap": 0.015,
+        "gapTolerance": 0.0001,
+        "evidenceRefs": [
+          "ribbon-reference-research",
+          "ribbon-quality-contract"
+        ]
+      },
+      "transform": {
+        "position": [0, 0, 0],
+        "rotation": [0, 0, 0],
+        "scale": [1, 1, 1]
+      },
+      "actionProfile": {
+        "animationRole": "propagated-wind-ribbon-field",
+        "pivot": {
+          "mode": "five-independent-fixed-ends",
+          "localPosition": [-2.445, 0, 0],
+          "axis": [-1, 0, 0],
+          "confidence": 0.98
+        },
+        "deformation": {
+          "segmentsPerRibbon": 30,
+          "propagation": "fixed-end-to-free-end multi-frequency phase lag",
+          "variation": "unique amplitude frequency phase twist bend turbulence and seed per ribbon",
+          "releaseTime": 4.18,
+          "releaseContinuityTolerance": 0.000001,
+          "releaseForces": "residual negative-X wind, curl and gravity"
+        }
+      },
+      "material": "sakura-ribbon-fabric",
+      "materialLayers": [
+        "sakura-ribbon-fabric"
+      ],
+      "localFeatures": [
+        "solid-wind-ribbons",
+        "released-ribbon-flight"
+      ],
+      "evidenceRefs": [
+        "ribbon-reference-research",
+        "ribbon-quality-contract"
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "SAKURA pastel pink/cream/mint/lilac/coral",
+        "secondaryAlbedo": "toon-lit darker side faces",
+        "materialClass": "stylized fabric ribbon",
+        "materialClassConfidence": 0.9
+      },
+      "fidelityTier": "interaction"
+    }
+  ],
+  "materials": [
+    {
+      "id": "cream-plastic",
+      "name": "Warm Cream Molded Plastic",
+      "type": "standard",
+      "shaderModel": "MeshStandardMaterial / PBR approximation",
+      "baseColor": "#F7EAD6",
+      "color": "#F7EAD6",
+      "albedo": {
+        "dominant": "#F6D3CA",
+        "secondary": [
+          "#E9CDBF",
+          "#F3E2D4",
+          "#D8B1A7"
+        ],
+        "samplingNotes": "Reference-derived from foreground pixels; de-lit to reduce baked shadows/highlights.",
+        "map": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-cream-plastic\\cream-plastic_albedo.png",
+          "url": "cream-plastic_albedo.png",
+          "channel": "albedo",
+          "source": "reference-pixel-extraction"
+        }
+      },
+      "colorVariation": {
+        "palette": [
+          "#F6D3CA",
+          "#E9CDBF",
+          "#F3E2D4",
+          "#D8B1A7",
+          "#413A35"
+        ],
+        "pattern": "reference-derived pixel palette",
+        "amplitude": 0.158,
+        "heightCorrelation": 0.42
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2.0,
+          2.0
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Preserve stable world/object-scale detail; do not stretch micro detail with component scale."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2.0,
+          "amplitude": 0.412,
+          "role": "reference-derived broad albedo and height breakup"
+        },
+        {
+          "id": "meso",
+          "frequency": 14.0,
+          "amplitude": 0.248,
+          "role": "reference-derived cracks, ridges, pores, grain, or leaf clusters"
+        },
+        {
+          "id": "micro",
+          "frequency": 72.0,
+          "amplitude": 0.111,
+          "role": "reference-derived micro highlight breakup under grazing light"
+        }
+      ],
+      "roughness": {
+        "base": 0.68,
+        "variation": 0.05,
+        "map": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-cream-plastic\\cream-plastic_roughness.png",
+          "url": "cream-plastic_roughness.png",
+          "channel": "roughness",
+          "source": "reference-pixel-extraction"
+        },
+        "localResponse": "reference-derived roughness estimate; cavities and textured zones trend rougher, bright highlights trend smoother"
+      },
+      "metalness": {
+        "base": 0.0,
+        "variation": 0.0
+      },
+      "normal": {
+        "pattern": "reference-derived height-gradient normal map",
+        "strength": 0.184,
+        "map": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-cream-plastic\\cream-plastic_normal.png",
+          "url": "cream-plastic_normal.png",
+          "channel": "normal",
+          "source": "reference-pixel-extraction"
+        },
+        "heightSource": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-cream-plastic\\cream-plastic_height.png",
+          "url": "cream-plastic_height.png",
+          "channel": "height",
+          "source": "reference-pixel-extraction"
+        },
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "reference-derived height field",
+        "amplitude": 0.011,
+        "map": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-cream-plastic\\cream-plastic_height.png",
+          "url": "cream-plastic_height.png",
+          "channel": "height",
+          "source": "reference-pixel-extraction"
+        }
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0.0,
+        "scale": 1.0,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.38,
+        "contactShadowBias": 0.35,
+        "map": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-cream-plastic\\cream-plastic_ao.png",
+          "url": "cream-plastic_ao.png",
+          "channel": "ao",
+          "source": "reference-pixel-extraction"
+        },
+        "notes": "Reference-derived cavity estimate from local height minima; verify against grazing-light screenshot."
+      },
+      "wear": {
+        "edgeWear": 0.0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0.0,
+        "cavityBias": 0.0,
+        "color": "#2F2A22"
+      },
+      "localOverrides": [
+        {
+          "id": "cream-edge-highlight",
+          "region": "barrel rim and control crowns",
+          "roughness": 0.24,
+          "evidenceRefs": [
+            "profile-view",
+            "control-view"
+          ]
+        },
+        {
+          "id": "reference-pbr-pixel-evidence",
+          "type": "material-map-evidence",
+          "evidenceRefs": [
+            "full-object"
+          ],
+          "channels": [
+            "albedo",
+            "roughness",
+            "height",
+            "normal",
+            "ambient-occlusion"
+          ],
+          "notes": "Use generated maps as material evidence, then refine after browser screenshot comparison."
+        }
+      ],
+      "shaderNotes": [
+        "Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.",
+        "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.",
+        "Use normal/bump/displacement only when they map to observed surface relief.",
+        "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there.",
+        "Reference-derived maps are estimates from image pixels; verify with neutral, grazing, and reference-matched renders.",
+        "Do not treat baked image shadows as final albedo; rerun extraction with a tighter material crop if highlights/shadows pollute the maps."
+      ],
+      "notes": "Reference-matched cream dielectric plastic; toon shader preserves the sampled value hierarchy.",
+      "referencePbr": {
+        "version": "1.0",
+        "sourceImage": "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake\\hair-dryer\\front.png",
+        "extractor": "stage1_intake/extract_pbr_evidence.py",
+        "method": "single-image pixel evidence with de-lighting estimate; not photogrammetry",
+        "usable": true,
+        "verdict": "pass",
+        "confidence": 0.91,
+        "estimatedFidelity": 0.91,
+        "targetThreshold": 0.7,
+        "hardLimit": "A single image cannot uniquely recover true albedo/roughness/normal/AO; maps are reference-derived estimates.",
+        "maps": {
+          "albedo": {
+            "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-cream-plastic\\cream-plastic_albedo.png",
+            "url": "cream-plastic_albedo.png",
+            "channel": "albedo",
+            "source": "reference-pixel-extraction"
+          },
+          "roughness": {
+            "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-cream-plastic\\cream-plastic_roughness.png",
+            "url": "cream-plastic_roughness.png",
+            "channel": "roughness",
+            "source": "reference-pixel-extraction"
+          },
+          "height": {
+            "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-cream-plastic\\cream-plastic_height.png",
+            "url": "cream-plastic_height.png",
+            "channel": "height",
+            "source": "reference-pixel-extraction"
+          },
+          "normal": {
+            "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-cream-plastic\\cream-plastic_normal.png",
+            "url": "cream-plastic_normal.png",
+            "channel": "normal",
+            "source": "reference-pixel-extraction"
+          },
+          "ao": {
+            "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-cream-plastic\\cream-plastic_ao.png",
+            "url": "cream-plastic_ao.png",
+            "channel": "ao",
+            "source": "reference-pixel-extraction"
+          }
+        },
+        "diagnostics": {
+          "sourceWidth": 557,
+          "sourceHeight": 941,
+          "mapSize": 1024,
+          "cropBBoxPixels": {
+            "x": 138,
+            "y": 145,
+            "width": 419,
+            "height": 676
+          },
+          "mask": {
+            "backgroundColor": "#FAF5EF",
+            "backgroundNoise": 1.414,
+            "transparentPixelFraction": 0.0,
+            "foregroundCoverage": 0.1642
+          },
+          "mapStats": {
+            "valueRange": 0.3765,
+            "heightP90Gradient": 0.02336,
+            "roughnessBase": 0.68,
+            "roughnessVariation": 0.05,
+            "normalStrength": 0.184,
+            "blurRadius": 21
+          },
+          "palette": [
+            "#F6D3CA",
+            "#E9CDBF",
+            "#F3E2D4",
+            "#D8B1A7",
+            "#413A35"
+          ]
+        },
+        "warnings": []
+      }
+    },
+    {
+      "id": "pink-plastic",
+      "name": "Sakura Pink Lacquered Plastic",
+      "type": "physical",
+      "shaderModel": "MeshToonMaterial compatible PBR approximation",
+      "baseColor": "#EAA7B7",
+      "color": "#EAA7B7",
+      "albedo": {
+        "dominant": "#F6D3CA",
+        "secondary": [
+          "#E9CDBF",
+          "#F3E2D4",
+          "#D8B1A7"
+        ],
+        "samplingNotes": "Reference-derived from foreground pixels; de-lit to reduce baked shadows/highlights.",
+        "map": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-pink-plastic\\pink-plastic_albedo.png",
+          "url": "pink-plastic_albedo.png",
+          "channel": "albedo",
+          "source": "reference-pixel-extraction"
+        }
+      },
+      "colorVariation": {
+        "palette": [
+          "#F6D3CA",
+          "#E9CDBF",
+          "#F3E2D4",
+          "#D8B1A7",
+          "#413A35"
+        ],
+        "pattern": "reference-derived pixel palette",
+        "amplitude": 0.158,
+        "heightCorrelation": 0.42
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Stable object-scale highlight breakup."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2.0,
+          "amplitude": 0.412,
+          "role": "reference-derived broad albedo and height breakup"
+        },
+        {
+          "id": "meso",
+          "frequency": 14.0,
+          "amplitude": 0.248,
+          "role": "reference-derived cracks, ridges, pores, grain, or leaf clusters"
+        },
+        {
+          "id": "micro",
+          "frequency": 72.0,
+          "amplitude": 0.111,
+          "role": "reference-derived micro highlight breakup under grazing light"
+        }
+      ],
+      "roughness": {
+        "base": 0.68,
+        "variation": 0.05,
+        "map": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-pink-plastic\\pink-plastic_roughness.png",
+          "url": "pink-plastic_roughness.png",
+          "channel": "roughness",
+          "source": "reference-pixel-extraction"
+        },
+        "localResponse": "reference-derived roughness estimate; cavities and textured zones trend rougher, bright highlights trend smoother"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "pattern": "reference-derived height-gradient normal map",
+        "strength": 0.184,
+        "map": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-pink-plastic\\pink-plastic_normal.png",
+          "url": "pink-plastic_normal.png",
+          "channel": "normal",
+          "source": "reference-pixel-extraction"
+        },
+        "heightSource": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-pink-plastic\\pink-plastic_height.png",
+          "url": "pink-plastic_height.png",
+          "channel": "height",
+          "source": "reference-pixel-extraction"
+        },
+        "space": "tangent"
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.38,
+        "contactShadowBias": 0.35,
+        "map": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-pink-plastic\\pink-plastic_ao.png",
+          "url": "pink-plastic_ao.png",
+          "channel": "ao",
+          "source": "reference-pixel-extraction"
+        },
+        "notes": "Reference-derived cavity estimate from local height minima; verify against grazing-light screenshot."
+      },
+      "localOverrides": [
+        {
+          "id": "pink-lacquer-highlight",
+          "region": "nozzle flare and handle front crown",
+          "roughness": 0.2,
+          "evidenceRefs": [
+            "profile-view",
+            "control-view"
+          ]
+        },
+        {
+          "id": "reference-pbr-pixel-evidence",
+          "type": "material-map-evidence",
+          "evidenceRefs": [
+            "full-object"
+          ],
+          "channels": [
+            "albedo",
+            "roughness",
+            "height",
+            "normal",
+            "ambient-occlusion"
+          ],
+          "notes": "Use generated maps as material evidence, then refine after browser screenshot comparison."
+        },
+        {
+          "id": "reference-pbr-pixel-evidence",
+          "type": "material-map-evidence",
+          "evidenceRefs": [
+            "full-object"
+          ],
+          "channels": [
+            "albedo",
+            "roughness",
+            "height",
+            "normal",
+            "ambient-occlusion"
+          ],
+          "notes": "Use generated maps as material evidence, then refine after browser screenshot comparison."
+        }
+      ],
+      "clearcoat": 0.35,
+      "referencePbr": {
+        "version": "1.0",
+        "sourceImage": "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake\\hair-dryer\\front.png",
+        "extractor": "stage1_intake/extract_pbr_evidence.py",
+        "method": "single-image pixel evidence with de-lighting estimate; not photogrammetry",
+        "usable": true,
+        "verdict": "pass",
+        "confidence": 0.91,
+        "estimatedFidelity": 0.91,
+        "targetThreshold": 0.7,
+        "hardLimit": "A single image cannot uniquely recover true albedo/roughness/normal/AO; maps are reference-derived estimates.",
+        "maps": {
+          "albedo": {
+            "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-pink-plastic\\pink-plastic_albedo.png",
+            "url": "pink-plastic_albedo.png",
+            "channel": "albedo",
+            "source": "reference-pixel-extraction"
+          },
+          "roughness": {
+            "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-pink-plastic\\pink-plastic_roughness.png",
+            "url": "pink-plastic_roughness.png",
+            "channel": "roughness",
+            "source": "reference-pixel-extraction"
+          },
+          "height": {
+            "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-pink-plastic\\pink-plastic_height.png",
+            "url": "pink-plastic_height.png",
+            "channel": "height",
+            "source": "reference-pixel-extraction"
+          },
+          "normal": {
+            "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-pink-plastic\\pink-plastic_normal.png",
+            "url": "pink-plastic_normal.png",
+            "channel": "normal",
+            "source": "reference-pixel-extraction"
+          },
+          "ao": {
+            "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-pink-plastic\\pink-plastic_ao.png",
+            "url": "pink-plastic_ao.png",
+            "channel": "ao",
+            "source": "reference-pixel-extraction"
+          }
+        },
+        "diagnostics": {
+          "sourceWidth": 557,
+          "sourceHeight": 941,
+          "mapSize": 1024,
+          "cropBBoxPixels": {
+            "x": 138,
+            "y": 145,
+            "width": 419,
+            "height": 676
+          },
+          "mask": {
+            "backgroundColor": "#FAF5EF",
+            "backgroundNoise": 1.414,
+            "transparentPixelFraction": 0.0,
+            "foregroundCoverage": 0.1642
+          },
+          "mapStats": {
+            "valueRange": 0.3765,
+            "heightP90Gradient": 0.02336,
+            "roughnessBase": 0.68,
+            "roughnessVariation": 0.05,
+            "normalStrength": 0.184,
+            "blurRadius": 21
+          },
+          "palette": [
+            "#F6D3CA",
+            "#E9CDBF",
+            "#F3E2D4",
+            "#D8B1A7",
+            "#413A35"
+          ]
+        },
+        "warnings": []
+      },
+      "bump": {
+        "pattern": "reference-derived height field",
+        "amplitude": 0.011,
+        "map": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-pink-plastic\\pink-plastic_height.png",
+          "url": "pink-plastic_height.png",
+          "channel": "height",
+          "source": "reference-pixel-extraction"
+        }
+      },
+      "shaderNotes": [
+        "Reference-derived maps are estimates from image pixels; verify with neutral, grazing, and reference-matched renders.",
+        "Do not treat baked image shadows as final albedo; rerun extraction with a tighter material crop if highlights/shadows pollute the maps.",
+        "Reference-derived maps are estimates from image pixels; verify with neutral, grazing, and reference-matched renders.",
+        "Do not treat baked image shadows as final albedo; rerun extraction with a tighter material crop if highlights/shadows pollute the maps."
+      ]
+    },
+    {
+      "id": "mint-plastic",
+      "name": "Mint Intake Plastic",
+      "type": "physical",
+      "shaderModel": "MeshToonMaterial compatible PBR approximation",
+      "baseColor": "#BFE1DA",
+      "color": "#BFE1DA",
+      "albedo": {
+        "dominant": "#F1D6CA",
+        "secondary": [
+          "#C4D9D0",
+          "#E0BAAF",
+          "#21241E"
+        ],
+        "samplingNotes": "Reference-derived from foreground pixels; de-lit to reduce baked shadows/highlights.",
+        "map": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-mint-plastic\\mint-plastic_albedo.png",
+          "url": "mint-plastic_albedo.png",
+          "channel": "albedo",
+          "source": "reference-pixel-extraction"
+        }
+      },
+      "colorVariation": {
+        "palette": [
+          "#F1D6CA",
+          "#C4D9D0",
+          "#E0BAAF",
+          "#21241E",
+          "#82877E"
+        ],
+        "pattern": "reference-derived pixel palette",
+        "amplitude": 0.332,
+        "heightCorrelation": 0.42
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "cylindrical",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Preserve concentric rear ring response."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2.0,
+          "amplitude": 0.52,
+          "role": "reference-derived broad albedo and height breakup"
+        },
+        {
+          "id": "meso",
+          "frequency": 14.0,
+          "amplitude": 0.35,
+          "role": "reference-derived cracks, ridges, pores, grain, or leaf clusters"
+        },
+        {
+          "id": "micro",
+          "frequency": 72.0,
+          "amplitude": 0.14,
+          "role": "reference-derived micro highlight breakup under grazing light"
+        }
+      ],
+      "roughness": {
+        "base": 0.681,
+        "variation": 0.127,
+        "map": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-mint-plastic\\mint-plastic_roughness.png",
+          "url": "mint-plastic_roughness.png",
+          "channel": "roughness",
+          "source": "reference-pixel-extraction"
+        },
+        "localResponse": "reference-derived roughness estimate; cavities and textured zones trend rougher, bright highlights trend smoother"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "pattern": "reference-derived height-gradient normal map",
+        "strength": 0.271,
+        "map": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-mint-plastic\\mint-plastic_normal.png",
+          "url": "mint-plastic_normal.png",
+          "channel": "normal",
+          "source": "reference-pixel-extraction"
+        },
+        "heightSource": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-mint-plastic\\mint-plastic_height.png",
+          "url": "mint-plastic_height.png",
+          "channel": "height",
+          "source": "reference-pixel-extraction"
+        },
+        "space": "tangent"
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.38,
+        "contactShadowBias": 0.35,
+        "map": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-mint-plastic\\mint-plastic_ao.png",
+          "url": "mint-plastic_ao.png",
+          "channel": "ao",
+          "source": "reference-pixel-extraction"
+        },
+        "notes": "Reference-derived cavity estimate from local height minima; verify against grazing-light screenshot."
+      },
+      "localOverrides": [
+        {
+          "id": "mint-ring-highlight",
+          "region": "raised inner ring",
+          "roughness": 0.18,
+          "evidenceRefs": [
+            "rear-view"
+          ]
+        },
+        {
+          "id": "reference-pbr-pixel-evidence",
+          "type": "material-map-evidence",
+          "evidenceRefs": [
+            "full-object"
+          ],
+          "channels": [
+            "albedo",
+            "roughness",
+            "height",
+            "normal",
+            "ambient-occlusion"
+          ],
+          "notes": "Use generated maps as material evidence, then refine after browser screenshot comparison."
+        },
+        {
+          "id": "reference-pbr-pixel-evidence",
+          "type": "material-map-evidence",
+          "evidenceRefs": [
+            "full-object"
+          ],
+          "channels": [
+            "albedo",
+            "roughness",
+            "height",
+            "normal",
+            "ambient-occlusion"
+          ],
+          "notes": "Use generated maps as material evidence, then refine after browser screenshot comparison."
+        }
+      ],
+      "clearcoat": 0.28,
+      "referencePbr": {
+        "version": "1.0",
+        "sourceImage": "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake\\hair-dryer\\back.png",
+        "extractor": "stage1_intake/extract_pbr_evidence.py",
+        "method": "single-image pixel evidence with de-lighting estimate; not photogrammetry",
+        "usable": true,
+        "verdict": "pass",
+        "confidence": 0.93,
+        "estimatedFidelity": 0.93,
+        "targetThreshold": 0.7,
+        "hardLimit": "A single image cannot uniquely recover true albedo/roughness/normal/AO; maps are reference-derived estimates.",
+        "maps": {
+          "albedo": {
+            "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-mint-plastic\\mint-plastic_albedo.png",
+            "url": "mint-plastic_albedo.png",
+            "channel": "albedo",
+            "source": "reference-pixel-extraction"
+          },
+          "roughness": {
+            "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-mint-plastic\\mint-plastic_roughness.png",
+            "url": "mint-plastic_roughness.png",
+            "channel": "roughness",
+            "source": "reference-pixel-extraction"
+          },
+          "height": {
+            "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-mint-plastic\\mint-plastic_height.png",
+            "url": "mint-plastic_height.png",
+            "channel": "height",
+            "source": "reference-pixel-extraction"
+          },
+          "normal": {
+            "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-mint-plastic\\mint-plastic_normal.png",
+            "url": "mint-plastic_normal.png",
+            "channel": "normal",
+            "source": "reference-pixel-extraction"
+          },
+          "ao": {
+            "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-mint-plastic\\mint-plastic_ao.png",
+            "url": "mint-plastic_ao.png",
+            "channel": "ao",
+            "source": "reference-pixel-extraction"
+          }
+        },
+        "diagnostics": {
+          "sourceWidth": 558,
+          "sourceHeight": 941,
+          "mapSize": 1024,
+          "cropBBoxPixels": {
+            "x": 65,
+            "y": 132,
+            "width": 256,
+            "height": 690
+          },
+          "mask": {
+            "backgroundColor": "#FAF5EF",
+            "backgroundNoise": 1.414,
+            "transparentPixelFraction": 0.0,
+            "foregroundCoverage": 0.1404
+          },
+          "mapStats": {
+            "valueRange": 0.7904,
+            "heightP90Gradient": 0.09807,
+            "roughnessBase": 0.681,
+            "roughnessVariation": 0.127,
+            "normalStrength": 0.271,
+            "blurRadius": 21
+          },
+          "palette": [
+            "#F1D6CA",
+            "#C4D9D0",
+            "#E0BAAF",
+            "#21241E",
+            "#82877E"
+          ]
+        },
+        "warnings": []
+      },
+      "bump": {
+        "pattern": "reference-derived height field",
+        "amplitude": 0.044,
+        "map": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-mint-plastic\\mint-plastic_height.png",
+          "url": "mint-plastic_height.png",
+          "channel": "height",
+          "source": "reference-pixel-extraction"
+        }
+      },
+      "shaderNotes": [
+        "Reference-derived maps are estimates from image pixels; verify with neutral, grazing, and reference-matched renders.",
+        "Do not treat baked image shadows as final albedo; rerun extraction with a tighter material crop if highlights/shadows pollute the maps.",
+        "Reference-derived maps are estimates from image pixels; verify with neutral, grazing, and reference-matched renders.",
+        "Do not treat baked image shadows as final albedo; rerun extraction with a tighter material crop if highlights/shadows pollute the maps."
+      ]
+    },
+    {
+      "id": "dark-cavity",
+      "name": "Dark Intake and Outlet Cavity",
+      "type": "physical",
+      "shaderModel": "MeshToonMaterial compatible PBR approximation",
+      "baseColor": "#4C4A4B",
+      "color": "#4C4A4B",
+      "albedo": {
+        "dominant": "#F1D6CA",
+        "secondary": [
+          "#C4D9D0",
+          "#E0BAAF",
+          "#21241E"
+        ],
+        "samplingNotes": "Reference-derived from foreground pixels; de-lit to reduce baked shadows/highlights.",
+        "map": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-dark-cavity\\dark-cavity_albedo.png",
+          "url": "dark-cavity_albedo.png",
+          "channel": "albedo",
+          "source": "reference-pixel-extraction"
+        }
+      },
+      "colorVariation": {
+        "palette": [
+          "#F1D6CA",
+          "#C4D9D0",
+          "#E0BAAF",
+          "#21241E",
+          "#82877E"
+        ],
+        "pattern": "reference-derived pixel palette",
+        "amplitude": 0.332,
+        "heightCorrelation": 0.42
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Stable dark cavity response."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2.0,
+          "amplitude": 0.52,
+          "role": "reference-derived broad albedo and height breakup"
+        },
+        {
+          "id": "meso",
+          "frequency": 14.0,
+          "amplitude": 0.35,
+          "role": "reference-derived cracks, ridges, pores, grain, or leaf clusters"
+        },
+        {
+          "id": "micro",
+          "frequency": 72.0,
+          "amplitude": 0.14,
+          "role": "reference-derived micro highlight breakup under grazing light"
+        }
+      ],
+      "roughness": {
+        "base": 0.681,
+        "variation": 0.127,
+        "map": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-dark-cavity\\dark-cavity_roughness.png",
+          "url": "dark-cavity_roughness.png",
+          "channel": "roughness",
+          "source": "reference-pixel-extraction"
+        },
+        "localResponse": "reference-derived roughness estimate; cavities and textured zones trend rougher, bright highlights trend smoother"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "pattern": "reference-derived height-gradient normal map",
+        "strength": 0.271,
+        "map": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-dark-cavity\\dark-cavity_normal.png",
+          "url": "dark-cavity_normal.png",
+          "channel": "normal",
+          "source": "reference-pixel-extraction"
+        },
+        "heightSource": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-dark-cavity\\dark-cavity_height.png",
+          "url": "dark-cavity_height.png",
+          "channel": "height",
+          "source": "reference-pixel-extraction"
+        },
+        "space": "tangent"
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.38,
+        "contactShadowBias": 0.35,
+        "map": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-dark-cavity\\dark-cavity_ao.png",
+          "url": "dark-cavity_ao.png",
+          "channel": "ao",
+          "source": "reference-pixel-extraction"
+        },
+        "notes": "Reference-derived cavity estimate from local height minima; verify against grazing-light screenshot."
+      },
+      "localOverrides": [
+        {
+          "id": "cavity-edge-darkening",
+          "region": "outlet and rear hole edges",
+          "roughness": 0.7,
+          "evidenceRefs": [
+            "profile-view",
+            "rear-view"
+          ]
+        },
+        {
+          "id": "reference-pbr-pixel-evidence",
+          "type": "material-map-evidence",
+          "evidenceRefs": [
+            "full-object"
+          ],
+          "channels": [
+            "albedo",
+            "roughness",
+            "height",
+            "normal",
+            "ambient-occlusion"
+          ],
+          "notes": "Use generated maps as material evidence, then refine after browser screenshot comparison."
+        },
+        {
+          "id": "reference-pbr-pixel-evidence",
+          "type": "material-map-evidence",
+          "evidenceRefs": [
+            "full-object"
+          ],
+          "channels": [
+            "albedo",
+            "roughness",
+            "height",
+            "normal",
+            "ambient-occlusion"
+          ],
+          "notes": "Use generated maps as material evidence, then refine after browser screenshot comparison."
+        }
+      ],
+      "referencePbr": {
+        "version": "1.0",
+        "sourceImage": "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake\\hair-dryer\\back.png",
+        "extractor": "stage1_intake/extract_pbr_evidence.py",
+        "method": "single-image pixel evidence with de-lighting estimate; not photogrammetry",
+        "usable": true,
+        "verdict": "pass",
+        "confidence": 0.93,
+        "estimatedFidelity": 0.93,
+        "targetThreshold": 0.7,
+        "hardLimit": "A single image cannot uniquely recover true albedo/roughness/normal/AO; maps are reference-derived estimates.",
+        "maps": {
+          "albedo": {
+            "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-dark-cavity\\dark-cavity_albedo.png",
+            "url": "dark-cavity_albedo.png",
+            "channel": "albedo",
+            "source": "reference-pixel-extraction"
+          },
+          "roughness": {
+            "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-dark-cavity\\dark-cavity_roughness.png",
+            "url": "dark-cavity_roughness.png",
+            "channel": "roughness",
+            "source": "reference-pixel-extraction"
+          },
+          "height": {
+            "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-dark-cavity\\dark-cavity_height.png",
+            "url": "dark-cavity_height.png",
+            "channel": "height",
+            "source": "reference-pixel-extraction"
+          },
+          "normal": {
+            "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-dark-cavity\\dark-cavity_normal.png",
+            "url": "dark-cavity_normal.png",
+            "channel": "normal",
+            "source": "reference-pixel-extraction"
+          },
+          "ao": {
+            "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-dark-cavity\\dark-cavity_ao.png",
+            "url": "dark-cavity_ao.png",
+            "channel": "ao",
+            "source": "reference-pixel-extraction"
+          }
+        },
+        "diagnostics": {
+          "sourceWidth": 558,
+          "sourceHeight": 941,
+          "mapSize": 1024,
+          "cropBBoxPixels": {
+            "x": 65,
+            "y": 132,
+            "width": 256,
+            "height": 690
+          },
+          "mask": {
+            "backgroundColor": "#FAF5EF",
+            "backgroundNoise": 1.414,
+            "transparentPixelFraction": 0.0,
+            "foregroundCoverage": 0.1404
+          },
+          "mapStats": {
+            "valueRange": 0.7904,
+            "heightP90Gradient": 0.09807,
+            "roughnessBase": 0.681,
+            "roughnessVariation": 0.127,
+            "normalStrength": 0.271,
+            "blurRadius": 21
+          },
+          "palette": [
+            "#F1D6CA",
+            "#C4D9D0",
+            "#E0BAAF",
+            "#21241E",
+            "#82877E"
+          ]
+        },
+        "warnings": []
+      },
+      "bump": {
+        "pattern": "reference-derived height field",
+        "amplitude": 0.044,
+        "map": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-dark-cavity\\dark-cavity_height.png",
+          "url": "dark-cavity_height.png",
+          "channel": "height",
+          "source": "reference-pixel-extraction"
+        }
+      },
+      "shaderNotes": [
+        "Reference-derived maps are estimates from image pixels; verify with neutral, grazing, and reference-matched renders.",
+        "Do not treat baked image shadows as final albedo; rerun extraction with a tighter material crop if highlights/shadows pollute the maps.",
+        "Reference-derived maps are estimates from image pixels; verify with neutral, grazing, and reference-matched renders.",
+        "Do not treat baked image shadows as final albedo; rerun extraction with a tighter material crop if highlights/shadows pollute the maps."
+      ]
+    },
+    {
+      "id": "cord-rubber",
+      "name": "Cream Flexible Cord Rubber",
+      "type": "physical",
+      "shaderModel": "MeshToonMaterial compatible PBR approximation",
+      "baseColor": "#EADFCF",
+      "color": "#EADFCF",
+      "albedo": {
+        "dominant": "#F6D3CA",
+        "secondary": [
+          "#E9CDBF",
+          "#F3E2D4",
+          "#D8B1A7"
+        ],
+        "samplingNotes": "Reference-derived from foreground pixels; de-lit to reduce baked shadows/highlights.",
+        "map": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-cord-rubber\\cord-rubber_albedo.png",
+          "url": "cord-rubber_albedo.png",
+          "channel": "albedo",
+          "source": "reference-pixel-extraction"
+        }
+      },
+      "colorVariation": {
+        "palette": [
+          "#F6D3CA",
+          "#E9CDBF",
+          "#F3E2D4",
+          "#D8B1A7",
+          "#413A35"
+        ],
+        "pattern": "reference-derived pixel palette",
+        "amplitude": 0.158,
+        "heightCorrelation": 0.42
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "cylindrical",
+        "repeat": [
+          3,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Stable rib and cable grain."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2.0,
+          "amplitude": 0.412,
+          "role": "reference-derived broad albedo and height breakup"
+        },
+        {
+          "id": "meso",
+          "frequency": 14.0,
+          "amplitude": 0.248,
+          "role": "reference-derived cracks, ridges, pores, grain, or leaf clusters"
+        },
+        {
+          "id": "micro",
+          "frequency": 72.0,
+          "amplitude": 0.111,
+          "role": "reference-derived micro highlight breakup under grazing light"
+        }
+      ],
+      "roughness": {
+        "base": 0.68,
+        "variation": 0.05,
+        "map": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-cord-rubber\\cord-rubber_roughness.png",
+          "url": "cord-rubber_roughness.png",
+          "channel": "roughness",
+          "source": "reference-pixel-extraction"
+        },
+        "localResponse": "reference-derived roughness estimate; cavities and textured zones trend rougher, bright highlights trend smoother"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "pattern": "reference-derived height-gradient normal map",
+        "strength": 0.184,
+        "map": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-cord-rubber\\cord-rubber_normal.png",
+          "url": "cord-rubber_normal.png",
+          "channel": "normal",
+          "source": "reference-pixel-extraction"
+        },
+        "heightSource": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-cord-rubber\\cord-rubber_height.png",
+          "url": "cord-rubber_height.png",
+          "channel": "height",
+          "source": "reference-pixel-extraction"
+        },
+        "space": "tangent"
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.38,
+        "contactShadowBias": 0.35,
+        "map": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-cord-rubber\\cord-rubber_ao.png",
+          "url": "cord-rubber_ao.png",
+          "channel": "ao",
+          "source": "reference-pixel-extraction"
+        },
+        "notes": "Reference-derived cavity estimate from local height minima; verify against grazing-light screenshot."
+      },
+      "localOverrides": [
+        {
+          "id": "rib-valley-response",
+          "region": "between six strain relief ribs",
+          "roughness": 0.8,
+          "evidenceRefs": [
+            "profile-view"
+          ]
+        },
+        {
+          "id": "reference-pbr-pixel-evidence",
+          "type": "material-map-evidence",
+          "evidenceRefs": [
+            "full-object"
+          ],
+          "channels": [
+            "albedo",
+            "roughness",
+            "height",
+            "normal",
+            "ambient-occlusion"
+          ],
+          "notes": "Use generated maps as material evidence, then refine after browser screenshot comparison."
+        },
+        {
+          "id": "reference-pbr-pixel-evidence",
+          "type": "material-map-evidence",
+          "evidenceRefs": [
+            "full-object"
+          ],
+          "channels": [
+            "albedo",
+            "roughness",
+            "height",
+            "normal",
+            "ambient-occlusion"
+          ],
+          "notes": "Use generated maps as material evidence, then refine after browser screenshot comparison."
+        }
+      ],
+      "referencePbr": {
+        "version": "1.0",
+        "sourceImage": "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake\\hair-dryer\\front.png",
+        "extractor": "stage1_intake/extract_pbr_evidence.py",
+        "method": "single-image pixel evidence with de-lighting estimate; not photogrammetry",
+        "usable": true,
+        "verdict": "pass",
+        "confidence": 0.91,
+        "estimatedFidelity": 0.91,
+        "targetThreshold": 0.7,
+        "hardLimit": "A single image cannot uniquely recover true albedo/roughness/normal/AO; maps are reference-derived estimates.",
+        "maps": {
+          "albedo": {
+            "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-cord-rubber\\cord-rubber_albedo.png",
+            "url": "cord-rubber_albedo.png",
+            "channel": "albedo",
+            "source": "reference-pixel-extraction"
+          },
+          "roughness": {
+            "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-cord-rubber\\cord-rubber_roughness.png",
+            "url": "cord-rubber_roughness.png",
+            "channel": "roughness",
+            "source": "reference-pixel-extraction"
+          },
+          "height": {
+            "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-cord-rubber\\cord-rubber_height.png",
+            "url": "cord-rubber_height.png",
+            "channel": "height",
+            "source": "reference-pixel-extraction"
+          },
+          "normal": {
+            "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-cord-rubber\\cord-rubber_normal.png",
+            "url": "cord-rubber_normal.png",
+            "channel": "normal",
+            "source": "reference-pixel-extraction"
+          },
+          "ao": {
+            "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-cord-rubber\\cord-rubber_ao.png",
+            "url": "cord-rubber_ao.png",
+            "channel": "ao",
+            "source": "reference-pixel-extraction"
+          }
+        },
+        "diagnostics": {
+          "sourceWidth": 557,
+          "sourceHeight": 941,
+          "mapSize": 1024,
+          "cropBBoxPixels": {
+            "x": 138,
+            "y": 145,
+            "width": 419,
+            "height": 676
+          },
+          "mask": {
+            "backgroundColor": "#FAF5EF",
+            "backgroundNoise": 1.414,
+            "transparentPixelFraction": 0.0,
+            "foregroundCoverage": 0.1642
+          },
+          "mapStats": {
+            "valueRange": 0.3765,
+            "heightP90Gradient": 0.02336,
+            "roughnessBase": 0.68,
+            "roughnessVariation": 0.05,
+            "normalStrength": 0.184,
+            "blurRadius": 21
+          },
+          "palette": [
+            "#F6D3CA",
+            "#E9CDBF",
+            "#F3E2D4",
+            "#D8B1A7",
+            "#413A35"
+          ]
+        },
+        "warnings": []
+      },
+      "bump": {
+        "pattern": "reference-derived height field",
+        "amplitude": 0.011,
+        "map": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-cord-rubber\\cord-rubber_height.png",
+          "url": "cord-rubber_height.png",
+          "channel": "height",
+          "source": "reference-pixel-extraction"
+        }
+      },
+      "shaderNotes": [
+        "Reference-derived maps are estimates from image pixels; verify with neutral, grazing, and reference-matched renders.",
+        "Do not treat baked image shadows as final albedo; rerun extraction with a tighter material crop if highlights/shadows pollute the maps.",
+        "Reference-derived maps are estimates from image pixels; verify with neutral, grazing, and reference-matched renders.",
+        "Do not treat baked image shadows as final albedo; rerun extraction with a tighter material crop if highlights/shadows pollute the maps."
+      ]
+    },
+    {
+      "id": "sakura-ribbon-fabric",
+      "name": "SAKURA Pastel Solid Ribbon Fabric",
+      "type": "toon-fabric",
+      "shaderModel": "transparent MeshToonMaterial with lit front/back/edge faces",
+      "baseColor": "#F19AB3",
+      "color": "#F19AB3",
+      "qualityTier": "hero-effect",
+      "roughness": {
+        "base": 0.58,
+        "variation": 0.08,
+        "map": "procedural toon-band response"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "localOverrides": [
+        {
+          "id": "five-ribbon-palette",
+          "region": "five independent solid ribbon meshes",
+          "colors": ["#F19AB3", "#F8D8A0", "#9FD8D0", "#C8B1DF", "#F2B39D"],
+          "evidenceRefs": [
+            "ribbon-reference-research",
+            "ribbon-quality-contract"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "status-led",
+      "name": "Pink Status LED",
+      "type": "toon-emissive",
+      "shaderModel": "MeshToonMaterial emissive",
+      "baseColor": "#81798F",
+      "color": "#81798F",
+      "qualityTier": "utility",
+      "roughness": {
+        "base": 0.18,
+        "variation": 0,
+        "map": "utility-constant-roughness"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "localOverrides": [
+        {
+          "id": "status-led-powered",
+          "region": "handle indicator",
+          "emissive": "#FF8FAB",
+          "evidenceRefs": [
+            "control-view",
+            "powered-view"
+          ]
+        }
+      ]
+    }
+  ],
+  "repetitionSystems": [
+    {
+      "id": "rear-perforations",
+      "name": "Rear circular perforation field",
+      "componentRef": "perforation-field",
+      "count": 81,
+      "distribution": "square lattice clipped to radius 0.72",
+      "geometry": "instanced eight-segment circles",
+      "material": "dark-cavity",
+      "instances": 81,
+      "buildsGeometry": true,
+      "evidenceRefs": [
+        "rear-view"
+      ]
+    },
+    {
+      "id": "fan-blades",
+      "name": "Seven radial fan blades",
+      "componentRef": "fan-rotor",
+      "count": 7,
+      "distribution": "radial equal angle around x axis",
+      "geometry": "rounded blade solids",
+      "material": "dark-cavity",
+      "instances": 7,
+      "buildsGeometry": true,
+      "evidenceRefs": [
+        "rear-view"
+      ]
+    },
+    {
+      "id": "strain-relief-ribs",
+      "name": "Six tapering cable boot ribs",
+      "componentRef": "strain-relief",
+      "count": 6,
+      "distribution": "linear along negative y with decreasing radius",
+      "geometry": "tapered cylinders",
+      "material": "cord-rubber",
+      "instances": 6,
+      "buildsGeometry": true,
+      "evidenceRefs": [
+        "profile-view"
+      ]
+    },
+    {
+      "id": "solid-wind-ribbon-field",
+      "name": "Five independently parameterized solid wind ribbons",
+      "componentRef": "solid-ribbon-field",
+      "count": 5,
+      "distribution": "five nozzle-bound anchors with unique propagated wave profiles along negative x airflow axis",
+      "geometry": "30-segment dynamic rectangular solid ribbon with side faces and end caps",
+      "material": "sakura-ribbon-fabric",
+      "instances": 5,
+      "buildsGeometry": true,
+      "evidenceRefs": [
+        "powered-view"
+      ]
+    }
+  ],
+  "buildPasses": [
+    {
+      "id": "blockout",
+      "goal": "Match macro silhouette and proportions.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "Silhouette reads correctly without materials.",
+        "Quality contract has named all required macro feature groups before code generation.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "structural-pass",
+      "goal": "Build the component hierarchy implied by the pre-spec complexity assessment.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "Macro, meso, and repeated structures meet qualityContract.minimumSpecDepth.",
+        "Parent-child relations, joints, seams, sockets, and contact points are explicit.",
+        "Every attached child appendage/connector has parentSocket, localStart/localEnd, contactType, embedDepth or overlap, and gapTolerance.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "form-refinement",
+      "goal": "Refine shape, deformation, bevels, tapers, curves, asymmetry, and visible local geometry.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "Important visible forms are represented in component geometryDescriptor, deformations, localFeatures, or repetitionSystems.",
+        "Endpoint-based child parts are rooted at their attachment sockets and do not visibly float away from parents.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "material-pass",
+      "goal": "Match material color, roughness, bump, and local variation.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "Reference-derived albedo palette records dominant, secondary, and accent colors per visible material.",
+        "Each important material defines roughness variation and at least one normal/bump/displacement response.",
+        "Local material overrides, dirt/wear/stains/moss/chips/scratches or equivalent masks are tied to evidenceRefs.",
+        "Thin, transparent, reflective, wet, or fibrous materials document alpha/transmission/clearcoat/metalness/fiber response when relevant.",
+        "Generated preview uses procedural albedo/roughness/bump texture or vertex color variation instead of one flat color.",
+        "Generated preview uses independent PBR maps at 1024px or higher for the quality-first tier.",
+        "If source pixels are available, referencePbr extraction passed at confidence >= 0.7 or the pass is stopped/requesting better references.",
+        "Macro, meso, and micro surface frequency bands are visible at the intended review distance without obvious tiling.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "lighting-pass",
+      "goal": "Make material and form readable under neutral turntable lighting plus optional reference lighting.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "lightingFromPhoto identifies key light direction/color/intensity, fill light, rim or environment light, and ambient color.",
+        "Exposure, tone mapping, background color/gradient, shadow softness, and contact shadow behavior are specified.",
+        "Lighting does not hide geometry/material gaps and screenshots can be compared fairly to the reference.",
+        "Neutral, grazing, and reference-matched lighting checks distinguish material errors from lighting errors.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "interaction-pass",
+      "goal": "Make the model ready for future animation, transformation, physics, or destruction.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "Macro and movable meso components have stable pivot nodes.",
+        "Sockets, collider proxies, and destruction metadata are present for future runtime actions.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "optimization-pass",
+      "goal": "Protect runtime performance after visual fidelity is accepted.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "Triangle count, draw calls, instancing, LOD strategy, and FPS target are documented or verified.",
+        "Repeated detail is instanced or simplified where possible without breaking silhouette/material believability."
+      ]
+    }
+  ],
+  "visualEvidence": [
+    {
+      "timestamp": "2026-08-03T16:18:54.712546+00:00",
+      "passId": "blockout",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.88,
+        "formDetail": 0.84,
+        "materialSurface": 0.82,
+        "lightingCamera": 0.81,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "dryer-profile",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Cream horizontal barrel, softened pink waist nozzle and vertical handle preserve the T silhouette and measured diameter/handle ratio."
+        },
+        {
+          "id": "rear-intake-system",
+          "score": 0.9,
+          "passed": true,
+          "notes": "Refined mint perforated screen is now the dominant visible layer; the rotor is recessed and only faintly visible behind it."
+        },
+        {
+          "id": "control-system",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Round cool-shot button, layered track and moving power thumb remain separate and readable on the handle face."
+        },
+        {
+          "id": "cable-system",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Cream collar, six tapering relief ribs and cord are distinct connected parts with no floating root."
+        },
+        {
+          "id": "sakura-material-system",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Cream, sakura pink, mint, dark cavity and soft cord values remain separate under neutral and three-quarter lighting."
+        },
+        {
+          "id": "purpose-action",
+          "score": 0.92,
+          "passed": true,
+          "notes": "Powered state visibly moves the slider, lights the indicator, spins the recessed rotor, emits six warm pink flow lines and bends five contrasting mint strands."
+        }
+      ],
+      "referenceScreenshot": "references/intake/hair-dryer/front.png",
+      "renderScreenshot": "artifacts/img2threejs/hair-dryer/blockout-review/render-front.png",
+      "comparisonImage": "artifacts/img2threejs/hair-dryer/comparison-blockout.png",
+      "cameraView": "profile-view",
+      "notes": "",
+      "aiVisionNotes": "Manual comparison confirms the identity silhouette; normalized deterministic diagnostics passed scale/aspect after matching the reference crop but IoU stayed unsuitable because of crop and background-mask semantics, so it is reported rather than overclaimed."
+    },
+    {
+      "timestamp": "2026-08-03T16:19:51.869202+00:00",
+      "passId": "structural-pass",
+      "estimatedFidelity": 0.88,
+      "aiVisionScore": 0.88,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.88,
+        "formDetail": 0.84,
+        "materialSurface": 0.82,
+        "lightingCamera": 0.81,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "dryer-profile",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Cream horizontal barrel, softened pink waist nozzle and vertical handle preserve the T silhouette and measured diameter/handle ratio."
+        },
+        {
+          "id": "rear-intake-system",
+          "score": 0.9,
+          "passed": true,
+          "notes": "Refined mint perforated screen is now the dominant visible layer; the rotor is recessed and only faintly visible behind it."
+        },
+        {
+          "id": "control-system",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Round cool-shot button, layered track and moving power thumb remain separate and readable on the handle face."
+        },
+        {
+          "id": "cable-system",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Cream collar, six tapering relief ribs and cord are distinct connected parts with no floating root."
+        },
+        {
+          "id": "sakura-material-system",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Cream, sakura pink, mint, dark cavity and soft cord values remain separate under neutral and three-quarter lighting."
+        },
+        {
+          "id": "purpose-action",
+          "score": 0.92,
+          "passed": true,
+          "notes": "Powered state visibly moves the slider, lights the indicator, spins the recessed rotor, emits six warm pink flow lines and bends five contrasting mint strands."
+        }
+      ],
+      "referenceScreenshot": "references/intake/hair-dryer/front.png",
+      "renderScreenshot": "artifacts/img2threejs/hair-dryer/final-review/render-front.png",
+      "comparisonImage": "artifacts/img2threejs/hair-dryer/comparison-structural-pass.png",
+      "cameraView": "three-quarter",
+      "notes": "",
+      "aiVisionNotes": "No floating roots in profile, long-axis or three-quarter views. Nozzle, intake, handle, controls and cord remain distinct selectable assemblies."
+    },
+    {
+      "timestamp": "2026-08-03T16:20:08.002195+00:00",
+      "passId": "form-refinement",
+      "estimatedFidelity": 0.86,
+      "aiVisionScore": 0.86,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.88,
+        "formDetail": 0.84,
+        "materialSurface": 0.82,
+        "lightingCamera": 0.81,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "dryer-profile",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Cream horizontal barrel, softened pink waist nozzle and vertical handle preserve the T silhouette and measured diameter/handle ratio."
+        },
+        {
+          "id": "rear-intake-system",
+          "score": 0.9,
+          "passed": true,
+          "notes": "Refined mint perforated screen is now the dominant visible layer; the rotor is recessed and only faintly visible behind it."
+        },
+        {
+          "id": "control-system",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Round cool-shot button, layered track and moving power thumb remain separate and readable on the handle face."
+        },
+        {
+          "id": "cable-system",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Cream collar, six tapering relief ribs and cord are distinct connected parts with no floating root."
+        },
+        {
+          "id": "sakura-material-system",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Cream, sakura pink, mint, dark cavity and soft cord values remain separate under neutral and three-quarter lighting."
+        },
+        {
+          "id": "purpose-action",
+          "score": 0.92,
+          "passed": true,
+          "notes": "Powered state visibly moves the slider, lights the indicator, spins the recessed rotor, emits six warm pink flow lines and bends five contrasting mint strands."
+        }
+      ],
+      "referenceScreenshot": "references/intake/hair-dryer/front.png",
+      "renderScreenshot": "artifacts/img2threejs/hair-dryer/form2-review/render-three-quarter.png",
+      "comparisonImage": "artifacts/img2threejs/hair-dryer/comparison-form-refinement.png",
+      "cameraView": "three-quarter",
+      "notes": "",
+      "aiVisionNotes": "The first form review exposed an inverted nozzle winding and a double-translated grille; both were corrected. A later audit found the black rotor too dominant, so the rotor was recessed behind an opaque-dominant mint screen and the transition lip was softened before continuation."
+    },
+    {
+      "timestamp": "2026-08-03T16:20:31.345330+00:00",
+      "passId": "material-pass",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.88,
+        "formDetail": 0.84,
+        "materialSurface": 0.82,
+        "lightingCamera": 0.81,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "dryer-profile",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Cream horizontal barrel, softened pink waist nozzle and vertical handle preserve the T silhouette and measured diameter/handle ratio."
+        },
+        {
+          "id": "rear-intake-system",
+          "score": 0.9,
+          "passed": true,
+          "notes": "Refined mint perforated screen is now the dominant visible layer; the rotor is recessed and only faintly visible behind it."
+        },
+        {
+          "id": "control-system",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Round cool-shot button, layered track and moving power thumb remain separate and readable on the handle face."
+        },
+        {
+          "id": "cable-system",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Cream collar, six tapering relief ribs and cord are distinct connected parts with no floating root."
+        },
+        {
+          "id": "sakura-material-system",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Cream, sakura pink, mint, dark cavity and soft cord values remain separate under neutral and three-quarter lighting."
+        },
+        {
+          "id": "purpose-action",
+          "score": 0.92,
+          "passed": true,
+          "notes": "Powered state visibly moves the slider, lights the indicator, spins the recessed rotor, emits six warm pink flow lines and bends five contrasting mint strands."
+        }
+      ],
+      "referenceScreenshot": "references/intake/hair-dryer/front.png",
+      "renderScreenshot": "artifacts/img2threejs/hair-dryer/final-review/render-front.png",
+      "comparisonImage": "artifacts/img2threejs/hair-dryer/comparison-material-pass.png",
+      "cameraView": "profile-view",
+      "notes": "",
+      "aiVisionNotes": "The mint perforated plate is visually dominant as required; the rotor is now a low-contrast inferred layer. Independent albedo/roughness/height/normal/AO evidence exists for all non-utility materials."
+    },
+    {
+      "timestamp": "2026-08-03T16:20:46.340266+00:00",
+      "passId": "lighting-pass",
+      "estimatedFidelity": 0.83,
+      "aiVisionScore": 0.83,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.88,
+        "formDetail": 0.84,
+        "materialSurface": 0.82,
+        "lightingCamera": 0.81,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "dryer-profile",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Cream horizontal barrel, softened pink waist nozzle and vertical handle preserve the T silhouette and measured diameter/handle ratio."
+        },
+        {
+          "id": "rear-intake-system",
+          "score": 0.9,
+          "passed": true,
+          "notes": "Refined mint perforated screen is now the dominant visible layer; the rotor is recessed and only faintly visible behind it."
+        },
+        {
+          "id": "control-system",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Round cool-shot button, layered track and moving power thumb remain separate and readable on the handle face."
+        },
+        {
+          "id": "cable-system",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Cream collar, six tapering relief ribs and cord are distinct connected parts with no floating root."
+        },
+        {
+          "id": "sakura-material-system",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Cream, sakura pink, mint, dark cavity and soft cord values remain separate under neutral and three-quarter lighting."
+        },
+        {
+          "id": "purpose-action",
+          "score": 0.92,
+          "passed": true,
+          "notes": "Powered state visibly moves the slider, lights the indicator, spins the recessed rotor, emits six warm pink flow lines and bends five contrasting mint strands."
+        }
+      ],
+      "referenceScreenshot": "references/intake/hair-dryer/front.png",
+      "renderScreenshot": "artifacts/img2threejs/hair-dryer/final-review/render-three-quarter.png",
+      "comparisonImage": "artifacts/img2threejs/hair-dryer/comparison-lighting-pass.png",
+      "cameraView": "three-quarter",
+      "notes": "",
+      "aiVisionNotes": "Neutral and three-quarter captures retain material zones and real depth; no form depends on one accidental highlight."
+    },
+    {
+      "timestamp": "2026-08-03T16:21:09.768747+00:00",
+      "passId": "interaction-pass",
+      "estimatedFidelity": 0.92,
+      "aiVisionScore": 0.92,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.88,
+        "formDetail": 0.84,
+        "materialSurface": 0.82,
+        "lightingCamera": 0.81,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "dryer-profile",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Cream horizontal barrel, softened pink waist nozzle and vertical handle preserve the T silhouette and measured diameter/handle ratio."
+        },
+        {
+          "id": "rear-intake-system",
+          "score": 0.9,
+          "passed": true,
+          "notes": "Refined mint perforated screen is now the dominant visible layer; the rotor is recessed and only faintly visible behind it."
+        },
+        {
+          "id": "control-system",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Round cool-shot button, layered track and moving power thumb remain separate and readable on the handle face."
+        },
+        {
+          "id": "cable-system",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Cream collar, six tapering relief ribs and cord are distinct connected parts with no floating root."
+        },
+        {
+          "id": "sakura-material-system",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Cream, sakura pink, mint, dark cavity and soft cord values remain separate under neutral and three-quarter lighting."
+        },
+        {
+          "id": "purpose-action",
+          "score": 0.92,
+          "passed": true,
+          "notes": "Powered state visibly moves the slider, lights the indicator, spins the recessed rotor, emits six warm pink flow lines and bends five contrasting mint strands."
+        }
+      ],
+      "referenceScreenshot": "references/intake/hair-dryer/front.png",
+      "renderScreenshot": "artifacts/img2threejs/hair-dryer/final-powered.png",
+      "comparisonImage": "artifacts/img2threejs/hair-dryer/comparison-interaction-pass.png",
+      "cameraView": "powered",
+      "notes": "",
+      "aiVisionNotes": "The airflow extends from the flattened outlet and bends a contrasting bundle, so the function reads as hair drying rather than generic motion. stop() was tested after a powered cycle: before/after canvas SHA-256 hashes are identical and diagnostics report power=0, animationSignal=0."
+    },
+    {
+      "timestamp": "2026-08-03T16:21:28.008649+00:00",
+      "passId": "optimization-pass",
+      "estimatedFidelity": 0.86,
+      "aiVisionScore": 0.86,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.88,
+        "formDetail": 0.84,
+        "materialSurface": 0.82,
+        "lightingCamera": 0.81,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "dryer-profile",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Cream horizontal barrel, softened pink waist nozzle and vertical handle preserve the T silhouette and measured diameter/handle ratio."
+        },
+        {
+          "id": "rear-intake-system",
+          "score": 0.9,
+          "passed": true,
+          "notes": "Refined mint perforated screen is now the dominant visible layer; the rotor is recessed and only faintly visible behind it."
+        },
+        {
+          "id": "control-system",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Round cool-shot button, layered track and moving power thumb remain separate and readable on the handle face."
+        },
+        {
+          "id": "cable-system",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Cream collar, six tapering relief ribs and cord are distinct connected parts with no floating root."
+        },
+        {
+          "id": "sakura-material-system",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Cream, sakura pink, mint, dark cavity and soft cord values remain separate under neutral and three-quarter lighting."
+        },
+        {
+          "id": "purpose-action",
+          "score": 0.92,
+          "passed": true,
+          "notes": "Powered state visibly moves the slider, lights the indicator, spins the recessed rotor, emits six warm pink flow lines and bends five contrasting mint strands."
+        }
+      ],
+      "referenceScreenshot": "references/intake/hair-dryer/front.png",
+      "renderScreenshot": "artifacts/img2threejs/hair-dryer/final-review/render-three-quarter.png",
+      "comparisonImage": "artifacts/img2threejs/hair-dryer/comparison-optimization-pass.png",
+      "cameraView": "three-quarter",
+      "notes": "",
+      "aiVisionNotes": "Optimization preserves the nozzle waist, dense mint grille, controls and powered effect. Multi-angle deterministic check reports no degenerate view."
+    }
+  ],
+  "reviewHistory": [
+    {
+      "timestamp": "2026-08-03T16:18:54.712546+00:00",
+      "passId": "blockout",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.88,
+        "formDetail": 0.84,
+        "materialSurface": 0.82,
+        "lightingCamera": 0.81,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "dryer-profile",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Cream horizontal barrel, softened pink waist nozzle and vertical handle preserve the T silhouette and measured diameter/handle ratio."
+        },
+        {
+          "id": "rear-intake-system",
+          "score": 0.9,
+          "passed": true,
+          "notes": "Refined mint perforated screen is now the dominant visible layer; the rotor is recessed and only faintly visible behind it."
+        },
+        {
+          "id": "control-system",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Round cool-shot button, layered track and moving power thumb remain separate and readable on the handle face."
+        },
+        {
+          "id": "cable-system",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Cream collar, six tapering relief ribs and cord are distinct connected parts with no floating root."
+        },
+        {
+          "id": "sakura-material-system",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Cream, sakura pink, mint, dark cavity and soft cord values remain separate under neutral and three-quarter lighting."
+        },
+        {
+          "id": "purpose-action",
+          "score": 0.92,
+          "passed": true,
+          "notes": "Powered state visibly moves the slider, lights the indicator, spins the recessed rotor, emits six warm pink flow lines and bends five contrasting mint strands."
+        }
+      ],
+      "action": "continue",
+      "summary": "Clay browser render locks the T silhouette, barrel-to-handle ratio and nozzle waist; deterministic mask IoU is not acceptance evidence because the supplied profile is intentionally cropped through the rear barrel while the review render shows the whole object.",
+      "matched": [
+        "T-shaped macro silhouette",
+        "body diameter to handle length",
+        "nozzle contraction and flare",
+        "no collapsed orbit views"
+      ],
+      "mismatches": [
+        "reference profile crops the rear barrel and uses a tall portrait frame",
+        "review viewer includes ground shadow and full rear intake"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "mapStrippedRender": "artifacts/img2threejs/hair-dryer/blockout-review/render-front.png",
+      "reviewViewpoints": [
+        "profile-view",
+        "rear-view",
+        "long-axis",
+        "thickness-axis",
+        "opposite-profile",
+        "three-quarter",
+        "powered"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake/hair-dryer/front.png",
+        "renderScreenshot": "artifacts/img2threejs/hair-dryer/blockout-review/render-front.png",
+        "comparisonImage": "artifacts/img2threejs/hair-dryer/comparison-blockout.png",
+        "cameraView": "profile-view",
+        "notes": "",
+        "aiVisionNotes": "Manual comparison confirms the identity silhouette; normalized deterministic diagnostics passed scale/aspect after matching the reference crop but IoU stayed unsuitable because of crop and background-mask semantics, so it is reported rather than overclaimed."
+      }
+    },
+    {
+      "timestamp": "2026-08-03T16:19:51.869202+00:00",
+      "passId": "structural-pass",
+      "estimatedFidelity": 0.88,
+      "aiVisionScore": 0.88,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.88,
+        "formDetail": 0.84,
+        "materialSurface": 0.82,
+        "lightingCamera": 0.81,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "dryer-profile",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Cream horizontal barrel, softened pink waist nozzle and vertical handle preserve the T silhouette and measured diameter/handle ratio."
+        },
+        {
+          "id": "rear-intake-system",
+          "score": 0.9,
+          "passed": true,
+          "notes": "Refined mint perforated screen is now the dominant visible layer; the rotor is recessed and only faintly visible behind it."
+        },
+        {
+          "id": "control-system",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Round cool-shot button, layered track and moving power thumb remain separate and readable on the handle face."
+        },
+        {
+          "id": "cable-system",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Cream collar, six tapering relief ribs and cord are distinct connected parts with no floating root."
+        },
+        {
+          "id": "sakura-material-system",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Cream, sakura pink, mint, dark cavity and soft cord values remain separate under neutral and three-quarter lighting."
+        },
+        {
+          "id": "purpose-action",
+          "score": 0.92,
+          "passed": true,
+          "notes": "Powered state visibly moves the slider, lights the indicator, spins the recessed rotor, emits six warm pink flow lines and bends five contrasting mint strands."
+        }
+      ],
+      "action": "continue",
+      "summary": "Browser review confirms 16 separable semantic parts, independent pivots and complete attachment sockets; the assembly gate reports 16 specified and 16 built with no errors or warnings.",
+      "matched": [
+        "motor shell/nozzle overlap",
+        "handle root contact",
+        "rear intake stack",
+        "control pivots",
+        "cable socket",
+        "instanced perforations"
+      ],
+      "mismatches": [
+        "internal motor and heater remain intentionally omitted",
+        "fan geometry is inferred behind the screen"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "reviewViewpoints": [
+        "profile-view",
+        "rear-view",
+        "long-axis",
+        "thickness-axis",
+        "opposite-profile",
+        "three-quarter",
+        "powered"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake/hair-dryer/front.png",
+        "renderScreenshot": "artifacts/img2threejs/hair-dryer/final-review/render-front.png",
+        "comparisonImage": "artifacts/img2threejs/hair-dryer/comparison-structural-pass.png",
+        "cameraView": "three-quarter",
+        "notes": "",
+        "aiVisionNotes": "No floating roots in profile, long-axis or three-quarter views. Nozzle, intake, handle, controls and cord remain distinct selectable assemblies."
+      }
+    },
+    {
+      "timestamp": "2026-08-03T16:20:08.002195+00:00",
+      "passId": "form-refinement",
+      "estimatedFidelity": 0.86,
+      "aiVisionScore": 0.86,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.88,
+        "formDetail": 0.84,
+        "materialSurface": 0.82,
+        "lightingCamera": 0.81,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "dryer-profile",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Cream horizontal barrel, softened pink waist nozzle and vertical handle preserve the T silhouette and measured diameter/handle ratio."
+        },
+        {
+          "id": "rear-intake-system",
+          "score": 0.9,
+          "passed": true,
+          "notes": "Refined mint perforated screen is now the dominant visible layer; the rotor is recessed and only faintly visible behind it."
+        },
+        {
+          "id": "control-system",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Round cool-shot button, layered track and moving power thumb remain separate and readable on the handle face."
+        },
+        {
+          "id": "cable-system",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Cream collar, six tapering relief ribs and cord are distinct connected parts with no floating root."
+        },
+        {
+          "id": "sakura-material-system",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Cream, sakura pink, mint, dark cavity and soft cord values remain separate under neutral and three-quarter lighting."
+        },
+        {
+          "id": "purpose-action",
+          "score": 0.92,
+          "passed": true,
+          "notes": "Powered state visibly moves the slider, lights the indicator, spins the recessed rotor, emits six warm pink flow lines and bends five contrasting mint strands."
+        }
+      ],
+      "action": "continue",
+      "summary": "The variable elliptical nozzle loft, cream transition lip, rounded handle, layered rear bezel, controls and six-step cable boot now hold from four non-degenerate angles.",
+      "matched": [
+        "softened barrel/nozzle transition",
+        "flattened outlet section",
+        "rounded handle shoulders",
+        "rear circular stack",
+        "control relief",
+        "strain-relief taper"
+      ],
+      "mismatches": [
+        "outlet inner louver construction is inferred",
+        "full power cable length is cropped by design"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "reviewViewpoints": [
+        "profile-view",
+        "rear-view",
+        "long-axis",
+        "thickness-axis",
+        "opposite-profile",
+        "three-quarter",
+        "powered"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake/hair-dryer/front.png",
+        "renderScreenshot": "artifacts/img2threejs/hair-dryer/form2-review/render-three-quarter.png",
+        "comparisonImage": "artifacts/img2threejs/hair-dryer/comparison-form-refinement.png",
+        "cameraView": "three-quarter",
+        "notes": "",
+        "aiVisionNotes": "The first form review exposed an inverted nozzle winding and a double-translated grille; both were corrected. A later audit found the black rotor too dominant, so the rotor was recessed behind an opaque-dominant mint screen and the transition lip was softened before continuation."
+      }
+    },
+    {
+      "timestamp": "2026-08-03T16:20:31.345330+00:00",
+      "passId": "material-pass",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.88,
+        "formDetail": 0.84,
+        "materialSurface": 0.82,
+        "lightingCamera": 0.81,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "dryer-profile",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Cream horizontal barrel, softened pink waist nozzle and vertical handle preserve the T silhouette and measured diameter/handle ratio."
+        },
+        {
+          "id": "rear-intake-system",
+          "score": 0.9,
+          "passed": true,
+          "notes": "Refined mint perforated screen is now the dominant visible layer; the rotor is recessed and only faintly visible behind it."
+        },
+        {
+          "id": "control-system",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Round cool-shot button, layered track and moving power thumb remain separate and readable on the handle face."
+        },
+        {
+          "id": "cable-system",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Cream collar, six tapering relief ribs and cord are distinct connected parts with no floating root."
+        },
+        {
+          "id": "sakura-material-system",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Cream, sakura pink, mint, dark cavity and soft cord values remain separate under neutral and three-quarter lighting."
+        },
+        {
+          "id": "purpose-action",
+          "score": 0.92,
+          "passed": true,
+          "notes": "Powered state visibly moves the slider, lights the indicator, spins the recessed rotor, emits six warm pink flow lines and bends five contrasting mint strands."
+        }
+      ],
+      "action": "continue",
+      "summary": "SAKURA cream, lacquer pink, mint screen, dark cavities and high-roughness cord remain distinct; five reference-derived PBR evidence sets pass confidence 0.91-0.93.",
+      "matched": [
+        "cream barrel value",
+        "pink nozzle and handle",
+        "mint intake ring and screen",
+        "dark hole field",
+        "soft cream cord"
+      ],
+      "mismatches": [
+        "MeshToonMaterial intentionally quantizes PBR response",
+        "single-image maps are evidence rather than exact inverse rendering"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "reviewViewpoints": [
+        "profile-view",
+        "rear-view",
+        "long-axis",
+        "thickness-axis",
+        "opposite-profile",
+        "three-quarter",
+        "powered"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake/hair-dryer/front.png",
+        "renderScreenshot": "artifacts/img2threejs/hair-dryer/final-review/render-front.png",
+        "comparisonImage": "artifacts/img2threejs/hair-dryer/comparison-material-pass.png",
+        "cameraView": "profile-view",
+        "notes": "",
+        "aiVisionNotes": "The mint perforated plate is visually dominant as required; the rotor is now a low-contrast inferred layer. Independent albedo/roughness/height/normal/AO evidence exists for all non-utility materials."
+      }
+    },
+    {
+      "timestamp": "2026-08-03T16:20:46.340266+00:00",
+      "passId": "lighting-pass",
+      "estimatedFidelity": 0.83,
+      "aiVisionScore": 0.83,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.88,
+        "formDetail": 0.84,
+        "materialSurface": 0.82,
+        "lightingCamera": 0.81,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "dryer-profile",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Cream horizontal barrel, softened pink waist nozzle and vertical handle preserve the T silhouette and measured diameter/handle ratio."
+        },
+        {
+          "id": "rear-intake-system",
+          "score": 0.9,
+          "passed": true,
+          "notes": "Refined mint perforated screen is now the dominant visible layer; the rotor is recessed and only faintly visible behind it."
+        },
+        {
+          "id": "control-system",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Round cool-shot button, layered track and moving power thumb remain separate and readable on the handle face."
+        },
+        {
+          "id": "cable-system",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Cream collar, six tapering relief ribs and cord are distinct connected parts with no floating root."
+        },
+        {
+          "id": "sakura-material-system",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Cream, sakura pink, mint, dark cavity and soft cord values remain separate under neutral and three-quarter lighting."
+        },
+        {
+          "id": "purpose-action",
+          "score": 0.92,
+          "passed": true,
+          "notes": "Powered state visibly moves the slider, lights the indicator, spins the recessed rotor, emits six warm pink flow lines and bends five contrasting mint strands."
+        }
+      ],
+      "action": "continue",
+      "summary": "Warm key, cool fill, pink rim and soft contact shadow expose the nozzle loft, cream transition lip, handle bevels and concentric rear rings without flattening the toon palette.",
+      "matched": [
+        "upper cream highlight",
+        "pink form separation",
+        "mint rear rim",
+        "soft floor contact",
+        "three-quarter depth"
+      ],
+      "mismatches": [
+        "viewer background is cool grey rather than the warm portrait reference",
+        "this is the shared SAKURA review environment"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "reviewViewpoints": [
+        "profile-view",
+        "rear-view",
+        "long-axis",
+        "thickness-axis",
+        "opposite-profile",
+        "three-quarter",
+        "powered"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake/hair-dryer/front.png",
+        "renderScreenshot": "artifacts/img2threejs/hair-dryer/final-review/render-three-quarter.png",
+        "comparisonImage": "artifacts/img2threejs/hair-dryer/comparison-lighting-pass.png",
+        "cameraView": "three-quarter",
+        "notes": "",
+        "aiVisionNotes": "Neutral and three-quarter captures retain material zones and real depth; no form depends on one accidental highlight."
+      }
+    },
+    {
+      "timestamp": "2026-08-03T16:21:09.768747+00:00",
+      "passId": "interaction-pass",
+      "estimatedFidelity": 0.92,
+      "aiVisionScore": 0.92,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.88,
+        "formDetail": 0.84,
+        "materialSurface": 0.82,
+        "lightingCamera": 0.81,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "dryer-profile",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Cream horizontal barrel, softened pink waist nozzle and vertical handle preserve the T silhouette and measured diameter/handle ratio."
+        },
+        {
+          "id": "rear-intake-system",
+          "score": 0.9,
+          "passed": true,
+          "notes": "Refined mint perforated screen is now the dominant visible layer; the rotor is recessed and only faintly visible behind it."
+        },
+        {
+          "id": "control-system",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Round cool-shot button, layered track and moving power thumb remain separate and readable on the handle face."
+        },
+        {
+          "id": "cable-system",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Cream collar, six tapering relief ribs and cord are distinct connected parts with no floating root."
+        },
+        {
+          "id": "sakura-material-system",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Cream, sakura pink, mint, dark cavity and soft cord values remain separate under neutral and three-quarter lighting."
+        },
+        {
+          "id": "purpose-action",
+          "score": 0.92,
+          "passed": true,
+          "notes": "Powered state visibly moves the slider, lights the indicator, spins the recessed rotor, emits six warm pink flow lines and bends five contrasting mint strands."
+        }
+      ],
+      "action": "continue",
+      "summary": "Powered browser state is purpose-readable at a glance: slider advances, indicator lights, recessed rotor spins, and five solid pastel ribbons propagate different S-curves before a continuous release and gravity fall.",
+      "matched": [
+        "power control actuation",
+        "status emission",
+        "fan rotation",
+        "five-ribbon fixed-end propagation",
+        "continuous released-flight and gravity response",
+        "5.2-second compatible cue"
+      ],
+      "mismatches": [
+        "airflow and strands are stylized purpose effects rather than reference geometry"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "reviewViewpoints": [
+        "profile-view",
+        "rear-view",
+        "long-axis",
+        "thickness-axis",
+        "opposite-profile",
+        "three-quarter",
+        "powered"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake/hair-dryer/front.png",
+        "renderScreenshot": "artifacts/img2threejs/hair-dryer/final-powered.png",
+        "comparisonImage": "artifacts/img2threejs/hair-dryer/comparison-interaction-pass.png",
+        "cameraView": "powered",
+        "notes": "",
+        "aiVisionNotes": "The airflow extends from the flattened outlet and bends a contrasting bundle, so the function reads as hair drying rather than generic motion. stop() was tested after a powered cycle: before/after canvas SHA-256 hashes are identical and diagnostics report power=0, animationSignal=0."
+      }
+    },
+    {
+      "timestamp": "2026-08-03T16:21:28.008649+00:00",
+      "passId": "optimization-pass",
+      "estimatedFidelity": 0.86,
+      "aiVisionScore": 0.86,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.88,
+        "formDetail": 0.84,
+        "materialSurface": 0.82,
+        "lightingCamera": 0.81,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "dryer-profile",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Cream horizontal barrel, softened pink waist nozzle and vertical handle preserve the T silhouette and measured diameter/handle ratio."
+        },
+        {
+          "id": "rear-intake-system",
+          "score": 0.9,
+          "passed": true,
+          "notes": "Refined mint perforated screen is now the dominant visible layer; the rotor is recessed and only faintly visible behind it."
+        },
+        {
+          "id": "control-system",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Round cool-shot button, layered track and moving power thumb remain separate and readable on the handle face."
+        },
+        {
+          "id": "cable-system",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Cream collar, six tapering relief ribs and cord are distinct connected parts with no floating root."
+        },
+        {
+          "id": "sakura-material-system",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Cream, sakura pink, mint, dark cavity and soft cord values remain separate under neutral and three-quarter lighting."
+        },
+        {
+          "id": "purpose-action",
+          "score": 0.92,
+          "passed": true,
+          "notes": "Powered state visibly moves the slider, lights the indicator, spins the recessed rotor, emits six warm pink flow lines and bends five contrasting mint strands."
+        }
+      ],
+      "action": "continue",
+      "summary": "Final SwiftShader browser diagnostics report 62 draw calls and 42,572 triangles, below the 160-call/250k-triangle budgets; 81 intake perforations share one InstancedMesh.",
+      "matched": [
+        "perforation instancing",
+        "shared materials",
+        "bounded tube segments",
+        "non-degenerate orbit volume",
+        "runtime budget"
+      ],
+      "mismatches": [
+        "toon outlines add some draw overhead by design",
+        "no LOD swap is needed for the small catalog scale"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "reviewViewpoints": [
+        "profile-view",
+        "rear-view",
+        "long-axis",
+        "thickness-axis",
+        "opposite-profile",
+        "three-quarter",
+        "powered"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake/hair-dryer/front.png",
+        "renderScreenshot": "artifacts/img2threejs/hair-dryer/final-review/render-three-quarter.png",
+        "comparisonImage": "artifacts/img2threejs/hair-dryer/comparison-optimization-pass.png",
+        "cameraView": "three-quarter",
+        "notes": "",
+        "aiVisionNotes": "Optimization preserves the nozzle waist, dense mint grille, controls and powered effect. Multi-angle deterministic check reports no degenerate view."
+      }
+    }
+  ],
+  "lodPlan": [
+    {
+      "tier": "near",
+      "distance": 0,
+      "strategy": "full component tree and material layers"
+    },
+    {
+      "tier": "far",
+      "distance": 30,
+      "strategy": "merge static components and reduce local feature geometry"
+    }
+  ],
+  "performanceBudget": {
+    "qualityPriority": "reference-fidelity",
+    "targetTriangles": 250000,
+    "maxDrawCalls": 160,
+    "textureSize": 2048,
+    "fpsTarget": 30,
+    "optimizationPolicy": "Reach accepted visual fidelity first, then optimize without removing reference-critical geometry or surface layers."
+  },
+  "lightingFromPhoto": [
+    "key light: warm 4300K directional from upper-front-left, intensity 3.2, broad soft shadow radius 4",
+    "fill light: cool blue-grey directional from camera-right/rear, intensity 1.35",
+    "rim light: low-saturation sakura pink from rear-left, intensity 1.6 for cream and mint separation",
+    "environment and output: warm hemisphere ambient, ACES tone mapping intent, exposure 1.0, pale blue-grey background and soft contact shadow"
+  ],
+  "proceduralStrategy": [
+    "Block out macro silhouette first.",
+    "Add component hierarchy and joints.",
+    "Create stable pivot groups, sockets, collider proxies, and destruction metadata before visual polish.",
+    "Refine forms with bevels, tapers, bends, and procedural noise.",
+    "Run reference PBR extraction for important source-image materials and stop when confidence is below the target threshold.",
+    "Add material variation before adding expensive micro-geometry."
+  ],
+  "animationAnchors": [
+    "root pivot node supports whole-object translation, rotation, scale, and visibility changes",
+    "component pivot groups support later local transforms without rebuilding geometry"
+  ],
+  "destructionAnchors": [
+    "actionProfile.destruction.fractureGroup marks detachable or breakable component sets",
+    "component seams and sockets define plausible break points instead of random explosions"
+  ],
+  "risks": [],
+  "localSpecSearch": {
+    "collection": "core_3d",
+    "query": "SAKURA Handheld Hair Dryer handheld hair dryer nozzle fan grille handle switch cord socket plastic housing airflow",
+    "index": {
+      "status": "hit",
+      "reason": "current",
+      "fingerprint": "6857e5ab528b42ac12f4f411f862610a0bffce8e47aee3610a7603c318072fe8"
+    },
+    "matches": [
+      {
+        "record_id": "core.socket-pivot",
+        "file_path": "grimoire/glossary/3d_vocabulary.md",
+        "heading": "Animation, Physics, And Destruction",
+        "key_path": null,
+        "score": 5.511200483252,
+        "snippets": [
+          "A pivot is a local rotation origin; a socket is an attachment point for a child part. In a runtime hierarchy, a socket Object3D is a child of the relevant pivot."
+        ],
+        "source_refs": [
+          {
+            "path": "grimoire/glossary/3d_vocabulary.md",
+            "heading": "Animation, Physics, And Destruction",
+            "key_path": null
+          },
+          {
+            "path": "grimoire/readiness/action_rigging.md",
+            "heading": "Hierarchy Pattern",
+            "key_path": null
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "grimoire/readiness/action_rigging.md"
+          },
+          {
+            "kind": "notebooklm-research",
+            "ref": "notebooklm:4b03c2f9-8393-411f-b5b4-039ab9532843",
+            "note": "Validated generic schema vocabulary; numeric claims remain backed by local source_refs."
+          }
+        ]
+      },
+      {
+        "record_id": "core.attachment-contract",
+        "file_path": "grimoire/readiness/joint_attachment.md",
+        "heading": "Attachment Contract",
+        "key_path": null,
+        "score": 4.774467103191,
+        "snippets": [
+          "An attached child records its parent, parent socket, local start and end, contact type, and embed depth or overlap where applicable."
+        ],
+        "source_refs": [
+          {
+            "path": "grimoire/readiness/joint_attachment.md",
+            "heading": "Attachment Contract",
+            "key_path": null
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "grimoire/readiness/joint_attachment.md"
+          },
+          {
+            "kind": "notebooklm-research",
+            "ref": "notebooklm:4b03c2f9-8393-411f-b5b4-039ab9532843",
+            "note": "Validated generic schema vocabulary; numeric claims remain backed by local source_refs."
+          }
+        ]
+      },
+      {
+        "record_id": "core.shader-mapping-torusgeometry-rings-loops",
+        "file_path": "docs/raw/img2threejs-skill-dataset.json",
+        "heading": null,
+        "key_path": "categories.rendering_shader_mapping[8]",
+        "score": 3.760685282793,
+        "snippets": [
+          "... circular features. Ánh xạ tới các chi tiết hình vòng tròn kiểu donut. Recognition cues: Circular loop feature — bayonet handle ring, finger loop on a Talon knife, trigger guard loop, carrying handle Dấu hiệu nhận diện: Chi tiết vòng tròn — ..."
+        ],
+        "source_refs": [
+          {
+            "path": "docs/raw/img2threejs-skill-dataset.json",
+            "heading": null,
+            "key_path": "categories.rendering_shader_mapping[8]"
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "docs/raw/img2threejs-skill-dataset.json",
+            "note": "img2threejs NotebookLM research distillation"
+          }
+        ]
+      }
+    ]
+  },
+  "pbrExtractionHistory": [
+    {
+      "materialId": "cream-plastic",
+      "confidence": 0.91,
+      "verdict": "pass",
+      "usable": true,
+      "maps": {
+        "albedo": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-cream-plastic\\cream-plastic_albedo.png",
+          "url": "cream-plastic_albedo.png",
+          "channel": "albedo",
+          "source": "reference-pixel-extraction"
+        },
+        "roughness": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-cream-plastic\\cream-plastic_roughness.png",
+          "url": "cream-plastic_roughness.png",
+          "channel": "roughness",
+          "source": "reference-pixel-extraction"
+        },
+        "height": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-cream-plastic\\cream-plastic_height.png",
+          "url": "cream-plastic_height.png",
+          "channel": "height",
+          "source": "reference-pixel-extraction"
+        },
+        "normal": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-cream-plastic\\cream-plastic_normal.png",
+          "url": "cream-plastic_normal.png",
+          "channel": "normal",
+          "source": "reference-pixel-extraction"
+        },
+        "ao": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-cream-plastic\\cream-plastic_ao.png",
+          "url": "cream-plastic_ao.png",
+          "channel": "ao",
+          "source": "reference-pixel-extraction"
+        }
+      }
+    },
+    {
+      "materialId": "pink-plastic",
+      "confidence": 0.91,
+      "verdict": "pass",
+      "usable": true,
+      "maps": {
+        "albedo": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-pink-plastic\\pink-plastic_albedo.png",
+          "url": "pink-plastic_albedo.png",
+          "channel": "albedo",
+          "source": "reference-pixel-extraction"
+        },
+        "roughness": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-pink-plastic\\pink-plastic_roughness.png",
+          "url": "pink-plastic_roughness.png",
+          "channel": "roughness",
+          "source": "reference-pixel-extraction"
+        },
+        "height": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-pink-plastic\\pink-plastic_height.png",
+          "url": "pink-plastic_height.png",
+          "channel": "height",
+          "source": "reference-pixel-extraction"
+        },
+        "normal": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-pink-plastic\\pink-plastic_normal.png",
+          "url": "pink-plastic_normal.png",
+          "channel": "normal",
+          "source": "reference-pixel-extraction"
+        },
+        "ao": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-pink-plastic\\pink-plastic_ao.png",
+          "url": "pink-plastic_ao.png",
+          "channel": "ao",
+          "source": "reference-pixel-extraction"
+        }
+      }
+    },
+    {
+      "materialId": "cord-rubber",
+      "confidence": 0.91,
+      "verdict": "pass",
+      "usable": true,
+      "maps": {
+        "albedo": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-cord-rubber\\cord-rubber_albedo.png",
+          "url": "cord-rubber_albedo.png",
+          "channel": "albedo",
+          "source": "reference-pixel-extraction"
+        },
+        "roughness": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-cord-rubber\\cord-rubber_roughness.png",
+          "url": "cord-rubber_roughness.png",
+          "channel": "roughness",
+          "source": "reference-pixel-extraction"
+        },
+        "height": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-cord-rubber\\cord-rubber_height.png",
+          "url": "cord-rubber_height.png",
+          "channel": "height",
+          "source": "reference-pixel-extraction"
+        },
+        "normal": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-cord-rubber\\cord-rubber_normal.png",
+          "url": "cord-rubber_normal.png",
+          "channel": "normal",
+          "source": "reference-pixel-extraction"
+        },
+        "ao": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-cord-rubber\\cord-rubber_ao.png",
+          "url": "cord-rubber_ao.png",
+          "channel": "ao",
+          "source": "reference-pixel-extraction"
+        }
+      }
+    },
+    {
+      "materialId": "pink-plastic",
+      "confidence": 0.91,
+      "verdict": "pass",
+      "usable": true,
+      "maps": {
+        "albedo": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-pink-plastic\\pink-plastic_albedo.png",
+          "url": "pink-plastic_albedo.png",
+          "channel": "albedo",
+          "source": "reference-pixel-extraction"
+        },
+        "roughness": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-pink-plastic\\pink-plastic_roughness.png",
+          "url": "pink-plastic_roughness.png",
+          "channel": "roughness",
+          "source": "reference-pixel-extraction"
+        },
+        "height": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-pink-plastic\\pink-plastic_height.png",
+          "url": "pink-plastic_height.png",
+          "channel": "height",
+          "source": "reference-pixel-extraction"
+        },
+        "normal": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-pink-plastic\\pink-plastic_normal.png",
+          "url": "pink-plastic_normal.png",
+          "channel": "normal",
+          "source": "reference-pixel-extraction"
+        },
+        "ao": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-pink-plastic\\pink-plastic_ao.png",
+          "url": "pink-plastic_ao.png",
+          "channel": "ao",
+          "source": "reference-pixel-extraction"
+        }
+      }
+    },
+    {
+      "materialId": "mint-plastic",
+      "confidence": 0.93,
+      "verdict": "pass",
+      "usable": true,
+      "maps": {
+        "albedo": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-mint-plastic\\mint-plastic_albedo.png",
+          "url": "mint-plastic_albedo.png",
+          "channel": "albedo",
+          "source": "reference-pixel-extraction"
+        },
+        "roughness": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-mint-plastic\\mint-plastic_roughness.png",
+          "url": "mint-plastic_roughness.png",
+          "channel": "roughness",
+          "source": "reference-pixel-extraction"
+        },
+        "height": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-mint-plastic\\mint-plastic_height.png",
+          "url": "mint-plastic_height.png",
+          "channel": "height",
+          "source": "reference-pixel-extraction"
+        },
+        "normal": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-mint-plastic\\mint-plastic_normal.png",
+          "url": "mint-plastic_normal.png",
+          "channel": "normal",
+          "source": "reference-pixel-extraction"
+        },
+        "ao": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-mint-plastic\\mint-plastic_ao.png",
+          "url": "mint-plastic_ao.png",
+          "channel": "ao",
+          "source": "reference-pixel-extraction"
+        }
+      }
+    },
+    {
+      "materialId": "cord-rubber",
+      "confidence": 0.91,
+      "verdict": "pass",
+      "usable": true,
+      "maps": {
+        "albedo": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-cord-rubber\\cord-rubber_albedo.png",
+          "url": "cord-rubber_albedo.png",
+          "channel": "albedo",
+          "source": "reference-pixel-extraction"
+        },
+        "roughness": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-cord-rubber\\cord-rubber_roughness.png",
+          "url": "cord-rubber_roughness.png",
+          "channel": "roughness",
+          "source": "reference-pixel-extraction"
+        },
+        "height": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-cord-rubber\\cord-rubber_height.png",
+          "url": "cord-rubber_height.png",
+          "channel": "height",
+          "source": "reference-pixel-extraction"
+        },
+        "normal": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-cord-rubber\\cord-rubber_normal.png",
+          "url": "cord-rubber_normal.png",
+          "channel": "normal",
+          "source": "reference-pixel-extraction"
+        },
+        "ao": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-cord-rubber\\cord-rubber_ao.png",
+          "url": "cord-rubber_ao.png",
+          "channel": "ao",
+          "source": "reference-pixel-extraction"
+        }
+      }
+    },
+    {
+      "materialId": "dark-cavity",
+      "confidence": 0.93,
+      "verdict": "pass",
+      "usable": true,
+      "maps": {
+        "albedo": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-dark-cavity\\dark-cavity_albedo.png",
+          "url": "dark-cavity_albedo.png",
+          "channel": "albedo",
+          "source": "reference-pixel-extraction"
+        },
+        "roughness": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-dark-cavity\\dark-cavity_roughness.png",
+          "url": "dark-cavity_roughness.png",
+          "channel": "roughness",
+          "source": "reference-pixel-extraction"
+        },
+        "height": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-dark-cavity\\dark-cavity_height.png",
+          "url": "dark-cavity_height.png",
+          "channel": "height",
+          "source": "reference-pixel-extraction"
+        },
+        "normal": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-dark-cavity\\dark-cavity_normal.png",
+          "url": "dark-cavity_normal.png",
+          "channel": "normal",
+          "source": "reference-pixel-extraction"
+        },
+        "ao": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-dark-cavity\\dark-cavity_ao.png",
+          "url": "dark-cavity_ao.png",
+          "channel": "ao",
+          "source": "reference-pixel-extraction"
+        }
+      }
+    },
+    {
+      "materialId": "mint-plastic",
+      "confidence": 0.93,
+      "verdict": "pass",
+      "usable": true,
+      "maps": {
+        "albedo": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-mint-plastic\\mint-plastic_albedo.png",
+          "url": "mint-plastic_albedo.png",
+          "channel": "albedo",
+          "source": "reference-pixel-extraction"
+        },
+        "roughness": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-mint-plastic\\mint-plastic_roughness.png",
+          "url": "mint-plastic_roughness.png",
+          "channel": "roughness",
+          "source": "reference-pixel-extraction"
+        },
+        "height": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-mint-plastic\\mint-plastic_height.png",
+          "url": "mint-plastic_height.png",
+          "channel": "height",
+          "source": "reference-pixel-extraction"
+        },
+        "normal": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-mint-plastic\\mint-plastic_normal.png",
+          "url": "mint-plastic_normal.png",
+          "channel": "normal",
+          "source": "reference-pixel-extraction"
+        },
+        "ao": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-mint-plastic\\mint-plastic_ao.png",
+          "url": "mint-plastic_ao.png",
+          "channel": "ao",
+          "source": "reference-pixel-extraction"
+        }
+      }
+    },
+    {
+      "materialId": "dark-cavity",
+      "confidence": 0.93,
+      "verdict": "pass",
+      "usable": true,
+      "maps": {
+        "albedo": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-dark-cavity\\dark-cavity_albedo.png",
+          "url": "dark-cavity_albedo.png",
+          "channel": "albedo",
+          "source": "reference-pixel-extraction"
+        },
+        "roughness": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-dark-cavity\\dark-cavity_roughness.png",
+          "url": "dark-cavity_roughness.png",
+          "channel": "roughness",
+          "source": "reference-pixel-extraction"
+        },
+        "height": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-dark-cavity\\dark-cavity_height.png",
+          "url": "dark-cavity_height.png",
+          "channel": "height",
+          "source": "reference-pixel-extraction"
+        },
+        "normal": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-dark-cavity\\dark-cavity_normal.png",
+          "url": "dark-cavity_normal.png",
+          "channel": "normal",
+          "source": "reference-pixel-extraction"
+        },
+        "ao": {
+          "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\hair-dryer\\pbr-dark-cavity\\dark-cavity_ao.png",
+          "url": "dark-cavity_ao.png",
+          "channel": "ao",
+          "source": "reference-pixel-extraction"
+        }
+      }
+    }
+  ],
+  "tier1Results": [
+    {
+      "passed": false,
+      "checks": {
+        "silhouetteIoU": 0.0332,
+        "aspectRatioDelta": 0.8177,
+        "scaleDelta": 0.7633,
+        "bilateralSymmetryError": 0.2881,
+        "colorDelta": {
+          "checked": 17,
+          "maxDeltaE": 27.55,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 3.38
+            },
+            {
+              "componentId": null,
+              "deltaE": 3.38
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.1
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.1
+            },
+            {
+              "componentId": null,
+              "deltaE": 27.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.81
+            },
+            {
+              "componentId": null,
+              "deltaE": 3.38
+            },
+            {
+              "componentId": null,
+              "deltaE": 27.55
+            },
+            {
+              "componentId": null,
+              "deltaE": 24.35
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.75
+            },
+            {
+              "componentId": null,
+              "deltaE": 3.85
+            },
+            {
+              "componentId": null,
+              "deltaE": 3.85
+            },
+            {
+              "componentId": null,
+              "deltaE": 3.38
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.16
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.16
+            },
+            {
+              "componentId": null,
+              "deltaE": 19.03
+            },
+            {
+              "componentId": null,
+              "deltaE": 22.37
+            }
+          ],
+          "gated": false
+        }
+      },
+      "failures": [
+        "silhouette IoU 0.033 is below threshold 0.85",
+        "aspect-ratio delta 0.818 exceeds threshold 0.05",
+        "scale delta 0.763 exceeds threshold 0.08",
+        "blockout requires --map-stripped-render evidence"
+      ],
+      "renderHash": "23d02e49caed75bc",
+      "passId": "blockout"
+    }
+  ]
+}

@@ -1,0 +1,3772 @@
+{
+  "targetName": "SAKURA Popcorn Machine",
+  "targetId": "popcorn-machine",
+  "schemaVersion": "2.1",
+  "sourceImage": "D:/下载文件/ChatGPT Image 2026年8月3日 16_17_49 (2).png",
+  "suitability": "pass",
+  "preSpecAssessment": {
+    "objectClass": {
+      "primaryType": "countertop popcorn vending machine",
+      "primaryDomain": "object",
+      "formLanguage": [
+        "hard-surface",
+        "rounded geometric",
+        "transparent-like"
+      ],
+      "structureKind": [
+        "compound object",
+        "layered shell",
+        "articulated assembly",
+        "repeated modules"
+      ],
+      "motionPotential": [
+        "rotary control",
+        "rotating popper",
+        "particle lift",
+        "dispense effect",
+        "light emitter"
+      ],
+      "materialFamilies": [
+        "plastic",
+        "glass-like",
+        "rubber",
+        "food-like"
+      ],
+      "notes": "Three admitted orthographic crops define the visible model. Hidden systems are resolved as explicit assumptions rather than claimed reference geometry."
+    },
+    "complexity": {
+      "tier": "complex",
+      "scores": {
+        "silhouetteComplexity": 2,
+        "componentCount": 3,
+        "hierarchyDepth": 3,
+        "repetitionDensity": 3,
+        "materialLayerCount": 3,
+        "localDetailDensity": 2,
+        "occlusionRisk": 2,
+        "actionReadinessNeed": 3
+      },
+      "estimatedCounts": {
+        "macroComponents": 5,
+        "mesoComponents": 18,
+        "microFeatureGroups": 20,
+        "materialLayers": 7,
+        "repetitionSystems": 4
+      },
+      "reasoning": [
+        "Transparent layered enclosure plus a rotating mechanism, repeated popcorn pieces, outlet architecture and rear service details require a complex hierarchy."
+      ]
+    },
+    "specDepthDecision": {
+      "requiredDepth": "complex",
+      "minimumComponentLevels": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "needsRepetitionSystems": true,
+      "needsMaterialLocalOverrides": true,
+      "needsMultipleReviewViews": true,
+      "needsActionReadyHierarchy": true,
+      "rationale": "Identity depends on transparent structure, repeated food forms and purpose-specific powered motion."
+    },
+    "unknownsToResolveBeforeImplementation": [],
+    "detailInventory": {
+      "scanMethod": "grid-3x3-plus-three-admitted-view-crops",
+      "targetMinDetails": 18,
+      "details": [
+        {
+          "id": "pink-dome-bevel",
+          "kind": "bevel",
+          "description": "low pink dome with broad rounded eave",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "top-dome.soft-bevel"
+          },
+          "evidenceRef": "front",
+          "confidence": 0.98
+        },
+        {
+          "id": "dome-crown",
+          "kind": "contour",
+          "description": "small centered rounded crown",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "top-crown.rounded-cap"
+          },
+          "evidenceRef": "front",
+          "confidence": 0.98
+        },
+        {
+          "id": "pink-gloss",
+          "kind": "gloss",
+          "description": "lacquer highlight on pink cap and buttons",
+          "mapsTo": {
+            "type": "material.localOverrides",
+            "ref": "accent.lacquer-highlight"
+          },
+          "evidenceRef": "front",
+          "confidence": 0.95
+        },
+        {
+          "id": "glass-chamber",
+          "kind": "gloss",
+          "description": "clear four-sided chamber with edge reflections",
+          "mapsTo": {
+            "type": "material.localOverrides",
+            "ref": "glass.edge-highlight"
+          },
+          "evidenceRef": "front",
+          "confidence": 0.96
+        },
+        {
+          "id": "chamber-posts",
+          "kind": "contour",
+          "description": "four cream corner posts joining chamber frames",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "chamber-posts.four-corner-layout"
+          },
+          "evidenceRef": "front",
+          "confidence": 0.94
+        },
+        {
+          "id": "upper-frame-seam",
+          "kind": "seam",
+          "description": "upper frame seam",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "upper-chamber-frame.recessed-seam"
+          },
+          "evidenceRef": "front",
+          "confidence": 0.97
+        },
+        {
+          "id": "lower-frame-seam",
+          "kind": "seam",
+          "description": "lower frame seam",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "lower-chamber-frame.recessed-seam"
+          },
+          "evidenceRef": "front",
+          "confidence": 0.98
+        },
+        {
+          "id": "popper-disc",
+          "kind": "contour",
+          "description": "rotating roof disc",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "popper-pivot.rotating-disc"
+          },
+          "evidenceRef": "front",
+          "confidence": 0.93
+        },
+        {
+          "id": "popper-column",
+          "kind": "ridge",
+          "description": "short drive column",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "popper-column.vertical-drive"
+          },
+          "evidenceRef": "side",
+          "confidence": 0.9
+        },
+        {
+          "id": "warm-lamp",
+          "kind": "emissive",
+          "description": "powered warm lamp",
+          "mapsTo": {
+            "type": "material.localOverrides",
+            "ref": "warm-lamp.powered-emissive"
+          },
+          "evidenceRef": "animation-requirement",
+          "confidence": 0.9
+        },
+        {
+          "id": "popcorn-pile",
+          "kind": "contour",
+          "description": "dense uneven popcorn pile",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "popcorn-cluster.dense-pile"
+          },
+          "evidenceRef": "front",
+          "confidence": 0.99
+        },
+        {
+          "id": "popcorn-lobes",
+          "kind": "contour",
+          "description": "lobed popcorn forms",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "popcorn-kernel.lobed-profile"
+          },
+          "evidenceRef": "front",
+          "confidence": 0.92
+        },
+        {
+          "id": "lower-shell-bevel",
+          "kind": "bevel",
+          "description": "rounded tapered cabinet",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "lower-cabinet.rounded-taper"
+          },
+          "evidenceRef": "front",
+          "confidence": 0.99
+        },
+        {
+          "id": "delivery-arch",
+          "kind": "hole",
+          "description": "deep rounded dispense arch",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "delivery-chute.recessed-arch"
+          },
+          "evidenceRef": "front",
+          "confidence": 0.99
+        },
+        {
+          "id": "delivery-tray",
+          "kind": "contour",
+          "description": "projecting bowl tray",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "delivery-tray.projecting-bowl"
+          },
+          "evidenceRef": "front",
+          "confidence": 0.99
+        },
+        {
+          "id": "control-button",
+          "kind": "contour",
+          "description": "layered round control",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "control-pivot.layered-button"
+          },
+          "evidenceRef": "front",
+          "confidence": 0.99
+        },
+        {
+          "id": "side-release",
+          "kind": "contour",
+          "description": "projecting side release",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "side-release.projecting-control"
+          },
+          "evidenceRef": "side",
+          "confidence": 0.91
+        },
+        {
+          "id": "rear-vent-slots",
+          "kind": "hole",
+          "description": "ten vertical vents",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "rear-vent-array.ten-slots"
+          },
+          "evidenceRef": "back",
+          "confidence": 0.99
+        },
+        {
+          "id": "base-accent-band",
+          "kind": "seam",
+          "description": "pink base band seam",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "base-band.continuous-accent-seam"
+          },
+          "evidenceRef": "front",
+          "confidence": 0.98
+        },
+        {
+          "id": "four-feet",
+          "kind": "contour",
+          "description": "four ground pads",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "feet.four-pad-layout"
+          },
+          "evidenceRef": "front",
+          "confidence": 0.95
+        }
+      ]
+    },
+    "anatomy": {
+      "applies": false,
+      "styleHeads": 0,
+      "proportions": {
+        "headUnit": 0,
+        "torso": 0,
+        "legs": 0,
+        "shoulderWidth": 0,
+        "hipWidth": 0
+      },
+      "pose": {
+        "type": "not-applicable",
+        "jointAngles": {}
+      },
+      "faceLandmarks": {
+        "eyeLine": 0,
+        "eyeSpacing": 0,
+        "noseBase": 0,
+        "mouthLine": 0,
+        "hairline": 0
+      },
+      "features": [],
+      "confidence": 0,
+      "note": "Not applicable."
+    },
+    "sourceImage": "D:/下载文件/ChatGPT Image 2026年8月3日 16_17_49 (2).png"
+  },
+  "qualityContract": {
+    "qualityBar": "complex",
+    "definitionOfDone": [
+      "Three orthographic views preserve the illustrated proportions and identity systems.",
+      "All primary assemblies are named and separable.",
+      "Powered behavior visibly produces and dispenses popcorn and restores exact idle state at 5.2 seconds."
+    ],
+    "minimumSpecDepth": {
+      "macroComponents": 5,
+      "mesoComponents": 15,
+      "microFeatureGroups": 10,
+      "materialLayers": 7,
+      "repetitionSystems": 4,
+      "reviewViewpoints": 5
+    },
+    "featureGroups": [
+      {
+        "id": "silhouette",
+        "name": "Tall rounded cabinet and low dome",
+        "required": true,
+        "qualityCriteria": [
+          "Front height-width ratio and side depth match the turn sheet.",
+          "Dome, chamber and cabinet retain distinct vertical masses."
+        ],
+        "evidenceRefs": [
+          "front",
+          "side",
+          "back"
+        ],
+        "failureModes": [
+          "generic box",
+          "dome too tall",
+          "chamber too short"
+        ]
+      },
+      {
+        "id": "chamber",
+        "name": "Transparent four-sided chamber",
+        "required": true,
+        "qualityCriteria": [
+          "Four glass panels, posts and upper/lower frames remain separate and legible."
+        ],
+        "evidenceRefs": [
+          "front",
+          "side",
+          "back"
+        ],
+        "failureModes": [
+          "opaque block",
+          "missing posts",
+          "glass hides food"
+        ]
+      },
+      {
+        "id": "popper-food",
+        "name": "Popper and popcorn system",
+        "required": true,
+        "qualityCriteria": [
+          "Roof mechanism remains centered and popcorn has a dense irregular lobed pile."
+        ],
+        "evidenceRefs": [
+          "front",
+          "side"
+        ],
+        "failureModes": [
+          "generic spheres",
+          "floating mechanism",
+          "wall penetration"
+        ]
+      },
+      {
+        "id": "delivery",
+        "name": "Front arch and projecting tray",
+        "required": true,
+        "qualityCriteria": [
+          "Arch cavity and tray create correct negative space and depth."
+        ],
+        "evidenceRefs": [
+          "front",
+          "side"
+        ],
+        "failureModes": [
+          "painted-on hole",
+          "flat tray",
+          "dispense misses tray"
+        ]
+      },
+      {
+        "id": "controls-rear",
+        "name": "Controls vents and feet",
+        "required": true,
+        "qualityCriteria": [
+          "Round button, side release, ten vents and four feet are visible in corresponding views."
+        ],
+        "evidenceRefs": [
+          "front",
+          "side",
+          "back"
+        ],
+        "failureModes": [
+          "missing rear identity",
+          "merged controls",
+          "floating feet"
+        ]
+      },
+      {
+        "id": "sakura-look",
+        "name": "SAKURA toon materials and powered light",
+        "required": true,
+        "qualityCriteria": [
+          "Cream, lacquer pink, clear chamber, warm food, dark cavity and warm emission remain distinct."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "uniform plastic",
+          "opaque glass",
+          "weak powered cue"
+        ]
+      }
+    ],
+    "visualDeltaChecks": [
+      "front silhouette",
+      "side depth and tray projection",
+      "rear vent count",
+      "glass hierarchy",
+      "popcorn containment",
+      "exact powered reset"
+    ],
+    "antiShallowSpecRules": [
+      "Do not merge glass into cabinet.",
+      "Do not model popcorn as one blob.",
+      "Do not merge moving pivots.",
+      "Do not accept powered state without food transformation."
+    ],
+    "mustNotDo": [
+      "No popcorn may cross the inner glass boundary.",
+      "No powered transform or emission may remain after stop.",
+      "Do not claim hidden heater or underside as reference-accurate."
+    ]
+  },
+  "qualityTargets": {
+    "targetFidelity": 0.78,
+    "mustMatch": [
+      "overall silhouette",
+      "transparent chamber",
+      "popper and pile",
+      "delivery arch and tray",
+      "rear vents",
+      "powered purpose cue"
+    ],
+    "reviewViewpoints": [
+      "front",
+      "side",
+      "back",
+      "three-quarter",
+      "powered"
+    ]
+  },
+  "selfCorrectLoop": {
+    "enabled": true,
+    "reviewAfterPasses": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "lighting-pass",
+      "interaction-pass"
+    ],
+    "allowedActions": [
+      "continue",
+      "refine-spec",
+      "refine-code",
+      "request-input",
+      "stop"
+    ],
+    "specRefineTriggers": [
+      "missing component",
+      "wrong primitive family",
+      "missing evidence"
+    ],
+    "codeRefineTriggers": [
+      "wrong geometry",
+      "wrong material",
+      "animation penetration",
+      "reset drift"
+    ],
+    "stopCriteria": [
+      "all critical features pass and interaction resets exactly"
+    ],
+    "visualAcceptance": {
+      "threshold": 0.7,
+      "reviewer": "agent vision",
+      "featureReviewPolicy": {
+        "enabled": true,
+        "adaptiveEscalation": true,
+        "singleImagePairOnly": true,
+        "maxCriticalFeaturesPerPass": 5,
+        "maxImportantFeaturesPerPass": 3,
+        "criticalDefaultThreshold": 0.74,
+        "importantAverageThreshold": 0.7,
+        "reviewUnit": "semantic subsystem",
+        "selectionRule": "identity-defining systems first"
+      }
+    },
+    "maxIterationsPerPass": 3,
+    "screenshotPolicy": {
+      "requiredForPasses": [
+        "blockout",
+        "structural-pass",
+        "form-refinement",
+        "material-pass",
+        "lighting-pass",
+        "interaction-pass"
+      ],
+      "preferredCapture": "project browser preview",
+      "fallbackCapture": "existing Playwright dependency",
+      "minimumEvidence": "render plus comparison sheet",
+      "reviewPairRule": "one admitted reference and one render per named view",
+      "acceptanceAuthority": "agent visual inspection"
+    }
+  },
+  "featureReviewTargets": [
+    {
+      "id": "popcorn-silhouette",
+      "name": "Tall rounded body and low dome",
+      "tier": "critical",
+      "passIds": [
+        "blockout"
+      ],
+      "minimumScore": 0.78,
+      "mustPass": true,
+      "componentRefs": [
+        "lower-cabinet",
+        "chamber-assembly",
+        "top-dome"
+      ],
+      "evidenceRefs": [
+        "front",
+        "side",
+        "back"
+      ]
+    },
+    {
+      "id": "popcorn-chamber-system",
+      "name": "Glass panels posts and frames",
+      "tier": "critical",
+      "passIds": [
+        "structural-pass",
+        "form-refinement"
+      ],
+      "minimumScore": 0.76,
+      "mustPass": true,
+      "componentRefs": [
+        "chamber-front-panel",
+        "chamber-side-panels",
+        "chamber-posts",
+        "upper-chamber-frame",
+        "lower-chamber-frame"
+      ],
+      "evidenceRefs": [
+        "front",
+        "side",
+        "back"
+      ]
+    },
+    {
+      "id": "popcorn-popper-pile",
+      "name": "Roof popper and food pile",
+      "tier": "critical",
+      "passIds": [
+        "structural-pass",
+        "form-refinement",
+        "interaction-pass"
+      ],
+      "minimumScore": 0.76,
+      "mustPass": true,
+      "componentRefs": [
+        "popper-pivot",
+        "popper-column",
+        "popcorn-cluster"
+      ],
+      "evidenceRefs": [
+        "front",
+        "side"
+      ]
+    },
+    {
+      "id": "popcorn-delivery",
+      "name": "Dispense arch tray and drop socket",
+      "tier": "critical",
+      "passIds": [
+        "structural-pass",
+        "interaction-pass"
+      ],
+      "minimumScore": 0.76,
+      "mustPass": true,
+      "componentRefs": [
+        "delivery-chute",
+        "delivery-tray",
+        "dispense-handful"
+      ],
+      "evidenceRefs": [
+        "front",
+        "side"
+      ]
+    },
+    {
+      "id": "popcorn-rear-controls",
+      "name": "Controls rear vents and feet",
+      "tier": "important",
+      "passIds": [
+        "form-refinement"
+      ],
+      "minimumScore": 0.7,
+      "mustPass": false,
+      "componentRefs": [
+        "control-pivot",
+        "side-release",
+        "rear-vent-array",
+        "feet"
+      ],
+      "evidenceRefs": [
+        "front",
+        "side",
+        "back"
+      ]
+    },
+    {
+      "id": "popcorn-sakura-materials",
+      "name": "SAKURA material and warm powered state",
+      "tier": "critical",
+      "passIds": [
+        "material-pass",
+        "lighting-pass",
+        "interaction-pass"
+      ],
+      "minimumScore": 0.72,
+      "mustPass": true,
+      "componentRefs": [
+        "top-dome",
+        "chamber-front-panel",
+        "popcorn-cluster",
+        "warm-lamp"
+      ],
+      "evidenceRefs": [
+        "full-object"
+      ]
+    }
+  ],
+  "lookDevTargets": {
+    "qualityPriority": "real-time-stylized",
+    "materialPass": {
+      "albedoPaletteRequired": true,
+      "roughnessVariationRequired": true,
+      "localOverridesRequired": true,
+      "referencePbrEvidence": [
+        "accent:0.909",
+        "shell:0.909",
+        "glass:0.885",
+        "popcorn:0.878"
+      ]
+    },
+    "lightingPass": {
+      "requiredTerms": [
+        "key light",
+        "fill light",
+        "rim light",
+        "exposure",
+        "ACES tone mapping",
+        "contact shadow"
+      ]
+    },
+    "screenshotReview": [
+      "neutral",
+      "grazing",
+      "reference-match",
+      "powered"
+    ]
+  },
+  "coordinateFrame": {
+    "front": "+Z camera-facing dispense side",
+    "up": "+Y",
+    "scaleReference": "cabinet width 2.0 world units"
+  },
+  "silhouette": {
+    "boundingShape": "tall rounded cuboid with low dome and transparent upper chamber",
+    "aspectRatios": [
+      0.64,
+      0.72
+    ],
+    "symmetry": "bilateral shell with asymmetric front and side controls",
+    "dominantCurves": [
+      "low dome arc",
+      "large cabinet corner radii",
+      "arched outlet"
+    ],
+    "negativeSpaces": [
+      "transparent chamber",
+      "front dispense arch",
+      "tray bowl"
+    ],
+    "landmarks": [
+      "pink dome",
+      "visible popcorn",
+      "round control",
+      "rear vents"
+    ]
+  },
+  "viewEvidence": [
+    {
+      "id": "full-object",
+      "view": "triptych",
+      "source": "D:/下载文件/ChatGPT Image 2026年8月3日 16_17_49 (2).png",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "front side and back reference elevations"
+      ],
+      "confidence": 0.99
+    },
+    {
+      "id": "front",
+      "view": "front",
+      "source": "E:/AI/codexAI/sakula/arrow-cube/references/intake/popcorn-machine/front.png",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "dome chamber popcorn outlet tray control and feet"
+      ],
+      "confidence": 0.99
+    },
+    {
+      "id": "side",
+      "view": "side",
+      "source": "E:/AI/codexAI/sakula/arrow-cube/references/intake/popcorn-machine/side.png",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "depth popper column side control tray projection"
+      ],
+      "confidence": 0.98
+    },
+    {
+      "id": "back",
+      "view": "back",
+      "source": "E:/AI/codexAI/sakula/arrow-cube/references/intake/popcorn-machine/back.png",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "rear glass post spacing vent array and base"
+      ],
+      "confidence": 0.99
+    },
+    {
+      "id": "animation-requirement",
+      "view": "behavior",
+      "source": "user requirement",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "control turn rotating popper warm light kernel expansion jumping tumbling and dispense"
+      ],
+      "confidence": 1.0
+    }
+  ],
+  "componentTree": [
+    {
+      "id": "root",
+      "name": "popcorn-machine-root",
+      "level": "macro",
+      "role": "component",
+      "importance": 1,
+      "confidence": 1,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Runtime container represents the whole manufactured appliance hierarchy.",
+      "parent": null,
+      "material": "shell",
+      "localFeatures": [],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(244, 237, 224, 1.0)",
+        "secondaryAlbedo": "rgba(246, 194, 187, 1.0)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.98
+      },
+      "evidenceRefs": [
+        "full-object"
+      ]
+    },
+    {
+      "id": "lower-cabinet",
+      "name": "lower-cabinet",
+      "level": "macro",
+      "role": "component",
+      "importance": 1,
+      "confidence": 0.99,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Visible lower housing is a discrete rounded hard-surface enclosure.",
+      "parent": "root",
+      "material": "shell",
+      "localFeatures": [
+        {
+          "id": "lower-cabinet.rounded-taper",
+          "geometryEffect": "rounded box with broad radiused corners and slight upper taper"
+        }
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(244, 237, 224, 1.0)",
+        "secondaryAlbedo": "rgba(255, 248, 235, 1.0)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.98
+      },
+      "evidenceRefs": [
+        "front",
+        "side",
+        "back"
+      ]
+    },
+    {
+      "id": "chamber-assembly",
+      "name": "transparent-chamber-assembly",
+      "level": "macro",
+      "role": "component",
+      "importance": 1,
+      "confidence": 0.98,
+      "primitive": "box",
+      "topologyClass": "conforming-shell",
+      "topologyRationale": "Four thin clear panels enclose a shared rectangular volume between structural frames.",
+      "parent": "root",
+      "material": "glass",
+      "localFeatures": [],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(241, 227, 210, 0.24)",
+        "secondaryAlbedo": "rgba(255, 250, 241, 0.12)",
+        "materialClass": "glass",
+        "materialClassConfidence": 0.9
+      },
+      "evidenceRefs": [
+        "front",
+        "side",
+        "back"
+      ]
+    },
+    {
+      "id": "top-assembly",
+      "name": "top-assembly",
+      "level": "macro",
+      "role": "component",
+      "importance": 1,
+      "confidence": 0.98,
+      "primitive": "lathe",
+      "topologyClass": "continuous-sculpt",
+      "topologyRationale": "The roof reads as a continuous low revolved dome over a broad eave.",
+      "parent": "root",
+      "material": "accent",
+      "localFeatures": [],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(246, 194, 187, 1.0)",
+        "secondaryAlbedo": "rgba(221, 158, 152, 1.0)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.98
+      },
+      "evidenceRefs": [
+        "front",
+        "side",
+        "back"
+      ]
+    },
+    {
+      "id": "delivery-assembly",
+      "name": "delivery-assembly",
+      "level": "macro",
+      "role": "component",
+      "importance": 0.95,
+      "confidence": 0.98,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "The front outlet is a distinct recessed cavity plus a projecting removable tray.",
+      "parent": "root",
+      "material": "cavity",
+      "localFeatures": [],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(114, 73, 70, 1.0)",
+        "secondaryAlbedo": "rgba(76, 53, 56, 1.0)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9
+      },
+      "evidenceRefs": [
+        "front",
+        "side"
+      ]
+    },
+    {
+      "id": "lower-chamber-frame",
+      "name": "lower-chamber-frame",
+      "level": "meso",
+      "role": "component",
+      "importance": 0.9,
+      "confidence": 0.98,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "A discrete cream rounded frame supports the clear panels above the cabinet.",
+      "parent": "chamber-assembly",
+      "material": "shell",
+      "localFeatures": [
+        {
+          "id": "lower-chamber-frame.recessed-seam",
+          "geometryEffect": "thin recessed horizontal seam"
+        }
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(244, 237, 224, 1.0)",
+        "secondaryAlbedo": "rgba(225, 211, 191, 1.0)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.98
+      },
+      "evidenceRefs": [
+        "front",
+        "side",
+        "back"
+      ]
+    },
+    {
+      "id": "upper-chamber-frame",
+      "name": "upper-chamber-frame",
+      "level": "meso",
+      "role": "component",
+      "importance": 0.9,
+      "confidence": 0.98,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "A broad cream rim clamps the glass below the dome.",
+      "parent": "chamber-assembly",
+      "material": "shell-light",
+      "localFeatures": [
+        {
+          "id": "upper-chamber-frame.recessed-seam",
+          "geometryEffect": "dark AO seam under rim"
+        }
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(255, 248, 235, 1.0)",
+        "secondaryAlbedo": "rgba(244, 237, 224, 1.0)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.98
+      },
+      "evidenceRefs": [
+        "front",
+        "side",
+        "back"
+      ]
+    },
+    {
+      "id": "chamber-front-panel",
+      "name": "chamber-front-panel",
+      "level": "meso",
+      "role": "component",
+      "importance": 0.95,
+      "confidence": 0.98,
+      "primitive": "plane-card",
+      "topologyClass": "conforming-shell",
+      "topologyRationale": "The front wall is a thin transparent panel bounded by posts and frames.",
+      "parent": "chamber-assembly",
+      "material": "glass",
+      "localFeatures": [],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(241, 227, 210, 0.20)",
+        "secondaryAlbedo": "rgba(255, 255, 255, 0.08)",
+        "materialClass": "glass",
+        "materialClassConfidence": 0.9
+      },
+      "evidenceRefs": [
+        "front"
+      ]
+    },
+    {
+      "id": "chamber-back-panel",
+      "name": "chamber-back-panel",
+      "level": "meso",
+      "role": "component",
+      "importance": 0.8,
+      "confidence": 0.95,
+      "primitive": "plane-card",
+      "topologyClass": "conforming-shell",
+      "topologyRationale": "The back wall is visibly transparent and bounded by rear posts.",
+      "parent": "chamber-assembly",
+      "material": "glass",
+      "localFeatures": [],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(241, 227, 210, 0.18)",
+        "secondaryAlbedo": "rgba(255, 255, 255, 0.08)",
+        "materialClass": "glass",
+        "materialClassConfidence": 0.88
+      },
+      "evidenceRefs": [
+        "back"
+      ]
+    },
+    {
+      "id": "chamber-side-panels",
+      "name": "chamber-side-panels",
+      "level": "meso",
+      "role": "component",
+      "importance": 0.9,
+      "confidence": 0.96,
+      "primitive": "plane-card",
+      "topologyClass": "conforming-shell",
+      "topologyRationale": "Left and right walls are thin transparent panels with readable side depth.",
+      "parent": "chamber-assembly",
+      "material": "glass",
+      "localFeatures": [],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(241, 227, 210, 0.18)",
+        "secondaryAlbedo": "rgba(255, 255, 255, 0.08)",
+        "materialClass": "glass",
+        "materialClassConfidence": 0.88
+      },
+      "evidenceRefs": [
+        "side"
+      ]
+    },
+    {
+      "id": "chamber-posts",
+      "name": "chamber-posts",
+      "level": "meso",
+      "role": "component",
+      "importance": 0.85,
+      "confidence": 0.94,
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Four repeated cream posts visibly reinforce the chamber corners.",
+      "parent": "chamber-assembly",
+      "material": "shell",
+      "localFeatures": [
+        {
+          "id": "chamber-posts.four-corner-layout",
+          "geometryEffect": "four rounded vertical posts overlapping both frames"
+        }
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(244, 237, 224, 1.0)",
+        "secondaryAlbedo": "rgba(225, 211, 191, 1.0)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.96
+      },
+      "evidenceRefs": [
+        "front",
+        "side",
+        "back"
+      ]
+    },
+    {
+      "id": "top-dome",
+      "name": "pink-top-dome",
+      "level": "meso",
+      "role": "component",
+      "importance": 1,
+      "confidence": 0.99,
+      "primitive": "lathe",
+      "topologyClass": "continuous-sculpt",
+      "topologyRationale": "The roof is a continuous shallow curved dome with no planar box faces.",
+      "parent": "top-assembly",
+      "material": "accent",
+      "localFeatures": [
+        {
+          "id": "top-dome.soft-bevel",
+          "geometryEffect": "continuous rolled edge and broad eave"
+        }
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(246, 194, 187, 1.0)",
+        "secondaryAlbedo": "rgba(221, 158, 152, 1.0)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.98
+      },
+      "evidenceRefs": [
+        "front",
+        "side",
+        "back"
+      ]
+    },
+    {
+      "id": "top-crown",
+      "name": "top-crown",
+      "level": "meso",
+      "role": "component",
+      "importance": 0.65,
+      "confidence": 0.98,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "A short separate rounded cap projects above the dome center.",
+      "parent": "top-assembly",
+      "material": "accent",
+      "localFeatures": [
+        {
+          "id": "top-crown.rounded-cap",
+          "geometryEffect": "short bevelled cap"
+        }
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(246, 194, 187, 1.0)",
+        "secondaryAlbedo": "rgba(221, 158, 152, 1.0)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.98
+      },
+      "evidenceRefs": [
+        "front",
+        "side",
+        "back"
+      ],
+      "attachment": {
+        "parentId": "top-assembly",
+        "parentSocket": "dome-crown-seat",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.14,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.005,
+        "evidenceRefs": [
+          "front",
+          "side"
+        ]
+      }
+    },
+    {
+      "id": "popper-pivot",
+      "name": "popper-rotor-pivot",
+      "level": "meso",
+      "role": "component",
+      "importance": 0.95,
+      "confidence": 0.93,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "A separate circular disc sits beneath the roof and is suitable for a central rotation pivot.",
+      "parent": "top-assembly",
+      "material": "accent-deep",
+      "localFeatures": [
+        {
+          "id": "popper-pivot.rotating-disc",
+          "geometryEffect": "concentric disc and three short stirring arms"
+        }
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(221, 158, 152, 1.0)",
+        "secondaryAlbedo": "rgba(176, 113, 104, 1.0)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9
+      },
+      "evidenceRefs": [
+        "front",
+        "side"
+      ],
+      "attachment": {
+        "parentId": "top-assembly",
+        "parentSocket": "popper-drive-seat",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          -0.28,
+          0
+        ],
+        "contactType": "socket",
+        "embedDepth": 0.04,
+        "gapTolerance": 0.005,
+        "evidenceRefs": [
+          "front",
+          "side"
+        ]
+      }
+    },
+    {
+      "id": "popper-column",
+      "name": "popper-drive-column",
+      "level": "meso",
+      "role": "component",
+      "importance": 0.8,
+      "confidence": 0.9,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Side elevation shows a short vertical drive column joining roof and rotor.",
+      "parent": "popper-pivot",
+      "material": "accent",
+      "localFeatures": [
+        {
+          "id": "popper-column.vertical-drive",
+          "geometryEffect": "short stepped spindle with overlap"
+        }
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(246, 194, 187, 1.0)",
+        "secondaryAlbedo": "rgba(221, 158, 152, 1.0)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9
+      },
+      "evidenceRefs": [
+        "side"
+      ],
+      "attachment": {
+        "parentId": "popper-pivot",
+        "parentSocket": "popper-column-seat",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.25,
+          0
+        ],
+        "contactType": "embedded",
+        "embedDepth": 0.05,
+        "gapTolerance": 0.005,
+        "evidenceRefs": [
+          "side"
+        ]
+      }
+    },
+    {
+      "id": "control-pivot",
+      "name": "front-control-pivot",
+      "level": "meso",
+      "role": "component",
+      "importance": 0.85,
+      "confidence": 0.99,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "The front control is a distinct layered circular button that rotates about its center.",
+      "parent": "lower-cabinet",
+      "material": "accent",
+      "localFeatures": [
+        {
+          "id": "control-pivot.layered-button",
+          "geometryEffect": "dark seat plus projecting pink button and index mark"
+        }
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(246, 194, 187, 1.0)",
+        "secondaryAlbedo": "rgba(114, 73, 70, 1.0)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.98
+      },
+      "evidenceRefs": [
+        "front"
+      ],
+      "attachment": {
+        "parentId": "lower-cabinet",
+        "parentSocket": "front-control-seat",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.14
+        ],
+        "contactType": "socket",
+        "embedDepth": 0.035,
+        "gapTolerance": 0.005,
+        "evidenceRefs": [
+          "front"
+        ]
+      }
+    },
+    {
+      "id": "delivery-chute",
+      "name": "delivery-chute",
+      "level": "meso",
+      "role": "component",
+      "importance": 0.95,
+      "confidence": 0.99,
+      "primitive": "extrude",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "The outlet is a deep manufactured arch-shaped cavity rather than a painted decal.",
+      "parent": "delivery-assembly",
+      "material": "cavity",
+      "localFeatures": [
+        {
+          "id": "delivery-chute.recessed-arch",
+          "geometryEffect": "arched back wall side jambs and upper soffit"
+        }
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(114, 73, 70, 1.0)",
+        "secondaryAlbedo": "rgba(76, 53, 56, 1.0)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9
+      },
+      "evidenceRefs": [
+        "front",
+        "side"
+      ]
+    },
+    {
+      "id": "delivery-tray",
+      "name": "delivery-tray",
+      "level": "meso",
+      "role": "component",
+      "importance": 0.95,
+      "confidence": 0.99,
+      "primitive": "extrude",
+      "topologyClass": "continuous-sculpt",
+      "topologyRationale": "The tray has a smoothly curved shallow-bowl profile and projecting lip.",
+      "parent": "delivery-assembly",
+      "material": "accent",
+      "localFeatures": [
+        {
+          "id": "delivery-tray.projecting-bowl",
+          "geometryEffect": "rounded basin with raised front lip"
+        }
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(246, 194, 187, 1.0)",
+        "secondaryAlbedo": "rgba(221, 158, 152, 1.0)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.98
+      },
+      "evidenceRefs": [
+        "front",
+        "side"
+      ]
+    },
+    {
+      "id": "rear-panel",
+      "name": "rear-service-panel",
+      "level": "meso",
+      "role": "component",
+      "importance": 0.75,
+      "confidence": 0.96,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "The rear face is a discrete cabinet panel carrying ventilation relief.",
+      "parent": "lower-cabinet",
+      "material": "shell",
+      "localFeatures": [],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(244, 237, 224, 1.0)",
+        "secondaryAlbedo": "rgba(225, 211, 191, 1.0)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.96
+      },
+      "evidenceRefs": [
+        "back"
+      ]
+    },
+    {
+      "id": "side-release",
+      "name": "side-release",
+      "level": "meso",
+      "role": "component",
+      "importance": 0.65,
+      "confidence": 0.78,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "A discrete pink projection is visible at lower side and treated as a release lever.",
+      "parent": "lower-cabinet",
+      "material": "accent",
+      "localFeatures": [
+        {
+          "id": "side-release.projecting-control",
+          "geometryEffect": "low triangular wedge with cabinet overlap"
+        }
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(246, 194, 187, 1.0)",
+        "secondaryAlbedo": "rgba(221, 158, 152, 1.0)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.78
+      },
+      "evidenceRefs": [
+        "side"
+      ]
+    },
+    {
+      "id": "base-band",
+      "name": "base-accent-band",
+      "level": "meso",
+      "role": "component",
+      "importance": 0.8,
+      "confidence": 0.98,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "A continuous separate pink skirt wraps the cabinet base.",
+      "parent": "lower-cabinet",
+      "material": "accent",
+      "localFeatures": [
+        {
+          "id": "base-band.continuous-accent-seam",
+          "geometryEffect": "narrow raised band with top panel seam"
+        }
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(246, 194, 187, 1.0)",
+        "secondaryAlbedo": "rgba(221, 158, 152, 1.0)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.98
+      },
+      "evidenceRefs": [
+        "front",
+        "side",
+        "back"
+      ]
+    },
+    {
+      "id": "feet",
+      "name": "feet",
+      "level": "meso",
+      "role": "component",
+      "importance": 0.6,
+      "confidence": 0.95,
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Four repeated small pads are visible at the appliance corners.",
+      "parent": "lower-cabinet",
+      "material": "rubber",
+      "localFeatures": [
+        {
+          "id": "feet.four-pad-layout",
+          "geometryEffect": "four rounded pads with floor overlap"
+        }
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(187, 132, 132, 1.0)",
+        "secondaryAlbedo": "rgba(96, 75, 81, 1.0)",
+        "materialClass": "rubber",
+        "materialClassConfidence": 0.82
+      },
+      "evidenceRefs": [
+        "front",
+        "side",
+        "back"
+      ]
+    },
+    {
+      "id": "popcorn-cluster",
+      "name": "popcorn-cluster",
+      "level": "micro",
+      "role": "component",
+      "importance": 1,
+      "confidence": 0.99,
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Many independent multi-lobed food pieces form a dense repeated pile.",
+      "parent": "chamber-assembly",
+      "material": "popcorn",
+      "localFeatures": [
+        {
+          "id": "popcorn-cluster.dense-pile",
+          "geometryEffect": "deterministic irregular mound distribution"
+        }
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(248, 218, 165, 1.0)",
+        "secondaryAlbedo": "rgba(253, 235, 196, 1.0)",
+        "materialClass": "unknown",
+        "materialClassConfidence": 0.9
+      },
+      "evidenceRefs": [
+        "front",
+        "side",
+        "back"
+      ]
+    },
+    {
+      "id": "popcorn-kernel",
+      "name": "popcorn-kernel-shape",
+      "level": "micro",
+      "role": "component",
+      "importance": 0.85,
+      "confidence": 0.92,
+      "primitive": "instanced-cluster",
+      "topologyClass": "continuous-sculpt",
+      "topologyRationale": "Each visible food piece is a small continuous irregular lobed mass rather than a sphere.",
+      "parent": "popcorn-cluster",
+      "material": "popcorn",
+      "localFeatures": [
+        {
+          "id": "popcorn-kernel.lobed-profile",
+          "geometryEffect": "four uneven ellipsoid lobes around a golden core"
+        }
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(253, 235, 196, 1.0)",
+        "secondaryAlbedo": "rgba(210, 157, 91, 1.0)",
+        "materialClass": "unknown",
+        "materialClassConfidence": 0.9
+      },
+      "evidenceRefs": [
+        "front",
+        "side"
+      ]
+    },
+    {
+      "id": "rear-vent-array",
+      "name": "rear-vent-array",
+      "level": "micro",
+      "role": "component",
+      "importance": 0.75,
+      "confidence": 0.99,
+      "primitive": "instanced-cluster",
+      "topologyClass": "surface-relief",
+      "topologyRationale": "Ten repeated recessed slots form shallow rear-surface ventilation relief.",
+      "parent": "rear-panel",
+      "material": "cavity",
+      "localFeatures": [
+        {
+          "id": "rear-vent-array.ten-slots",
+          "geometryEffect": "ten rounded vertical dark recesses"
+        }
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(114, 103, 91, 1.0)",
+        "secondaryAlbedo": "rgba(76, 53, 56, 1.0)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9
+      },
+      "evidenceRefs": [
+        "back"
+      ]
+    },
+    {
+      "id": "warm-lamp",
+      "name": "warm-lamp",
+      "level": "micro",
+      "role": "component",
+      "importance": 0.75,
+      "confidence": 0.9,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "A small disc beneath the mechanism carries the powered warm emission cue.",
+      "parent": "popper-pivot",
+      "material": "warm-lamp",
+      "localFeatures": [],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(255, 218, 148, 1.0)",
+        "secondaryAlbedo": "rgba(255, 176, 89, 1.0)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.8
+      },
+      "evidenceRefs": [
+        "animation-requirement"
+      ],
+      "attachment": {
+        "parentId": "popper-pivot",
+        "parentSocket": "lamp-seat",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          -0.04,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.02,
+        "gapTolerance": 0.003,
+        "evidenceRefs": [
+          "animation-requirement"
+        ]
+      }
+    },
+    {
+      "id": "dispense-handful",
+      "name": "dispense-handful",
+      "level": "micro",
+      "role": "component",
+      "importance": 0.75,
+      "confidence": 0.8,
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "A small runtime food cluster follows the internal chute to the tray during activation.",
+      "parent": "delivery-assembly",
+      "material": "popcorn",
+      "localFeatures": [],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(253, 235, 196, 1.0)",
+        "secondaryAlbedo": "rgba(210, 157, 91, 1.0)",
+        "materialClass": "unknown",
+        "materialClassConfidence": 0.8
+      },
+      "evidenceRefs": [
+        "animation-requirement"
+      ]
+    }
+  ],
+  "materials": [
+    {
+      "id": "shell",
+      "name": "Cream satin toon shell",
+      "type": "toon",
+      "baseColor": "#F4EDE0",
+      "albedo": {
+        "dominant": "#F4EDE0",
+        "secondary": [
+          "#FFF8EB",
+          "#E1D3BF"
+        ]
+      },
+      "roughness": {
+        "base": 0.62,
+        "variation": 0.1,
+        "map": "independent procedural molded-plastic roughness"
+      },
+      "metalness": {
+        "base": 0
+      },
+      "normal": {
+        "pattern": "subtle-molded-plastic",
+        "strength": 0.04
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.22
+      },
+      "localOverrides": [
+        {
+          "id": "shell.frame-cavity",
+          "roughness": 0.72,
+          "region": "frame seams"
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.909,
+        "maps": {
+          "albedo": {
+            "url": "artifacts/img2threejs/popcorn-machine/pbr-shell/shell_albedo.png"
+          },
+          "roughness": {
+            "url": "artifacts/img2threejs/popcorn-machine/pbr-shell/shell_roughness.png"
+          },
+          "height": {
+            "url": "artifacts/img2threejs/popcorn-machine/pbr-shell/shell_height.png"
+          },
+          "normal": {
+            "url": "artifacts/img2threejs/popcorn-machine/pbr-shell/shell_normal.png"
+          },
+          "ao": {
+            "url": "artifacts/img2threejs/popcorn-machine/pbr-shell/shell_ao.png"
+          }
+        }
+      }
+    },
+    {
+      "id": "shell-light",
+      "name": "Cream highlight toon",
+      "type": "toon",
+      "baseColor": "#FFF8EB",
+      "albedo": {
+        "dominant": "#FFF8EB",
+        "secondary": [
+          "#F4EDE0"
+        ]
+      },
+      "roughness": {
+        "base": 0.56,
+        "variation": 0.06,
+        "map": "independent solid roughness"
+      },
+      "metalness": {
+        "base": 0
+      },
+      "normal": {
+        "pattern": "none",
+        "strength": 0.01
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.15
+      },
+      "localOverrides": [],
+      "qualityTier": "utility"
+    },
+    {
+      "id": "accent",
+      "name": "Pink lacquer toon",
+      "type": "toon",
+      "baseColor": "#F6C2BB",
+      "albedo": {
+        "dominant": "#F6C2BB",
+        "secondary": [
+          "#DD9E98",
+          "#F9DCD5"
+        ]
+      },
+      "roughness": {
+        "base": 0.34,
+        "variation": 0.09,
+        "map": "independent lacquer roughness"
+      },
+      "metalness": {
+        "base": 0
+      },
+      "normal": {
+        "pattern": "subtle-molded-plastic",
+        "strength": 0.03
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.16
+      },
+      "clearcoat": 0.42,
+      "clearcoatRoughness": 0.18,
+      "localOverrides": [
+        {
+          "id": "accent.lacquer-highlight",
+          "roughness": 0.16,
+          "clearcoat": 0.68,
+          "region": "dome crown button tray lip"
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.909,
+        "maps": {
+          "albedo": {
+            "url": "artifacts/img2threejs/popcorn-machine/pbr-accent/accent_albedo.png"
+          },
+          "roughness": {
+            "url": "artifacts/img2threejs/popcorn-machine/pbr-accent/accent_roughness.png"
+          },
+          "height": {
+            "url": "artifacts/img2threejs/popcorn-machine/pbr-accent/accent_height.png"
+          },
+          "normal": {
+            "url": "artifacts/img2threejs/popcorn-machine/pbr-accent/accent_normal.png"
+          },
+          "ao": {
+            "url": "artifacts/img2threejs/popcorn-machine/pbr-accent/accent_ao.png"
+          }
+        }
+      }
+    },
+    {
+      "id": "accent-deep",
+      "name": "Deep pink mechanism toon",
+      "type": "toon",
+      "baseColor": "#B07168",
+      "albedo": {
+        "dominant": "#B07168",
+        "secondary": [
+          "#7A4D50"
+        ]
+      },
+      "roughness": {
+        "base": 0.5,
+        "variation": 0.06,
+        "map": "independent solid roughness"
+      },
+      "metalness": {
+        "base": 0
+      },
+      "normal": {
+        "pattern": "none",
+        "strength": 0.01
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.2
+      },
+      "localOverrides": [],
+      "qualityTier": "utility"
+    },
+    {
+      "id": "glass",
+      "name": "Warm clear chamber",
+      "type": "toon-transparent",
+      "baseColor": "#F1E3D2",
+      "albedo": {
+        "dominant": "#F1E3D2",
+        "secondary": [
+          "#FFFFFF",
+          "#E9CCA3"
+        ]
+      },
+      "roughness": {
+        "base": 0.16,
+        "variation": 0.04,
+        "map": "independent clear-surface roughness"
+      },
+      "metalness": {
+        "base": 0
+      },
+      "normal": {
+        "pattern": "none",
+        "strength": 0.01
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.06
+      },
+      "transmission": 0.72,
+      "opacity": 0.2,
+      "localOverrides": [
+        {
+          "id": "glass.edge-highlight",
+          "roughness": 0.08,
+          "opacity": 0.32,
+          "region": "panel edges"
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.885,
+        "maps": {
+          "albedo": {
+            "url": "artifacts/img2threejs/popcorn-machine/pbr-glass/glass_albedo.png"
+          },
+          "roughness": {
+            "url": "artifacts/img2threejs/popcorn-machine/pbr-glass/glass_roughness.png"
+          },
+          "height": {
+            "url": "artifacts/img2threejs/popcorn-machine/pbr-glass/glass_height.png"
+          },
+          "normal": {
+            "url": "artifacts/img2threejs/popcorn-machine/pbr-glass/glass_normal.png"
+          },
+          "ao": {
+            "url": "artifacts/img2threejs/popcorn-machine/pbr-glass/glass_ao.png"
+          }
+        }
+      }
+    },
+    {
+      "id": "popcorn",
+      "name": "Warm lobed popcorn toon",
+      "type": "toon",
+      "baseColor": "#F8DAA5",
+      "albedo": {
+        "dominant": "#F8DAA5",
+        "secondary": [
+          "#FDEBC4",
+          "#D29D5B"
+        ]
+      },
+      "roughness": {
+        "base": 0.76,
+        "variation": 0.12,
+        "map": "independent food roughness"
+      },
+      "metalness": {
+        "base": 0
+      },
+      "normal": {
+        "pattern": "lobed-food micro relief",
+        "strength": 0.09
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.25
+      },
+      "localOverrides": [
+        {
+          "id": "popcorn.golden-core",
+          "baseColor": "#D29D5B",
+          "region": "kernel centers"
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.878,
+        "maps": {
+          "albedo": {
+            "url": "artifacts/img2threejs/popcorn-machine/pbr-popcorn/popcorn_albedo.png"
+          },
+          "roughness": {
+            "url": "artifacts/img2threejs/popcorn-machine/pbr-popcorn/popcorn_roughness.png"
+          },
+          "height": {
+            "url": "artifacts/img2threejs/popcorn-machine/pbr-popcorn/popcorn_height.png"
+          },
+          "normal": {
+            "url": "artifacts/img2threejs/popcorn-machine/pbr-popcorn/popcorn_normal.png"
+          },
+          "ao": {
+            "url": "artifacts/img2threejs/popcorn-machine/pbr-popcorn/popcorn_ao.png"
+          }
+        }
+      }
+    },
+    {
+      "id": "cavity",
+      "name": "Dark rose cavity toon",
+      "type": "toon",
+      "baseColor": "#724946",
+      "albedo": {
+        "dominant": "#724946",
+        "secondary": [
+          "#4C3538"
+        ]
+      },
+      "roughness": {
+        "base": 0.78,
+        "variation": 0.05,
+        "map": "independent cavity roughness"
+      },
+      "metalness": {
+        "base": 0
+      },
+      "normal": {
+        "pattern": "none",
+        "strength": 0.01
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.58
+      },
+      "localOverrides": [
+        {
+          "id": "cavity.inner-shadow",
+          "baseColor": "#4C3538",
+          "region": "outlet and vents"
+        }
+      ],
+      "qualityTier": "utility"
+    },
+    {
+      "id": "rubber",
+      "name": "Muted pink rubber",
+      "type": "toon",
+      "baseColor": "#BB8484",
+      "albedo": {
+        "dominant": "#BB8484",
+        "secondary": [
+          "#604B51"
+        ]
+      },
+      "roughness": {
+        "base": 0.84,
+        "variation": 0.04,
+        "map": "independent rubber roughness"
+      },
+      "metalness": {
+        "base": 0
+      },
+      "normal": {
+        "pattern": "fine rubber",
+        "strength": 0.03
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.28
+      },
+      "localOverrides": [],
+      "qualityTier": "utility"
+    },
+    {
+      "id": "warm-lamp",
+      "name": "Powered warm lamp",
+      "type": "toon-emissive",
+      "baseColor": "#FFDA94",
+      "albedo": {
+        "dominant": "#FFDA94",
+        "secondary": [
+          "#FFB059"
+        ]
+      },
+      "roughness": {
+        "base": 0.22,
+        "variation": 0.02,
+        "map": "independent lamp roughness"
+      },
+      "metalness": {
+        "base": 0
+      },
+      "normal": {
+        "pattern": "none",
+        "strength": 0.01
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.05
+      },
+      "localOverrides": [
+        {
+          "id": "warm-lamp.powered-emissive",
+          "emissive": "#FFB059",
+          "emissiveIntensity": 2.2,
+          "region": "popper underside"
+        }
+      ],
+      "qualityTier": "utility"
+    }
+  ],
+  "repetitionSystems": [
+    {
+      "id": "chamber-post-set",
+      "componentRef": "chamber-posts",
+      "count": 4,
+      "realization": "geometry",
+      "buildsGeometry": true,
+      "geometry": {
+        "primitive": "box"
+      },
+      "distribution": "four-corner rectangular"
+    },
+    {
+      "id": "popcorn-pile-system",
+      "componentRef": "popcorn-cluster",
+      "count": 36,
+      "realization": "geometry",
+      "buildsGeometry": true,
+      "geometry": {
+        "primitive": "ellipsoid multi-lobe"
+      },
+      "distribution": "deterministic bounded mound"
+    },
+    {
+      "id": "rear-vent-row",
+      "componentRef": "rear-vent-array",
+      "count": 10,
+      "realization": "geometry",
+      "buildsGeometry": true,
+      "geometry": {
+        "primitive": "box"
+      },
+      "distribution": "linear"
+    },
+    {
+      "id": "foot-pad-set",
+      "componentRef": "feet",
+      "count": 4,
+      "realization": "geometry",
+      "buildsGeometry": true,
+      "geometry": {
+        "primitive": "box"
+      },
+      "distribution": "rectangular"
+    }
+  ],
+  "buildPasses": [
+    {
+      "id": "blockout",
+      "goal": "Lock cabinet chamber and dome silhouette.",
+      "componentRefs": [
+        "lower-cabinet",
+        "chamber-assembly",
+        "top-dome",
+        "delivery-assembly"
+      ],
+      "acceptance": [
+        "Silhouette reads correctly without materials.",
+        "Quality contract has named all required macro feature groups before code generation.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "structural-pass",
+      "goal": "Build frames panels posts popper and delivery assemblies.",
+      "componentRefs": [
+        "lower-chamber-frame",
+        "upper-chamber-frame",
+        "chamber-front-panel",
+        "chamber-side-panels",
+        "chamber-posts",
+        "popper-pivot",
+        "delivery-chute",
+        "delivery-tray"
+      ],
+      "acceptance": [
+        "Every identity system is separate and physically connected.",
+        "AI vision comparison score meets threshold."
+      ]
+    },
+    {
+      "id": "form-refinement",
+      "goal": "Refine curves seams controls vents feet and lobed food forms.",
+      "componentRefs": [
+        "top-dome",
+        "top-crown",
+        "control-pivot",
+        "rear-vent-array",
+        "feet",
+        "popcorn-cluster"
+      ],
+      "acceptance": [
+        "Three orthographic and three-quarter views remain volumetric and recognizable.",
+        "AI vision comparison score meets threshold."
+      ]
+    },
+    {
+      "id": "material-pass",
+      "goal": "Apply SAKURA cream pink clear food and cavity material separation.",
+      "componentRefs": [
+        "lower-cabinet",
+        "top-dome",
+        "chamber-front-panel",
+        "popcorn-cluster",
+        "delivery-chute"
+      ],
+      "acceptance": [
+        "Material classes remain distinct under neutral and grazing light.",
+        "AI vision comparison score meets threshold."
+      ]
+    },
+    {
+      "id": "lighting-pass",
+      "goal": "Tune key fill rim exposure and contact shadow.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "Transparent chamber and bevels read without washing out food.",
+        "AI vision comparison score meets threshold."
+      ]
+    },
+    {
+      "id": "interaction-pass",
+      "goal": "Animate controls popper food transformation and tray dispense with exact reset.",
+      "componentRefs": [
+        "control-pivot",
+        "popper-pivot",
+        "popcorn-cluster",
+        "dispense-handful",
+        "warm-lamp"
+      ],
+      "acceptance": [
+        "Purpose is identifiable at a glance.",
+        "No food penetrates glass.",
+        "stop restores exact 5.2 second idle state.",
+        "AI vision comparison score meets threshold."
+      ]
+    },
+    {
+      "id": "optimization-pass",
+      "goal": "Preserve browser performance by sharing low-segment geometries and bounded particles.",
+      "componentRefs": [
+        "root",
+        "popcorn-cluster",
+        "rear-vent-array"
+      ],
+      "acceptance": [
+        "Draw calls and triangle count remain within budget."
+      ]
+    }
+  ],
+  "lightingFromPhoto": [
+    "warm upper-left key light intensity 3.0 with soft shadow radius 4",
+    "cool fill light intensity 1.2 from right rear and pink rim light intensity 1.3",
+    "ACES tone mapping exposure 1.05 on a pale neutral background with soft ground contact shadow"
+  ],
+  "proceduralStrategy": [
+    "Lock five macro masses.",
+    "Build transparent panels and structural posts as separate parts.",
+    "Use deterministic multi-lobe popcorn groups inside fixed chamber bounds.",
+    "Expose control and popper pivots plus dispense and cable sockets.",
+    "Review five named stages in browser before final interaction evidence."
+  ],
+  "animationAnchors": [
+    "control-pivot",
+    "popper-pivot",
+    "popcorn-cluster",
+    "dispense-socket",
+    "power-cable-socket",
+    "warm-lamp"
+  ],
+  "destructionAnchors": [
+    "lower-cabinet",
+    "chamber-assembly",
+    "top-assembly",
+    "delivery-assembly"
+  ],
+  "assumptions": [
+    "Hidden heater motor gearbox and internal gate are omitted as unverified internals.",
+    "The underside and cable shape are not visible; only a rear power-cable socket is provided.",
+    "The side triangular projection is treated as a release lever with lower confidence.",
+    "Food trajectories are authored for purpose clarity while remaining within observed chamber bounds."
+  ],
+  "performanceBudget": {
+    "qualityPriority": "real-time browser",
+    "targetTriangles": 70000,
+    "maxDrawCalls": 120,
+    "textureSize": 512,
+    "fpsTarget": 60
+  },
+  "actionReadiness": {
+    "contract": "named hierarchical pivots sockets colliders and deterministic reset",
+    "defaultRigType": "hierarchical rigid prop plus bounded particles",
+    "rootMotionNode": "root",
+    "requiredComponentFields": [
+      "id",
+      "role",
+      "primitive"
+    ],
+    "transformChannels": [
+      "translate",
+      "rotate",
+      "scale",
+      "material-state",
+      "visibility"
+    ],
+    "authoringRules": [
+      "popper and controls remain independent pivots",
+      "dispensed food follows a bounded path",
+      "stop restores every mutable property"
+    ],
+    "destructionPolicy": {
+      "defaultBreakable": false
+    }
+  },
+  "reviewHistory": [
+    {
+      "timestamp": "2026-08-03T13:32:08.584971+00:00",
+      "passId": "blockout",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.83,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.81,
+        "lightingCamera": 0.8,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "popcorn-silhouette",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Tall cabinet, transparent chamber and low rounded dome match the reference silhouette."
+        },
+        {
+          "id": "popcorn-chamber-system",
+          "score": 0.83,
+          "passed": true,
+          "notes": "Front and side panels, four posts and upper/lower frames remain independent."
+        },
+        {
+          "id": "popcorn-popper-pile",
+          "score": 0.85,
+          "passed": true,
+          "notes": "Roof popper and dense lobed popcorn pile read clearly from front and side."
+        },
+        {
+          "id": "popcorn-delivery",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Arched chute, front tray and animated handful form a coherent delivery path."
+        },
+        {
+          "id": "popcorn-rear-controls",
+          "score": 0.77,
+          "passed": true,
+          "notes": "Controls, rear vent pattern and feet are present in orbit views."
+        },
+        {
+          "id": "popcorn-sakura-materials",
+          "score": 0.81,
+          "passed": true,
+          "notes": "Cream shell, Sakura pink dome, clear chamber and warm food materials remain distinct."
+        }
+      ],
+      "action": "continue",
+      "summary": "Front, side, back and three-quarter browser views preserve the tall cabinet, framed chamber, popper, food pile and delivery path; the powered popping cycle is purpose-readable.",
+      "matched": [
+        "tall rounded cabinet",
+        "independent transparent chamber panels",
+        "roof popper and popcorn pile",
+        "front delivery chute",
+        "powered popping and dispense cycle"
+      ],
+      "mismatches": [
+        "reference uses flatter illustration lighting",
+        "translucent panels and animated food particles change binary silhouette masks"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "mapStrippedRender": "artifacts/img2threejs/popcorn-machine/clay-review/render-front.png",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake/popcorn-machine/front.png",
+        "renderScreenshot": "artifacts/img2threejs/popcorn-machine/final-review/render-front.png",
+        "comparisonImage": "artifacts/img2threejs/popcorn-machine/final-review/comparison-front.png",
+        "cameraView": "front",
+        "notes": "四个浏览器视图均已检查；确定性二值轮廓仅作为受构图和透明材质限制的辅助证据。",
+        "aiVisionNotes": ""
+      }
+    },
+    {
+      "timestamp": "2026-08-03T13:32:09.098221+00:00",
+      "passId": "structural-pass",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.83,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.81,
+        "lightingCamera": 0.8,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "popcorn-silhouette",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Tall cabinet, transparent chamber and low rounded dome match the reference silhouette."
+        },
+        {
+          "id": "popcorn-chamber-system",
+          "score": 0.83,
+          "passed": true,
+          "notes": "Front and side panels, four posts and upper/lower frames remain independent."
+        },
+        {
+          "id": "popcorn-popper-pile",
+          "score": 0.85,
+          "passed": true,
+          "notes": "Roof popper and dense lobed popcorn pile read clearly from front and side."
+        },
+        {
+          "id": "popcorn-delivery",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Arched chute, front tray and animated handful form a coherent delivery path."
+        },
+        {
+          "id": "popcorn-rear-controls",
+          "score": 0.77,
+          "passed": true,
+          "notes": "Controls, rear vent pattern and feet are present in orbit views."
+        },
+        {
+          "id": "popcorn-sakura-materials",
+          "score": 0.81,
+          "passed": true,
+          "notes": "Cream shell, Sakura pink dome, clear chamber and warm food materials remain distinct."
+        }
+      ],
+      "action": "continue",
+      "summary": "Front, side, back and three-quarter browser views preserve the tall cabinet, framed chamber, popper, food pile and delivery path; the powered popping cycle is purpose-readable.",
+      "matched": [
+        "tall rounded cabinet",
+        "independent transparent chamber panels",
+        "roof popper and popcorn pile",
+        "front delivery chute",
+        "powered popping and dispense cycle"
+      ],
+      "mismatches": [
+        "reference uses flatter illustration lighting",
+        "translucent panels and animated food particles change binary silhouette masks"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake/popcorn-machine/front.png",
+        "renderScreenshot": "artifacts/img2threejs/popcorn-machine/final-review/render-front.png",
+        "comparisonImage": "artifacts/img2threejs/popcorn-machine/final-review/comparison-front.png",
+        "cameraView": "front",
+        "notes": "四个浏览器视图均已检查；确定性二值轮廓仅作为受构图和透明材质限制的辅助证据。",
+        "aiVisionNotes": ""
+      }
+    },
+    {
+      "timestamp": "2026-08-03T13:32:09.453221+00:00",
+      "passId": "form-refinement",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.83,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.81,
+        "lightingCamera": 0.8,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "popcorn-silhouette",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Tall cabinet, transparent chamber and low rounded dome match the reference silhouette."
+        },
+        {
+          "id": "popcorn-chamber-system",
+          "score": 0.83,
+          "passed": true,
+          "notes": "Front and side panels, four posts and upper/lower frames remain independent."
+        },
+        {
+          "id": "popcorn-popper-pile",
+          "score": 0.85,
+          "passed": true,
+          "notes": "Roof popper and dense lobed popcorn pile read clearly from front and side."
+        },
+        {
+          "id": "popcorn-delivery",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Arched chute, front tray and animated handful form a coherent delivery path."
+        },
+        {
+          "id": "popcorn-rear-controls",
+          "score": 0.77,
+          "passed": true,
+          "notes": "Controls, rear vent pattern and feet are present in orbit views."
+        },
+        {
+          "id": "popcorn-sakura-materials",
+          "score": 0.81,
+          "passed": true,
+          "notes": "Cream shell, Sakura pink dome, clear chamber and warm food materials remain distinct."
+        }
+      ],
+      "action": "continue",
+      "summary": "Front, side, back and three-quarter browser views preserve the tall cabinet, framed chamber, popper, food pile and delivery path; the powered popping cycle is purpose-readable.",
+      "matched": [
+        "tall rounded cabinet",
+        "independent transparent chamber panels",
+        "roof popper and popcorn pile",
+        "front delivery chute",
+        "powered popping and dispense cycle"
+      ],
+      "mismatches": [
+        "reference uses flatter illustration lighting",
+        "translucent panels and animated food particles change binary silhouette masks"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake/popcorn-machine/front.png",
+        "renderScreenshot": "artifacts/img2threejs/popcorn-machine/final-review/render-front.png",
+        "comparisonImage": "artifacts/img2threejs/popcorn-machine/final-review/comparison-front.png",
+        "cameraView": "front",
+        "notes": "四个浏览器视图均已检查；确定性二值轮廓仅作为受构图和透明材质限制的辅助证据。",
+        "aiVisionNotes": ""
+      }
+    },
+    {
+      "timestamp": "2026-08-03T13:32:09.827706+00:00",
+      "passId": "material-pass",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.83,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.81,
+        "lightingCamera": 0.8,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "popcorn-silhouette",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Tall cabinet, transparent chamber and low rounded dome match the reference silhouette."
+        },
+        {
+          "id": "popcorn-chamber-system",
+          "score": 0.83,
+          "passed": true,
+          "notes": "Front and side panels, four posts and upper/lower frames remain independent."
+        },
+        {
+          "id": "popcorn-popper-pile",
+          "score": 0.85,
+          "passed": true,
+          "notes": "Roof popper and dense lobed popcorn pile read clearly from front and side."
+        },
+        {
+          "id": "popcorn-delivery",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Arched chute, front tray and animated handful form a coherent delivery path."
+        },
+        {
+          "id": "popcorn-rear-controls",
+          "score": 0.77,
+          "passed": true,
+          "notes": "Controls, rear vent pattern and feet are present in orbit views."
+        },
+        {
+          "id": "popcorn-sakura-materials",
+          "score": 0.81,
+          "passed": true,
+          "notes": "Cream shell, Sakura pink dome, clear chamber and warm food materials remain distinct."
+        }
+      ],
+      "action": "continue",
+      "summary": "Front, side, back and three-quarter browser views preserve the tall cabinet, framed chamber, popper, food pile and delivery path; the powered popping cycle is purpose-readable.",
+      "matched": [
+        "tall rounded cabinet",
+        "independent transparent chamber panels",
+        "roof popper and popcorn pile",
+        "front delivery chute",
+        "powered popping and dispense cycle"
+      ],
+      "mismatches": [
+        "reference uses flatter illustration lighting",
+        "translucent panels and animated food particles change binary silhouette masks"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake/popcorn-machine/front.png",
+        "renderScreenshot": "artifacts/img2threejs/popcorn-machine/final-review/render-front.png",
+        "comparisonImage": "artifacts/img2threejs/popcorn-machine/final-review/comparison-front.png",
+        "cameraView": "front",
+        "notes": "四个浏览器视图均已检查；确定性二值轮廓仅作为受构图和透明材质限制的辅助证据。",
+        "aiVisionNotes": ""
+      }
+    },
+    {
+      "timestamp": "2026-08-03T13:32:10.333704+00:00",
+      "passId": "lighting-pass",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.83,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.81,
+        "lightingCamera": 0.8,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "popcorn-silhouette",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Tall cabinet, transparent chamber and low rounded dome match the reference silhouette."
+        },
+        {
+          "id": "popcorn-chamber-system",
+          "score": 0.83,
+          "passed": true,
+          "notes": "Front and side panels, four posts and upper/lower frames remain independent."
+        },
+        {
+          "id": "popcorn-popper-pile",
+          "score": 0.85,
+          "passed": true,
+          "notes": "Roof popper and dense lobed popcorn pile read clearly from front and side."
+        },
+        {
+          "id": "popcorn-delivery",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Arched chute, front tray and animated handful form a coherent delivery path."
+        },
+        {
+          "id": "popcorn-rear-controls",
+          "score": 0.77,
+          "passed": true,
+          "notes": "Controls, rear vent pattern and feet are present in orbit views."
+        },
+        {
+          "id": "popcorn-sakura-materials",
+          "score": 0.81,
+          "passed": true,
+          "notes": "Cream shell, Sakura pink dome, clear chamber and warm food materials remain distinct."
+        }
+      ],
+      "action": "continue",
+      "summary": "Front, side, back and three-quarter browser views preserve the tall cabinet, framed chamber, popper, food pile and delivery path; the powered popping cycle is purpose-readable.",
+      "matched": [
+        "tall rounded cabinet",
+        "independent transparent chamber panels",
+        "roof popper and popcorn pile",
+        "front delivery chute",
+        "powered popping and dispense cycle"
+      ],
+      "mismatches": [
+        "reference uses flatter illustration lighting",
+        "translucent panels and animated food particles change binary silhouette masks"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake/popcorn-machine/front.png",
+        "renderScreenshot": "artifacts/img2threejs/popcorn-machine/final-review/render-front.png",
+        "comparisonImage": "artifacts/img2threejs/popcorn-machine/final-review/comparison-front.png",
+        "cameraView": "front",
+        "notes": "四个浏览器视图均已检查；确定性二值轮廓仅作为受构图和透明材质限制的辅助证据。",
+        "aiVisionNotes": ""
+      }
+    },
+    {
+      "timestamp": "2026-08-03T13:32:10.905704+00:00",
+      "passId": "interaction-pass",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.83,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.81,
+        "lightingCamera": 0.8,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "popcorn-silhouette",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Tall cabinet, transparent chamber and low rounded dome match the reference silhouette."
+        },
+        {
+          "id": "popcorn-chamber-system",
+          "score": 0.83,
+          "passed": true,
+          "notes": "Front and side panels, four posts and upper/lower frames remain independent."
+        },
+        {
+          "id": "popcorn-popper-pile",
+          "score": 0.85,
+          "passed": true,
+          "notes": "Roof popper and dense lobed popcorn pile read clearly from front and side."
+        },
+        {
+          "id": "popcorn-delivery",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Arched chute, front tray and animated handful form a coherent delivery path."
+        },
+        {
+          "id": "popcorn-rear-controls",
+          "score": 0.77,
+          "passed": true,
+          "notes": "Controls, rear vent pattern and feet are present in orbit views."
+        },
+        {
+          "id": "popcorn-sakura-materials",
+          "score": 0.81,
+          "passed": true,
+          "notes": "Cream shell, Sakura pink dome, clear chamber and warm food materials remain distinct."
+        }
+      ],
+      "action": "continue",
+      "summary": "Front, side, back and three-quarter browser views preserve the tall cabinet, framed chamber, popper, food pile and delivery path; the powered popping cycle is purpose-readable.",
+      "matched": [
+        "tall rounded cabinet",
+        "independent transparent chamber panels",
+        "roof popper and popcorn pile",
+        "front delivery chute",
+        "powered popping and dispense cycle"
+      ],
+      "mismatches": [
+        "reference uses flatter illustration lighting",
+        "translucent panels and animated food particles change binary silhouette masks"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake/popcorn-machine/front.png",
+        "renderScreenshot": "artifacts/img2threejs/popcorn-machine/final-review/render-front.png",
+        "comparisonImage": "artifacts/img2threejs/popcorn-machine/final-review/comparison-front.png",
+        "cameraView": "front",
+        "notes": "四个浏览器视图均已检查；确定性二值轮廓仅作为受构图和透明材质限制的辅助证据。",
+        "aiVisionNotes": ""
+      }
+    },
+    {
+      "timestamp": "2026-08-03T13:32:11.351705+00:00",
+      "passId": "optimization-pass",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.83,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.81,
+        "lightingCamera": 0.8,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "popcorn-silhouette",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Tall cabinet, transparent chamber and low rounded dome match the reference silhouette."
+        },
+        {
+          "id": "popcorn-chamber-system",
+          "score": 0.83,
+          "passed": true,
+          "notes": "Front and side panels, four posts and upper/lower frames remain independent."
+        },
+        {
+          "id": "popcorn-popper-pile",
+          "score": 0.85,
+          "passed": true,
+          "notes": "Roof popper and dense lobed popcorn pile read clearly from front and side."
+        },
+        {
+          "id": "popcorn-delivery",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Arched chute, front tray and animated handful form a coherent delivery path."
+        },
+        {
+          "id": "popcorn-rear-controls",
+          "score": 0.77,
+          "passed": true,
+          "notes": "Controls, rear vent pattern and feet are present in orbit views."
+        },
+        {
+          "id": "popcorn-sakura-materials",
+          "score": 0.81,
+          "passed": true,
+          "notes": "Cream shell, Sakura pink dome, clear chamber and warm food materials remain distinct."
+        }
+      ],
+      "action": "continue",
+      "summary": "Front, side, back and three-quarter browser views preserve the tall cabinet, framed chamber, popper, food pile and delivery path; the powered popping cycle is purpose-readable.",
+      "matched": [
+        "tall rounded cabinet",
+        "independent transparent chamber panels",
+        "roof popper and popcorn pile",
+        "front delivery chute",
+        "powered popping and dispense cycle"
+      ],
+      "mismatches": [
+        "reference uses flatter illustration lighting",
+        "translucent panels and animated food particles change binary silhouette masks"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake/popcorn-machine/front.png",
+        "renderScreenshot": "artifacts/img2threejs/popcorn-machine/final-review/render-front.png",
+        "comparisonImage": "artifacts/img2threejs/popcorn-machine/final-review/comparison-front.png",
+        "cameraView": "front",
+        "notes": "四个浏览器视图均已检查；确定性二值轮廓仅作为受构图和透明材质限制的辅助证据。",
+        "aiVisionNotes": ""
+      }
+    }
+  ],
+  "visualEvidence": [
+    {
+      "timestamp": "2026-08-03T13:32:08.584971+00:00",
+      "passId": "blockout",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.83,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.81,
+        "lightingCamera": 0.8,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "popcorn-silhouette",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Tall cabinet, transparent chamber and low rounded dome match the reference silhouette."
+        },
+        {
+          "id": "popcorn-chamber-system",
+          "score": 0.83,
+          "passed": true,
+          "notes": "Front and side panels, four posts and upper/lower frames remain independent."
+        },
+        {
+          "id": "popcorn-popper-pile",
+          "score": 0.85,
+          "passed": true,
+          "notes": "Roof popper and dense lobed popcorn pile read clearly from front and side."
+        },
+        {
+          "id": "popcorn-delivery",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Arched chute, front tray and animated handful form a coherent delivery path."
+        },
+        {
+          "id": "popcorn-rear-controls",
+          "score": 0.77,
+          "passed": true,
+          "notes": "Controls, rear vent pattern and feet are present in orbit views."
+        },
+        {
+          "id": "popcorn-sakura-materials",
+          "score": 0.81,
+          "passed": true,
+          "notes": "Cream shell, Sakura pink dome, clear chamber and warm food materials remain distinct."
+        }
+      ],
+      "referenceScreenshot": "references/intake/popcorn-machine/front.png",
+      "renderScreenshot": "artifacts/img2threejs/popcorn-machine/final-review/render-front.png",
+      "comparisonImage": "artifacts/img2threejs/popcorn-machine/final-review/comparison-front.png",
+      "cameraView": "front",
+      "notes": "四个浏览器视图均已检查；确定性二值轮廓仅作为受构图和透明材质限制的辅助证据。",
+      "aiVisionNotes": ""
+    },
+    {
+      "timestamp": "2026-08-03T13:32:09.098221+00:00",
+      "passId": "structural-pass",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.83,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.81,
+        "lightingCamera": 0.8,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "popcorn-silhouette",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Tall cabinet, transparent chamber and low rounded dome match the reference silhouette."
+        },
+        {
+          "id": "popcorn-chamber-system",
+          "score": 0.83,
+          "passed": true,
+          "notes": "Front and side panels, four posts and upper/lower frames remain independent."
+        },
+        {
+          "id": "popcorn-popper-pile",
+          "score": 0.85,
+          "passed": true,
+          "notes": "Roof popper and dense lobed popcorn pile read clearly from front and side."
+        },
+        {
+          "id": "popcorn-delivery",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Arched chute, front tray and animated handful form a coherent delivery path."
+        },
+        {
+          "id": "popcorn-rear-controls",
+          "score": 0.77,
+          "passed": true,
+          "notes": "Controls, rear vent pattern and feet are present in orbit views."
+        },
+        {
+          "id": "popcorn-sakura-materials",
+          "score": 0.81,
+          "passed": true,
+          "notes": "Cream shell, Sakura pink dome, clear chamber and warm food materials remain distinct."
+        }
+      ],
+      "referenceScreenshot": "references/intake/popcorn-machine/front.png",
+      "renderScreenshot": "artifacts/img2threejs/popcorn-machine/final-review/render-front.png",
+      "comparisonImage": "artifacts/img2threejs/popcorn-machine/final-review/comparison-front.png",
+      "cameraView": "front",
+      "notes": "四个浏览器视图均已检查；确定性二值轮廓仅作为受构图和透明材质限制的辅助证据。",
+      "aiVisionNotes": ""
+    },
+    {
+      "timestamp": "2026-08-03T13:32:09.453221+00:00",
+      "passId": "form-refinement",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.83,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.81,
+        "lightingCamera": 0.8,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "popcorn-silhouette",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Tall cabinet, transparent chamber and low rounded dome match the reference silhouette."
+        },
+        {
+          "id": "popcorn-chamber-system",
+          "score": 0.83,
+          "passed": true,
+          "notes": "Front and side panels, four posts and upper/lower frames remain independent."
+        },
+        {
+          "id": "popcorn-popper-pile",
+          "score": 0.85,
+          "passed": true,
+          "notes": "Roof popper and dense lobed popcorn pile read clearly from front and side."
+        },
+        {
+          "id": "popcorn-delivery",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Arched chute, front tray and animated handful form a coherent delivery path."
+        },
+        {
+          "id": "popcorn-rear-controls",
+          "score": 0.77,
+          "passed": true,
+          "notes": "Controls, rear vent pattern and feet are present in orbit views."
+        },
+        {
+          "id": "popcorn-sakura-materials",
+          "score": 0.81,
+          "passed": true,
+          "notes": "Cream shell, Sakura pink dome, clear chamber and warm food materials remain distinct."
+        }
+      ],
+      "referenceScreenshot": "references/intake/popcorn-machine/front.png",
+      "renderScreenshot": "artifacts/img2threejs/popcorn-machine/final-review/render-front.png",
+      "comparisonImage": "artifacts/img2threejs/popcorn-machine/final-review/comparison-front.png",
+      "cameraView": "front",
+      "notes": "四个浏览器视图均已检查；确定性二值轮廓仅作为受构图和透明材质限制的辅助证据。",
+      "aiVisionNotes": ""
+    },
+    {
+      "timestamp": "2026-08-03T13:32:09.827706+00:00",
+      "passId": "material-pass",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.83,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.81,
+        "lightingCamera": 0.8,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "popcorn-silhouette",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Tall cabinet, transparent chamber and low rounded dome match the reference silhouette."
+        },
+        {
+          "id": "popcorn-chamber-system",
+          "score": 0.83,
+          "passed": true,
+          "notes": "Front and side panels, four posts and upper/lower frames remain independent."
+        },
+        {
+          "id": "popcorn-popper-pile",
+          "score": 0.85,
+          "passed": true,
+          "notes": "Roof popper and dense lobed popcorn pile read clearly from front and side."
+        },
+        {
+          "id": "popcorn-delivery",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Arched chute, front tray and animated handful form a coherent delivery path."
+        },
+        {
+          "id": "popcorn-rear-controls",
+          "score": 0.77,
+          "passed": true,
+          "notes": "Controls, rear vent pattern and feet are present in orbit views."
+        },
+        {
+          "id": "popcorn-sakura-materials",
+          "score": 0.81,
+          "passed": true,
+          "notes": "Cream shell, Sakura pink dome, clear chamber and warm food materials remain distinct."
+        }
+      ],
+      "referenceScreenshot": "references/intake/popcorn-machine/front.png",
+      "renderScreenshot": "artifacts/img2threejs/popcorn-machine/final-review/render-front.png",
+      "comparisonImage": "artifacts/img2threejs/popcorn-machine/final-review/comparison-front.png",
+      "cameraView": "front",
+      "notes": "四个浏览器视图均已检查；确定性二值轮廓仅作为受构图和透明材质限制的辅助证据。",
+      "aiVisionNotes": ""
+    },
+    {
+      "timestamp": "2026-08-03T13:32:10.333704+00:00",
+      "passId": "lighting-pass",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.83,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.81,
+        "lightingCamera": 0.8,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "popcorn-silhouette",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Tall cabinet, transparent chamber and low rounded dome match the reference silhouette."
+        },
+        {
+          "id": "popcorn-chamber-system",
+          "score": 0.83,
+          "passed": true,
+          "notes": "Front and side panels, four posts and upper/lower frames remain independent."
+        },
+        {
+          "id": "popcorn-popper-pile",
+          "score": 0.85,
+          "passed": true,
+          "notes": "Roof popper and dense lobed popcorn pile read clearly from front and side."
+        },
+        {
+          "id": "popcorn-delivery",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Arched chute, front tray and animated handful form a coherent delivery path."
+        },
+        {
+          "id": "popcorn-rear-controls",
+          "score": 0.77,
+          "passed": true,
+          "notes": "Controls, rear vent pattern and feet are present in orbit views."
+        },
+        {
+          "id": "popcorn-sakura-materials",
+          "score": 0.81,
+          "passed": true,
+          "notes": "Cream shell, Sakura pink dome, clear chamber and warm food materials remain distinct."
+        }
+      ],
+      "referenceScreenshot": "references/intake/popcorn-machine/front.png",
+      "renderScreenshot": "artifacts/img2threejs/popcorn-machine/final-review/render-front.png",
+      "comparisonImage": "artifacts/img2threejs/popcorn-machine/final-review/comparison-front.png",
+      "cameraView": "front",
+      "notes": "四个浏览器视图均已检查；确定性二值轮廓仅作为受构图和透明材质限制的辅助证据。",
+      "aiVisionNotes": ""
+    },
+    {
+      "timestamp": "2026-08-03T13:32:10.905704+00:00",
+      "passId": "interaction-pass",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.83,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.81,
+        "lightingCamera": 0.8,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "popcorn-silhouette",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Tall cabinet, transparent chamber and low rounded dome match the reference silhouette."
+        },
+        {
+          "id": "popcorn-chamber-system",
+          "score": 0.83,
+          "passed": true,
+          "notes": "Front and side panels, four posts and upper/lower frames remain independent."
+        },
+        {
+          "id": "popcorn-popper-pile",
+          "score": 0.85,
+          "passed": true,
+          "notes": "Roof popper and dense lobed popcorn pile read clearly from front and side."
+        },
+        {
+          "id": "popcorn-delivery",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Arched chute, front tray and animated handful form a coherent delivery path."
+        },
+        {
+          "id": "popcorn-rear-controls",
+          "score": 0.77,
+          "passed": true,
+          "notes": "Controls, rear vent pattern and feet are present in orbit views."
+        },
+        {
+          "id": "popcorn-sakura-materials",
+          "score": 0.81,
+          "passed": true,
+          "notes": "Cream shell, Sakura pink dome, clear chamber and warm food materials remain distinct."
+        }
+      ],
+      "referenceScreenshot": "references/intake/popcorn-machine/front.png",
+      "renderScreenshot": "artifacts/img2threejs/popcorn-machine/final-review/render-front.png",
+      "comparisonImage": "artifacts/img2threejs/popcorn-machine/final-review/comparison-front.png",
+      "cameraView": "front",
+      "notes": "四个浏览器视图均已检查；确定性二值轮廓仅作为受构图和透明材质限制的辅助证据。",
+      "aiVisionNotes": ""
+    },
+    {
+      "timestamp": "2026-08-03T13:32:11.351705+00:00",
+      "passId": "optimization-pass",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.83,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.81,
+        "lightingCamera": 0.8,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "popcorn-silhouette",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Tall cabinet, transparent chamber and low rounded dome match the reference silhouette."
+        },
+        {
+          "id": "popcorn-chamber-system",
+          "score": 0.83,
+          "passed": true,
+          "notes": "Front and side panels, four posts and upper/lower frames remain independent."
+        },
+        {
+          "id": "popcorn-popper-pile",
+          "score": 0.85,
+          "passed": true,
+          "notes": "Roof popper and dense lobed popcorn pile read clearly from front and side."
+        },
+        {
+          "id": "popcorn-delivery",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Arched chute, front tray and animated handful form a coherent delivery path."
+        },
+        {
+          "id": "popcorn-rear-controls",
+          "score": 0.77,
+          "passed": true,
+          "notes": "Controls, rear vent pattern and feet are present in orbit views."
+        },
+        {
+          "id": "popcorn-sakura-materials",
+          "score": 0.81,
+          "passed": true,
+          "notes": "Cream shell, Sakura pink dome, clear chamber and warm food materials remain distinct."
+        }
+      ],
+      "referenceScreenshot": "references/intake/popcorn-machine/front.png",
+      "renderScreenshot": "artifacts/img2threejs/popcorn-machine/final-review/render-front.png",
+      "comparisonImage": "artifacts/img2threejs/popcorn-machine/final-review/comparison-front.png",
+      "cameraView": "front",
+      "notes": "四个浏览器视图均已检查；确定性二值轮廓仅作为受构图和透明材质限制的辅助证据。",
+      "aiVisionNotes": ""
+    }
+  ],
+  "sculptPipeline": {
+    "passGateMode": "locked-sequential",
+    "passOrder": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "completedPasses": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "currentPass": "complete",
+    "nextRequiredEvidence": [],
+    "lastCompletedPass": "optimization-pass",
+    "blockedReason": "all build passes completed"
+  },
+  "tier1Results": [
+    {
+      "passed": false,
+      "checks": {
+        "silhouetteIoU": 0.3274,
+        "aspectRatioDelta": 0.1665,
+        "scaleDelta": 0.365,
+        "bilateralSymmetryError": 0.0673,
+        "colorDelta": {
+          "checked": 27,
+          "maxDeltaE": 32.32,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 8.89
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.89
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.06
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.61
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.8
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.89
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.62
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.06
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.06
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.06
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.89
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.61
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.61
+            },
+            {
+              "componentId": null,
+              "deltaE": 14.05
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.61
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.61
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.8
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.61
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.89
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.61
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.61
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.47
+            },
+            {
+              "componentId": null,
+              "deltaE": 25.6
+            },
+            {
+              "componentId": null,
+              "deltaE": 20.47
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.72
+            },
+            {
+              "componentId": null,
+              "deltaE": 32.32
+            },
+            {
+              "componentId": null,
+              "deltaE": 20.47
+            }
+          ],
+          "gated": false
+        }
+      },
+      "failures": [
+        "silhouette IoU 0.327 is below threshold 0.85",
+        "aspect-ratio delta 0.167 exceeds threshold 0.05",
+        "scale delta 0.365 exceeds threshold 0.08",
+        "blockout requires --map-stripped-render evidence"
+      ],
+      "renderHash": "071b8cf0ae6a21d6",
+      "passId": "blockout"
+    },
+    {
+      "passed": false,
+      "checks": {
+        "silhouetteIoU": 0.3367,
+        "aspectRatioDelta": 0.1009,
+        "scaleDelta": 1.0135,
+        "bilateralSymmetryError": 0.113,
+        "colorDelta": {
+          "checked": 27,
+          "maxDeltaE": 32.21,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 6.69
+            },
+            {
+              "componentId": null,
+              "deltaE": 6.69
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.99
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.63
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.57
+            },
+            {
+              "componentId": null,
+              "deltaE": 6.69
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.89
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.99
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.99
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.99
+            },
+            {
+              "componentId": null,
+              "deltaE": 6.69
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.63
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.63
+            },
+            {
+              "componentId": null,
+              "deltaE": 14.01
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.63
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.63
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.57
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.63
+            },
+            {
+              "componentId": null,
+              "deltaE": 6.69
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.63
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.63
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.48
+            },
+            {
+              "componentId": null,
+              "deltaE": 25.46
+            },
+            {
+              "componentId": null,
+              "deltaE": 18.56
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.71
+            },
+            {
+              "componentId": null,
+              "deltaE": 32.21
+            },
+            {
+              "componentId": null,
+              "deltaE": 18.56
+            }
+          ],
+          "gated": false
+        }
+      },
+      "failures": [
+        "silhouette IoU 0.337 is below threshold 0.85",
+        "aspect-ratio delta 0.101 exceeds threshold 0.05",
+        "scale delta 1.014 exceeds threshold 0.08"
+      ],
+      "renderHash": "3fa2e6709158b154",
+      "passId": "blockout",
+      "mapStrippedRender": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\popcorn-machine\\tier1\\tier1-match.png"
+    },
+    {
+      "passed": false,
+      "checks": {
+        "silhouetteIoU": 0.3274,
+        "aspectRatioDelta": 0.1665,
+        "scaleDelta": 0.365,
+        "bilateralSymmetryError": 0.0673,
+        "colorDelta": {
+          "checked": 27,
+          "maxDeltaE": 32.32,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 8.89
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.89
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.06
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.61
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.8
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.89
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.62
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.06
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.06
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.06
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.89
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.61
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.61
+            },
+            {
+              "componentId": null,
+              "deltaE": 14.05
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.61
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.61
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.8
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.61
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.89
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.61
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.61
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.47
+            },
+            {
+              "componentId": null,
+              "deltaE": 25.6
+            },
+            {
+              "componentId": null,
+              "deltaE": 20.47
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.72
+            },
+            {
+              "componentId": null,
+              "deltaE": 32.32
+            },
+            {
+              "componentId": null,
+              "deltaE": 20.47
+            }
+          ],
+          "gated": false
+        }
+      },
+      "failures": [
+        "silhouette IoU 0.327 is below threshold 0.85",
+        "aspect-ratio delta 0.167 exceeds threshold 0.05",
+        "scale delta 0.365 exceeds threshold 0.08",
+        "blockout requires --map-stripped-render evidence"
+      ],
+      "renderHash": "071b8cf0ae6a21d6",
+      "passId": "blockout"
+    },
+    {
+      "passed": false,
+      "checks": {
+        "silhouetteIoU": 0.6547,
+        "aspectRatioDelta": 0.0,
+        "scaleDelta": 0.0,
+        "bilateralSymmetryError": 0.0663,
+        "colorDelta": {
+          "checked": 27,
+          "maxDeltaE": 34.29,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 5.8
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.8
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.34
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.2
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.63
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.8
+            },
+            {
+              "componentId": null,
+              "deltaE": 2.94
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.34
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.34
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.34
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.8
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.2
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.2
+            },
+            {
+              "componentId": null,
+              "deltaE": 14.72
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.2
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.2
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.63
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.2
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.8
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.2
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.2
+            },
+            {
+              "componentId": null,
+              "deltaE": 16.2
+            },
+            {
+              "componentId": null,
+              "deltaE": 25.81
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.33
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.29
+            },
+            {
+              "componentId": null,
+              "deltaE": 34.29
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.33
+            }
+          ],
+          "gated": false
+        }
+      },
+      "failures": [
+        "silhouette IoU 0.655 is below threshold 0.85"
+      ],
+      "renderHash": "94298985251a52ce",
+      "passId": "blockout",
+      "mapStrippedRender": "artifacts\\img2threejs\\popcorn-machine\\browser-review\\normalized4\\render-normalized.png"
+    }
+  ]
+}

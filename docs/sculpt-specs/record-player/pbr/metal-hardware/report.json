@@ -1,0 +1,83 @@
+{
+  "ok": true,
+  "verdict": "pass",
+  "confidence": 0.909,
+  "estimatedFidelity": 0.909,
+  "targetThreshold": 0.7,
+  "materialId": "metal-hardware",
+  "sourceImage": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\record-player\\pbr\\metal-hardware\\source-crop.png",
+  "outDir": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\record-player\\pbr\\metal-hardware",
+  "palette": [
+    "#EEB5AD",
+    "#9A7467",
+    "#CC948B",
+    "#F5CFC5",
+    "#3F332D"
+  ],
+  "maps": {
+    "albedo": {
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\record-player\\pbr\\metal-hardware\\metal-hardware_albedo.png",
+      "url": "metal-hardware_albedo.png",
+      "channel": "albedo",
+      "source": "reference-pixel-extraction"
+    },
+    "roughness": {
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\record-player\\pbr\\metal-hardware\\metal-hardware_roughness.png",
+      "url": "metal-hardware_roughness.png",
+      "channel": "roughness",
+      "source": "reference-pixel-extraction"
+    },
+    "height": {
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\record-player\\pbr\\metal-hardware\\metal-hardware_height.png",
+      "url": "metal-hardware_height.png",
+      "channel": "height",
+      "source": "reference-pixel-extraction"
+    },
+    "normal": {
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\record-player\\pbr\\metal-hardware\\metal-hardware_normal.png",
+      "url": "metal-hardware_normal.png",
+      "channel": "normal",
+      "source": "reference-pixel-extraction"
+    },
+    "ao": {
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\record-player\\pbr\\metal-hardware\\metal-hardware_ao.png",
+      "url": "metal-hardware_ao.png",
+      "channel": "ao",
+      "source": "reference-pixel-extraction"
+    }
+  },
+  "diagnostics": {
+    "sourceWidth": 73,
+    "sourceHeight": 46,
+    "mapSize": 1024,
+    "cropBBoxPixels": {
+      "x": 0,
+      "y": 0,
+      "width": 73,
+      "height": 46
+    },
+    "mask": {
+      "backgroundColor": "#F4E4D1",
+      "backgroundNoise": 7.071,
+      "transparentPixelFraction": 0.0,
+      "foregroundCoverage": 0.7615
+    },
+    "mapStats": {
+      "valueRange": 0.584,
+      "heightP90Gradient": 0.05567,
+      "roughnessBase": 0.694,
+      "roughnessVariation": 0.102,
+      "normalStrength": 0.221,
+      "blurRadius": 21
+    },
+    "palette": [
+      "#EEB5AD",
+      "#9A7467",
+      "#CC948B",
+      "#F5CFC5",
+      "#3F332D"
+    ]
+  },
+  "warnings": [],
+  "limitation": "single-image PBR extraction is an estimate; 70%+ extraction confidence still needs render screenshot review"
+}

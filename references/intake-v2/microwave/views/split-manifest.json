@@ -1,0 +1,47 @@
+{
+  "source": "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake-v2\\microwave\\microwave-turnsheet-v2.png",
+  "sourceWidth": 2048,
+  "sourceHeight": 2048,
+  "outputs": [
+    {
+      "view": "front",
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake-v2\\microwave\\views\\front.png",
+      "crop": [
+        0,
+        0,
+        1024,
+        1024
+      ]
+    },
+    {
+      "view": "side",
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake-v2\\microwave\\views\\side.png",
+      "crop": [
+        1024,
+        0,
+        2048,
+        1024
+      ]
+    },
+    {
+      "view": "back",
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake-v2\\microwave\\views\\back.png",
+      "crop": [
+        0,
+        1024,
+        1024,
+        2048
+      ]
+    },
+    {
+      "view": "three-quarter",
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake-v2\\microwave\\views\\three-quarter.png",
+      "crop": [
+        1024,
+        1024,
+        2048,
+        2048
+      ]
+    }
+  ]
+}

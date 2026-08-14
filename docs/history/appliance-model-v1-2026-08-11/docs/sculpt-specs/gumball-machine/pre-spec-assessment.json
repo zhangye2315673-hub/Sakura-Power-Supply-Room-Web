@@ -1,0 +1,102 @@
+{
+  "targetName": "SAKURA capsule toy machine",
+  "sourceImage": "E:/AI/codexAI/sakula/arrow-cube/references/intake/gumball-machine/front.png",
+  "preSpecAssessment": {
+    "objectClass": {
+      "primaryType": "capsule toy vending machine",
+      "primaryDomain": "object",
+      "formLanguage": ["geometric", "soft hard-surface", "transparent-like"],
+      "structureKind": ["compound object", "layered shell", "articulated assembly", "repeated modules"],
+      "motionPotential": ["articulated crank", "capsule agitation", "single-capsule dispensing", "effect-emitter"],
+      "materialFamilies": ["gloss plastic", "transparent polymer", "painted metal", "rubber"],
+      "notes": "观察：正、侧、背三张正交视图给出同一台扭蛋机。主体为透明球形仓叠置在奶油色锥台底座上，粉色顶盖、仓底环、底圈和操作件形成统一强调色。"
+    },
+    "complexity": {
+      "tier": "complex",
+      "scores": {
+        "silhouetteComplexity": 2,
+        "componentCount": 3,
+        "hierarchyDepth": 3,
+        "repetitionDensity": 2,
+        "materialLayerCount": 3,
+        "localDetailDensity": 2,
+        "occlusionRisk": 2,
+        "actionReadinessNeed": 3
+      },
+      "estimatedCounts": {
+        "macroComponents": 4,
+        "mesoComponents": 12,
+        "microFeatureGroups": 9,
+        "materialLayers": 7,
+        "repetitionSystems": 4
+      },
+      "reasoning": [
+        "球仓、锥台机身和底圈轮廓清晰，但正确身份依赖顶盖环、中心立柱、旋钮、侧摇杆和前出货口的关系。",
+        "九颗以上透明胶囊需要上下半球、彩色下壳和赤道接缝的重复系统；通电动作还需要独立胶囊运动通道。",
+        "透明仓会暴露内部零件与遮挡排序，背面检修盖、底面和内部落球机构只能合理推测。"
+      ]
+    },
+    "specDepthDecision": {
+      "requiredDepth": "complex",
+      "minimumComponentLevels": ["macro", "meso", "micro"],
+      "needsRepetitionSystems": true,
+      "needsMaterialLocalOverrides": true,
+      "needsMultipleReviewViews": true,
+      "needsActionReadyHierarchy": true,
+      "rationale": "透明仓、胶囊重复系统、机械摇杆和可见落球动作要求多层级独立组件。"
+    },
+    "unknownsToResolveBeforeImplementation": [
+      "推测：透明仓内部的分度盘、拨片、落球通道与防双出球挡片在三视图中被胶囊遮挡。",
+      "推测：底面螺丝、电缆收纳和四脚的固定方式不可见。",
+      "推测：后检修盖的厚度、锁扣和内部维护空间不可见。",
+      "推测：侧摇杆连接到前旋钮轴的内部齿轮关系不可见。"
+    ],
+    "detailInventory": {
+      "scanMethod": "grid-3x3",
+      "targetMinDetails": 10,
+      "details": [
+        {"id":"d01","kind":"bevel","description":"粉色半球顶盖具有宽外檐和圆角高光边","region":{"x":0.08,"y":0.13,"width":0.22,"height":0.13,"units":"normalized"},"scale":"meso","affects":"silhouette","mapsTo":{"type":"component.localFeatures","ref":"top-lid.localFeatures.domed-cap-beveled-rim"},"evidenceRef":"front:top-lid","confidence":0.97},
+        {"id":"d02","kind":"gloss","description":"透明球仓上有大面积低粗糙度白色反光","region":{"x":0.09,"y":0.23,"width":0.24,"height":0.27,"units":"normalized"},"scale":"macro","affects":"roughness transmission","mapsTo":{"type":"material.localOverrides","ref":"globe-glass.localOverrides.front-highlight"},"evidenceRef":"front:globe","confidence":0.95},
+        {"id":"d03","kind":"seam","description":"球仓下缘被厚粉色圆环夹持","region":{"x":0.1,"y":0.48,"width":0.23,"height":0.06,"units":"normalized"},"scale":"meso","affects":"construction seam","mapsTo":{"type":"component.localFeatures","ref":"globe-seat-ring.localFeatures.double-lip-seam"},"evidenceRef":"front:globe-seat","confidence":0.97},
+        {"id":"d04","kind":"ridge","description":"中心粉色立柱从顶盖延伸到胶囊层内部","region":{"x":0.2,"y":0.2,"width":0.04,"height":0.27,"units":"normalized"},"scale":"meso","affects":"internal structure","mapsTo":{"type":"component.localFeatures","ref":"center-column.localFeatures.vertical-feed-spine"},"evidenceRef":"front:center-column","confidence":0.88},
+        {"id":"d05","kind":"seam","description":"胶囊具有透明上半球、彩色下半球和赤道接缝","region":{"x":0.1,"y":0.34,"width":0.25,"height":0.17,"units":"normalized"},"scale":"micro","affects":"capsule identity","mapsTo":{"type":"component.localFeatures","ref":"capsule-system.localFeatures.upper-lower-halves-equator-seams"},"evidenceRef":"front:capsules","confidence":0.96},
+        {"id":"d06","kind":"bevel","description":"底座为上窄下宽的圆角锥台而非直筒","region":{"x":0.08,"y":0.5,"width":0.25,"height":0.29,"units":"normalized"},"scale":"macro","affects":"silhouette taper","mapsTo":{"type":"component.localFeatures","ref":"base-shell.localFeatures.rounded-frustum-taper"},"evidenceRef":"front:base","confidence":0.98},
+        {"id":"d07","kind":"ridge","description":"正面大旋钮有厚圆座、横向握柄和中央凸点","region":{"x":0.18,"y":0.54,"width":0.1,"height":0.13,"units":"normalized"},"scale":"meso","affects":"control identity","mapsTo":{"type":"component.localFeatures","ref":"front-crank.localFeatures.seat-grip-center-boss"},"evidenceRef":"front:crank","confidence":0.99},
+        {"id":"d08","kind":"hole","description":"前下方出货口为深色拱形真实凹腔并有托盘唇","region":{"x":0.17,"y":0.67,"width":0.13,"height":0.13,"units":"normalized"},"scale":"meso","affects":"negative space","mapsTo":{"type":"component.localFeatures","ref":"dispense-chute.localFeatures.arched-cavity-tray-lip"},"evidenceRef":"front:dispense","confidence":0.99},
+        {"id":"d09","kind":"bevel","description":"侧面摇杆由轴盘、细杆和球头组成","region":{"x":0.41,"y":0.53,"width":0.15,"height":0.17,"units":"normalized"},"scale":"meso","affects":"articulation","mapsTo":{"type":"component.localFeatures","ref":"side-crank.localFeatures.hub-arm-ball-grip"},"evidenceRef":"side:crank","confidence":0.98},
+        {"id":"d10","kind":"seam","description":"背面方形检修盖有圆角面板线","region":{"x":0.75,"y":0.57,"width":0.1,"height":0.13,"units":"normalized"},"scale":"meso","affects":"rear service","mapsTo":{"type":"component.localFeatures","ref":"rear-service-panel.localFeatures.rounded-panel-seam"},"evidenceRef":"back:service-panel","confidence":0.95},
+        {"id":"d11","kind":"hole","description":"背面底圈中央有半圆电缆出口缺口","region":{"x":0.74,"y":0.75,"width":0.12,"height":0.06,"units":"normalized"},"scale":"micro","affects":"rear silhouette","mapsTo":{"type":"component.localFeatures","ref":"base-ring.localFeatures.rear-cable-notch"},"evidenceRef":"back:base-notch","confidence":0.94},
+        {"id":"d12","kind":"gloss","description":"粉色塑料在顶盖、环、旋钮和底圈有一致清漆高光","region":{"x":0.0,"y":0.0,"width":1.0,"height":1.0,"units":"normalized"},"scale":"micro","affects":"clearcoat roughness","mapsTo":{"type":"material.localOverrides","ref":"accent-plastic.localOverrides.highlight-bands"},"evidenceRef":"tri-view:accent-plastic","confidence":0.93},
+        {"id":"d13","kind":"bevel","description":"底部四脚低矮圆角并略伸出底圈","region":{"x":0.07,"y":0.76,"width":0.82,"height":0.06,"units":"normalized"},"scale":"micro","affects":"grounding","mapsTo":{"type":"component.localFeatures","ref":"foot-system.localFeatures.four-rounded-feet"},"evidenceRef":"front-side-back:feet","confidence":0.84},
+        {"id":"d14","kind":"seam","description":"奶油机身与粉色底圈之间有连续接缝","region":{"x":0.07,"y":0.73,"width":0.85,"height":0.04,"units":"normalized"},"scale":"micro","affects":"assembly separation","mapsTo":{"type":"component.localFeatures","ref":"base-ring.localFeatures.upper-shell-seam"},"evidenceRef":"tri-view:base-ring","confidence":0.95},
+        {"id":"d15","kind":"gloss","description":"胶囊透明罩与彩色壳分别保留高光和颜色层","region":{"x":0.08,"y":0.31,"width":0.83,"height":0.21,"units":"normalized"},"scale":"micro","affects":"capsule transmission color","mapsTo":{"type":"material.localOverrides","ref":"capsule-clear.localOverrides.gloss-shell"},"evidenceRef":"tri-view:capsules","confidence":0.94}
+      ]
+    },
+    "anatomy": {"applies":false,"styleHeads":0,"proportions":{"headUnit":0,"torso":0,"legs":0,"shoulderWidth":0,"hipWidth":0},"pose":{"type":"not-applicable","jointAngles":{}},"faceLandmarks":{"eyeLine":0,"eyeSpacing":0,"noseBase":0,"mouthLine":0,"hairline":0},"features":[],"confidence":1,"note":"Not a character."},
+    "sourceImage": "E:/AI/codexAI/sakula/arrow-cube/references/intake/gumball-machine/front.png"
+  },
+  "qualityContract": {
+    "qualityBar": "complex",
+    "definitionOfDone": [
+      "Front silhouette matches the bulbous transparent globe over a tapered cream pedestal, including the wide pink lid and base-ring proportions.",
+      "Every visible assembly remains independently named: globe, lid, seat ring, center column, capsules, base shell, front crank, side crank, dispense chute, rear panel, base ring and feet.",
+      "Capsules read as two-piece transparent/color shells with equator seams, not opaque balls.",
+      "Powered demonstration visibly rotates both controls, agitates the capsule bed, routes one capsule into the front tray without intersections, and safely restores by 5.2 seconds.",
+      "SAKURA cream/pink/mint/blue/yellow pastel toon palette, outlines and restrained gloss remain consistent with the current project."
+    ],
+    "minimumSpecDepth":{"macroComponents":4,"mesoComponents":10,"microFeatureGroups":7,"materialLayers":6,"repetitionSystems":3,"reviewViewpoints":5},
+    "featureGroups":[
+      {"id":"globe-and-lid-silhouette","name":"Globe and lid silhouette","required":true,"qualityCriteria":["The globe is a broad near-sphere with a flattened lower seat and domed pink cap with wide rim."],"evidenceRefs":["front:globe","side:globe"],"failureModes":["globe reads as a jar or straight cylinder","lid is a flat disk"]},
+      {"id":"tapered-base-and-dispense","name":"Tapered base and dispense architecture","required":true,"qualityCriteria":["Cream body tapers upward; arched dark chute and protruding pink tray remain legible."],"evidenceRefs":["front:base","front:dispense"],"failureModes":["base is cylindrical","dispense cavity is painted flat"]},
+      {"id":"control-assembly","name":"Front and side controls","required":true,"qualityCriteria":["Front crank and side crank are nested pivots with visible hub, grip and attachment overlap."],"evidenceRefs":["front:crank","side:crank"],"failureModes":["controls float","crank cannot rotate at hub"]},
+      {"id":"capsule-system","name":"Transparent two-piece capsule system","required":true,"qualityCriteria":["At least nine capsules vary color and orientation; each has a clear upper shell, colored lower shell and equator seam."],"evidenceRefs":["front:capsules","side:capsules","back:capsules"],"failureModes":["capsules are opaque spheres","layout is uniform grid"]},
+      {"id":"attachment-joint-correctness","name":"Attachment and joint correctness","required":true,"qualityCriteria":["Lid, globe rings, cranks, chute and feet overlap or socket into their parents without gaps."],"evidenceRefs":["tri-view"],"failureModes":["floating parts","animation separates joints"]},
+      {"id":"surface-material-response","name":"Pastel plastic and transparent material split","required":true,"qualityCriteria":["Cream and pink plastic, transparent globe, clear capsule shells, colored capsule halves and dark cavity remain visually distinct."],"evidenceRefs":["tri-view"],"failureModes":["glass disappears","all surfaces share one roughness"]},
+      {"id":"powered-dispense-action","name":"Purpose-readable powered action","required":true,"qualityCriteria":["Controls rotate, capsule bed visibly stirs, exactly one selected capsule follows a contained path to the tray and remains there before reset."],"evidenceRefs":["user-action-requirement"],"failureModes":["generic wobble only","capsule intersects shell or disappears"]}
+    ],
+    "visualDeltaChecks":["globe-to-base height ratio","base top-to-bottom taper","lid rim thickness","crank diameter and chute width","capsule count/size/color distribution","rear panel and cable-notch placement","material transmission and pastel palette","5.2-second dispense path clearance"],
+    "antiShallowSpecRules":["No monolithic mesh.","No opaque-ball substitute for capsules.","No flat decal substitute for the arched dispense cavity.","No center pivot for the side crank.","No invented hidden mechanism reported as observed."]
+  },
+  "authoringInstruction": "Use the observed tri-view evidence and preserve all uncertainties as inferred.",
+  "localSpecSearch": {"collection":"core_3d","query":"transparent capsule vending machine glass globe crank chute pastel plastic bevel transmission real-time Three.js","matches":[{"record_id":"core.pbr-opacity-alpha","source_refs":[{"path":"docs/raw/img2threejs-skill-dataset.json","key_path":"categories.material_pbr[8]"}],"evidence_refs":[{"kind":"source","ref":"docs/raw/img2threejs-skill-dataset.json"}]},{"record_id":"core.coordinate-relative-units","source_refs":[{"path":"grimoire/glossary/3d_vocabulary.md","heading":"Geometry And Topology"}],"evidence_refs":[{"kind":"source","ref":"grimoire/glossary/3d_vocabulary.md"}]}]}
+}

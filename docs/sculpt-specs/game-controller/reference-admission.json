@@ -1,0 +1,13 @@
+{
+  "verdict": "conditional-pass",
+  "notes": [
+    "All three PNG files decode and pass technical admission.",
+    "Front-right grip is slightly clipped and side sheet includes neighbouring fragments; only the central side object is evidence.",
+    "Bilateral symmetry plus the complete back view resolve the clipped front handle silhouette."
+  ],
+  "views": [
+    { "role": "front", "path": "references/intake/game-controller/front.png", "width": 557, "height": 941, "foregroundCoverage": 0.191, "pHash": "18437877712538836003", "admitted": true },
+    { "role": "side", "path": "references/intake/game-controller/side.png", "width": 557, "height": 941, "foregroundCoverage": 0.126, "pHash": "17702751083525072658", "admitted": true },
+    { "role": "back", "path": "references/intake/game-controller/back.png", "width": 558, "height": 941, "foregroundCoverage": 0.2195, "pHash": "12192887180375689535", "admitted": true }
+  ]
+}

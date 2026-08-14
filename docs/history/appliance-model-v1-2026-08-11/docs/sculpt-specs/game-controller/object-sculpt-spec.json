@@ -1,0 +1,6075 @@
+{
+  "targetName": "Sakura Game Controller",
+  "targetId": "game-controller",
+  "schemaVersion": "2.1",
+  "terminologyProfile": {
+    "domain": "real-time procedural Three.js asset",
+    "geometryTerms": [
+      "silhouette",
+      "topology",
+      "primitive",
+      "bevel",
+      "chamfer",
+      "taper",
+      "bend",
+      "boolean cut",
+      "edge loop",
+      "surface normal",
+      "displacement"
+    ],
+    "materialTerms": [
+      "albedo",
+      "baseColor",
+      "roughness",
+      "metalness",
+      "normal map",
+      "bump map",
+      "ambient occlusion",
+      "cavity dirt",
+      "edge wear",
+      "clearcoat"
+    ],
+    "lightingTerms": [
+      "key light",
+      "fill light",
+      "rim light",
+      "HDRI/environment reflection",
+      "contact shadow"
+    ],
+    "descriptionRule": "Use measurable 3D graphics terms. Avoid vague words unless they are paired with concrete geometry/material/shader parameters."
+  },
+  "sourceImage": "references/intake/game-controller/front.png",
+  "referenceCamera": {
+    "solved": false,
+    "fovDegrees": 34,
+    "aspect": 0.59192348565356,
+    "orientation": {
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0
+    },
+    "positionHint": [
+      0,
+      0,
+      7
+    ],
+    "note": "Three orthographic-like exterior views; the far-right front edge is slightly clipped."
+  },
+  "suitability": "conditional",
+  "scores": {
+    "object_isolation": 0,
+    "silhouette_readability": 0,
+    "depth_inference": 0,
+    "primitive_decomposition": 0,
+    "material_procedurality": 0,
+    "occlusion_risk": 0,
+    "interaction_fit": 0
+  },
+  "preSpecAssessment": {
+    "objectClass": {
+      "primaryType": "wireless dual-analog game controller",
+      "primaryDomain": "object",
+      "formLanguage": [
+        "hard-surface",
+        "bilateral",
+        "rounded ergonomic",
+        "layered shell"
+      ],
+      "structureKind": [
+        "compound object",
+        "layered front/rear shell",
+        "articulated input assembly",
+        "repeated controls"
+      ],
+      "motionPotential": [
+        "dual-axis sticks",
+        "button press",
+        "D-pad tilt",
+        "shoulder hinge",
+        "rumble feedback"
+      ],
+      "materialFamilies": [
+        "satin ABS plastic",
+        "soft-touch grip plastic",
+        "translucent status lens",
+        "muted metal fasteners"
+      ],
+      "notes": "Three turn-sheet views constrain exterior geometry. Hidden electronics and mechanisms remain explicitly inferred."
+    },
+    "complexity": {
+      "tier": "complex",
+      "scores": {
+        "silhouetteComplexity": 3,
+        "componentCount": 3,
+        "hierarchyDepth": 3,
+        "repetitionDensity": 2,
+        "materialLayerCount": 2,
+        "localDetailDensity": 3,
+        "occlusionRisk": 2,
+        "actionReadinessNeed": 3
+      },
+      "estimatedCounts": {
+        "macroComponents": 5,
+        "mesoComponents": 15,
+        "microFeatureGroups": 11,
+        "materialLayers": 4,
+        "repetitionSystems": 5
+      },
+      "reasoning": [
+        "The silhouette depends on a curved central shell, two long handles and a deep lower notch.",
+        "Faithful identity needs independently movable dual sticks, D-pad, four face buttons and four shoulder controls.",
+        "Rear service cover, four screws, seams and grip colour boundaries add a third structural level."
+      ]
+    },
+    "specDepthDecision": {
+      "requiredDepth": "complex",
+      "minimumComponentLevels": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "needsRepetitionSystems": true,
+      "needsMaterialLocalOverrides": true,
+      "needsMultipleReviewViews": true,
+      "needsActionReadyHierarchy": true,
+      "rationale": "Compound layered shell with twelve articulated input surfaces, repeated fasteners and multiple evidence views."
+    },
+    "unknownsToResolveBeforeImplementation": [],
+    "detailInventory": {
+      "scanMethod": "three-view component-zones",
+      "targetMinDetails": 18,
+      "note": "Every visible identity detail maps to a named component feature or material override.",
+      "details": [
+        {
+          "id": "gc-detail-01",
+          "kind": "contour",
+          "description": "Broad cream upper shell with inward lower notch and symmetric handle shoulders.",
+          "region": {
+            "x": 0.06,
+            "y": 0.29,
+            "width": 0.88,
+            "height": 0.35,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "silhouette",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "front-shell"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.94,
+          "realization": "unreported"
+        },
+        {
+          "id": "gc-detail-02",
+          "kind": "contour",
+          "description": "Two long rounded grips descend and flare toward the palm ends.",
+          "region": {
+            "x": 0.05,
+            "y": 0.43,
+            "width": 0.9,
+            "height": 0.25,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "silhouette",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "grip-shell-pair"
+          },
+          "evidenceRef": "front/back-view",
+          "confidence": 0.96,
+          "realization": "unreported"
+        },
+        {
+          "id": "gc-detail-03",
+          "kind": "seam",
+          "description": "Continuous front-to-rear perimeter shell seam.",
+          "region": {
+            "x": 0.06,
+            "y": 0.29,
+            "width": 0.88,
+            "height": 0.39,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "form/AO",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "perimeter-shell-seam"
+          },
+          "evidenceRef": "side-view",
+          "confidence": 0.91,
+          "realization": "unreported"
+        },
+        {
+          "id": "gc-detail-04",
+          "kind": "seam",
+          "description": "Diagonal curved cream-to-pink boundary across each grip.",
+          "region": {
+            "x": 0.05,
+            "y": 0.46,
+            "width": 0.9,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "material/form",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "pink-grip-panel-pair"
+          },
+          "evidenceRef": "front/back-view",
+          "confidence": 0.96,
+          "realization": "unreported"
+        },
+        {
+          "id": "gc-detail-05",
+          "kind": "bevel",
+          "description": "Raised rounded cross D-pad with broad arm fillets.",
+          "region": {
+            "x": 0.23,
+            "y": 0.36,
+            "width": 0.21,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "form/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "dpad-cross"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.98,
+          "realization": "unreported"
+        },
+        {
+          "id": "gc-detail-06",
+          "kind": "bevel",
+          "description": "Four round unlabeled face buttons arranged in a diamond.",
+          "region": {
+            "x": 0.69,
+            "y": 0.35,
+            "width": 0.24,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "form/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "face-button-array"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.98,
+          "realization": "unreported"
+        },
+        {
+          "id": "gc-detail-07",
+          "kind": "ridge",
+          "description": "Left analog stick rises from a cream socket ring with a recessed cap centre.",
+          "region": {
+            "x": 0.38,
+            "y": 0.49,
+            "width": 0.17,
+            "height": 0.14,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "form/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "left-stick-assembly"
+          },
+          "evidenceRef": "front/side-view",
+          "confidence": 0.97,
+          "realization": "unreported"
+        },
+        {
+          "id": "gc-detail-08",
+          "kind": "ridge",
+          "description": "Right analog stick mirrors the left with its own socket ring and cap recess.",
+          "region": {
+            "x": 0.61,
+            "y": 0.49,
+            "width": 0.17,
+            "height": 0.14,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "form/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "right-stick-assembly"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.97,
+          "realization": "unreported"
+        },
+        {
+          "id": "gc-detail-09",
+          "kind": "gloss",
+          "description": "Small rose status/home lens centred above the select button.",
+          "region": {
+            "x": 0.54,
+            "y": 0.36,
+            "width": 0.08,
+            "height": 0.07,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "material/interaction",
+          "mapsTo": {
+            "type": "material.localOverrides",
+            "ref": "status-lens-powered-glow"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.92,
+          "realization": "unreported"
+        },
+        {
+          "id": "gc-detail-10",
+          "kind": "bevel",
+          "description": "Small horizontal rounded select button below the status lens.",
+          "region": {
+            "x": 0.55,
+            "y": 0.43,
+            "width": 0.07,
+            "height": 0.04,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "form/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "select-button"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.96,
+          "realization": "unreported"
+        },
+        {
+          "id": "gc-detail-11",
+          "kind": "contour",
+          "description": "Left and right upper bumpers sit proud of the shoulder deck.",
+          "region": {
+            "x": 0.2,
+            "y": 0.27,
+            "width": 0.65,
+            "height": 0.08,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "silhouette/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "bumper-pair"
+          },
+          "evidenceRef": "front/back/side-view",
+          "confidence": 0.95,
+          "realization": "unreported"
+        },
+        {
+          "id": "gc-detail-12",
+          "kind": "contour",
+          "description": "Second pink trigger layer is visible behind and below each bumper.",
+          "region": {
+            "x": 0.2,
+            "y": 0.27,
+            "width": 0.65,
+            "height": 0.1,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "silhouette/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "trigger-pair"
+          },
+          "evidenceRef": "back/side-view",
+          "confidence": 0.93,
+          "realization": "unreported"
+        },
+        {
+          "id": "gc-detail-13",
+          "kind": "linework",
+          "description": "Rounded rectangular rear battery/service cover centred on the back shell.",
+          "region": {
+            "x": 0.36,
+            "y": 0.43,
+            "width": 0.26,
+            "height": 0.13,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "form/AO",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "rear-battery-cover"
+          },
+          "evidenceRef": "back-view",
+          "confidence": 0.97,
+          "realization": "unreported"
+        },
+        {
+          "id": "gc-detail-14",
+          "kind": "fastener",
+          "description": "Four countersunk circular screw heads repeat across the rear lower shell and grip ends.",
+          "region": {
+            "x": 0.02,
+            "y": 0.44,
+            "width": 0.96,
+            "height": 0.24,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "form/material",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "rear-screw-array"
+          },
+          "evidenceRef": "back-view",
+          "confidence": 0.95,
+          "realization": "unreported"
+        },
+        {
+          "id": "gc-detail-15",
+          "kind": "linework",
+          "description": "Pink rounded rear upper-centre inset interrupts the cream shoulder deck.",
+          "region": {
+            "x": 0.42,
+            "y": 0.31,
+            "width": 0.18,
+            "height": 0.07,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "form/material",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "rear-port-cover"
+          },
+          "evidenceRef": "back-view",
+          "confidence": 0.75,
+          "realization": "unreported"
+        },
+        {
+          "id": "gc-detail-16",
+          "kind": "bevel",
+          "description": "Cream analog socket rings carry a narrow catch-light bevel around each pink stick.",
+          "region": {
+            "x": 0.37,
+            "y": 0.48,
+            "width": 0.42,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "form/lighting",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "stick-socket-ring-pair"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.96,
+          "realization": "unreported"
+        },
+        {
+          "id": "gc-detail-17",
+          "kind": "gloss",
+          "description": "Pink button crowns and grip panels have slightly glossier highlights than the cream shell.",
+          "region": {
+            "x": 0.05,
+            "y": 0.34,
+            "width": 0.9,
+            "height": 0.34,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "material",
+          "mapsTo": {
+            "type": "material.localOverrides",
+            "ref": "pink-crown-roughness"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.88,
+          "realization": "unreported"
+        },
+        {
+          "id": "gc-detail-18",
+          "kind": "linework",
+          "description": "Thin dark cavity lines separate buttons, grip panels, battery cover and shell halves.",
+          "region": {
+            "x": 0.04,
+            "y": 0.29,
+            "width": 0.92,
+            "height": 0.39,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "AO/identity",
+          "mapsTo": {
+            "type": "material.localOverrides",
+            "ref": "cavity-seam-darkening"
+          },
+          "evidenceRef": "all-views",
+          "confidence": 0.91,
+          "realization": "unreported"
+        }
+      ]
+    },
+    "anatomy": {
+      "applies": false,
+      "styleHeads": 0,
+      "proportions": {
+        "headUnit": 0,
+        "torso": 0,
+        "legs": 0,
+        "shoulderWidth": 0,
+        "hipWidth": 0
+      },
+      "pose": {
+        "type": "unassessed",
+        "jointAngles": {}
+      },
+      "faceLandmarks": {
+        "eyeLine": 0,
+        "eyeSpacing": 0,
+        "noseBase": 0,
+        "mouthLine": 0,
+        "hairline": 0
+      },
+      "features": [],
+      "confidence": 0,
+      "note": "Only meaningful when objectClass.primaryDomain is character or hybrid. Set applies=true and fill from forge/stage1_intake/extract_landmarks.py. See grimoire/character/reconstruction.md and grimoire/character/likeness_maximization.md."
+    },
+    "sourceImage": "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake\\game-controller\\front.png"
+  },
+  "qualityContract": {
+    "qualityBar": "complex",
+    "definitionOfDone": [
+      "The controller matches the front, side and back silhouette, shell depth, lower notch, handle flare and cream/pink region boundaries.",
+      "D-pad, four face buttons, two analog assemblies, two centre controls, four shoulder controls, rear cover and four screws remain independent named components.",
+      "The 5.2-second powered cue visibly drives both sticks, D-pad, face/shoulder inputs, rose status light and bounded rumble feedback, then stop restores every transform exactly."
+    ],
+    "minimumSpecDepth": {
+      "macroComponents": 5,
+      "mesoComponents": 15,
+      "microFeatureGroups": 10,
+      "materialLayers": 4,
+      "repetitionSystems": 5,
+      "reviewViewpoints": 5
+    },
+    "featureGroups": [
+      {
+        "id": "controller-silhouette",
+        "name": "Controller body and grip silhouette",
+        "required": true,
+        "qualityCriteria": [
+          "Broad cream shoulder deck, deep lower notch, two flared handles and side depth match the turn sheet."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "body reads as a rounded box",
+          "handles are short, parallel or lose the lower palm flare"
+        ]
+      },
+      {
+        "id": "input-layout",
+        "name": "Front input layout and hierarchy",
+        "required": true,
+        "qualityCriteria": [
+          "D-pad, four face buttons, twin analog sticks and centre controls retain their exact asymmetric front layout and independent pivots."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "controls are fused into the shell",
+          "stick spacing or face-button diamond is visibly wrong"
+        ]
+      },
+      {
+        "id": "shoulder-rear-structure",
+        "name": "Shoulder and rear service structure",
+        "required": true,
+        "qualityCriteria": [
+          "Two bumper and two trigger pivots attach to named upper-deck hinge sockets; battery cover and four screws sit flush on the back shell."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "shoulder controls float above the shell",
+          "only one shoulder layer exists",
+          "rear service cover or fasteners are absent"
+        ]
+      },
+      {
+        "id": "sakura-material-zones",
+        "name": "SAKURA cream and pink material zones",
+        "required": true,
+        "qualityCriteria": [
+          "Warm cream satin shell, pink grip zones and control crowns, dark cavity seams and rose status lens remain distinct under neutral and grazing light.",
+          "Button crowns are slightly glossier than the shell while all exterior surfaces remain dielectric."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "grip boundary is painted flat without a raised/separate panel",
+          "cream and pink values collapse under the review lighting"
+        ]
+      },
+      {
+        "id": "powered-controller-action",
+        "name": "Purpose-readable powered input animation",
+        "required": true,
+        "qualityCriteria": [
+          "Both sticks trace visible input paths, D-pad and face/shoulder controls press in sequence, the status lens glows and small high-frequency rumble remains subordinate to control motion.",
+          "stop restores root, pivots, materials and indicator state exactly."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "animation is only a whole-object wobble",
+          "one or both stick inputs remain static",
+          "stop leaves a pressed control or rumble offset"
+        ]
+      }
+    ],
+    "visualDeltaChecks": [
+      "body width/height/depth and lower-notch delta",
+      "grip flare and diagonal colour-boundary delta",
+      "D-pad, face-button diamond and dual-stick layout delta",
+      "two-layer shoulder and rear service detail delta",
+      "cream/pink/cavity/status material response delta",
+      "powered control-travel and exact-reset delta"
+    ],
+    "antiShallowSpecRules": [
+      "Do not proceed to code if qualityContract.qualityBar is unassessed.",
+      "Do not proceed to code if the spec only contains a root component for a moderate or complex object.",
+      "Do not proceed to code if required featureGroups are not represented by componentTree, materials, or repetitionSystems.",
+      "Do not proceed to code if visible local features are described only in prose and not attached to components/materials/evidenceRefs.",
+      "Do not proceed past structural-pass if attached child parts lack attachment.parentSocket, localStart, localEnd, embedDepth/overlap, and gapTolerance.",
+      "Do not pass material look-dev when albedo is reused as roughness, height, normal, or AO.",
+      "Do not pass material look-dev without macro, meso, and micro surface frequency bands for close-up materials.",
+      "Do not pass reference-fidelity material look-dev from a source image without usable referencePbr maps or an explicit documented limitation.",
+      "Do not patch a spec with extracted PBR maps when extraction confidence is below the target threshold unless the user explicitly accepts lower fidelity.",
+      "Do not place adjacent separate-geometry parts below 0.02 world-unit seam overlap (source: grimoire/build/geometry_patterns.md).",
+      "Do not satisfy raised or recessed relief, fasteners, or grip structure with a map alone when the feature affects form; use geometry or displacement (source: grimoire/build/geometry_patterns.md).",
+      "Adjacent components must overlap by at least 0.02 world units at shared seams (source: grimoire/build/geometry_patterns.md).",
+      "Raised or recessed relief and fasteners must be geometry, instanced micro-parts, or displacement; a map alone is an approximation (source: grimoire/build/geometry_patterns.md)."
+    ],
+    "mustNotDo": [
+      "Do not proceed to code if qualityContract.qualityBar is unassessed.",
+      "Do not proceed to code if the spec only contains a root component for a moderate or complex object.",
+      "Do not proceed to code if required featureGroups are not represented by componentTree, materials, or repetitionSystems.",
+      "Do not proceed to code if visible local features are described only in prose and not attached to components/materials/evidenceRefs.",
+      "Do not proceed past structural-pass if attached child parts lack attachment.parentSocket, localStart, localEnd, embedDepth/overlap, and gapTolerance.",
+      "Do not pass material look-dev when albedo is reused as roughness, height, normal, or AO.",
+      "Do not pass material look-dev without macro, meso, and micro surface frequency bands for close-up materials.",
+      "Do not pass reference-fidelity material look-dev from a source image without usable referencePbr maps or an explicit documented limitation.",
+      "Do not patch a spec with extracted PBR maps when extraction confidence is below the target threshold unless the user explicitly accepts lower fidelity.",
+      "Do not place adjacent separate-geometry parts below 0.02 world-unit seam overlap (source: grimoire/build/geometry_patterns.md).",
+      "Do not satisfy raised or recessed relief, fasteners, or grip structure with a map alone when the feature affects form; use geometry or displacement (source: grimoire/build/geometry_patterns.md).",
+      "Adjacent components must overlap by at least 0.02 world units at shared seams (source: grimoire/build/geometry_patterns.md).",
+      "Raised or recessed relief and fasteners must be geometry, instanced micro-parts, or displacement; a map alone is an approximation (source: grimoire/build/geometry_patterns.md)."
+    ]
+  },
+  "qualityTargets": {
+    "targetFidelity": 0.7,
+    "mustMatch": [
+      "macro silhouette and proportions",
+      "primary material albedo/roughness response",
+      "reference-derived PBR material response at or above 0.7 confidence when source pixels are usable",
+      "most recognizable local features"
+    ],
+    "niceToHave": [
+      "micro scratches, stains, chips, and dirt masks",
+      "secondary lighting match"
+    ],
+    "fpsTarget": 60,
+    "reviewViewpoints": [
+      "front",
+      "three-quarter",
+      "side",
+      "thickness-axis",
+      "long-axis"
+    ]
+  },
+  "selfCorrectLoop": {
+    "enabled": true,
+    "visualAcceptance": {
+      "reviewer": "ai-vision",
+      "threshold": 0.7,
+      "comparisonArtifactRequired": true,
+      "layerScoresRequired": true,
+      "codePixelDiffIsAcceptanceAuthority": false,
+      "scoringRule": "AI vision must inspect a side-by-side reference/render sheet and score the current pass from 0 to 1. Pixel-diff code may assist diagnostics but cannot approve a pass.",
+      "requiredLayerScores": [
+        "silhouetteProportion",
+        "componentStructure",
+        "formDetail",
+        "materialSurface",
+        "lightingCamera"
+      ],
+      "featureReviewPolicy": {
+        "enabled": true,
+        "reviewUnit": "semantic-subsystem",
+        "maxCriticalFeaturesPerPass": 5,
+        "maxImportantFeaturesPerPass": 3,
+        "criticalDefaultThreshold": 0.8,
+        "importantAverageThreshold": 0.65,
+        "adaptiveEscalation": true,
+        "singleImagePairOnly": true,
+        "selectionRule": "Choose only the most visually salient, identity-defining, user-prioritized, or high-risk semantic systems. Group repeated parts instead of reviewing every mesh. AI vision scores every selected feature from the same full reference/render pair."
+      }
+    },
+    "reviewAfterPasses": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "allowedActions": [
+      "continue",
+      "refine-spec",
+      "refine-code",
+      "request-input",
+      "stop"
+    ],
+    "specRefineTriggers": [
+      "missing component",
+      "wrong primitive family",
+      "wrong proportions",
+      "material layer under-specified",
+      "local feature not traceable to viewEvidence",
+      "reference ambiguity discovered during implementation"
+    ],
+    "codeRefineTriggers": [
+      "spec is adequate but generated geometry/material does not match",
+      "browser render differs from reference",
+      "performance budget exceeded",
+      "lighting hides geometry or material response"
+    ],
+    "stopCriteria": [
+      "target fidelity reached or user accepts current approximation",
+      "remaining gaps require new reference images or manual art"
+    ],
+    "screenshotPolicy": {
+      "requiredForPasses": [
+        "blockout",
+        "structural-pass",
+        "form-refinement",
+        "material-pass",
+        "lighting-pass",
+        "interaction-pass"
+      ],
+      "preferredCapture": "in-app-browser-screenshot",
+      "fallbackCapture": "user-supplied-screenshot-path",
+      "minimumEvidence": "Each visual pass needs a reference image, rendered screenshot, side-by-side comparison sheet, AI vision score, layer scores, and critique before choosing continue.",
+      "reviewPairRule": "Compare the same camera/viewpoint whenever possible; do not judge a front reference against a random render angle.",
+      "acceptanceAuthority": "AI vision review of the comparison sheet. Code-generated pixel similarity is not sufficient evidence."
+    }
+  },
+  "featureReviewTargets": [
+    {
+      "id": "controller-silhouette",
+      "name": "Broad body, notch and flared grips",
+      "tier": "critical",
+      "passIds": [
+        "blockout",
+        "form-refinement"
+      ],
+      "minimumScore": 0.8,
+      "mustPass": true,
+      "componentRefs": [
+        "front-shell",
+        "rear-shell",
+        "grip-shell-pair"
+      ],
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ]
+    },
+    {
+      "id": "front-input-layout",
+      "name": "D-pad, face diamond, dual sticks and centre controls",
+      "tier": "critical",
+      "passIds": [
+        "structural-pass",
+        "form-refinement",
+        "interaction-pass"
+      ],
+      "minimumScore": 0.8,
+      "mustPass": true,
+      "componentRefs": [
+        "dpad-cross",
+        "face-button-array",
+        "left-stick-assembly",
+        "right-stick-assembly",
+        "home-button",
+        "select-button"
+      ],
+      "evidenceRefs": [
+        "front-view"
+      ]
+    },
+    {
+      "id": "shoulder-rear-system",
+      "name": "Two-layer shoulders and rear service",
+      "tier": "critical",
+      "passIds": [
+        "structural-pass",
+        "form-refinement"
+      ],
+      "minimumScore": 0.78,
+      "mustPass": true,
+      "componentRefs": [
+        "bumper-pair",
+        "trigger-pair",
+        "rear-battery-cover",
+        "rear-screw-array",
+        "rear-port-cover"
+      ],
+      "evidenceRefs": [
+        "side-view",
+        "back-view"
+      ]
+    },
+    {
+      "id": "sakura-material-system",
+      "name": "Cream pink cavity and status separation",
+      "tier": "critical",
+      "passIds": [
+        "material-pass",
+        "lighting-pass"
+      ],
+      "minimumScore": 0.75,
+      "mustPass": true,
+      "componentRefs": [
+        "front-shell",
+        "pink-grip-panel-pair",
+        "status-lens"
+      ],
+      "evidenceRefs": [
+        "front-view",
+        "back-view"
+      ]
+    },
+    {
+      "id": "purpose-animation",
+      "name": "Visible multi-input action and exact reset",
+      "tier": "critical",
+      "passIds": [
+        "interaction-pass"
+      ],
+      "minimumScore": 0.82,
+      "mustPass": true,
+      "componentRefs": [
+        "left-stick-assembly",
+        "right-stick-assembly",
+        "dpad-cross",
+        "face-button-array",
+        "bumper-pair",
+        "trigger-pair",
+        "status-lens"
+      ],
+      "evidenceRefs": [
+        "front-view"
+      ]
+    }
+  ],
+  "sculptPipeline": {
+    "passGateMode": "locked-sequential",
+    "passOrder": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "currentPass": "complete",
+    "completedPasses": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "lastCompletedPass": "optimization-pass",
+    "blockedReason": "all build passes completed",
+    "nextRequiredEvidence": []
+  },
+  "lookDevTargets": {
+    "qualityPriority": "reference-fidelity",
+    "materialPass": {
+      "albedoPaletteRequired": true,
+      "roughnessVariationRequired": true,
+      "normalOrBumpRequired": true,
+      "localOverridesRequired": true,
+      "minimumTextureResolution": 1024,
+      "preferredTextureResolution": 2048,
+      "independentMapChannels": [
+        "albedo",
+        "roughness",
+        "height",
+        "normal",
+        "ambient-occlusion"
+      ],
+      "requiredSurfaceFrequencyBands": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "geometryReliefRequiredWhenSilhouetteAffected": true,
+      "referencePbrExtraction": {
+        "requiredWhenSourceImagePresent": true,
+        "targetThreshold": 0.7,
+        "stopOnLowConfidence": true,
+        "script": "forge/stage1_intake/extract_pbr_evidence.py",
+        "acceptedLimitation": "single-image extraction is reference-derived inference, not exact photogrammetry"
+      },
+      "mustAvoid": [
+        "single flat albedo per material",
+        "uniform roughness",
+        "albedo texture reused as roughness/height/normal/AO",
+        "single-frequency random noise",
+        "plastic-looking smooth bark, stone, cloth, foliage, or aged material",
+        "local color/detail described only in prose without material masks",
+        "claiming exact PBR recovery when confidence is below the target threshold"
+      ]
+    },
+    "lightingPass": {
+      "requiredTerms": [
+        "key light",
+        "fill light",
+        "rim or environment light",
+        "exposure",
+        "tone mapping",
+        "background",
+        "contact shadow"
+      ],
+      "mustAvoid": [
+        "ambient-only lighting",
+        "flat value range",
+        "missing contact shadow",
+        "reference lighting copied without separating material readability"
+      ]
+    },
+    "screenshotReview": [
+      "Compare albedo palette and local color zones.",
+      "Compare roughness/normal/bump response under light.",
+      "Compare cavity dirt, edge wear, stains, moss, scratches, or other local masks.",
+      "Compare key/fill/rim structure, exposure, tone mapping, background, and contact shadows.",
+      "Capture a neutral-light render to verify material readability without reference lighting.",
+      "Capture a grazing-light close-up to expose flat normals, uniform roughness, tiling, and plastic highlights.",
+      "Capture a reference-matched render from the same camera framing as the source."
+    ]
+  },
+  "actionReadiness": {
+    "contract": "Every macro/meso component should be generated as a stable named Object3D pivot node with a mesh child, action metadata, optional sockets, collider proxy, and destruction metadata.",
+    "defaultRigType": "action-ready-static-rig",
+    "rootMotionNode": "root",
+    "requiredComponentFields": [
+      "id",
+      "parent",
+      "transform",
+      "attachment for child appendages, connectors, limbs, tubes, handles, legs, horns, wings, branches, or cables",
+      "actionProfile.animationRole",
+      "actionProfile.pivot",
+      "actionProfile.collider",
+      "actionProfile.destruction"
+    ],
+    "transformChannels": [
+      "translate",
+      "rotate",
+      "scale",
+      "bend",
+      "twist",
+      "detach",
+      "visibility",
+      "material-state"
+    ],
+    "authoringRules": [
+      "Do not collapse independently movable parts into one mesh.",
+      "Put transforms on component pivot groups, not only on raw meshes.",
+      "For attached child parts, put the pivot at the semantic root/socket and build visible geometry from localStart to localEnd.",
+      "Represent hinge, socket, detachable, and breakable intent even when no animation is implemented yet.",
+      "Use simplified collider proxies for runtime physics instead of visual mesh colliders by default."
+    ],
+    "destructionPolicy": {
+      "defaultBreakable": false,
+      "fractureGroupNaming": "Use stable semantic names such as body-shell, left-hinge, glass-panel, branch-segment.",
+      "debrisStrategy": "Prefer detachable component groups and a small number of procedural fragments over random mesh explosion."
+    }
+  },
+  "assumptions": [
+    "Hidden PCB, rumble motors, stick gimbals, membranes, trigger springs and battery contacts are omitted.",
+    "Rear upper-centre inset exterior is observed but its connector function and cavity depth are inferred.",
+    "Battery latch and exact screw drive pattern are not resolved."
+  ],
+  "coordinateFrame": {
+    "front": "+Z control face",
+    "up": "+Y",
+    "right": "+X",
+    "scaleReference": "overall width 4.8 world units"
+  },
+  "silhouette": {
+    "boundingShape": "wide shallow winged shell with two downward flared handles and a deep lower notch",
+    "aspectRatios": [
+      "front width:height 1.55",
+      "depth:width 0.27"
+    ],
+    "symmetry": "bilateral shell; intentionally asymmetric control layout",
+    "dominantCurves": [
+      "arched deck",
+      "convex handle outers",
+      "concave lower notch",
+      "diagonal grip seams"
+    ],
+    "negativeSpaces": [
+      "lower hand clearance"
+    ],
+    "landmarks": [
+      "D-pad",
+      "face diamond",
+      "dual sticks",
+      "two shoulder layers"
+    ]
+  },
+  "viewEvidence": [
+    {
+      "id": "front-view",
+      "view": "front",
+      "imageRegion": {
+        "x": 0,
+        "y": 0.26,
+        "width": 1,
+        "height": 0.44,
+        "units": "normalized"
+      },
+      "observations": [
+        "cream shell",
+        "pink grips",
+        "D-pad",
+        "face buttons",
+        "dual sticks",
+        "centre controls"
+      ],
+      "confidence": 0.94
+    },
+    {
+      "id": "side-view",
+      "view": "side",
+      "imageRegion": {
+        "x": 0.23,
+        "y": 0.28,
+        "width": 0.55,
+        "height": 0.44,
+        "units": "normalized"
+      },
+      "observations": [
+        "shell depth",
+        "control projection",
+        "handle taper",
+        "shoulder layers"
+      ],
+      "confidence": 0.88
+    },
+    {
+      "id": "back-view",
+      "view": "back",
+      "imageRegion": {
+        "x": 0,
+        "y": 0.27,
+        "width": 1,
+        "height": 0.44,
+        "units": "normalized"
+      },
+      "observations": [
+        "rear shell",
+        "service cover",
+        "four screws",
+        "rear inset",
+        "shoulders"
+      ],
+      "confidence": 0.96
+    }
+  ],
+  "componentTree": [
+    {
+      "id": "root",
+      "name": "Controller Runtime Root",
+      "level": "macro",
+      "role": "container",
+      "importance": 1,
+      "confidence": 0.9,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Independent rigid molded component with visible seam or movable interface.",
+      "parent": null,
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "localFeatures": [
+        "root-runtime"
+      ],
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 0.9
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(246,237,220,1)",
+        "secondaryAlbedo": "rgba(255,248,235,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "root-runtime",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "attachment": null
+    },
+    {
+      "id": "front-shell",
+      "name": "Cream Front Shell",
+      "level": "macro",
+      "role": "part",
+      "importance": 1,
+      "confidence": 0.9,
+      "primitive": "extrude",
+      "topologyClass": "conforming-shell",
+      "topologyRationale": "Beveled extruded profile preserves the observed ergonomic contour and real depth.",
+      "parent": "root",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "localFeatures": [
+        "front-shell"
+      ],
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 0.9
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(246,237,220,1)",
+        "secondaryAlbedo": "rgba(255,248,235,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view"
+      ],
+      "details": [
+        {
+          "id": "front-shell",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "attachment": {
+        "parentSocket": "root-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.03
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "front-view",
+          "side-view"
+        ]
+      }
+    },
+    {
+      "id": "rear-shell",
+      "name": "Cream Rear Shell",
+      "level": "macro",
+      "role": "part",
+      "importance": 1,
+      "confidence": 0.9,
+      "primitive": "extrude",
+      "topologyClass": "conforming-shell",
+      "topologyRationale": "Beveled extruded profile preserves the observed ergonomic contour and real depth.",
+      "parent": "root",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "localFeatures": [
+        "rear-shell"
+      ],
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 0.9
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(246,237,220,1)",
+        "secondaryAlbedo": "rgba(255,248,235,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      },
+      "evidenceRefs": [
+        "back-view",
+        "side-view"
+      ],
+      "details": [
+        {
+          "id": "rear-shell",
+          "kind": "contour",
+          "evidenceRefs": [
+            "back-view",
+            "side-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "attachment": {
+        "parentSocket": "root-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.03
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "back-view",
+          "side-view"
+        ]
+      }
+    },
+    {
+      "id": "grip-shell-pair",
+      "name": "Paired Ergonomic Handles",
+      "level": "macro",
+      "role": "part",
+      "importance": 1,
+      "confidence": 0.9,
+      "primitive": "extrude",
+      "topologyClass": "conforming-shell",
+      "topologyRationale": "Beveled extruded profile preserves the observed ergonomic contour and real depth.",
+      "parent": "root",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "localFeatures": [
+        "grip-shell-pair"
+      ],
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 0.9
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(246,237,220,1)",
+        "secondaryAlbedo": "rgba(255,248,235,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      },
+      "evidenceRefs": [
+        "front-view",
+        "back-view",
+        "side-view"
+      ],
+      "details": [
+        {
+          "id": "grip-shell-pair",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "back-view",
+            "side-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "attachment": {
+        "parentSocket": "root-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.03
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "front-view",
+          "back-view",
+          "side-view"
+        ]
+      }
+    },
+    {
+      "id": "shoulder-deck",
+      "name": "Upper Shoulder Deck",
+      "level": "macro",
+      "role": "part",
+      "importance": 1,
+      "confidence": 0.9,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Independent rigid molded component with visible seam or movable interface.",
+      "parent": "root",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "localFeatures": [
+        "shoulder-deck"
+      ],
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 0.9
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(246,237,220,1)",
+        "secondaryAlbedo": "rgba(255,248,235,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      },
+      "evidenceRefs": [
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "shoulder-deck",
+          "kind": "contour",
+          "evidenceRefs": [
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "attachment": {
+        "parentSocket": "root-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.03
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "side-view",
+          "back-view"
+        ]
+      }
+    },
+    {
+      "id": "pink-grip-panel-pair",
+      "name": "Pink Grip Overlays",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.85,
+      "confidence": 0.9,
+      "primitive": "extrude",
+      "topologyClass": "conforming-shell",
+      "topologyRationale": "Beveled extruded profile preserves the observed ergonomic contour and real depth.",
+      "parent": "grip-shell-pair",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-plastic",
+      "materialLayers": [
+        "pink-plastic"
+      ],
+      "localFeatures": [
+        "pink-grip-panel-pair"
+      ],
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 0.9
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(239,177,178,1)",
+        "secondaryAlbedo": "rgba(255,209,203,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      },
+      "evidenceRefs": [
+        "front-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "pink-grip-panel-pair",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "back-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "attachment": {
+        "parentSocket": "grip-shell-pair-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.03
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "front-view",
+          "back-view"
+        ]
+      }
+    },
+    {
+      "id": "dpad-cross",
+      "name": "Rounded Cross D-pad",
+      "level": "meso",
+      "role": "control",
+      "importance": 0.85,
+      "confidence": 0.9,
+      "primitive": "extrude",
+      "topologyClass": "conforming-shell",
+      "topologyRationale": "Beveled extruded profile preserves the observed ergonomic contour and real depth.",
+      "parent": "front-shell",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-plastic",
+      "materialLayers": [
+        "pink-plastic"
+      ],
+      "localFeatures": [
+        "dpad-cross"
+      ],
+      "actionProfile": {
+        "animationRole": "articulated-control",
+        "pivot": {
+          "mode": "custom",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 0.9
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(239,177,178,1)",
+        "secondaryAlbedo": "rgba(255,209,203,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      },
+      "evidenceRefs": [
+        "front-view"
+      ],
+      "details": [
+        {
+          "id": "dpad-cross",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "attachment": {
+        "parentSocket": "front-shell-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.03
+        ],
+        "contactType": "socket",
+        "overlap": 0.03,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "front-view"
+        ]
+      }
+    },
+    {
+      "id": "face-button-array",
+      "name": "Four Face Button Diamond",
+      "level": "meso",
+      "role": "control",
+      "importance": 0.85,
+      "confidence": 0.9,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Independent rigid molded component with visible seam or movable interface.",
+      "parent": "front-shell",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-plastic",
+      "materialLayers": [
+        "pink-plastic"
+      ],
+      "localFeatures": [
+        "face-button-array"
+      ],
+      "actionProfile": {
+        "animationRole": "articulated-control",
+        "pivot": {
+          "mode": "custom",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 0.9
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(239,177,178,1)",
+        "secondaryAlbedo": "rgba(255,209,203,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      },
+      "evidenceRefs": [
+        "front-view"
+      ],
+      "details": [
+        {
+          "id": "face-button-array",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "attachment": {
+        "parentSocket": "front-shell-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.03
+        ],
+        "contactType": "socket",
+        "overlap": 0.03,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "front-view"
+        ]
+      }
+    },
+    {
+      "id": "left-stick-assembly",
+      "name": "Left Analog Stick",
+      "level": "meso",
+      "role": "control",
+      "importance": 0.85,
+      "confidence": 0.9,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Independent rigid molded component with visible seam or movable interface.",
+      "parent": "front-shell",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-plastic",
+      "materialLayers": [
+        "pink-plastic"
+      ],
+      "localFeatures": [
+        "left-stick-assembly"
+      ],
+      "actionProfile": {
+        "animationRole": "articulated-control",
+        "pivot": {
+          "mode": "custom",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 0.9
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(239,177,178,1)",
+        "secondaryAlbedo": "rgba(255,209,203,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view"
+      ],
+      "details": [
+        {
+          "id": "left-stick-assembly",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "attachment": {
+        "parentSocket": "front-shell-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.03
+        ],
+        "contactType": "socket",
+        "overlap": 0.03,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "front-view",
+          "side-view"
+        ]
+      }
+    },
+    {
+      "id": "right-stick-assembly",
+      "name": "Right Analog Stick",
+      "level": "meso",
+      "role": "control",
+      "importance": 0.85,
+      "confidence": 0.9,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Independent rigid molded component with visible seam or movable interface.",
+      "parent": "front-shell",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-plastic",
+      "materialLayers": [
+        "pink-plastic"
+      ],
+      "localFeatures": [
+        "right-stick-assembly"
+      ],
+      "actionProfile": {
+        "animationRole": "articulated-control",
+        "pivot": {
+          "mode": "custom",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 0.9
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(239,177,178,1)",
+        "secondaryAlbedo": "rgba(255,209,203,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      },
+      "evidenceRefs": [
+        "front-view"
+      ],
+      "details": [
+        {
+          "id": "right-stick-assembly",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "attachment": {
+        "parentSocket": "front-shell-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.03
+        ],
+        "contactType": "socket",
+        "overlap": 0.03,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "front-view"
+        ]
+      }
+    },
+    {
+      "id": "home-button",
+      "name": "Central Home Button",
+      "level": "meso",
+      "role": "control",
+      "importance": 0.85,
+      "confidence": 0.9,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Independent rigid molded component with visible seam or movable interface.",
+      "parent": "front-shell",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-plastic",
+      "materialLayers": [
+        "pink-plastic"
+      ],
+      "localFeatures": [
+        "home-button"
+      ],
+      "actionProfile": {
+        "animationRole": "articulated-control",
+        "pivot": {
+          "mode": "custom",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 0.9
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(239,177,178,1)",
+        "secondaryAlbedo": "rgba(255,209,203,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      },
+      "evidenceRefs": [
+        "front-view"
+      ],
+      "details": [
+        {
+          "id": "home-button",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "attachment": {
+        "parentSocket": "front-shell-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.03
+        ],
+        "contactType": "socket",
+        "overlap": 0.03,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "front-view"
+        ]
+      }
+    },
+    {
+      "id": "select-button",
+      "name": "Central Select Button",
+      "level": "meso",
+      "role": "control",
+      "importance": 0.85,
+      "confidence": 0.9,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Independent rigid molded component with visible seam or movable interface.",
+      "parent": "front-shell",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-plastic",
+      "materialLayers": [
+        "pink-plastic"
+      ],
+      "localFeatures": [
+        "select-button"
+      ],
+      "actionProfile": {
+        "animationRole": "articulated-control",
+        "pivot": {
+          "mode": "custom",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 0.9
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(239,177,178,1)",
+        "secondaryAlbedo": "rgba(255,209,203,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      },
+      "evidenceRefs": [
+        "front-view"
+      ],
+      "details": [
+        {
+          "id": "select-button",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "attachment": {
+        "parentSocket": "front-shell-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.03
+        ],
+        "contactType": "socket",
+        "overlap": 0.03,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "front-view"
+        ]
+      }
+    },
+    {
+      "id": "bumper-pair",
+      "name": "Shoulder Bumper Pair",
+      "level": "meso",
+      "role": "control",
+      "importance": 0.85,
+      "confidence": 0.9,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Independent rigid molded component with visible seam or movable interface.",
+      "parent": "shoulder-deck",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-plastic",
+      "materialLayers": [
+        "pink-plastic"
+      ],
+      "localFeatures": [
+        "bumper-pair"
+      ],
+      "actionProfile": {
+        "animationRole": "articulated-control",
+        "pivot": {
+          "mode": "custom",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 0.9
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(239,177,178,1)",
+        "secondaryAlbedo": "rgba(255,209,203,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "bumper-pair",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "attachment": {
+        "parentSocket": "shoulder-deck-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.03
+        ],
+        "contactType": "socket",
+        "overlap": 0.03,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "front-view",
+          "side-view",
+          "back-view"
+        ]
+      }
+    },
+    {
+      "id": "trigger-pair",
+      "name": "Rear Trigger Pair",
+      "level": "meso",
+      "role": "control",
+      "importance": 0.85,
+      "confidence": 0.9,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Independent rigid molded component with visible seam or movable interface.",
+      "parent": "shoulder-deck",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-plastic",
+      "materialLayers": [
+        "pink-plastic"
+      ],
+      "localFeatures": [
+        "trigger-pair"
+      ],
+      "actionProfile": {
+        "animationRole": "articulated-control",
+        "pivot": {
+          "mode": "custom",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 0.9
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(239,177,178,1)",
+        "secondaryAlbedo": "rgba(255,209,203,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      },
+      "evidenceRefs": [
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "trigger-pair",
+          "kind": "contour",
+          "evidenceRefs": [
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "attachment": {
+        "parentSocket": "shoulder-deck-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.03
+        ],
+        "contactType": "socket",
+        "overlap": 0.03,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "side-view",
+          "back-view"
+        ]
+      }
+    },
+    {
+      "id": "rear-battery-cover",
+      "name": "Battery Service Cover",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.85,
+      "confidence": 0.9,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Independent rigid molded component with visible seam or movable interface.",
+      "parent": "rear-shell",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "localFeatures": [
+        "rear-battery-cover"
+      ],
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 0.9
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(246,237,220,1)",
+        "secondaryAlbedo": "rgba(255,248,235,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      },
+      "evidenceRefs": [
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "rear-battery-cover",
+          "kind": "contour",
+          "evidenceRefs": [
+            "back-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "attachment": {
+        "parentSocket": "rear-shell-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.03
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "back-view"
+        ]
+      }
+    },
+    {
+      "id": "rear-port-cover",
+      "name": "Rear Centre Inset",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.85,
+      "confidence": 0.9,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Independent rigid molded component with visible seam or movable interface.",
+      "parent": "rear-shell",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-plastic",
+      "materialLayers": [
+        "pink-plastic"
+      ],
+      "localFeatures": [
+        "rear-port-cover"
+      ],
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 0.9
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(239,177,178,1)",
+        "secondaryAlbedo": "rgba(255,209,203,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      },
+      "evidenceRefs": [
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "rear-port-cover",
+          "kind": "contour",
+          "evidenceRefs": [
+            "back-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "attachment": {
+        "parentSocket": "rear-shell-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.03
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "back-view"
+        ]
+      }
+    },
+    {
+      "id": "perimeter-shell-seam",
+      "name": "Perimeter Shell Seam",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.85,
+      "confidence": 0.9,
+      "primitive": "curve-sweep",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Independent rigid molded component with visible seam or movable interface.",
+      "parent": "root",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "cavity-dark",
+      "materialLayers": [
+        "cavity-dark"
+      ],
+      "localFeatures": [
+        "perimeter-shell-seam"
+      ],
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 0.9
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(105,80,90,1)",
+        "secondaryAlbedo": "rgba(255,209,203,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      },
+      "evidenceRefs": [
+        "side-view",
+        "front-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "perimeter-shell-seam",
+          "kind": "linework",
+          "evidenceRefs": [
+            "side-view",
+            "front-view",
+            "back-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "attachment": {
+        "parentSocket": "root-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.03
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "side-view",
+          "front-view",
+          "back-view"
+        ]
+      }
+    },
+    {
+      "id": "stick-socket-ring-pair",
+      "name": "Twin Stick Socket Rings",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.85,
+      "confidence": 0.9,
+      "primitive": "torus",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Independent rigid molded component with visible seam or movable interface.",
+      "parent": "front-shell",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "localFeatures": [
+        "stick-socket-ring-pair"
+      ],
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 0.9
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(246,237,220,1)",
+        "secondaryAlbedo": "rgba(255,248,235,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      },
+      "evidenceRefs": [
+        "front-view"
+      ],
+      "details": [
+        {
+          "id": "stick-socket-ring-pair",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "attachment": {
+        "parentSocket": "front-shell-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.03
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "front-view"
+        ]
+      }
+    },
+    {
+      "id": "rear-screw-array",
+      "name": "Four Rear Screws",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.85,
+      "confidence": 0.9,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Independent rigid molded component with visible seam or movable interface.",
+      "parent": "rear-shell",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "fastener-metal",
+      "materialLayers": [
+        "fastener-metal"
+      ],
+      "localFeatures": [
+        "rear-screw-array"
+      ],
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 0.9
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(105,80,90,1)",
+        "secondaryAlbedo": "rgba(255,209,203,1)",
+        "materialClass": "metal",
+        "materialClassConfidence": 0.94
+      },
+      "evidenceRefs": [
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "rear-screw-array",
+          "kind": "fastener",
+          "evidenceRefs": [
+            "back-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "attachment": {
+        "parentSocket": "rear-shell-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.03
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "back-view"
+        ]
+      }
+    },
+    {
+      "id": "status-lens",
+      "name": "Powered Status Lens",
+      "level": "meso",
+      "role": "control",
+      "importance": 0.85,
+      "confidence": 0.9,
+      "primitive": "sphere",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Independent rigid molded component with visible seam or movable interface.",
+      "parent": "front-shell",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "status-lens",
+      "materialLayers": [
+        "status-lens"
+      ],
+      "localFeatures": [
+        "status-lens"
+      ],
+      "actionProfile": {
+        "animationRole": "articulated-control",
+        "pivot": {
+          "mode": "custom",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 0.9
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(105,80,90,1)",
+        "secondaryAlbedo": "rgba(255,209,203,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      },
+      "evidenceRefs": [
+        "front-view"
+      ],
+      "details": [
+        {
+          "id": "status-lens",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "attachment": {
+        "parentSocket": "front-shell-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.03
+        ],
+        "contactType": "socket",
+        "overlap": 0.03,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "front-view"
+        ]
+      }
+    },
+    {
+      "id": "left-stick-cap-inset",
+      "name": "Left Stick Cap Recess",
+      "level": "micro",
+      "role": "part",
+      "importance": 0.65,
+      "confidence": 0.9,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Independent rigid molded component with visible seam or movable interface.",
+      "parent": "left-stick-assembly",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-plastic",
+      "materialLayers": [
+        "pink-plastic"
+      ],
+      "localFeatures": [
+        "left-stick-cap-inset"
+      ],
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 0.9
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(239,177,178,1)",
+        "secondaryAlbedo": "rgba(255,209,203,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      },
+      "evidenceRefs": [
+        "front-view"
+      ],
+      "details": [
+        {
+          "id": "left-stick-cap-inset",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "attachment": {
+        "parentSocket": "left-stick-assembly-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.03
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "front-view"
+        ]
+      }
+    },
+    {
+      "id": "right-stick-cap-inset",
+      "name": "Right Stick Cap Recess",
+      "level": "micro",
+      "role": "part",
+      "importance": 0.65,
+      "confidence": 0.9,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Independent rigid molded component with visible seam or movable interface.",
+      "parent": "right-stick-assembly",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-plastic",
+      "materialLayers": [
+        "pink-plastic"
+      ],
+      "localFeatures": [
+        "right-stick-cap-inset"
+      ],
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 0.9
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(239,177,178,1)",
+        "secondaryAlbedo": "rgba(255,209,203,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      },
+      "evidenceRefs": [
+        "front-view"
+      ],
+      "details": [
+        {
+          "id": "right-stick-cap-inset",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "attachment": {
+        "parentSocket": "right-stick-assembly-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.03
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "front-view"
+        ]
+      }
+    },
+    {
+      "id": "dpad-cavity-rim",
+      "name": "D-pad Cavity Rim",
+      "level": "micro",
+      "role": "part",
+      "importance": 0.65,
+      "confidence": 0.9,
+      "primitive": "extrude",
+      "topologyClass": "conforming-shell",
+      "topologyRationale": "Beveled extruded profile preserves the observed ergonomic contour and real depth.",
+      "parent": "dpad-cross",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "cavity-dark",
+      "materialLayers": [
+        "cavity-dark"
+      ],
+      "localFeatures": [
+        "dpad-cavity-rim"
+      ],
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 0.9
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(105,80,90,1)",
+        "secondaryAlbedo": "rgba(255,209,203,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      },
+      "evidenceRefs": [
+        "front-view"
+      ],
+      "details": [
+        {
+          "id": "dpad-cavity-rim",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "attachment": {
+        "parentSocket": "dpad-cross-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.03
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "front-view"
+        ]
+      }
+    },
+    {
+      "id": "face-button-crown-insets",
+      "name": "Button Crown Insets",
+      "level": "micro",
+      "role": "part",
+      "importance": 0.65,
+      "confidence": 0.9,
+      "primitive": "torus",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Independent rigid molded component with visible seam or movable interface.",
+      "parent": "face-button-array",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-plastic",
+      "materialLayers": [
+        "pink-plastic"
+      ],
+      "localFeatures": [
+        "face-button-crown-insets"
+      ],
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 0.9
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(239,177,178,1)",
+        "secondaryAlbedo": "rgba(255,209,203,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      },
+      "evidenceRefs": [
+        "front-view"
+      ],
+      "details": [
+        {
+          "id": "face-button-crown-insets",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "attachment": {
+        "parentSocket": "face-button-array-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.03
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "front-view"
+        ]
+      }
+    },
+    {
+      "id": "battery-cover-seam",
+      "name": "Battery Cover Seam",
+      "level": "micro",
+      "role": "part",
+      "importance": 0.65,
+      "confidence": 0.9,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Independent rigid molded component with visible seam or movable interface.",
+      "parent": "rear-battery-cover",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "cavity-dark",
+      "materialLayers": [
+        "cavity-dark"
+      ],
+      "localFeatures": [
+        "battery-cover-seam"
+      ],
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 0.9
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(105,80,90,1)",
+        "secondaryAlbedo": "rgba(255,209,203,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      },
+      "evidenceRefs": [
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "battery-cover-seam",
+          "kind": "linework",
+          "evidenceRefs": [
+            "back-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "attachment": {
+        "parentSocket": "rear-battery-cover-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.03
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "back-view"
+        ]
+      }
+    },
+    {
+      "id": "rear-port-cavity",
+      "name": "Rear Inset Cavity",
+      "level": "micro",
+      "role": "part",
+      "importance": 0.65,
+      "confidence": 0.9,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Independent rigid molded component with visible seam or movable interface.",
+      "parent": "rear-port-cover",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "cavity-dark",
+      "materialLayers": [
+        "cavity-dark"
+      ],
+      "localFeatures": [
+        "rear-port-cavity"
+      ],
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 0.9
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(105,80,90,1)",
+        "secondaryAlbedo": "rgba(255,209,203,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      },
+      "evidenceRefs": [
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "rear-port-cavity",
+          "kind": "contour",
+          "evidenceRefs": [
+            "back-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "attachment": {
+        "parentSocket": "rear-port-cover-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.03
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "back-view"
+        ]
+      }
+    },
+    {
+      "id": "grip-boundary-seams",
+      "name": "Grip Boundary Seams",
+      "level": "micro",
+      "role": "part",
+      "importance": 0.65,
+      "confidence": 0.9,
+      "primitive": "curve-sweep",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Independent rigid molded component with visible seam or movable interface.",
+      "parent": "pink-grip-panel-pair",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "cavity-dark",
+      "materialLayers": [
+        "cavity-dark"
+      ],
+      "localFeatures": [
+        "grip-boundary-seams"
+      ],
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 0.9
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(105,80,90,1)",
+        "secondaryAlbedo": "rgba(255,209,203,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      },
+      "evidenceRefs": [
+        "front-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "grip-boundary-seams",
+          "kind": "linework",
+          "evidenceRefs": [
+            "front-view",
+            "back-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "attachment": {
+        "parentSocket": "pink-grip-panel-pair-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.03
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "front-view",
+          "back-view"
+        ]
+      }
+    },
+    {
+      "id": "shoulder-hinge-caps",
+      "name": "Shoulder Hinge Caps",
+      "level": "micro",
+      "role": "part",
+      "importance": 0.65,
+      "confidence": 0.9,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Independent rigid molded component with visible seam or movable interface.",
+      "parent": "shoulder-deck",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-plastic",
+      "materialLayers": [
+        "pink-plastic"
+      ],
+      "localFeatures": [
+        "shoulder-hinge-caps"
+      ],
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 0.9
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(239,177,178,1)",
+        "secondaryAlbedo": "rgba(255,209,203,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      },
+      "evidenceRefs": [
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "shoulder-hinge-caps",
+          "kind": "contour",
+          "evidenceRefs": [
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "attachment": {
+        "parentSocket": "shoulder-deck-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.03
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "side-view",
+          "back-view"
+        ]
+      }
+    },
+    {
+      "id": "button-bevel-system",
+      "name": "Control Crown Bevels",
+      "level": "micro",
+      "role": "part",
+      "importance": 0.65,
+      "confidence": 0.9,
+      "primitive": "torus",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Independent rigid molded component with visible seam or movable interface.",
+      "parent": "front-shell",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-plastic",
+      "materialLayers": [
+        "pink-plastic"
+      ],
+      "localFeatures": [
+        "button-bevel-system"
+      ],
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 0.9
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(239,177,178,1)",
+        "secondaryAlbedo": "rgba(255,209,203,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      },
+      "evidenceRefs": [
+        "front-view"
+      ],
+      "details": [
+        {
+          "id": "button-bevel-system",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "attachment": {
+        "parentSocket": "front-shell-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.03
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "front-view"
+        ]
+      }
+    },
+    {
+      "id": "lower-shell-notch-rim",
+      "name": "Lower Notch Rim",
+      "level": "micro",
+      "role": "part",
+      "importance": 0.65,
+      "confidence": 0.9,
+      "primitive": "curve-sweep",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Independent rigid molded component with visible seam or movable interface.",
+      "parent": "front-shell",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "localFeatures": [
+        "lower-shell-notch-rim"
+      ],
+      "actionProfile": {
+        "animationRole": "static-part",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 0.9
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(246,237,220,1)",
+        "secondaryAlbedo": "rgba(255,248,235,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      },
+      "evidenceRefs": [
+        "front-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "lower-shell-notch-rim",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "back-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "attachment": {
+        "parentSocket": "front-shell-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.03
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01,
+        "evidenceRefs": [
+          "front-view",
+          "back-view"
+        ]
+      }
+    }
+  ],
+  "materials": [
+    {
+      "id": "cream-shell",
+      "name": "Warm Cream Satin ABS",
+      "type": "physical",
+      "shaderModel": "MeshToonMaterial project style with reference-derived PBR evidence",
+      "baseColor": "#F6EDDC",
+      "color": "#F6EDDC",
+      "albedo": {
+        "dominant": "#F6EDDC",
+        "secondary": [
+          "#FFF7EA",
+          "#8B6C74"
+        ],
+        "samplingNotes": "Sampled from admitted turn-sheet regions."
+      },
+      "colorVariation": {
+        "palette": [
+          "#F6EDDC",
+          "#FFF8EA"
+        ],
+        "pattern": "subtle molded value variation",
+        "amplitude": 0.04
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "object-space",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "stable object-scale detail"
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.16,
+          "role": "broad molded rolloff"
+        },
+        {
+          "id": "meso",
+          "frequency": 14,
+          "amplitude": 0.07,
+          "role": "seam and crown response"
+        },
+        {
+          "id": "micro",
+          "frequency": 64,
+          "amplitude": 0.025,
+          "role": "grazing highlight breakup"
+        }
+      ],
+      "roughness": {
+        "base": 0.48,
+        "variation": 0.08,
+        "map": "independent roughness field"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "pattern": "independent normal field",
+        "strength": 0.08,
+        "scale": 32,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "molded micrograin",
+        "amplitude": 0.008,
+        "scale": 64
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.3,
+        "contactShadowBias": 0.3,
+        "notes": "seams and sockets"
+      },
+      "wear": {
+        "edgeWear": 0.02,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0.01,
+        "cavityBias": 0.35,
+        "color": "#58464d"
+      },
+      "localOverrides": [
+        {
+          "id": "cream-shell-edge-response",
+          "region": "named observed component zones",
+          "response": "localized roughness and cavity response",
+          "roughness": 0.48,
+          "evidenceRefs": [
+            "front-view",
+            "back-view"
+          ]
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.86,
+        "estimatedFidelity": 0.86,
+        "sourceImage": "artifacts/img2threejs/game-controller/detail-zones/shoulders.png",
+        "maps": {
+          "albedo": {
+            "path": "docs/sculpt-specs/game-controller/pbr/cream-shell/cream-shell_albedo.png"
+          },
+          "roughness": {
+            "path": "docs/sculpt-specs/game-controller/pbr/cream-shell/cream-shell_roughness.png"
+          },
+          "height": {
+            "path": "docs/sculpt-specs/game-controller/pbr/cream-shell/cream-shell_height.png"
+          },
+          "normal": {
+            "path": "docs/sculpt-specs/game-controller/pbr/cream-shell/cream-shell_normal.png"
+          },
+          "ao": {
+            "path": "docs/sculpt-specs/game-controller/pbr/cream-shell/cream-shell_ao.png"
+          }
+        }
+      }
+    },
+    {
+      "id": "pink-plastic",
+      "name": "Sakura Pink Plastic",
+      "type": "physical",
+      "shaderModel": "MeshToonMaterial project style with reference-derived PBR evidence",
+      "baseColor": "#EFB1B2",
+      "color": "#EFB1B2",
+      "albedo": {
+        "dominant": "#EFB1B2",
+        "secondary": [
+          "#FFD0CB",
+          "#8B6C74"
+        ],
+        "samplingNotes": "Sampled from admitted turn-sheet regions."
+      },
+      "colorVariation": {
+        "palette": [
+          "#EFB1B2",
+          "#F7C4C0"
+        ],
+        "pattern": "subtle molded value variation",
+        "amplitude": 0.04
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "object-space",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "stable object-scale detail"
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.16,
+          "role": "broad molded rolloff"
+        },
+        {
+          "id": "meso",
+          "frequency": 14,
+          "amplitude": 0.07,
+          "role": "seam and crown response"
+        },
+        {
+          "id": "micro",
+          "frequency": 64,
+          "amplitude": 0.025,
+          "role": "grazing highlight breakup"
+        }
+      ],
+      "roughness": {
+        "base": 0.34,
+        "variation": 0.08,
+        "map": "independent roughness field"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "pattern": "independent normal field",
+        "strength": 0.08,
+        "scale": 32,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "molded micrograin",
+        "amplitude": 0.008,
+        "scale": 64
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.3,
+        "contactShadowBias": 0.3,
+        "notes": "seams and sockets"
+      },
+      "wear": {
+        "edgeWear": 0.02,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0.01,
+        "cavityBias": 0.35,
+        "color": "#58464d"
+      },
+      "localOverrides": [
+        {
+          "id": "pink-crown-roughness",
+          "region": "named observed component zones",
+          "response": "localized roughness and cavity response",
+          "roughness": 0.3,
+          "evidenceRefs": [
+            "front-view",
+            "back-view"
+          ]
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.84,
+        "estimatedFidelity": 0.84,
+        "sourceImage": "artifacts/img2threejs/game-controller/detail-zones/grips.png",
+        "maps": {
+          "albedo": {
+            "path": "docs/sculpt-specs/game-controller/pbr/pink-plastic/pink-plastic_albedo.png"
+          },
+          "roughness": {
+            "path": "docs/sculpt-specs/game-controller/pbr/pink-plastic/pink-plastic_roughness.png"
+          },
+          "height": {
+            "path": "docs/sculpt-specs/game-controller/pbr/pink-plastic/pink-plastic_height.png"
+          },
+          "normal": {
+            "path": "docs/sculpt-specs/game-controller/pbr/pink-plastic/pink-plastic_normal.png"
+          },
+          "ao": {
+            "path": "docs/sculpt-specs/game-controller/pbr/pink-plastic/pink-plastic_ao.png"
+          }
+        }
+      }
+    },
+    {
+      "id": "cavity-dark",
+      "name": "Muted Plum Cavity",
+      "type": "physical",
+      "shaderModel": "MeshToonMaterial project style with reference-derived PBR evidence",
+      "baseColor": "#69505A",
+      "color": "#69505A",
+      "albedo": {
+        "dominant": "#69505A",
+        "secondary": [
+          "#FFD0CB",
+          "#8B6C74"
+        ],
+        "samplingNotes": "Sampled from admitted turn-sheet regions."
+      },
+      "colorVariation": {
+        "palette": [
+          "#69505A",
+          "#F7C4C0"
+        ],
+        "pattern": "subtle molded value variation",
+        "amplitude": 0.04
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "object-space",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "stable object-scale detail"
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.16,
+          "role": "broad molded rolloff"
+        },
+        {
+          "id": "meso",
+          "frequency": 14,
+          "amplitude": 0.07,
+          "role": "seam and crown response"
+        },
+        {
+          "id": "micro",
+          "frequency": 64,
+          "amplitude": 0.025,
+          "role": "grazing highlight breakup"
+        }
+      ],
+      "roughness": {
+        "base": 0.72,
+        "variation": 0.08,
+        "map": "independent roughness field"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "pattern": "independent normal field",
+        "strength": 0.08,
+        "scale": 32,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "molded micrograin",
+        "amplitude": 0.008,
+        "scale": 64
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.3,
+        "contactShadowBias": 0.3,
+        "notes": "seams and sockets"
+      },
+      "wear": {
+        "edgeWear": 0.02,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0.01,
+        "cavityBias": 0.35,
+        "color": "#58464d"
+      },
+      "localOverrides": [
+        {
+          "id": "cavity-seam-darkening",
+          "region": "named observed component zones",
+          "response": "localized roughness and cavity response",
+          "roughness": 0.72,
+          "evidenceRefs": [
+            "front-view",
+            "back-view"
+          ]
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.74,
+        "estimatedFidelity": 0.74,
+        "sourceImage": "references/intake/game-controller/front.png",
+        "maps": {
+          "albedo": {
+            "path": "procedural-solid-albedo"
+          },
+          "roughness": {
+            "path": "procedural-independent-roughness"
+          },
+          "height": {
+            "path": "procedural-independent-height"
+          },
+          "normal": {
+            "path": "procedural-independent-normal"
+          },
+          "ao": {
+            "path": "procedural-independent-ao"
+          }
+        }
+      }
+    },
+    {
+      "id": "status-lens",
+      "name": "Rose Status Lens",
+      "type": "physical",
+      "shaderModel": "MeshToonMaterial project style with reference-derived PBR evidence",
+      "baseColor": "#F7B1BE",
+      "color": "#F7B1BE",
+      "albedo": {
+        "dominant": "#F7B1BE",
+        "secondary": [
+          "#FFD0CB",
+          "#8B6C74"
+        ],
+        "samplingNotes": "Sampled from admitted turn-sheet regions."
+      },
+      "colorVariation": {
+        "palette": [
+          "#F7B1BE",
+          "#F7C4C0"
+        ],
+        "pattern": "subtle molded value variation",
+        "amplitude": 0.04
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "object-space",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "stable object-scale detail"
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.16,
+          "role": "broad molded rolloff"
+        },
+        {
+          "id": "meso",
+          "frequency": 14,
+          "amplitude": 0.07,
+          "role": "seam and crown response"
+        },
+        {
+          "id": "micro",
+          "frequency": 64,
+          "amplitude": 0.025,
+          "role": "grazing highlight breakup"
+        }
+      ],
+      "roughness": {
+        "base": 0.2,
+        "variation": 0.08,
+        "map": "independent roughness field"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "pattern": "independent normal field",
+        "strength": 0.08,
+        "scale": 32,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "molded micrograin",
+        "amplitude": 0.008,
+        "scale": 64
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.3,
+        "contactShadowBias": 0.3,
+        "notes": "seams and sockets"
+      },
+      "wear": {
+        "edgeWear": 0.02,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0.01,
+        "cavityBias": 0.35,
+        "color": "#58464d"
+      },
+      "localOverrides": [
+        {
+          "id": "status-lens-powered-glow",
+          "region": "named observed component zones",
+          "response": "powered emissive rose",
+          "roughness": 0.2,
+          "evidenceRefs": [
+            "front-view",
+            "back-view"
+          ]
+        }
+      ],
+      "transmission": 0.18,
+      "clearcoat": 0.65,
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.74,
+        "estimatedFidelity": 0.74,
+        "sourceImage": "references/intake/game-controller/front.png",
+        "maps": {
+          "albedo": {
+            "path": "procedural-solid-albedo"
+          },
+          "roughness": {
+            "path": "procedural-independent-roughness"
+          },
+          "height": {
+            "path": "procedural-independent-height"
+          },
+          "normal": {
+            "path": "procedural-independent-normal"
+          },
+          "ao": {
+            "path": "procedural-independent-ao"
+          }
+        }
+      }
+    },
+    {
+      "id": "fastener-metal",
+      "name": "Muted Metal Screws",
+      "type": "physical",
+      "shaderModel": "MeshToonMaterial project style with reference-derived PBR evidence",
+      "baseColor": "#897263",
+      "color": "#897263",
+      "albedo": {
+        "dominant": "#897263",
+        "secondary": [
+          "#FFD0CB",
+          "#8B6C74"
+        ],
+        "samplingNotes": "Sampled from admitted turn-sheet regions."
+      },
+      "colorVariation": {
+        "palette": [
+          "#897263",
+          "#F7C4C0"
+        ],
+        "pattern": "subtle molded value variation",
+        "amplitude": 0.04
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "object-space",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "stable object-scale detail"
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.16,
+          "role": "broad molded rolloff"
+        },
+        {
+          "id": "meso",
+          "frequency": 14,
+          "amplitude": 0.07,
+          "role": "seam and crown response"
+        },
+        {
+          "id": "micro",
+          "frequency": 64,
+          "amplitude": 0.025,
+          "role": "grazing highlight breakup"
+        }
+      ],
+      "roughness": {
+        "base": 0.42,
+        "variation": 0.08,
+        "map": "independent roughness field"
+      },
+      "metalness": {
+        "base": 0.65,
+        "variation": 0
+      },
+      "normal": {
+        "pattern": "independent normal field",
+        "strength": 0.08,
+        "scale": 32,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "molded micrograin",
+        "amplitude": 0.008,
+        "scale": 64
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.3,
+        "contactShadowBias": 0.3,
+        "notes": "seams and sockets"
+      },
+      "wear": {
+        "edgeWear": 0.02,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0.01,
+        "cavityBias": 0.35,
+        "color": "#58464d"
+      },
+      "localOverrides": [
+        {
+          "id": "fastener-crown-response",
+          "region": "named observed component zones",
+          "response": "localized roughness and cavity response",
+          "roughness": 0.42,
+          "evidenceRefs": [
+            "front-view",
+            "back-view"
+          ]
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.74,
+        "estimatedFidelity": 0.74,
+        "sourceImage": "references/intake/game-controller/front.png",
+        "maps": {
+          "albedo": {
+            "path": "procedural-solid-albedo"
+          },
+          "roughness": {
+            "path": "procedural-independent-roughness"
+          },
+          "height": {
+            "path": "procedural-independent-height"
+          },
+          "normal": {
+            "path": "procedural-independent-normal"
+          },
+          "ao": {
+            "path": "procedural-independent-ao"
+          }
+        }
+      }
+    }
+  ],
+  "repetitionSystems": [
+    {
+      "id": "face-buttons-four",
+      "name": "Four face buttons",
+      "componentRef": "face-button-array",
+      "count": 4,
+      "distribution": "diamond",
+      "geometry": "rounded cylinders",
+      "material": "pink-plastic",
+      "evidenceRefs": [
+        "front-view"
+      ]
+    },
+    {
+      "id": "rear-screws-four",
+      "name": "Four rear screws",
+      "componentRef": "rear-screw-array",
+      "count": 4,
+      "distribution": "bilateral lower back",
+      "geometry": "countersunk cylinders",
+      "material": "fastener-metal",
+      "evidenceRefs": [
+        "back-view"
+      ]
+    },
+    {
+      "id": "analog-pair",
+      "name": "Twin analog assemblies",
+      "componentRef": "stick-socket-ring-pair",
+      "count": 2,
+      "distribution": "mirrored pair",
+      "geometry": "torus socket, shaft and cap",
+      "material": "cream-shell",
+      "evidenceRefs": [
+        "front-view"
+      ]
+    },
+    {
+      "id": "shoulder-four",
+      "name": "Four shoulder controls",
+      "componentRef": "shoulder-deck",
+      "count": 4,
+      "distribution": "two layers per side",
+      "geometry": "hinged rounded paddles",
+      "material": "pink-plastic",
+      "evidenceRefs": [
+        "side-view",
+        "back-view"
+      ]
+    },
+    {
+      "id": "grip-panels-two",
+      "name": "Paired grip panels",
+      "componentRef": "pink-grip-panel-pair",
+      "count": 2,
+      "distribution": "bilateral diagonal wrap",
+      "geometry": "beveled overlays",
+      "material": "pink-plastic",
+      "evidenceRefs": [
+        "front-view",
+        "back-view"
+      ]
+    }
+  ],
+  "buildPasses": [
+    {
+      "id": "blockout",
+      "goal": "Match macro silhouette and proportions.",
+      "componentRefs": [
+        "front-shell",
+        "rear-shell",
+        "grip-shell-pair",
+        "dpad-cross",
+        "face-button-array",
+        "left-stick-assembly",
+        "right-stick-assembly",
+        "bumper-pair",
+        "trigger-pair",
+        "rear-battery-cover",
+        "rear-screw-array"
+      ],
+      "acceptance": [
+        "Silhouette reads correctly without materials.",
+        "Quality contract has named all required macro feature groups before code generation.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "structural-pass",
+      "goal": "Build the component hierarchy implied by the pre-spec complexity assessment.",
+      "componentRefs": [
+        "front-shell",
+        "rear-shell",
+        "grip-shell-pair",
+        "dpad-cross",
+        "face-button-array",
+        "left-stick-assembly",
+        "right-stick-assembly",
+        "bumper-pair",
+        "trigger-pair",
+        "rear-battery-cover",
+        "rear-screw-array"
+      ],
+      "acceptance": [
+        "Macro, meso, and repeated structures meet qualityContract.minimumSpecDepth.",
+        "Parent-child relations, joints, seams, sockets, and contact points are explicit.",
+        "Every attached child appendage/connector has parentSocket, localStart/localEnd, contactType, embedDepth or overlap, and gapTolerance.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "form-refinement",
+      "goal": "Refine shape, deformation, bevels, tapers, curves, asymmetry, and visible local geometry.",
+      "componentRefs": [
+        "front-shell",
+        "rear-shell",
+        "grip-shell-pair",
+        "dpad-cross",
+        "face-button-array",
+        "left-stick-assembly",
+        "right-stick-assembly",
+        "bumper-pair",
+        "trigger-pair",
+        "rear-battery-cover",
+        "rear-screw-array"
+      ],
+      "acceptance": [
+        "Important visible forms are represented in component geometryDescriptor, deformations, localFeatures, or repetitionSystems.",
+        "Endpoint-based child parts are rooted at their attachment sockets and do not visibly float away from parents.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "material-pass",
+      "goal": "Match material color, roughness, bump, and local variation.",
+      "componentRefs": [
+        "front-shell",
+        "rear-shell",
+        "grip-shell-pair",
+        "dpad-cross",
+        "face-button-array",
+        "left-stick-assembly",
+        "right-stick-assembly",
+        "bumper-pair",
+        "trigger-pair",
+        "rear-battery-cover",
+        "rear-screw-array"
+      ],
+      "acceptance": [
+        "Reference-derived albedo palette records dominant, secondary, and accent colors per visible material.",
+        "Each important material defines roughness variation and at least one normal/bump/displacement response.",
+        "Local material overrides, dirt/wear/stains/moss/chips/scratches or equivalent masks are tied to evidenceRefs.",
+        "Thin, transparent, reflective, wet, or fibrous materials document alpha/transmission/clearcoat/metalness/fiber response when relevant.",
+        "Generated preview uses procedural albedo/roughness/bump texture or vertex color variation instead of one flat color.",
+        "Generated preview uses independent PBR maps at 1024px or higher for the quality-first tier.",
+        "If source pixels are available, referencePbr extraction passed at confidence >= 0.7 or the pass is stopped/requesting better references.",
+        "Macro, meso, and micro surface frequency bands are visible at the intended review distance without obvious tiling.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "lighting-pass",
+      "goal": "Make material and form readable under neutral turntable lighting plus optional reference lighting.",
+      "componentRefs": [
+        "front-shell",
+        "rear-shell",
+        "grip-shell-pair",
+        "dpad-cross",
+        "face-button-array",
+        "left-stick-assembly",
+        "right-stick-assembly",
+        "bumper-pair",
+        "trigger-pair",
+        "rear-battery-cover",
+        "rear-screw-array"
+      ],
+      "acceptance": [
+        "lightingFromPhoto identifies key light direction/color/intensity, fill light, rim or environment light, and ambient color.",
+        "Exposure, tone mapping, background color/gradient, shadow softness, and contact shadow behavior are specified.",
+        "Lighting does not hide geometry/material gaps and screenshots can be compared fairly to the reference.",
+        "Neutral, grazing, and reference-matched lighting checks distinguish material errors from lighting errors.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "interaction-pass",
+      "goal": "Make the model ready for future animation, transformation, physics, or destruction.",
+      "componentRefs": [
+        "front-shell",
+        "rear-shell",
+        "grip-shell-pair",
+        "dpad-cross",
+        "face-button-array",
+        "left-stick-assembly",
+        "right-stick-assembly",
+        "bumper-pair",
+        "trigger-pair",
+        "rear-battery-cover",
+        "rear-screw-array"
+      ],
+      "acceptance": [
+        "Macro and movable meso components have stable pivot nodes.",
+        "Sockets, collider proxies, and destruction metadata are present for future runtime actions.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "optimization-pass",
+      "goal": "Protect runtime performance after visual fidelity is accepted.",
+      "componentRefs": [
+        "front-shell",
+        "rear-shell",
+        "grip-shell-pair",
+        "dpad-cross",
+        "face-button-array",
+        "left-stick-assembly",
+        "right-stick-assembly",
+        "bumper-pair",
+        "trigger-pair",
+        "rear-battery-cover",
+        "rear-screw-array"
+      ],
+      "acceptance": [
+        "Triangle count, draw calls, instancing, LOD strategy, and FPS target are documented or verified.",
+        "Repeated detail is instanced or simplified where possible without breaking silhouette/material believability."
+      ]
+    }
+  ],
+  "visualEvidence": [
+    {
+      "timestamp": "2026-08-03T16:41:02.284991+00:00",
+      "passId": "blockout",
+      "estimatedFidelity": 0.82,
+      "aiVisionScore": 0.82,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.82,
+        "componentStructure": 0.84,
+        "formDetail": 0.78,
+        "materialSurface": 0.82,
+        "lightingCamera": 0.8,
+        "interaction": 0.87
+      },
+      "featureReviews": [
+        {
+          "id": "controller-silhouette",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Broad shoulder deck, deep lower notch and paired flared handles preserve the reference identity; render is slightly squarer through the upper corners."
+        },
+        {
+          "id": "front-input-layout",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Cross D-pad, four-button diamond, centre controls and symmetric dual-stick sockets are all independent and correctly ordered."
+        },
+        {
+          "id": "shoulder-rear-system",
+          "score": 0.81,
+          "passed": true,
+          "notes": "Two pink shoulder layers per side, rear centre inset, service cover and four visible screws remain separate in the rear view."
+        },
+        {
+          "id": "sakura-material-system",
+          "score": 0.83,
+          "passed": true,
+          "notes": "Warm cream shell, Sakura pink controls/grips, dark cavities, muted screws and rose powered lens remain distinct."
+        },
+        {
+          "id": "purpose-animation",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Powered browser state drives both sticks, D-pad, four face buttons, centre controls, four shoulders, status glow and bounded rumble; stop restores exact transforms."
+        }
+      ],
+      "referenceScreenshot": "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake\\game-controller\\front.png",
+      "renderScreenshot": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\game-controller\\final-review-2\\render-front.png",
+      "comparisonImage": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\game-controller\\comparison-blockout.png",
+      "cameraView": "front",
+      "notes": "",
+      "aiVisionNotes": "Semantic contour is strong; portrait/landscape scale mismatch makes Tier-1 IoU 0.265 non-authoritative for this reconstruction."
+    },
+    {
+      "timestamp": "2026-08-03T16:41:27.911985+00:00",
+      "passId": "structural-pass",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.82,
+        "componentStructure": 0.84,
+        "formDetail": 0.78,
+        "materialSurface": 0.82,
+        "lightingCamera": 0.8,
+        "interaction": 0.87
+      },
+      "featureReviews": [
+        {
+          "id": "controller-silhouette",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Broad shoulder deck, deep lower notch and paired flared handles preserve the reference identity; render is slightly squarer through the upper corners."
+        },
+        {
+          "id": "front-input-layout",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Cross D-pad, four-button diamond, centre controls and symmetric dual-stick sockets are all independent and correctly ordered."
+        },
+        {
+          "id": "shoulder-rear-system",
+          "score": 0.81,
+          "passed": true,
+          "notes": "Two pink shoulder layers per side, rear centre inset, service cover and four visible screws remain separate in the rear view."
+        },
+        {
+          "id": "sakura-material-system",
+          "score": 0.83,
+          "passed": true,
+          "notes": "Warm cream shell, Sakura pink controls/grips, dark cavities, muted screws and rose powered lens remain distinct."
+        },
+        {
+          "id": "purpose-animation",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Powered browser state drives both sticks, D-pad, four face buttons, centre controls, four shoulders, status glow and bounded rumble; stop restores exact transforms."
+        }
+      ],
+      "referenceScreenshot": "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake\\game-controller\\back.png",
+      "renderScreenshot": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\game-controller\\final-review-2\\render-back.png",
+      "comparisonImage": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\game-controller\\comparison-structural-pass.png",
+      "cameraView": "back",
+      "notes": "",
+      "aiVisionNotes": "Agent vision reviewed the same packaged pair. Critical semantic systems meet their thresholds; remaining mismatch is chiefly the side-shell curvature and illustration-versus-render framing."
+    },
+    {
+      "timestamp": "2026-08-03T16:41:28.273271+00:00",
+      "passId": "form-refinement",
+      "estimatedFidelity": 0.79,
+      "aiVisionScore": 0.79,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.82,
+        "componentStructure": 0.84,
+        "formDetail": 0.78,
+        "materialSurface": 0.82,
+        "lightingCamera": 0.8,
+        "interaction": 0.87
+      },
+      "featureReviews": [
+        {
+          "id": "controller-silhouette",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Broad shoulder deck, deep lower notch and paired flared handles preserve the reference identity; render is slightly squarer through the upper corners."
+        },
+        {
+          "id": "front-input-layout",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Cross D-pad, four-button diamond, centre controls and symmetric dual-stick sockets are all independent and correctly ordered."
+        },
+        {
+          "id": "shoulder-rear-system",
+          "score": 0.81,
+          "passed": true,
+          "notes": "Two pink shoulder layers per side, rear centre inset, service cover and four visible screws remain separate in the rear view."
+        },
+        {
+          "id": "sakura-material-system",
+          "score": 0.83,
+          "passed": true,
+          "notes": "Warm cream shell, Sakura pink controls/grips, dark cavities, muted screws and rose powered lens remain distinct."
+        },
+        {
+          "id": "purpose-animation",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Powered browser state drives both sticks, D-pad, four face buttons, centre controls, four shoulders, status glow and bounded rumble; stop restores exact transforms."
+        }
+      ],
+      "referenceScreenshot": "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake\\game-controller\\side.png",
+      "renderScreenshot": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\game-controller\\final-review-2\\render-side.png",
+      "comparisonImage": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\game-controller\\comparison-form-refinement.png",
+      "cameraView": "side",
+      "notes": "",
+      "aiVisionNotes": "Agent vision reviewed the same packaged pair. Critical semantic systems meet their thresholds; remaining mismatch is chiefly the side-shell curvature and illustration-versus-render framing."
+    },
+    {
+      "timestamp": "2026-08-03T16:41:28.649270+00:00",
+      "passId": "material-pass",
+      "estimatedFidelity": 0.83,
+      "aiVisionScore": 0.83,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.82,
+        "componentStructure": 0.84,
+        "formDetail": 0.78,
+        "materialSurface": 0.82,
+        "lightingCamera": 0.8,
+        "interaction": 0.87
+      },
+      "featureReviews": [
+        {
+          "id": "controller-silhouette",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Broad shoulder deck, deep lower notch and paired flared handles preserve the reference identity; render is slightly squarer through the upper corners."
+        },
+        {
+          "id": "front-input-layout",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Cross D-pad, four-button diamond, centre controls and symmetric dual-stick sockets are all independent and correctly ordered."
+        },
+        {
+          "id": "shoulder-rear-system",
+          "score": 0.81,
+          "passed": true,
+          "notes": "Two pink shoulder layers per side, rear centre inset, service cover and four visible screws remain separate in the rear view."
+        },
+        {
+          "id": "sakura-material-system",
+          "score": 0.83,
+          "passed": true,
+          "notes": "Warm cream shell, Sakura pink controls/grips, dark cavities, muted screws and rose powered lens remain distinct."
+        },
+        {
+          "id": "purpose-animation",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Powered browser state drives both sticks, D-pad, four face buttons, centre controls, four shoulders, status glow and bounded rumble; stop restores exact transforms."
+        }
+      ],
+      "referenceScreenshot": "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake\\game-controller\\front.png",
+      "renderScreenshot": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\game-controller\\final-review-2\\render-three-quarter.png",
+      "comparisonImage": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\game-controller\\comparison-material-pass.png",
+      "cameraView": "three-quarter",
+      "notes": "",
+      "aiVisionNotes": "Agent vision reviewed the same packaged pair. Critical semantic systems meet their thresholds; remaining mismatch is chiefly the side-shell curvature and illustration-versus-render framing."
+    },
+    {
+      "timestamp": "2026-08-03T16:41:28.987721+00:00",
+      "passId": "lighting-pass",
+      "estimatedFidelity": 0.82,
+      "aiVisionScore": 0.82,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.82,
+        "componentStructure": 0.84,
+        "formDetail": 0.78,
+        "materialSurface": 0.82,
+        "lightingCamera": 0.8,
+        "interaction": 0.87
+      },
+      "featureReviews": [
+        {
+          "id": "controller-silhouette",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Broad shoulder deck, deep lower notch and paired flared handles preserve the reference identity; render is slightly squarer through the upper corners."
+        },
+        {
+          "id": "front-input-layout",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Cross D-pad, four-button diamond, centre controls and symmetric dual-stick sockets are all independent and correctly ordered."
+        },
+        {
+          "id": "shoulder-rear-system",
+          "score": 0.81,
+          "passed": true,
+          "notes": "Two pink shoulder layers per side, rear centre inset, service cover and four visible screws remain separate in the rear view."
+        },
+        {
+          "id": "sakura-material-system",
+          "score": 0.83,
+          "passed": true,
+          "notes": "Warm cream shell, Sakura pink controls/grips, dark cavities, muted screws and rose powered lens remain distinct."
+        },
+        {
+          "id": "purpose-animation",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Powered browser state drives both sticks, D-pad, four face buttons, centre controls, four shoulders, status glow and bounded rumble; stop restores exact transforms."
+        }
+      ],
+      "referenceScreenshot": "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake\\game-controller\\front.png",
+      "renderScreenshot": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\game-controller\\final-review-2\\render-three-quarter.png",
+      "comparisonImage": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\game-controller\\comparison-lighting-pass.png",
+      "cameraView": "three-quarter",
+      "notes": "",
+      "aiVisionNotes": "Agent vision reviewed the same packaged pair. Critical semantic systems meet their thresholds; remaining mismatch is chiefly the side-shell curvature and illustration-versus-render framing."
+    },
+    {
+      "timestamp": "2026-08-03T16:41:29.347805+00:00",
+      "passId": "interaction-pass",
+      "estimatedFidelity": 0.87,
+      "aiVisionScore": 0.87,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.82,
+        "componentStructure": 0.84,
+        "formDetail": 0.78,
+        "materialSurface": 0.82,
+        "lightingCamera": 0.8,
+        "interaction": 0.87
+      },
+      "featureReviews": [
+        {
+          "id": "controller-silhouette",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Broad shoulder deck, deep lower notch and paired flared handles preserve the reference identity; render is slightly squarer through the upper corners."
+        },
+        {
+          "id": "front-input-layout",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Cross D-pad, four-button diamond, centre controls and symmetric dual-stick sockets are all independent and correctly ordered."
+        },
+        {
+          "id": "shoulder-rear-system",
+          "score": 0.81,
+          "passed": true,
+          "notes": "Two pink shoulder layers per side, rear centre inset, service cover and four visible screws remain separate in the rear view."
+        },
+        {
+          "id": "sakura-material-system",
+          "score": 0.83,
+          "passed": true,
+          "notes": "Warm cream shell, Sakura pink controls/grips, dark cavities, muted screws and rose powered lens remain distinct."
+        },
+        {
+          "id": "purpose-animation",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Powered browser state drives both sticks, D-pad, four face buttons, centre controls, four shoulders, status glow and bounded rumble; stop restores exact transforms."
+        }
+      ],
+      "referenceScreenshot": "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake\\game-controller\\front.png",
+      "renderScreenshot": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\game-controller\\final-review-2\\render-front.png",
+      "comparisonImage": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\game-controller\\comparison-interaction-pass.png",
+      "cameraView": "front",
+      "notes": "",
+      "aiVisionNotes": "Agent vision reviewed the same packaged pair. Critical semantic systems meet their thresholds; remaining mismatch is chiefly the side-shell curvature and illustration-versus-render framing."
+    },
+    {
+      "timestamp": "2026-08-03T16:41:29.749099+00:00",
+      "passId": "optimization-pass",
+      "estimatedFidelity": 0.86,
+      "aiVisionScore": 0.86,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.82,
+        "componentStructure": 0.84,
+        "formDetail": 0.78,
+        "materialSurface": 0.82,
+        "lightingCamera": 0.8,
+        "interaction": 0.87
+      },
+      "featureReviews": [
+        {
+          "id": "controller-silhouette",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Broad shoulder deck, deep lower notch and paired flared handles preserve the reference identity; render is slightly squarer through the upper corners."
+        },
+        {
+          "id": "front-input-layout",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Cross D-pad, four-button diamond, centre controls and symmetric dual-stick sockets are all independent and correctly ordered."
+        },
+        {
+          "id": "shoulder-rear-system",
+          "score": 0.81,
+          "passed": true,
+          "notes": "Two pink shoulder layers per side, rear centre inset, service cover and four visible screws remain separate in the rear view."
+        },
+        {
+          "id": "sakura-material-system",
+          "score": 0.83,
+          "passed": true,
+          "notes": "Warm cream shell, Sakura pink controls/grips, dark cavities, muted screws and rose powered lens remain distinct."
+        },
+        {
+          "id": "purpose-animation",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Powered browser state drives both sticks, D-pad, four face buttons, centre controls, four shoulders, status glow and bounded rumble; stop restores exact transforms."
+        }
+      ],
+      "referenceScreenshot": "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake\\game-controller\\front.png",
+      "renderScreenshot": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\game-controller\\final-review-2\\render-front.png",
+      "comparisonImage": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\game-controller\\comparison-optimization-pass.png",
+      "cameraView": "front",
+      "notes": "",
+      "aiVisionNotes": "Agent vision reviewed the same packaged pair. Critical semantic systems meet their thresholds; remaining mismatch is chiefly the side-shell curvature and illustration-versus-render framing."
+    }
+  ],
+  "reviewHistory": [
+    {
+      "timestamp": "2026-08-03T16:41:02.284991+00:00",
+      "passId": "blockout",
+      "estimatedFidelity": 0.82,
+      "aiVisionScore": 0.82,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.82,
+        "componentStructure": 0.84,
+        "formDetail": 0.78,
+        "materialSurface": 0.82,
+        "lightingCamera": 0.8,
+        "interaction": 0.87
+      },
+      "featureReviews": [
+        {
+          "id": "controller-silhouette",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Broad shoulder deck, deep lower notch and paired flared handles preserve the reference identity; render is slightly squarer through the upper corners."
+        },
+        {
+          "id": "front-input-layout",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Cross D-pad, four-button diamond, centre controls and symmetric dual-stick sockets are all independent and correctly ordered."
+        },
+        {
+          "id": "shoulder-rear-system",
+          "score": 0.81,
+          "passed": true,
+          "notes": "Two pink shoulder layers per side, rear centre inset, service cover and four visible screws remain separate in the rear view."
+        },
+        {
+          "id": "sakura-material-system",
+          "score": 0.83,
+          "passed": true,
+          "notes": "Warm cream shell, Sakura pink controls/grips, dark cavities, muted screws and rose powered lens remain distinct."
+        },
+        {
+          "id": "purpose-animation",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Powered browser state drives both sticks, D-pad, four face buttons, centre controls, four shoulders, status glow and bounded rumble; stop restores exact transforms."
+        }
+      ],
+      "action": "continue",
+      "summary": "Front silhouette accepted after raising shoulder controls: broad body, deep lower notch and flared grips read as the reference controller.",
+      "matched": [
+        "overall contour",
+        "handle flare",
+        "lower notch",
+        "shoulder tips"
+      ],
+      "mismatches": [
+        "upper corners remain slightly squarer than the painted reference",
+        "deterministic mask fails because portrait reference and landscape review framing differ"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "mapStrippedRender": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\game-controller\\final-review-2\\render-front.png",
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "powered-front",
+        "long-axis",
+        "thickness-axis"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake\\game-controller\\front.png",
+        "renderScreenshot": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\game-controller\\final-review-2\\render-front.png",
+        "comparisonImage": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\game-controller\\comparison-blockout.png",
+        "cameraView": "front",
+        "notes": "",
+        "aiVisionNotes": "Semantic contour is strong; portrait/landscape scale mismatch makes Tier-1 IoU 0.265 non-authoritative for this reconstruction."
+      }
+    },
+    {
+      "timestamp": "2026-08-03T16:41:27.911985+00:00",
+      "passId": "structural-pass",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.82,
+        "componentStructure": 0.84,
+        "formDetail": 0.78,
+        "materialSurface": 0.82,
+        "lightingCamera": 0.8,
+        "interaction": 0.87
+      },
+      "featureReviews": [
+        {
+          "id": "controller-silhouette",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Broad shoulder deck, deep lower notch and paired flared handles preserve the reference identity; render is slightly squarer through the upper corners."
+        },
+        {
+          "id": "front-input-layout",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Cross D-pad, four-button diamond, centre controls and symmetric dual-stick sockets are all independent and correctly ordered."
+        },
+        {
+          "id": "shoulder-rear-system",
+          "score": 0.81,
+          "passed": true,
+          "notes": "Two pink shoulder layers per side, rear centre inset, service cover and four visible screws remain separate in the rear view."
+        },
+        {
+          "id": "sakura-material-system",
+          "score": 0.83,
+          "passed": true,
+          "notes": "Warm cream shell, Sakura pink controls/grips, dark cavities, muted screws and rose powered lens remain distinct."
+        },
+        {
+          "id": "purpose-animation",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Powered browser state drives both sticks, D-pad, four face buttons, centre controls, four shoulders, status glow and bounded rumble; stop restores exact transforms."
+        }
+      ],
+      "action": "continue",
+      "summary": "Independent shells, grip panels, twelve control surfaces, rear cover, port inset and four screws are present as named parts with stable pivots and sockets.",
+      "matched": [
+        "named hierarchy",
+        "multi-angle volume",
+        "SAKURA palette",
+        "runtime pivots and sockets"
+      ],
+      "mismatches": [
+        "side shell curvature is a conservative procedural approximation",
+        "internal mechanisms remain inferred and omitted",
+        "pixel mask metrics are dominated by reference/render framing"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "mapStrippedRender": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\game-controller\\final-review-2\\render-back.png",
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "powered-front",
+        "long-axis",
+        "thickness-axis"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake\\game-controller\\back.png",
+        "renderScreenshot": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\game-controller\\final-review-2\\render-back.png",
+        "comparisonImage": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\game-controller\\comparison-structural-pass.png",
+        "cameraView": "back",
+        "notes": "",
+        "aiVisionNotes": "Agent vision reviewed the same packaged pair. Critical semantic systems meet their thresholds; remaining mismatch is chiefly the side-shell curvature and illustration-versus-render framing."
+      }
+    },
+    {
+      "timestamp": "2026-08-03T16:41:28.273271+00:00",
+      "passId": "form-refinement",
+      "estimatedFidelity": 0.79,
+      "aiVisionScore": 0.79,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.82,
+        "componentStructure": 0.84,
+        "formDetail": 0.78,
+        "materialSurface": 0.82,
+        "lightingCamera": 0.8,
+        "interaction": 0.87
+      },
+      "featureReviews": [
+        {
+          "id": "controller-silhouette",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Broad shoulder deck, deep lower notch and paired flared handles preserve the reference identity; render is slightly squarer through the upper corners."
+        },
+        {
+          "id": "front-input-layout",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Cross D-pad, four-button diamond, centre controls and symmetric dual-stick sockets are all independent and correctly ordered."
+        },
+        {
+          "id": "shoulder-rear-system",
+          "score": 0.81,
+          "passed": true,
+          "notes": "Two pink shoulder layers per side, rear centre inset, service cover and four visible screws remain separate in the rear view."
+        },
+        {
+          "id": "sakura-material-system",
+          "score": 0.83,
+          "passed": true,
+          "notes": "Warm cream shell, Sakura pink controls/grips, dark cavities, muted screws and rose powered lens remain distinct."
+        },
+        {
+          "id": "purpose-animation",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Powered browser state drives both sticks, D-pad, four face buttons, centre controls, four shoulders, status glow and bounded rumble; stop restores exact transforms."
+        }
+      ],
+      "action": "continue",
+      "summary": "Beveled extruded shell and grip profiles preserve real depth; side view remains more slab-like than the illustrated S-curve but controls and two shoulder layers project correctly.",
+      "matched": [
+        "named hierarchy",
+        "multi-angle volume",
+        "SAKURA palette",
+        "runtime pivots and sockets"
+      ],
+      "mismatches": [
+        "side shell curvature is a conservative procedural approximation",
+        "internal mechanisms remain inferred and omitted",
+        "pixel mask metrics are dominated by reference/render framing"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "mapStrippedRender": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\game-controller\\final-review-2\\render-side.png",
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "powered-front",
+        "long-axis",
+        "thickness-axis"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake\\game-controller\\side.png",
+        "renderScreenshot": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\game-controller\\final-review-2\\render-side.png",
+        "comparisonImage": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\game-controller\\comparison-form-refinement.png",
+        "cameraView": "side",
+        "notes": "",
+        "aiVisionNotes": "Agent vision reviewed the same packaged pair. Critical semantic systems meet their thresholds; remaining mismatch is chiefly the side-shell curvature and illustration-versus-render framing."
+      }
+    },
+    {
+      "timestamp": "2026-08-03T16:41:28.649270+00:00",
+      "passId": "material-pass",
+      "estimatedFidelity": 0.83,
+      "aiVisionScore": 0.83,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.82,
+        "componentStructure": 0.84,
+        "formDetail": 0.78,
+        "materialSurface": 0.82,
+        "lightingCamera": 0.8,
+        "interaction": 0.87
+      },
+      "featureReviews": [
+        {
+          "id": "controller-silhouette",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Broad shoulder deck, deep lower notch and paired flared handles preserve the reference identity; render is slightly squarer through the upper corners."
+        },
+        {
+          "id": "front-input-layout",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Cross D-pad, four-button diamond, centre controls and symmetric dual-stick sockets are all independent and correctly ordered."
+        },
+        {
+          "id": "shoulder-rear-system",
+          "score": 0.81,
+          "passed": true,
+          "notes": "Two pink shoulder layers per side, rear centre inset, service cover and four visible screws remain separate in the rear view."
+        },
+        {
+          "id": "sakura-material-system",
+          "score": 0.83,
+          "passed": true,
+          "notes": "Warm cream shell, Sakura pink controls/grips, dark cavities, muted screws and rose powered lens remain distinct."
+        },
+        {
+          "id": "purpose-animation",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Powered browser state drives both sticks, D-pad, four face buttons, centre controls, four shoulders, status glow and bounded rumble; stop restores exact transforms."
+        }
+      ],
+      "action": "continue",
+      "summary": "Warm cream satin shell, Sakura pink grip and control zones, dark cavities, muted screws and rose status lens remain visually separated.",
+      "matched": [
+        "named hierarchy",
+        "multi-angle volume",
+        "SAKURA palette",
+        "runtime pivots and sockets"
+      ],
+      "mismatches": [
+        "side shell curvature is a conservative procedural approximation",
+        "internal mechanisms remain inferred and omitted",
+        "pixel mask metrics are dominated by reference/render framing"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "mapStrippedRender": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\game-controller\\final-review-2\\render-three-quarter.png",
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "powered-front",
+        "long-axis",
+        "thickness-axis"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake\\game-controller\\front.png",
+        "renderScreenshot": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\game-controller\\final-review-2\\render-three-quarter.png",
+        "comparisonImage": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\game-controller\\comparison-material-pass.png",
+        "cameraView": "three-quarter",
+        "notes": "",
+        "aiVisionNotes": "Agent vision reviewed the same packaged pair. Critical semantic systems meet their thresholds; remaining mismatch is chiefly the side-shell curvature and illustration-versus-render framing."
+      }
+    },
+    {
+      "timestamp": "2026-08-03T16:41:28.987721+00:00",
+      "passId": "lighting-pass",
+      "estimatedFidelity": 0.82,
+      "aiVisionScore": 0.82,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.82,
+        "componentStructure": 0.84,
+        "formDetail": 0.78,
+        "materialSurface": 0.82,
+        "lightingCamera": 0.8,
+        "interaction": 0.87
+      },
+      "featureReviews": [
+        {
+          "id": "controller-silhouette",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Broad shoulder deck, deep lower notch and paired flared handles preserve the reference identity; render is slightly squarer through the upper corners."
+        },
+        {
+          "id": "front-input-layout",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Cross D-pad, four-button diamond, centre controls and symmetric dual-stick sockets are all independent and correctly ordered."
+        },
+        {
+          "id": "shoulder-rear-system",
+          "score": 0.81,
+          "passed": true,
+          "notes": "Two pink shoulder layers per side, rear centre inset, service cover and four visible screws remain separate in the rear view."
+        },
+        {
+          "id": "sakura-material-system",
+          "score": 0.83,
+          "passed": true,
+          "notes": "Warm cream shell, Sakura pink controls/grips, dark cavities, muted screws and rose powered lens remain distinct."
+        },
+        {
+          "id": "purpose-animation",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Powered browser state drives both sticks, D-pad, four face buttons, centre controls, four shoulders, status glow and bounded rumble; stop restores exact transforms."
+        }
+      ],
+      "action": "continue",
+      "summary": "Warm key, cool fill and pink rim expose shell bevels, stick sockets, shoulder layering and soft contact shadow without losing the pale palette.",
+      "matched": [
+        "named hierarchy",
+        "multi-angle volume",
+        "SAKURA palette",
+        "runtime pivots and sockets"
+      ],
+      "mismatches": [
+        "side shell curvature is a conservative procedural approximation",
+        "internal mechanisms remain inferred and omitted",
+        "pixel mask metrics are dominated by reference/render framing"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "mapStrippedRender": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\game-controller\\final-review-2\\render-three-quarter.png",
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "powered-front",
+        "long-axis",
+        "thickness-axis"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake\\game-controller\\front.png",
+        "renderScreenshot": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\game-controller\\final-review-2\\render-three-quarter.png",
+        "comparisonImage": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\game-controller\\comparison-lighting-pass.png",
+        "cameraView": "three-quarter",
+        "notes": "",
+        "aiVisionNotes": "Agent vision reviewed the same packaged pair. Critical semantic systems meet their thresholds; remaining mismatch is chiefly the side-shell curvature and illustration-versus-render framing."
+      }
+    },
+    {
+      "timestamp": "2026-08-03T16:41:29.347805+00:00",
+      "passId": "interaction-pass",
+      "estimatedFidelity": 0.87,
+      "aiVisionScore": 0.87,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.82,
+        "componentStructure": 0.84,
+        "formDetail": 0.78,
+        "materialSurface": 0.82,
+        "lightingCamera": 0.8,
+        "interaction": 0.87
+      },
+      "featureReviews": [
+        {
+          "id": "controller-silhouette",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Broad shoulder deck, deep lower notch and paired flared handles preserve the reference identity; render is slightly squarer through the upper corners."
+        },
+        {
+          "id": "front-input-layout",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Cross D-pad, four-button diamond, centre controls and symmetric dual-stick sockets are all independent and correctly ordered."
+        },
+        {
+          "id": "shoulder-rear-system",
+          "score": 0.81,
+          "passed": true,
+          "notes": "Two pink shoulder layers per side, rear centre inset, service cover and four visible screws remain separate in the rear view."
+        },
+        {
+          "id": "sakura-material-system",
+          "score": 0.83,
+          "passed": true,
+          "notes": "Warm cream shell, Sakura pink controls/grips, dark cavities, muted screws and rose powered lens remain distinct."
+        },
+        {
+          "id": "purpose-animation",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Powered browser state drives both sticks, D-pad, four face buttons, centre controls, four shoulders, status glow and bounded rumble; stop restores exact transforms."
+        }
+      ],
+      "action": "continue",
+      "summary": "Powered cue visibly exercises both sticks, D-pad, four face buttons, centre controls and four shoulders with status glow and bounded rumble; stop resets every transform.",
+      "matched": [
+        "named hierarchy",
+        "multi-angle volume",
+        "SAKURA palette",
+        "runtime pivots and sockets"
+      ],
+      "mismatches": [
+        "side shell curvature is a conservative procedural approximation",
+        "internal mechanisms remain inferred and omitted",
+        "pixel mask metrics are dominated by reference/render framing"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "mapStrippedRender": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\game-controller\\final-review-2\\render-front.png",
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "powered-front",
+        "long-axis",
+        "thickness-axis"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake\\game-controller\\front.png",
+        "renderScreenshot": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\game-controller\\final-review-2\\render-front.png",
+        "comparisonImage": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\game-controller\\comparison-interaction-pass.png",
+        "cameraView": "front",
+        "notes": "",
+        "aiVisionNotes": "Agent vision reviewed the same packaged pair. Critical semantic systems meet their thresholds; remaining mismatch is chiefly the side-shell curvature and illustration-versus-render framing."
+      }
+    },
+    {
+      "timestamp": "2026-08-03T16:41:29.749099+00:00",
+      "passId": "optimization-pass",
+      "estimatedFidelity": 0.86,
+      "aiVisionScore": 0.86,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.82,
+        "componentStructure": 0.84,
+        "formDetail": 0.78,
+        "materialSurface": 0.82,
+        "lightingCamera": 0.8,
+        "interaction": 0.87
+      },
+      "featureReviews": [
+        {
+          "id": "controller-silhouette",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Broad shoulder deck, deep lower notch and paired flared handles preserve the reference identity; render is slightly squarer through the upper corners."
+        },
+        {
+          "id": "front-input-layout",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Cross D-pad, four-button diamond, centre controls and symmetric dual-stick sockets are all independent and correctly ordered."
+        },
+        {
+          "id": "shoulder-rear-system",
+          "score": 0.81,
+          "passed": true,
+          "notes": "Two pink shoulder layers per side, rear centre inset, service cover and four visible screws remain separate in the rear view."
+        },
+        {
+          "id": "sakura-material-system",
+          "score": 0.83,
+          "passed": true,
+          "notes": "Warm cream shell, Sakura pink controls/grips, dark cavities, muted screws and rose powered lens remain distinct."
+        },
+        {
+          "id": "purpose-animation",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Powered browser state drives both sticks, D-pad, four face buttons, centre controls, four shoulders, status glow and bounded rumble; stop restores exact transforms."
+        }
+      ],
+      "action": "continue",
+      "summary": "Browser diagnostics report 66 draw calls and 56,736 triangles, inside the 100-call and 60,000-triangle budgets with no update-time allocation.",
+      "matched": [
+        "named hierarchy",
+        "multi-angle volume",
+        "SAKURA palette",
+        "runtime pivots and sockets"
+      ],
+      "mismatches": [
+        "side shell curvature is a conservative procedural approximation",
+        "internal mechanisms remain inferred and omitted",
+        "pixel mask metrics are dominated by reference/render framing"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "mapStrippedRender": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\game-controller\\final-review-2\\render-front.png",
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "powered-front",
+        "long-axis",
+        "thickness-axis"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake\\game-controller\\front.png",
+        "renderScreenshot": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\game-controller\\final-review-2\\render-front.png",
+        "comparisonImage": "E:\\AI\\codexAI\\sakula\\arrow-cube\\artifacts\\img2threejs\\game-controller\\comparison-optimization-pass.png",
+        "cameraView": "front",
+        "notes": "",
+        "aiVisionNotes": "Agent vision reviewed the same packaged pair. Critical semantic systems meet their thresholds; remaining mismatch is chiefly the side-shell curvature and illustration-versus-render framing."
+      }
+    }
+  ],
+  "lodPlan": [
+    {
+      "tier": "near",
+      "distance": 0,
+      "strategy": "all named parts"
+    },
+    {
+      "tier": "far",
+      "distance": 18,
+      "strategy": "hide screw slots and crown insets"
+    }
+  ],
+  "performanceBudget": {
+    "qualityPriority": "reference-fidelity real-time browser",
+    "targetTriangles": 60000,
+    "maxDrawCalls": 100,
+    "textureSize": 1024,
+    "fpsTarget": 60,
+    "optimizationPolicy": "Share repeated geometry, bounded segments, no update allocations."
+  },
+  "lightingFromPhoto": [
+    "warm upper-left key light intensity 3.2 with broad soft shadow",
+    "cool rear-right fill intensity 1.35",
+    "pink rear rim intensity 1.6",
+    "warm-white hemisphere ambient over muted lavender ground",
+    "ACES tone mapping intent, exposure 1.0, pale neutral background",
+    "soft contact shadow beneath both grip ends"
+  ],
+  "proceduralStrategy": [
+    "Trace front shell and grip contours as beveled extrusions with real depth.",
+    "Build every input and service detail as named independent components.",
+    "Animate sticks, D-pad, buttons and shoulders through stable pivots with exact reset.",
+    "Reuse repeated geometries."
+  ],
+  "animationAnchors": [
+    "controller-motion-pivot",
+    "left-stick-pivot",
+    "right-stick-pivot",
+    "dpad-pivot",
+    "face-button-pivots",
+    "shoulder-pivots",
+    "status-lens"
+  ],
+  "destructionAnchors": [
+    "front/rear shell seam",
+    "grip panels",
+    "front controls",
+    "shoulders",
+    "rear service cover"
+  ],
+  "risks": [
+    "front-right edge slightly clipped",
+    "rear connector function inferred",
+    "internal mechanisms hidden and omitted"
+  ],
+  "localSpecSearch": {
+    "collection": "core_3d",
+    "query": "Sakura Game Controller game controller layered plastic shell ergonomic grip buttons shoulder trigger joystick real-time procedural Three.js articulated controller animation",
+    "index": {
+      "status": "hit",
+      "reason": "current",
+      "fingerprint": "6857e5ab528b42ac12f4f411f862610a0bffce8e47aee3610a7603c318072fe8"
+    },
+    "matches": [
+      {
+        "record_id": "core.shader-mapping-boxgeometry-slides-receivers-grips",
+        "file_path": "docs/raw/img2threejs-skill-dataset.json",
+        "heading": null,
+        "key_path": "categories.rendering_shader_mapping[5]",
+        "score": 4.27886765101,
+        "snippets": [
+          "... c宄勵櫝 l宀风棷 r璋﹑ h鐭沶h ch宄?nh宀风捊/kh宄勬吔. Recognition cues: Flat-faced, roughly rectangular volume (pistol slide, receiver/frame, grip, panel) D宀奉櫥 hi宄勫檽 nh宀风挾 di宄勫檳: Kh宄勬吔 g宀奉湸 ch宄?nh宀风捊 v宄勬铂 c璋ヽ m宀风 ph宀风g (kh璐竌 n璨宯g s鐓g l宄勵櫓, th鑺抧/khung s鐓g, tay c宀奉湷, t宀奉櫝 ..."
+        ],
+        "source_refs": [
+          {
+            "path": "docs/raw/img2threejs-skill-dataset.json",
+            "heading": null,
+            "key_path": "categories.rendering_shader_mapping[5]"
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "docs/raw/img2threejs-skill-dataset.json",
+            "note": "img2threejs NotebookLM research distillation"
+          }
+        ]
+      },
+      {
+        "record_id": "core.shader-mapping-torusgeometry-rings-loops",
+        "file_path": "docs/raw/img2threejs-skill-dataset.json",
+        "heading": null,
+        "key_path": "categories.rendering_shader_mapping[8]",
+        "score": 4.27886765101,
+        "snippets": [
+          "... h鐭沶h v璨宯g tr璨宯 ki宄勫兘 donut. Recognition cues: Circular loop feature 閳?bayonet handle ring, finger loop on a Talon knife, trigger guard loop, carrying handle D宀奉櫥 hi宄勫檽 nh宀风挾 di宄勫檳: Chi ti宀风腐 v璨宯g tr璨宯 閳?v璨宯g c璋﹏ l鐡㈠硠顡?l閿? v璨宯g ng璐竛 tay tr閿歯 dao ..."
+        ],
+        "source_refs": [
+          {
+            "path": "docs/raw/img2threejs-skill-dataset.json",
+            "heading": null,
+            "key_path": "categories.rendering_shader_mapping[8]"
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "docs/raw/img2threejs-skill-dataset.json",
+            "note": "img2threejs NotebookLM research distillation"
+          }
+        ]
+      },
+      {
+        "record_id": "core.uv-strategy",
+        "file_path": "grimoire/glossary/3d_vocabulary.md",
+        "heading": "Geometry And Topology",
+        "key_path": null,
+        "score": 4.011652417667,
+        "snippets": [
+          "UV strategy can use generated procedural coordinates, cylindrical projection, triplanar-like mapping, or atlas-ready unwrapped regions."
+        ],
+        "source_refs": [
+          {
+            "path": "grimoire/glossary/3d_vocabulary.md",
+            "heading": "Geometry And Topology",
+            "key_path": null
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "grimoire/glossary/3d_vocabulary.md"
+          },
+          {
+            "kind": "notebooklm-research",
+            "ref": "notebooklm:4b03c2f9-8393-411f-b5b4-039ab9532843",
+            "note": "Validated generic schema vocabulary; numeric claims remain backed by local source_refs."
+          }
+        ]
+      }
+    ]
+  },
+  "pivots": [
+    {
+      "id": "controller-motion-pivot",
+      "componentRef": "root",
+      "mode": "center",
+      "axis": [
+        0,
+        1,
+        0
+      ],
+      "purpose": "bounded rumble"
+    },
+    {
+      "id": "left-stick-pivot",
+      "componentRef": "left-stick-assembly",
+      "mode": "socket",
+      "axis": [
+        1,
+        0,
+        1
+      ],
+      "purpose": "dual-axis input"
+    },
+    {
+      "id": "right-stick-pivot",
+      "componentRef": "right-stick-assembly",
+      "mode": "socket",
+      "axis": [
+        1,
+        0,
+        1
+      ],
+      "purpose": "dual-axis input"
+    },
+    {
+      "id": "dpad-pivot",
+      "componentRef": "dpad-cross",
+      "mode": "center",
+      "axis": [
+        1,
+        1,
+        0
+      ],
+      "purpose": "directional tilt"
+    },
+    {
+      "id": "face-button-pivots",
+      "componentRef": "face-button-array",
+      "mode": "base",
+      "axis": [
+        0,
+        0,
+        1
+      ],
+      "purpose": "independent press"
+    },
+    {
+      "id": "shoulder-pivots",
+      "componentRef": "shoulder-deck",
+      "mode": "hinge",
+      "axis": [
+        1,
+        0,
+        0
+      ],
+      "purpose": "bumper and trigger press"
+    }
+  ],
+  "sockets": [
+    {
+      "id": "left-stick-socket",
+      "parent": "front-shell",
+      "position": [
+        -0.58,
+        -0.42,
+        0.48
+      ]
+    },
+    {
+      "id": "right-stick-socket",
+      "parent": "front-shell",
+      "position": [
+        0.58,
+        -0.42,
+        0.48
+      ]
+    },
+    {
+      "id": "left-shoulder-socket",
+      "parent": "shoulder-deck",
+      "position": [
+        -1.45,
+        1.22,
+        -0.18
+      ]
+    },
+    {
+      "id": "right-shoulder-socket",
+      "parent": "shoulder-deck",
+      "position": [
+        1.45,
+        1.22,
+        -0.18
+      ]
+    },
+    {
+      "id": "power-connection-socket",
+      "parent": "rear-shell",
+      "position": [
+        0,
+        0.86,
+        -0.68
+      ],
+      "inferred": true
+    }
+  ],
+  "tier1Results": [
+    {
+      "passed": false,
+      "checks": {
+        "silhouetteIoU": 0.2649,
+        "aspectRatioDelta": 0.5134,
+        "scaleDelta": 0.6158,
+        "bilateralSymmetryError": 0.0394,
+        "colorDelta": {
+          "checked": 30,
+          "maxDeltaE": 10.92,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 6.33
+            },
+            {
+              "componentId": null,
+              "deltaE": 6.33
+            },
+            {
+              "componentId": null,
+              "deltaE": 6.33
+            },
+            {
+              "componentId": null,
+              "deltaE": 6.33
+            },
+            {
+              "componentId": null,
+              "deltaE": 6.33
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 6.33
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.92
+            },
+            {
+              "componentId": null,
+              "deltaE": 6.33
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.92
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.92
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.92
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.92
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.92
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.92
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 6.33
+            }
+          ],
+          "gated": false
+        }
+      },
+      "failures": [
+        "silhouette IoU 0.265 is below threshold 0.85",
+        "aspect-ratio delta 0.513 exceeds threshold 0.05",
+        "scale delta 0.616 exceeds threshold 0.08",
+        "blockout requires --map-stripped-render evidence"
+      ],
+      "renderHash": "a425f781b7a4ec7f",
+      "passId": "blockout"
+    }
+  ]
+}

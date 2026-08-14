@@ -1,0 +1,747 @@
+{
+  "targetName": "SAKURA Blender v2",
+  "sourceImage": "references/intake-v2/blender/blender-turnsheet-v2.png",
+  "preSpecAssessment": {
+    "objectClass": {
+      "primaryType": "faceted countertop blender with transparent vessel",
+      "primaryDomain": "object",
+      "formLanguage": [
+        "hard-surface",
+        "low-poly",
+        "faceted",
+        "transparent-vessel"
+      ],
+      "structureKind": [
+        "compound object",
+        "layered shell",
+        "articulated assembly",
+        "repeated modules"
+      ],
+      "motionPotential": [
+        "articulated",
+        "rotating",
+        "effect-emitter",
+        "detachable",
+        "destructible"
+      ],
+      "materialFamilies": [
+        "matte plastic",
+        "transparent jar wall",
+        "dark metal",
+        "rubber",
+        "translucent liquid"
+      ],
+      "notes": "The v1 runtime contract freezes the 144-node rig. The IMAGEN sheet only reallocates visual masses within that envelope."
+    },
+    "complexity": {
+      "tier": "ultra-complex",
+      "scores": {
+        "silhouetteComplexity": 3,
+        "componentCount": 3,
+        "hierarchyDepth": 3,
+        "repetitionDensity": 3,
+        "materialLayerCount": 3,
+        "localDetailDensity": 3,
+        "occlusionRisk": 3,
+        "actionReadinessNeed": 3
+      },
+      "estimatedCounts": {
+        "macroComponents": 4,
+        "mesoComponents": 18,
+        "microFeatureGroups": 21,
+        "materialLayers": 12,
+        "repetitionSystems": 6
+      },
+      "reasoning": [
+        "Transparent jar ordering must coexist with opaque fruit, blades, liquid and splash volumes.",
+        "Jar, lid, blade, dial, fruit and liquid pivots are all independently animated and must reset exactly.",
+        "Eight ribs, four blades, five vents, four feet and twelve fruit chunks are repeated systems.",
+        "The current runtime exposes 144 named objects and ten semantic sockets whose local transforms are frozen."
+      ]
+    },
+    "specDepthDecision": {
+      "requiredDepth": "ultra-complex",
+      "minimumComponentLevels": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "needsRepetitionSystems": true,
+      "needsMaterialLocalOverrides": true,
+      "needsMultipleReviewViews": true,
+      "needsActionReadyHierarchy": true,
+      "rationale": "The redesign changes visual geometry only and must preserve the existing high-density performance rig."
+    },
+    "unknownsToResolveBeforeImplementation": [],
+    "detailInventory": {
+      "scanMethod": "grid-4x4 plus four-view component review",
+      "targetMinDetails": 20,
+      "details": [
+        {
+          "id": "blender-detail-1",
+          "kind": "bevel",
+          "description": "Low 8-sided mint lid knob with a crisp stepped upper rim.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "lid-knob"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.96
+        },
+        {
+          "id": "blender-detail-2",
+          "kind": "contour",
+          "description": "Broad Sakura-pink lid uses a stepped 12-sided umbrella crown.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "lid-shell"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.98
+        },
+        {
+          "id": "blender-detail-3",
+          "kind": "seam",
+          "description": "Thin projecting lid flange overlaps the jar rim.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "lid-flange"
+          },
+          "evidenceRef": "side-view",
+          "confidence": 0.97
+        },
+        {
+          "id": "blender-detail-4",
+          "kind": "seam",
+          "description": "Translucent pink collar continues below the lid.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "jar-upper-collar"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.96
+        },
+        {
+          "id": "blender-detail-5",
+          "kind": "contour",
+          "description": "Transparent jar widens upward as a readable 12-sided faceted vessel.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "jar-shell"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.99
+        },
+        {
+          "id": "blender-detail-6",
+          "kind": "ridge",
+          "description": "Eight sparse molded ribs follow the faceted jar taper without milky overlap.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "jar-rib-array"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.94
+        },
+        {
+          "id": "blender-detail-7",
+          "kind": "contour",
+          "description": "Bold cream 8-sided three-bend handle forms a tall angular opening with thick embedded roots.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "jar-handle"
+          },
+          "evidenceRef": "side-view",
+          "confidence": 0.98
+        },
+        {
+          "id": "blender-detail-8",
+          "kind": "ridge",
+          "description": "Four enlarged dark metal blade wedges cant upward around a faceted hub.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "blade-array"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.95
+        },
+        {
+          "id": "blender-detail-9",
+          "kind": "seam",
+          "description": "Shallow pink jar seat separates vessel from motor base.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "jar-seat"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.97
+        },
+        {
+          "id": "blender-detail-10",
+          "kind": "bevel",
+          "description": "Warm cream upper motor shoulder is compressed into a stronger trapezoid transition.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "upper-base-shell"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.99
+        },
+        {
+          "id": "blender-detail-11",
+          "kind": "bevel",
+          "description": "Sakura-pink lower enclosure reads as a chunky faceted plinth inside the v1 footprint.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "lower-base-shell"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.99
+        },
+        {
+          "id": "blender-detail-12",
+          "kind": "seam",
+          "description": "Straight horizontal cream-to-pink enclosure seam.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "base-seam-band"
+          },
+          "evidenceRef": "side-view",
+          "confidence": 0.98
+        },
+        {
+          "id": "blender-detail-13",
+          "kind": "bevel",
+          "description": "Oversized layered mint speed dial is approximately 18 percent larger while retaining the frozen pivot.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "speed-dial"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.99
+        },
+        {
+          "id": "blender-detail-14",
+          "kind": "linework",
+          "description": "Narrow vertical marker is recessed into the dial face.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "dial-marker"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.98
+        },
+        {
+          "id": "blender-detail-15",
+          "kind": "emissive",
+          "description": "Small circular status lens sits above the speed dial.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "status-indicator"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.98
+        },
+        {
+          "id": "blender-detail-16",
+          "kind": "hole",
+          "description": "Five horizontal rounded vent slots occupy the rear cream panel.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "rear-vent-array"
+          },
+          "evidenceRef": "back-view",
+          "confidence": 0.99
+        },
+        {
+          "id": "blender-detail-17",
+          "kind": "hole",
+          "description": "Dark two-pin inlet is centered low on the rear pink panel.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "rear-power-inlet"
+          },
+          "evidenceRef": "back-view",
+          "confidence": 0.99
+        },
+        {
+          "id": "blender-detail-18",
+          "kind": "fastener",
+          "description": "Four shallow dark rubber feet support the base.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "foot-array"
+          },
+          "evidenceRef": "side-view",
+          "confidence": 0.94
+        },
+        {
+          "id": "blender-detail-19",
+          "kind": "gloss",
+          "description": "Jar edges and ribs carry brighter low-roughness highlights than the center.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "material.localOverrides",
+            "ref": "transparent-jar-edge-response"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.94
+        },
+        {
+          "id": "blender-detail-20",
+          "kind": "contour",
+          "description": "Powered-only smoothie vortex and ingredient spiral communicate blending.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "liquid-vortex-pivot"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.94
+        },
+        {
+          "id": "blender-v2-detail-21",
+          "kind": "contour",
+          "description": "Stable dark-plum outline hierarchy uses main, structure and detail widths with object-space plus/minus 18 percent variation.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "catalog-visible game contour",
+          "affects": "silhouette, materialSurface",
+          "mapsTo": {
+            "type": "material.localOverrides",
+            "ref": "blender-outline-hierarchy"
+          },
+          "evidenceRef": "references/intake-v2/blender/views/three-quarter.png",
+          "confidence": 0.98
+        }
+      ]
+    },
+    "anatomy": {
+      "applies": false,
+      "styleHeads": 0,
+      "proportions": {
+        "headUnit": 0,
+        "torso": 0,
+        "legs": 0,
+        "shoulderWidth": 0,
+        "hipWidth": 0
+      },
+      "pose": {
+        "type": "unassessed",
+        "jointAngles": {}
+      },
+      "faceLandmarks": {
+        "eyeLine": 0,
+        "eyeSpacing": 0,
+        "noseBase": 0,
+        "mouthLine": 0,
+        "hairline": 0
+      },
+      "features": [],
+      "confidence": 0,
+      "note": "Only meaningful when objectClass.primaryDomain is character or hybrid. Set applies=true and fill from forge/stage1_intake/extract_landmarks.py. See grimoire/character/reconstruction.md and grimoire/character/likeness_maximization.md."
+    },
+    "sourceImage": "references/intake-v2/blender/blender-turnsheet-v2.png"
+  },
+  "qualityContract": {
+    "qualityBar": "ultra-complex",
+    "definitionOfDone": [
+      "The base, jar, lid, handle, fruit and control read as the same blender from all four reference views while preserving the exact v1 full-tree bounds.",
+      "The jar, lid, handle, dial, blade, fruit, liquid and splash geometry remain children of the frozen v1 pivots and sockets.",
+      "The model uses broad 6-12 sided facets, stepped bevels and a 0.0048/0.0041/0.0033 stable outline hierarchy without temporal jitter.",
+      "Startup, chop, blend, two lid bounces, mouth splash, wind-down and stop all retain one animation owner and exact reset."
+    ],
+    "minimumSpecDepth": {
+      "macroComponents": 4,
+      "mesoComponents": 16,
+      "microFeatureGroups": 20,
+      "materialLayers": 10,
+      "repetitionSystems": 6,
+      "reviewViewpoints": 7
+    },
+    "featureGroups": [
+      {
+        "id": "blender-envelope-silhouette",
+        "name": "Frozen blender envelope and silhouette",
+        "required": true,
+        "qualityCriteria": [
+          "Exact v1 Box3, ground height, jar/base ratio, handle side and four cable edge anchors are preserved."
+        ],
+        "evidenceRefs": [
+          "front-view",
+          "side-view",
+          "back-view",
+          "three-quarter-view"
+        ],
+        "failureModes": [
+          "full-tree Box3 changes",
+          "handle switches side",
+          "jar or base expands past the v1 footprint"
+        ]
+      },
+      {
+        "id": "faceted-vessel-system",
+        "name": "Faceted transparent vessel system",
+        "required": true,
+        "qualityCriteria": [
+          "12-sided jar, sparse ribs, rolled rim, angular handle roots and stepped lid remain readable and attached."
+        ],
+        "evidenceRefs": [
+          "front-view",
+          "side-view",
+          "back-view",
+          "three-quarter-view"
+        ],
+        "failureModes": [
+          "opaque or milky jar",
+          "hose-like handle",
+          "floating roots",
+          "lid hides splash gaps"
+        ]
+      },
+      {
+        "id": "motor-control-system",
+        "name": "Chunky base and oversized control",
+        "required": true,
+        "qualityCriteria": [
+          "Pink plinth, compressed cream shoulder, enlarged dial, status dot, rear vents and inlet retain frozen placements."
+        ],
+        "evidenceRefs": [
+          "front-view",
+          "back-view",
+          "three-quarter-view"
+        ],
+        "failureModes": [
+          "generic rectangular base",
+          "dial pivot moves",
+          "rear connection no longer matches"
+        ]
+      },
+      {
+        "id": "blender-animation-contact",
+        "name": "Frozen animation and effect contact",
+        "required": true,
+        "qualityCriteria": [
+          "Blade, fruit, liquid, lid and splash remain aligned through all sampled phases and stop exactly restores idle state."
+        ],
+        "evidenceRefs": [
+          "front-view",
+          "three-quarter-view"
+        ],
+        "failureModes": [
+          "fruit or liquid crosses jar wall",
+          "splash emits from old mouth",
+          "lid bounce separates from jar"
+        ]
+      },
+      {
+        "id": "blender-outline-hierarchy",
+        "name": "Stable unequal outline hierarchy",
+        "required": true,
+        "qualityCriteria": [
+          "Main, structural and detail contours use stable 0.0048/0.0041/0.0033 widths with plus/minus 18 percent object-space variation."
+        ],
+        "evidenceRefs": [
+          "front-view",
+          "side-view",
+          "back-view",
+          "three-quarter-view"
+        ],
+        "failureModes": [
+          "uniform technical outline",
+          "temporal wobble",
+          "transparent parts become black clumps"
+        ]
+      }
+    ],
+    "visualDeltaChecks": [
+      "exact v1 full-tree Box3, center and ground contact",
+      "four scene-edge cable anchors and ten semantic socket transforms",
+      "jar-seat, blade-axis, lid-seat, dial and splash-mouth screen-space contacts",
+      "faceted base, jar, lid and handle silhouette across four views",
+      "transparent sorting with fruit, blade and smoothie volumes",
+      "single timeline owner and exact stop reset",
+      "outline width hierarchy and stability under rotation"
+    ],
+    "antiShallowSpecRules": [
+      "No fused compound mesh.",
+      "No flat texture replacement for wheel or grille.",
+      "No pass without browser evidence."
+    ]
+  },
+  "authoringInstruction": "Fill observed object class, complexity reasoning, featureGroups, visualDeltaChecks, and unknowns before generating or implementing ObjectSculptSpec.",
+  "localSpecSearch": {
+    "collection": "core_3d",
+    "query": "SAKURA Blender v2 countertop blender transparent faceted jar handle attachment animated liquid vortex low-poly toon appliance stable object-space irregular outline",
+    "index": {
+      "status": "hit",
+      "reason": "current",
+      "fingerprint": "ac4f0bc9028e34083dbb5d5531ae3df7699c8e7641d5f8e6d42e7492ea1be1d0"
+    },
+    "matches": [
+      {
+        "record_id": "core.transform-local-object-space",
+        "file_path": "grimoire/intake/image_analysis.md",
+        "heading": "Layer 4 — Spatial relationships (scene-graph)",
+        "key_path": null,
+        "score": 6.38819547765,
+        "snippets": [
+          "Describe connected parts in 3D object-space using spatial predicates and a contact type rather than 2D image-space placement."
+        ],
+        "source_refs": [
+          {
+            "path": "grimoire/intake/image_analysis.md",
+            "heading": "Layer 4 — Spatial relationships (scene-graph)",
+            "key_path": null
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "grimoire/intake/image_analysis.md"
+          },
+          {
+            "kind": "notebooklm-research",
+            "ref": "notebooklm:4b03c2f9-8393-411f-b5b4-039ab9532843",
+            "note": "Validated generic schema vocabulary; numeric claims remain backed by local source_refs."
+          }
+        ]
+      },
+      {
+        "record_id": "core.description-scene-graph-relational-triplets",
+        "file_path": "docs/raw/img2threejs-skill-dataset.json",
+        "heading": null,
+        "key_path": "categories.description_conventions[2]",
+        "score": 5.362541246501,
+        "snippets": [
+          "<Subject, Predicate, Object> statements capturing spatial/semantic relationships between parts (e.g. <blade, attached_to, handle>), plus per-node bounding box and class label. Các phát biểu <Chủ thể, Vị ngữ, Đối tượng> nắm bắt quan hệ không ..."
+        ],
+        "source_refs": [
+          {
+            "path": "docs/raw/img2threejs-skill-dataset.json",
+            "heading": null,
+            "key_path": "categories.description_conventions[2]"
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "docs/raw/img2threejs-skill-dataset.json",
+            "note": "img2threejs NotebookLM research distillation"
+          }
+        ]
+      },
+      {
+        "record_id": "core.topology-intent",
+        "file_path": "grimoire/glossary/3d_vocabulary.md",
+        "heading": "Geometry And Topology",
+        "key_path": null,
+        "score": 5.143858634031,
+        "snippets": [
+          "Topology intent classifies a surface as hard-surface blockout, subdivision-ready, low-poly prop, organic deformed mesh, or alpha-card cluster."
+        ],
+        "source_refs": [
+          {
+            "path": "grimoire/glossary/3d_vocabulary.md",
+            "heading": "Geometry And Topology",
+            "key_path": null
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "grimoire/glossary/3d_vocabulary.md"
+          },
+          {
+            "kind": "notebooklm-research",
+            "ref": "notebooklm:4b03c2f9-8393-411f-b5b4-039ab9532843",
+            "note": "Validated generic schema vocabulary; numeric claims remain backed by local source_refs."
+          }
+        ]
+      }
+    ]
+  }
+}

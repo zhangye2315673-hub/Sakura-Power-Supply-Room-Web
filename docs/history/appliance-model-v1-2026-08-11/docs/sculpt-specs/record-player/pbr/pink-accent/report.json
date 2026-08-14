@@ -1,0 +1,83 @@
+{
+  "ok": true,
+  "verdict": "pass",
+  "confidence": 0.909,
+  "estimatedFidelity": 0.909,
+  "targetThreshold": 0.7,
+  "materialId": "pink-accent",
+  "sourceImage": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\record-player\\pbr\\pink-accent\\source-crop.png",
+  "outDir": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\record-player\\pbr\\pink-accent",
+  "palette": [
+    "#E8B0A8",
+    "#ECD5C4",
+    "#937B6F",
+    "#CFBBAA",
+    "#36261F"
+  ],
+  "maps": {
+    "albedo": {
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\record-player\\pbr\\pink-accent\\pink-accent_albedo.png",
+      "url": "pink-accent_albedo.png",
+      "channel": "albedo",
+      "source": "reference-pixel-extraction"
+    },
+    "roughness": {
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\record-player\\pbr\\pink-accent\\pink-accent_roughness.png",
+      "url": "pink-accent_roughness.png",
+      "channel": "roughness",
+      "source": "reference-pixel-extraction"
+    },
+    "height": {
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\record-player\\pbr\\pink-accent\\pink-accent_height.png",
+      "url": "pink-accent_height.png",
+      "channel": "height",
+      "source": "reference-pixel-extraction"
+    },
+    "normal": {
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\record-player\\pbr\\pink-accent\\pink-accent_normal.png",
+      "url": "pink-accent_normal.png",
+      "channel": "normal",
+      "source": "reference-pixel-extraction"
+    },
+    "ao": {
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\record-player\\pbr\\pink-accent\\pink-accent_ao.png",
+      "url": "pink-accent_ao.png",
+      "channel": "ao",
+      "source": "reference-pixel-extraction"
+    }
+  },
+  "diagnostics": {
+    "sourceWidth": 420,
+    "sourceHeight": 105,
+    "mapSize": 1024,
+    "cropBBoxPixels": {
+      "x": 0,
+      "y": 10,
+      "width": 420,
+      "height": 91
+    },
+    "mask": {
+      "backgroundColor": "#F9EDDD",
+      "backgroundNoise": 14.457,
+      "transparentPixelFraction": 0.0,
+      "foregroundCoverage": 0.1783
+    },
+    "mapStats": {
+      "valueRange": 0.733,
+      "heightP90Gradient": 0.03407,
+      "roughnessBase": 0.68,
+      "roughnessVariation": 0.052,
+      "normalStrength": 0.196,
+      "blurRadius": 21
+    },
+    "palette": [
+      "#E8B0A8",
+      "#ECD5C4",
+      "#937B6F",
+      "#CFBBAA",
+      "#36261F"
+    ]
+  },
+  "warnings": [],
+  "limitation": "single-image PBR extraction is an estimate; 70%+ extraction confidence still needs render screenshot review"
+}

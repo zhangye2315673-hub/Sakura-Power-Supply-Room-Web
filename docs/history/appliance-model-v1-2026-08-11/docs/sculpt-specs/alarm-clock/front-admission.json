@@ -1,0 +1,14 @@
+﻿{
+  "admitted": true,
+  "reasons": [],
+  "provenance": {
+    "viewpoint": "front",
+    "sourcePath": "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake\\alarm-clock\\front.png",
+    "width": 557,
+    "height": 941,
+    "foregroundCoverage": 0.1395,
+    "largestComponentFraction": 0.9956,
+    "pHash": 17395310368237187497,
+    "duplicateOfHash": null
+  }
+}

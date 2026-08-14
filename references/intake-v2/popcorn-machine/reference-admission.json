@@ -1,0 +1,17 @@
+{
+  "status": "conditional",
+  "provider": "v1-runtime-fallback",
+  "model": null,
+  "views": ["front", "side", "back", "three-quarter"],
+  "checks": {
+    "technicalProbe": true,
+    "allViewsDecodable": true,
+    "crossViewPartConsistency": true,
+    "commonGroundLine": true,
+    "animationAnchorsVisible": true
+  },
+  "limitations": [
+    "A new GPT Image 2 concept sheet could not be generated because no secure API credential was available.",
+    "The admitted views document v1 geometry, so the v2 exaggeration is an authored low-poly interpretation rather than image-matched concept reconstruction."
+  ]
+}

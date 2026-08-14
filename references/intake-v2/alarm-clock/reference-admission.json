@@ -1,0 +1,66 @@
+﻿[
+    {
+        "admitted":  true,
+        "reasons":  [
+
+                    ],
+        "provenance":  {
+                           "viewpoint":  "front",
+                           "sourcePath":  "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake-v2\\alarm-clock\\views\\front.png",
+                           "width":  557,
+                           "height":  941,
+                           "foregroundCoverage":  0.1395,
+                           "largestComponentFraction":  0.9956,
+                           "pHash":  17395310368237187497,
+                           "duplicateOfHash":  null
+                       }
+    },
+    {
+        "admitted":  true,
+        "reasons":  [
+
+                    ],
+        "provenance":  {
+                           "viewpoint":  "side",
+                           "sourcePath":  "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake-v2\\alarm-clock\\views\\side.png",
+                           "width":  557,
+                           "height":  941,
+                           "foregroundCoverage":  0.181,
+                           "largestComponentFraction":  0.8712,
+                           "pHash":  11645990197195121032,
+                           "duplicateOfHash":  null
+                       }
+    },
+    {
+        "admitted":  true,
+        "reasons":  [
+
+                    ],
+        "provenance":  {
+                           "viewpoint":  "back",
+                           "sourcePath":  "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake-v2\\alarm-clock\\views\\back.png",
+                           "width":  558,
+                           "height":  941,
+                           "foregroundCoverage":  0.321,
+                           "largestComponentFraction":  1.0,
+                           "pHash":  11946037940447487433,
+                           "duplicateOfHash":  null
+                       }
+    },
+    {
+        "admitted":  true,
+        "reasons":  [
+
+                    ],
+        "provenance":  {
+                           "viewpoint":  "three-quarter",
+                           "sourcePath":  "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake-v2\\alarm-clock\\views\\three-quarter.png",
+                           "width":  1200,
+                           "height":  830,
+                           "foregroundCoverage":  0.1697,
+                           "largestComponentFraction":  0.963,
+                           "pHash":  16400311480804285324,
+                           "duplicateOfHash":  null
+                       }
+    }
+]

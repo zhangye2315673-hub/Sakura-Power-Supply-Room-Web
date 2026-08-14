@@ -1,0 +1,24 @@
+{
+  "target": "game-controller-v2",
+  "source": "references/intake-v2/game-controller/game-controller-turnsheet-v2.png",
+  "technicalProbe": {
+    "width": 1254,
+    "height": 1254,
+    "bytes": 1324671,
+    "sha256": "A4A103C0ABAFED7358A02D9194C7E03C89650E92C95C93F7B9970672B92B915F",
+    "technicalSuitability": "pass",
+    "warnings": []
+  },
+  "views": [
+    { "viewpoint": "front", "admitted": true, "width": 627, "height": 627, "foregroundCoverage": 0.3160, "largestComponentFraction": 0.9545, "pHash": "18052543246338008852" },
+    { "viewpoint": "side", "admitted": true, "width": 627, "height": 627, "foregroundCoverage": 0.2042, "largestComponentFraction": 0.8809, "pHash": "11880485924005779558" },
+    { "viewpoint": "back", "admitted": true, "width": 627, "height": 627, "foregroundCoverage": 0.4038, "largestComponentFraction": 0.9942, "pHash": "18205663335947475879" },
+    { "viewpoint": "three-quarter", "admitted": true, "width": 627, "height": 627, "foregroundCoverage": 0.3016, "largestComponentFraction": 0.8974, "pHash": "16759802319620815059" }
+  ],
+  "verdict": "pass",
+  "notes": [
+    "All four crops are non-empty, sufficiently large, mutually distinct and consistent in control count.",
+    "The generated sheet is visual form evidence; archived runtime bounds and frozen transforms remain authoritative."
+  ]
+}
+

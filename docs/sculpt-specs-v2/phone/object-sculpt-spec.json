@@ -1,0 +1,4963 @@
+{
+  "targetName": "SAKURA Phone v2",
+  "targetId": "phone-v2",
+  "schemaVersion": "2.1",
+  "terminologyProfile": {
+    "domain": "real-time procedural Three.js asset",
+    "geometryTerms": [
+      "silhouette",
+      "topology",
+      "primitive",
+      "bevel",
+      "chamfer",
+      "taper",
+      "bend",
+      "boolean cut",
+      "edge loop",
+      "surface normal",
+      "displacement"
+    ],
+    "materialTerms": [
+      "albedo",
+      "baseColor",
+      "roughness",
+      "metalness",
+      "normal map",
+      "bump map",
+      "ambient occlusion",
+      "cavity dirt",
+      "edge wear",
+      "clearcoat"
+    ],
+    "lightingTerms": [
+      "key light",
+      "fill light",
+      "rim light",
+      "HDRI/environment reflection",
+      "contact shadow"
+    ],
+    "descriptionRule": "Use measurable 3D graphics terms. Avoid vague words unless they are paired with concrete geometry/material/shader parameters."
+  },
+  "sourceImage": "references/intake-v2/phone/views/front.png",
+  "referenceCamera": {
+    "projection": "perspective",
+    "view": "three-quarter",
+    "confidence": 0.9,
+    "notes": "Review camera follows the existing model-review framing; not solved as a source-photo camera."
+  },
+  "suitability": "conditional",
+  "scores": {
+    "object_isolation": 3,
+    "silhouette_readability": 3,
+    "depth_inference": 3,
+    "primitive_decomposition": 3,
+    "material_procedurality": 3,
+    "occlusion_risk": 2,
+    "interaction_fit": 3
+  },
+  "preSpecAssessment": {
+    "objectClass": {
+      "primaryType": "original stylized smartphone with model-owned incoming-call performance rig",
+      "primaryDomain": "object",
+      "formLanguage": [
+        "faceted-handheld",
+        "exaggerated-low-poly",
+        "Sakura-toon",
+        "stable-uneven-ink"
+      ],
+      "structureKind": [
+        "layered-slab",
+        "frozen-pivot-and-socket-rig"
+      ],
+      "motionPotential": [
+        "body lift",
+        "high-frequency vibration",
+        "call UI pulse",
+        "volumetric reminders"
+      ],
+      "materialFamilies": [
+        "warm cream polymer",
+        "Sakura accent polymer",
+        "cool-violet screen",
+        "painted metal",
+        "emissive call UI"
+      ],
+      "notes": "No independent source artwork exists. Archived runtime views are conditional design evidence, not GPT Image 2 output or image-exact reconstruction."
+    },
+    "complexity": {
+      "tier": "complex",
+      "scores": {
+        "silhouetteComplexity": 3,
+        "componentCount": 3,
+        "hierarchyDepth": 3,
+        "repetitionDensity": 3,
+        "materialLayerCount": 3,
+        "localDetailDensity": 3,
+        "occlusionRisk": 2,
+        "actionReadinessNeed": 3
+      },
+      "estimatedCounts": {
+        "macroComponents": 4,
+        "mesoComponents": 9,
+        "microFeatureGroups": 10,
+        "materialLayers": 5,
+        "repetitionSystems": 6
+      },
+      "reasoning": [
+        "The slab is simple, but the complete incoming-call UI, repeated volumetric feedback and frozen action hierarchy require a complex contract."
+      ]
+    },
+    "specDepthDecision": {
+      "requiredDepth": "complex",
+      "minimumComponentLevels": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "needsRepetitionSystems": true,
+      "needsMaterialLocalOverrides": true,
+      "needsMultipleReviewViews": true,
+      "needsActionReadyHierarchy": true,
+      "rationale": "Every call control, side control, I/O and feedback anchor must remain independently testable."
+    },
+    "unknownsToResolveBeforeImplementation": [],
+    "detailInventory": {
+      "scanMethod": "four archived runtime views plus frozen hierarchy audit",
+      "targetMinDetails": 16,
+      "note": "Every item maps to a component or material entry; no pixel-exact source claim is made.",
+      "details": [
+        {
+          "id": "phone-detail-1",
+          "kind": "contour",
+          "description": "Eight-corner perimeter rail defines the archived handset package.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "handset-shell"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.92
+        },
+        {
+          "id": "phone-detail-2",
+          "kind": "contour",
+          "description": "Four hexagonal guard caps exaggerate the handheld silhouette.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "corner-guard-array"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.92
+        },
+        {
+          "id": "phone-detail-3",
+          "kind": "contour",
+          "description": "Cream rear shell and narrow center spine form separate planes.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "rear-shell"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.92
+        },
+        {
+          "id": "phone-detail-4",
+          "kind": "contour",
+          "description": "Front bezel contains oversized low-poly glass, crown and chin.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "screen-assembly"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.92
+        },
+        {
+          "id": "phone-detail-5",
+          "kind": "contour",
+          "description": "Earpiece and front camera remain discrete at the screen crown.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "screen-details"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.92
+        },
+        {
+          "id": "phone-detail-6",
+          "kind": "contour",
+          "description": "Avatar, MOMO label and CALLING prompt occupy the frozen UI pivot.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "incoming-call-ui"
+          },
+          "evidenceRef": "back-view",
+          "confidence": 0.98
+        },
+        {
+          "id": "phone-detail-7",
+          "kind": "contour",
+          "description": "Answer and hang-up wells retain separate pivots and sockets.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "call-controls"
+          },
+          "evidenceRef": "back-view",
+          "confidence": 0.98
+        },
+        {
+          "id": "phone-detail-8",
+          "kind": "contour",
+          "description": "Right power and left paired volume keys retain archived travel axes.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "side-controls"
+          },
+          "evidenceRef": "back-view",
+          "confidence": 0.98
+        },
+        {
+          "id": "phone-detail-9",
+          "kind": "contour",
+          "description": "Bottom Type-C recess, tongue, five speakers and microphone remain independent.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "bottom-io"
+          },
+          "evidenceRef": "back-view",
+          "confidence": 0.98
+        },
+        {
+          "id": "phone-detail-10",
+          "kind": "contour",
+          "description": "Chamfered rear camera island enlarges the recognizable camera mass.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "camera-island"
+          },
+          "evidenceRef": "back-view",
+          "confidence": 0.98
+        },
+        {
+          "id": "phone-detail-11",
+          "kind": "contour",
+          "description": "Two twelve-sided lens stacks retain frozen lens pivots and sockets.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "camera-lenses"
+          },
+          "evidenceRef": "back-view",
+          "confidence": 0.98
+        },
+        {
+          "id": "phone-detail-12",
+          "kind": "contour",
+          "description": "Five-petal brand-neutral Sakura motif replaces a generic rear mark.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "rear-motif"
+          },
+          "evidenceRef": "back-view",
+          "confidence": 0.98
+        },
+        {
+          "id": "phone-detail-13",
+          "kind": "contour",
+          "description": "Three torus wave rings remain closed volumetric call feedback.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "feedback-rig"
+          },
+          "evidenceRef": "runtime-contract",
+          "confidence": 0.98
+        },
+        {
+          "id": "phone-detail-14",
+          "kind": "contour",
+          "description": "Four vibration arcs and six signal arcs use closed TubeGeometry.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "feedback-rig"
+          },
+          "evidenceRef": "runtime-contract",
+          "confidence": 0.98
+        },
+        {
+          "id": "phone-detail-15",
+          "kind": "contour",
+          "description": "Eight notification points and six message particles remain model-owned.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "feedback-rig"
+          },
+          "evidenceRef": "runtime-contract",
+          "confidence": 0.98
+        },
+        {
+          "id": "phone-detail-16",
+          "kind": "contour",
+          "description": "Main, structure and detail ink use stable 0.18 object-space variation.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "outline-system"
+          },
+          "evidenceRef": "runtime-contract",
+          "confidence": 0.98
+        }
+      ]
+    },
+    "anatomy": {
+      "applies": false,
+      "styleHeads": 0,
+      "proportions": {
+        "headUnit": 0,
+        "torso": 0,
+        "legs": 0,
+        "shoulderWidth": 0,
+        "hipWidth": 0
+      },
+      "pose": {
+        "type": "unassessed",
+        "jointAngles": {}
+      },
+      "faceLandmarks": {
+        "eyeLine": 0,
+        "eyeSpacing": 0,
+        "noseBase": 0,
+        "mouthLine": 0,
+        "hairline": 0
+      },
+      "features": [],
+      "confidence": 0,
+      "note": "Only meaningful when objectClass.primaryDomain is character or hybrid. Set applies=true and fill from forge/stage1_intake/extract_landmarks.py. See grimoire/character/reconstruction.md and grimoire/character/likeness_maximization.md."
+    },
+    "sourceImage": "references/intake-v2/phone/views/front.png"
+  },
+  "qualityContract": {
+    "qualityBar": "complex",
+    "definitionOfDone": [
+      "Phone v2 preserves archived package, ground, pivots, sockets and call trajectories while strengthening low-poly identity.",
+      "Solid parts use 0.0048/0.0041/0.0033 stable ink with 0.18 variation; call effects own no outline meshes."
+    ],
+    "minimumSpecDepth": {
+      "macroComponents": 4,
+      "mesoComponents": 7,
+      "microFeatureGroups": 6,
+      "materialLayers": 5,
+      "repetitionSystems": 5,
+      "reviewViewpoints": 0
+    },
+    "featureGroups": [
+      {
+        "id": "overall-silhouette",
+        "name": "Overall silhouette and proportions",
+        "required": true,
+        "qualityCriteria": [
+          "Bounding shape, dominant curves, negative spaces, and scale relationships are explicitly described."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "model reads as a generic placeholder instead of the reference object",
+          "major proportions are guessed without evidence"
+        ]
+      },
+      {
+        "id": "primary-structure",
+        "name": "Primary structure and hierarchy",
+        "required": true,
+        "qualityCriteria": [
+          "Major parts, joints, seams, contact points, and parent-child relationships are named before code generation."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "large visible parts are merged into one mesh",
+          "component hierarchy is too shallow for the observed complexity"
+        ]
+      },
+      {
+        "id": "attachment-joint-correctness",
+        "name": "Attachment and joint correctness",
+        "required": true,
+        "qualityCriteria": [
+          "Every visible child appendage, branch, limb, handle, connector, tube, cable, horn, wing, leg, or hinged part has an attachment contract with parent socket, localStart/localEnd, contact type, embed/overlap, and gap tolerance."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "child part root floats away from the parent",
+          "branch/limb/tube is centered in space instead of pivoting from its root",
+          "parent-child transform mixes world and local coordinates"
+        ]
+      },
+      {
+        "id": "surface-material-response",
+        "name": "Surface material response",
+        "required": true,
+        "qualityCriteria": [
+          "Albedo zones, roughness, normal/bump/displacement intent, cavity dirt, edge wear, and local overrides are specified where visible.",
+          "Important materials define independent albedo, roughness, height/normal, and AO responses instead of reusing one texture for unrelated PBR channels.",
+          "Surface response is decomposed into macro, meso, and micro frequency bands with scale and amplitude tied to object scale."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "surface looks like flat plastic",
+          "local material variation is missing or not tied to image evidence"
+        ]
+      },
+      {
+        "id": "reference-lookdev",
+        "name": "Reference color, material, and lighting response",
+        "required": true,
+        "qualityCriteria": [
+          "Material-pass names the reference-derived albedo palette, roughness variation, tactile normal/bump/displacement response, and local masks.",
+          "When a source image is available, run reference PBR extraction and require confidence >= 0.7 before treating maps as implementation-ready.",
+          "Lighting-pass names key/fill/rim or environment light, exposure, tone mapping, background, and contact shadow behavior.",
+          "Neutral, grazing-angle, and reference-matched renders prove that surface relief survives relighting and is not painted into albedo."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "model has acceptable shape but reads as flat shaded or plastic",
+          "colors are a generic average instead of reference-observed local color zones",
+          "lighting is evenly ambient and cannot reproduce the source value range"
+        ]
+      }
+    ],
+    "visualDeltaChecks": [
+      "silhouette and negative-space delta",
+      "component hierarchy depth delta",
+      "repetition density and distribution delta",
+      "material albedo/roughness/normal response delta",
+      "local feature placement and scale delta"
+    ],
+    "antiShallowSpecRules": [
+      "Do not proceed to code if qualityContract.qualityBar is unassessed.",
+      "Do not proceed to code if the spec only contains a root component for a moderate or complex object.",
+      "Do not proceed to code if required featureGroups are not represented by componentTree, materials, or repetitionSystems.",
+      "Do not proceed to code if visible local features are described only in prose and not attached to components/materials/evidenceRefs.",
+      "Do not proceed past structural-pass if attached child parts lack attachment.parentSocket, localStart, localEnd, embedDepth/overlap, and gapTolerance.",
+      "Do not pass material look-dev when albedo is reused as roughness, height, normal, or AO.",
+      "Do not pass material look-dev without macro, meso, and micro surface frequency bands for close-up materials.",
+      "Do not pass reference-fidelity material look-dev from a source image without usable referencePbr maps or an explicit documented limitation.",
+      "Do not patch a spec with extracted PBR maps when extraction confidence is below the target threshold unless the user explicitly accepts lower fidelity.",
+      "Do not place adjacent separate-geometry parts below 0.02 world-unit seam overlap (source: grimoire/build/geometry_patterns.md).",
+      "Do not satisfy raised or recessed relief, fasteners, or grip structure with a map alone when the feature affects form; use geometry or displacement (source: grimoire/build/geometry_patterns.md).",
+      "Adjacent components must overlap by at least 0.02 world units at shared seams (source: grimoire/build/geometry_patterns.md).",
+      "Raised or recessed relief and fasteners must be geometry, instanced micro-parts, or displacement; a map alone is an approximation (source: grimoire/build/geometry_patterns.md)."
+    ],
+    "mustNotDo": [
+      "Do not proceed to code if qualityContract.qualityBar is unassessed.",
+      "Do not proceed to code if the spec only contains a root component for a moderate or complex object.",
+      "Do not proceed to code if required featureGroups are not represented by componentTree, materials, or repetitionSystems.",
+      "Do not proceed to code if visible local features are described only in prose and not attached to components/materials/evidenceRefs.",
+      "Do not proceed past structural-pass if attached child parts lack attachment.parentSocket, localStart, localEnd, embedDepth/overlap, and gapTolerance.",
+      "Do not pass material look-dev when albedo is reused as roughness, height, normal, or AO.",
+      "Do not pass material look-dev without macro, meso, and micro surface frequency bands for close-up materials.",
+      "Do not pass reference-fidelity material look-dev from a source image without usable referencePbr maps or an explicit documented limitation.",
+      "Do not patch a spec with extracted PBR maps when extraction confidence is below the target threshold unless the user explicitly accepts lower fidelity.",
+      "Do not place adjacent separate-geometry parts below 0.02 world-unit seam overlap (source: grimoire/build/geometry_patterns.md).",
+      "Do not satisfy raised or recessed relief, fasteners, or grip structure with a map alone when the feature affects form; use geometry or displacement (source: grimoire/build/geometry_patterns.md).",
+      "Adjacent components must overlap by at least 0.02 world units at shared seams (source: grimoire/build/geometry_patterns.md).",
+      "Raised or recessed relief and fasteners must be geometry, instanced micro-parts, or displacement; a map alone is an approximation (source: grimoire/build/geometry_patterns.md)."
+    ]
+  },
+  "qualityTargets": {
+    "silhouette": 0.84,
+    "proportions": 0.84,
+    "structure": 0.9,
+    "materials": 0.84,
+    "actionReadiness": 0.96,
+    "outline": 0.86,
+    "reviewViewpoints": [
+      "front",
+      "side",
+      "back",
+      "three-quarter",
+      "runtime-startup",
+      "runtime-climax",
+      "runtime-wind-down"
+    ]
+  },
+  "selfCorrectLoop": {
+    "enabled": true,
+    "visualAcceptance": {
+      "reviewer": "ai-vision",
+      "threshold": 0.8,
+      "comparisonArtifactRequired": true,
+      "layerScoresRequired": true,
+      "codePixelDiffIsAcceptanceAuthority": false,
+      "scoringRule": "AI vision must inspect a side-by-side reference/render sheet and score the current pass from 0 to 1. Pixel-diff code may assist diagnostics but cannot approve a pass.",
+      "requiredLayerScores": [
+        "silhouetteProportion",
+        "componentStructure",
+        "formDetail",
+        "materialSurface",
+        "lightingCamera"
+      ],
+      "featureReviewPolicy": {
+        "enabled": true,
+        "reviewUnit": "semantic-subsystem",
+        "maxCriticalFeaturesPerPass": 5,
+        "maxImportantFeaturesPerPass": 3,
+        "criticalDefaultThreshold": 0.8,
+        "importantAverageThreshold": 0.65,
+        "adaptiveEscalation": true,
+        "singleImagePairOnly": true,
+        "selectionRule": "Choose only the most visually salient, identity-defining, user-prioritized, or high-risk semantic systems. Group repeated parts instead of reviewing every mesh. AI vision scores every selected feature from the same full reference/render pair."
+      }
+    },
+    "reviewAfterPasses": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "allowedActions": [
+      "continue",
+      "refine-spec",
+      "refine-code",
+      "request-input",
+      "stop"
+    ],
+    "specRefineTriggers": [
+      "missing component",
+      "wrong primitive family",
+      "wrong proportions",
+      "material layer under-specified",
+      "local feature not traceable to viewEvidence",
+      "reference ambiguity discovered during implementation"
+    ],
+    "codeRefineTriggers": [
+      "spec is adequate but generated geometry/material does not match",
+      "browser render differs from reference",
+      "performance budget exceeded",
+      "lighting hides geometry or material response"
+    ],
+    "stopCriteria": [
+      "target fidelity reached or user accepts current approximation",
+      "remaining gaps require new reference images or manual art"
+    ],
+    "screenshotPolicy": {
+      "requiredForPasses": [
+        "blockout",
+        "structural-pass",
+        "form-refinement",
+        "material-pass",
+        "surface-pass",
+        "lighting-pass",
+        "interaction-pass"
+      ],
+      "preferredCapture": "in-app-browser-screenshot",
+      "fallbackCapture": "user-supplied-screenshot-path",
+      "minimumEvidence": "Each visual pass needs a reference image, rendered screenshot, side-by-side comparison sheet, AI vision score, layer scores, and critique before choosing continue.",
+      "reviewPairRule": "Compare the same camera/viewpoint whenever possible; do not judge a front reference against a random render angle.",
+      "acceptanceAuthority": "AI vision review of the comparison sheet. Code-generated pixel similarity is not sufficient evidence."
+    }
+  },
+  "featureReviewTargets": [
+    {
+      "id": "phone-silhouette",
+      "name": "Faceted handheld silhouette and enlarged feature masses",
+      "tier": "critical",
+      "passIds": [
+        "blockout",
+        "form-refinement"
+      ],
+      "minimumScore": 0.82,
+      "mustPass": true,
+      "componentRefs": [
+        "handset-shell",
+        "corner-guard-array",
+        "camera-island"
+      ],
+      "evidenceRefs": [
+        "front-view",
+        "back-view",
+        "three-quarter-view"
+      ]
+    },
+    {
+      "id": "phone-identity",
+      "name": "Readable smartphone screen, side controls, I/O and dual camera identity",
+      "tier": "critical",
+      "passIds": [
+        "structural-pass",
+        "material-pass"
+      ],
+      "minimumScore": 0.82,
+      "mustPass": true,
+      "componentRefs": [
+        "screen-assembly",
+        "side-controls",
+        "bottom-io",
+        "camera-lenses"
+      ],
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ]
+    },
+    {
+      "id": "phone-runtime",
+      "name": "Frozen call UI, feedback and handset motion contact",
+      "tier": "critical",
+      "passIds": [
+        "interaction-pass"
+      ],
+      "minimumScore": 0.9,
+      "mustPass": true,
+      "componentRefs": [
+        "incoming-call-ui",
+        "call-controls",
+        "feedback-rig"
+      ],
+      "evidenceRefs": [
+        "runtime-contract"
+      ]
+    },
+    {
+      "id": "phone-ink",
+      "name": "Stable three-tier uneven ink without outlined call effects",
+      "tier": "critical",
+      "passIds": [
+        "material-pass",
+        "lighting-pass"
+      ],
+      "minimumScore": 0.82,
+      "mustPass": true,
+      "componentRefs": [
+        "outline-system"
+      ],
+      "evidenceRefs": [
+        "three-quarter-view"
+      ]
+    }
+  ],
+  "sculptPipeline": {
+    "passGateMode": "locked-sequential",
+    "passOrder": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "currentPass": "complete",
+    "completedPasses": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "lastCompletedPass": "optimization-pass",
+    "blockedReason": "",
+    "nextRequiredEvidence": []
+  },
+  "lookDevTargets": {
+    "qualityPriority": "reference-fidelity",
+    "materialPass": {
+      "albedoPaletteRequired": true,
+      "roughnessVariationRequired": true,
+      "normalOrBumpRequired": true,
+      "localOverridesRequired": true,
+      "minimumTextureResolution": 1024,
+      "preferredTextureResolution": 2048,
+      "independentMapChannels": [
+        "albedo",
+        "roughness",
+        "height",
+        "normal",
+        "ambient-occlusion"
+      ],
+      "requiredSurfaceFrequencyBands": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "geometryReliefRequiredWhenSilhouetteAffected": true,
+      "referencePbrExtraction": {
+        "requiredWhenSourceImagePresent": true,
+        "targetThreshold": 0.7,
+        "stopOnLowConfidence": true,
+        "script": "forge/stage1_intake/extract_pbr_evidence.py",
+        "acceptedLimitation": "single-image extraction is reference-derived inference, not exact photogrammetry"
+      },
+      "mustAvoid": [
+        "single flat albedo per material",
+        "uniform roughness",
+        "albedo texture reused as roughness/height/normal/AO",
+        "single-frequency random noise",
+        "plastic-looking smooth bark, stone, cloth, foliage, or aged material",
+        "local color/detail described only in prose without material masks",
+        "claiming exact PBR recovery when confidence is below the target threshold"
+      ]
+    },
+    "lightingPass": {
+      "requiredTerms": [
+        "key light",
+        "fill light",
+        "rim or environment light",
+        "exposure",
+        "tone mapping",
+        "background",
+        "contact shadow"
+      ],
+      "mustAvoid": [
+        "ambient-only lighting",
+        "flat value range",
+        "missing contact shadow",
+        "reference lighting copied without separating material readability"
+      ]
+    },
+    "screenshotReview": [
+      "Compare albedo palette and local color zones.",
+      "Compare roughness/normal/bump response under light.",
+      "Compare cavity dirt, edge wear, stains, moss, scratches, or other local masks.",
+      "Compare key/fill/rim structure, exposure, tone mapping, background, and contact shadows.",
+      "Capture a neutral-light render to verify material readability without reference lighting.",
+      "Capture a grazing-light close-up to expose flat normals, uniform roughness, tiling, and plastic highlights.",
+      "Capture a reference-matched render from the same camera framing as the source."
+    ]
+  },
+  "actionReadiness": {
+    "hierarchyReady": true,
+    "pivotStrategy": "All existing pivots and sockets retain exact local transforms and remain published through root.userData.sculptRuntime.",
+    "sockets": [
+      "phone-body-socket",
+      "phone-screen-socket",
+      "phone-incoming-call-ui-socket",
+      "phone-call-answer-socket",
+      "phone-call-hangup-socket",
+      "phone-power-button-socket",
+      "phone-volume-button-socket",
+      "phone-bottom-io-socket",
+      "phone-usb-c-connection-socket",
+      "phone-rear-camera-island-socket",
+      "phone-camera-lens-1-socket",
+      "phone-camera-lens-2-socket"
+    ],
+    "colliders": [
+      "phone-body"
+    ],
+    "destructionGroups": [
+      "phone-shell-assembly",
+      "phone-camera-assembly",
+      "phone-call-feedback"
+    ],
+    "interactionNotes": [
+      "No shared timeline or controller changes.",
+      "Call effects intentionally own no outline meshes."
+    ]
+  },
+  "assumptions": [
+    "No independent phone artwork exists; this is a stylized original upgrade.",
+    "Archived runtime views are conditional fallback, not GPT Image 2 output.",
+    "Archived package, ground, parent paths, local transforms and socket directions are immutable."
+  ],
+  "coordinateFrame": {
+    "handedness": "right-handed",
+    "upAxis": "+Y",
+    "forwardAxis": "+Z",
+    "origin": "archived phone root",
+    "units": "Three.js world units"
+  },
+  "silhouette": {
+    "primaryMass": "tall eight-corner slab inside archived package",
+    "secondaryMasses": [
+      "four guard caps",
+      "front screen stack",
+      "rear camera island"
+    ],
+    "negativeSpaces": [
+      "Type-C recess",
+      "speaker perforations",
+      "lens centers"
+    ],
+    "symmetry": "bilateral shell with asymmetric controls and diagonal dual camera",
+    "proportionNotes": "All world-space package dimensions exactly equal archived v1 in automated verification."
+  },
+  "viewEvidence": [
+    {
+      "id": "front-view",
+      "view": "front",
+      "imagePath": "references/intake-v2/phone/views/front.png",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "archived original-design silhouette, palette, part placement and framing"
+      ],
+      "confidence": 0.94
+    },
+    {
+      "id": "side-view",
+      "view": "side",
+      "imagePath": "references/intake-v2/phone/views/side.png",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "archived original-design silhouette, palette, part placement and framing"
+      ],
+      "confidence": 0.94
+    },
+    {
+      "id": "back-view",
+      "view": "back",
+      "imagePath": "references/intake-v2/phone/views/back.png",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "archived original-design silhouette, palette, part placement and framing"
+      ],
+      "confidence": 0.94
+    },
+    {
+      "id": "three-quarter-view",
+      "view": "three-quarter",
+      "imagePath": "references/intake-v2/phone/views/three-quarter.png",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "archived original-design silhouette, palette, part placement and framing"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "id": "runtime-contract",
+      "view": "runtime",
+      "imagePath": "docs/history/appliance-model-v1-2026-08-11/screenshots/models/phone/active-climax-2.8.png",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "frozen parent paths, local transforms, sockets, bounds, effect ownership and reset"
+      ],
+      "confidence": 0.99
+    }
+  ],
+  "componentTree": [
+    {
+      "id": "root",
+      "name": "Phone root",
+      "level": "macro",
+      "role": "assembly",
+      "importance": 1,
+      "confidence": 0.5,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Phone root uses box as a named low-poly runtime part while preserving archived anchors.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly hard-surface game prop with deterministic local transforms",
+        "edgeTreatment": {
+          "type": "single-segment planar chamfer",
+          "bevelRadius": 0.05,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": null,
+      "attachment": null,
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 1,
+        "units": "relative",
+        "confidence": 0.5
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "root",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.5
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "box",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Replace with sphere/capsule/compound proxy when the object shape demands it."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "root",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "base"
+        }
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "root-package"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0,
+        "microRoughness": 0,
+        "bumpAmplitude": 0,
+        "normalPattern": "",
+        "displacementPattern": "",
+        "occlusionPattern": "",
+        "edgeWearPattern": "",
+        "notes": ""
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view",
+        "runtime-contract"
+      ],
+      "details": [
+        {
+          "id": "root-package",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "three-quarter-view",
+            "runtime-contract"
+          ]
+        }
+      ],
+      "fidelityTier": "blockout",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(247,240,228,1)",
+        "secondaryAlbedo": "rgba(231,219,226,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9,
+        "roughness": 0.68,
+        "toonBands": 3
+      }
+    },
+    {
+      "id": "handset-shell",
+      "name": "Faceted handset shell",
+      "level": "macro",
+      "role": "enclosure",
+      "importance": 1,
+      "confidence": 0.5,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Faceted handset shell uses box as a named low-poly runtime part while preserving archived anchors.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly hard-surface game prop with deterministic local transforms",
+        "edgeTreatment": {
+          "type": "single-segment planar chamfer",
+          "bevelRadius": 0.05,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "root",
+      "attachment": {
+        "parentSocket": "root",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.02,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.02,
+        "gapTolerance": 0.005
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 1,
+        "units": "relative",
+        "confidence": 0.5
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "root",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.5
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "box",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Replace with sphere/capsule/compound proxy when the object shape demands it."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "root",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "base"
+        }
+      },
+      "material": "Sakura-accent",
+      "materialLayers": [
+        "Sakura-accent"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "phone-detail-1"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0,
+        "microRoughness": 0,
+        "bumpAmplitude": 0,
+        "normalPattern": "",
+        "displacementPattern": "",
+        "occlusionPattern": "",
+        "edgeWearPattern": "",
+        "notes": ""
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view",
+        "runtime-contract"
+      ],
+      "details": [
+        {
+          "id": "phone-detail-1",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "three-quarter-view",
+            "runtime-contract"
+          ]
+        }
+      ],
+      "fidelityTier": "blockout",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(232,167,183,1)",
+        "secondaryAlbedo": "rgba(151,91,118,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9,
+        "roughness": 0.68,
+        "toonBands": 3
+      }
+    },
+    {
+      "id": "screen-assembly",
+      "name": "Layered screen assembly",
+      "level": "macro",
+      "role": "display enclosure",
+      "importance": 1,
+      "confidence": 0.5,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Layered screen assembly uses box as a named low-poly runtime part while preserving archived anchors.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly hard-surface game prop with deterministic local transforms",
+        "edgeTreatment": {
+          "type": "single-segment planar chamfer",
+          "bevelRadius": 0.05,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "handset-shell",
+      "attachment": {
+        "parentSocket": "handset-shell",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.02,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.02,
+        "gapTolerance": 0.005
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 1,
+        "units": "relative",
+        "confidence": 0.5
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "root",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.5
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "box",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Replace with sphere/capsule/compound proxy when the object shape demands it."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "handset-shell",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "base"
+        }
+      },
+      "material": "screen-violet",
+      "materialLayers": [
+        "screen-violet"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "phone-detail-4"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0,
+        "microRoughness": 0,
+        "bumpAmplitude": 0,
+        "normalPattern": "",
+        "displacementPattern": "",
+        "occlusionPattern": "",
+        "edgeWearPattern": "",
+        "notes": ""
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view",
+        "runtime-contract"
+      ],
+      "details": [
+        {
+          "id": "phone-detail-4",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "three-quarter-view",
+            "runtime-contract"
+          ]
+        }
+      ],
+      "fidelityTier": "blockout",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(77,83,106,1)",
+        "secondaryAlbedo": "rgba(37,39,51,1)",
+        "materialClass": "glass",
+        "materialClassConfidence": 0.9,
+        "roughness": 0.34,
+        "toonBands": 3
+      }
+    },
+    {
+      "id": "feedback-rig",
+      "name": "Incoming-call performance rig",
+      "level": "macro",
+      "role": "frozen animation assembly",
+      "importance": 1,
+      "confidence": 0.5,
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Incoming-call performance rig uses instanced-cluster as a named low-poly runtime part while preserving archived anchors.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly hard-surface game prop with deterministic local transforms",
+        "edgeTreatment": {
+          "type": "single-segment planar chamfer",
+          "bevelRadius": 0.05,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "root",
+      "attachment": {
+        "parentSocket": "root",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.02,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.02,
+        "gapTolerance": 0.005
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 1,
+        "units": "relative",
+        "confidence": 0.5
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "root",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.5
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "box",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Replace with sphere/capsule/compound proxy when the object shape demands it."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "root",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "base"
+        }
+      },
+      "material": "call-ui",
+      "materialLayers": [
+        "call-ui"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "phone-detail-13",
+        "phone-detail-14",
+        "phone-detail-15"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0,
+        "microRoughness": 0,
+        "bumpAmplitude": 0,
+        "normalPattern": "",
+        "displacementPattern": "",
+        "occlusionPattern": "",
+        "edgeWearPattern": "",
+        "notes": ""
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view",
+        "runtime-contract"
+      ],
+      "details": [
+        {
+          "id": "phone-detail-13",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "three-quarter-view",
+            "runtime-contract"
+          ]
+        },
+        {
+          "id": "phone-detail-14",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "three-quarter-view",
+            "runtime-contract"
+          ]
+        },
+        {
+          "id": "phone-detail-15",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "three-quarter-view",
+            "runtime-contract"
+          ]
+        }
+      ],
+      "fidelityTier": "blockout",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(121,230,176,1)",
+        "secondaryAlbedo": "rgba(241,127,159,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9,
+        "roughness": 0.68,
+        "toonBands": 3
+      }
+    },
+    {
+      "id": "corner-guard-array",
+      "name": "Four faceted guard caps",
+      "level": "meso",
+      "role": "protective silhouette",
+      "importance": 1,
+      "confidence": 0.5,
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Four faceted guard caps uses instanced-cluster as a named low-poly runtime part while preserving archived anchors.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly hard-surface game prop with deterministic local transforms",
+        "edgeTreatment": {
+          "type": "single-segment planar chamfer",
+          "bevelRadius": 0.018,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "handset-shell",
+      "attachment": {
+        "parentSocket": "handset-shell",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.02,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.02,
+        "gapTolerance": 0.005
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 1,
+        "units": "relative",
+        "confidence": 0.5
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "root",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.5
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "box",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Replace with sphere/capsule/compound proxy when the object shape demands it."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "handset-shell",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "base"
+        }
+      },
+      "material": "cool-metal",
+      "materialLayers": [
+        "cool-metal"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "phone-detail-2"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0,
+        "microRoughness": 0,
+        "bumpAmplitude": 0,
+        "normalPattern": "",
+        "displacementPattern": "",
+        "occlusionPattern": "",
+        "edgeWearPattern": "",
+        "notes": ""
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view",
+        "runtime-contract"
+      ],
+      "details": [
+        {
+          "id": "phone-detail-2",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "three-quarter-view",
+            "runtime-contract"
+          ]
+        }
+      ],
+      "fidelityTier": "structural-pass",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(170,167,178,1)",
+        "secondaryAlbedo": "rgba(81,71,89,1)",
+        "materialClass": "metal",
+        "materialClassConfidence": 0.9,
+        "roughness": 0.68,
+        "toonBands": 3
+      }
+    },
+    {
+      "id": "rear-shell",
+      "name": "Cream rear shell and spine",
+      "level": "meso",
+      "role": "rear enclosure",
+      "importance": 1,
+      "confidence": 0.5,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Cream rear shell and spine uses box as a named low-poly runtime part while preserving archived anchors.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly hard-surface game prop with deterministic local transforms",
+        "edgeTreatment": {
+          "type": "single-segment planar chamfer",
+          "bevelRadius": 0.018,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "handset-shell",
+      "attachment": {
+        "parentSocket": "handset-shell",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.02,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.02,
+        "gapTolerance": 0.005
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 1,
+        "units": "relative",
+        "confidence": 0.5
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "root",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.5
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "box",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Replace with sphere/capsule/compound proxy when the object shape demands it."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "handset-shell",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "base"
+        }
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "phone-detail-3"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0,
+        "microRoughness": 0,
+        "bumpAmplitude": 0,
+        "normalPattern": "",
+        "displacementPattern": "",
+        "occlusionPattern": "",
+        "edgeWearPattern": "",
+        "notes": ""
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view",
+        "runtime-contract"
+      ],
+      "details": [
+        {
+          "id": "phone-detail-3",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "three-quarter-view",
+            "runtime-contract"
+          ]
+        }
+      ],
+      "fidelityTier": "structural-pass",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(247,240,228,1)",
+        "secondaryAlbedo": "rgba(231,219,226,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9,
+        "roughness": 0.68,
+        "toonBands": 3
+      }
+    },
+    {
+      "id": "screen-details",
+      "name": "Screen crown details",
+      "level": "micro",
+      "role": "earpiece and camera",
+      "importance": 1,
+      "confidence": 0.5,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Screen crown details uses box as a named low-poly runtime part while preserving archived anchors.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly hard-surface game prop with deterministic local transforms",
+        "edgeTreatment": {
+          "type": "single-segment planar chamfer",
+          "bevelRadius": 0.018,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "screen-assembly",
+      "attachment": {
+        "parentSocket": "screen-assembly",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.02,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.02,
+        "gapTolerance": 0.005
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 1,
+        "units": "relative",
+        "confidence": 0.5
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "root",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.5
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "box",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Replace with sphere/capsule/compound proxy when the object shape demands it."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "screen-assembly",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "base"
+        }
+      },
+      "material": "cool-metal",
+      "materialLayers": [
+        "cool-metal"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "phone-detail-5"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0,
+        "microRoughness": 0,
+        "bumpAmplitude": 0,
+        "normalPattern": "",
+        "displacementPattern": "",
+        "occlusionPattern": "",
+        "edgeWearPattern": "",
+        "notes": ""
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view",
+        "runtime-contract"
+      ],
+      "details": [
+        {
+          "id": "phone-detail-5",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "three-quarter-view",
+            "runtime-contract"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(170,167,178,1)",
+        "secondaryAlbedo": "rgba(81,71,89,1)",
+        "materialClass": "metal",
+        "materialClassConfidence": 0.9,
+        "roughness": 0.68,
+        "toonBands": 3
+      }
+    },
+    {
+      "id": "incoming-call-ui",
+      "name": "Incoming-call screen UI",
+      "level": "meso",
+      "role": "animated screen content",
+      "importance": 1,
+      "confidence": 0.5,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Incoming-call screen UI uses box as a named low-poly runtime part while preserving archived anchors.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly hard-surface game prop with deterministic local transforms",
+        "edgeTreatment": {
+          "type": "single-segment planar chamfer",
+          "bevelRadius": 0.018,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "screen-assembly",
+      "attachment": {
+        "parentSocket": "screen-assembly",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.02,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.02,
+        "gapTolerance": 0.005
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 1,
+        "units": "relative",
+        "confidence": 0.5
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "root",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.5
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "box",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Replace with sphere/capsule/compound proxy when the object shape demands it."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "screen-assembly",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "base"
+        }
+      },
+      "material": "call-ui",
+      "materialLayers": [
+        "call-ui"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "phone-detail-6"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0,
+        "microRoughness": 0,
+        "bumpAmplitude": 0,
+        "normalPattern": "",
+        "displacementPattern": "",
+        "occlusionPattern": "",
+        "edgeWearPattern": "",
+        "notes": ""
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view",
+        "runtime-contract"
+      ],
+      "details": [
+        {
+          "id": "phone-detail-6",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "three-quarter-view",
+            "runtime-contract"
+          ]
+        }
+      ],
+      "fidelityTier": "structural-pass",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(121,230,176,1)",
+        "secondaryAlbedo": "rgba(241,127,159,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9,
+        "roughness": 0.68,
+        "toonBands": 3
+      }
+    },
+    {
+      "id": "call-controls",
+      "name": "Answer and hang-up controls",
+      "level": "meso",
+      "role": "animated call actions",
+      "importance": 1,
+      "confidence": 0.5,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Answer and hang-up controls uses box as a named low-poly runtime part while preserving archived anchors.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly hard-surface game prop with deterministic local transforms",
+        "edgeTreatment": {
+          "type": "single-segment planar chamfer",
+          "bevelRadius": 0.018,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "incoming-call-ui",
+      "attachment": {
+        "parentSocket": "incoming-call-ui",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.02,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.02,
+        "gapTolerance": 0.005
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 1,
+        "units": "relative",
+        "confidence": 0.5
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "root",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.5
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "box",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Replace with sphere/capsule/compound proxy when the object shape demands it."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "incoming-call-ui",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "base"
+        }
+      },
+      "material": "call-ui",
+      "materialLayers": [
+        "call-ui"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "phone-detail-7"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0,
+        "microRoughness": 0,
+        "bumpAmplitude": 0,
+        "normalPattern": "",
+        "displacementPattern": "",
+        "occlusionPattern": "",
+        "edgeWearPattern": "",
+        "notes": ""
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view",
+        "runtime-contract"
+      ],
+      "details": [
+        {
+          "id": "phone-detail-7",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "three-quarter-view",
+            "runtime-contract"
+          ]
+        }
+      ],
+      "fidelityTier": "structural-pass",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(121,230,176,1)",
+        "secondaryAlbedo": "rgba(241,127,159,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9,
+        "roughness": 0.68,
+        "toonBands": 3
+      }
+    },
+    {
+      "id": "side-controls",
+      "name": "Power and volume controls",
+      "level": "meso",
+      "role": "physical controls",
+      "importance": 1,
+      "confidence": 0.5,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Power and volume controls uses box as a named low-poly runtime part while preserving archived anchors.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly hard-surface game prop with deterministic local transforms",
+        "edgeTreatment": {
+          "type": "single-segment planar chamfer",
+          "bevelRadius": 0.018,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "handset-shell",
+      "attachment": {
+        "parentSocket": "handset-shell",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.02,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.02,
+        "gapTolerance": 0.005
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 1,
+        "units": "relative",
+        "confidence": 0.5
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "root",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.5
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "box",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Replace with sphere/capsule/compound proxy when the object shape demands it."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "handset-shell",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "base"
+        }
+      },
+      "material": "cool-metal",
+      "materialLayers": [
+        "cool-metal"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "phone-detail-8"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0,
+        "microRoughness": 0,
+        "bumpAmplitude": 0,
+        "normalPattern": "",
+        "displacementPattern": "",
+        "occlusionPattern": "",
+        "edgeWearPattern": "",
+        "notes": ""
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view",
+        "runtime-contract"
+      ],
+      "details": [
+        {
+          "id": "phone-detail-8",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "three-quarter-view",
+            "runtime-contract"
+          ]
+        }
+      ],
+      "fidelityTier": "structural-pass",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(170,167,178,1)",
+        "secondaryAlbedo": "rgba(81,71,89,1)",
+        "materialClass": "metal",
+        "materialClassConfidence": 0.9,
+        "roughness": 0.68,
+        "toonBands": 3
+      }
+    },
+    {
+      "id": "bottom-io",
+      "name": "Type-C and acoustic I/O",
+      "level": "meso",
+      "role": "connector bank",
+      "importance": 1,
+      "confidence": 0.5,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Type-C and acoustic I/O uses box as a named low-poly runtime part while preserving archived anchors.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly hard-surface game prop with deterministic local transforms",
+        "edgeTreatment": {
+          "type": "single-segment planar chamfer",
+          "bevelRadius": 0.018,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "handset-shell",
+      "attachment": {
+        "parentSocket": "handset-shell",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.02,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.02,
+        "gapTolerance": 0.005
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 1,
+        "units": "relative",
+        "confidence": 0.5
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "root",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.5
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "box",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Replace with sphere/capsule/compound proxy when the object shape demands it."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "handset-shell",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "base"
+        }
+      },
+      "material": "cool-metal",
+      "materialLayers": [
+        "cool-metal"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "phone-detail-9"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0,
+        "microRoughness": 0,
+        "bumpAmplitude": 0,
+        "normalPattern": "",
+        "displacementPattern": "",
+        "occlusionPattern": "",
+        "edgeWearPattern": "",
+        "notes": ""
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view",
+        "runtime-contract"
+      ],
+      "details": [
+        {
+          "id": "phone-detail-9",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "three-quarter-view",
+            "runtime-contract"
+          ]
+        }
+      ],
+      "fidelityTier": "structural-pass",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(170,167,178,1)",
+        "secondaryAlbedo": "rgba(81,71,89,1)",
+        "materialClass": "metal",
+        "materialClassConfidence": 0.9,
+        "roughness": 0.68,
+        "toonBands": 3
+      }
+    },
+    {
+      "id": "camera-island",
+      "name": "Chamfered camera island",
+      "level": "meso",
+      "role": "rear camera housing",
+      "importance": 1,
+      "confidence": 0.5,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Chamfered camera island uses box as a named low-poly runtime part while preserving archived anchors.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly hard-surface game prop with deterministic local transforms",
+        "edgeTreatment": {
+          "type": "single-segment planar chamfer",
+          "bevelRadius": 0.018,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "rear-shell",
+      "attachment": {
+        "parentSocket": "rear-shell",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.02,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.02,
+        "gapTolerance": 0.005
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 1,
+        "units": "relative",
+        "confidence": 0.5
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "root",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.5
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "box",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Replace with sphere/capsule/compound proxy when the object shape demands it."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "rear-shell",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "base"
+        }
+      },
+      "material": "Sakura-accent",
+      "materialLayers": [
+        "Sakura-accent"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "phone-detail-10"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0,
+        "microRoughness": 0,
+        "bumpAmplitude": 0,
+        "normalPattern": "",
+        "displacementPattern": "",
+        "occlusionPattern": "",
+        "edgeWearPattern": "",
+        "notes": ""
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view",
+        "runtime-contract"
+      ],
+      "details": [
+        {
+          "id": "phone-detail-10",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "three-quarter-view",
+            "runtime-contract"
+          ]
+        }
+      ],
+      "fidelityTier": "structural-pass",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(232,167,183,1)",
+        "secondaryAlbedo": "rgba(151,91,118,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9,
+        "roughness": 0.68,
+        "toonBands": 3
+      }
+    },
+    {
+      "id": "camera-lenses",
+      "name": "Dual camera stacks",
+      "level": "micro",
+      "role": "camera optics",
+      "importance": 1,
+      "confidence": 0.5,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Dual camera stacks uses cylinder as a named low-poly runtime part while preserving archived anchors.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly hard-surface game prop with deterministic local transforms",
+        "edgeTreatment": {
+          "type": "single-segment planar chamfer",
+          "bevelRadius": 0.018,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "camera-island",
+      "attachment": {
+        "parentSocket": "camera-island",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.02,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.02,
+        "gapTolerance": 0.005
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 1,
+        "units": "relative",
+        "confidence": 0.5
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "root",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.5
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "box",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Replace with sphere/capsule/compound proxy when the object shape demands it."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "camera-island",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "base"
+        }
+      },
+      "material": "cool-metal",
+      "materialLayers": [
+        "cool-metal"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "phone-detail-11"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0,
+        "microRoughness": 0,
+        "bumpAmplitude": 0,
+        "normalPattern": "",
+        "displacementPattern": "",
+        "occlusionPattern": "",
+        "edgeWearPattern": "",
+        "notes": ""
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view",
+        "runtime-contract"
+      ],
+      "details": [
+        {
+          "id": "phone-detail-11",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "three-quarter-view",
+            "runtime-contract"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(170,167,178,1)",
+        "secondaryAlbedo": "rgba(81,71,89,1)",
+        "materialClass": "metal",
+        "materialClassConfidence": 0.9,
+        "roughness": 0.68,
+        "toonBands": 3
+      }
+    },
+    {
+      "id": "rear-motif",
+      "name": "Five-petal Sakura motif",
+      "level": "micro",
+      "role": "brand-neutral identity mark",
+      "importance": 1,
+      "confidence": 0.5,
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Five-petal Sakura motif uses instanced-cluster as a named low-poly runtime part while preserving archived anchors.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly hard-surface game prop with deterministic local transforms",
+        "edgeTreatment": {
+          "type": "single-segment planar chamfer",
+          "bevelRadius": 0.018,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "rear-shell",
+      "attachment": {
+        "parentSocket": "rear-shell",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.02,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.02,
+        "gapTolerance": 0.005
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 1,
+        "units": "relative",
+        "confidence": 0.5
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "root",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.5
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "box",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Replace with sphere/capsule/compound proxy when the object shape demands it."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "rear-shell",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "base"
+        }
+      },
+      "material": "Sakura-accent",
+      "materialLayers": [
+        "Sakura-accent"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "phone-detail-12"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0,
+        "microRoughness": 0,
+        "bumpAmplitude": 0,
+        "normalPattern": "",
+        "displacementPattern": "",
+        "occlusionPattern": "",
+        "edgeWearPattern": "",
+        "notes": ""
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view",
+        "runtime-contract"
+      ],
+      "details": [
+        {
+          "id": "phone-detail-12",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "three-quarter-view",
+            "runtime-contract"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(232,167,183,1)",
+        "secondaryAlbedo": "rgba(151,91,118,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9,
+        "roughness": 0.68,
+        "toonBands": 3
+      }
+    },
+    {
+      "id": "outline-system",
+      "name": "Three-tier stable ink system",
+      "level": "micro",
+      "role": "solid-part silhouette ink",
+      "importance": 1,
+      "confidence": 0.5,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Three-tier stable ink system uses box as a named low-poly runtime part while preserving archived anchors.",
+      "geometryDescriptor": {
+        "topologyIntent": "low-poly hard-surface game prop with deterministic local transforms",
+        "edgeTreatment": {
+          "type": "single-segment planar chamfer",
+          "bevelRadius": 0.018,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "root",
+      "attachment": {
+        "parentSocket": "root",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.02,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.02,
+        "gapTolerance": 0.005
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1,
+        "depth": 1,
+        "units": "relative",
+        "confidence": 0.5
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "root",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.5
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "box",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Replace with sphere/capsule/compound proxy when the object shape demands it."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "root",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0,
+          "debrisMaterial": "base"
+        }
+      },
+      "material": "screen-violet",
+      "materialLayers": [
+        "screen-violet"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "phone-detail-16"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0,
+        "microRoughness": 0,
+        "bumpAmplitude": 0,
+        "normalPattern": "",
+        "displacementPattern": "",
+        "occlusionPattern": "",
+        "edgeWearPattern": "",
+        "notes": ""
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view",
+        "runtime-contract"
+      ],
+      "details": [
+        {
+          "id": "phone-detail-16",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "three-quarter-view",
+            "runtime-contract"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(77,83,106,1)",
+        "secondaryAlbedo": "rgba(37,39,51,1)",
+        "materialClass": "glass",
+        "materialClassConfidence": 0.9,
+        "roughness": 0.34,
+        "toonBands": 3
+      }
+    }
+  ],
+  "materials": [
+    {
+      "id": "cream-shell",
+      "name": "Warm cream shell",
+      "type": "standard",
+      "shaderModel": "MeshStandardMaterial / PBR approximation",
+      "baseColor": "#F7F0E4",
+      "color": "#F7F0E4",
+      "albedo": {
+        "dominant": "#F7F0E4",
+        "secondary": [
+          "#F7F0E4"
+        ],
+        "samplingNotes": "Use image-observed local color zones, not a single averaged color."
+      },
+      "colorVariation": {
+        "palette": [
+          "#8A7A5F",
+          "#6E614B",
+          "#A08F70"
+        ],
+        "pattern": "mottled",
+        "amplitude": 0.15,
+        "heightCorrelation": 0.3
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Preserve stable world/object-scale detail; do not stretch micro detail with component scale."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.42,
+          "role": "broad color and height breakup"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.22,
+          "role": "ridges, pores, grain, dents, or equivalent visible relief"
+        },
+        {
+          "id": "micro",
+          "frequency": 56,
+          "amplitude": 0.08,
+          "role": "highlight breakup visible under grazing light"
+        }
+      ],
+      "roughness": {
+        "base": 0.72,
+        "variation": 0.15,
+        "map": "independent-procedural-field",
+        "localResponse": "higher roughness in cavities, lower roughness on worn edges"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "pattern": "derived-from-independent-height-field",
+        "strength": 0.35,
+        "scale": 24,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.25,
+        "contactShadowBias": 0.35,
+        "notes": "Darken creases, seams, intersections, and recessed local features."
+      },
+      "wear": {
+        "edgeWear": 0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0,
+        "cavityBias": 0,
+        "color": "#2F2A22"
+      },
+      "localOverrides": [
+        {
+          "id": "cream-shell-toon-response",
+          "region": "named material zone",
+          "response": "two-to-three Toon bands with cool-violet shadow tint and stable solid-part ink",
+          "evidenceRefs": [
+            "front-view",
+            "three-quarter-view"
+          ]
+        }
+      ],
+      "shaderNotes": [
+        "Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.",
+        "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.",
+        "Use normal/bump/displacement only when they map to observed surface relief.",
+        "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."
+      ],
+      "notes": "Procedural solid Toon material; no runtime image texture.",
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.8,
+        "estimatedFidelity": 0.8,
+        "sourceImage": "references/intake-v2/phone/views/front.png",
+        "maps": {
+          "albedo": {
+            "path": "procedural-solid-albedo"
+          },
+          "roughness": {
+            "path": "procedural-cream-shell-roughness"
+          },
+          "height": {
+            "path": "procedural-cream-shell-height"
+          },
+          "normal": {
+            "path": "procedural-cream-shell-normal"
+          },
+          "ao": {
+            "path": "procedural-cream-shell-ao"
+          }
+        },
+        "limitation": "Archived original-design renders provide palette evidence only; channels are independently procedural for the approved Toon look."
+      },
+      "finishClass": "plastic"
+    },
+    {
+      "id": "Sakura-accent",
+      "name": "Sakura accent polymer",
+      "type": "standard",
+      "shaderModel": "MeshStandardMaterial / PBR approximation",
+      "baseColor": "#E8A7B7",
+      "color": "#E8A7B7",
+      "albedo": {
+        "dominant": "#E8A7B7",
+        "secondary": [
+          "#E8A7B7"
+        ],
+        "samplingNotes": "Use image-observed local color zones, not a single averaged color."
+      },
+      "colorVariation": {
+        "palette": [
+          "#8A7A5F",
+          "#6E614B",
+          "#A08F70"
+        ],
+        "pattern": "mottled",
+        "amplitude": 0.15,
+        "heightCorrelation": 0.3
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Preserve stable world/object-scale detail; do not stretch micro detail with component scale."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.42,
+          "role": "broad color and height breakup"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.22,
+          "role": "ridges, pores, grain, dents, or equivalent visible relief"
+        },
+        {
+          "id": "micro",
+          "frequency": 56,
+          "amplitude": 0.08,
+          "role": "highlight breakup visible under grazing light"
+        }
+      ],
+      "roughness": {
+        "base": 0.68,
+        "variation": 0.15,
+        "map": "independent-procedural-field",
+        "localResponse": "higher roughness in cavities, lower roughness on worn edges"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "pattern": "derived-from-independent-height-field",
+        "strength": 0.35,
+        "scale": 24,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.25,
+        "contactShadowBias": 0.35,
+        "notes": "Darken creases, seams, intersections, and recessed local features."
+      },
+      "wear": {
+        "edgeWear": 0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0,
+        "cavityBias": 0,
+        "color": "#2F2A22"
+      },
+      "localOverrides": [
+        {
+          "id": "Sakura-accent-toon-response",
+          "region": "named material zone",
+          "response": "two-to-three Toon bands with cool-violet shadow tint and stable solid-part ink",
+          "evidenceRefs": [
+            "front-view",
+            "three-quarter-view"
+          ]
+        }
+      ],
+      "shaderNotes": [
+        "Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.",
+        "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.",
+        "Use normal/bump/displacement only when they map to observed surface relief.",
+        "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."
+      ],
+      "notes": "Procedural solid Toon material; no runtime image texture.",
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.8,
+        "estimatedFidelity": 0.8,
+        "sourceImage": "references/intake-v2/phone/views/front.png",
+        "maps": {
+          "albedo": {
+            "path": "procedural-solid-albedo"
+          },
+          "roughness": {
+            "path": "procedural-Sakura-accent-roughness"
+          },
+          "height": {
+            "path": "procedural-Sakura-accent-height"
+          },
+          "normal": {
+            "path": "procedural-Sakura-accent-normal"
+          },
+          "ao": {
+            "path": "procedural-Sakura-accent-ao"
+          }
+        },
+        "limitation": "Archived original-design renders provide palette evidence only; channels are independently procedural for the approved Toon look."
+      },
+      "finishClass": "plastic"
+    },
+    {
+      "id": "screen-violet",
+      "name": "Cool-violet screen glass",
+      "type": "standard",
+      "shaderModel": "MeshStandardMaterial / PBR approximation",
+      "baseColor": "#4D536A",
+      "color": "#4D536A",
+      "albedo": {
+        "dominant": "#4D536A",
+        "secondary": [
+          "#4D536A"
+        ],
+        "samplingNotes": "Use image-observed local color zones, not a single averaged color."
+      },
+      "colorVariation": {
+        "palette": [
+          "#8A7A5F",
+          "#6E614B",
+          "#A08F70"
+        ],
+        "pattern": "mottled",
+        "amplitude": 0.15,
+        "heightCorrelation": 0.3
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Preserve stable world/object-scale detail; do not stretch micro detail with component scale."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.42,
+          "role": "broad color and height breakup"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.22,
+          "role": "ridges, pores, grain, dents, or equivalent visible relief"
+        },
+        {
+          "id": "micro",
+          "frequency": 56,
+          "amplitude": 0.08,
+          "role": "highlight breakup visible under grazing light"
+        }
+      ],
+      "roughness": {
+        "base": 0.34,
+        "variation": 0.15,
+        "map": "independent-procedural-field",
+        "localResponse": "higher roughness in cavities, lower roughness on worn edges"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "pattern": "derived-from-independent-height-field",
+        "strength": 0.35,
+        "scale": 24,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.25,
+        "contactShadowBias": 0.35,
+        "notes": "Darken creases, seams, intersections, and recessed local features."
+      },
+      "wear": {
+        "edgeWear": 0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0,
+        "cavityBias": 0,
+        "color": "#2F2A22"
+      },
+      "localOverrides": [
+        {
+          "id": "screen-violet-toon-response",
+          "region": "named material zone",
+          "response": "two-to-three Toon bands with cool-violet shadow tint and stable solid-part ink",
+          "evidenceRefs": [
+            "front-view",
+            "three-quarter-view"
+          ]
+        }
+      ],
+      "shaderNotes": [
+        "Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.",
+        "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.",
+        "Use normal/bump/displacement only when they map to observed surface relief.",
+        "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."
+      ],
+      "notes": "Procedural solid Toon material; no runtime image texture.",
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.8,
+        "estimatedFidelity": 0.8,
+        "sourceImage": "references/intake-v2/phone/views/front.png",
+        "maps": {
+          "albedo": {
+            "path": "procedural-solid-albedo"
+          },
+          "roughness": {
+            "path": "procedural-screen-violet-roughness"
+          },
+          "height": {
+            "path": "procedural-screen-violet-height"
+          },
+          "normal": {
+            "path": "procedural-screen-violet-normal"
+          },
+          "ao": {
+            "path": "procedural-screen-violet-ao"
+          }
+        },
+        "limitation": "Archived original-design renders provide palette evidence only; channels are independently procedural for the approved Toon look."
+      },
+      "finishClass": "glass"
+    },
+    {
+      "id": "call-ui",
+      "name": "Call UI accents",
+      "type": "standard",
+      "shaderModel": "MeshStandardMaterial / PBR approximation",
+      "baseColor": "#79E6B0",
+      "color": "#79E6B0",
+      "albedo": {
+        "dominant": "#79E6B0",
+        "secondary": [
+          "#79E6B0"
+        ],
+        "samplingNotes": "Use image-observed local color zones, not a single averaged color."
+      },
+      "colorVariation": {
+        "palette": [
+          "#8A7A5F",
+          "#6E614B",
+          "#A08F70"
+        ],
+        "pattern": "mottled",
+        "amplitude": 0.15,
+        "heightCorrelation": 0.3
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Preserve stable world/object-scale detail; do not stretch micro detail with component scale."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.42,
+          "role": "broad color and height breakup"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.22,
+          "role": "ridges, pores, grain, dents, or equivalent visible relief"
+        },
+        {
+          "id": "micro",
+          "frequency": 56,
+          "amplitude": 0.08,
+          "role": "highlight breakup visible under grazing light"
+        }
+      ],
+      "roughness": {
+        "base": 0.54,
+        "variation": 0.15,
+        "map": "independent-procedural-field",
+        "localResponse": "higher roughness in cavities, lower roughness on worn edges"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "pattern": "derived-from-independent-height-field",
+        "strength": 0.35,
+        "scale": 24,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.25,
+        "contactShadowBias": 0.35,
+        "notes": "Darken creases, seams, intersections, and recessed local features."
+      },
+      "wear": {
+        "edgeWear": 0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0,
+        "cavityBias": 0,
+        "color": "#2F2A22"
+      },
+      "localOverrides": [
+        {
+          "id": "call-ui-toon-response",
+          "region": "named material zone",
+          "response": "two-to-three Toon bands with cool-violet shadow tint and stable solid-part ink",
+          "evidenceRefs": [
+            "front-view",
+            "three-quarter-view"
+          ]
+        }
+      ],
+      "shaderNotes": [
+        "Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.",
+        "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.",
+        "Use normal/bump/displacement only when they map to observed surface relief.",
+        "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."
+      ],
+      "notes": "Procedural solid Toon material; no runtime image texture.",
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.8,
+        "estimatedFidelity": 0.8,
+        "sourceImage": "references/intake-v2/phone/views/front.png",
+        "maps": {
+          "albedo": {
+            "path": "procedural-solid-albedo"
+          },
+          "roughness": {
+            "path": "procedural-call-ui-roughness"
+          },
+          "height": {
+            "path": "procedural-call-ui-height"
+          },
+          "normal": {
+            "path": "procedural-call-ui-normal"
+          },
+          "ao": {
+            "path": "procedural-call-ui-ao"
+          }
+        },
+        "limitation": "Archived original-design renders provide palette evidence only; channels are independently procedural for the approved Toon look."
+      },
+      "finishClass": "plastic"
+    },
+    {
+      "id": "cool-metal",
+      "name": "Cool gray-violet hardware",
+      "type": "standard",
+      "shaderModel": "MeshStandardMaterial / PBR approximation",
+      "baseColor": "#AAA7B2",
+      "color": "#AAA7B2",
+      "albedo": {
+        "dominant": "#AAA7B2",
+        "secondary": [
+          "#AAA7B2"
+        ],
+        "samplingNotes": "Use image-observed local color zones, not a single averaged color."
+      },
+      "colorVariation": {
+        "palette": [
+          "#8A7A5F",
+          "#6E614B",
+          "#A08F70"
+        ],
+        "pattern": "mottled",
+        "amplitude": 0.15,
+        "heightCorrelation": 0.3
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Preserve stable world/object-scale detail; do not stretch micro detail with component scale."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.42,
+          "role": "broad color and height breakup"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.22,
+          "role": "ridges, pores, grain, dents, or equivalent visible relief"
+        },
+        {
+          "id": "micro",
+          "frequency": 56,
+          "amplitude": 0.08,
+          "role": "highlight breakup visible under grazing light"
+        }
+      ],
+      "roughness": {
+        "base": 0.58,
+        "variation": 0.15,
+        "map": "independent-procedural-field",
+        "localResponse": "higher roughness in cavities, lower roughness on worn edges"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "pattern": "derived-from-independent-height-field",
+        "strength": 0.35,
+        "scale": 24,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.25,
+        "contactShadowBias": 0.35,
+        "notes": "Darken creases, seams, intersections, and recessed local features."
+      },
+      "wear": {
+        "edgeWear": 0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0,
+        "cavityBias": 0,
+        "color": "#2F2A22"
+      },
+      "localOverrides": [
+        {
+          "id": "cool-metal-toon-response",
+          "region": "named material zone",
+          "response": "two-to-three Toon bands with cool-violet shadow tint and stable solid-part ink",
+          "evidenceRefs": [
+            "front-view",
+            "three-quarter-view"
+          ]
+        }
+      ],
+      "shaderNotes": [
+        "Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.",
+        "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.",
+        "Use normal/bump/displacement only when they map to observed surface relief.",
+        "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."
+      ],
+      "notes": "Procedural solid Toon material; no runtime image texture.",
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.8,
+        "estimatedFidelity": 0.8,
+        "sourceImage": "references/intake-v2/phone/views/front.png",
+        "maps": {
+          "albedo": {
+            "path": "procedural-solid-albedo"
+          },
+          "roughness": {
+            "path": "procedural-cool-metal-roughness"
+          },
+          "height": {
+            "path": "procedural-cool-metal-height"
+          },
+          "normal": {
+            "path": "procedural-cool-metal-normal"
+          },
+          "ao": {
+            "path": "procedural-cool-metal-ao"
+          }
+        },
+        "limitation": "Archived original-design renders provide palette evidence only; channels are independently procedural for the approved Toon look."
+      },
+      "finishClass": "painted-metal"
+    }
+  ],
+  "repetitionSystems": [
+    {
+      "id": "corner-guards",
+      "name": "Corner guard array",
+      "componentRef": "corner-guard-array",
+      "count": 4,
+      "distribution": "four handset corners",
+      "geometry": "shared six-sided cylinder",
+      "material": "cool-metal",
+      "evidenceRefs": [
+        "front-view"
+      ]
+    },
+    {
+      "id": "camera-lenses",
+      "name": "Dual lens array",
+      "componentRef": "camera-lenses",
+      "count": 2,
+      "distribution": "diagonal on archived camera pivot",
+      "geometry": "shared twelve-sided cylinder and torus",
+      "material": "cool-metal",
+      "evidenceRefs": [
+        "back-view"
+      ]
+    },
+    {
+      "id": "speaker-holes",
+      "name": "Speaker perforations",
+      "componentRef": "bottom-io",
+      "count": 5,
+      "distribution": "even row on bottom edge",
+      "geometry": "shared eight-sided cylinder",
+      "material": "screen-violet",
+      "evidenceRefs": [
+        "side-view"
+      ]
+    },
+    {
+      "id": "wave-rings",
+      "name": "Stereo wave rings",
+      "componentRef": "feedback-rig",
+      "count": 3,
+      "distribution": "concentric frozen feedback root",
+      "geometry": "closed torus volumes",
+      "material": "call-ui",
+      "evidenceRefs": [
+        "runtime-contract"
+      ]
+    },
+    {
+      "id": "call-arcs",
+      "name": "Vibration and signal arcs",
+      "componentRef": "feedback-rig",
+      "count": 10,
+      "distribution": "bilateral frozen animation lanes",
+      "geometry": "closed TubeGeometry arcs",
+      "material": "call-ui",
+      "evidenceRefs": [
+        "runtime-contract"
+      ]
+    },
+    {
+      "id": "notification-particles",
+      "name": "Notification and message particles",
+      "componentRef": "feedback-rig",
+      "count": 14,
+      "distribution": "frozen orbital and rising lanes",
+      "geometry": "icosahedra and rounded message volumes",
+      "material": "call-ui",
+      "evidenceRefs": [
+        "runtime-contract"
+      ]
+    }
+  ],
+  "buildPasses": [
+    {
+      "id": "blockout",
+      "goal": "Match macro silhouette and proportions.",
+      "componentRefs": [
+        "root",
+        "handset-shell",
+        "screen-assembly",
+        "feedback-rig"
+      ],
+      "acceptance": [
+        "blockout evidence includes named phone v2 parts and admitted viewpoints",
+        "critical feature thresholds remain satisfied"
+      ]
+    },
+    {
+      "id": "structural-pass",
+      "goal": "Build the component hierarchy implied by the pre-spec complexity assessment.",
+      "componentRefs": [
+        "corner-guard-array",
+        "rear-shell",
+        "incoming-call-ui",
+        "call-controls",
+        "side-controls",
+        "bottom-io",
+        "camera-island"
+      ],
+      "acceptance": [
+        "structural-pass evidence includes named phone v2 parts and admitted viewpoints",
+        "critical feature thresholds remain satisfied"
+      ]
+    },
+    {
+      "id": "form-refinement",
+      "goal": "Refine shape, deformation, bevels, tapers, curves, asymmetry, and visible local geometry.",
+      "componentRefs": [
+        "screen-details",
+        "camera-lenses",
+        "rear-motif",
+        "outline-system"
+      ],
+      "acceptance": [
+        "form-refinement evidence includes named phone v2 parts and admitted viewpoints",
+        "critical feature thresholds remain satisfied"
+      ]
+    },
+    {
+      "id": "material-pass",
+      "goal": "Match material color, roughness, bump, and local variation.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "material-pass evidence includes named phone v2 parts and admitted viewpoints",
+        "critical feature thresholds remain satisfied"
+      ]
+    },
+    {
+      "id": "lighting-pass",
+      "goal": "Make material and form readable under neutral turntable lighting plus optional reference lighting.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "lighting-pass evidence includes named phone v2 parts and admitted viewpoints",
+        "critical feature thresholds remain satisfied"
+      ]
+    },
+    {
+      "id": "interaction-pass",
+      "goal": "Make the model ready for future animation, transformation, physics, or destruction.",
+      "componentRefs": [
+        "feedback-rig",
+        "incoming-call-ui",
+        "call-controls"
+      ],
+      "acceptance": [
+        "interaction-pass evidence includes named phone v2 parts and admitted viewpoints",
+        "critical feature thresholds remain satisfied"
+      ]
+    },
+    {
+      "id": "optimization-pass",
+      "goal": "Protect runtime performance after visual fidelity is accepted.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "optimization-pass evidence includes named phone v2 parts and admitted viewpoints",
+        "critical feature thresholds remain satisfied"
+      ]
+    }
+  ],
+  "visualEvidence": [
+    {
+      "id": "phone-v2-static-and-animation",
+      "reference": "references/intake-v2/phone/views/three-quarter.png",
+      "render": "artifacts/appliance-v2/phone/evidence/models/phone/render-off-three-quarter.png",
+      "comparison": "artifacts/appliance-v2/phone/review/phone-reference-v2-four-view-comparison.png",
+      "viewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "startup",
+        "climax",
+        "wind-down"
+      ],
+      "referenceStatus": "conditional-fallback-original-design"
+    }
+  ],
+  "reviewHistory": [
+    {
+      "passId": "blockout",
+      "timestamp": "2026-08-13T05:00:00.000Z",
+      "estimatedFidelity": 0.86,
+      "aiVisionScore": 0.86,
+      "visualAcceptanceThreshold": 0.8,
+      "action": "continue",
+      "summary": "blockout accepted against the conditionally admitted original-design v1 views and frozen phone runtime contract.",
+      "matched": [
+        "eight-corner shell, guard caps and enlarged display remain inside the exact archived package",
+        "screen controls, side controls, Type-C bank, camera island and lenses remain independently named",
+        "stable three-tier ink applies only to solid phone parts and call effects own no outline meshes",
+        "all archived pivots, sockets, call UI positions, body motion and effect trajectories retain exact local transforms"
+      ],
+      "mismatches": [
+        "No independent GPT Image 2 concept sheet was available; reference evidence is explicitly conditional fallback."
+      ],
+      "evidence": [
+        "references/intake-v2/phone/views/three-quarter.png",
+        "artifacts/appliance-v2/phone/evidence/models/phone/render-off-three-quarter.png",
+        "artifacts/appliance-v2/phone/review/phone-reference-v2-four-view-comparison.png",
+        "artifacts/appliance-v2/phone/diagnostics/phone-v2-verification.json",
+        "artifacts/appliance-v2/phone/assembly/part-coverage.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.87,
+        "componentStructure": 0.91,
+        "formDetail": 0.88,
+        "materialSurface": 0.86,
+        "lightingCamera": 0.86
+      },
+      "featureReviews": [
+        {
+          "id": "phone-silhouette",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Eight-corner rail, faceted guards, layered screen and rear camera mass read in all four idle views."
+        },
+        {
+          "id": "phone-identity",
+          "score": 0.9,
+          "passed": true,
+          "notes": "Front screen, side keys, Type-C bank, diagonal dual camera and Sakura rear mark remain recognizable."
+        },
+        {
+          "id": "phone-runtime",
+          "score": 0.99,
+          "passed": true,
+          "notes": "Every frozen pivot and socket transform matches; one session and one timeline owner drive all three sampled phases."
+        },
+        {
+          "id": "phone-ink",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Main, structure and detail tiers use stable 0.18 variation; call effects have no outline children."
+        }
+      ],
+      "aiVisionNotes": "Four idle views and startup, climax and wind-down were manually inspected. Images are nonblank and uncropped; UI remains on the screen, lenses remain attached, and no outlined effect clumps were introduced.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/phone/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/phone/evidence/models/phone/render-off-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/phone/review/phone-reference-v2-four-view-comparison.png",
+        "cameraView": "four static and three fixed runtime views",
+        "notes": "Completed procedural geometry is reused as staged evidence.",
+        "aiVisionNotes": "Original SAKURA design; no claim of image-exact reconstruction or GPT Image 2 provenance."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "runtime-startup",
+        "runtime-climax",
+        "runtime-wind-down"
+      ],
+      "evidenceReuseNote": "The completed procedural model is reused across staged reviews; seven separate intermediate meshes were not captured."
+    },
+    {
+      "passId": "structural-pass",
+      "timestamp": "2026-08-13T05:01:00.000Z",
+      "estimatedFidelity": 0.89,
+      "aiVisionScore": 0.89,
+      "visualAcceptanceThreshold": 0.8,
+      "action": "continue",
+      "summary": "structural-pass accepted against the conditionally admitted original-design v1 views and frozen phone runtime contract.",
+      "matched": [
+        "eight-corner shell, guard caps and enlarged display remain inside the exact archived package",
+        "screen controls, side controls, Type-C bank, camera island and lenses remain independently named",
+        "stable three-tier ink applies only to solid phone parts and call effects own no outline meshes",
+        "all archived pivots, sockets, call UI positions, body motion and effect trajectories retain exact local transforms"
+      ],
+      "mismatches": [
+        "No independent GPT Image 2 concept sheet was available; reference evidence is explicitly conditional fallback."
+      ],
+      "evidence": [
+        "references/intake-v2/phone/views/three-quarter.png",
+        "artifacts/appliance-v2/phone/evidence/models/phone/render-off-three-quarter.png",
+        "artifacts/appliance-v2/phone/review/phone-reference-v2-four-view-comparison.png",
+        "artifacts/appliance-v2/phone/diagnostics/phone-v2-verification.json",
+        "artifacts/appliance-v2/phone/assembly/part-coverage.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.87,
+        "componentStructure": 0.91,
+        "formDetail": 0.88,
+        "materialSurface": 0.86,
+        "lightingCamera": 0.86
+      },
+      "featureReviews": [
+        {
+          "id": "phone-silhouette",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Eight-corner rail, faceted guards, layered screen and rear camera mass read in all four idle views."
+        },
+        {
+          "id": "phone-identity",
+          "score": 0.9,
+          "passed": true,
+          "notes": "Front screen, side keys, Type-C bank, diagonal dual camera and Sakura rear mark remain recognizable."
+        },
+        {
+          "id": "phone-runtime",
+          "score": 0.99,
+          "passed": true,
+          "notes": "Every frozen pivot and socket transform matches; one session and one timeline owner drive all three sampled phases."
+        },
+        {
+          "id": "phone-ink",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Main, structure and detail tiers use stable 0.18 variation; call effects have no outline children."
+        }
+      ],
+      "aiVisionNotes": "Four idle views and startup, climax and wind-down were manually inspected. Images are nonblank and uncropped; UI remains on the screen, lenses remain attached, and no outlined effect clumps were introduced.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/phone/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/phone/evidence/models/phone/render-off-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/phone/review/phone-reference-v2-four-view-comparison.png",
+        "cameraView": "four static and three fixed runtime views",
+        "notes": "Completed procedural geometry is reused as staged evidence.",
+        "aiVisionNotes": "Original SAKURA design; no claim of image-exact reconstruction or GPT Image 2 provenance."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "runtime-startup",
+        "runtime-climax",
+        "runtime-wind-down"
+      ],
+      "evidenceReuseNote": "The completed procedural model is reused across staged reviews; seven separate intermediate meshes were not captured."
+    },
+    {
+      "passId": "form-refinement",
+      "timestamp": "2026-08-13T05:02:00.000Z",
+      "estimatedFidelity": 0.88,
+      "aiVisionScore": 0.88,
+      "visualAcceptanceThreshold": 0.8,
+      "action": "continue",
+      "summary": "form-refinement accepted against the conditionally admitted original-design v1 views and frozen phone runtime contract.",
+      "matched": [
+        "eight-corner shell, guard caps and enlarged display remain inside the exact archived package",
+        "screen controls, side controls, Type-C bank, camera island and lenses remain independently named",
+        "stable three-tier ink applies only to solid phone parts and call effects own no outline meshes",
+        "all archived pivots, sockets, call UI positions, body motion and effect trajectories retain exact local transforms"
+      ],
+      "mismatches": [
+        "The v2 shell is deliberately more angular and game-like than the softer original v1 design."
+      ],
+      "evidence": [
+        "references/intake-v2/phone/views/three-quarter.png",
+        "artifacts/appliance-v2/phone/evidence/models/phone/render-off-three-quarter.png",
+        "artifacts/appliance-v2/phone/review/phone-reference-v2-four-view-comparison.png",
+        "artifacts/appliance-v2/phone/diagnostics/phone-v2-verification.json",
+        "artifacts/appliance-v2/phone/assembly/part-coverage.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.87,
+        "componentStructure": 0.91,
+        "formDetail": 0.88,
+        "materialSurface": 0.86,
+        "lightingCamera": 0.86
+      },
+      "featureReviews": [
+        {
+          "id": "phone-silhouette",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Eight-corner rail, faceted guards, layered screen and rear camera mass read in all four idle views."
+        },
+        {
+          "id": "phone-identity",
+          "score": 0.9,
+          "passed": true,
+          "notes": "Front screen, side keys, Type-C bank, diagonal dual camera and Sakura rear mark remain recognizable."
+        },
+        {
+          "id": "phone-runtime",
+          "score": 0.99,
+          "passed": true,
+          "notes": "Every frozen pivot and socket transform matches; one session and one timeline owner drive all three sampled phases."
+        },
+        {
+          "id": "phone-ink",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Main, structure and detail tiers use stable 0.18 variation; call effects have no outline children."
+        }
+      ],
+      "aiVisionNotes": "Four idle views and startup, climax and wind-down were manually inspected. Images are nonblank and uncropped; UI remains on the screen, lenses remain attached, and no outlined effect clumps were introduced.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/phone/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/phone/evidence/models/phone/render-off-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/phone/review/phone-reference-v2-four-view-comparison.png",
+        "cameraView": "four static and three fixed runtime views",
+        "notes": "Completed procedural geometry is reused as staged evidence.",
+        "aiVisionNotes": "Original SAKURA design; no claim of image-exact reconstruction or GPT Image 2 provenance."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "runtime-startup",
+        "runtime-climax",
+        "runtime-wind-down"
+      ],
+      "evidenceReuseNote": "The completed procedural model is reused across staged reviews; seven separate intermediate meshes were not captured."
+    },
+    {
+      "passId": "material-pass",
+      "timestamp": "2026-08-13T05:03:00.000Z",
+      "estimatedFidelity": 0.87,
+      "aiVisionScore": 0.87,
+      "visualAcceptanceThreshold": 0.8,
+      "action": "continue",
+      "summary": "material-pass accepted against the conditionally admitted original-design v1 views and frozen phone runtime contract.",
+      "matched": [
+        "eight-corner shell, guard caps and enlarged display remain inside the exact archived package",
+        "screen controls, side controls, Type-C bank, camera island and lenses remain independently named",
+        "stable three-tier ink applies only to solid phone parts and call effects own no outline meshes",
+        "all archived pivots, sockets, call UI positions, body motion and effect trajectories retain exact local transforms"
+      ],
+      "mismatches": [
+        "No independent GPT Image 2 concept sheet was available; reference evidence is explicitly conditional fallback."
+      ],
+      "evidence": [
+        "references/intake-v2/phone/views/three-quarter.png",
+        "artifacts/appliance-v2/phone/evidence/models/phone/render-off-three-quarter.png",
+        "artifacts/appliance-v2/phone/review/phone-reference-v2-four-view-comparison.png",
+        "artifacts/appliance-v2/phone/diagnostics/phone-v2-verification.json",
+        "artifacts/appliance-v2/phone/assembly/part-coverage.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.87,
+        "componentStructure": 0.91,
+        "formDetail": 0.88,
+        "materialSurface": 0.86,
+        "lightingCamera": 0.86
+      },
+      "featureReviews": [
+        {
+          "id": "phone-silhouette",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Eight-corner rail, faceted guards, layered screen and rear camera mass read in all four idle views."
+        },
+        {
+          "id": "phone-identity",
+          "score": 0.9,
+          "passed": true,
+          "notes": "Front screen, side keys, Type-C bank, diagonal dual camera and Sakura rear mark remain recognizable."
+        },
+        {
+          "id": "phone-runtime",
+          "score": 0.99,
+          "passed": true,
+          "notes": "Every frozen pivot and socket transform matches; one session and one timeline owner drive all three sampled phases."
+        },
+        {
+          "id": "phone-ink",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Main, structure and detail tiers use stable 0.18 variation; call effects have no outline children."
+        }
+      ],
+      "aiVisionNotes": "Four idle views and startup, climax and wind-down were manually inspected. Images are nonblank and uncropped; UI remains on the screen, lenses remain attached, and no outlined effect clumps were introduced.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/phone/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/phone/evidence/models/phone/render-off-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/phone/review/phone-reference-v2-four-view-comparison.png",
+        "cameraView": "four static and three fixed runtime views",
+        "notes": "Completed procedural geometry is reused as staged evidence.",
+        "aiVisionNotes": "Original SAKURA design; no claim of image-exact reconstruction or GPT Image 2 provenance."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "runtime-startup",
+        "runtime-climax",
+        "runtime-wind-down"
+      ],
+      "evidenceReuseNote": "The completed procedural model is reused across staged reviews; seven separate intermediate meshes were not captured."
+    },
+    {
+      "passId": "lighting-pass",
+      "timestamp": "2026-08-13T05:04:00.000Z",
+      "estimatedFidelity": 0.86,
+      "aiVisionScore": 0.86,
+      "visualAcceptanceThreshold": 0.8,
+      "action": "continue",
+      "summary": "lighting-pass accepted against the conditionally admitted original-design v1 views and frozen phone runtime contract.",
+      "matched": [
+        "eight-corner shell, guard caps and enlarged display remain inside the exact archived package",
+        "screen controls, side controls, Type-C bank, camera island and lenses remain independently named",
+        "stable three-tier ink applies only to solid phone parts and call effects own no outline meshes",
+        "all archived pivots, sockets, call UI positions, body motion and effect trajectories retain exact local transforms"
+      ],
+      "mismatches": [
+        "No independent GPT Image 2 concept sheet was available; reference evidence is explicitly conditional fallback."
+      ],
+      "evidence": [
+        "references/intake-v2/phone/views/three-quarter.png",
+        "artifacts/appliance-v2/phone/evidence/models/phone/render-off-three-quarter.png",
+        "artifacts/appliance-v2/phone/review/phone-reference-v2-four-view-comparison.png",
+        "artifacts/appliance-v2/phone/diagnostics/phone-v2-verification.json",
+        "artifacts/appliance-v2/phone/assembly/part-coverage.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.87,
+        "componentStructure": 0.91,
+        "formDetail": 0.88,
+        "materialSurface": 0.86,
+        "lightingCamera": 0.86
+      },
+      "featureReviews": [
+        {
+          "id": "phone-silhouette",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Eight-corner rail, faceted guards, layered screen and rear camera mass read in all four idle views."
+        },
+        {
+          "id": "phone-identity",
+          "score": 0.9,
+          "passed": true,
+          "notes": "Front screen, side keys, Type-C bank, diagonal dual camera and Sakura rear mark remain recognizable."
+        },
+        {
+          "id": "phone-runtime",
+          "score": 0.99,
+          "passed": true,
+          "notes": "Every frozen pivot and socket transform matches; one session and one timeline owner drive all three sampled phases."
+        },
+        {
+          "id": "phone-ink",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Main, structure and detail tiers use stable 0.18 variation; call effects have no outline children."
+        }
+      ],
+      "aiVisionNotes": "Four idle views and startup, climax and wind-down were manually inspected. Images are nonblank and uncropped; UI remains on the screen, lenses remain attached, and no outlined effect clumps were introduced.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/phone/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/phone/evidence/models/phone/render-off-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/phone/review/phone-reference-v2-four-view-comparison.png",
+        "cameraView": "four static and three fixed runtime views",
+        "notes": "Completed procedural geometry is reused as staged evidence.",
+        "aiVisionNotes": "Original SAKURA design; no claim of image-exact reconstruction or GPT Image 2 provenance."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "runtime-startup",
+        "runtime-climax",
+        "runtime-wind-down"
+      ],
+      "evidenceReuseNote": "The completed procedural model is reused across staged reviews; seven separate intermediate meshes were not captured."
+    },
+    {
+      "passId": "interaction-pass",
+      "timestamp": "2026-08-13T05:05:00.000Z",
+      "estimatedFidelity": 0.98,
+      "aiVisionScore": 0.98,
+      "visualAcceptanceThreshold": 0.8,
+      "action": "continue",
+      "summary": "interaction-pass accepted against the conditionally admitted original-design v1 views and frozen phone runtime contract.",
+      "matched": [
+        "eight-corner shell, guard caps and enlarged display remain inside the exact archived package",
+        "screen controls, side controls, Type-C bank, camera island and lenses remain independently named",
+        "stable three-tier ink applies only to solid phone parts and call effects own no outline meshes",
+        "all archived pivots, sockets, call UI positions, body motion and effect trajectories retain exact local transforms"
+      ],
+      "mismatches": [
+        "The large bright call rings remain visually dominant at climax because their frozen v1 trajectory and scale were explicitly preserved."
+      ],
+      "evidence": [
+        "references/intake-v2/phone/views/three-quarter.png",
+        "artifacts/appliance-v2/phone/evidence/models/phone/render-off-three-quarter.png",
+        "artifacts/appliance-v2/phone/review/phone-reference-v2-four-view-comparison.png",
+        "artifacts/appliance-v2/phone/diagnostics/phone-v2-verification.json",
+        "artifacts/appliance-v2/phone/assembly/part-coverage.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.87,
+        "componentStructure": 0.91,
+        "formDetail": 0.88,
+        "materialSurface": 0.86,
+        "lightingCamera": 0.86
+      },
+      "featureReviews": [
+        {
+          "id": "phone-silhouette",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Eight-corner rail, faceted guards, layered screen and rear camera mass read in all four idle views."
+        },
+        {
+          "id": "phone-identity",
+          "score": 0.9,
+          "passed": true,
+          "notes": "Front screen, side keys, Type-C bank, diagonal dual camera and Sakura rear mark remain recognizable."
+        },
+        {
+          "id": "phone-runtime",
+          "score": 0.99,
+          "passed": true,
+          "notes": "Every frozen pivot and socket transform matches; one session and one timeline owner drive all three sampled phases."
+        },
+        {
+          "id": "phone-ink",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Main, structure and detail tiers use stable 0.18 variation; call effects have no outline children."
+        }
+      ],
+      "aiVisionNotes": "Four idle views and startup, climax and wind-down were manually inspected. Images are nonblank and uncropped; UI remains on the screen, lenses remain attached, and no outlined effect clumps were introduced.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/phone/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/phone/evidence/models/phone/render-off-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/phone/review/phone-reference-v2-four-view-comparison.png",
+        "cameraView": "four static and three fixed runtime views",
+        "notes": "Completed procedural geometry is reused as staged evidence.",
+        "aiVisionNotes": "Original SAKURA design; no claim of image-exact reconstruction or GPT Image 2 provenance."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "runtime-startup",
+        "runtime-climax",
+        "runtime-wind-down"
+      ],
+      "evidenceReuseNote": "The completed procedural model is reused across staged reviews; seven separate intermediate meshes were not captured."
+    },
+    {
+      "passId": "optimization-pass",
+      "timestamp": "2026-08-13T05:06:00.000Z",
+      "estimatedFidelity": 0.95,
+      "aiVisionScore": 0.95,
+      "visualAcceptanceThreshold": 0.8,
+      "action": "continue",
+      "summary": "optimization-pass accepted against the conditionally admitted original-design v1 views and frozen phone runtime contract.",
+      "matched": [
+        "eight-corner shell, guard caps and enlarged display remain inside the exact archived package",
+        "screen controls, side controls, Type-C bank, camera island and lenses remain independently named",
+        "stable three-tier ink applies only to solid phone parts and call effects own no outline meshes",
+        "all archived pivots, sockets, call UI positions, body motion and effect trajectories retain exact local transforms"
+      ],
+      "mismatches": [
+        "No independent GPT Image 2 concept sheet was available; reference evidence is explicitly conditional fallback."
+      ],
+      "evidence": [
+        "references/intake-v2/phone/views/three-quarter.png",
+        "artifacts/appliance-v2/phone/evidence/models/phone/render-off-three-quarter.png",
+        "artifacts/appliance-v2/phone/review/phone-reference-v2-four-view-comparison.png",
+        "artifacts/appliance-v2/phone/diagnostics/phone-v2-verification.json",
+        "artifacts/appliance-v2/phone/assembly/part-coverage.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.87,
+        "componentStructure": 0.91,
+        "formDetail": 0.88,
+        "materialSurface": 0.86,
+        "lightingCamera": 0.86
+      },
+      "featureReviews": [
+        {
+          "id": "phone-silhouette",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Eight-corner rail, faceted guards, layered screen and rear camera mass read in all four idle views."
+        },
+        {
+          "id": "phone-identity",
+          "score": 0.9,
+          "passed": true,
+          "notes": "Front screen, side keys, Type-C bank, diagonal dual camera and Sakura rear mark remain recognizable."
+        },
+        {
+          "id": "phone-runtime",
+          "score": 0.99,
+          "passed": true,
+          "notes": "Every frozen pivot and socket transform matches; one session and one timeline owner drive all three sampled phases."
+        },
+        {
+          "id": "phone-ink",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Main, structure and detail tiers use stable 0.18 variation; call effects have no outline children."
+        }
+      ],
+      "aiVisionNotes": "Four idle views and startup, climax and wind-down were manually inspected. Images are nonblank and uncropped; UI remains on the screen, lenses remain attached, and no outlined effect clumps were introduced.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/phone/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/phone/evidence/models/phone/render-off-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/phone/review/phone-reference-v2-four-view-comparison.png",
+        "cameraView": "four static and three fixed runtime views",
+        "notes": "Completed procedural geometry is reused as staged evidence.",
+        "aiVisionNotes": "Original SAKURA design; no claim of image-exact reconstruction or GPT Image 2 provenance."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "runtime-startup",
+        "runtime-climax",
+        "runtime-wind-down"
+      ],
+      "evidenceReuseNote": "The completed procedural model is reused across staged reviews; seven separate intermediate meshes were not captured."
+    }
+  ],
+  "lodPlan": [
+    {
+      "tier": "near",
+      "distance": 0,
+      "strategy": "full component tree and material layers"
+    },
+    {
+      "tier": "far",
+      "distance": 30,
+      "strategy": "merge static components and reduce local feature geometry"
+    }
+  ],
+  "performanceBudget": {
+    "qualityPriority": "stylized-runtime",
+    "targetTriangles": 18000,
+    "maxDrawCalls": 120,
+    "textureSize": 0,
+    "fpsTarget": 60,
+    "optimizationPolicy": "Stay below 1.35x archived triangles, reuse repeated geometry where practical and add no runtime textures."
+  },
+  "lightingFromPhoto": [
+    "warm upper-left key for cream and Sakura planes",
+    "mint hemisphere fill for cool-violet screen separation",
+    "cool violet rear rim for camera and guard silhouette",
+    "ACES tone mapping at existing model-review exposure",
+    "soft contact shadow at archived ground"
+  ],
+  "proceduralStrategy": [
+    "Extruded eight-corner slabs for primary shell planes.",
+    "Six-to-twelve sided cylinders and torus rings for deliberately faceted details.",
+    "Named meshes under frozen pivots for runtime compatibility.",
+    "Three-tier object-space outline variation on solid body parts only."
+  ],
+  "animationAnchors": [
+    "phone-handset-pivot",
+    "phone-incoming-call-ui-pivot",
+    "phone-call-answer-button-pivot",
+    "phone-call-hangup-button-pivot",
+    "phone-call-feedback-rig"
+  ],
+  "destructionAnchors": [
+    "phone-shell-assembly",
+    "phone-camera-assembly",
+    "phone-call-feedback"
+  ],
+  "risks": [
+    "Very thick outlines can close speaker and lens gaps at distant framing.",
+    "Call rings may dominate the small body at climax, so effect outlines remain disabled.",
+    "The more angular v2 silhouette deliberately departs from the soft v1 rectangle."
+  ],
+  "localSpecSearch": {
+    "collection": "core_3d",
+    "queries": [
+      "stylized low poly smartphone rounded shell camera island runtime pivot socket",
+      "toon outline object-space stable variation game prop"
+    ],
+    "records": [
+      {
+        "recordId": "core.socket-pivot",
+        "sourceRefs": [
+          "grimoire/glossary/3d_vocabulary.md#Animation, Physics, And Destruction",
+          "grimoire/readiness/action_rigging.md#Hierarchy Pattern"
+        ],
+        "appliedTo": [
+          "frozen pivot and socket hierarchy"
+        ]
+      },
+      {
+        "recordId": "core.runtime-hierarchy",
+        "sourceRefs": [
+          "grimoire/readiness/action_rigging.md#Hierarchy Pattern"
+        ],
+        "appliedTo": [
+          "runtime nodes, sockets, colliders and destruction groups"
+        ]
+      },
+      {
+        "recordId": "core.topology-intent",
+        "sourceRefs": [
+          "grimoire/glossary/3d_vocabulary.md#Geometry And Topology"
+        ],
+        "appliedTo": [
+          "low-poly hard-surface topology classification"
+        ]
+      }
+    ]
+  },
+  "sourceImages": [
+    "references/intake-v2/phone/views/front.png",
+    "references/intake-v2/phone/views/side.png",
+    "references/intake-v2/phone/views/back.png",
+    "references/intake-v2/phone/views/three-quarter.png"
+  ]
+}

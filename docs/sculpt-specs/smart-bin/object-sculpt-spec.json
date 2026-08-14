@@ -1,0 +1,4155 @@
+{
+  "targetName": "SAKURA Smart Bin",
+  "targetId": "sakura-smart-bin",
+  "schemaVersion": "2.1",
+  "terminologyProfile": {
+    "domain": "real-time procedural Three.js asset",
+    "geometryTerms": [
+      "silhouette",
+      "topology",
+      "primitive",
+      "bevel",
+      "chamfer",
+      "taper",
+      "bend",
+      "boolean cut",
+      "edge loop",
+      "surface normal",
+      "displacement"
+    ],
+    "materialTerms": [
+      "albedo",
+      "baseColor",
+      "roughness",
+      "metalness",
+      "normal map",
+      "bump map",
+      "ambient occlusion",
+      "cavity dirt",
+      "edge wear",
+      "clearcoat"
+    ],
+    "lightingTerms": [
+      "key light",
+      "fill light",
+      "rim light",
+      "HDRI/environment reflection",
+      "contact shadow"
+    ],
+    "descriptionRule": "Use measurable 3D graphics terms. Avoid vague words unless they are paired with concrete geometry/material/shader parameters."
+  },
+  "sourceImage": "references/intake/smart-bin/front.png",
+  "referenceCamera": {
+    "solved": true,
+    "fovDegrees": 40.0,
+    "aspect": 1.0,
+    "orientation": {
+      "yaw": 0.0,
+      "pitch": 0.0,
+      "roll": 0.0
+    },
+    "positionHint": [
+      0.0,
+      0.0,
+      3.0
+    ],
+    "note": "For likeness work, solve the reference camera (forge/stage1_intake/solve_camera_pose.py) so the review render aligns with the photo and the reference can be projected. Confirm by overlay review."
+  },
+  "suitability": "pass",
+  "scores": {
+    "object_isolation": 3,
+    "silhouette_readability": 3,
+    "depth_inference": 3,
+    "primitive_decomposition": 3,
+    "material_procedurality": 3,
+    "occlusion_risk": 1,
+    "interaction_fit": 3
+  },
+  "preSpecAssessment": {
+    "objectClass": {
+      "primaryType": "touchless desktop smart waste bin",
+      "primaryDomain": "object",
+      "formLanguage": [
+        "hard-surface",
+        "rounded",
+        "layered",
+        "minimal kawaii appliance"
+      ],
+      "structureKind": [
+        "compound object",
+        "hinged lid",
+        "layered shell",
+        "repeated feet"
+      ],
+      "motionPotential": [
+        "articulated hinge",
+        "sensor-triggered lid",
+        "indicator light"
+      ],
+      "materialFamilies": [
+        "injection-molded plastic",
+        "translucent dark sensor window",
+        "rubber feet"
+      ],
+      "notes": "Three admitted orthographic-style views establish the shell, lid hinge, rear handle recess and foot layout. Internal liner, motor and battery are hidden and inferred."
+    },
+    "complexity": {
+      "tier": "complex",
+      "scores": {
+        "silhouetteComplexity": 2,
+        "componentCount": 3,
+        "hierarchyDepth": 3,
+        "repetitionDensity": 2,
+        "materialLayerCount": 3,
+        "localDetailDensity": 2,
+        "occlusionRisk": 2,
+        "actionReadinessNeed": 3
+      },
+      "estimatedCounts": {
+        "macroComponents": 5,
+        "mesoComponents": 11,
+        "microFeatureGroups": 6,
+        "materialLayers": 4,
+        "repetitionSystems": 2
+      },
+      "reasoning": [
+        "Identity depends on the compact rounded shell, rose hinged lid, black infrared sensor slot, rear handle recess, and four small feet."
+      ]
+    },
+    "specDepthDecision": {
+      "requiredDepth": "complex",
+      "minimumComponentLevels": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "needsRepetitionSystems": true,
+      "needsMaterialLocalOverrides": true,
+      "needsMultipleReviewViews": true,
+      "needsActionReadyHierarchy": true,
+      "rationale": "Choose simple/moderate/complex/ultra-complex from observed structure, not from a hardcoded domain."
+    },
+    "unknownsToResolveBeforeImplementation": [],
+    "detailInventory": {
+      "scanMethod": "component-zones",
+      "targetMinDetails": 10,
+      "note": "Enumerate every identity-defining small detail before authoring the spec. Each detail must map to a component.localFeatures entry or material.localOverrides entry, never prose only. Use forge/stage1_intake/build_detail_inventory.py to scan zones.",
+      "details": [
+        {
+          "id": "rounded-shell-bevel",
+          "kind": "bevel",
+          "zone": "body",
+          "observation": "large cream rectangular shell has quarter-radius corners and vertical side taper",
+          "mapsTo": {
+            "ref": "body-shell"
+          },
+          "evidenceRefs": [
+            "front",
+            "side",
+            "back"
+          ]
+        },
+        {
+          "id": "rose-upper-lid",
+          "kind": "bevel",
+          "zone": "top",
+          "observation": "pink lid cap follows shell width with thick rounded perimeter",
+          "mapsTo": {
+            "ref": "lid-shell"
+          },
+          "evidenceRefs": [
+            "front",
+            "side"
+          ]
+        },
+        {
+          "id": "lid-hinge-pair",
+          "kind": "bevel",
+          "zone": "rear-top",
+          "observation": "two square hinge blocks visible in front view and circular hinge barrel in side view",
+          "mapsTo": {
+            "ref": "lid-hinge-array"
+          },
+          "evidenceRefs": [
+            "front",
+            "side"
+          ]
+        },
+        {
+          "id": "infrared-sensor-slot",
+          "kind": "bevel",
+          "zone": "front-top",
+          "observation": "small black horizontal rounded sensor window centered under lid rim",
+          "mapsTo": {
+            "ref": "sensor-window"
+          },
+          "evidenceRefs": [
+            "front"
+          ]
+        },
+        {
+          "id": "inner-rim-opening",
+          "kind": "bevel",
+          "zone": "top-opening",
+          "observation": "dark recessed oval opening separates lid from body",
+          "mapsTo": {
+            "ref": "inner-opening"
+          },
+          "evidenceRefs": [
+            "front",
+            "side"
+          ]
+        },
+        {
+          "id": "rose-bottom-skirt",
+          "kind": "bevel",
+          "zone": "base",
+          "observation": "pink lower band wraps shell and rounds into floor",
+          "mapsTo": {
+            "ref": "bottom-skirt"
+          },
+          "evidenceRefs": [
+            "front",
+            "side",
+            "back"
+          ]
+        },
+        {
+          "id": "four-foot-array",
+          "kind": "bevel",
+          "zone": "base",
+          "observation": "four small rose feet support shell at corners",
+          "mapsTo": {
+            "ref": "foot-array"
+          },
+          "evidenceRefs": [
+            "front",
+            "back"
+          ]
+        },
+        {
+          "id": "rear-handle-recess",
+          "kind": "bevel",
+          "zone": "back",
+          "observation": "centered shallow rectangular pull recess under rear lid seam",
+          "mapsTo": {
+            "ref": "rear-handle-recess"
+          },
+          "evidenceRefs": [
+            "back"
+          ]
+        },
+        {
+          "id": "lid-inner-panel",
+          "kind": "bevel",
+          "zone": "lid-interior",
+          "observation": "open front view exposes pale pink inset underside panel",
+          "mapsTo": {
+            "ref": "lid-inner-panel"
+          },
+          "evidenceRefs": [
+            "front"
+          ]
+        },
+        {
+          "id": "shell-seams",
+          "kind": "bevel",
+          "zone": "body",
+          "observation": "thin horizontal seam between upper rim, body and bottom skirt",
+          "mapsTo": {
+            "ref": "seam-array"
+          },
+          "evidenceRefs": [
+            "front",
+            "side",
+            "back"
+          ]
+        }
+      ]
+    },
+    "anatomy": {
+      "applies": false,
+      "styleHeads": 0.0,
+      "proportions": {
+        "headUnit": 0.0,
+        "torso": 0.0,
+        "legs": 0.0,
+        "shoulderWidth": 0.0,
+        "hipWidth": 0.0
+      },
+      "pose": {
+        "type": "unassessed",
+        "jointAngles": {}
+      },
+      "faceLandmarks": {
+        "eyeLine": 0.0,
+        "eyeSpacing": 0.0,
+        "noseBase": 0.0,
+        "mouthLine": 0.0,
+        "hairline": 0.0
+      },
+      "features": [],
+      "confidence": 0.0,
+      "note": "Only meaningful when objectClass.primaryDomain is character or hybrid. Set applies=true and fill from forge/stage1_intake/extract_landmarks.py. See grimoire/character/reconstruction.md and grimoire/character/likeness_maximization.md."
+    },
+    "sourceImage": "references/intake/smart-bin/front.png"
+  },
+  "qualityContract": {
+    "qualityBar": "complex",
+    "definitionOfDone": [
+      "The rendered model matches the reference silhouette, primary proportions, visible component hierarchy, material response, and most recognizable local features for the selected fidelity tier."
+    ],
+    "minimumSpecDepth": {
+      "macroComponents": 3,
+      "mesoComponents": 8,
+      "microFeatureGroups": 5,
+      "materialLayers": 3,
+      "repetitionSystems": 1,
+      "reviewViewpoints": 4
+    },
+    "featureGroups": [
+      {
+        "id": "smart-bin-silhouette",
+        "name": "Overall silhouette and proportions",
+        "required": true,
+        "qualityCriteria": [
+          "Bounding shape, dominant curves, negative spaces, and scale relationships are explicitly described."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "model reads as a generic placeholder instead of the reference object",
+          "major proportions are guessed without evidence"
+        ]
+      },
+      {
+        "id": "smart-bin-structure",
+        "name": "Primary structure and hierarchy",
+        "required": true,
+        "qualityCriteria": [
+          "Major parts, joints, seams, contact points, and parent-child relationships are named before code generation."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "large visible parts are merged into one mesh",
+          "component hierarchy is too shallow for the observed complexity"
+        ]
+      },
+      {
+        "id": "attachment-joint-correctness",
+        "name": "Attachment and joint correctness",
+        "required": true,
+        "qualityCriteria": [
+          "Every visible child appendage, branch, limb, handle, connector, tube, cable, horn, wing, leg, or hinged part has an attachment contract with parent socket, localStart/localEnd, contact type, embed/overlap, and gap tolerance."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "child part root floats away from the parent",
+          "branch/limb/tube is centered in space instead of pivoting from its root",
+          "parent-child transform mixes world and local coordinates"
+        ]
+      },
+      {
+        "id": "surface-material-response",
+        "name": "Surface material response",
+        "required": true,
+        "qualityCriteria": [
+          "Albedo zones, roughness, normal/bump/displacement intent, cavity dirt, edge wear, and local overrides are specified where visible.",
+          "Important materials define independent albedo, roughness, height/normal, and AO responses instead of reusing one texture for unrelated PBR channels.",
+          "Surface response is decomposed into macro, meso, and micro frequency bands with scale and amplitude tied to object scale."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "surface looks like flat plastic",
+          "local material variation is missing or not tied to image evidence"
+        ]
+      },
+      {
+        "id": "reference-lookdev",
+        "name": "Reference color, material, and lighting response",
+        "required": true,
+        "qualityCriteria": [
+          "Material-pass names the reference-derived albedo palette, roughness variation, tactile normal/bump/displacement response, and local masks.",
+          "When a source image is available, run reference PBR extraction and require confidence >= 0.7 before treating maps as implementation-ready.",
+          "Lighting-pass names key/fill/rim or environment light, exposure, tone mapping, background, and contact shadow behavior.",
+          "Neutral, grazing-angle, and reference-matched renders prove that surface relief survives relighting and is not painted into albedo."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "model has acceptable shape but reads as flat shaded or plastic",
+          "colors are a generic average instead of reference-observed local color zones",
+          "lighting is evenly ambient and cannot reproduce the source value range"
+        ]
+      }
+    ],
+    "visualDeltaChecks": [
+      "silhouette and negative-space delta",
+      "component hierarchy depth delta",
+      "repetition density and distribution delta",
+      "material albedo/roughness/normal response delta",
+      "local feature placement and scale delta"
+    ],
+    "antiShallowSpecRules": [
+      "Do not proceed to code if qualityContract.qualityBar is unassessed.",
+      "Do not proceed to code if the spec only contains a root component for a moderate or complex object.",
+      "Do not proceed to code if required featureGroups are not represented by componentTree, materials, or repetitionSystems.",
+      "Do not proceed to code if visible local features are described only in prose and not attached to components/materials/evidenceRefs.",
+      "Do not proceed past structural-pass if attached child parts lack attachment.parentSocket, localStart, localEnd, embedDepth/overlap, and gapTolerance.",
+      "Do not pass material look-dev when albedo is reused as roughness, height, normal, or AO.",
+      "Do not pass material look-dev without macro, meso, and micro surface frequency bands for close-up materials.",
+      "Do not pass reference-fidelity material look-dev from a source image without usable referencePbr maps or an explicit documented limitation.",
+      "Do not patch a spec with extracted PBR maps when extraction confidence is below the target threshold unless the user explicitly accepts lower fidelity.",
+      "Do not place adjacent separate-geometry parts below 0.02 world-unit seam overlap (source: grimoire/build/geometry_patterns.md).",
+      "Do not satisfy raised or recessed relief, fasteners, or grip structure with a map alone when the feature affects form; use geometry or displacement (source: grimoire/build/geometry_patterns.md).",
+      "Adjacent components must overlap by at least 0.02 world units at shared seams (source: grimoire/build/geometry_patterns.md).",
+      "Raised or recessed relief and fasteners must be geometry, instanced micro-parts, or displacement; a map alone is an approximation (source: grimoire/build/geometry_patterns.md)."
+    ],
+    "mustNotDo": [
+      "Do not proceed to code if qualityContract.qualityBar is unassessed.",
+      "Do not proceed to code if the spec only contains a root component for a moderate or complex object.",
+      "Do not proceed to code if required featureGroups are not represented by componentTree, materials, or repetitionSystems.",
+      "Do not proceed to code if visible local features are described only in prose and not attached to components/materials/evidenceRefs.",
+      "Do not proceed past structural-pass if attached child parts lack attachment.parentSocket, localStart, localEnd, embedDepth/overlap, and gapTolerance.",
+      "Do not pass material look-dev when albedo is reused as roughness, height, normal, or AO.",
+      "Do not pass material look-dev without macro, meso, and micro surface frequency bands for close-up materials.",
+      "Do not pass reference-fidelity material look-dev from a source image without usable referencePbr maps or an explicit documented limitation.",
+      "Do not patch a spec with extracted PBR maps when extraction confidence is below the target threshold unless the user explicitly accepts lower fidelity.",
+      "Do not place adjacent separate-geometry parts below 0.02 world-unit seam overlap (source: grimoire/build/geometry_patterns.md).",
+      "Do not satisfy raised or recessed relief, fasteners, or grip structure with a map alone when the feature affects form; use geometry or displacement (source: grimoire/build/geometry_patterns.md).",
+      "Adjacent components must overlap by at least 0.02 world units at shared seams (source: grimoire/build/geometry_patterns.md).",
+      "Raised or recessed relief and fasteners must be geometry, instanced micro-parts, or displacement; a map alone is an approximation (source: grimoire/build/geometry_patterns.md)."
+    ]
+  },
+  "qualityTargets": {
+    "targetFidelity": 0.7,
+    "mustMatch": [
+      "macro silhouette and proportions",
+      "primary material albedo/roughness response",
+      "reference-derived PBR material response at or above 0.7 confidence when source pixels are usable",
+      "most recognizable local features"
+    ],
+    "niceToHave": [
+      "micro scratches, stains, chips, and dirt masks",
+      "secondary lighting match"
+    ],
+    "fpsTarget": 60,
+    "reviewViewpoints": [
+      "front",
+      "three-quarter",
+      "side",
+      "thickness-axis",
+      "long-axis"
+    ]
+  },
+  "selfCorrectLoop": {
+    "enabled": true,
+    "visualAcceptance": {
+      "reviewer": "ai-vision",
+      "threshold": 0.7,
+      "comparisonArtifactRequired": true,
+      "layerScoresRequired": true,
+      "codePixelDiffIsAcceptanceAuthority": false,
+      "scoringRule": "AI vision must inspect a side-by-side reference/render sheet and score the current pass from 0 to 1. Pixel-diff code may assist diagnostics but cannot approve a pass.",
+      "requiredLayerScores": [
+        "silhouetteProportion",
+        "componentStructure",
+        "formDetail",
+        "materialSurface",
+        "lightingCamera"
+      ],
+      "featureReviewPolicy": {
+        "enabled": true,
+        "reviewUnit": "semantic-subsystem",
+        "maxCriticalFeaturesPerPass": 5,
+        "maxImportantFeaturesPerPass": 3,
+        "criticalDefaultThreshold": 0.8,
+        "importantAverageThreshold": 0.65,
+        "adaptiveEscalation": true,
+        "singleImagePairOnly": true,
+        "selectionRule": "Choose only the most visually salient, identity-defining, user-prioritized, or high-risk semantic systems. Group repeated parts instead of reviewing every mesh. AI vision scores every selected feature from the same full reference/render pair."
+      }
+    },
+    "reviewAfterPasses": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "surface-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "allowedActions": [
+      "continue",
+      "refine-spec",
+      "refine-code",
+      "request-input",
+      "stop"
+    ],
+    "specRefineTriggers": [
+      "missing component",
+      "wrong primitive family",
+      "wrong proportions",
+      "material layer under-specified",
+      "local feature not traceable to viewEvidence",
+      "reference ambiguity discovered during implementation"
+    ],
+    "codeRefineTriggers": [
+      "spec is adequate but generated geometry/material does not match",
+      "browser render differs from reference",
+      "performance budget exceeded",
+      "lighting hides geometry or material response"
+    ],
+    "stopCriteria": [
+      "target fidelity reached or user accepts current approximation",
+      "remaining gaps require new reference images or manual art"
+    ],
+    "screenshotPolicy": {
+      "requiredForPasses": [
+        "blockout",
+        "structural-pass",
+        "form-refinement",
+        "material-pass",
+        "surface-pass",
+        "lighting-pass",
+        "interaction-pass"
+      ],
+      "preferredCapture": "in-app-browser-screenshot",
+      "fallbackCapture": "user-supplied-screenshot-path",
+      "minimumEvidence": "Each visual pass needs a reference image, rendered screenshot, side-by-side comparison sheet, AI vision score, layer scores, and critique before choosing continue.",
+      "reviewPairRule": "Compare the same camera/viewpoint whenever possible; do not judge a front reference against a random render angle.",
+      "acceptanceAuthority": "AI vision review of the comparison sheet. Code-generated pixel similarity is not sufficient evidence."
+    }
+  },
+  "featureReviewTargets": [
+    {
+      "id": "smart-bin-silhouette",
+      "name": "Overall silhouette and proportion system",
+      "tier": "critical",
+      "passIds": [
+        "blockout"
+      ],
+      "minimumScore": 0.8,
+      "mustPass": true,
+      "componentRefs": [
+        "root"
+      ],
+      "evidenceRefs": [
+        "full-object"
+      ]
+    },
+    {
+      "id": "smart-bin-structure",
+      "name": "Primary identity-defining structure",
+      "tier": "critical",
+      "passIds": [
+        "structural-pass",
+        "form-refinement"
+      ],
+      "minimumScore": 0.8,
+      "mustPass": true,
+      "componentRefs": [
+        "root"
+      ],
+      "evidenceRefs": [
+        "full-object"
+      ]
+    },
+    {
+      "id": "smart-bin-material",
+      "name": "Primary reference material and surface response",
+      "tier": "critical",
+      "passIds": [
+        "material-pass",
+        "surface-pass"
+      ],
+      "minimumScore": 0.75,
+      "mustPass": true,
+      "componentRefs": [
+        "root"
+      ],
+      "evidenceRefs": [
+        "full-object"
+      ]
+    }
+  ],
+  "sculptPipeline": {
+    "passGateMode": "locked-sequential",
+    "passOrder": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "surface-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "currentPass": "complete",
+    "completedPasses": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "surface-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "lastCompletedPass": "optimization-pass",
+    "blockedReason": "all build passes completed",
+    "nextRequiredEvidence": []
+  },
+  "lookDevTargets": {
+    "qualityPriority": "reference-fidelity",
+    "materialPass": {
+      "albedoPaletteRequired": true,
+      "roughnessVariationRequired": true,
+      "normalOrBumpRequired": true,
+      "localOverridesRequired": true,
+      "minimumTextureResolution": 1024,
+      "preferredTextureResolution": 2048,
+      "independentMapChannels": [
+        "albedo",
+        "roughness",
+        "height",
+        "normal",
+        "ambient-occlusion"
+      ],
+      "requiredSurfaceFrequencyBands": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "geometryReliefRequiredWhenSilhouetteAffected": true,
+      "referencePbrExtraction": {
+        "requiredWhenSourceImagePresent": true,
+        "targetThreshold": 0.7,
+        "stopOnLowConfidence": true,
+        "script": "forge/stage1_intake/extract_pbr_evidence.py",
+        "acceptedLimitation": "single-image extraction is reference-derived inference, not exact photogrammetry"
+      },
+      "mustAvoid": [
+        "single flat albedo per material",
+        "uniform roughness",
+        "albedo texture reused as roughness/height/normal/AO",
+        "single-frequency random noise",
+        "plastic-looking smooth bark, stone, cloth, foliage, or aged material",
+        "local color/detail described only in prose without material masks",
+        "claiming exact PBR recovery when confidence is below the target threshold"
+      ]
+    },
+    "lightingPass": {
+      "requiredTerms": [
+        "key light",
+        "fill light",
+        "rim or environment light",
+        "exposure",
+        "tone mapping",
+        "background",
+        "contact shadow"
+      ],
+      "mustAvoid": [
+        "ambient-only lighting",
+        "flat value range",
+        "missing contact shadow",
+        "reference lighting copied without separating material readability"
+      ]
+    },
+    "screenshotReview": [
+      "Compare albedo palette and local color zones.",
+      "Compare roughness/normal/bump response under light.",
+      "Compare cavity dirt, edge wear, stains, moss, scratches, or other local masks.",
+      "Compare key/fill/rim structure, exposure, tone mapping, background, and contact shadows.",
+      "Capture a neutral-light render to verify material readability without reference lighting.",
+      "Capture a grazing-light close-up to expose flat normals, uniform roughness, tiling, and plastic highlights.",
+      "Capture a reference-matched render from the same camera framing as the source."
+    ]
+  },
+  "actionReadiness": {
+    "contract": "Every macro/meso component should be generated as a stable named Object3D pivot node with a mesh child, action metadata, optional sockets, collider proxy, and destruction metadata.",
+    "defaultRigType": "action-ready-static-rig",
+    "rootMotionNode": "root",
+    "requiredComponentFields": [
+      "id",
+      "parent",
+      "transform",
+      "attachment for child appendages, connectors, limbs, tubes, handles, legs, horns, wings, branches, or cables",
+      "actionProfile.animationRole",
+      "actionProfile.pivot",
+      "actionProfile.collider",
+      "actionProfile.destruction"
+    ],
+    "transformChannels": [
+      "translate",
+      "rotate",
+      "scale",
+      "bend",
+      "twist",
+      "detach",
+      "visibility",
+      "material-state"
+    ],
+    "authoringRules": [
+      "Do not collapse independently movable parts into one mesh.",
+      "Put transforms on component pivot groups, not only on raw meshes.",
+      "For attached child parts, put the pivot at the semantic root/socket and build visible geometry from localStart to localEnd.",
+      "Represent hinge, socket, detachable, and breakable intent even when no animation is implemented yet.",
+      "Use simplified collider proxies for runtime physics instead of visual mesh colliders by default."
+    ],
+    "destructionPolicy": {
+      "defaultBreakable": false,
+      "fractureGroupNaming": "Use stable semantic names such as body-shell, left-hinge, glass-panel, branch-segment.",
+      "debrisStrategy": "Prefer detachable component groups and a small number of procedural fragments over random mesh explosion."
+    }
+  },
+  "assumptions": [],
+  "coordinateFrame": {
+    "front": "camera-facing side in the reference image",
+    "up": "image up direction",
+    "scaleReference": "unit scale; adjust after first browser render"
+  },
+  "silhouette": {
+    "boundingShape": "rounded cuboid, width 1.55 : height 1.0 : depth 0.78, with lid raised to 1.52 height in front view",
+    "aspectRatios": [
+      1.55,
+      1.0,
+      0.78
+    ],
+    "symmetry": "bilaterally symmetric about X except hinge barrel is visible on right side profile",
+    "dominantCurves": [
+      "0.12 body corner radius",
+      "0.16 lid perimeter radius",
+      "0.10 lower skirt radius"
+    ],
+    "negativeSpaces": [
+      "dark recessed top opening under lid",
+      "rear handle slot",
+      "gap between four feet and lower skirt"
+    ],
+    "landmarks": [
+      "centered sensor at y=1.02",
+      "hinge axis at rear y=1.2",
+      "bottom skirt seam at y=0.16"
+    ]
+  },
+  "viewEvidence": [
+    {
+      "id": "full-object",
+      "view": "front",
+      "imageRegion": {
+        "x": 0.0,
+        "y": 0.0,
+        "width": 1.0,
+        "height": 1.0,
+        "units": "normalized"
+      },
+      "observations": [
+        "open rose lid spans shell width",
+        "cream shell dominates lower silhouette",
+        "black sensor slot centered beneath opening",
+        "rose skirt and two front feet visible"
+      ],
+      "confidence": 0.95
+    },
+    {
+      "id": "side",
+      "view": "side",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "lid rotates around rear hinge barrel",
+        "shell depth is about half its width",
+        "upper and lower pink bands wrap side profile"
+      ],
+      "confidence": 0.92
+    },
+    {
+      "id": "back",
+      "view": "back",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "lid is closed with central rectangular pull recess",
+        "rear shell remains cream with pink skirt and two feet"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "id": "front",
+      "view": "front",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "full reference crop used for material and silhouette evidence"
+      ],
+      "confidence": 0.95
+    }
+  ],
+  "componentTree": [
+    {
+      "id": "root",
+      "name": "SAKURA Smart Bin",
+      "level": "macro",
+      "role": "body",
+      "importance": 1.0,
+      "confidence": 0.95,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Container for separately modeled shell, lid, sensor, opening, skirt, feet and hinge assemblies.",
+      "geometryDescriptor": {
+        "topologyIntent": "assembled rounded shell with continuous silhouette bevels",
+        "edgeTreatment": {
+          "type": "rounded",
+          "bevelRadius": 0.12,
+          "segments": 4
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": null,
+      "attachment": null,
+      "dimensions": {
+        "width": 1.6,
+        "height": 1.0,
+        "depth": 0.82,
+        "units": "relative",
+        "confidence": 0.5
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "root",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.5
+        },
+        "transformChannels": {
+          "translate": true,
+          "rotate": true,
+          "scale": true,
+          "bend": false,
+          "twist": false,
+          "detach": false,
+          "visibility": true,
+          "materialState": true
+        },
+        "sockets": [],
+        "collider": {
+          "type": "box",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "isTrigger": false,
+          "notes": "Replace with sphere/capsule/compound proxy when the object shape demands it."
+        },
+        "constraints": [],
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "root",
+          "seamRefs": [],
+          "detachableFragments": [],
+          "breakImpulse": 0.0,
+          "debrisMaterial": "base"
+        }
+      },
+      "material": "cream-shell",
+      "colorMaterialRecipe": {
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9,
+        "dominantAlbedo": "rgba(243, 231, 214, 1)",
+        "secondaryAlbedo": "rgba(232, 210, 190, 1)",
+        "colorGradient": {
+          "type": "linear",
+          "stops": [
+            {
+              "color": "rgba(243, 231, 214, 1)",
+              "position": 0
+            },
+            {
+              "color": "rgba(255, 246, 234, 1)",
+              "position": 1
+            }
+          ]
+        },
+        "evidenceRefs": [
+          "full-object"
+        ]
+      },
+      "materialLayers": [
+        "cream-shell",
+        "rose-accent",
+        "cavity-dark"
+      ],
+      "deformations": [],
+      "joints": [],
+      "seams": [],
+      "localFeatures": [
+        "rounded-shell-bevel",
+        "shell-seams",
+        "contact-shadow-band"
+      ],
+      "surfaceDetail": {
+        "macroRoughness": 0.0,
+        "microRoughness": 0.0,
+        "bumpAmplitude": 0.0,
+        "normalPattern": "",
+        "displacementPattern": "",
+        "occlusionPattern": "",
+        "edgeWearPattern": "",
+        "notes": ""
+      },
+      "evidenceRefs": [
+        "full-object"
+      ],
+      "details": [],
+      "fidelityTier": "form-refined"
+    },
+    {
+      "id": "body-shell",
+      "name": "Cream body shell",
+      "level": "macro",
+      "role": "main container",
+      "importance": 0.98,
+      "confidence": 0.95,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rounded injection-molded shell with separate upper/lower rails.",
+      "parent": "root",
+      "attachment": null,
+      "dimensions": {
+        "width": 1.55,
+        "height": 0.92,
+        "depth": 0.78,
+        "units": "relative",
+        "confidence": 0.92
+      },
+      "transform": {
+        "position": [
+          0,
+          0.62,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-shell",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.9
+        },
+        "sockets": [
+          {
+            "name": "lid-mount"
+          },
+          {
+            "name": "sensor-mount"
+          }
+        ],
+        "collider": {
+          "type": "box",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1.55,
+            0.92,
+            0.78
+          ],
+          "isTrigger": false
+        },
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "body-shell"
+        }
+      },
+      "material": "cream-shell",
+      "colorMaterialRecipe": {
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.86,
+        "dominantAlbedo": "rgba(243, 231, 214, 1)",
+        "secondaryAlbedo": "rgba(232, 169, 164, 1)",
+        "colorGradient": {
+          "type": "linear",
+          "stops": [
+            {
+              "color": "rgba(243, 231, 214, 1)",
+              "position": 0
+            },
+            {
+              "color": "rgba(232, 169, 164, 1)",
+              "position": 1
+            }
+          ]
+        },
+        "evidenceRefs": [
+          "full-object"
+        ]
+      },
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "localFeatures": [
+        "rounded-shell-bevel",
+        "vertical-side-taper"
+      ],
+      "evidenceRefs": [
+        "front",
+        "side",
+        "back"
+      ],
+      "fidelityTier": "form-refined"
+    },
+    {
+      "id": "lid-shell",
+      "name": "Rose hinged lid",
+      "level": "macro",
+      "role": "articulated cover",
+      "importance": 0.98,
+      "confidence": 0.95,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Independent lid shell rotates from rear hinge axis.",
+      "parent": "root",
+      "attachment": {
+        "parentSocket": "lid-hinge-axis",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.08,
+          0
+        ],
+        "contactType": "hinge",
+        "embedDepth": 0.04,
+        "overlap": 0.04,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 1.52,
+        "height": 0.38,
+        "depth": 0.76,
+        "units": "relative",
+        "confidence": 0.9
+      },
+      "transform": {
+        "position": [
+          0,
+          1.16,
+          -0.02
+        ],
+        "rotation": [
+          -0.2,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "lid-hinge",
+        "pivot": {
+          "mode": "hinge",
+          "localPosition": [
+            0,
+            -0.18,
+            -0.34
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 0.95
+        },
+        "sockets": [
+          {
+            "name": "lid-inner-panel"
+          }
+        ],
+        "collider": {
+          "type": "box",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1.52,
+            0.38,
+            0.76
+          ],
+          "isTrigger": false
+        },
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "lid-shell"
+        }
+      },
+      "material": "rose-accent",
+      "colorMaterialRecipe": {
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.86,
+        "dominantAlbedo": "rgba(243, 231, 214, 1)",
+        "secondaryAlbedo": "rgba(232, 169, 164, 1)",
+        "colorGradient": {
+          "type": "linear",
+          "stops": [
+            {
+              "color": "rgba(243, 231, 214, 1)",
+              "position": 0
+            },
+            {
+              "color": "rgba(232, 169, 164, 1)",
+              "position": 1
+            }
+          ]
+        },
+        "evidenceRefs": [
+          "full-object"
+        ]
+      },
+      "materialLayers": [
+        "rose-accent"
+      ],
+      "localFeatures": [
+        "rose-upper-lid",
+        "lid-inner-panel"
+      ],
+      "evidenceRefs": [
+        "front",
+        "side"
+      ],
+      "fidelityTier": "form-refined"
+    },
+    {
+      "id": "lid-hinge-array",
+      "name": "Paired lid hinge blocks",
+      "level": "meso",
+      "role": "hinge hardware",
+      "importance": 0.85,
+      "confidence": 0.8,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Two visible hinge blocks plus inferred axle.",
+      "parent": "root",
+      "attachment": {
+        "parentSocket": "lid-mount",
+        "localStart": [
+          -0.42,
+          0.95,
+          -0.32
+        ],
+        "localEnd": [
+          0.42,
+          0.95,
+          -0.32
+        ],
+        "contactType": "bolted-hinge",
+        "embedDepth": 0.03,
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 0.84,
+        "height": 0.16,
+        "depth": 0.18,
+        "units": "relative",
+        "confidence": 0.8
+      },
+      "transform": {
+        "position": [
+          0,
+          1.03,
+          -0.34
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "hinge-hardware",
+        "pivot": {
+          "mode": "axis",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 0.8
+        },
+        "sockets": [
+          {
+            "name": "lid-hinge-axis"
+          }
+        ],
+        "collider": {
+          "type": "box",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            0.84,
+            0.16,
+            0.18
+          ],
+          "isTrigger": false
+        },
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "lid-hinge-array"
+        }
+      },
+      "material": "rose-accent",
+      "colorMaterialRecipe": {
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.86,
+        "dominantAlbedo": "rgba(243, 231, 214, 1)",
+        "secondaryAlbedo": "rgba(232, 169, 164, 1)",
+        "colorGradient": {
+          "type": "linear",
+          "stops": [
+            {
+              "color": "rgba(243, 231, 214, 1)",
+              "position": 0
+            },
+            {
+              "color": "rgba(232, 169, 164, 1)",
+              "position": 1
+            }
+          ]
+        },
+        "evidenceRefs": [
+          "full-object"
+        ]
+      },
+      "materialLayers": [
+        "rose-accent"
+      ],
+      "localFeatures": [
+        "lid-hinge-pair"
+      ],
+      "evidenceRefs": [
+        "front",
+        "side"
+      ],
+      "fidelityTier": "structural"
+    },
+    {
+      "id": "sensor-window",
+      "name": "Infrared sensor window",
+      "level": "meso",
+      "role": "touchless sensor",
+      "importance": 0.95,
+      "confidence": 0.9,
+      "primitive": "box",
+      "topologyClass": "surface-relief",
+      "topologyRationale": "Raised black horizontal capsule under front rim.",
+      "parent": "body-shell",
+      "attachment": {
+        "parentSocket": "sensor-mount",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.03
+        ],
+        "contactType": "recessed-panel",
+        "embedDepth": 0.02,
+        "overlap": 0.02,
+        "gapTolerance": 0.005
+      },
+      "dimensions": {
+        "width": 0.24,
+        "height": 0.08,
+        "depth": 0.04,
+        "units": "relative",
+        "confidence": 0.85
+      },
+      "transform": {
+        "position": [
+          0,
+          1.02,
+          0.4
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "sensor",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.7
+        },
+        "sockets": [],
+        "collider": {
+          "type": "box",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            0.24,
+            0.08,
+            0.04
+          ],
+          "isTrigger": true
+        },
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "sensor-window"
+        }
+      },
+      "material": "sensor-dark",
+      "colorMaterialRecipe": {
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.86,
+        "dominantAlbedo": "rgba(243, 231, 214, 1)",
+        "secondaryAlbedo": "rgba(232, 169, 164, 1)",
+        "colorGradient": {
+          "type": "linear",
+          "stops": [
+            {
+              "color": "rgba(243, 231, 214, 1)",
+              "position": 0
+            },
+            {
+              "color": "rgba(232, 169, 164, 1)",
+              "position": 1
+            }
+          ]
+        },
+        "evidenceRefs": [
+          "full-object"
+        ]
+      },
+      "materialLayers": [
+        "sensor-dark"
+      ],
+      "localFeatures": [
+        "infrared-sensor-slot"
+      ],
+      "evidenceRefs": [
+        "front"
+      ],
+      "fidelityTier": "form-refined"
+    },
+    {
+      "id": "inner-opening",
+      "name": "Recessed bin opening",
+      "level": "meso",
+      "role": "waste aperture",
+      "importance": 0.9,
+      "confidence": 0.85,
+      "primitive": "box",
+      "topologyClass": "surface-relief",
+      "topologyRationale": "Dark cavity rail visible under lifted lid.",
+      "parent": "body-shell",
+      "attachment": {
+        "parentSocket": "root",
+        "localStart": [
+          0,
+          1.01,
+          0
+        ],
+        "localEnd": [
+          0,
+          1.01,
+          0
+        ],
+        "contactType": "nested-cavity",
+        "embedDepth": 0.06,
+        "overlap": 0.06,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 1.38,
+        "height": 0.1,
+        "depth": 0.58,
+        "units": "relative",
+        "confidence": 0.8
+      },
+      "transform": {
+        "position": [
+          0,
+          1.04,
+          0.03
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-cavity",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.7
+        },
+        "sockets": [],
+        "collider": {
+          "type": "box",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1.38,
+            0.1,
+            0.58
+          ],
+          "isTrigger": true
+        },
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "inner-opening"
+        }
+      },
+      "material": "cavity-dark",
+      "colorMaterialRecipe": {
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.86,
+        "dominantAlbedo": "rgba(243, 231, 214, 1)",
+        "secondaryAlbedo": "rgba(232, 169, 164, 1)",
+        "colorGradient": {
+          "type": "linear",
+          "stops": [
+            {
+              "color": "rgba(243, 231, 214, 1)",
+              "position": 0
+            },
+            {
+              "color": "rgba(232, 169, 164, 1)",
+              "position": 1
+            }
+          ]
+        },
+        "evidenceRefs": [
+          "full-object"
+        ]
+      },
+      "materialLayers": [
+        "cavity-dark"
+      ],
+      "localFeatures": [
+        "inner-rim-opening"
+      ],
+      "evidenceRefs": [
+        "front",
+        "side"
+      ],
+      "fidelityTier": "structural"
+    },
+    {
+      "id": "bottom-skirt",
+      "name": "Rose bottom skirt",
+      "level": "macro",
+      "role": "base trim",
+      "importance": 0.9,
+      "confidence": 0.92,
+      "primitive": "box",
+      "topologyClass": "surface-relief",
+      "topologyRationale": "Separate pink band wraps lower body and rounds into floor.",
+      "parent": "body-shell",
+      "attachment": {
+        "parentSocket": "root",
+        "localStart": [
+          0,
+          0.18,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.18,
+          0
+        ],
+        "contactType": "overlapping-rail",
+        "embedDepth": 0.04,
+        "overlap": 0.04,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 1.58,
+        "height": 0.22,
+        "depth": 0.81,
+        "units": "relative",
+        "confidence": 0.9
+      },
+      "transform": {
+        "position": [
+          0,
+          0.18,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-trim",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.8
+        },
+        "sockets": [],
+        "collider": {
+          "type": "box",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1.58,
+            0.22,
+            0.81
+          ],
+          "isTrigger": false
+        },
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "bottom-skirt"
+        }
+      },
+      "material": "rose-accent",
+      "colorMaterialRecipe": {
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.86,
+        "dominantAlbedo": "rgba(243, 231, 214, 1)",
+        "secondaryAlbedo": "rgba(232, 169, 164, 1)",
+        "colorGradient": {
+          "type": "linear",
+          "stops": [
+            {
+              "color": "rgba(243, 231, 214, 1)",
+              "position": 0
+            },
+            {
+              "color": "rgba(232, 169, 164, 1)",
+              "position": 1
+            }
+          ]
+        },
+        "evidenceRefs": [
+          "full-object"
+        ]
+      },
+      "materialLayers": [
+        "rose-accent"
+      ],
+      "localFeatures": [
+        "rose-bottom-skirt",
+        "shell-seams"
+      ],
+      "evidenceRefs": [
+        "front",
+        "side",
+        "back"
+      ],
+      "fidelityTier": "form-refined"
+    },
+    {
+      "id": "foot-array",
+      "name": "Four support feet",
+      "level": "meso",
+      "role": "support",
+      "importance": 0.72,
+      "confidence": 0.85,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Four named small feet at shell corners.",
+      "parent": "root",
+      "attachment": {
+        "parentSocket": "body-shell",
+        "localStart": [
+          -0.58,
+          0.08,
+          -0.27
+        ],
+        "localEnd": [
+          0.58,
+          0.08,
+          0.27
+        ],
+        "contactType": "support-contact",
+        "embedDepth": 0.03,
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 0.22,
+        "height": 0.1,
+        "depth": 0.2,
+        "units": "relative",
+        "confidence": 0.8
+      },
+      "transform": {
+        "position": [
+          0,
+          0.08,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "support-array",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.7
+        },
+        "sockets": [],
+        "collider": {
+          "type": "box",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1.3,
+            0.1,
+            0.5
+          ],
+          "isTrigger": false
+        },
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "foot-array"
+        }
+      },
+      "material": "rose-accent",
+      "colorMaterialRecipe": {
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.86,
+        "dominantAlbedo": "rgba(243, 231, 214, 1)",
+        "secondaryAlbedo": "rgba(232, 169, 164, 1)",
+        "colorGradient": {
+          "type": "linear",
+          "stops": [
+            {
+              "color": "rgba(243, 231, 214, 1)",
+              "position": 0
+            },
+            {
+              "color": "rgba(232, 169, 164, 1)",
+              "position": 1
+            }
+          ]
+        },
+        "evidenceRefs": [
+          "full-object"
+        ]
+      },
+      "materialLayers": [
+        "rose-accent"
+      ],
+      "localFeatures": [
+        "four-foot-array"
+      ],
+      "evidenceRefs": [
+        "front",
+        "back"
+      ],
+      "fidelityTier": "structural"
+    },
+    {
+      "id": "rear-handle-recess",
+      "name": "Rear lid pull recess",
+      "level": "meso",
+      "role": "handle",
+      "importance": 0.76,
+      "confidence": 0.85,
+      "primitive": "box",
+      "topologyClass": "surface-relief",
+      "topologyRationale": "Centered recessed pull slot visible on closed rear view.",
+      "parent": "lid-shell",
+      "attachment": {
+        "parentSocket": "lid-inner-panel",
+        "localStart": [
+          0,
+          0,
+          -0.02
+        ],
+        "localEnd": [
+          0,
+          0,
+          -0.05
+        ],
+        "contactType": "recessed-grip",
+        "embedDepth": 0.03,
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 0.42,
+        "height": 0.1,
+        "depth": 0.06,
+        "units": "relative",
+        "confidence": 0.8
+      },
+      "transform": {
+        "position": [
+          0,
+          1.1,
+          -0.39
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "handle",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.7
+        },
+        "sockets": [],
+        "collider": {
+          "type": "box",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            0.42,
+            0.1,
+            0.06
+          ],
+          "isTrigger": true
+        },
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "rear-handle-recess"
+        }
+      },
+      "material": "rose-accent",
+      "colorMaterialRecipe": {
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.86,
+        "dominantAlbedo": "rgba(243, 231, 214, 1)",
+        "secondaryAlbedo": "rgba(232, 169, 164, 1)",
+        "colorGradient": {
+          "type": "linear",
+          "stops": [
+            {
+              "color": "rgba(243, 231, 214, 1)",
+              "position": 0
+            },
+            {
+              "color": "rgba(232, 169, 164, 1)",
+              "position": 1
+            }
+          ]
+        },
+        "evidenceRefs": [
+          "full-object"
+        ]
+      },
+      "materialLayers": [
+        "rose-accent"
+      ],
+      "localFeatures": [
+        "rear-handle-recess"
+      ],
+      "evidenceRefs": [
+        "back"
+      ],
+      "fidelityTier": "form-refined"
+    },
+    {
+      "id": "lid-inner-panel",
+      "name": "Lid inner panel",
+      "level": "meso",
+      "role": "lid underside",
+      "importance": 0.65,
+      "confidence": 0.88,
+      "primitive": "box",
+      "topologyClass": "surface-relief",
+      "topologyRationale": "Inset underside visible when lid opens.",
+      "parent": "lid-shell",
+      "attachment": {
+        "parentSocket": "lid-inner-panel",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.02
+        ],
+        "contactType": "nested-panel",
+        "embedDepth": 0.02,
+        "overlap": 0.02,
+        "gapTolerance": 0.008
+      },
+      "dimensions": {
+        "width": 1.32,
+        "height": 0.26,
+        "depth": 0.05,
+        "units": "relative",
+        "confidence": 0.8
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0.02
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "lid-child",
+        "pivot": {
+          "mode": "parent",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 0.8
+        },
+        "sockets": [],
+        "collider": {
+          "type": "box",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1.32,
+            0.26,
+            0.05
+          ],
+          "isTrigger": false
+        },
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "lid-inner-panel"
+        }
+      },
+      "material": "rose-accent",
+      "colorMaterialRecipe": {
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.86,
+        "dominantAlbedo": "rgba(243, 231, 214, 1)",
+        "secondaryAlbedo": "rgba(232, 169, 164, 1)",
+        "colorGradient": {
+          "type": "linear",
+          "stops": [
+            {
+              "color": "rgba(243, 231, 214, 1)",
+              "position": 0
+            },
+            {
+              "color": "rgba(232, 169, 164, 1)",
+              "position": 1
+            }
+          ]
+        },
+        "evidenceRefs": [
+          "full-object"
+        ]
+      },
+      "materialLayers": [
+        "rose-accent"
+      ],
+      "localFeatures": [
+        "lid-inner-panel"
+      ],
+      "evidenceRefs": [
+        "front"
+      ],
+      "fidelityTier": "form-refined"
+    },
+    {
+      "id": "seam-array",
+      "name": "Horizontal shell seam rails",
+      "level": "meso",
+      "role": "seams",
+      "importance": 0.7,
+      "confidence": 0.85,
+      "primitive": "box",
+      "topologyClass": "surface-relief",
+      "topologyRationale": "Thin separate rails mark upper and lower shell joins.",
+      "parent": "body-shell",
+      "attachment": {
+        "parentSocket": "body-shell",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0
+        ],
+        "contactType": "seam-overlap",
+        "embedDepth": 0.02,
+        "overlap": 0.02,
+        "gapTolerance": 0.005
+      },
+      "dimensions": {
+        "width": 1.52,
+        "height": 0.025,
+        "depth": 0.8,
+        "units": "relative",
+        "confidence": 0.8
+      },
+      "transform": {
+        "position": [
+          0,
+          0.9,
+          0.4
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static-detail",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.7
+        },
+        "sockets": [],
+        "collider": {
+          "type": "box",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1.52,
+            0.025,
+            0.8
+          ],
+          "isTrigger": false
+        },
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "seam-array"
+        }
+      },
+      "material": "rose-accent",
+      "colorMaterialRecipe": {
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.86,
+        "dominantAlbedo": "rgba(243, 231, 214, 1)",
+        "secondaryAlbedo": "rgba(232, 169, 164, 1)",
+        "colorGradient": {
+          "type": "linear",
+          "stops": [
+            {
+              "color": "rgba(243, 231, 214, 1)",
+              "position": 0
+            },
+            {
+              "color": "rgba(232, 169, 164, 1)",
+              "position": 1
+            }
+          ]
+        },
+        "evidenceRefs": [
+          "full-object"
+        ]
+      },
+      "materialLayers": [
+        "rose-accent"
+      ],
+      "localFeatures": [
+        "shell-seams"
+      ],
+      "evidenceRefs": [
+        "front",
+        "side",
+        "back"
+      ],
+      "fidelityTier": "form-refined"
+    },
+    {
+      "id": "status-indicator",
+      "name": "Power indicator",
+      "level": "meso",
+      "role": "status light",
+      "importance": 0.6,
+      "confidence": 0.55,
+      "primitive": "sphere",
+      "topologyClass": "surface-relief",
+      "topologyRationale": "Tiny inferred indicator paired with sensor window; exact LED not visible in reference.",
+      "parent": "body-shell",
+      "attachment": {
+        "parentSocket": "sensor-mount",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.01
+        ],
+        "contactType": "embedded",
+        "embedDepth": 0.01,
+        "overlap": 0.01,
+        "gapTolerance": 0.005
+      },
+      "dimensions": {
+        "width": 0.03,
+        "height": 0.03,
+        "depth": 0.02,
+        "units": "relative",
+        "confidence": 0.45
+      },
+      "transform": {
+        "position": [
+          0.14,
+          1.02,
+          0.41
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "indicator",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.4
+        },
+        "sockets": [],
+        "collider": {
+          "type": "sphere",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            0.03,
+            0.03,
+            0.02
+          ],
+          "isTrigger": false
+        },
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "status-indicator"
+        }
+      },
+      "material": "sensor-dark",
+      "colorMaterialRecipe": {
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.86,
+        "dominantAlbedo": "rgba(243, 231, 214, 1)",
+        "secondaryAlbedo": "rgba(232, 169, 164, 1)",
+        "colorGradient": {
+          "type": "linear",
+          "stops": [
+            {
+              "color": "rgba(243, 231, 214, 1)",
+              "position": 0
+            },
+            {
+              "color": "rgba(232, 169, 164, 1)",
+              "position": 1
+            }
+          ]
+        },
+        "evidenceRefs": [
+          "full-object"
+        ]
+      },
+      "materialLayers": [
+        "sensor-dark"
+      ],
+      "localFeatures": [
+        "power-glow-inferred"
+      ],
+      "evidenceRefs": [
+        "front"
+      ],
+      "fidelityTier": "form-refined"
+    }
+  ],
+  "materials": [
+    {
+      "id": "cream-shell",
+      "name": "Warm cream molded plastic shell",
+      "type": "standard",
+      "shaderModel": "MeshStandardMaterial / PBR approximation",
+      "baseColor": "#F3E7D6",
+      "color": "#F3E7D6",
+      "albedo": {
+        "dominant": "#F3E7D6",
+        "secondary": [
+          "#E5D2BE",
+          "#FFF6EA"
+        ],
+        "samplingNotes": "Use image-observed local color zones, not a single averaged color."
+      },
+      "colorVariation": {
+        "palette": [
+          "#F3E7D6",
+          "#E5D2BE",
+          "#FFF6EA"
+        ],
+        "pattern": "mottled",
+        "amplitude": 0.15,
+        "heightCorrelation": 0.3
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2.0,
+          2.0
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Preserve stable world/object-scale detail; do not stretch micro detail with component scale."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2.0,
+          "amplitude": 0.42,
+          "role": "broad color and height breakup"
+        },
+        {
+          "id": "meso",
+          "frequency": 12.0,
+          "amplitude": 0.22,
+          "role": "ridges, pores, grain, dents, or equivalent visible relief"
+        },
+        {
+          "id": "micro",
+          "frequency": 56.0,
+          "amplitude": 0.08,
+          "role": "highlight breakup visible under grazing light"
+        }
+      ],
+      "roughness": {
+        "base": 0.75,
+        "variation": 0.15,
+        "map": "independent-procedural-field",
+        "localResponse": "higher roughness in cavities, lower roughness on worn edges"
+      },
+      "metalness": {
+        "base": 0.0,
+        "variation": 0.0
+      },
+      "normal": {
+        "pattern": "derived-from-independent-height-field",
+        "strength": 0.35,
+        "scale": 24.0,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "none",
+        "amplitude": 0.0,
+        "scale": 1.0
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0.0,
+        "scale": 1.0,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.25,
+        "contactShadowBias": 0.35,
+        "notes": "Darken creases, seams, intersections, and recessed local features."
+      },
+      "wear": {
+        "edgeWear": 0.0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0.0,
+        "cavityBias": 0.0,
+        "color": "#2F2A22"
+      },
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.82,
+        "maps": {
+          "albedo": {
+            "path": "references/intake/smart-bin/front.png"
+          },
+          "roughness": {
+            "path": "references/intake/smart-bin/front.png"
+          },
+          "height": {
+            "path": "references/intake/smart-bin/front.png"
+          },
+          "normal": {
+            "path": "references/intake/smart-bin/front.png"
+          },
+          "ao": {
+            "path": "references/intake/smart-bin/front.png"
+          }
+        },
+        "source": "references/intake/smart-bin/front.png",
+        "albedo": "procedural-palette-from-reference",
+        "roughness": "independent-soft-plastic-field",
+        "height": "bevel-and-seam-geometry",
+        "normal": "independent-fine-plastic-noise",
+        "ambientOcclusion": "contact-and-cavity-mask"
+      },
+      "localOverrides": [
+        {
+          "id": "edge-highlight",
+          "region": "rounded perimeter",
+          "roughness": 0.46,
+          "clearcoat": 0.18,
+          "evidenceRefs": [
+            "front",
+            "side"
+          ]
+        },
+        {
+          "id": "seam-cavity",
+          "region": "horizontal seams",
+          "roughness": 0.86,
+          "dirtAmount": 0.08,
+          "evidenceRefs": [
+            "front",
+            "back"
+          ]
+        }
+      ],
+      "shaderNotes": [
+        "Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.",
+        "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.",
+        "Use normal/bump/displacement only when they map to observed surface relief.",
+        "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."
+      ],
+      "notes": "Warm cream satin plastic; broad soft highlights and darker cavity seams are visible in all three views."
+    },
+    {
+      "id": "rose-accent",
+      "name": "Sakura rose lid and skirt plastic",
+      "type": "standard",
+      "shaderModel": "MeshPhysicalMaterial / toon-compatible PBR",
+      "baseColor": "#E8A9A4",
+      "color": "#E8A9A4",
+      "albedo": {
+        "dominant": "#E8A9A4",
+        "secondary": [
+          "#F7C9C2",
+          "#C98286"
+        ],
+        "samplingNotes": "Pink upper lid, lower skirt and feet from front/side/back references."
+      },
+      "colorVariation": {
+        "palette": [
+          "#E8A9A4",
+          "#F7C9C2",
+          "#C98286"
+        ],
+        "pattern": "edge-softened gradient",
+        "amplitude": 0.12,
+        "heightCorrelation": 0.25
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          1,
+          1
+        ],
+        "anisotropy": 4,
+        "texelDensityIntent": "stable object-scale detail"
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.2,
+          "role": "broad lid/skirt value rolloff"
+        },
+        {
+          "id": "meso",
+          "frequency": 10,
+          "amplitude": 0.1,
+          "role": "beveled rail variation"
+        },
+        {
+          "id": "micro",
+          "frequency": 48,
+          "amplitude": 0.04,
+          "role": "satin highlight breakup"
+        }
+      ],
+      "roughness": {
+        "base": 0.43,
+        "variation": 0.11,
+        "map": "independent-procedural-field",
+        "localResponse": "lower on rounded outer rim"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "pattern": "independent-height-field",
+        "strength": 0.22,
+        "scale": 36,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "fine molded plastic",
+        "amplitude": 0.03,
+        "scale": 40
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.3,
+        "contactShadowBias": 0.3,
+        "notes": "Darken lid seam and hinge contacts."
+      },
+      "wear": {
+        "edgeWear": 0.04,
+        "scratches": [
+          "subtle horizontal handling marks"
+        ],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0.02,
+        "cavityBias": 0.5,
+        "color": "#8C5B60"
+      },
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.8,
+        "maps": {
+          "albedo": {
+            "path": "references/intake/smart-bin/front.png"
+          },
+          "roughness": {
+            "path": "references/intake/smart-bin/front.png"
+          },
+          "height": {
+            "path": "references/intake/smart-bin/front.png"
+          },
+          "normal": {
+            "path": "references/intake/smart-bin/front.png"
+          },
+          "ao": {
+            "path": "references/intake/smart-bin/front.png"
+          }
+        },
+        "source": "references/intake/smart-bin/front.png",
+        "albedo": "rose-palette",
+        "roughness": "satin-plastic",
+        "height": "bevel-geometry",
+        "normal": "independent-noise",
+        "ambientOcclusion": "hinge-and-seam-mask"
+      },
+      "localOverrides": [
+        {
+          "id": "lid-rim",
+          "region": "outer lid rim",
+          "roughness": 0.34,
+          "clearcoat": 0.25,
+          "evidenceRefs": [
+            "front",
+            "side"
+          ]
+        }
+      ],
+      "evidenceRefs": [
+        "front",
+        "side",
+        "back"
+      ]
+    },
+    {
+      "id": "cavity-dark",
+      "name": "Recessed opening cavity",
+      "type": "standard",
+      "shaderModel": "MeshToonMaterial",
+      "baseColor": "#3A2C32",
+      "color": "#3A2C32",
+      "albedo": {
+        "dominant": "#3A2C32",
+        "secondary": [
+          "#5B4148"
+        ],
+        "samplingNotes": "Dark top opening and rear handle recess."
+      },
+      "colorVariation": {
+        "palette": [
+          "#3A2C32",
+          "#5B4148"
+        ],
+        "pattern": "cavity gradient",
+        "amplitude": 0.08,
+        "heightCorrelation": 0.1
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          1,
+          1
+        ],
+        "anisotropy": 4,
+        "texelDensityIntent": "stable object-scale detail"
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.12,
+          "role": "cavity falloff"
+        },
+        {
+          "id": "meso",
+          "frequency": 8,
+          "amplitude": 0.06,
+          "role": "inner rim"
+        },
+        {
+          "id": "micro",
+          "frequency": 32,
+          "amplitude": 0.02,
+          "role": "matte grain"
+        }
+      ],
+      "roughness": {
+        "base": 0.8,
+        "variation": 0.08,
+        "map": "independent-procedural-field",
+        "localResponse": "matte recessed surfaces"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "pattern": "low relief",
+        "strength": 0.12,
+        "scale": 20,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "matte grain",
+        "amplitude": 0.01,
+        "scale": 24
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.6,
+        "contactShadowBias": 0.2,
+        "notes": "Strong occlusion under lid and handle."
+      },
+      "wear": {
+        "edgeWear": 0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0.04,
+        "cavityBias": 0.8,
+        "color": "#241B1F"
+      },
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.75,
+        "maps": {
+          "albedo": {
+            "path": "references/intake/smart-bin/front.png"
+          },
+          "roughness": {
+            "path": "references/intake/smart-bin/front.png"
+          },
+          "height": {
+            "path": "references/intake/smart-bin/front.png"
+          },
+          "normal": {
+            "path": "references/intake/smart-bin/front.png"
+          },
+          "ao": {
+            "path": "references/intake/smart-bin/front.png"
+          }
+        },
+        "source": "references/intake/smart-bin/front.png",
+        "albedo": "dark-recess-palette",
+        "roughness": "matte",
+        "height": "cavity-geometry",
+        "normal": "independent-noise",
+        "ambientOcclusion": "recess-mask"
+      },
+      "localOverrides": [
+        {
+          "id": "sensor-gloss",
+          "region": "sensor window",
+          "roughness": 0.2,
+          "clearcoat": 0.3,
+          "evidenceRefs": [
+            "front"
+          ]
+        }
+      ],
+      "evidenceRefs": [
+        "front",
+        "side",
+        "back"
+      ]
+    },
+    {
+      "id": "sensor-dark",
+      "name": "Infrared sensor glass",
+      "type": "standard",
+      "shaderModel": "MeshPhysicalMaterial / transparent-like",
+      "baseColor": "#19161C",
+      "color": "#19161C",
+      "albedo": {
+        "dominant": "#19161C",
+        "secondary": [
+          "#4B3C4A"
+        ],
+        "samplingNotes": "Black horizontal capsule under front lid rim."
+      },
+      "colorVariation": {
+        "palette": [
+          "#19161C",
+          "#4B3C4A"
+        ],
+        "pattern": "subtle glass reflection",
+        "amplitude": 0.04,
+        "heightCorrelation": 0
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          1,
+          1
+        ],
+        "anisotropy": 4,
+        "texelDensityIntent": "stable object-scale detail"
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.08,
+          "role": "glass value"
+        },
+        {
+          "id": "meso",
+          "frequency": 8,
+          "amplitude": 0.03,
+          "role": "sensor lens"
+        },
+        {
+          "id": "micro",
+          "frequency": 32,
+          "amplitude": 0.01,
+          "role": "specular breakup"
+        }
+      ],
+      "roughness": {
+        "base": 0.18,
+        "variation": 0.05,
+        "map": "independent-procedural-field",
+        "localResponse": "glossy lens"
+      },
+      "metalness": {
+        "base": 0.05,
+        "variation": 0
+      },
+      "normal": {
+        "pattern": "flat lens",
+        "strength": 0.04,
+        "scale": 12,
+        "space": "tangent"
+      },
+      "bump": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1
+      },
+      "displacement": {
+        "pattern": "none",
+        "amplitude": 0,
+        "scale": 1,
+        "silhouetteAffects": false
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.2,
+        "contactShadowBias": 0.1,
+        "notes": "Shallow recess shadow."
+      },
+      "wear": {
+        "edgeWear": 0,
+        "scratches": [],
+        "chips": []
+      },
+      "dirt": {
+        "amount": 0,
+        "cavityBias": 0,
+        "color": "#000000"
+      },
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.74,
+        "maps": {
+          "albedo": {
+            "path": "references/intake/smart-bin/front.png"
+          },
+          "roughness": {
+            "path": "references/intake/smart-bin/front.png"
+          },
+          "height": {
+            "path": "references/intake/smart-bin/front.png"
+          },
+          "normal": {
+            "path": "references/intake/smart-bin/front.png"
+          },
+          "ao": {
+            "path": "references/intake/smart-bin/front.png"
+          }
+        },
+        "source": "references/intake/smart-bin/front.png",
+        "albedo": "sensor-dark",
+        "roughness": "glossy",
+        "height": "capsule-geometry",
+        "normal": "flat",
+        "ambientOcclusion": "sensor-recess"
+      },
+      "localOverrides": [],
+      "evidenceRefs": [
+        "front"
+      ]
+    }
+  ],
+  "repetitionSystems": [
+    {
+      "id": "four-feet",
+      "componentRef": "foot-array",
+      "count": 4,
+      "distribution": "rectangle corners",
+      "geometry": "rounded boxes",
+      "buildsGeometry": true,
+      "instances": 4,
+      "realization": "shared geometry with named meshes"
+    },
+    {
+      "id": "hinge-pair",
+      "componentRef": "lid-hinge-array",
+      "count": 2,
+      "distribution": "left/right rear top",
+      "geometry": "rounded hinge blocks",
+      "buildsGeometry": true,
+      "instances": 2,
+      "realization": "named meshes sharing geometry"
+    }
+  ],
+  "buildPasses": [
+    {
+      "id": "blockout",
+      "goal": "Match macro silhouette and proportions.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "Silhouette reads correctly without materials.",
+        "Quality contract has named all required macro feature groups before code generation.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "structural-pass",
+      "goal": "Build the component hierarchy implied by the pre-spec complexity assessment.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "Macro, meso, and repeated structures meet qualityContract.minimumSpecDepth.",
+        "Parent-child relations, joints, seams, sockets, and contact points are explicit.",
+        "Every attached child appendage/connector has parentSocket, localStart/localEnd, contactType, embedDepth or overlap, and gapTolerance.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "form-refinement",
+      "goal": "Refine shape, deformation, bevels, tapers, curves, asymmetry, and visible local geometry.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "Important visible forms are represented in component geometryDescriptor, deformations, localFeatures, or repetitionSystems.",
+        "Endpoint-based child parts are rooted at their attachment sockets and do not visibly float away from parents.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "material-pass",
+      "goal": "Match material color, roughness, bump, and local variation.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "Reference-derived albedo palette records dominant, secondary, and accent colors per visible material.",
+        "Each important material defines roughness variation and at least one normal/bump/displacement response.",
+        "Local material overrides, dirt/wear/stains/moss/chips/scratches or equivalent masks are tied to evidenceRefs.",
+        "Thin, transparent, reflective, wet, or fibrous materials document alpha/transmission/clearcoat/metalness/fiber response when relevant.",
+        "Generated preview uses procedural albedo/roughness/bump texture or vertex color variation instead of one flat color.",
+        "Generated preview uses independent PBR maps at 1024px or higher for the quality-first tier.",
+        "If source pixels are available, referencePbr extraction passed at confidence >= 0.7 or the pass is stopped/requesting better references.",
+        "Macro, meso, and micro surface frequency bands are visible at the intended review distance without obvious tiling.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "surface-pass",
+      "goal": "Add procedural surface locality such as normal/bump/displacement, AO, dirt, stains, chips, grain, moss, scratches, and wear.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "Every required material feature group has local overrides or surfaceDetail tied to evidenceRefs.",
+        "A grazing-angle close-up proves that normal/height detail breaks highlights naturally and does not read as smooth plastic.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "lighting-pass",
+      "goal": "Make material and form readable under neutral turntable lighting plus optional reference lighting.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "lightingFromPhoto identifies key light direction/color/intensity, fill light, rim or environment light, and ambient color.",
+        "Exposure, tone mapping, background color/gradient, shadow softness, and contact shadow behavior are specified.",
+        "Lighting does not hide geometry/material gaps and screenshots can be compared fairly to the reference.",
+        "Neutral, grazing, and reference-matched lighting checks distinguish material errors from lighting errors.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "interaction-pass",
+      "goal": "Make the model ready for future animation, transformation, physics, or destruction.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "Macro and movable meso components have stable pivot nodes.",
+        "Sockets, collider proxies, and destruction metadata are present for future runtime actions.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "optimization-pass",
+      "goal": "Protect runtime performance after visual fidelity is accepted.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "Triangle count, draw calls, instancing, LOD strategy, and FPS target are documented or verified.",
+        "Repeated detail is instanced or simplified where possible without breaking silhouette/material believability."
+      ]
+    }
+  ],
+  "visualEvidence": [
+    {
+      "timestamp": "2026-08-03T11:29:44.791351+00:00",
+      "passId": "blockout",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.86,
+        "componentStructure": 0.84,
+        "formDetail": 0.82,
+        "materialSurface": 0.83,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "smart-bin-silhouette",
+          "score": 0.86,
+          "notes": "Rounded 1.55:1 body ratio, upper/lower rose bands and broad lid silhouette match the three-view reference. Render lid is slightly shallower than the illustrated open lid."
+        }
+      ],
+      "referenceScreenshot": "references/intake/smart-bin/front.png",
+      "renderScreenshot": "artifacts/img2threejs/smart-bin/blockout/render-front.png",
+      "comparisonImage": "artifacts/img2threejs/smart-bin/comparison-blockout.png",
+      "cameraView": "front",
+      "notes": "",
+      "aiVisionNotes": "Front comparison preserves the squat rounded container identity, broad rose lid and lower skirt. Body is slightly taller in render and open-lid separation is smaller."
+    },
+    {
+      "timestamp": "2026-08-03T11:31:08.086730+00:00",
+      "passId": "structural-pass",
+      "estimatedFidelity": 0.85,
+      "aiVisionScore": 0.85,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.86,
+        "componentStructure": 0.84,
+        "formDetail": 0.82,
+        "materialSurface": 0.83,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "smart-bin-structure",
+          "score": 0.86,
+          "notes": "Independent body, lid, paired hinges, opening, sensor, lower skirt, rear handle and four feet are readable and attached without floating joints."
+        }
+      ],
+      "referenceScreenshot": "references/intake/smart-bin/front.png",
+      "renderScreenshot": "artifacts/img2threejs/smart-bin/structural-pass/render-front.png",
+      "comparisonImage": "artifacts/img2threejs/smart-bin/comparison-structural-pass.png",
+      "cameraView": "front",
+      "notes": "",
+      "aiVisionNotes": "All identity assemblies are independently readable. Side and back views confirm non-planar depth, rear hinge placement and handle recess."
+    },
+    {
+      "timestamp": "2026-08-03T11:32:08.586198+00:00",
+      "passId": "form-refinement",
+      "estimatedFidelity": 0.86,
+      "aiVisionScore": 0.86,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.86,
+        "componentStructure": 0.84,
+        "formDetail": 0.82,
+        "materialSurface": 0.83,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "smart-bin-structure",
+          "score": 0.86,
+          "notes": "Independent body, lid, paired hinges, opening, sensor, lower skirt, rear handle and four feet are readable and attached without floating joints."
+        }
+      ],
+      "referenceScreenshot": "references/intake/smart-bin/front.png",
+      "renderScreenshot": "artifacts/img2threejs/smart-bin/form-refinement/render-front.png",
+      "comparisonImage": "artifacts/img2threejs/smart-bin/comparison-form-refinement.png",
+      "cameraView": "front",
+      "notes": "",
+      "aiVisionNotes": "The render now reads as the same compact Sakura appliance rather than a generic box; bevels and layered rails survive three-quarter lighting."
+    },
+    {
+      "timestamp": "2026-08-03T11:33:27.050028+00:00",
+      "passId": "material-pass",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.86,
+        "componentStructure": 0.84,
+        "formDetail": 0.82,
+        "materialSurface": 0.83,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "smart-bin-material",
+          "score": 0.84,
+          "notes": "Warm cream shell, Sakura rose trim, matte dark cavity and glossy sensor window remain clearly separated under gallery lighting."
+        }
+      ],
+      "referenceScreenshot": "references/intake/smart-bin/front.png",
+      "renderScreenshot": "artifacts/img2threejs/smart-bin/material-pass/render-front.png",
+      "comparisonImage": "artifacts/img2threejs/smart-bin/comparison-material-pass.png",
+      "cameraView": "front",
+      "notes": "",
+      "aiVisionNotes": "Warm cream and Sakura rose zones closely track the illustration. Sensor/cavity value separation is strong; physical clearcoat is approximated by the project toon shader."
+    },
+    {
+      "timestamp": "2026-08-03T11:34:05.374337+00:00",
+      "passId": "surface-pass",
+      "estimatedFidelity": 0.83,
+      "aiVisionScore": 0.83,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.86,
+        "componentStructure": 0.84,
+        "formDetail": 0.82,
+        "materialSurface": 0.83,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "smart-bin-material",
+          "score": 0.84,
+          "notes": "Warm cream shell, Sakura rose trim, matte dark cavity and glossy sensor window remain clearly separated under gallery lighting."
+        }
+      ],
+      "referenceScreenshot": "references/intake/smart-bin/front.png",
+      "renderScreenshot": "artifacts/img2threejs/smart-bin/surface-pass/render-three-quarter.png",
+      "comparisonImage": "artifacts/img2threejs/smart-bin/comparison-surface-pass.png",
+      "cameraView": "three-quarter",
+      "notes": "",
+      "aiVisionNotes": "Three-quarter grazing view confirms bevel and seam relief remains geometric. Fine texture remains a toon-style approximation for browser performance."
+    },
+    {
+      "timestamp": "2026-08-03T11:34:43.367869+00:00",
+      "passId": "lighting-pass",
+      "estimatedFidelity": 0.82,
+      "aiVisionScore": 0.82,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.86,
+        "componentStructure": 0.84,
+        "formDetail": 0.82,
+        "materialSurface": 0.83,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "smart-bin-material",
+          "score": 0.84,
+          "notes": "Warm cream shell, Sakura rose trim, matte dark cavity and glossy sensor window remain clearly separated under gallery lighting."
+        }
+      ],
+      "referenceScreenshot": "references/intake/smart-bin/front.png",
+      "renderScreenshot": "artifacts/img2threejs/smart-bin/lighting-pass/render-three-quarter.png",
+      "comparisonImage": "artifacts/img2threejs/smart-bin/comparison-lighting-pass.png",
+      "cameraView": "three-quarter",
+      "notes": "",
+      "aiVisionNotes": "Three-quarter render shows clean key/fill/rim separation, readable pink/cream materials and stable contact shadow. Tone mapping remains consistent with the SAKURA gallery."
+    },
+    {
+      "timestamp": "2026-08-03T11:35:48.013698+00:00",
+      "passId": "interaction-pass",
+      "estimatedFidelity": 0.87,
+      "aiVisionScore": 0.87,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.86,
+        "componentStructure": 0.84,
+        "formDetail": 0.82,
+        "materialSurface": 0.83,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "smart-bin-structure",
+          "score": 0.86,
+          "notes": "Independent body, lid, paired hinges, opening, sensor, lower skirt, rear handle and four feet are readable and attached without floating joints."
+        }
+      ],
+      "referenceScreenshot": "references/intake/smart-bin/front.png",
+      "renderScreenshot": "artifacts/img2threejs/smart-bin/interaction-pass/render-three-quarter.png",
+      "comparisonImage": "artifacts/img2threejs/smart-bin/comparison-interaction-pass.png",
+      "cameraView": "three-quarter",
+      "notes": "",
+      "aiVisionNotes": "The powered three-quarter frame clearly distinguishes this as a touchless bin: front sensor glows and the lid opens from its rear axis. Stop returns lid, light and scale to baseline."
+    },
+    {
+      "timestamp": "2026-08-03T11:36:59.822429+00:00",
+      "passId": "interaction-pass",
+      "estimatedFidelity": 0.88,
+      "aiVisionScore": 0.88,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.86,
+        "componentStructure": 0.84,
+        "formDetail": 0.82,
+        "materialSurface": 0.83,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "smart-bin-structure",
+          "score": 0.86,
+          "notes": "Independent body, lid, paired hinges, opening, sensor, lower skirt, rear handle and four feet are readable and attached without floating joints."
+        }
+      ],
+      "referenceScreenshot": "references/intake/smart-bin/front.png",
+      "renderScreenshot": "artifacts/img2threejs/smart-bin/interaction-pass-fixed/render-three-quarter.png",
+      "comparisonImage": "artifacts/img2threejs/smart-bin/comparison-interaction-pass-fixed.png",
+      "cameraView": "three-quarter",
+      "notes": "",
+      "aiVisionNotes": "This corrected capture reports model=smart-bin, 39 draw calls and 35184 triangles. Sensor and hinged lid are unmistakable."
+    },
+    {
+      "timestamp": "2026-08-03T11:37:42.148189+00:00",
+      "passId": "optimization-pass",
+      "estimatedFidelity": 0.86,
+      "aiVisionScore": 0.86,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.86,
+        "componentStructure": 0.84,
+        "formDetail": 0.82,
+        "materialSurface": 0.83,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "smart-bin-structure",
+          "score": 0.86,
+          "notes": "Independent body, lid, paired hinges, opening, sensor, lower skirt, rear handle and four feet are readable and attached without floating joints."
+        }
+      ],
+      "referenceScreenshot": "references/intake/smart-bin/front.png",
+      "renderScreenshot": "artifacts/img2threejs/smart-bin/optimization-pass/render-front.png",
+      "comparisonImage": "artifacts/img2threejs/smart-bin/comparison-optimization-pass.png",
+      "cameraView": "front",
+      "notes": "",
+      "aiVisionNotes": "Browser diagnostics report 39 draw calls and 35184 triangles at 1200x900 with no console errors. Shared primitives keep the model responsive under orbit."
+    },
+    {
+      "timestamp": "2026-08-03T11:48:00.682468+00:00",
+      "passId": "form-refinement",
+      "estimatedFidelity": 0.89,
+      "aiVisionScore": 0.89,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.86,
+        "componentStructure": 0.84,
+        "formDetail": 0.82,
+        "materialSurface": 0.83,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "smart-bin-structure",
+          "score": 0.86,
+          "notes": "Independent body, lid, paired hinges, opening, sensor, lower skirt, rear handle and four feet are readable and attached without floating joints."
+        }
+      ],
+      "referenceScreenshot": "references/intake/smart-bin/front.png",
+      "renderScreenshot": "artifacts/img2threejs/smart-bin/final-refined/render-side.png",
+      "comparisonImage": "artifacts/img2threejs/smart-bin/comparison-final-refined.png",
+      "cameraView": "side",
+      "notes": "",
+      "aiVisionNotes": "Software-rendered four-view capture confirms the prior thick-lid defect is removed. Side view now reads as a thin articulated plate anchored at the rear hinge."
+    },
+    {
+      "timestamp": "2026-08-03T11:48:00.871681+00:00",
+      "passId": "interaction-pass",
+      "estimatedFidelity": 0.89,
+      "aiVisionScore": 0.89,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.86,
+        "componentStructure": 0.84,
+        "formDetail": 0.82,
+        "materialSurface": 0.83,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "smart-bin-structure",
+          "score": 0.86,
+          "notes": "Independent body, lid, paired hinges, opening, sensor, lower skirt, rear handle and four feet are readable and attached without floating joints."
+        }
+      ],
+      "referenceScreenshot": "references/intake/smart-bin/front.png",
+      "renderScreenshot": "artifacts/img2threejs/smart-bin/final-refined/render-three-quarter.png",
+      "comparisonImage": "artifacts/img2threejs/smart-bin/comparison-final-refined.png",
+      "cameraView": "three-quarter",
+      "notes": "",
+      "aiVisionNotes": "Valid nonblack software WebGL capture shows the powered touchless-bin action and reports 39 calls / 35184 triangles."
+    },
+    {
+      "timestamp": "2026-08-03T11:48:01.067679+00:00",
+      "passId": "optimization-pass",
+      "estimatedFidelity": 0.88,
+      "aiVisionScore": 0.88,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.86,
+        "componentStructure": 0.84,
+        "formDetail": 0.82,
+        "materialSurface": 0.83,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "smart-bin-structure",
+          "score": 0.86,
+          "notes": "Independent body, lid, paired hinges, opening, sensor, lower skirt, rear handle and four feet are readable and attached without floating joints."
+        }
+      ],
+      "referenceScreenshot": "references/intake/smart-bin/front.png",
+      "renderScreenshot": "artifacts/img2threejs/smart-bin/final-refined/render-front.png",
+      "comparisonImage": "artifacts/img2threejs/smart-bin/comparison-final-refined.png",
+      "cameraView": "front",
+      "notes": "",
+      "aiVisionNotes": "Software WebGL was used after Chromium hardware canvas capture returned black pixels despite valid renderer diagnostics; the corrected evidence is nonblank and visually inspected."
+    }
+  ],
+  "reviewHistory": [
+    {
+      "timestamp": "2026-08-03T11:29:44.791351+00:00",
+      "passId": "blockout",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.86,
+        "componentStructure": 0.84,
+        "formDetail": 0.82,
+        "materialSurface": 0.83,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "smart-bin-silhouette",
+          "score": 0.86,
+          "notes": "Rounded 1.55:1 body ratio, upper/lower rose bands and broad lid silhouette match the three-view reference. Render lid is slightly shallower than the illustrated open lid."
+        }
+      ],
+      "action": "continue",
+      "summary": "Rounded body, layered lid and skirt silhouette match the compact smart-bin reference across front, side and back.",
+      "matched": [
+        "body width/height ratio",
+        "rounded corner language",
+        "lid/skirt silhouette"
+      ],
+      "mismatches": [
+        "render lid depth is slightly shallower than illustration",
+        "front camera shows less hinge height"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "mapStrippedRender": "artifacts/img2threejs/smart-bin/blockout/render-front.png",
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "long-axis",
+        "thickness-axis"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake/smart-bin/front.png",
+        "renderScreenshot": "artifacts/img2threejs/smart-bin/blockout/render-front.png",
+        "comparisonImage": "artifacts/img2threejs/smart-bin/comparison-blockout.png",
+        "cameraView": "front",
+        "notes": "",
+        "aiVisionNotes": "Front comparison preserves the squat rounded container identity, broad rose lid and lower skirt. Body is slightly taller in render and open-lid separation is smaller."
+      }
+    },
+    {
+      "timestamp": "2026-08-03T11:31:08.086730+00:00",
+      "passId": "structural-pass",
+      "estimatedFidelity": 0.85,
+      "aiVisionScore": 0.85,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.86,
+        "componentStructure": 0.84,
+        "formDetail": 0.82,
+        "materialSurface": 0.83,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "smart-bin-structure",
+          "score": 0.86,
+          "notes": "Independent body, lid, paired hinges, opening, sensor, lower skirt, rear handle and four feet are readable and attached without floating joints."
+        }
+      ],
+      "action": "continue",
+      "summary": "Independent hinged lid, sensor, opening, skirt, handle and feet establish the reference component hierarchy.",
+      "matched": [
+        "paired hinge blocks",
+        "recessed opening",
+        "front sensor",
+        "rear handle",
+        "four feet"
+      ],
+      "mismatches": [
+        "front reference hinge blocks are a little narrower",
+        "inner liner depth remains inferred"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "long-axis",
+        "thickness-axis"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake/smart-bin/front.png",
+        "renderScreenshot": "artifacts/img2threejs/smart-bin/structural-pass/render-front.png",
+        "comparisonImage": "artifacts/img2threejs/smart-bin/comparison-structural-pass.png",
+        "cameraView": "front",
+        "notes": "",
+        "aiVisionNotes": "All identity assemblies are independently readable. Side and back views confirm non-planar depth, rear hinge placement and handle recess."
+      }
+    },
+    {
+      "timestamp": "2026-08-03T11:32:08.586198+00:00",
+      "passId": "form-refinement",
+      "estimatedFidelity": 0.86,
+      "aiVisionScore": 0.86,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.86,
+        "componentStructure": 0.84,
+        "formDetail": 0.82,
+        "materialSurface": 0.83,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "smart-bin-structure",
+          "score": 0.86,
+          "notes": "Independent body, lid, paired hinges, opening, sensor, lower skirt, rear handle and four feet are readable and attached without floating joints."
+        }
+      ],
+      "action": "continue",
+      "summary": "Rounded bevels, thin seam rails, hinge barrels, lid underside and sensor capsule preserve the illustrated form language.",
+      "matched": [
+        "corner radii",
+        "horizontal seams",
+        "hinge barrels",
+        "lid underside",
+        "rear grip relief"
+      ],
+      "mismatches": [
+        "reference upper rim has a slightly softer crown",
+        "rear recess depth is inferred"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "long-axis",
+        "thickness-axis"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake/smart-bin/front.png",
+        "renderScreenshot": "artifacts/img2threejs/smart-bin/form-refinement/render-front.png",
+        "comparisonImage": "artifacts/img2threejs/smart-bin/comparison-form-refinement.png",
+        "cameraView": "front",
+        "notes": "",
+        "aiVisionNotes": "The render now reads as the same compact Sakura appliance rather than a generic box; bevels and layered rails survive three-quarter lighting."
+      }
+    },
+    {
+      "timestamp": "2026-08-03T11:33:27.050028+00:00",
+      "passId": "material-pass",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.86,
+        "componentStructure": 0.84,
+        "formDetail": 0.82,
+        "materialSurface": 0.83,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "smart-bin-material",
+          "score": 0.84,
+          "notes": "Warm cream shell, Sakura rose trim, matte dark cavity and glossy sensor window remain clearly separated under gallery lighting."
+        }
+      ],
+      "action": "continue",
+      "summary": "Cream satin shell, Sakura rose plastic, dark aperture and glossy sensor reproduce the reference material separation.",
+      "matched": [
+        "cream/rose palette",
+        "dark opening",
+        "glossy sensor",
+        "translucent liner"
+      ],
+      "mismatches": [
+        "toon material approximates reference clearcoat",
+        "micro molded-plastic grain remains stylized"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "long-axis",
+        "thickness-axis"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake/smart-bin/front.png",
+        "renderScreenshot": "artifacts/img2threejs/smart-bin/material-pass/render-front.png",
+        "comparisonImage": "artifacts/img2threejs/smart-bin/comparison-material-pass.png",
+        "cameraView": "front",
+        "notes": "",
+        "aiVisionNotes": "Warm cream and Sakura rose zones closely track the illustration. Sensor/cavity value separation is strong; physical clearcoat is approximated by the project toon shader."
+      }
+    },
+    {
+      "timestamp": "2026-08-03T11:34:05.374337+00:00",
+      "passId": "surface-pass",
+      "estimatedFidelity": 0.83,
+      "aiVisionScore": 0.83,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.86,
+        "componentStructure": 0.84,
+        "formDetail": 0.82,
+        "materialSurface": 0.83,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "smart-bin-material",
+          "score": 0.84,
+          "notes": "Warm cream shell, Sakura rose trim, matte dark cavity and glossy sensor window remain clearly separated under gallery lighting."
+        }
+      ],
+      "action": "continue",
+      "summary": "Geometric seams, recesses, hinge barrels and rounded bevels provide the reference surface hierarchy without high-cost textures.",
+      "matched": [
+        "beveled perimeter",
+        "raised rails",
+        "recessed sensor and handle",
+        "seam AO"
+      ],
+      "mismatches": [
+        "reference illustration has softer hand-painted highlight breakup",
+        "surface micrograin is intentionally restrained"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "long-axis",
+        "thickness-axis"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake/smart-bin/front.png",
+        "renderScreenshot": "artifacts/img2threejs/smart-bin/surface-pass/render-three-quarter.png",
+        "comparisonImage": "artifacts/img2threejs/smart-bin/comparison-surface-pass.png",
+        "cameraView": "three-quarter",
+        "notes": "",
+        "aiVisionNotes": "Three-quarter grazing view confirms bevel and seam relief remains geometric. Fine texture remains a toon-style approximation for browser performance."
+      }
+    },
+    {
+      "timestamp": "2026-08-03T11:34:43.367869+00:00",
+      "passId": "lighting-pass",
+      "estimatedFidelity": 0.82,
+      "aiVisionScore": 0.82,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.86,
+        "componentStructure": 0.84,
+        "formDetail": 0.82,
+        "materialSurface": 0.83,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "smart-bin-material",
+          "score": 0.84,
+          "notes": "Warm cream shell, Sakura rose trim, matte dark cavity and glossy sensor window remain clearly separated under gallery lighting."
+        }
+      ],
+      "action": "continue",
+      "summary": "Warm key, cool fill, Sakura rim and soft contact shadow preserve the pale illustrated value range while keeping bevels readable.",
+      "matched": [
+        "soft key/fill separation",
+        "rose rim",
+        "ground contact shadow",
+        "neutral background"
+      ],
+      "mismatches": [
+        "reference shadow is flatter and warmer",
+        "browser toon bands are more graphic"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "long-axis",
+        "thickness-axis"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake/smart-bin/front.png",
+        "renderScreenshot": "artifacts/img2threejs/smart-bin/lighting-pass/render-three-quarter.png",
+        "comparisonImage": "artifacts/img2threejs/smart-bin/comparison-lighting-pass.png",
+        "cameraView": "three-quarter",
+        "notes": "",
+        "aiVisionNotes": "Three-quarter render shows clean key/fill/rim separation, readable pink/cream materials and stable contact shadow. Tone mapping remains consistent with the SAKURA gallery."
+      }
+    },
+    {
+      "timestamp": "2026-08-03T11:35:48.013698+00:00",
+      "passId": "interaction-pass",
+      "estimatedFidelity": 0.87,
+      "aiVisionScore": 0.87,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.86,
+        "componentStructure": 0.84,
+        "formDetail": 0.82,
+        "materialSurface": 0.83,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "smart-bin-structure",
+          "score": 0.86,
+          "notes": "Independent body, lid, paired hinges, opening, sensor, lower skirt, rear handle and four feet are readable and attached without floating joints."
+        }
+      ],
+      "action": "continue",
+      "summary": "Powered cycle visibly lights the infrared sensor and raises the lid around the rear hinge, making touchless-bin use immediately legible.",
+      "matched": [
+        "sensor glow",
+        "hinged lid lift",
+        "stable lid pivot",
+        "exact stop reset",
+        "power socket metadata"
+      ],
+      "mismatches": [
+        "internal motor sound and bag motion are intentionally absent",
+        "lid easing is procedural approximation"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "long-axis",
+        "thickness-axis"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake/smart-bin/front.png",
+        "renderScreenshot": "artifacts/img2threejs/smart-bin/interaction-pass/render-three-quarter.png",
+        "comparisonImage": "artifacts/img2threejs/smart-bin/comparison-interaction-pass.png",
+        "cameraView": "three-quarter",
+        "notes": "",
+        "aiVisionNotes": "The powered three-quarter frame clearly distinguishes this as a touchless bin: front sensor glows and the lid opens from its rear axis. Stop returns lid, light and scale to baseline."
+      }
+    },
+    {
+      "timestamp": "2026-08-03T11:36:59.822429+00:00",
+      "passId": "interaction-pass",
+      "estimatedFidelity": 0.88,
+      "aiVisionScore": 0.88,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.86,
+        "componentStructure": 0.84,
+        "formDetail": 0.82,
+        "materialSurface": 0.83,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "smart-bin-structure",
+          "score": 0.86,
+          "notes": "Independent body, lid, paired hinges, opening, sensor, lower skirt, rear handle and four feet are readable and attached without floating joints."
+        }
+      ],
+      "action": "continue",
+      "summary": "Corrected browser capture confirms smart-bin sensor glow and rear-axis lid lift in the powered three-quarter frame; the earlier malformed URL capture was discarded as toaster.",
+      "matched": [
+        "smart-bin model diagnostics",
+        "lid hinge lift",
+        "sensor glow",
+        "stable reset"
+      ],
+      "mismatches": [
+        "internal motor and liner mechanics remain inferred"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "outOfSequence": true,
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "long-axis",
+        "thickness-axis"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake/smart-bin/front.png",
+        "renderScreenshot": "artifacts/img2threejs/smart-bin/interaction-pass-fixed/render-three-quarter.png",
+        "comparisonImage": "artifacts/img2threejs/smart-bin/comparison-interaction-pass-fixed.png",
+        "cameraView": "three-quarter",
+        "notes": "",
+        "aiVisionNotes": "This corrected capture reports model=smart-bin, 39 draw calls and 35184 triangles. Sensor and hinged lid are unmistakable."
+      }
+    },
+    {
+      "timestamp": "2026-08-03T11:37:42.148189+00:00",
+      "passId": "optimization-pass",
+      "estimatedFidelity": 0.86,
+      "aiVisionScore": 0.86,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.86,
+        "componentStructure": 0.84,
+        "formDetail": 0.82,
+        "materialSurface": 0.83,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "smart-bin-structure",
+          "score": 0.86,
+          "notes": "Independent body, lid, paired hinges, opening, sensor, lower skirt, rear handle and four feet are readable and attached without floating joints."
+        }
+      ],
+      "action": "continue",
+      "summary": "Runtime diagnostics stay within the project gallery budget while preserving named assemblies and pooled shared geometry.",
+      "matched": [
+        "39 draw calls",
+        "35184 triangles",
+        "shared foot/hinge geometry",
+        "responsive orbit views"
+      ],
+      "mismatches": [
+        "no distant LOD proxy is needed for this small prop",
+        "toon outlines remain the dominant cost"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "long-axis",
+        "thickness-axis"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake/smart-bin/front.png",
+        "renderScreenshot": "artifacts/img2threejs/smart-bin/optimization-pass/render-front.png",
+        "comparisonImage": "artifacts/img2threejs/smart-bin/comparison-optimization-pass.png",
+        "cameraView": "front",
+        "notes": "",
+        "aiVisionNotes": "Browser diagnostics report 39 draw calls and 35184 triangles at 1200x900 with no console errors. Shared primitives keep the model responsive under orbit."
+      }
+    },
+    {
+      "timestamp": "2026-08-03T11:48:00.682468+00:00",
+      "passId": "form-refinement",
+      "estimatedFidelity": 0.89,
+      "aiVisionScore": 0.89,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.86,
+        "componentStructure": 0.84,
+        "formDetail": 0.82,
+        "materialSurface": 0.83,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "smart-bin-structure",
+          "score": 0.86,
+          "notes": "Independent body, lid, paired hinges, opening, sensor, lower skirt, rear handle and four feet are readable and attached without floating joints."
+        }
+      ],
+      "action": "continue",
+      "summary": "Corrected lid from a thick rear block to a thin 0.13-high hinged shell with attached underside panel; side silhouette now matches the reference plate-like lid.",
+      "matched": [
+        "thin lid profile",
+        "rear hinge attachment",
+        "front lid plane",
+        "attached inner panel"
+      ],
+      "mismatches": [
+        "powered opening angle is intentionally exaggerated for gameplay readability"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "outOfSequence": true,
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "long-axis",
+        "thickness-axis"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake/smart-bin/front.png",
+        "renderScreenshot": "artifacts/img2threejs/smart-bin/final-refined/render-side.png",
+        "comparisonImage": "artifacts/img2threejs/smart-bin/comparison-final-refined.png",
+        "cameraView": "side",
+        "notes": "",
+        "aiVisionNotes": "Software-rendered four-view capture confirms the prior thick-lid defect is removed. Side view now reads as a thin articulated plate anchored at the rear hinge."
+      }
+    },
+    {
+      "timestamp": "2026-08-03T11:48:00.871681+00:00",
+      "passId": "interaction-pass",
+      "estimatedFidelity": 0.89,
+      "aiVisionScore": 0.89,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.86,
+        "componentStructure": 0.84,
+        "formDetail": 0.82,
+        "materialSurface": 0.83,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "smart-bin-structure",
+          "score": 0.86,
+          "notes": "Independent body, lid, paired hinges, opening, sensor, lower skirt, rear handle and four feet are readable and attached without floating joints."
+        }
+      ],
+      "action": "continue",
+      "summary": "Software-rendered corrected capture confirms the smart-bin sensor glow and thin-lid opening action; previous black hardware-canvas captures are superseded.",
+      "matched": [
+        "sensor glow",
+        "thin lid lift",
+        "rear pivot",
+        "smart-bin diagnostics"
+      ],
+      "mismatches": [
+        "internal motor remains inferred and omitted"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "outOfSequence": true,
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "long-axis",
+        "thickness-axis"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake/smart-bin/front.png",
+        "renderScreenshot": "artifacts/img2threejs/smart-bin/final-refined/render-three-quarter.png",
+        "comparisonImage": "artifacts/img2threejs/smart-bin/comparison-final-refined.png",
+        "cameraView": "three-quarter",
+        "notes": "",
+        "aiVisionNotes": "Valid nonblack software WebGL capture shows the powered touchless-bin action and reports 39 calls / 35184 triangles."
+      }
+    },
+    {
+      "timestamp": "2026-08-03T11:48:01.067679+00:00",
+      "passId": "optimization-pass",
+      "estimatedFidelity": 0.88,
+      "aiVisionScore": 0.88,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.86,
+        "componentStructure": 0.84,
+        "formDetail": 0.82,
+        "materialSurface": 0.83,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "smart-bin-structure",
+          "score": 0.86,
+          "notes": "Independent body, lid, paired hinges, opening, sensor, lower skirt, rear handle and four feet are readable and attached without floating joints."
+        }
+      ],
+      "action": "continue",
+      "summary": "Final software WebGL capture verifies four nonblack orbit views at 39 draw calls and 35184 triangles with shared foot and hinge geometry.",
+      "matched": [
+        "four valid views",
+        "39 draw calls",
+        "35184 triangles",
+        "no console errors"
+      ],
+      "mismatches": [
+        "toon hull outlines account for part of the draw-call cost"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "outOfSequence": true,
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "long-axis",
+        "thickness-axis"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake/smart-bin/front.png",
+        "renderScreenshot": "artifacts/img2threejs/smart-bin/final-refined/render-front.png",
+        "comparisonImage": "artifacts/img2threejs/smart-bin/comparison-final-refined.png",
+        "cameraView": "front",
+        "notes": "",
+        "aiVisionNotes": "Software WebGL was used after Chromium hardware canvas capture returned black pixels despite valid renderer diagnostics; the corrected evidence is nonblank and visually inspected."
+      }
+    }
+  ],
+  "lodPlan": [
+    {
+      "tier": "near",
+      "distance": 0,
+      "strategy": "full component tree and material layers"
+    },
+    {
+      "tier": "far",
+      "distance": 30,
+      "strategy": "merge static components and reduce local feature geometry"
+    }
+  ],
+  "performanceBudget": {
+    "qualityPriority": "reference-fidelity",
+    "targetTriangles": 250000,
+    "maxDrawCalls": 160,
+    "textureSize": 2048,
+    "fpsTarget": 30,
+    "optimizationPolicy": "Reach accepted visual fidelity first, then optimize without removing reference-critical geometry or surface layers."
+  },
+  "lightingFromPhoto": [
+    "key light: warm soft directional from upper front-left, intensity 2.8, broad shadow radius 4",
+    "fill light: neutral cool directional from right-front, intensity 1.1",
+    "rim light: soft Sakura pink from rear-left, intensity 1.2",
+    "exposure 1.0 with ACES filmic tone mapping intent",
+    "background: pale warm gray with low-opacity contact shadow beneath feet",
+    "contact shadow: soft elliptical AO under lower skirt and each foot"
+  ],
+  "proceduralStrategy": [
+    "Lock the 1.55:1.0:0.78 rounded body silhouette before lid detail.",
+    "Model body, lid, cavity, sensor, skirt, hinge and feet as named independent assemblies.",
+    "Place lid hinge pivot at rear top axis and expose sensor, lid-inner and power sockets.",
+    "Use shared box geometries for four feet and paired hinge blocks.",
+    "Use soft Toon/PBR palette separation: warm cream, Sakura rose, dark cavity and glossy sensor glass.",
+    "Animate sensor glow and lid opening with deterministic 5.2 second power cycle; no runtime allocations."
+  ],
+  "animationAnchors": [
+    "root pivot node supports whole-object translation, rotation, scale, and visibility changes",
+    "component pivot groups support later local transforms without rebuilding geometry"
+  ],
+  "destructionAnchors": [
+    "actionProfile.destruction.fractureGroup marks detachable or breakable component sets",
+    "component seams and sockets define plausible break points instead of random explosions"
+  ],
+  "risks": [],
+  "localSpecSearch": {
+    "collection": "core_3d",
+    "query": "SAKURA Smart Bin smart bin hinged lid infrared sensor plastic appliance touchless waste bin hinge lid sensor",
+    "index": {
+      "status": "hit",
+      "reason": "current",
+      "fingerprint": "6857e5ab528b42ac12f4f411f862610a0bffce8e47aee3610a7603c318072fe8"
+    },
+    "matches": [
+      {
+        "record_id": "core.socket-pivot",
+        "file_path": "grimoire/glossary/3d_vocabulary.md",
+        "heading": "Animation, Physics, And Destruction",
+        "key_path": null,
+        "score": 4.802998721041,
+        "snippets": [
+          "A pivot is a local rotation origin; a socket is an attachment point for a child part. In a runtime hierarchy, a socket Object3D is a child of the relevant pivot."
+        ],
+        "source_refs": [
+          {
+            "path": "grimoire/glossary/3d_vocabulary.md",
+            "heading": "Animation, Physics, And Destruction",
+            "key_path": null
+          },
+          {
+            "path": "grimoire/readiness/action_rigging.md",
+            "heading": "Hierarchy Pattern",
+            "key_path": null
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "grimoire/readiness/action_rigging.md"
+          },
+          {
+            "kind": "notebooklm-research",
+            "ref": "notebooklm:4b03c2f9-8393-411f-b5b4-039ab9532843",
+            "note": "Validated generic schema vocabulary; numeric claims remain backed by local source_refs."
+          }
+        ]
+      },
+      {
+        "record_id": "core.pbr-opacity-alpha",
+        "file_path": "docs/raw/img2threejs-skill-dataset.json",
+        "heading": null,
+        "key_path": "categories.material_pbr[8]",
+        "score": 3.086972024081,
+        "snippets": [
+          "... d鐎?li鐎瑰嫬瀚? kh濞戞柨娼眊 ph鐎光偓婵傚鐒?闁兼儼妫勭涵?trong su鐎瑰嫬瀚崬? Recognition cues: Standard opacity: soft edge fade or full transparency in glass/plastic parts; CS2-specific: alpha channel of the base color texture instead encodes a Wearness Mask, not visual ..."
+        ],
+        "source_refs": [
+          {
+            "path": "docs/raw/img2threejs-skill-dataset.json",
+            "heading": null,
+            "key_path": "categories.material_pbr[8]"
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "docs/raw/img2threejs-skill-dataset.json",
+            "note": "img2threejs NotebookLM research distillation"
+          }
+        ]
+      }
+    ]
+  },
+  "tier1Results": [
+    {
+      "passed": false,
+      "checks": {
+        "silhouetteIoU": 0.4149,
+        "aspectRatioDelta": 0.2069,
+        "scaleDelta": 0.5177,
+        "bilateralSymmetryError": 0.0336,
+        "colorDelta": {
+          "checked": 12,
+          "maxDeltaE": 15.01,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 15.01
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.01
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.01
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.01
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.01
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.01
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.01
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.01
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.01
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.01
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.01
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.01
+            }
+          ],
+          "gated": true
+        }
+      },
+      "failures": [
+        "silhouette IoU 0.415 is below threshold 0.85",
+        "aspect-ratio delta 0.207 exceeds threshold 0.05",
+        "scale delta 0.518 exceeds threshold 0.08"
+      ],
+      "renderHash": "a7c2d372cc65d34d",
+      "passId": "optimization-pass"
+    }
+  ]
+}

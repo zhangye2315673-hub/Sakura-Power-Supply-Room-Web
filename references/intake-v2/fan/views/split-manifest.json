@@ -1,0 +1,10 @@
+{
+  "source": "archived-v1-four-view-fallback",
+  "generationStatus": "blocked-after-two-timeouts-and-region-451",
+  "outputs": [
+    { "view": "front", "path": "references/intake-v2/fan/views/front.png", "source": "docs/history/appliance-model-v1-2026-08-11/screenshots/models/fan/idle-front.png" },
+    { "view": "side", "path": "references/intake-v2/fan/views/side.png", "source": "docs/history/appliance-model-v1-2026-08-11/screenshots/models/fan/idle-side.png" },
+    { "view": "back", "path": "references/intake-v2/fan/views/back.png", "source": "docs/history/appliance-model-v1-2026-08-11/screenshots/models/fan/idle-back.png" },
+    { "view": "three-quarter", "path": "references/intake-v2/fan/views/three-quarter.png", "source": "docs/history/appliance-model-v1-2026-08-11/screenshots/models/fan/idle-three-quarter.png" }
+  ]
+}

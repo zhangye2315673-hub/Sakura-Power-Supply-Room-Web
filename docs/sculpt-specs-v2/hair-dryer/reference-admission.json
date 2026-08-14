@@ -1,0 +1,22 @@
+{
+  "admitted": true,
+  "verdict": "conditional",
+  "reasons": [
+    "Archived front, side and back orthographic references are technically valid and semantically consistent.",
+    "The requested GPT Image 2 compatible endpoint timed out twice before returning an image, so no generated turn-sheet is claimed."
+  ],
+  "provenance": {
+    "viewpoint": "front",
+    "sourcePath": "references/intake/hair-dryer/front.png",
+    "width": 557,
+    "height": 941,
+    "foregroundCoverage": 0.1642,
+    "largestComponentFraction": 1.0,
+    "pHash": "14999711103326761401",
+    "duplicateOfHash": null
+  },
+  "generationAttempts": [
+    { "model": "gpt-image-2", "result": "timeout", "limitSeconds": 120 },
+    { "model": "gpt-image-2", "result": "timeout", "limitSeconds": 360 }
+  ]
+}

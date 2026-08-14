@@ -1,0 +1,841 @@
+{
+  "targetName": "SAKURA Microwave v2",
+  "sourceImage": "references/intake-v2/microwave/microwave-turnsheet-v2.png",
+  "preSpecAssessment": {
+    "objectClass": {
+      "primaryType": "faceted countertop microwave with articulated door and model-owned heat performance",
+      "primaryDomain": "object",
+      "formLanguage": [
+        "hard-surface",
+        "low-poly",
+        "faceted",
+        "retro game appliance"
+      ],
+      "structureKind": [
+        "compound object",
+        "layered shell",
+        "articulated assembly",
+        "repeated modules"
+      ],
+      "motionPotential": [
+        "hinged door",
+        "rotating tray",
+        "food pulse",
+        "whole-machine compression",
+        "volumetric steam and heat emission"
+      ],
+      "materialFamilies": [
+        "molded plastic",
+        "smoked glass",
+        "warm cavity liner",
+        "rubber",
+        "metal contact",
+        "emissive indicator"
+      ],
+      "notes": "The archived rig is compatibility truth. The turn-sheet reallocates only visual mass inside the frozen envelope."
+    },
+    "complexity": {
+      "tier": "ultra-complex",
+      "scores": {
+        "silhouetteComplexity": 2,
+        "componentCount": 3,
+        "hierarchyDepth": 3,
+        "repetitionDensity": 3,
+        "materialLayerCount": 3,
+        "localDetailDensity": 3,
+        "occlusionRisk": 3,
+        "actionReadinessNeed": 3
+      },
+      "estimatedCounts": {
+        "macroComponents": 7,
+        "mesoComponents": 20,
+        "microFeatureGroups": 24,
+        "materialLayers": 10,
+        "repetitionSystems": 6
+      },
+      "reasoning": [
+        "A transparent articulated door, fixed cavity, rotating tray and food share strict depth and reset constraints.",
+        "Three control pivots, rear socket, four cable anchors, eight steam clusters and four heat waves must keep exact transforms.",
+        "Front mesh, dial ticks, rear vents, fasteners and effects form multiple repeated systems with outline exclusions."
+      ]
+    },
+    "specDepthDecision": {
+      "requiredDepth": "ultra-complex",
+      "minimumComponentLevels": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "needsRepetitionSystems": true,
+      "needsMaterialLocalOverrides": true,
+      "needsMultipleReviewViews": true,
+      "needsActionReadyHierarchy": true,
+      "rationale": "Visual replacement touches an animation-rich transparent appliance with nested effects and exact reset."
+    },
+    "unknownsToResolveBeforeImplementation": [],
+    "detailInventory": {
+      "scanMethod": "grid-4x4 plus four-view component review",
+      "targetMinDetails": 24,
+      "details": [
+        {
+          "id": "detail-01",
+          "kind": "contour",
+          "description": "Full tree remains inside the archived v1 Box3.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 0.25,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "cabinet-frame"
+          },
+          "evidenceRef": "references/intake-v2/microwave/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-02",
+          "kind": "bevel",
+          "description": "Top hood uses broad clipped corner planes and a narrow pink step.",
+          "region": {
+            "x": 0.25,
+            "y": 0,
+            "width": 0.25,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "top-hood"
+          },
+          "evidenceRef": "references/intake-v2/microwave/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-03",
+          "kind": "contour",
+          "description": "Side walls expose large tapered planes without changing depth extremes.",
+          "region": {
+            "x": 0.5,
+            "y": 0,
+            "width": 0.25,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "side-shell-system"
+          },
+          "evidenceRef": "references/intake-v2/microwave/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-04",
+          "kind": "seam",
+          "description": "Low pink plinth separates the cabinet from four feet.",
+          "region": {
+            "x": 0.75,
+            "y": 0,
+            "width": 0.25,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "lower-plinth"
+          },
+          "evidenceRef": "references/intake-v2/microwave/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-05",
+          "kind": "bevel",
+          "description": "Door outer frame becomes deeper and more graphic.",
+          "region": {
+            "x": 0,
+            "y": 0.16,
+            "width": 0.25,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "door-outer-frame"
+          },
+          "evidenceRef": "references/intake-v2/microwave/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-06",
+          "kind": "seam",
+          "description": "Dark gasket frame remains separated from the outer pink door.",
+          "region": {
+            "x": 0.25,
+            "y": 0.16,
+            "width": 0.25,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "door-inner-gasket"
+          },
+          "evidenceRef": "references/intake-v2/microwave/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-07",
+          "kind": "gloss",
+          "description": "Smoked glass stays a dark readable plane with restrained transparency.",
+          "region": {
+            "x": 0.5,
+            "y": 0.16,
+            "width": 0.25,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "materialSurface",
+          "mapsTo": {
+            "type": "material.localOverrides",
+            "ref": "smoked-glass"
+          },
+          "evidenceRef": "references/intake-v2/microwave/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-08",
+          "kind": "linework",
+          "description": "Bounded safety mesh remains behind the glass without black clumping.",
+          "region": {
+            "x": 0.75,
+            "y": 0.16,
+            "width": 0.25,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "window-mesh"
+          },
+          "evidenceRef": "references/intake-v2/microwave/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-09",
+          "kind": "contour",
+          "description": "Tall faceted handle keeps the archived right-edge pivot and socket.",
+          "region": {
+            "x": 0,
+            "y": 0.32,
+            "width": 0.25,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "door-handle"
+          },
+          "evidenceRef": "references/intake-v2/microwave/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-10",
+          "kind": "fastener",
+          "description": "Left hinge attachment remains readable at the frozen axis.",
+          "region": {
+            "x": 0.25,
+            "y": 0.32,
+            "width": 0.25,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "door-hinge"
+          },
+          "evidenceRef": "references/intake-v2/microwave/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-11",
+          "kind": "contour",
+          "description": "True cavity panels remain behind the door with fixed depth.",
+          "region": {
+            "x": 0.5,
+            "y": 0.32,
+            "width": 0.25,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "cavity-assembly"
+          },
+          "evidenceRef": "references/intake-v2/microwave/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-12",
+          "kind": "contour",
+          "description": "Tray, plate and food retain their archived rotor and food pivots.",
+          "region": {
+            "x": 0.75,
+            "y": 0.32,
+            "width": 0.25,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "tray-food-system"
+          },
+          "evidenceRef": "references/intake-v2/microwave/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-13",
+          "kind": "emissive",
+          "description": "Mint display bars and three sequence indicators remain stable.",
+          "region": {
+            "x": 0,
+            "y": 0.48,
+            "width": 0.25,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "display-system"
+          },
+          "evidenceRef": "references/intake-v2/microwave/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-14",
+          "kind": "ridge",
+          "description": "Small indexed button retains its travel pivot.",
+          "region": {
+            "x": 0.25,
+            "y": 0.48,
+            "width": 0.25,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "small-button"
+          },
+          "evidenceRef": "references/intake-v2/microwave/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-15",
+          "kind": "contour",
+          "description": "Oversized low-segment dial and bezel remain centered on the frozen pivot.",
+          "region": {
+            "x": 0.5,
+            "y": 0.48,
+            "width": 0.25,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "dial-system"
+          },
+          "evidenceRef": "references/intake-v2/microwave/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-16",
+          "kind": "linework",
+          "description": "Eight radial tick marks remain a bounded repetition system.",
+          "region": {
+            "x": 0.75,
+            "y": 0.48,
+            "width": 0.25,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "dial-ticks"
+          },
+          "evidenceRef": "references/intake-v2/microwave/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-17",
+          "kind": "bevel",
+          "description": "Lower rectangular button gains a clipped low-poly face.",
+          "region": {
+            "x": 0,
+            "y": 0.64,
+            "width": 0.25,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "lower-button"
+          },
+          "evidenceRef": "references/intake-v2/microwave/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-18",
+          "kind": "contour",
+          "description": "Rear service cassette uses a thick stepped perimeter.",
+          "region": {
+            "x": 0.25,
+            "y": 0.64,
+            "width": 0.25,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "rear-service-panel"
+          },
+          "evidenceRef": "references/intake-v2/microwave/views/back.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-19",
+          "kind": "linework",
+          "description": "Four rows of five vent slots remain evenly spaced.",
+          "region": {
+            "x": 0.5,
+            "y": 0.64,
+            "width": 0.25,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "rear-vent-system"
+          },
+          "evidenceRef": "references/intake-v2/microwave/views/back.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-20",
+          "kind": "fastener",
+          "description": "Four rear fasteners remain countable and unclumped.",
+          "region": {
+            "x": 0.75,
+            "y": 0.64,
+            "width": 0.25,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "rear-fasteners"
+          },
+          "evidenceRef": "references/intake-v2/microwave/views/back.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-21",
+          "kind": "contour",
+          "description": "Rear inlet and contacts remain on the frozen socket.",
+          "region": {
+            "x": 0,
+            "y": 0.8,
+            "width": 0.25,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "power-entry"
+          },
+          "evidenceRef": "references/intake-v2/microwave/views/back.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-22",
+          "kind": "contour",
+          "description": "Four faceted feet preserve ground contact.",
+          "region": {
+            "x": 0.25,
+            "y": 0.8,
+            "width": 0.25,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "foot-system"
+          },
+          "evidenceRef": "references/intake-v2/microwave/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-23",
+          "kind": "contour",
+          "description": "Eight steam clusters and four thick heat waves retain authored emitters.",
+          "region": {
+            "x": 0.5,
+            "y": 0.8,
+            "width": 0.25,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "performance-rig"
+          },
+          "evidenceRef": "references/intake-v2/microwave/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-24",
+          "kind": "linework",
+          "description": "Main, structure and detail ink use stable 0.0048, 0.0041 and 0.0033 widths with 0.18 variation.",
+          "region": {
+            "x": 0.75,
+            "y": 0.8,
+            "width": 0.25,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "materialSurface",
+          "mapsTo": {
+            "type": "material.localOverrides",
+            "ref": "outline-hierarchy"
+          },
+          "evidenceRef": "references/intake-v2/microwave/views/three-quarter.png",
+          "confidence": 0.96
+        }
+      ]
+    },
+    "anatomy": {
+      "applies": false,
+      "styleHeads": 0,
+      "proportions": {
+        "headUnit": 0,
+        "torso": 0,
+        "legs": 0,
+        "shoulderWidth": 0,
+        "hipWidth": 0
+      },
+      "pose": {
+        "type": "unassessed",
+        "jointAngles": {}
+      },
+      "faceLandmarks": {
+        "eyeLine": 0,
+        "eyeSpacing": 0,
+        "noseBase": 0,
+        "mouthLine": 0,
+        "hairline": 0
+      },
+      "features": [],
+      "confidence": 0,
+      "note": "Only meaningful when objectClass.primaryDomain is character or hybrid. Set applies=true and fill from forge/stage1_intake/extract_landmarks.py. See grimoire/character/reconstruction.md and grimoire/character/likeness_maximization.md."
+    },
+    "sourceImage": "references/intake-v2/microwave/microwave-turnsheet-v2.png"
+  },
+  "qualityContract": {
+    "qualityBar": "ultra-complex",
+    "definitionOfDone": [
+      "All four static views match the upgraded faceted silhouette while remaining inside the archived v1 Box3.",
+      "Door, handle, control tower, cavity, tray, food, rear service and feet retain their exact runtime attachment points.",
+      "All frozen pivots and sockets preserve parent paths and idle transforms within 1e-4.",
+      "Startup, climax, wind-down, stop and rebuild retain one timeline owner, 24 steam lobes, four thick waves and exact reset.",
+      "Main, structure and detail contours use the required stable unequal width hierarchy without clumping on glass or effects."
+    ],
+    "minimumSpecDepth": {
+      "macroComponents": 6,
+      "mesoComponents": 16,
+      "microFeatureGroups": 24,
+      "materialLayers": 9,
+      "repetitionSystems": 6,
+      "reviewViewpoints": 7
+    },
+    "featureGroups": [
+      {
+        "id": "microwave-silhouette",
+        "name": "Faceted wide-low microwave silhouette",
+        "required": true,
+        "qualityCriteria": [
+          "Dominant left door, narrow right control tower and deep side shell remain inside the archived bounds."
+        ],
+        "evidenceRefs": [
+          "front-view",
+          "side-view",
+          "back-view",
+          "three-quarter-view"
+        ],
+        "failureModes": [
+          "soft inflated shell",
+          "control tower merge",
+          "envelope growth"
+        ]
+      },
+      {
+        "id": "door-cavity-system",
+        "name": "Door, gasket, glass and cavity depth",
+        "required": true,
+        "qualityCriteria": [
+          "Door rotates on the archived hinge and the cavity remains visible without glass sorting artifacts."
+        ],
+        "evidenceRefs": [
+          "front-view",
+          "side-view",
+          "three-quarter-view"
+        ],
+        "failureModes": [
+          "floating handle",
+          "blocked cavity",
+          "glass projection"
+        ]
+      },
+      {
+        "id": "control-system",
+        "name": "Display, buttons and oversized dial",
+        "required": true,
+        "qualityCriteria": [
+          "Control order and all pivot centers remain frozen."
+        ],
+        "evidenceRefs": [
+          "front-view",
+          "three-quarter-view"
+        ],
+        "failureModes": [
+          "face-like controls",
+          "moved dial",
+          "extra keypad"
+        ]
+      },
+      {
+        "id": "rear-service-system",
+        "name": "Rear service cassette and power entry",
+        "required": true,
+        "qualityCriteria": [
+          "Four-by-five vents, four fasteners and rear socket remain countable and aligned."
+        ],
+        "evidenceRefs": [
+          "back-view"
+        ],
+        "failureModes": [
+          "missing vent",
+          "moved inlet",
+          "flat rear"
+        ]
+      },
+      {
+        "id": "animation-contact",
+        "name": "Tray, food, steam and heat animation contact",
+        "required": true,
+        "qualityCriteria": [
+          "All effects originate from their archived positions and reset exactly."
+        ],
+        "evidenceRefs": [
+          "animation-contract"
+        ],
+        "failureModes": [
+          "old-position emission",
+          "duplicate timeline",
+          "reset drift"
+        ]
+      },
+      {
+        "id": "outline-hierarchy",
+        "name": "Stable unequal SAKURA ink hierarchy",
+        "required": true,
+        "qualityCriteria": [
+          "Three widths stay stable under rotation and avoid transparent or tiny effect clumps."
+        ],
+        "evidenceRefs": [
+          "three-quarter-view"
+        ],
+        "failureModes": [
+          "uniform outline",
+          "temporal shimmer",
+          "black clumps"
+        ]
+      }
+    ],
+    "visualDeltaChecks": [
+      "full-tree bounds delta",
+      "door window and handle contact delta",
+      "control pivot delta",
+      "rear socket and cable anchor projection delta",
+      "outline tier stability delta",
+      "startup/climax/wind-down effect contact delta"
+    ],
+    "antiShallowSpecRules": [
+      "Do not proceed to code if qualityContract.qualityBar is unassessed.",
+      "Do not proceed to code if the spec only contains a root component for a moderate or complex object.",
+      "Do not proceed to code if required featureGroups are not represented by componentTree, materials, or repetitionSystems.",
+      "Do not proceed to code if visible local features are described only in prose and not attached to components/materials/evidenceRefs.",
+      "Do not proceed past structural-pass if attached child parts lack attachment.parentSocket, localStart, localEnd, embedDepth/overlap, and gapTolerance.",
+      "Do not pass material look-dev when albedo is reused as roughness, height, normal, or AO.",
+      "Do not pass material look-dev without macro, meso, and micro surface frequency bands for close-up materials.",
+      "Do not pass reference-fidelity material look-dev from a source image without usable referencePbr maps or an explicit documented limitation.",
+      "Do not patch a spec with extracted PBR maps when extraction confidence is below the target threshold unless the user explicitly accepts lower fidelity.",
+      "Do not place adjacent separate-geometry parts below 0.02 world-unit seam overlap (source: grimoire/build/geometry_patterns.md).",
+      "Do not satisfy raised or recessed relief, fasteners, or grip structure with a map alone when the feature affects form; use geometry or displacement (source: grimoire/build/geometry_patterns.md).",
+      "Adjacent components must overlap by at least 0.02 world units at shared seams (source: grimoire/build/geometry_patterns.md).",
+      "Raised or recessed relief and fasteners must be geometry, instanced micro-parts, or displacement; a map alone is an approximation (source: grimoire/build/geometry_patterns.md)."
+    ],
+    "mustNotDo": [
+      "Do not proceed to code if qualityContract.qualityBar is unassessed.",
+      "Do not proceed to code if the spec only contains a root component for a moderate or complex object.",
+      "Do not proceed to code if required featureGroups are not represented by componentTree, materials, or repetitionSystems.",
+      "Do not proceed to code if visible local features are described only in prose and not attached to components/materials/evidenceRefs.",
+      "Do not proceed past structural-pass if attached child parts lack attachment.parentSocket, localStart, localEnd, embedDepth/overlap, and gapTolerance.",
+      "Do not pass material look-dev when albedo is reused as roughness, height, normal, or AO.",
+      "Do not pass material look-dev without macro, meso, and micro surface frequency bands for close-up materials.",
+      "Do not pass reference-fidelity material look-dev from a source image without usable referencePbr maps or an explicit documented limitation.",
+      "Do not patch a spec with extracted PBR maps when extraction confidence is below the target threshold unless the user explicitly accepts lower fidelity.",
+      "Do not place adjacent separate-geometry parts below 0.02 world-unit seam overlap (source: grimoire/build/geometry_patterns.md).",
+      "Do not satisfy raised or recessed relief, fasteners, or grip structure with a map alone when the feature affects form; use geometry or displacement (source: grimoire/build/geometry_patterns.md).",
+      "Adjacent components must overlap by at least 0.02 world units at shared seams (source: grimoire/build/geometry_patterns.md).",
+      "Raised or recessed relief and fasteners must be geometry, instanced micro-parts, or displacement; a map alone is an approximation (source: grimoire/build/geometry_patterns.md)."
+    ]
+  },
+  "authoringInstruction": "Fill observed object class, complexity reasoning, featureGroups, visualDeltaChecks, and unknowns before generating or implementing ObjectSculptSpec.",
+  "localSpecSearch": {
+    "collection": "core_3d",
+    "query": "SAKURA Microwave v2 faceted low-poly countertop microwave articulated door turntable food steam heat-wave runtime sockets toon outline",
+    "index": {
+      "status": "hit",
+      "reason": "current",
+      "fingerprint": "6857e5ab528b42ac12f4f411f862610a0bffce8e47aee3610a7603c318072fe8"
+    },
+    "matches": [
+      {
+        "record_id": "core.runtime-hierarchy",
+        "file_path": "grimoire/readiness/action_rigging.md",
+        "heading": "Hierarchy Pattern",
+        "key_path": null,
+        "score": 9.751723358964,
+        "snippets": [
+          "An action-ready model uses a root, component pivot groups, visual meshes, sockets, collider metadata or proxies, and destruction-group metadata."
+        ],
+        "source_refs": [
+          {
+            "path": "grimoire/readiness/action_rigging.md",
+            "heading": "Hierarchy Pattern",
+            "key_path": null
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "grimoire/readiness/action_rigging.md"
+          },
+          {
+            "kind": "notebooklm-research",
+            "ref": "notebooklm:4b03c2f9-8393-411f-b5b4-039ab9532843",
+            "note": "Validated generic schema vocabulary; numeric claims remain backed by local source_refs."
+          }
+        ]
+      },
+      {
+        "record_id": "core.topology-intent",
+        "file_path": "grimoire/glossary/3d_vocabulary.md",
+        "heading": "Geometry And Topology",
+        "key_path": null,
+        "score": 5.143858634031,
+        "snippets": [
+          "Topology intent classifies a surface as hard-surface blockout, subdivision-ready, low-poly prop, organic deformed mesh, or alpha-card cluster."
+        ],
+        "source_refs": [
+          {
+            "path": "grimoire/glossary/3d_vocabulary.md",
+            "heading": "Geometry And Topology",
+            "key_path": null
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "grimoire/glossary/3d_vocabulary.md"
+          },
+          {
+            "kind": "notebooklm-research",
+            "ref": "notebooklm:4b03c2f9-8393-411f-b5b4-039ab9532843",
+            "note": "Validated generic schema vocabulary; numeric claims remain backed by local source_refs."
+          }
+        ]
+      },
+      {
+        "record_id": "core.shader-mapping-uvcoordinate-system-conversion-attachment-hierarchy",
+        "file_path": "docs/raw/img2threejs-skill-dataset.json",
+        "heading": null,
+        "key_path": "categories.rendering_shader_mapping[14]",
+        "score": 4.37507566929,
+        "snippets": [
+          "... appears mirrored or flipped sideways after import signals a handedness mismatch; Attachment points behave like named sockets/joints (Unreal sockets, USD UsdPhysicsFixedJoint, 'ghost links') — a local offset+rotation relative to a parent ..."
+        ],
+        "source_refs": [
+          {
+            "path": "docs/raw/img2threejs-skill-dataset.json",
+            "heading": null,
+            "key_path": "categories.rendering_shader_mapping[14]"
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "docs/raw/img2threejs-skill-dataset.json",
+            "note": "img2threejs NotebookLM research distillation"
+          }
+        ]
+      }
+    ]
+  }
+}

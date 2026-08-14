@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SAKURA 家电模型审查</title>
+  </head>
+  <body>
+    <main id="model-review">
+      <header>
+        <div>
+          <span>IMG2THREEJS STAGED REVIEW</span>
+          <strong id="model-title">加载模型…</strong>
+        </div>
+        <nav>
+          <button type="button" data-view="front">正面</button>
+          <button type="button" data-view="side">侧面</button>
+          <button type="button" data-view="back">背面</button>
+          <button type="button" data-view="three-quarter">三分之四</button>
+          <button type="button" id="review-reset">重置</button>
+          <button type="button" id="review-rotate">开始自转</button>
+        </nav>
+      </header>
+      <section>
+        <canvas id="model-review-canvas" aria-label="程序化家电模型审查画布"></canvas>
+        <p id="model-review-status">等待模型</p>
+      </section>
+    </main>
+    <script type="module" src="/src/review/modelReview.ts"></script>
+  </body>
+</html>

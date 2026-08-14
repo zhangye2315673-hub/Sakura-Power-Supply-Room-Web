@@ -1,0 +1,12 @@
+[
+  {
+    "id": "seven-terminal-identities",
+    "score": 0.93,
+    "notes": "All seven layouts retain their defining count, spacing, cavity, and front-face cues; the new dark interface ring improves separation from the shared shell."
+  },
+  {
+    "id": "attachment-runtime",
+    "score": 0.92,
+    "notes": "The cable, terminal, and indicator sockets are explicit zero-triangle nodes; every visible assembly part has a stable semantic name and destruction group."
+  }
+]

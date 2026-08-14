@@ -1,0 +1,22 @@
+{
+  "status": "pass",
+  "provider": "openai-compatible-comfly",
+  "model": "gpt-image-2",
+  "quality": "high",
+  "size": "2048x2048",
+  "output": "references/intake-v2/toaster/toaster-turnsheet-v2.png",
+  "views": ["front", "right-side", "back", "three-quarter"],
+  "checks": {
+    "technicalProbe": true,
+    "frontAdmission": true,
+    "sideAdmission": true,
+    "backAdmission": true,
+    "threeQuarterAdmission": true,
+    "crossViewPartConsistency": true,
+    "commonGroundLine": true,
+    "noTextOrWatermark": true,
+    "noCableOrMotionEffects": true,
+    "animationAnchorsVisuallyCompatible": true
+  },
+  "notes": "Each split view passed independent reference admission. The concept's divided heater bars remain one runtime toast slot and one frozen launch socket. Existing pivots, sockets, effects and timeline remain authoritative."
+}

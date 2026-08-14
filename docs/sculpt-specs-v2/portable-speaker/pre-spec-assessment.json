@@ -1,0 +1,740 @@
+{
+  "targetName": "SAKURA Portable Speaker v2",
+  "sourceImage": "references/intake-v2/portable-speaker/portable-speaker-turnsheet-v2.png",
+  "preSpecAssessment": {
+    "objectClass": {
+      "primaryType": "faceted portable loudspeaker with articulated carry handle",
+      "primaryDomain": "object",
+      "formLanguage": [
+        "hard-surface",
+        "low-poly",
+        "faceted",
+        "retro game appliance"
+      ],
+      "structureKind": [
+        "compound object",
+        "layered shell",
+        "articulated assembly",
+        "repeated modules"
+      ],
+      "motionPotential": [
+        "whole-machine bass pulse",
+        "driver diaphragm travel",
+        "volumetric wave emitter"
+      ],
+      "materialFamilies": [
+        "molded plastic",
+        "rubber",
+        "dark cavity",
+        "emissive indicator"
+      ],
+      "notes": "The archived rig is compatibility truth. The four-view sheet reallocates only visual mass inside the frozen envelope."
+    },
+    "complexity": {
+      "tier": "complex",
+      "scores": {
+        "silhouetteComplexity": 2,
+        "componentCount": 3,
+        "hierarchyDepth": 3,
+        "repetitionDensity": 3,
+        "materialLayerCount": 2,
+        "localDetailDensity": 3,
+        "occlusionRisk": 2,
+        "actionReadinessNeed": 3
+      },
+      "estimatedCounts": {
+        "macroComponents": 5,
+        "mesoComponents": 10,
+        "microFeatureGroups": 24,
+        "materialLayers": 6,
+        "repetitionSystems": 2
+      },
+      "reasoning": [
+        "The shell is compact, but identity depends on a dense 480-instance grille, a layered handle and hinge assembly, front controls and rear service geometry.",
+        "The one-owner bass performance deforms the complete machine, drives a hidden diaphragm and emits eight volumetric waves before exact reset."
+      ]
+    },
+    "specDepthDecision": {
+      "requiredDepth": "complex",
+      "minimumComponentLevels": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "needsRepetitionSystems": true,
+      "needsMaterialLocalOverrides": true,
+      "needsMultipleReviewViews": true,
+      "needsActionReadyHierarchy": true,
+      "rationale": "Visual replacement touches an animation-rich compound appliance with dense repeated relief and strict runtime anchors."
+    },
+    "unknownsToResolveBeforeImplementation": [],
+    "detailInventory": {
+      "scanMethod": "grid-3x3 plus four-view component review",
+      "targetMinDetails": 24,
+      "details": [
+        {
+          "id": "detail-01",
+          "kind": "contour",
+          "description": "The complete faceted cabinet remains inside the archived v1 Box3.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 0.25,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "cabinet-shell"
+          },
+          "evidenceRef": "references/intake-v2/portable-speaker/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-02",
+          "kind": "bevel",
+          "description": "Clipped upper and lower shell corners create broad LOW POLY planes.",
+          "region": {
+            "x": 0.25,
+            "y": 0,
+            "width": 0.25,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "cabinet-shell"
+          },
+          "evidenceRef": "references/intake-v2/portable-speaker/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-03",
+          "kind": "contour",
+          "description": "Side walls taper subtly without changing the archived footprint extremes.",
+          "region": {
+            "x": 0.5,
+            "y": 0,
+            "width": 0.25,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "cabinet-shell"
+          },
+          "evidenceRef": "references/intake-v2/portable-speaker/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-04",
+          "kind": "seam",
+          "description": "A dark construction seam separates the shell from the acoustic front.",
+          "region": {
+            "x": 0.75,
+            "y": 0,
+            "width": 0.25,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "front-fascia"
+          },
+          "evidenceRef": "references/intake-v2/portable-speaker/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-05",
+          "kind": "bevel",
+          "description": "The fascia uses a deep three-step frame with restrained chamfers.",
+          "region": {
+            "x": 0,
+            "y": 0.16,
+            "width": 0.25,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "front-fascia"
+          },
+          "evidenceRef": "references/intake-v2/portable-speaker/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-06",
+          "kind": "fastener",
+          "description": "Exactly 480 visible grille instances retain radial delay metadata.",
+          "region": {
+            "x": 0.25,
+            "y": 0.16,
+            "width": 0.25,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "grille-perforations"
+          },
+          "evidenceRef": "references/intake-v2/portable-speaker/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-07",
+          "kind": "contour",
+          "description": "The lower-right exclusion remains clear for the power controls.",
+          "region": {
+            "x": 0.5,
+            "y": 0.16,
+            "width": 0.25,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "grille-perforations"
+          },
+          "evidenceRef": "references/intake-v2/portable-speaker/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-08",
+          "kind": "ridge",
+          "description": "The power control keeps its concentric ring, bezel and face stack.",
+          "region": {
+            "x": 0.75,
+            "y": 0.16,
+            "width": 0.25,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "power-control"
+          },
+          "evidenceRef": "references/intake-v2/portable-speaker/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-09",
+          "kind": "linework",
+          "description": "The raised power glyph remains legible at catalog scale.",
+          "region": {
+            "x": 0,
+            "y": 0.32,
+            "width": 0.25,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "power-control"
+          },
+          "evidenceRef": "references/intake-v2/portable-speaker/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-10",
+          "kind": "emissive",
+          "description": "The mint status lens remains a small inset point below the control.",
+          "region": {
+            "x": 0.25,
+            "y": 0.32,
+            "width": 0.25,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "status-indicator"
+          },
+          "evidenceRef": "references/intake-v2/portable-speaker/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-11",
+          "kind": "contour",
+          "description": "The handle becomes thicker and more exaggerated without moving its pivot.",
+          "region": {
+            "x": 0.5,
+            "y": 0.32,
+            "width": 0.25,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "carry-handle"
+          },
+          "evidenceRef": "references/intake-v2/portable-speaker/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-12",
+          "kind": "bevel",
+          "description": "The handle arch uses a twelve-sided outer profile and broad inner chamfer.",
+          "region": {
+            "x": 0.75,
+            "y": 0.32,
+            "width": 0.25,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "carry-handle"
+          },
+          "evidenceRef": "references/intake-v2/portable-speaker/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-13",
+          "kind": "seam",
+          "description": "Mint side inserts stay attached to both outer handle roots.",
+          "region": {
+            "x": 0,
+            "y": 0.48,
+            "width": 0.25,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "carry-handle"
+          },
+          "evidenceRef": "references/intake-v2/portable-speaker/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-14",
+          "kind": "fastener",
+          "description": "Each hinge becomes a readable three-layer low-poly cap stack.",
+          "region": {
+            "x": 0.25,
+            "y": 0.48,
+            "width": 0.25,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "handle-hinges"
+          },
+          "evidenceRef": "references/intake-v2/portable-speaker/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-15",
+          "kind": "contour",
+          "description": "The rear service panel receives a stepped clipped perimeter.",
+          "region": {
+            "x": 0.5,
+            "y": 0.48,
+            "width": 0.25,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "rear-service-panel"
+          },
+          "evidenceRef": "references/intake-v2/portable-speaker/views/back.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-16",
+          "kind": "linework",
+          "description": "The horizontal rear port remains centered on its frozen cable socket.",
+          "region": {
+            "x": 0.75,
+            "y": 0.48,
+            "width": 0.25,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "rear-service-panel"
+          },
+          "evidenceRef": "references/intake-v2/portable-speaker/views/back.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-17",
+          "kind": "contour",
+          "description": "Two faceted rubber feet preserve the archived ground contact.",
+          "region": {
+            "x": 0,
+            "y": 0.64,
+            "width": 0.25,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "feet"
+          },
+          "evidenceRef": "references/intake-v2/portable-speaker/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-18",
+          "kind": "contour",
+          "description": "The driver remains hidden behind the grille and slightly left of center.",
+          "region": {
+            "x": 0.25,
+            "y": 0.64,
+            "width": 0.25,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "internal-driver"
+          },
+          "evidenceRef": "references/intake-v2/portable-speaker/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-19",
+          "kind": "contour",
+          "description": "Eight closed TubeGeometry waves remain thick from oblique views.",
+          "region": {
+            "x": 0.5,
+            "y": 0.64,
+            "width": 0.25,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "sound-wave-emitter"
+          },
+          "evidenceRef": "references/intake-v2/portable-speaker/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-20",
+          "kind": "contour",
+          "description": "Four zero-geometry scene-edge sockets freeze the old fallback cable anchors.",
+          "region": {
+            "x": 0.75,
+            "y": 0.64,
+            "width": 0.25,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "root"
+          },
+          "evidenceRef": "references/intake-v2/portable-speaker/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-21",
+          "kind": "contour",
+          "description": "Whole-machine, cabinet, fascia and handle pivots keep exact parent paths and transforms.",
+          "region": {
+            "x": 0,
+            "y": 0.8,
+            "width": 0.25,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "root"
+          },
+          "evidenceRef": "references/intake-v2/portable-speaker/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-22",
+          "kind": "linework",
+          "description": "Main, structural and detail ink use 0.0048, 0.0041 and 0.0033 widths.",
+          "region": {
+            "x": 0.25,
+            "y": 0.8,
+            "width": 0.25,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "materialSurface",
+          "mapsTo": {
+            "type": "material.localOverrides",
+            "ref": "outline-hierarchy"
+          },
+          "evidenceRef": "references/intake-v2/portable-speaker/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-23",
+          "kind": "linework",
+          "description": "Outline variation is stable object-space low-frequency noise at plus/minus 18 percent.",
+          "region": {
+            "x": 0.5,
+            "y": 0.8,
+            "width": 0.25,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "materialSurface",
+          "mapsTo": {
+            "type": "material.localOverrides",
+            "ref": "outline-hierarchy"
+          },
+          "evidenceRef": "references/intake-v2/portable-speaker/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-24",
+          "kind": "gloss",
+          "description": "Broad satin Toon highlights explain the shell planes without realistic texture.",
+          "region": {
+            "x": 0.75,
+            "y": 0.8,
+            "width": 0.25,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "materialSurface",
+          "mapsTo": {
+            "type": "material.localOverrides",
+            "ref": "pink-plastic"
+          },
+          "evidenceRef": "references/intake-v2/portable-speaker/views/three-quarter.png",
+          "confidence": 0.96
+        }
+      ]
+    },
+    "anatomy": {
+      "applies": false,
+      "styleHeads": 0,
+      "proportions": {
+        "headUnit": 0,
+        "torso": 0,
+        "legs": 0,
+        "shoulderWidth": 0,
+        "hipWidth": 0
+      },
+      "pose": {
+        "type": "unassessed",
+        "jointAngles": {}
+      },
+      "faceLandmarks": {
+        "eyeLine": 0,
+        "eyeSpacing": 0,
+        "noseBase": 0,
+        "mouthLine": 0,
+        "hairline": 0
+      },
+      "features": [],
+      "confidence": 0,
+      "note": "Only meaningful when objectClass.primaryDomain is character or hybrid. Set applies=true and fill from forge/stage1_intake/extract_landmarks.py. See grimoire/character/reconstruction.md and grimoire/character/likeness_maximization.md."
+    },
+    "sourceImage": "references/intake-v2/portable-speaker/portable-speaker-turnsheet-v2.png",
+    "resolvedImplementationAssumptions": []
+  },
+  "qualityContract": {
+    "qualityBar": "complex",
+    "definitionOfDone": [
+      "All four static views match the upgraded faceted silhouette while staying within the archived v1 envelope.",
+      "The 480-instance grille, lower-right control clearance, layered hinges, rear service panel and paired feet remain countable and attached.",
+      "All frozen pivots, sockets, colliders and destruction groups keep their parent paths and idle transforms within 1e-4.",
+      "Startup, climax, wind-down, stop and rebuild retain one timeline owner, eight closed wave tubes and exact reset.",
+      "Main, structure and detail contours use the required stable unequal width hierarchy without clumping on tiny effects."
+    ],
+    "minimumSpecDepth": {
+      "macroComponents": 4,
+      "mesoComponents": 6,
+      "microFeatureGroups": 20,
+      "materialLayers": 5,
+      "repetitionSystems": 2,
+      "reviewViewpoints": 4
+    },
+    "featureGroups": [
+      {
+        "id": "speaker-silhouette",
+        "name": "Faceted cabinet and exaggerated handle silhouette",
+        "required": true,
+        "qualityCriteria": [
+          "Slightly-taller cabinet, thick handle opening and clipped corners remain inside the archived bounds."
+        ],
+        "evidenceRefs": [
+          "front-view",
+          "side-view",
+          "back-view",
+          "three-quarter-view"
+        ],
+        "failureModes": [
+          "inflated soft shell",
+          "handle opening collapse",
+          "envelope growth"
+        ]
+      },
+      {
+        "id": "acoustic-front",
+        "name": "Deep fascia and 480-point grille system",
+        "required": true,
+        "qualityCriteria": [
+          "Three-step fascia, dense hole field and lower-right exclusion remain readable."
+        ],
+        "evidenceRefs": [
+          "front-view",
+          "three-quarter-view"
+        ],
+        "failureModes": [
+          "exposed cone",
+          "sparse grille",
+          "flat fascia"
+        ]
+      },
+      {
+        "id": "handle-hinge-system",
+        "name": "Thick handle and layered hinge attachment",
+        "required": true,
+        "qualityCriteria": [
+          "Both roots overlap their original hinge sockets through all motion."
+        ],
+        "evidenceRefs": [
+          "front-view",
+          "side-view",
+          "back-view"
+        ],
+        "failureModes": [
+          "floating root",
+          "moved hinge axis",
+          "missing mint insert"
+        ]
+      },
+      {
+        "id": "controls-service",
+        "name": "Front controls and rear service assembly",
+        "required": true,
+        "qualityCriteria": [
+          "Power ring, glyph, status dot, service panel and port remain at frozen anchors."
+        ],
+        "evidenceRefs": [
+          "front-view",
+          "back-view"
+        ],
+        "failureModes": [
+          "face-like controls",
+          "moved port",
+          "missing rear panel"
+        ]
+      },
+      {
+        "id": "powered-purpose",
+        "name": "Single-owner bass performance and exact reset",
+        "required": true,
+        "qualityCriteria": [
+          "Whole-machine pulse, hidden driver travel and eight thick waves complete without drift."
+        ],
+        "evidenceRefs": [
+          "animation-contract"
+        ],
+        "failureModes": [
+          "duplicate timeline",
+          "flat effects",
+          "reset drift"
+        ]
+      },
+      {
+        "id": "outline-hierarchy",
+        "name": "Stable unequal SAKURA ink hierarchy",
+        "required": true,
+        "qualityCriteria": [
+          "Three widths remain stable under rotation and do not outline particles or transparent effects."
+        ],
+        "evidenceRefs": [
+          "three-quarter-view"
+        ],
+        "failureModes": [
+          "uniform outline",
+          "temporal shimmer",
+          "black clumps"
+        ]
+      }
+    ],
+    "visualDeltaChecks": [
+      "full-tree bounds delta",
+      "handle negative-space delta",
+      "fascia depth and grille density delta",
+      "front/rear anchor projection delta",
+      "outline tier stability delta",
+      "startup/climax/wind-down contact delta"
+    ],
+    "antiShallowSpecRules": [
+      "Do not proceed to code if qualityContract.qualityBar is unassessed.",
+      "Do not proceed to code if the spec only contains a root component for a moderate or complex object.",
+      "Do not proceed to code if required featureGroups are not represented by componentTree, materials, or repetitionSystems.",
+      "Do not proceed to code if visible local features are described only in prose and not attached to components/materials/evidenceRefs.",
+      "Do not proceed past structural-pass if attached child parts lack attachment.parentSocket, localStart, localEnd, embedDepth/overlap, and gapTolerance.",
+      "Do not pass material look-dev when albedo is reused as roughness, height, normal, or AO.",
+      "Do not pass material look-dev without macro, meso, and micro surface frequency bands for close-up materials.",
+      "Do not pass reference-fidelity material look-dev from a source image without usable referencePbr maps or an explicit documented limitation.",
+      "Do not patch a spec with extracted PBR maps when extraction confidence is below the target threshold unless the user explicitly accepts lower fidelity.",
+      "Do not place adjacent separate-geometry parts below 0.02 world-unit seam overlap (source: grimoire/build/geometry_patterns.md).",
+      "Do not satisfy raised or recessed relief, fasteners, or grip structure with a map alone when the feature affects form; use geometry or displacement (source: grimoire/build/geometry_patterns.md)."
+    ]
+  },
+  "authoringInstruction": "Fill observed object class, complexity reasoning, featureGroups, visualDeltaChecks, and unknowns before generating or implementing ObjectSculptSpec.",
+  "localSpecSearch": {
+    "collection": "core_3d",
+    "query": "SAKURA Portable Speaker v2",
+    "index": {
+      "status": "hit",
+      "reason": "current",
+      "fingerprint": "6857e5ab528b42ac12f4f411f862610a0bffce8e47aee3610a7603c318072fe8"
+    },
+    "matches": []
+  }
+}

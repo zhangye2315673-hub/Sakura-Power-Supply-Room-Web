@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="zh-CN" class="opening-active">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#d4e8fa" />
+    <script>
+      (() => {
+        const params = new URLSearchParams(location.search);
+        const internal = params.has('showcase');
+        const query = params.get('theme');
+        let mode = query === 'night' || query === 'day' ? query : 'day';
+        if (!internal && query !== 'night' && query !== 'day') {
+          try {
+            const saved = localStorage.getItem('sakura.theme');
+            if (saved === 'night' || saved === 'day') mode = saved;
+          } catch {}
+        }
+        const color = mode === 'night' ? '#11152c' : '#d4e8fa';
+        document.documentElement.dataset.theme = mode;
+        document.documentElement.style.setProperty('--page-background', color);
+        document.querySelector('meta[name="theme-color"]')?.setAttribute('content', color);
+      })();
+    </script>
+    <style>
+      html, body { margin: 0; background: var(--page-background, #d4e8fa); overflow: hidden; }
+      #app { opacity: 0; }
+      #complete-panel[aria-hidden="true"] { opacity: 0 !important; visibility: hidden !important; pointer-events: none; }
+      html.app-ready #app { opacity: 1; transition: opacity 140ms ease-out; }
+    </style>
+    <meta
+      name="description"
+      content="整理缠绕的彩色插头电线精灵，让周围的家电依次恢复供电。"
+    />
+    <title>Plug Cable Spirits · 樱色插线室</title>
+  </head>
+  <body>
+    <main id="app">
+      <div id="scene-transition-curtain" aria-hidden="true"></div>
+      <canvas id="game-canvas" aria-label="可旋转的三维彩色电线解谜"></canvas>
+
+      <section id="start-screen" aria-hidden="false" aria-labelledby="start-screen-title">
+        <div class="start-screen-wash" aria-hidden="true"></div>
+        <div class="start-screen-copy">
+          <span class="start-screen-kicker">SAKURA HOME CIRCUIT · 01</span>
+          <h1 id="start-screen-title">
+            <small>Plug Cable Spirits</small>
+            樱色插线室
+          </h1>
+          <p>整理紧密盘绕的插头线，让安静的家电重新亮起来。</p>
+          <div class="start-mode-actions">
+            <button id="start-game-button" type="button" disabled>线路准备中…</button>
+            <div class="challenge-mode-wrap">
+              <button
+                id="challenge-mode-button"
+                type="button"
+                aria-expanded="false"
+                aria-controls="challenge-mode-menu"
+                disabled
+              >挑战模式</button>
+              <div id="challenge-mode-menu" role="menu" aria-hidden="true">
+                <button id="start-random-button" type="button" role="menuitem" disabled>随机挑战</button>
+                <button id="start-rush-button" type="button" role="menuitem" disabled>RUSH挑战</button>
+                <button id="start-double-ended-button" type="button" role="menuitem" disabled>双头挑战</button>
+                <button id="start-skill-button" type="button" role="menuitem" disabled>技能挑战</button>
+              </div>
+            </div>
+          </div>
+          <div class="start-loading-copy">
+            <span id="start-loading-status">正在唤醒樱色线路</span>
+            <strong id="start-loading-percent">3%</strong>
+          </div>
+          <div
+            class="start-progress"
+            role="progressbar"
+            aria-label="第一关预加载进度"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-valuenow="3"
+          >
+            <i></i>
+          </div>
+        </div>
+        <div class="start-screen-object-note" aria-hidden="true">
+          <span id="start-object-state">PREPARING</span>
+          <b>开放式插头线束</b>
+          <i></i>
+        </div>
+        <footer class="start-screen-footer">
+          <span>拖动旋转 · 滚轮缩放 · 点击理线</span>
+          <span>第一关 · 四种挑战模式</span>
+        </footer>
+      </section>
+
+      <section id="hud" aria-live="polite">
+        <div class="brand-block">
+          <span class="brand-kicker">Sakura home circuit</span>
+          <strong>Plug <i>Spirits</i></strong>
+          <small>樱色插线室</small>
+        </div>
+
+        <div class="progress-cluster">
+          <div class="progress-copy">
+            <span>Remaining</span>
+            <strong><b id="remaining-value">0</b><em>/</em><b id="total-value">0</b></strong>
+          </div>
+          <div class="progress-track" aria-hidden="true">
+            <i id="progress-fill"></i>
+          </div>
+        </div>
+
+        <div id="status-line">寻找出口畅通的插头精灵</div>
+      </section>
+
+      <div id="play-tools">
+        <div id="skill-status-rack" aria-label="技能挑战状态">
+          <div id="skill-buff-slot" class="skill-status-slot" data-status="empty">
+            <span class="skill-status-glyph"><i class="skill-status-mark"></i></span>
+            <strong class="skill-status-count"></strong>
+            <span class="skill-status-tooltip" role="tooltip">
+              <b class="skill-status-name">BUFF</b>
+              <small class="skill-status-detail"></small>
+            </span>
+          </div>
+          <div id="skill-debuff-slot" class="skill-status-slot" data-status="empty">
+            <span class="skill-status-glyph"><i class="skill-status-mark"></i></span>
+            <strong class="skill-status-count"></strong>
+            <span class="skill-status-tooltip" role="tooltip">
+              <b class="skill-status-name">DEBUFF</b>
+              <small class="skill-status-detail"></small>
+            </span>
+          </div>
+          <div id="skill-printer-pending" aria-hidden="true">
+            <span><i>▤</i></span><b>×1</b><small>打印机：下一次正确抽线后自动再抽一根</small>
+          </div>
+        </div>
+        <section id="rush-timer" aria-hidden="true" aria-live="polite">
+          <span id="rush-timer-state">准备倒计时</span>
+          <strong id="rush-timer-value">00:00</strong>
+        </section>
+        <section id="random-lives" aria-label="随机挑战生命值" aria-hidden="true">
+          <span class="life-label">LIVES</span>
+          <div aria-hidden="true"><i>♥</i><i>♥</i><i>♥</i></div>
+        </section>
+
+        <button id="hint-button" type="button" aria-label="提示一个可拔出的插头" disabled>
+          <span class="life-label">提示</span>
+          <div class="hint-icons" aria-hidden="true"><i>!</i><i>!</i><i>!</i></div>
+        </button>
+      </div>
+
+      <section id="skill-challenge-ui" aria-hidden="true">
+        <div id="skill-cue" aria-live="polite" aria-hidden="true" tabindex="0">
+          <span id="skill-cue-source">家电连接完成</span>
+          <strong id="skill-cue-title">技能触发</strong>
+          <small id="skill-cue-detail"></small>
+          <i id="skill-cue-phase">技能发动</i>
+        </div>
+
+        <div id="skill-screen-effect" data-effect="none" aria-hidden="true"></div>
+
+        <section id="skill-card-panel" aria-hidden="true" aria-label="扭蛋三选一">
+          <div id="skill-card-list"></div>
+        </section>
+
+        <div id="skill-recycle-prompt" aria-hidden="true">
+          <span>SMART RECYCLE</span>
+          <strong>选择任意一根线回收</strong>
+        </div>
+      </section>
+
+      <div id="rush-edge-alert" aria-hidden="true"></div>
+
+      <section id="rush-briefing-panel" class="rush-panel" aria-hidden="true" aria-labelledby="rush-briefing-title">
+        <div class="rush-card">
+          <span>FIXED CABLE SPEED TRIAL</span>
+          <b>RUSH</b>
+          <h1 id="rush-briefing-title">速度挑战</h1>
+          <div class="rush-briefing-meta">
+            <strong id="rush-briefing-time">固定倒计时</strong>
+            <em id="rush-briefing-difficulty">难度</em>
+          </div>
+          <p id="rush-briefing-goal">在倒计时结束前清空中央线束。</p>
+          <small>整局共用一次倒计时 · 接错不额外扣时 · 无生命值</small>
+          <div class="rush-card-actions">
+            <button id="rush-start-button" type="button">开始挑战</button>
+            <button id="rush-briefing-home-button" type="button">回到主界面</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="rush-result-panel" class="rush-panel" aria-hidden="true" aria-labelledby="rush-result-title">
+        <div class="rush-card rush-result-card">
+          <span id="rush-result-eyebrow">RUSH CLEARED</span>
+          <h1 id="rush-result-title">挑战成功</h1>
+          <p id="rush-result-description">中央线束已经全部清空。</p>
+          <div class="rush-card-actions">
+            <button id="rush-next-button" type="button">下一轮随机挑战</button>
+            <button id="rush-retry-button" type="button" hidden>重新开始</button>
+            <button id="rush-result-home-button" type="button">回到主界面</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="double-ended-briefing-panel" class="rush-panel double-ended-panel" aria-hidden="true" aria-labelledby="double-ended-briefing-title">
+        <div class="rush-card double-ended-card">
+          <span id="double-ended-briefing-eyebrow">DOUBLE-ENDED CABLE RULE</span>
+          <b>2×</b>
+          <h1 id="double-ended-briefing-title">双插头挑战</h1>
+          <div class="double-ended-rule-visual" aria-hidden="true">
+            <i class="double-ended-plug left"></i>
+            <span><em></em><em></em><em></em></span>
+            <i class="double-ended-plug right"></i>
+          </div>
+          <p id="double-ended-briefing-rule">每条线的两端都是插头。观察两端，找到没有被其他线路挡住的一端。</p>
+          <small id="double-ended-briefing-hint">出口不会被标记；拖动旋转线束，从两端自行寻找。点击被挡端会失去一颗心。</small>
+          <div class="rush-card-actions">
+            <button id="double-ended-start-button" type="button">开始双插头挑战</button>
+            <button id="double-ended-home-button" type="button">回到主界面</button>
+          </div>
+        </div>
+      </section>
+
+      <nav id="game-actions" aria-label="关卡操作">
+        <button id="home-button" type="button">主界面</button>
+        <button id="language-button" type="button" aria-label="切换到英文">EN</button>
+        <span id="seed-label">SEED —</span>
+        <button id="appliance-gallery-button" type="button">家电图鉴</button>
+        <button id="reset-button" type="button">重置</button>
+        <button id="new-button" type="button">随机挑战</button>
+      </nav>
+
+      <div id="toast" role="status"></div>
+
+      <section id="puzzle-loader" aria-hidden="true" aria-live="polite">
+        <div class="puzzle-loader-copy">
+          <span>NEW CIRCUIT</span>
+          <strong id="puzzle-loader-label">正在编织随机线路</strong>
+        </div>
+        <div class="plug-loader" role="progressbar" aria-label="关卡生成进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+          <div class="plug-loader-rail">
+            <i class="plug-loader-cable"></i>
+            <i class="plug-loader-head"><b></b><b></b></i>
+            <i class="plug-loader-socket"><b></b><b></b></i>
+          </div>
+          <span id="puzzle-loader-percent">0%</span>
+        </div>
+      </section>
+
+      <aside id="help-strip">
+        <span><b>拖动</b> 旋转观察</span>
+        <span><b>滚轮</b> 缩放</span>
+        <span><b>点击</b> 理顺接线</span>
+      </aside>
+
+      <section id="game-over-panel" aria-hidden="true">
+        <div class="complete-card game-over-card">
+          <span>CIRCUIT OVERLOAD</span>
+          <h1>线路断电</h1>
+          <p>三次错误已经用完，重新观察遮挡关系再挑战一次。</p>
+          <div class="game-over-actions">
+            <button id="retry-random-button" type="button">重新挑战</button>
+            <button id="game-over-new-button" type="button">生成新线路</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="complete-panel" aria-hidden="true">
+        <div class="complete-card">
+          <span>Home circuit restored</span>
+          <h1>全屋通电</h1>
+          <p>所有插头精灵都找到了自己的家电。</p>
+          <button id="continue-button" type="button">编织新的彩线 <i>→</i></button>
+        </div>
+      </section>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

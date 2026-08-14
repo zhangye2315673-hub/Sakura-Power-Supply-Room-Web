@@ -1,0 +1,5829 @@
+{
+  "targetName": "SAKURA Stand Mixer",
+  "targetId": "stand-mixer",
+  "schemaVersion": "2.1",
+  "terminologyProfile": {
+    "domain": "real-time procedural Three.js appliance",
+    "geometryTerms": [
+      "silhouette",
+      "topology",
+      "bevel",
+      "pivot",
+      "socket",
+      "instancing"
+    ],
+    "materialTerms": [
+      "albedo",
+      "roughness",
+      "normal map",
+      "ambient occlusion",
+      "clearcoat",
+      "transmission"
+    ],
+    "lightingTerms": [
+      "key light",
+      "fill light",
+      "rim light",
+      "contact shadow",
+      "exposure"
+    ],
+    "descriptionRule": "Use measurable 3D object-space terms and evidence refs."
+  },
+  "sourceImage": "references/intake/stand-mixer/front.png",
+  "referenceCamera": {
+    "solved": false,
+    "fovDegrees": 36,
+    "aspect": 0.59192348565356,
+    "orientation": {
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0
+    },
+    "positionHint": [
+      0,
+      0,
+      4
+    ],
+    "note": "Three orthographic-like views constrain the exterior; hidden drive, bowl lock and hinge internals remain inferred."
+  },
+  "suitability": "pass",
+  "scores": {
+    "object_isolation": 3,
+    "silhouette_readability": 3,
+    "depth_inference": 3,
+    "primitive_decomposition": 3,
+    "material_procedurality": 3,
+    "occlusion_risk": 2,
+    "interaction_fit": 3
+  },
+  "preSpecAssessment": {
+    "objectClass": {
+      "primaryType": "tilt-head countertop stand mixer",
+      "primaryDomain": "object",
+      "formLanguage": [
+        "hard-surface",
+        "rounded-retro",
+        "layered-shell",
+        "mechanical"
+      ],
+      "structureKind": [
+        "compound object",
+        "articulated head",
+        "rotating tool",
+        "repeated wire and vent modules"
+      ],
+      "motionPotential": [
+        "tilt head",
+        "planetary rotation",
+        "control turn",
+        "lever actuation",
+        "material-state"
+      ],
+      "materialFamilies": [
+        "gloss-painted housing",
+        "ceramic-like bowl",
+        "painted metal",
+        "brushed steel",
+        "rubber"
+      ],
+      "notes": "Front, side and back establish all exterior masses and controls. Motor, gears, bowl lock and underside cable routing are inferred."
+    },
+    "complexity": {
+      "tier": "complex",
+      "scores": {
+        "silhouetteComplexity": 3,
+        "componentCount": 3,
+        "hierarchyDepth": 3,
+        "repetitionDensity": 3,
+        "materialLayerCount": 3,
+        "localDetailDensity": 3,
+        "occlusionRisk": 2,
+        "actionReadinessNeed": 3
+      },
+      "estimatedCounts": {
+        "macroComponents": 5,
+        "mesoComponents": 17,
+        "microFeatureGroups": 12,
+        "materialLayers": 7,
+        "repetitionSystems": 4
+      },
+      "reasoning": [
+        "Long rounded motor head, arched column, deep handled bowl, articulated tool train, controls and repeated whisk/vent structures require a complex hierarchy."
+      ]
+    },
+    "specDepthDecision": {
+      "requiredDepth": "complex",
+      "minimumComponentLevels": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "needsRepetitionSystems": true,
+      "needsMaterialLocalOverrides": true,
+      "needsMultipleReviewViews": true,
+      "needsActionReadyHierarchy": true,
+      "rationale": "Compound articulated assembly with radial repetition and mixed transparency."
+    },
+    "unknownsToResolveBeforeImplementation": [],
+    "detailInventory": {
+      "scanMethod": "three-view component-zones",
+      "targetMinDetails": 14,
+      "note": "Each observed or inferred identity detail maps to a named component feature.",
+      "details": [
+        {
+          "id": "stand-mixer-detail-1",
+          "kind": "contour",
+          "description": "Long cream motor head with domed nose and rounded rear cap.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "motor-head-shell"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.96
+        },
+        {
+          "id": "stand-mixer-detail-2",
+          "kind": "seam",
+          "description": "Continuous Sakura-pink horizontal band around the lower head.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "head-seam-band"
+          },
+          "evidenceRef": "side-view",
+          "confidence": 0.95
+        },
+        {
+          "id": "stand-mixer-detail-3",
+          "kind": "groove",
+          "description": "Layered circular pink speed dial on the front face.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "speed-dial"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.95
+        },
+        {
+          "id": "stand-mixer-detail-4",
+          "kind": "ridge",
+          "description": "Small stepped release lever below the left side of the head.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "head-release-lever"
+          },
+          "evidenceRef": "side-view",
+          "confidence": 0.88
+        },
+        {
+          "id": "stand-mixer-detail-5",
+          "kind": "contour",
+          "description": "Tapered pink rear column with a deep bowl clearance arch.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "rear-column"
+          },
+          "evidenceRef": "side-view",
+          "confidence": 0.96
+        },
+        {
+          "id": "stand-mixer-detail-6",
+          "kind": "fastener",
+          "description": "Large concentric pink side hinge disc connecting head and column.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "column-hinge-pivot"
+          },
+          "evidenceRef": "side-view",
+          "confidence": 0.93
+        },
+        {
+          "id": "stand-mixer-detail-7",
+          "kind": "bevel",
+          "description": "Cream stepped drive collar beneath the head.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "planetary-hub"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.96
+        },
+        {
+          "id": "stand-mixer-detail-8",
+          "kind": "ridge",
+          "description": "Six bowed metal whisk wires converge at a lower ring.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "whisk-wire-array"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.94
+        },
+        {
+          "id": "stand-mixer-detail-9",
+          "kind": "contour",
+          "description": "Deep cream bowl with flared rolled rim and rounded base.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "mixing-bowl"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.96
+        },
+        {
+          "id": "stand-mixer-detail-10",
+          "kind": "contour",
+          "description": "Thick cream U-shaped handle attached to the bowl side.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "bowl-handle"
+          },
+          "evidenceRef": "side-view",
+          "confidence": 0.92
+        },
+        {
+          "id": "stand-mixer-detail-11",
+          "kind": "seam",
+          "description": "Raised Sakura-pink circular bowl-lock pedestal.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "bowl-seat"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.94
+        },
+        {
+          "id": "stand-mixer-detail-12",
+          "kind": "bevel",
+          "description": "Wide pink plinth with softened corners and lower step.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "base-shell"
+          },
+          "evidenceRef": "side-view",
+          "confidence": 0.97
+        },
+        {
+          "id": "stand-mixer-detail-13",
+          "kind": "groove",
+          "description": "Concentric cream-and-pink lower column control dial.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "lower-control-dial"
+          },
+          "evidenceRef": "side-view",
+          "confidence": 0.9
+        },
+        {
+          "id": "stand-mixer-detail-14",
+          "kind": "hole",
+          "description": "Eight narrow vertical ventilation slots in an arched rear recess.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "rear-vent-slot-array"
+          },
+          "evidenceRef": "back-view",
+          "confidence": 0.96
+        },
+        {
+          "id": "stand-mixer-detail-15",
+          "kind": "fastener",
+          "description": "Four shallow rubber feet under the plinth.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "foot-array"
+          },
+          "evidenceRef": "side-view",
+          "confidence": 0.82
+        },
+        {
+          "id": "stand-mixer-detail-16",
+          "kind": "hole",
+          "description": "Rear lower power cable connection socket.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "power-socket"
+          },
+          "evidenceRef": "back-view",
+          "confidence": 0.55
+        }
+      ]
+    },
+    "sourceImage": "references/intake/stand-mixer/front.png"
+  },
+  "qualityContract": {
+    "qualityBar": "complex",
+    "definitionOfDone": [
+      "The stand mixer matches the turn-sheet silhouette, head-to-column-to-bowl proportions, repeated whisk and rear vent structures, pastel material separation, and clearly communicates mixing during the 5.2 second powered cue."
+    ],
+    "minimumSpecDepth": {
+      "macroComponents": 5,
+      "mesoComponents": 12,
+      "microFeatureGroups": 8,
+      "materialLayers": 7,
+      "repetitionSystems": 5,
+      "reviewViewpoints": 5
+    },
+    "featureGroups": [
+      {
+        "id": "shell",
+        "name": "Rounded shell proportion",
+        "required": true,
+        "qualityCriteria": [
+          "Height/width 1.12 and depth/width 0.72 with broad corner radii."
+        ],
+        "evidenceRefs": [
+          "front",
+          "side"
+        ],
+        "failureModes": [
+          "boxy silhouette"
+        ]
+      },
+      {
+        "id": "wheel",
+        "name": "Eight-ring bubble wheel",
+        "required": true,
+        "qualityCriteria": [
+          "Exactly eight rings and eight spokes rotate around a centered front axis."
+        ],
+        "evidenceRefs": [
+          "front"
+        ],
+        "failureModes": [
+          "wrong count or fused parts"
+        ]
+      },
+      {
+        "id": "reservoir",
+        "name": "Side liquid reservoir",
+        "required": true,
+        "qualityCriteria": [
+          "Translucent right-rear tank remains attached from side and back."
+        ],
+        "evidenceRefs": [
+          "side",
+          "back"
+        ],
+        "failureModes": [
+          "floating or opaque tank"
+        ]
+      },
+      {
+        "id": "rear-fan",
+        "name": "Rear fan and grille",
+        "required": true,
+        "qualityCriteria": [
+          "Rotor is visible behind concentric grille geometry and four fasteners."
+        ],
+        "evidenceRefs": [
+          "back"
+        ],
+        "failureModes": [
+          "flat decal grille"
+        ]
+      },
+      {
+        "id": "powered-action",
+        "name": "Powered purpose animation",
+        "required": true,
+        "qualityCriteria": [
+          "Control, wheel and fan rotate while bubbles rise and spread, then exact reset at 5.2 seconds."
+        ],
+        "evidenceRefs": [
+          "turn-sheet-left-effect"
+        ],
+        "failureModes": [
+          "generic wobble or no bubbles"
+        ]
+      }
+    ],
+    "visualDeltaChecks": [
+      "silhouette",
+      "depth ratio",
+      "eight-ring count",
+      "material separation",
+      "powered bubbles"
+    ],
+    "antiShallowSpecRules": [
+      "No fused compound mesh.",
+      "No flat texture replacement for wheel or grille.",
+      "No pass without browser evidence."
+    ]
+  },
+  "qualityTargets": {
+    "fidelity": "high real-time procedural match",
+    "minimumReadDistance": "gallery orbit",
+    "identityCritical": [
+      "eight-ring wheel",
+      "side tank",
+      "rear grille",
+      "cream-pink palette"
+    ],
+    "reviewViewpoints": [
+      "front",
+      "side",
+      "back",
+      "three-quarter",
+      "powered"
+    ],
+    "mustMatch": [
+      "long rounded cream motor head and pink waist seam",
+      "arched rear column and side hinge",
+      "deep handled bowl on raised pink seat",
+      "stepped planetary hub and six-wire balloon whisk",
+      "front and lower controls plus eight rear vents",
+      "reference-derived material response"
+    ]
+  },
+  "selfCorrectLoop": {
+    "enabled": true,
+    "visualAcceptance": {
+      "reviewer": "ai-vision",
+      "threshold": 0.7,
+      "comparisonArtifactRequired": true,
+      "layerScoresRequired": true,
+      "codePixelDiffIsAcceptanceAuthority": false,
+      "requiredLayerScores": [
+        "silhouetteProportion",
+        "componentStructure",
+        "formDetail",
+        "materialSurface",
+        "lightingCamera"
+      ],
+      "featureReviewPolicy": {
+        "enabled": true,
+        "reviewUnit": "semantic-subsystem",
+        "maxCriticalFeaturesPerPass": 5,
+        "maxImportantFeaturesPerPass": 3,
+        "criticalDefaultThreshold": 0.8,
+        "importantAverageThreshold": 0.65,
+        "adaptiveEscalation": true,
+        "singleImagePairOnly": true
+      }
+    },
+    "reviewAfterPasses": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "allowedActions": [
+      "continue",
+      "refine-spec",
+      "refine-code",
+      "request-input",
+      "stop"
+    ],
+    "screenshotPolicy": {
+      "requiredForPasses": [
+        "blockout",
+        "structural-pass",
+        "form-refinement",
+        "material-pass",
+        "lighting-pass",
+        "interaction-pass"
+      ],
+      "preferredCapture": "model-review.html",
+      "minimumEvidence": "render screenshot, side-by-side comparison, AI vision score and feature scores"
+    }
+  },
+  "featureReviewTargets": [
+    {
+      "id": "mixer-silhouette",
+      "name": "Head column bowl and base silhouette",
+      "tier": "critical",
+      "passIds": [
+        "blockout",
+        "form-refinement"
+      ],
+      "minimumScore": 0.8,
+      "mustPass": true,
+      "componentRefs": [
+        "motor-head-shell",
+        "rear-column",
+        "mixing-bowl",
+        "base-shell"
+      ],
+      "evidenceRefs": [
+        "front-view",
+        "side-view"
+      ]
+    },
+    {
+      "id": "planetary-whisk",
+      "name": "Stepped drive and six-wire whisk",
+      "tier": "critical",
+      "passIds": [
+        "structural-pass",
+        "interaction-pass"
+      ],
+      "minimumScore": 0.8,
+      "mustPass": true,
+      "componentRefs": [
+        "planetary-hub",
+        "beater-pivot",
+        "whisk-wire-array"
+      ],
+      "evidenceRefs": [
+        "front-view",
+        "side-view"
+      ]
+    },
+    {
+      "id": "bowl-seat-handle",
+      "name": "Deep bowl, rolled rim, handle and seat",
+      "tier": "critical",
+      "passIds": [
+        "structural-pass",
+        "form-refinement"
+      ],
+      "minimumScore": 0.78,
+      "mustPass": true,
+      "componentRefs": [
+        "mixing-bowl",
+        "bowl-rim",
+        "bowl-handle",
+        "bowl-seat"
+      ],
+      "evidenceRefs": [
+        "front-view",
+        "side-view"
+      ]
+    },
+    {
+      "id": "controls-hinge",
+      "name": "Front dial, release lever, side hinge and lower dial",
+      "tier": "important",
+      "passIds": [
+        "structural-pass",
+        "form-refinement"
+      ],
+      "minimumScore": 0.72,
+      "mustPass": false,
+      "componentRefs": [
+        "speed-dial",
+        "head-release-lever",
+        "column-hinge-pivot",
+        "lower-control-dial"
+      ],
+      "evidenceRefs": [
+        "front-view",
+        "side-view"
+      ]
+    },
+    {
+      "id": "rear-vents",
+      "name": "Arched eight-slot rear vent",
+      "tier": "important",
+      "passIds": [
+        "structural-pass",
+        "form-refinement"
+      ],
+      "minimumScore": 0.72,
+      "mustPass": false,
+      "componentRefs": [
+        "rear-vent-panel",
+        "rear-vent-slot-array"
+      ],
+      "evidenceRefs": [
+        "back-view"
+      ]
+    },
+    {
+      "id": "mixing-action",
+      "name": "Tilt, lever, whisk and visible mixture action",
+      "tier": "critical",
+      "passIds": [
+        "interaction-pass"
+      ],
+      "minimumScore": 0.8,
+      "mustPass": true,
+      "componentRefs": [
+        "motor-head-pivot",
+        "beater-pivot",
+        "whisk-wire-array",
+        "mixing-bowl"
+      ],
+      "evidenceRefs": [
+        "front-view",
+        "side-view"
+      ]
+    }
+  ],
+  "sculptPipeline": {
+    "passGateMode": "locked-sequential",
+    "passOrder": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "currentPass": "complete",
+    "completedPasses": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "lastCompletedPass": "optimization-pass",
+    "blockedReason": "all build passes completed",
+    "nextRequiredEvidence": []
+  },
+  "lookDevTargets": {
+    "qualityPriority": "reference-fidelity",
+    "materialPass": {
+      "minimumTextureResolution": 1024,
+      "independentMapChannels": [
+        "albedo",
+        "roughness",
+        "height",
+        "normal",
+        "ambient-occlusion"
+      ],
+      "referencePbrExtraction": {
+        "requiredWhenSourceImagePresent": true,
+        "targetThreshold": 0.7,
+        "stopOnLowConfidence": true
+      }
+    },
+    "lightingPass": {
+      "requiredTerms": [
+        "key light",
+        "fill light",
+        "rim light",
+        "exposure",
+        "tone mapping",
+        "contact shadow"
+      ]
+    }
+  },
+  "actionReadiness": {
+    "contract": "Named pivots, sockets, colliders and resettable powered transforms.",
+    "defaultRigType": "action-ready-appliance-rig",
+    "rootMotionNode": "root"
+  },
+  "assumptions": [
+    "Motor, reduction gears and internal planetary train are hidden and omitted.",
+    "Bowl seat locking tabs and underside cable routing are not visible.",
+    "The exact hinge stop and head tilt angle are inferred from typical use.",
+    "The small rear lower power connection is inferred because the cable and underside are occluded."
+  ],
+  "coordinateFrame": {
+    "front": "+Z faces the bowl and front speed dial",
+    "up": "+Y with floor at y=0",
+    "scaleReference": "base width = 3.35 world units; total height = 4.35 world units"
+  },
+  "silhouette": {
+    "boundingShape": "wide stepped base supporting a deep bowl below a long pill-shaped motor head joined by an arched rear column",
+    "aspectRatios": [
+      "overall width:height:depth = 3.35:4.35:2.55",
+      "head width:height:depth = 2.95:1.08:1.52",
+      "bowl width:height = 2.42:1.58"
+    ],
+    "symmetry": "front is mostly bilateral; side view is strongly rear-weighted by column and forward-projecting head",
+    "dominantCurves": [
+      "domed head nose",
+      "deep bowl spline",
+      "column clearance arch",
+      "balloon whisk wire arcs"
+    ],
+    "negativeSpaces": [
+      "open gap below head around whisk",
+      "arched clearance between bowl and rear column",
+      "bowl handle opening"
+    ],
+    "landmarks": [
+      "pink head seam",
+      "layered front dial",
+      "large side hinge disc",
+      "six-wire whisk",
+      "eight rear vents"
+    ]
+  },
+  "viewEvidence": [
+    {
+      "id": "front-view",
+      "view": "front",
+      "imagePath": "references/intake/stand-mixer/front.png",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "head face dial and seam",
+        "whisk centered over bowl",
+        "wide stepped base"
+      ],
+      "confidence": 0.97
+    },
+    {
+      "id": "side-view",
+      "view": "side",
+      "imagePath": "references/intake/stand-mixer/side.png",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "long motor head depth",
+        "large side hinge and release lever",
+        "bowl handle and lower control"
+      ],
+      "confidence": 0.96
+    },
+    {
+      "id": "back-view",
+      "view": "back",
+      "imagePath": "references/intake/stand-mixer/back.png",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "tapered rear column",
+        "arched eight-slot vent recess",
+        "symmetric side hinge caps"
+      ],
+      "confidence": 0.95
+    }
+  ],
+  "componentTree": [
+    {
+      "id": "root",
+      "name": "Stand Mixer Root",
+      "level": "macro",
+      "role": "container",
+      "importance": 1,
+      "confidence": 1,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Runtime container for the complete appliance hierarchy.",
+      "parent": null,
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-shell",
+      "materialLayers": [
+        "pink-shell"
+      ],
+      "localFeatures": [
+        "root.silhouette",
+        "root.bevel",
+        "root.material-zone"
+      ],
+      "actionProfile": {
+        "animationRole": "root",
+        "pivot": {
+          "mode": "base",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 1
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(248,233,213,1)",
+        "secondaryAlbedo": "rgba(243,194,181,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.98
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "root.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "root.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "root.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "geometryDescriptor": {
+        "topologyIntent": "assembled tilt-head mixer with independent shells, bowl and rotating tool",
+        "edgeTreatment": {
+          "type": "rounded bevel",
+          "bevelRadius": 0.12,
+          "segments": 4
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals"
+      },
+      "dimensions": {
+        "width": 3.35,
+        "height": 4.35,
+        "depth": 2.55,
+        "units": "world",
+        "confidence": 0.94
+      }
+    },
+    {
+      "id": "base-shell",
+      "name": "Stepped Base Shell",
+      "level": "macro",
+      "role": "part",
+      "importance": 1,
+      "confidence": 0.99,
+      "primitive": "extrude",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rounded rigid molded enclosure with a constant broad footprint and visible panel seam.",
+      "parent": "root",
+      "transform": {
+        "position": [
+          0,
+          1.12,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-shell",
+      "materialLayers": [
+        "pink-shell"
+      ],
+      "localFeatures": [
+        "base-shell.silhouette",
+        "base-shell.bevel",
+        "base-shell.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(248,233,213,1)",
+        "secondaryAlbedo": "rgba(245,225,206,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.99
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "base-shell.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "base-shell.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "base-shell.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "root",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "rear-column",
+      "name": "Tapered Rear Column",
+      "level": "macro",
+      "role": "part",
+      "importance": 1,
+      "confidence": 0.99,
+      "primitive": "ellipsoid",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Discrete circular front assembly proud of the housing.",
+      "parent": "base-shell",
+      "transform": {
+        "position": [
+          0,
+          0.28,
+          0.82
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-shell",
+      "materialLayers": [
+        "pink-shell"
+      ],
+      "localFeatures": [
+        "rear-column.silhouette",
+        "rear-column.bevel",
+        "rear-column.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(102,80,70,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.98
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "rear-column.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "rear-column.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "rear-column.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "base-shell",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "motor-head-pivot",
+      "name": "Tilt Head Pivot",
+      "level": "macro",
+      "role": "part",
+      "importance": 0.9,
+      "confidence": 0.94,
+      "primitive": "extrude",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Independent rounded rectangular translucent tank attached to the right-rear housing.",
+      "parent": "base-shell",
+      "transform": {
+        "position": [
+          0.92,
+          0.1,
+          -0.28
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-shell",
+      "materialLayers": [
+        "pink-shell"
+      ],
+      "localFeatures": [
+        "motor-head-pivot.silhouette",
+        "motor-head-pivot.bevel",
+        "motor-head-pivot.material-zone"
+      ],
+      "actionProfile": {
+        "animationRole": "static-part",
+        "sockets": [
+          {
+            "id": "reservoir-fluid-outlet",
+            "localPosition": [
+              -0.2,
+              -0.52,
+              0
+            ]
+          }
+        ]
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(235,189,177,0.68)",
+        "secondaryAlbedo": "rgba(248,233,213,0.42)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.92
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "motor-head-pivot.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "motor-head-pivot.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "motor-head-pivot.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "base-shell",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "motor-head-shell",
+      "name": "Rounded Motor Head",
+      "level": "macro",
+      "role": "part",
+      "importance": 0.95,
+      "confidence": 0.99,
+      "primitive": "ellipsoid",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Discrete circular rear ventilation and fan assembly inset into the back panel.",
+      "parent": "base-shell",
+      "transform": {
+        "position": [
+          0,
+          0.18,
+          -0.82
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "localFeatures": [
+        "motor-head-shell.silhouette",
+        "motor-head-shell.bevel",
+        "motor-head-shell.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(70,57,49,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.98
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "motor-head-shell.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "motor-head-shell.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "motor-head-shell.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "base-shell",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "head-seam-band",
+      "name": "Pink Head Seam Band",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.95,
+      "confidence": 0.99,
+      "primitive": "torus",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Thick rigid circular trim ring with a rounded cross section.",
+      "parent": "rear-column",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0.03
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-accent",
+      "materialLayers": [
+        "pink-accent"
+      ],
+      "localFeatures": [
+        "head-seam-band.silhouette",
+        "head-seam-band.bevel",
+        "head-seam-band.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(215,181,170,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.99
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "head-seam-band.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "head-seam-band.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "head-seam-band.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "rear-column",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "planetary-hub",
+      "name": "Planetary Drive Hub",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.9,
+      "confidence": 0.96,
+      "primitive": "ellipsoid",
+      "topologyClass": "conforming-shell",
+      "topologyRationale": "Thin transparent cover follows the circular working cavity.",
+      "parent": "rear-column",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0.04
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "localFeatures": [
+        "planetary-hub.silhouette",
+        "planetary-hub.bevel",
+        "planetary-hub.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(102,80,70,0.36)",
+        "secondaryAlbedo": "rgba(215,181,170,0.18)",
+        "materialClass": "glass",
+        "materialClassConfidence": 0.9
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "planetary-hub.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "planetary-hub.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "planetary-hub.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "rear-column",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "beater-pivot",
+      "name": "Beater Spin Pivot",
+      "level": "meso",
+      "role": "part",
+      "importance": 1,
+      "confidence": 0.99,
+      "primitive": "ellipsoid",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rigid radial wheel rotates as one assembly around the front axis.",
+      "parent": "rear-column",
+      "transform": {
+        "position": [
+          0,
+          0,
+          -0.03
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "steel-wire",
+      "materialLayers": [
+        "steel-wire"
+      ],
+      "localFeatures": [
+        "beater-pivot.silhouette",
+        "beater-pivot.bevel",
+        "beater-pivot.material-zone"
+      ],
+      "actionProfile": {
+        "animationRole": "rotor",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            0,
+            1
+          ],
+          "confidence": 0.99
+        },
+        "sockets": [
+          {
+            "id": "bubble-emitter",
+            "localPosition": [
+              -0.68,
+              0.05,
+              0.12
+            ]
+          }
+        ]
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(215,181,170,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.99
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "beater-pivot.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "beater-pivot.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "beater-pivot.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "rear-column",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "beater-collar",
+      "name": "Stepped Beater Collar",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.85,
+      "confidence": 0.99,
+      "primitive": "ellipsoid",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Concentric rigid hub cap on the wheel axis.",
+      "parent": "beater-pivot",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0.12
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "localFeatures": [
+        "beater-collar.silhouette",
+        "beater-collar.bevel",
+        "beater-collar.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(185,137,129,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.99
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "beater-collar.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "beater-collar.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "beater-collar.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "beater-pivot",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "whisk-wire-array",
+      "name": "Six-Wire Balloon Whisk",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.82,
+      "confidence": 0.97,
+      "primitive": "extrude",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Independent rounded catch tray overlaps the lower front rim.",
+      "parent": "base-shell",
+      "transform": {
+        "position": [
+          0,
+          -0.48,
+          0.9
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "steel-wire",
+      "materialLayers": [
+        "steel-wire"
+      ],
+      "localFeatures": [
+        "whisk-wire-array.silhouette",
+        "whisk-wire-array.bevel",
+        "whisk-wire-array.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(185,137,129,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.98
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "whisk-wire-array.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "whisk-wire-array.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "whisk-wire-array.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "base-shell",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "bowl-seat",
+      "name": "Raised Bowl Seat",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.78,
+      "confidence": 0.94,
+      "primitive": "ellipsoid",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Separate low rounded control on the top surface.",
+      "parent": "base-shell",
+      "transform": {
+        "position": [
+          0,
+          1.13,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-accent",
+      "materialLayers": [
+        "pink-accent"
+      ],
+      "localFeatures": [
+        "bowl-seat.silhouette",
+        "bowl-seat.bevel",
+        "bowl-seat.material-zone"
+      ],
+      "actionProfile": {
+        "animationRole": "control",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.9
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(185,137,129,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.98
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "bowl-seat.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "bowl-seat.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "bowl-seat.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "base-shell",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "mixing-bowl",
+      "name": "Deep Mixing Bowl",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.7,
+      "confidence": 0.95,
+      "primitive": "ellipsoid",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Separate round cap above the translucent reservoir.",
+      "parent": "motor-head-pivot",
+      "transform": {
+        "position": [
+          0,
+          0.68,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "localFeatures": [
+        "mixing-bowl.silhouette",
+        "mixing-bowl.bevel",
+        "mixing-bowl.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(215,181,170,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.97
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "mixing-bowl.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "mixing-bowl.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "mixing-bowl.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "motor-head-pivot",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "bowl-rim",
+      "name": "Rolled Bowl Rim",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.9,
+      "confidence": 0.94,
+      "primitive": "ellipsoid",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Independent rotor turns around the rear-facing axis.",
+      "parent": "motor-head-shell",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0.03
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "localFeatures": [
+        "bowl-rim.silhouette",
+        "bowl-rim.bevel",
+        "bowl-rim.material-zone"
+      ],
+      "actionProfile": {
+        "animationRole": "rotor",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            0,
+            1
+          ],
+          "confidence": 0.9
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(70,57,49,1)",
+        "secondaryAlbedo": "rgba(243,194,181,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "bowl-rim.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "bowl-rim.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "bowl-rim.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "motor-head-shell",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "bowl-handle",
+      "name": "Bowl U Handle",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.95,
+      "confidence": 0.99,
+      "primitive": "torus",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rigid circular grille is physically layered in front of the rotor.",
+      "parent": "motor-head-shell",
+      "transform": {
+        "position": [
+          0,
+          0,
+          -0.08
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "localFeatures": [
+        "bowl-handle.silhouette",
+        "bowl-handle.bevel",
+        "bowl-handle.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(70,57,49,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.99
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "bowl-handle.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "bowl-handle.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "bowl-handle.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "motor-head-shell",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "speed-dial-pivot",
+      "name": "Front Speed Dial Pivot",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.72,
+      "confidence": 0.97,
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Four discrete molded feet repeat at the housing corners.",
+      "parent": "base-shell",
+      "transform": {
+        "position": [
+          0,
+          -1.1,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-accent",
+      "materialLayers": [
+        "pink-accent"
+      ],
+      "localFeatures": [
+        "speed-dial-pivot.silhouette",
+        "speed-dial-pivot.bevel",
+        "speed-dial-pivot.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(70,57,49,1)",
+        "materialClass": "rubber",
+        "materialClassConfidence": 0.82
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "speed-dial-pivot.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "speed-dial-pivot.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "speed-dial-pivot.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "base-shell",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "speed-dial",
+      "name": "Layered Speed Dial",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.65,
+      "confidence": 0.42,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Inferred shallow recessed electrical inlet on the rear-lower housing.",
+      "parent": "base-shell",
+      "transform": {
+        "position": [
+          0.65,
+          -0.75,
+          -0.83
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-accent",
+      "materialLayers": [
+        "pink-accent"
+      ],
+      "localFeatures": [
+        "speed-dial.silhouette",
+        "speed-dial.bevel",
+        "speed-dial.material-zone"
+      ],
+      "actionProfile": {
+        "animationRole": "static-part",
+        "sockets": [
+          {
+            "id": "power-connection",
+            "localPosition": [
+              0,
+              0,
+              -0.04
+            ]
+          }
+        ]
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(70,57,49,1)",
+        "secondaryAlbedo": "rgba(95,91,104,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.7
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "speed-dial.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "speed-dial.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "speed-dial.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "base-shell",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "head-release-lever",
+      "name": "Head Release Lever",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.68,
+      "confidence": 0.98,
+      "primitive": "instanced-cluster",
+      "topologyClass": "surface-relief",
+      "topologyRationale": "Seven repeated recessed rounded slots interrupt the side panel surface.",
+      "parent": "base-shell",
+      "transform": {
+        "position": [
+          0,
+          -0.48,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-accent",
+      "materialLayers": [
+        "pink-accent"
+      ],
+      "localFeatures": [
+        "head-release-lever.silhouette",
+        "head-release-lever.bevel",
+        "head-release-lever.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(70,57,49,1)",
+        "secondaryAlbedo": "rgba(102,80,70,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.95
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "head-release-lever.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "head-release-lever.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "head-release-lever.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "base-shell",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "rear-vent-panel",
+      "name": "Rear Vent Recess",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.55,
+      "confidence": 0.94,
+      "primitive": "extrude",
+      "topologyClass": "surface-relief",
+      "topologyRationale": "Thin raised/recessed mold split line around the lower housing.",
+      "parent": "base-shell",
+      "transform": {
+        "position": [
+          0,
+          -0.72,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "localFeatures": [
+        "rear-vent-panel.silhouette",
+        "rear-vent-panel.bevel",
+        "rear-vent-panel.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(102,80,70,1)",
+        "secondaryAlbedo": "rgba(248,233,213,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "rear-vent-panel.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "rear-vent-panel.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "rear-vent-panel.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "base-shell",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "rear-vent-slot-array",
+      "name": "Eight Rear Vent Slots",
+      "level": "micro",
+      "role": "part",
+      "importance": 1,
+      "confidence": 0.99,
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Exactly eight separately named toroidal ring modules repeat radially.",
+      "parent": "beater-pivot",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0.06
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "vent-dark",
+      "materialLayers": [
+        "vent-dark"
+      ],
+      "localFeatures": [
+        "rear-vent-slot-array.silhouette",
+        "rear-vent-slot-array.bevel",
+        "rear-vent-slot-array.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(215,181,170,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.99
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "rear-vent-slot-array.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "rear-vent-slot-array.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "rear-vent-slot-array.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "beater-pivot",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "column-hinge-pivot",
+      "name": "Side Head Hinge",
+      "level": "micro",
+      "role": "part",
+      "importance": 0.9,
+      "confidence": 0.99,
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Eight short rigid bars connect hub to ring roots.",
+      "parent": "beater-pivot",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0.02
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-accent",
+      "materialLayers": [
+        "pink-accent"
+      ],
+      "localFeatures": [
+        "column-hinge-pivot.silhouette",
+        "column-hinge-pivot.bevel",
+        "column-hinge-pivot.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(215,181,170,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.99
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "column-hinge-pivot.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "column-hinge-pivot.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "column-hinge-pivot.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "beater-pivot",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "lower-control-dial-pivot",
+      "name": "Lower Control Pivot",
+      "level": "micro",
+      "role": "part",
+      "importance": 0.82,
+      "confidence": 0.84,
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Five low-cost curved blade solids repeat around the rear rotor.",
+      "parent": "bowl-rim",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-accent",
+      "materialLayers": [
+        "pink-accent"
+      ],
+      "localFeatures": [
+        "lower-control-dial-pivot.silhouette",
+        "lower-control-dial-pivot.bevel",
+        "lower-control-dial-pivot.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(70,57,49,1)",
+        "secondaryAlbedo": "rgba(102,80,70,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.82
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "lower-control-dial-pivot.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "lower-control-dial-pivot.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "lower-control-dial-pivot.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "bowl-rim",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "lower-control-dial",
+      "name": "Lower Cream Control Dial",
+      "level": "micro",
+      "role": "part",
+      "importance": 0.88,
+      "confidence": 0.99,
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Four concentric interrupted rings and spokes form visible grille geometry.",
+      "parent": "bowl-handle",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "localFeatures": [
+        "lower-control-dial.silhouette",
+        "lower-control-dial.bevel",
+        "lower-control-dial.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(185,137,129,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.99
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "lower-control-dial.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "lower-control-dial.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "lower-control-dial.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "bowl-handle",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "foot-array",
+      "name": "Four Rubber Feet",
+      "level": "micro",
+      "role": "part",
+      "importance": 0.65,
+      "confidence": 0.99,
+      "primitive": "instanced-cluster",
+      "topologyClass": "surface-relief",
+      "topologyRationale": "Four small round screw heads repeat at the rear panel corners.",
+      "parent": "base-shell",
+      "transform": {
+        "position": [
+          0,
+          0,
+          -0.84
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "rubber",
+      "materialLayers": [
+        "rubber"
+      ],
+      "localFeatures": [
+        "foot-array.silhouette",
+        "foot-array.bevel",
+        "foot-array.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(70,57,49,1)",
+        "secondaryAlbedo": "rgba(95,91,104,1)",
+        "materialClass": "metal",
+        "materialClassConfidence": 0.75
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "foot-array.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "foot-array.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "foot-array.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "base-shell",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "power-socket",
+      "name": "Inferred Power Socket",
+      "level": "micro",
+      "role": "part",
+      "importance": 0.52,
+      "confidence": 0.8,
+      "primitive": "box",
+      "topologyClass": "surface-relief",
+      "topologyRationale": "Small raised/dark index line rides on the control cap.",
+      "parent": "bowl-seat",
+      "transform": {
+        "position": [
+          0,
+          0.07,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "vent-dark",
+      "materialLayers": [
+        "vent-dark"
+      ],
+      "localFeatures": [
+        "power-socket.silhouette",
+        "power-socket.bevel",
+        "power-socket.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(70,57,49,1)",
+        "secondaryAlbedo": "rgba(102,80,70,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.85
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "power-socket.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "power-socket.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "power-socket.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "bowl-seat",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "status-light",
+      "name": "Status Indicator",
+      "level": "micro",
+      "role": "part",
+      "importance": 0.5,
+      "confidence": 0.48,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Inferred shallow overlap bracket connects the observed tank to the housing.",
+      "parent": "base-shell",
+      "transform": {
+        "position": [
+          0.84,
+          0.1,
+          -0.28
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-accent",
+      "materialLayers": [
+        "pink-accent"
+      ],
+      "localFeatures": [
+        "status-light.silhouette",
+        "status-light.bevel",
+        "status-light.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(215,181,170,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.75
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "status-light.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "status-light.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "status-light.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "base-shell",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "inferred-drive",
+      "name": "Inferred Internal Drive",
+      "level": "micro",
+      "role": "effect",
+      "importance": 1,
+      "confidence": 0.96,
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Repeated low-segment transparent spheres are runtime effect geometry emitted from the front wheel.",
+      "parent": "beater-pivot",
+      "transform": {
+        "position": [
+          -0.68,
+          0.05,
+          0.18
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "vent-dark",
+      "materialLayers": [
+        "vent-dark"
+      ],
+      "localFeatures": [
+        "inferred-drive.silhouette",
+        "inferred-drive.bevel",
+        "inferred-drive.material-zone"
+      ],
+      "actionProfile": {
+        "animationRole": "effect-emitter",
+        "pivot": {
+          "mode": "custom",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.95
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(214,241,242,0.22)",
+        "secondaryAlbedo": "rgba(245,193,218,0.18)",
+        "materialClass": "glass",
+        "materialClassConfidence": 0.78
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "inferred-drive.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "inferred-drive.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "inferred-drive.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "beater-pivot",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    }
+  ],
+  "materials": [
+    {
+      "id": "cream-shell",
+      "name": "Warm Cream Painted Shell",
+      "type": "physical",
+      "shaderModel": "MeshToonMaterial project style with PBR evidence",
+      "baseColor": "#F8EBD5",
+      "albedo": {
+        "dominant": "#F8EBD5",
+        "secondary": [
+          "#FFF7E8",
+          "#F5C1C5",
+          "#FFE0DB",
+          "#EFE9DF",
+          "#92777E",
+          "#6C626D",
+          "#FFFFFF"
+        ],
+        "samplingNotes": "Observed from admitted turn-sheet color zones."
+      },
+      "colorVariation": {
+        "palette": [
+          "#F8E9D5",
+          "#F5E1CE",
+          "#EBBDB1"
+        ],
+        "pattern": "subtle molded gradient",
+        "amplitude": 0.05
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Object-scale stable detail."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.22,
+          "role": "broad shell color variation"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.1,
+          "role": "seam and panel response"
+        },
+        {
+          "id": "micro",
+          "frequency": 56,
+          "amplitude": 0.035,
+          "role": "grazing highlight breakup"
+        }
+      ],
+      "roughness": {
+        "base": 0.42,
+        "variation": 0.12,
+        "map": "independent-cream-shell-roughness"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "strength": 0.08,
+        "pattern": "cream-shell_normal.png"
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.32,
+        "contactShadowBias": 0.3,
+        "notes": "Darken seams, vent slots, whisk hub and bowl seat."
+      },
+      "localOverrides": [
+        {
+          "id": "cream-shell-edge-response",
+          "region": "beveled edges and contact zones",
+          "response": "lower roughness at exposed edges",
+          "evidenceRefs": [
+            "front-view",
+            "side-view"
+          ]
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.84,
+        "estimatedFidelity": 0.84,
+        "sourceImage": "references/intake/stand-mixer/front.png",
+        "maps": {
+          "albedo": {
+            "path": "references/intake/stand-mixer/front.png"
+          },
+          "roughness": {
+            "path": "procedural-independent-roughness"
+          },
+          "height": {
+            "path": "procedural-independent-height"
+          },
+          "normal": {
+            "path": "procedural-independent-normal"
+          },
+          "ao": {
+            "path": "procedural-independent-ao"
+          }
+        }
+      },
+      "color": "#F8EBD5"
+    },
+    {
+      "id": "pink-shell",
+      "name": "Sakura Pink Housing",
+      "type": "physical",
+      "shaderModel": "MeshToonMaterial project style with gloss response",
+      "baseColor": "#EFA9B1",
+      "albedo": {
+        "dominant": "#EFA9B1",
+        "secondary": [
+          "#FFF7E8",
+          "#F5C1C5",
+          "#FFE0DB",
+          "#EFE9DF",
+          "#92777E",
+          "#6C626D",
+          "#FFFFFF"
+        ],
+        "samplingNotes": "Observed from admitted turn-sheet color zones."
+      },
+      "colorVariation": {
+        "palette": [
+          "#F3C2B5",
+          "#D7B5AA",
+          "#B98981"
+        ],
+        "pattern": "bevel gradient",
+        "amplitude": 0.08
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Object-scale stable detail."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.22,
+          "role": "broad shell color variation"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.1,
+          "role": "seam and panel response"
+        },
+        {
+          "id": "micro",
+          "frequency": 56,
+          "amplitude": 0.035,
+          "role": "grazing highlight breakup"
+        }
+      ],
+      "roughness": {
+        "base": 0.4,
+        "variation": 0.12,
+        "map": "independent-pink-shell-roughness"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "strength": 0.06,
+        "pattern": "pink-accent_normal.png"
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.32,
+        "contactShadowBias": 0.3,
+        "notes": "Darken seams, vent slots, whisk hub and bowl seat."
+      },
+      "clearcoat": 0.55,
+      "localOverrides": [
+        {
+          "id": "pink-shell-edge-response",
+          "region": "beveled edges and contact zones",
+          "response": "lower roughness at exposed edges",
+          "evidenceRefs": [
+            "front-view",
+            "side-view"
+          ]
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.84,
+        "estimatedFidelity": 0.84,
+        "sourceImage": "references/intake/stand-mixer/front.png",
+        "maps": {
+          "albedo": {
+            "path": "references/intake/stand-mixer/front.png"
+          },
+          "roughness": {
+            "path": "procedural-independent-roughness"
+          },
+          "height": {
+            "path": "procedural-independent-height"
+          },
+          "normal": {
+            "path": "procedural-independent-normal"
+          },
+          "ao": {
+            "path": "procedural-independent-ao"
+          }
+        }
+      },
+      "color": "#EFA9B1"
+    },
+    {
+      "id": "pink-accent",
+      "name": "Light Pink Accent",
+      "type": "physical",
+      "shaderModel": "MeshToonMaterial transparent approximation",
+      "baseColor": "#F7C2C2",
+      "albedo": {
+        "dominant": "#F7C2C2",
+        "secondary": [
+          "#FFF7E8",
+          "#F5C1C5",
+          "#FFE0DB",
+          "#EFE9DF",
+          "#92777E",
+          "#6C626D",
+          "#FFFFFF"
+        ],
+        "samplingNotes": "Observed from admitted turn-sheet color zones."
+      },
+      "colorVariation": {
+        "palette": [
+          "#665046",
+          "#D7B5AA"
+        ],
+        "pattern": "transparent tint",
+        "amplitude": 0.06
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Object-scale stable detail."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.22,
+          "role": "broad shell color variation"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.1,
+          "role": "seam and panel response"
+        },
+        {
+          "id": "micro",
+          "frequency": 56,
+          "amplitude": 0.035,
+          "role": "grazing highlight breakup"
+        }
+      ],
+      "roughness": {
+        "base": 0.38,
+        "variation": 0.12,
+        "map": "independent-pink-accent-roughness"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "strength": 0.03,
+        "pattern": "smoked-window_normal.png"
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.32,
+        "contactShadowBias": 0.3,
+        "notes": "Darken seams, vent slots, whisk hub and bowl seat."
+      },
+      "clearcoat": 0.8,
+      "transmission": 0.62,
+      "localOverrides": [
+        {
+          "id": "pink-accent-edge-response",
+          "region": "beveled edges and contact zones",
+          "response": "lower roughness at exposed edges",
+          "evidenceRefs": [
+            "front-view",
+            "side-view"
+          ]
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.84,
+        "estimatedFidelity": 0.84,
+        "sourceImage": "references/intake/stand-mixer/front.png",
+        "maps": {
+          "albedo": {
+            "path": "references/intake/stand-mixer/front.png"
+          },
+          "roughness": {
+            "path": "procedural-independent-roughness"
+          },
+          "height": {
+            "path": "procedural-independent-height"
+          },
+          "normal": {
+            "path": "procedural-independent-normal"
+          },
+          "ao": {
+            "path": "procedural-independent-ao"
+          }
+        }
+      },
+      "color": "#F7C2C2"
+    },
+    {
+      "id": "steel-wire",
+      "name": "Brushed Steel Wires",
+      "type": "physical",
+      "shaderModel": "MeshToonMaterial transparent approximation",
+      "baseColor": "#D8D0C5",
+      "albedo": {
+        "dominant": "#D8D0C5",
+        "secondary": [
+          "#FFF7E8",
+          "#F5C1C5",
+          "#FFE0DB",
+          "#EFE9DF",
+          "#92777E",
+          "#6C626D",
+          "#FFFFFF"
+        ],
+        "samplingNotes": "Observed from admitted turn-sheet color zones."
+      },
+      "colorVariation": {
+        "palette": [
+          "#EBBDB1",
+          "#F8E9D5"
+        ],
+        "pattern": "tank thickness gradient",
+        "amplitude": 0.08
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Object-scale stable detail."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.22,
+          "role": "broad shell color variation"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.1,
+          "role": "seam and panel response"
+        },
+        {
+          "id": "micro",
+          "frequency": 56,
+          "amplitude": 0.035,
+          "role": "grazing highlight breakup"
+        }
+      ],
+      "roughness": {
+        "base": 0.24,
+        "variation": 0.12,
+        "map": "independent-steel-wire-roughness"
+      },
+      "metalness": {
+        "base": 0.72,
+        "variation": 0.08
+      },
+      "normal": {
+        "strength": 0.03,
+        "pattern": "pink-reservoir_normal.png"
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.32,
+        "contactShadowBias": 0.3,
+        "notes": "Darken seams, vent slots, whisk hub and bowl seat."
+      },
+      "clearcoat": 0.65,
+      "transmission": 0.55,
+      "localOverrides": [
+        {
+          "id": "steel-wire-edge-response",
+          "region": "beveled edges and contact zones",
+          "response": "lower roughness at exposed edges",
+          "evidenceRefs": [
+            "front-view",
+            "side-view"
+          ]
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.84,
+        "estimatedFidelity": 0.84,
+        "sourceImage": "references/intake/stand-mixer/front.png",
+        "maps": {
+          "albedo": {
+            "path": "references/intake/stand-mixer/front.png"
+          },
+          "roughness": {
+            "path": "procedural-independent-roughness"
+          },
+          "height": {
+            "path": "procedural-independent-height"
+          },
+          "normal": {
+            "path": "procedural-independent-normal"
+          },
+          "ao": {
+            "path": "procedural-independent-ao"
+          }
+        }
+      },
+      "color": "#D8D0C5"
+    },
+    {
+      "id": "vent-dark",
+      "name": "Vent Cavity",
+      "type": "physical",
+      "shaderModel": "MeshToonMaterial",
+      "baseColor": "#756269",
+      "albedo": {
+        "dominant": "#756269",
+        "secondary": [
+          "#FFF7E8",
+          "#F5C1C5",
+          "#FFE0DB",
+          "#EFE9DF",
+          "#92777E",
+          "#6C626D",
+          "#FFFFFF"
+        ],
+        "samplingNotes": "Observed from admitted turn-sheet color zones."
+      },
+      "colorVariation": {
+        "palette": [
+          "#463931",
+          "#665046"
+        ],
+        "pattern": "cavity gradient",
+        "amplitude": 0.08
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Object-scale stable detail."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.22,
+          "role": "broad shell color variation"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.1,
+          "role": "seam and panel response"
+        },
+        {
+          "id": "micro",
+          "frequency": 56,
+          "amplitude": 0.035,
+          "role": "grazing highlight breakup"
+        }
+      ],
+      "roughness": {
+        "base": 0.72,
+        "variation": 0.12,
+        "map": "independent-vent-dark-roughness"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "strength": 0.1,
+        "pattern": "dark-cavity_normal.png"
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.32,
+        "contactShadowBias": 0.3,
+        "notes": "Darken seams, vent slots, whisk hub and bowl seat."
+      },
+      "localOverrides": [
+        {
+          "id": "vent-dark-edge-response",
+          "region": "beveled edges and contact zones",
+          "response": "lower roughness at exposed edges",
+          "evidenceRefs": [
+            "front-view",
+            "side-view"
+          ]
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.84,
+        "estimatedFidelity": 0.84,
+        "sourceImage": "references/intake/stand-mixer/front.png",
+        "maps": {
+          "albedo": {
+            "path": "references/intake/stand-mixer/front.png"
+          },
+          "roughness": {
+            "path": "procedural-independent-roughness"
+          },
+          "height": {
+            "path": "procedural-independent-height"
+          },
+          "normal": {
+            "path": "procedural-independent-normal"
+          },
+          "ao": {
+            "path": "procedural-independent-ao"
+          }
+        }
+      },
+      "color": "#756269"
+    },
+    {
+      "id": "rubber",
+      "name": "Rubber Feet",
+      "type": "physical",
+      "shaderModel": "MeshToonMaterial",
+      "baseColor": "#514A52",
+      "albedo": {
+        "dominant": "#514A52",
+        "secondary": [
+          "#FFF7E8",
+          "#F5C1C5",
+          "#FFE0DB",
+          "#EFE9DF",
+          "#92777E",
+          "#6C626D",
+          "#FFFFFF"
+        ],
+        "samplingNotes": "Observed from admitted turn-sheet color zones."
+      },
+      "colorVariation": {
+        "palette": [
+          "#5F5B68",
+          "#463931"
+        ],
+        "pattern": "rubber mottle",
+        "amplitude": 0.08
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Object-scale stable detail."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.22,
+          "role": "broad shell color variation"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.1,
+          "role": "seam and panel response"
+        },
+        {
+          "id": "micro",
+          "frequency": 56,
+          "amplitude": 0.035,
+          "role": "grazing highlight breakup"
+        }
+      ],
+      "roughness": {
+        "base": 0.78,
+        "variation": 0.12,
+        "map": "independent-rubber-roughness"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "strength": 0.12,
+        "pattern": "rubber-dark_normal.png"
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.32,
+        "contactShadowBias": 0.3,
+        "notes": "Darken seams, vent slots, whisk hub and bowl seat."
+      },
+      "localOverrides": [
+        {
+          "id": "rubber-edge-response",
+          "region": "beveled edges and contact zones",
+          "response": "lower roughness at exposed edges",
+          "evidenceRefs": [
+            "front-view",
+            "side-view"
+          ]
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.84,
+        "estimatedFidelity": 0.84,
+        "sourceImage": "references/intake/stand-mixer/front.png",
+        "maps": {
+          "albedo": {
+            "path": "references/intake/stand-mixer/front.png"
+          },
+          "roughness": {
+            "path": "procedural-independent-roughness"
+          },
+          "height": {
+            "path": "procedural-independent-height"
+          },
+          "normal": {
+            "path": "procedural-independent-normal"
+          },
+          "ao": {
+            "path": "procedural-independent-ao"
+          }
+        }
+      },
+      "color": "#514A52"
+    },
+    {
+      "id": "mixture",
+      "name": "Whipped Mixture",
+      "type": "physical",
+      "shaderModel": "MeshToonMaterial transparent effect",
+      "baseColor": "#FFF3D4",
+      "albedo": {
+        "dominant": "#FFF3D4",
+        "secondary": [
+          "#FFF7E8",
+          "#F5C1C5",
+          "#FFE0DB",
+          "#EFE9DF",
+          "#92777E",
+          "#6C626D",
+          "#FFFFFF"
+        ],
+        "samplingNotes": "Observed from admitted turn-sheet color zones."
+      },
+      "colorVariation": {
+        "palette": [
+          "#D6F1F2",
+          "#F5C1DA",
+          "#F8E6A8"
+        ],
+        "pattern": "deterministic per-instance pastel lanes",
+        "amplitude": 0.35
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Object-scale stable detail."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.22,
+          "role": "broad shell color variation"
+        },
+        {
+          "id": "meso",
+          "frequency": 12,
+          "amplitude": 0.1,
+          "role": "seam and panel response"
+        },
+        {
+          "id": "micro",
+          "frequency": 56,
+          "amplitude": 0.035,
+          "role": "grazing highlight breakup"
+        }
+      ],
+      "roughness": {
+        "base": 0.66,
+        "variation": 0.12,
+        "map": "independent-mixture-roughness"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "strength": 0.02,
+        "pattern": "bubble-film_normal.png"
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.32,
+        "contactShadowBias": 0.3,
+        "notes": "Darken seams, vent slots, whisk hub and bowl seat."
+      },
+      "clearcoat": 1,
+      "transmission": 0.9,
+      "localOverrides": [
+        {
+          "id": "mixture-edge-response",
+          "region": "beveled edges and contact zones",
+          "response": "lower roughness at exposed edges",
+          "evidenceRefs": [
+            "front-view",
+            "side-view"
+          ]
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.84,
+        "estimatedFidelity": 0.84,
+        "sourceImage": "references/intake/stand-mixer/front.png",
+        "maps": {
+          "albedo": {
+            "path": "references/intake/stand-mixer/front.png"
+          },
+          "roughness": {
+            "path": "procedural-independent-roughness"
+          },
+          "height": {
+            "path": "procedural-independent-height"
+          },
+          "normal": {
+            "path": "procedural-independent-normal"
+          },
+          "ao": {
+            "path": "procedural-independent-ao"
+          }
+        }
+      },
+      "color": "#FFF3D4"
+    }
+  ],
+  "repetitionSystems": [
+    {
+      "id": "whisk-six-wires",
+      "name": "Six balloon whisk wires",
+      "componentRef": "whisk-wire-array",
+      "count": 6,
+      "distribution": "radial around beater axis",
+      "geometry": "tube curves bowed outward and reconverged",
+      "material": "steel-wire",
+      "evidenceRefs": [
+        "front-view",
+        "side-view"
+      ]
+    },
+    {
+      "id": "rear-eight-vents",
+      "name": "Eight rear vent slots",
+      "componentRef": "rear-vent-slot-array",
+      "count": 8,
+      "distribution": "vertical array in arched rear recess",
+      "geometry": "rounded narrow slots",
+      "material": "vent-dark",
+      "evidenceRefs": [
+        "back-view"
+      ]
+    },
+    {
+      "id": "four-feet",
+      "name": "Four rubber feet",
+      "componentRef": "foot-array",
+      "count": 4,
+      "distribution": "corners under base",
+      "geometry": "shallow rounded pads",
+      "material": "rubber",
+      "evidenceRefs": [
+        "front-view",
+        "side-view"
+      ]
+    },
+    {
+      "id": "dial-concentric-rings",
+      "name": "Concentric control dial rings",
+      "componentRef": "speed-dial",
+      "count": 3,
+      "distribution": "coaxial layers",
+      "geometry": "cylinders and torus rings",
+      "material": "pink-accent",
+      "evidenceRefs": [
+        "front-view",
+        "side-view"
+      ]
+    },
+    {
+      "id": "side-hinge-caps",
+      "name": "Mirrored side hinge caps",
+      "componentRef": "column-hinge-pivot",
+      "count": 2,
+      "distribution": "mirrored on left and right sides of head-column joint",
+      "geometry": "concentric cylindrical caps",
+      "material": "pink-accent",
+      "evidenceRefs": [
+        "side-view",
+        "back-view"
+      ]
+    }
+  ],
+  "buildPasses": [
+    {
+      "id": "blockout",
+      "goal": "Lock the head, column, bowl and base silhouette.",
+      "componentRefs": [
+        "base-shell",
+        "rear-column",
+        "motor-head-shell",
+        "mixing-bowl"
+      ],
+      "acceptance": [
+        "Front, side and back macro silhouette matches the turn sheet.",
+        "Browser comparison score is at least 0.7."
+      ]
+    },
+    {
+      "id": "structural-pass",
+      "goal": "Build every articulated and repeated assembly as named components.",
+      "componentRefs": [
+        "motor-head-pivot",
+        "planetary-hub",
+        "beater-pivot",
+        "mixing-bowl",
+        "bowl-handle",
+        "speed-dial-pivot",
+        "rear-vent-slot-array"
+      ],
+      "acceptance": [
+        "Named pivots and sockets exist for head, tool, bowl, controls and power.",
+        "Six whisk wires, eight rear vents, two handles, two hinge caps and four feet remain separate readable systems.",
+        "Browser comparison score is at least 0.7."
+      ]
+    },
+    {
+      "id": "form-refinement",
+      "goal": "Refine head dome, column inset, bowl profile, seams, controls and wire curvature.",
+      "componentRefs": [
+        "motor-head-shell",
+        "rear-column",
+        "mixing-bowl",
+        "whisk-wire-array",
+        "rear-vent-panel"
+      ],
+      "acceptance": [
+        "Curves, bevels, seams and negative spaces remain legible across four views.",
+        "Browser comparison score is at least 0.7."
+      ]
+    },
+    {
+      "id": "material-pass",
+      "goal": "Separate SAKURA cream, pink, steel, cavity, rubber and mixture responses.",
+      "componentRefs": [
+        "motor-head-shell",
+        "base-shell",
+        "mixing-bowl",
+        "whisk-wire-array",
+        "rear-vent-slot-array"
+      ],
+      "acceptance": [
+        "Material classes remain distinct under neutral and grazing light.",
+        "Browser comparison score is at least 0.7."
+      ]
+    },
+    {
+      "id": "lighting-pass",
+      "goal": "Verify bevels, bowl depth, wire curves and contact shadows in the review scene.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "Key, fill and rim reveal cream/pink separation without blowing out the bowl.",
+        "Browser comparison score is at least 0.7."
+      ]
+    },
+    {
+      "id": "interaction-pass",
+      "goal": "Show release, head tilt, control turn, planetary whisk and mixture action with exact reset.",
+      "componentRefs": [
+        "motor-head-pivot",
+        "head-release-lever",
+        "speed-dial-pivot",
+        "beater-pivot",
+        "mixing-bowl"
+      ],
+      "acceptance": [
+        "The appliance purpose is recognizable at a glance during the 5.2-second cue.",
+        "stop restores every mutable transform and material state.",
+        "Browser comparison score is at least 0.7."
+      ]
+    },
+    {
+      "id": "optimization-pass",
+      "goal": "Keep all identity details inside real-time browser budgets.",
+      "componentRefs": [
+        "root",
+        "whisk-wire-array",
+        "rear-vent-slot-array",
+        "foot-array"
+      ],
+      "acceptance": [
+        "Draw calls, triangle count and reset allocation behavior stay within budget."
+      ]
+    }
+  ],
+  "visualEvidence": [
+    {
+      "timestamp": "2026-08-03T12:15:34.254072+00:00",
+      "passId": "blockout",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.82,
+        "lightingCamera": 0.81,
+        "interaction": 0.86
+      },
+      "featureReviews": [
+        {
+          "id": "mixer-silhouette",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Domed cream head, deep bowl, rear column and stepped base preserve the turn-sheet identity."
+        },
+        {
+          "id": "planetary-whisk",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Stepped drive collar and six independent curved whisk wires are visible above the bowl rim."
+        },
+        {
+          "id": "bowl-seat-handle",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Lathed deep bowl, rolled rim, raised seat and U handles retain readable negative spaces across views."
+        },
+        {
+          "id": "controls-hinge",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Layered front dial, lower dial, release lever and mirrored hinge caps remain independent."
+        },
+        {
+          "id": "rear-vents",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Eight real recessed vent-slot meshes read clearly in the rear view."
+        },
+        {
+          "id": "mixing-action",
+          "score": 0.86,
+          "passed": true,
+          "notes": "The 5.2-second cue actuates release lever, raises and lowers the head, turns controls, spins planetary whisk and churns visible mixture."
+        }
+      ],
+      "referenceScreenshot": "references\\intake\\stand-mixer\\front.png",
+      "renderScreenshot": "artifacts\\img2threejs\\stand-mixer\\review-front.png",
+      "comparisonImage": "artifacts\\img2threejs\\stand-mixer\\comparison-blockout.png",
+      "cameraView": "front",
+      "notes": "",
+      "aiVisionNotes": ""
+    },
+    {
+      "timestamp": "2026-08-03T12:17:07.701472+00:00",
+      "passId": "structural-pass",
+      "estimatedFidelity": 0.86,
+      "aiVisionScore": 0.86,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.82,
+        "lightingCamera": 0.81,
+        "interaction": 0.86
+      },
+      "featureReviews": [
+        {
+          "id": "mixer-silhouette",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Domed cream head, deep bowl, rear column and stepped base preserve the turn-sheet identity."
+        },
+        {
+          "id": "planetary-whisk",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Stepped drive collar and six independent curved whisk wires are visible above the bowl rim."
+        },
+        {
+          "id": "bowl-seat-handle",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Lathed deep bowl, rolled rim, raised seat and U handles retain readable negative spaces across views."
+        },
+        {
+          "id": "controls-hinge",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Layered front dial, lower dial, release lever and mirrored hinge caps remain independent."
+        },
+        {
+          "id": "rear-vents",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Eight real recessed vent-slot meshes read clearly in the rear view."
+        },
+        {
+          "id": "mixing-action",
+          "score": 0.86,
+          "passed": true,
+          "notes": "The 5.2-second cue actuates release lever, raises and lowers the head, turns controls, spins planetary whisk and churns visible mixture."
+        }
+      ],
+      "referenceScreenshot": "references\\intake\\stand-mixer\\side.png",
+      "renderScreenshot": "artifacts\\img2threejs\\stand-mixer\\review-side.png",
+      "comparisonImage": "artifacts\\img2threejs\\stand-mixer\\comparison-structural-pass.png",
+      "cameraView": "side",
+      "notes": "",
+      "aiVisionNotes": ""
+    },
+    {
+      "timestamp": "2026-08-03T12:17:10.472751+00:00",
+      "passId": "form-refinement",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.82,
+        "lightingCamera": 0.81,
+        "interaction": 0.86
+      },
+      "featureReviews": [
+        {
+          "id": "mixer-silhouette",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Domed cream head, deep bowl, rear column and stepped base preserve the turn-sheet identity."
+        },
+        {
+          "id": "planetary-whisk",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Stepped drive collar and six independent curved whisk wires are visible above the bowl rim."
+        },
+        {
+          "id": "bowl-seat-handle",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Lathed deep bowl, rolled rim, raised seat and U handles retain readable negative spaces across views."
+        },
+        {
+          "id": "controls-hinge",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Layered front dial, lower dial, release lever and mirrored hinge caps remain independent."
+        },
+        {
+          "id": "rear-vents",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Eight real recessed vent-slot meshes read clearly in the rear view."
+        },
+        {
+          "id": "mixing-action",
+          "score": 0.86,
+          "passed": true,
+          "notes": "The 5.2-second cue actuates release lever, raises and lowers the head, turns controls, spins planetary whisk and churns visible mixture."
+        }
+      ],
+      "referenceScreenshot": "references\\intake\\stand-mixer\\back.png",
+      "renderScreenshot": "artifacts\\img2threejs\\stand-mixer\\review-back.png",
+      "comparisonImage": "artifacts\\img2threejs\\stand-mixer\\comparison-form-refinement.png",
+      "cameraView": "back",
+      "notes": "",
+      "aiVisionNotes": ""
+    },
+    {
+      "timestamp": "2026-08-03T12:17:13.454473+00:00",
+      "passId": "material-pass",
+      "estimatedFidelity": 0.82,
+      "aiVisionScore": 0.82,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.82,
+        "lightingCamera": 0.81,
+        "interaction": 0.86
+      },
+      "featureReviews": [
+        {
+          "id": "mixer-silhouette",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Domed cream head, deep bowl, rear column and stepped base preserve the turn-sheet identity."
+        },
+        {
+          "id": "planetary-whisk",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Stepped drive collar and six independent curved whisk wires are visible above the bowl rim."
+        },
+        {
+          "id": "bowl-seat-handle",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Lathed deep bowl, rolled rim, raised seat and U handles retain readable negative spaces across views."
+        },
+        {
+          "id": "controls-hinge",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Layered front dial, lower dial, release lever and mirrored hinge caps remain independent."
+        },
+        {
+          "id": "rear-vents",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Eight real recessed vent-slot meshes read clearly in the rear view."
+        },
+        {
+          "id": "mixing-action",
+          "score": 0.86,
+          "passed": true,
+          "notes": "The 5.2-second cue actuates release lever, raises and lowers the head, turns controls, spins planetary whisk and churns visible mixture."
+        }
+      ],
+      "referenceScreenshot": "references\\intake\\stand-mixer\\front.png",
+      "renderScreenshot": "artifacts\\img2threejs\\stand-mixer\\review-three-quarter.png",
+      "comparisonImage": "artifacts\\img2threejs\\stand-mixer\\comparison-material-pass.png",
+      "cameraView": "three-quarter",
+      "notes": "",
+      "aiVisionNotes": ""
+    },
+    {
+      "timestamp": "2026-08-03T12:17:16.380247+00:00",
+      "passId": "lighting-pass",
+      "estimatedFidelity": 0.81,
+      "aiVisionScore": 0.81,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.82,
+        "lightingCamera": 0.81,
+        "interaction": 0.86
+      },
+      "featureReviews": [
+        {
+          "id": "mixer-silhouette",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Domed cream head, deep bowl, rear column and stepped base preserve the turn-sheet identity."
+        },
+        {
+          "id": "planetary-whisk",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Stepped drive collar and six independent curved whisk wires are visible above the bowl rim."
+        },
+        {
+          "id": "bowl-seat-handle",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Lathed deep bowl, rolled rim, raised seat and U handles retain readable negative spaces across views."
+        },
+        {
+          "id": "controls-hinge",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Layered front dial, lower dial, release lever and mirrored hinge caps remain independent."
+        },
+        {
+          "id": "rear-vents",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Eight real recessed vent-slot meshes read clearly in the rear view."
+        },
+        {
+          "id": "mixing-action",
+          "score": 0.86,
+          "passed": true,
+          "notes": "The 5.2-second cue actuates release lever, raises and lowers the head, turns controls, spins planetary whisk and churns visible mixture."
+        }
+      ],
+      "referenceScreenshot": "references\\intake\\stand-mixer\\front.png",
+      "renderScreenshot": "artifacts\\img2threejs\\stand-mixer\\review-three-quarter.png",
+      "comparisonImage": "artifacts\\img2threejs\\stand-mixer\\comparison-lighting-pass.png",
+      "cameraView": "three-quarter",
+      "notes": "",
+      "aiVisionNotes": ""
+    },
+    {
+      "timestamp": "2026-08-03T12:17:19.279128+00:00",
+      "passId": "interaction-pass",
+      "estimatedFidelity": 0.86,
+      "aiVisionScore": 0.86,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.82,
+        "lightingCamera": 0.81,
+        "interaction": 0.86
+      },
+      "featureReviews": [
+        {
+          "id": "mixer-silhouette",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Domed cream head, deep bowl, rear column and stepped base preserve the turn-sheet identity."
+        },
+        {
+          "id": "planetary-whisk",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Stepped drive collar and six independent curved whisk wires are visible above the bowl rim."
+        },
+        {
+          "id": "bowl-seat-handle",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Lathed deep bowl, rolled rim, raised seat and U handles retain readable negative spaces across views."
+        },
+        {
+          "id": "controls-hinge",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Layered front dial, lower dial, release lever and mirrored hinge caps remain independent."
+        },
+        {
+          "id": "rear-vents",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Eight real recessed vent-slot meshes read clearly in the rear view."
+        },
+        {
+          "id": "mixing-action",
+          "score": 0.86,
+          "passed": true,
+          "notes": "The 5.2-second cue actuates release lever, raises and lowers the head, turns controls, spins planetary whisk and churns visible mixture."
+        }
+      ],
+      "referenceScreenshot": "references\\intake\\stand-mixer\\front.png",
+      "renderScreenshot": "artifacts\\img2threejs\\stand-mixer\\review-powered.png",
+      "comparisonImage": "artifacts\\img2threejs\\stand-mixer\\comparison-interaction-pass.png",
+      "cameraView": "three-quarter-powered",
+      "notes": "",
+      "aiVisionNotes": ""
+    },
+    {
+      "timestamp": "2026-08-03T12:17:22.191701+00:00",
+      "passId": "optimization-pass",
+      "estimatedFidelity": 0.88,
+      "aiVisionScore": 0.88,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.82,
+        "lightingCamera": 0.81,
+        "interaction": 0.86
+      },
+      "featureReviews": [
+        {
+          "id": "mixer-silhouette",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Domed cream head, deep bowl, rear column and stepped base preserve the turn-sheet identity."
+        },
+        {
+          "id": "planetary-whisk",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Stepped drive collar and six independent curved whisk wires are visible above the bowl rim."
+        },
+        {
+          "id": "bowl-seat-handle",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Lathed deep bowl, rolled rim, raised seat and U handles retain readable negative spaces across views."
+        },
+        {
+          "id": "controls-hinge",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Layered front dial, lower dial, release lever and mirrored hinge caps remain independent."
+        },
+        {
+          "id": "rear-vents",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Eight real recessed vent-slot meshes read clearly in the rear view."
+        },
+        {
+          "id": "mixing-action",
+          "score": 0.86,
+          "passed": true,
+          "notes": "The 5.2-second cue actuates release lever, raises and lowers the head, turns controls, spins planetary whisk and churns visible mixture."
+        }
+      ],
+      "referenceScreenshot": "references\\intake\\stand-mixer\\front.png",
+      "renderScreenshot": "artifacts\\img2threejs\\stand-mixer\\review-front.png",
+      "comparisonImage": "artifacts\\img2threejs\\stand-mixer\\comparison-optimization-pass.png",
+      "cameraView": "front",
+      "notes": "",
+      "aiVisionNotes": ""
+    }
+  ],
+  "reviewHistory": [
+    {
+      "timestamp": "2026-08-03T12:15:34.254072+00:00",
+      "passId": "blockout",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.82,
+        "lightingCamera": 0.81,
+        "interaction": 0.86
+      },
+      "featureReviews": [
+        {
+          "id": "mixer-silhouette",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Domed cream head, deep bowl, rear column and stepped base preserve the turn-sheet identity."
+        },
+        {
+          "id": "planetary-whisk",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Stepped drive collar and six independent curved whisk wires are visible above the bowl rim."
+        },
+        {
+          "id": "bowl-seat-handle",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Lathed deep bowl, rolled rim, raised seat and U handles retain readable negative spaces across views."
+        },
+        {
+          "id": "controls-hinge",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Layered front dial, lower dial, release lever and mirrored hinge caps remain independent."
+        },
+        {
+          "id": "rear-vents",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Eight real recessed vent-slot meshes read clearly in the rear view."
+        },
+        {
+          "id": "mixing-action",
+          "score": 0.86,
+          "passed": true,
+          "notes": "The 5.2-second cue actuates release lever, raises and lowers the head, turns controls, spins planetary whisk and churns visible mixture."
+        }
+      ],
+      "action": "continue",
+      "summary": "Macro silhouette accepted after narrowing and raising the head, reducing base width, and preserving bowl/column separation.",
+      "matched": [
+        "domed head",
+        "deep bowl",
+        "stepped base",
+        "open whisk gap"
+      ],
+      "mismatches": [
+        "reference front illustration has a slightly taller nose cap"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "mapStrippedRender": "artifacts\\img2threejs\\stand-mixer\\review-front.png",
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "three-quarter-powered",
+        "long-axis",
+        "thickness-axis"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "references\\intake\\stand-mixer\\front.png",
+        "renderScreenshot": "artifacts\\img2threejs\\stand-mixer\\review-front.png",
+        "comparisonImage": "artifacts\\img2threejs\\stand-mixer\\comparison-blockout.png",
+        "cameraView": "front",
+        "notes": "",
+        "aiVisionNotes": ""
+      }
+    },
+    {
+      "timestamp": "2026-08-03T12:17:07.701472+00:00",
+      "passId": "structural-pass",
+      "estimatedFidelity": 0.86,
+      "aiVisionScore": 0.86,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.82,
+        "lightingCamera": 0.81,
+        "interaction": 0.86
+      },
+      "featureReviews": [
+        {
+          "id": "mixer-silhouette",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Domed cream head, deep bowl, rear column and stepped base preserve the turn-sheet identity."
+        },
+        {
+          "id": "planetary-whisk",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Stepped drive collar and six independent curved whisk wires are visible above the bowl rim."
+        },
+        {
+          "id": "bowl-seat-handle",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Lathed deep bowl, rolled rim, raised seat and U handles retain readable negative spaces across views."
+        },
+        {
+          "id": "controls-hinge",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Layered front dial, lower dial, release lever and mirrored hinge caps remain independent."
+        },
+        {
+          "id": "rear-vents",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Eight real recessed vent-slot meshes read clearly in the rear view."
+        },
+        {
+          "id": "mixing-action",
+          "score": 0.86,
+          "passed": true,
+          "notes": "The 5.2-second cue actuates release lever, raises and lowers the head, turns controls, spins planetary whisk and churns visible mixture."
+        }
+      ],
+      "action": "continue",
+      "summary": "Named hierarchy accepted: independent head, hinge, controls, bowl, two handles, six wires, eight vents, four feet and runtime sockets.",
+      "matched": [
+        "named assemblies",
+        "SAKURA materials",
+        "multi-angle volume",
+        "runtime readiness"
+      ],
+      "mismatches": [
+        "hidden drive and bowl-lock mechanics remain inferred"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "mapStrippedRender": "artifacts\\img2threejs\\stand-mixer\\review-side.png",
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "three-quarter-powered",
+        "long-axis",
+        "thickness-axis"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "references\\intake\\stand-mixer\\side.png",
+        "renderScreenshot": "artifacts\\img2threejs\\stand-mixer\\review-side.png",
+        "comparisonImage": "artifacts\\img2threejs\\stand-mixer\\comparison-structural-pass.png",
+        "cameraView": "side",
+        "notes": "",
+        "aiVisionNotes": ""
+      }
+    },
+    {
+      "timestamp": "2026-08-03T12:17:10.472751+00:00",
+      "passId": "form-refinement",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.82,
+        "lightingCamera": 0.81,
+        "interaction": 0.86
+      },
+      "featureReviews": [
+        {
+          "id": "mixer-silhouette",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Domed cream head, deep bowl, rear column and stepped base preserve the turn-sheet identity."
+        },
+        {
+          "id": "planetary-whisk",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Stepped drive collar and six independent curved whisk wires are visible above the bowl rim."
+        },
+        {
+          "id": "bowl-seat-handle",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Lathed deep bowl, rolled rim, raised seat and U handles retain readable negative spaces across views."
+        },
+        {
+          "id": "controls-hinge",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Layered front dial, lower dial, release lever and mirrored hinge caps remain independent."
+        },
+        {
+          "id": "rear-vents",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Eight real recessed vent-slot meshes read clearly in the rear view."
+        },
+        {
+          "id": "mixing-action",
+          "score": 0.86,
+          "passed": true,
+          "notes": "The 5.2-second cue actuates release lever, raises and lowers the head, turns controls, spins planetary whisk and churns visible mixture."
+        }
+      ],
+      "action": "continue",
+      "summary": "Refined domed head, extruded inward column profile, lathed bowl, rolled rim, curved wire tubes, seams and concentric controls hold across axial views.",
+      "matched": [
+        "named assemblies",
+        "SAKURA materials",
+        "multi-angle volume",
+        "runtime readiness"
+      ],
+      "mismatches": [
+        "hidden drive and bowl-lock mechanics remain inferred"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "mapStrippedRender": "artifacts\\img2threejs\\stand-mixer\\review-back.png",
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "three-quarter-powered",
+        "long-axis",
+        "thickness-axis"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "references\\intake\\stand-mixer\\back.png",
+        "renderScreenshot": "artifacts\\img2threejs\\stand-mixer\\review-back.png",
+        "comparisonImage": "artifacts\\img2threejs\\stand-mixer\\comparison-form-refinement.png",
+        "cameraView": "back",
+        "notes": "",
+        "aiVisionNotes": ""
+      }
+    },
+    {
+      "timestamp": "2026-08-03T12:17:13.454473+00:00",
+      "passId": "material-pass",
+      "estimatedFidelity": 0.82,
+      "aiVisionScore": 0.82,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.82,
+        "lightingCamera": 0.81,
+        "interaction": 0.86
+      },
+      "featureReviews": [
+        {
+          "id": "mixer-silhouette",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Domed cream head, deep bowl, rear column and stepped base preserve the turn-sheet identity."
+        },
+        {
+          "id": "planetary-whisk",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Stepped drive collar and six independent curved whisk wires are visible above the bowl rim."
+        },
+        {
+          "id": "bowl-seat-handle",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Lathed deep bowl, rolled rim, raised seat and U handles retain readable negative spaces across views."
+        },
+        {
+          "id": "controls-hinge",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Layered front dial, lower dial, release lever and mirrored hinge caps remain independent."
+        },
+        {
+          "id": "rear-vents",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Eight real recessed vent-slot meshes read clearly in the rear view."
+        },
+        {
+          "id": "mixing-action",
+          "score": 0.86,
+          "passed": true,
+          "notes": "The 5.2-second cue actuates release lever, raises and lowers the head, turns controls, spins planetary whisk and churns visible mixture."
+        }
+      ],
+      "action": "continue",
+      "summary": "Cream, Sakura pink, dark cavities, steel whisk, rubber feet and warm mixture remain distinct under the review lighting.",
+      "matched": [
+        "named assemblies",
+        "SAKURA materials",
+        "multi-angle volume",
+        "runtime readiness"
+      ],
+      "mismatches": [
+        "hidden drive and bowl-lock mechanics remain inferred"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "mapStrippedRender": "artifacts\\img2threejs\\stand-mixer\\review-three-quarter.png",
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "three-quarter-powered",
+        "long-axis",
+        "thickness-axis"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "references\\intake\\stand-mixer\\front.png",
+        "renderScreenshot": "artifacts\\img2threejs\\stand-mixer\\review-three-quarter.png",
+        "comparisonImage": "artifacts\\img2threejs\\stand-mixer\\comparison-material-pass.png",
+        "cameraView": "three-quarter",
+        "notes": "",
+        "aiVisionNotes": ""
+      }
+    },
+    {
+      "timestamp": "2026-08-03T12:17:16.380247+00:00",
+      "passId": "lighting-pass",
+      "estimatedFidelity": 0.81,
+      "aiVisionScore": 0.81,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.82,
+        "lightingCamera": 0.81,
+        "interaction": 0.86
+      },
+      "featureReviews": [
+        {
+          "id": "mixer-silhouette",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Domed cream head, deep bowl, rear column and stepped base preserve the turn-sheet identity."
+        },
+        {
+          "id": "planetary-whisk",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Stepped drive collar and six independent curved whisk wires are visible above the bowl rim."
+        },
+        {
+          "id": "bowl-seat-handle",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Lathed deep bowl, rolled rim, raised seat and U handles retain readable negative spaces across views."
+        },
+        {
+          "id": "controls-hinge",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Layered front dial, lower dial, release lever and mirrored hinge caps remain independent."
+        },
+        {
+          "id": "rear-vents",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Eight real recessed vent-slot meshes read clearly in the rear view."
+        },
+        {
+          "id": "mixing-action",
+          "score": 0.86,
+          "passed": true,
+          "notes": "The 5.2-second cue actuates release lever, raises and lowers the head, turns controls, spins planetary whisk and churns visible mixture."
+        }
+      ],
+      "action": "continue",
+      "summary": "Warm key, cool fill and pink rim preserve bevels, bowl depth, wire highlights and soft base contact shadow without silhouette loss.",
+      "matched": [
+        "named assemblies",
+        "SAKURA materials",
+        "multi-angle volume",
+        "runtime readiness"
+      ],
+      "mismatches": [
+        "hidden drive and bowl-lock mechanics remain inferred"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "mapStrippedRender": "artifacts\\img2threejs\\stand-mixer\\review-three-quarter.png",
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "three-quarter-powered",
+        "long-axis",
+        "thickness-axis"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "references\\intake\\stand-mixer\\front.png",
+        "renderScreenshot": "artifacts\\img2threejs\\stand-mixer\\review-three-quarter.png",
+        "comparisonImage": "artifacts\\img2threejs\\stand-mixer\\comparison-lighting-pass.png",
+        "cameraView": "three-quarter",
+        "notes": "",
+        "aiVisionNotes": ""
+      }
+    },
+    {
+      "timestamp": "2026-08-03T12:17:19.279128+00:00",
+      "passId": "interaction-pass",
+      "estimatedFidelity": 0.86,
+      "aiVisionScore": 0.86,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.82,
+        "lightingCamera": 0.81,
+        "interaction": 0.86
+      },
+      "featureReviews": [
+        {
+          "id": "mixer-silhouette",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Domed cream head, deep bowl, rear column and stepped base preserve the turn-sheet identity."
+        },
+        {
+          "id": "planetary-whisk",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Stepped drive collar and six independent curved whisk wires are visible above the bowl rim."
+        },
+        {
+          "id": "bowl-seat-handle",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Lathed deep bowl, rolled rim, raised seat and U handles retain readable negative spaces across views."
+        },
+        {
+          "id": "controls-hinge",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Layered front dial, lower dial, release lever and mirrored hinge caps remain independent."
+        },
+        {
+          "id": "rear-vents",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Eight real recessed vent-slot meshes read clearly in the rear view."
+        },
+        {
+          "id": "mixing-action",
+          "score": 0.86,
+          "passed": true,
+          "notes": "The 5.2-second cue actuates release lever, raises and lowers the head, turns controls, spins planetary whisk and churns visible mixture."
+        }
+      ],
+      "action": "continue",
+      "summary": "Powered cue clearly actuates release lever, head lift and return, front and lower controls, planetary whisk and bounded bowl mixture; stop resets all state.",
+      "matched": [
+        "named assemblies",
+        "SAKURA materials",
+        "multi-angle volume",
+        "runtime readiness"
+      ],
+      "mismatches": [
+        "hidden drive and bowl-lock mechanics remain inferred"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "mapStrippedRender": "artifacts\\img2threejs\\stand-mixer\\review-powered.png",
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "three-quarter-powered",
+        "long-axis",
+        "thickness-axis"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "references\\intake\\stand-mixer\\front.png",
+        "renderScreenshot": "artifacts\\img2threejs\\stand-mixer\\review-powered.png",
+        "comparisonImage": "artifacts\\img2threejs\\stand-mixer\\comparison-interaction-pass.png",
+        "cameraView": "three-quarter-powered",
+        "notes": "",
+        "aiVisionNotes": ""
+      }
+    },
+    {
+      "timestamp": "2026-08-03T12:17:22.191701+00:00",
+      "passId": "optimization-pass",
+      "estimatedFidelity": 0.88,
+      "aiVisionScore": 0.88,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.82,
+        "lightingCamera": 0.81,
+        "interaction": 0.86
+      },
+      "featureReviews": [
+        {
+          "id": "mixer-silhouette",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Domed cream head, deep bowl, rear column and stepped base preserve the turn-sheet identity."
+        },
+        {
+          "id": "planetary-whisk",
+          "score": 0.86,
+          "passed": true,
+          "notes": "Stepped drive collar and six independent curved whisk wires are visible above the bowl rim."
+        },
+        {
+          "id": "bowl-seat-handle",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Lathed deep bowl, rolled rim, raised seat and U handles retain readable negative spaces across views."
+        },
+        {
+          "id": "controls-hinge",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Layered front dial, lower dial, release lever and mirrored hinge caps remain independent."
+        },
+        {
+          "id": "rear-vents",
+          "score": 0.88,
+          "passed": true,
+          "notes": "Eight real recessed vent-slot meshes read clearly in the rear view."
+        },
+        {
+          "id": "mixing-action",
+          "score": 0.86,
+          "passed": true,
+          "notes": "The 5.2-second cue actuates release lever, raises and lowers the head, turns controls, spins planetary whisk and churns visible mixture."
+        }
+      ],
+      "action": "continue",
+      "summary": "Performance accepted at 72 draw calls and 47,452 triangles, below the 110 draw-call and 80,000-triangle budgets.",
+      "matched": [
+        "named assemblies",
+        "SAKURA materials",
+        "multi-angle volume",
+        "runtime readiness"
+      ],
+      "mismatches": [
+        "hidden drive and bowl-lock mechanics remain inferred"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [],
+      "mapStrippedRender": "artifacts\\img2threejs\\stand-mixer\\review-front.png",
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "three-quarter-powered",
+        "long-axis",
+        "thickness-axis"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "references\\intake\\stand-mixer\\front.png",
+        "renderScreenshot": "artifacts\\img2threejs\\stand-mixer\\review-front.png",
+        "comparisonImage": "artifacts\\img2threejs\\stand-mixer\\comparison-optimization-pass.png",
+        "cameraView": "front",
+        "notes": "",
+        "aiVisionNotes": ""
+      }
+    }
+  ],
+  "lodPlan": [
+    {
+      "tier": "near",
+      "distance": 0,
+      "strategy": "full named assemblies"
+    },
+    {
+      "tier": "far",
+      "distance": 20,
+      "strategy": "hide powered bubbles when inactive and reuse geometry"
+    }
+  ],
+  "performanceBudget": {
+    "qualityPriority": "reference-fidelity real-time browser",
+    "targetTriangles": 80000,
+    "maxDrawCalls": 110,
+    "textureSize": 1024,
+    "fpsTarget": 60,
+    "optimizationPolicy": "Share wire/vent/foot geometries and avoid particle allocations during update."
+  },
+  "lightingFromPhoto": [
+    "warm upper-left key intensity 3.1 with broad soft shadow",
+    "cool rear-right fill intensity 1.25",
+    "pink rear rim intensity 1.45",
+    "ACES exposure 1.0 on pale neutral background",
+    "soft ground contact shadow under four feet"
+  ],
+  "proceduralStrategy": [
+    "Lock base, column, head and bowl proportions first.",
+    "Build head, hinge, controls, bowl and whisk as separate named assemblies.",
+    "Use CatmullRom tube curves for six whisk wires and repeated rounded boxes for vents.",
+    "Animate head tilt, release lever, planetary rotation and visible cream mixture with exact reset.",
+    "Reuse repeated geometries to preserve real-time browser performance."
+  ],
+  "animationAnchors": [
+    "motor-head-pivot around rear side hinge",
+    "beater-pivot beneath planetary hub",
+    "speed-dial-pivot on front face",
+    "head-release-lever-pivot beneath head",
+    "bowl-seat-socket and power-cable-socket"
+  ],
+  "destructionAnchors": [
+    "base and column shell group",
+    "tilt head and hinge group",
+    "bowl and handle group",
+    "planetary hub and whisk group"
+  ],
+  "risks": [
+    "interior drive and bowl locking geometry are inferred",
+    "whisk wire arcs require enough segments to remain smooth without excessive triangles",
+    "visible mixture must remain inside bowl and reset deterministically"
+  ],
+  "localSpecSearch": {
+    "collection": "core_3d",
+    "query": "bubble machine radial torus rings transparent plastic fan",
+    "matches": [
+      {
+        "record_id": "core.pbr-opacity-alpha",
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "docs/raw/img2threejs-skill-dataset.json"
+          }
+        ]
+      },
+      {
+        "record_id": "core.shader-mapping-torusgeometry-rings-loops",
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "docs/raw/img2threejs-skill-dataset.json"
+          }
+        ]
+      }
+    ]
+  },
+  "tier1Results": [
+    {
+      "passed": false,
+      "checks": {
+        "silhouetteIoU": 0.2762,
+        "aspectRatioDelta": 0.0613,
+        "scaleDelta": 0.9937,
+        "bilateralSymmetryError": 0.0394,
+        "colorDelta": {
+          "checked": 26,
+          "maxDeltaE": 17.03,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 17.03
+            },
+            {
+              "componentId": null,
+              "deltaE": 17.03
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.68
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.85
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.68
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.68
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.11
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.68
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.68
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.68
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.68
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.68
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.99
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.68
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.68
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.99
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.99
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.11
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.68
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.68
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.99
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.68
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.99
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.99
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.68
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.29
+            }
+          ],
+          "gated": true
+        }
+      },
+      "failures": [
+        "silhouette IoU 0.276 is below threshold 0.85",
+        "aspect-ratio delta 0.061 exceeds threshold 0.05",
+        "scale delta 0.994 exceeds threshold 0.08"
+      ],
+      "renderHash": "246d3a13e07c4048",
+      "passId": "optimization-pass"
+    },
+    {
+      "passed": false,
+      "checks": {
+        "silhouetteIoU": 0.2762,
+        "aspectRatioDelta": 0.0613,
+        "scaleDelta": 0.9937,
+        "bilateralSymmetryError": 0.0394,
+        "colorDelta": {
+          "checked": 26,
+          "maxDeltaE": 17.03,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 17.03
+            },
+            {
+              "componentId": null,
+              "deltaE": 17.03
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.68
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.85
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.68
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.68
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.11
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.68
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.68
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.68
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.68
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.68
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.99
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.68
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.68
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.99
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.99
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.11
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.68
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.68
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.99
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.68
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.99
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.99
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.68
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.29
+            }
+          ],
+          "gated": true
+        }
+      },
+      "failures": [
+        "silhouette IoU 0.276 is below threshold 0.85",
+        "aspect-ratio delta 0.061 exceeds threshold 0.05",
+        "scale delta 0.994 exceeds threshold 0.08"
+      ],
+      "renderHash": "246d3a13e07c4048",
+      "passId": "optimization-pass"
+    }
+  ]
+}

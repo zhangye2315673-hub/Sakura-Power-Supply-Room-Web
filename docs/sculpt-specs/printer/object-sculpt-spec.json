@@ -1,0 +1,6018 @@
+{
+  "targetName": "SAKURA Compact Inkjet Printer",
+  "targetId": "printer",
+  "schemaVersion": "2.1",
+  "terminologyProfile": {
+    "domain": "real-time procedural Three.js appliance",
+    "geometryTerms": [
+      "silhouette",
+      "topology",
+      "bevel",
+      "pivot",
+      "socket",
+      "instancing"
+    ],
+    "materialTerms": [
+      "albedo",
+      "roughness",
+      "normal map",
+      "ambient occlusion",
+      "clearcoat",
+      "transmission"
+    ],
+    "lightingTerms": [
+      "key light",
+      "fill light",
+      "rim light",
+      "contact shadow",
+      "exposure"
+    ],
+    "descriptionRule": "Use measurable 3D object-space terms and evidence refs."
+  },
+  "sourceImage": "references/intake/printer/front.png",
+  "referenceCamera": {
+    "solved": false,
+    "fovDegrees": 34,
+    "aspect": 0.59192348565356,
+    "orientation": {
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0
+    },
+    "positionHint": [
+      0,
+      0,
+      4
+    ],
+    "note": "Three orthographic-like views constrain the complete exterior. Internal ink, roller and underside geometry remain inferred."
+  },
+  "suitability": "pass",
+  "scores": {
+    "object_isolation": 3,
+    "silhouette_readability": 3,
+    "depth_inference": 3,
+    "primitive_decomposition": 3,
+    "material_procedurality": 3,
+    "occlusion_risk": 2,
+    "interaction_fit": 3
+  },
+  "preSpecAssessment": {
+    "objectClass": {
+      "primaryType": "compact desktop inkjet printer",
+      "primaryDomain": "object",
+      "formLanguage": [
+        "hard-surface",
+        "rounded-retro",
+        "layered-shell",
+        "soft-industrial"
+      ],
+      "structureKind": [
+        "compound object",
+        "layered enclosure",
+        "hinged trays",
+        "repeated roller and foot modules"
+      ],
+      "motionPotential": [
+        "paper feed",
+        "roller rotation",
+        "tray hinge",
+        "control press",
+        "status light"
+      ],
+      "materialFamilies": [
+        "warm ABS plastic",
+        "Sakura pink ABS",
+        "dark rubber",
+        "paper",
+        "indicator lens"
+      ],
+      "notes": "Front, side and back views establish the outer enclosure, paper support, output tray, controls and rear inlet. Printhead, cartridge bay, internal rollers and underside details are not visible."
+    },
+    "complexity": {
+      "tier": "complex",
+      "scores": {
+        "silhouetteComplexity": 2,
+        "componentCount": 3,
+        "hierarchyDepth": 3,
+        "repetitionDensity": 2,
+        "materialLayerCount": 3,
+        "localDetailDensity": 3,
+        "occlusionRisk": 2,
+        "actionReadinessNeed": 3
+      },
+      "estimatedCounts": {
+        "macroComponents": 5,
+        "mesoComponents": 15,
+        "microFeatureGroups": 11,
+        "materialLayers": 7,
+        "repetitionSystems": 4
+      },
+      "reasoning": [
+        "The broad rounded shell is simple, but front and rear articulated paper systems, inset output cavity, controls, rollers, feet and a purpose-readable paper animation require a complex runtime hierarchy."
+      ]
+    },
+    "specDepthDecision": {
+      "requiredDepth": "complex",
+      "minimumComponentLevels": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "needsRepetitionSystems": true,
+      "needsMaterialLocalOverrides": true,
+      "needsMultipleReviewViews": true,
+      "needsActionReadyHierarchy": true,
+      "rationale": "Compound articulated assembly with radial repetition and mixed transparency."
+    },
+    "unknownsToResolveBeforeImplementation": [],
+    "detailInventory": {
+      "scanMethod": "three-view component-zones",
+      "targetMinDetails": 16,
+      "note": "Each observed or inferred identity detail maps to a named component local feature or material override.",
+      "details": [
+        {
+          "id": "printer-detail-1",
+          "kind": "contour",
+          "description": "Broad cream rectangular enclosure with strongly rounded shoulders and lower corners.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "main-shell"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.98
+        },
+        {
+          "id": "printer-detail-2",
+          "kind": "seam",
+          "description": "Thin horizontal top-lid seam wraps across the front and side.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "top-lid"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.95
+        },
+        {
+          "id": "printer-detail-3",
+          "kind": "contour",
+          "description": "Tall rear paper support leans backward and frames the input sheet.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "rear-paper-support"
+          },
+          "evidenceRef": "side-view",
+          "confidence": 0.97
+        },
+        {
+          "id": "printer-detail-4",
+          "kind": "contour",
+          "description": "Wide Sakura-pink rear backplate with rounded corners and lower finger recess.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "rear-support-backplate"
+          },
+          "evidenceRef": "back-view",
+          "confidence": 0.96
+        },
+        {
+          "id": "printer-detail-5",
+          "kind": "contour",
+          "description": "Single warm-white paper sheet rises above the rear support.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "input-paper"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.98
+        },
+        {
+          "id": "printer-detail-6",
+          "kind": "hole",
+          "description": "Deep pink inset output bay with dark inner throat.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "output-cavity"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.98
+        },
+        {
+          "id": "printer-detail-7",
+          "kind": "bevel",
+          "description": "Projecting Sakura-pink output tray with thick rounded front rim.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "output-tray-pivot"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.98
+        },
+        {
+          "id": "printer-detail-8",
+          "kind": "groove",
+          "description": "Centered shallow grip recess in the tray front edge.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "tray-handle"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.96
+        },
+        {
+          "id": "printer-detail-9",
+          "kind": "contour",
+          "description": "Warm-white page rests on the output tray and emerges from the throat.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "printed-paper"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.97
+        },
+        {
+          "id": "printer-detail-10",
+          "kind": "bevel",
+          "description": "Large layered circular Sakura-pink power/action button.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "control-button-pivot"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.98
+        },
+        {
+          "id": "printer-detail-11",
+          "kind": "fastener",
+          "description": "Small circular indicator sits to the right of the main button.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "status-indicator"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.97
+        },
+        {
+          "id": "printer-detail-12",
+          "kind": "ridge",
+          "description": "Paired dark feed rollers are visible inside the output throat during operation.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "feed-roller-array"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.64
+        },
+        {
+          "id": "printer-detail-13",
+          "kind": "hole",
+          "description": "Square rear power inlet with black circular core.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "rear-power-inlet"
+          },
+          "evidenceRef": "back-view",
+          "confidence": 0.98
+        },
+        {
+          "id": "printer-detail-14",
+          "kind": "seam",
+          "description": "Continuous pink lower rear band separates shell from feet.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "rear-lower-band"
+          },
+          "evidenceRef": "back-view",
+          "confidence": 0.95
+        },
+        {
+          "id": "printer-detail-15",
+          "kind": "fastener",
+          "description": "Four shallow Sakura-pink rubberized feet support the enclosure.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "foot-array"
+          },
+          "evidenceRef": "side-view",
+          "confidence": 0.88
+        },
+        {
+          "id": "printer-detail-16",
+          "kind": "gloss",
+          "description": "Pale broad edge highlights follow the shell corner radii.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "material.localOverrides",
+            "ref": "cream-shell-edge-response"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.9
+        },
+        {
+          "id": "printer-detail-17",
+          "kind": "bevel",
+          "description": "Raised pink inner lip follows the rectangular output opening.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "output-cavity-inner-lip"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.96
+        },
+        {
+          "id": "printer-detail-18",
+          "kind": "ridge",
+          "description": "Two pink vertical guides flank the input page.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "silhouette/material/interaction",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "paper-guide-array"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.96
+        }
+      ]
+    },
+    "sourceImage": "references/intake/printer/front.png"
+  },
+  "qualityContract": {
+    "qualityBar": "complex",
+    "definitionOfDone": [
+      "The printer matches the three-view silhouette and proportions, preserves the cream/pink material zoning, separates all paper-handling assemblies, and unmistakably prints and ejects a page during the 5.2 second powered cue."
+    ],
+    "minimumSpecDepth": {
+      "macroComponents": 5,
+      "mesoComponents": 12,
+      "microFeatureGroups": 8,
+      "materialLayers": 7,
+      "repetitionSystems": 5,
+      "reviewViewpoints": 5
+    },
+    "featureGroups": [
+      {
+        "id": "shell",
+        "name": "Rounded shell proportion",
+        "required": true,
+        "qualityCriteria": [
+          "Height/width 1.12 and depth/width 0.72 with broad corner radii."
+        ],
+        "evidenceRefs": [
+          "front",
+          "side"
+        ],
+        "failureModes": [
+          "boxy silhouette"
+        ]
+      },
+      {
+        "id": "wheel",
+        "name": "Eight-ring bubble wheel",
+        "required": true,
+        "qualityCriteria": [
+          "Exactly eight rings and eight spokes rotate around a centered front axis."
+        ],
+        "evidenceRefs": [
+          "front"
+        ],
+        "failureModes": [
+          "wrong count or fused parts"
+        ]
+      },
+      {
+        "id": "reservoir",
+        "name": "Side liquid reservoir",
+        "required": true,
+        "qualityCriteria": [
+          "Translucent right-rear tank remains attached from side and back."
+        ],
+        "evidenceRefs": [
+          "side",
+          "back"
+        ],
+        "failureModes": [
+          "floating or opaque tank"
+        ]
+      },
+      {
+        "id": "rear-fan",
+        "name": "Rear fan and grille",
+        "required": true,
+        "qualityCriteria": [
+          "Rotor is visible behind concentric grille geometry and four fasteners."
+        ],
+        "evidenceRefs": [
+          "back"
+        ],
+        "failureModes": [
+          "flat decal grille"
+        ]
+      },
+      {
+        "id": "powered-action",
+        "name": "Powered purpose animation",
+        "required": true,
+        "qualityCriteria": [
+          "Control, wheel and fan rotate while bubbles rise and spread, then exact reset at 5.2 seconds."
+        ],
+        "evidenceRefs": [
+          "turn-sheet-left-effect"
+        ],
+        "failureModes": [
+          "generic wobble or no bubbles"
+        ]
+      }
+    ],
+    "visualDeltaChecks": [
+      "silhouette",
+      "depth ratio",
+      "eight-ring count",
+      "material separation",
+      "powered bubbles"
+    ],
+    "antiShallowSpecRules": [
+      "No fused compound mesh.",
+      "No flat texture replacement for wheel or grille.",
+      "No pass without browser evidence."
+    ]
+  },
+  "qualityTargets": {
+    "fidelity": "high real-time procedural match",
+    "minimumReadDistance": "gallery orbit",
+    "identityCritical": [
+      "eight-ring wheel",
+      "side tank",
+      "rear grille",
+      "cream-pink palette"
+    ],
+    "reviewViewpoints": [
+      "front",
+      "side",
+      "back",
+      "three-quarter",
+      "powered"
+    ],
+    "mustMatch": [
+      "wide rounded cream body and thin top seam",
+      "rear leaning paper support with white input sheet",
+      "deep pink output cavity and projecting hinged tray",
+      "large circular control plus small indicator",
+      "rear power inlet and lower pink band",
+      "visible paper feed and ejection action"
+    ]
+  },
+  "selfCorrectLoop": {
+    "enabled": true,
+    "visualAcceptance": {
+      "reviewer": "ai-vision",
+      "threshold": 0.7,
+      "comparisonArtifactRequired": true,
+      "layerScoresRequired": true,
+      "codePixelDiffIsAcceptanceAuthority": false,
+      "requiredLayerScores": [
+        "silhouetteProportion",
+        "componentStructure",
+        "formDetail",
+        "materialSurface",
+        "lightingCamera"
+      ],
+      "featureReviewPolicy": {
+        "enabled": true,
+        "reviewUnit": "semantic-subsystem",
+        "maxCriticalFeaturesPerPass": 5,
+        "maxImportantFeaturesPerPass": 3,
+        "criticalDefaultThreshold": 0.8,
+        "importantAverageThreshold": 0.65,
+        "adaptiveEscalation": true,
+        "singleImagePairOnly": true
+      }
+    },
+    "reviewAfterPasses": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "allowedActions": [
+      "continue",
+      "refine-spec",
+      "refine-code",
+      "request-input",
+      "stop"
+    ],
+    "screenshotPolicy": {
+      "requiredForPasses": [
+        "blockout",
+        "structural-pass",
+        "form-refinement",
+        "material-pass",
+        "lighting-pass",
+        "interaction-pass"
+      ],
+      "preferredCapture": "model-review.html",
+      "minimumEvidence": "render screenshot, side-by-side comparison, AI vision score and feature scores"
+    }
+  },
+  "featureReviewTargets": [
+    {
+      "id": "printer-silhouette",
+      "name": "Body, support and tray silhouette",
+      "tier": "critical",
+      "passIds": [
+        "blockout",
+        "form-refinement"
+      ],
+      "minimumScore": 0.8,
+      "mustPass": true,
+      "componentRefs": [
+        "main-shell",
+        "rear-paper-support",
+        "output-tray"
+      ],
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ]
+    },
+    {
+      "id": "paper-handling",
+      "name": "Input support, paper path, rollers and output sheet",
+      "tier": "critical",
+      "passIds": [
+        "structural-pass",
+        "interaction-pass"
+      ],
+      "minimumScore": 0.8,
+      "mustPass": true,
+      "componentRefs": [
+        "rear-paper-support",
+        "input-paper",
+        "feed-roller-array",
+        "printed-paper"
+      ],
+      "evidenceRefs": [
+        "front-view",
+        "side-view"
+      ]
+    },
+    {
+      "id": "output-cavity",
+      "name": "Deep inset output cavity and raised pink lip",
+      "tier": "critical",
+      "passIds": [
+        "structural-pass",
+        "form-refinement"
+      ],
+      "minimumScore": 0.8,
+      "mustPass": true,
+      "componentRefs": [
+        "output-cavity",
+        "output-cavity-inner-lip",
+        "output-tray"
+      ],
+      "evidenceRefs": [
+        "front-view"
+      ]
+    },
+    {
+      "id": "controls",
+      "name": "Large round control and small indicator",
+      "tier": "important",
+      "passIds": [
+        "structural-pass",
+        "material-pass"
+      ],
+      "minimumScore": 0.74,
+      "mustPass": false,
+      "componentRefs": [
+        "control-button",
+        "status-indicator"
+      ],
+      "evidenceRefs": [
+        "front-view"
+      ]
+    },
+    {
+      "id": "rear-identity",
+      "name": "Rear paper backplate, lower band and power inlet",
+      "tier": "important",
+      "passIds": [
+        "structural-pass",
+        "form-refinement"
+      ],
+      "minimumScore": 0.74,
+      "mustPass": false,
+      "componentRefs": [
+        "rear-support-backplate",
+        "rear-lower-band",
+        "rear-power-inlet"
+      ],
+      "evidenceRefs": [
+        "back-view"
+      ]
+    },
+    {
+      "id": "printing-action",
+      "name": "Button press, roller spin and page ejection",
+      "tier": "critical",
+      "passIds": [
+        "interaction-pass"
+      ],
+      "minimumScore": 0.82,
+      "mustPass": true,
+      "componentRefs": [
+        "control-button-pivot",
+        "feed-roller-array",
+        "printed-paper-pivot"
+      ],
+      "evidenceRefs": [
+        "front-view",
+        "side-view"
+      ]
+    }
+  ],
+  "sculptPipeline": {
+    "passGateMode": "locked-sequential",
+    "passOrder": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "currentPass": "complete",
+    "completedPasses": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "lastCompletedPass": "optimization-pass",
+    "blockedReason": "all build passes completed",
+    "nextRequiredEvidence": []
+  },
+  "lookDevTargets": {
+    "qualityPriority": "reference-fidelity",
+    "materialPass": {
+      "minimumTextureResolution": 1024,
+      "independentMapChannels": [
+        "albedo",
+        "roughness",
+        "height",
+        "normal",
+        "ambient-occlusion"
+      ],
+      "referencePbrExtraction": {
+        "requiredWhenSourceImagePresent": true,
+        "targetThreshold": 0.7,
+        "stopOnLowConfidence": true
+      }
+    },
+    "lightingPass": {
+      "requiredTerms": [
+        "key light",
+        "fill light",
+        "rim light",
+        "exposure",
+        "tone mapping",
+        "contact shadow"
+      ]
+    }
+  },
+  "actionReadiness": {
+    "contract": "Named pivots, sockets, colliders and resettable powered transforms.",
+    "defaultRigType": "action-ready-appliance-rig",
+    "rootMotionNode": "root"
+  },
+  "assumptions": [
+    "The cartridge carriage, ink path, internal drive and most rollers are hidden and omitted.",
+    "Two feed rollers are added inside the throat to support the printing action; their exact profile is inferred.",
+    "The output tray hinge axis and opening travel are inferred from the fixed open pose.",
+    "Underside fasteners, ventilation and cable shape are not shown; only a rear power socket is provided."
+  ],
+  "coordinateFrame": {
+    "front": "+Z faces the output opening and controls",
+    "up": "+Y with floor at y=0",
+    "scaleReference": "body width = 3.4 world units; closed body height = 1.58 world units"
+  },
+  "silhouette": {
+    "boundingShape": "wide low rounded enclosure with a backward-leaning paper support above and a short tray projecting forward",
+    "aspectRatios": [
+      "body width:height:depth = 3.40:1.58:2.38",
+      "overall height with input paper = 2.75",
+      "output tray projection = 0.86"
+    ],
+    "symmetry": "main shell is bilateral; right-side controls and rear-right power inlet break symmetry",
+    "dominantCurves": [
+      "large shell corner radii",
+      "rounded output opening",
+      "tray front lip",
+      "paper support shoulder radii"
+    ],
+    "negativeSpaces": [
+      "deep output throat above tray",
+      "small gap below tray front edge",
+      "paper guide gaps beside input page"
+    ],
+    "landmarks": [
+      "pink rear paper support",
+      "white input page",
+      "large right control",
+      "pink output tray",
+      "rear power inlet"
+    ]
+  },
+  "viewEvidence": [
+    {
+      "id": "front-view",
+      "view": "front",
+      "imagePath": "references/intake/printer/front.png",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "body width and corner radius",
+        "output cavity and tray",
+        "input page and two controls"
+      ],
+      "confidence": 0.98
+    },
+    {
+      "id": "side-view",
+      "view": "side",
+      "imagePath": "references/intake/printer/side.png",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "body depth",
+        "tray projection",
+        "rear support lean and foot profile"
+      ],
+      "confidence": 0.96
+    },
+    {
+      "id": "back-view",
+      "view": "back",
+      "imagePath": "references/intake/printer/back.png",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "wide rear support backplate",
+        "lower pink band",
+        "rear-right power inlet"
+      ],
+      "confidence": 0.98
+    }
+  ],
+  "componentTree": [
+    {
+      "id": "root",
+      "name": "Printer Root",
+      "level": "macro",
+      "role": "container",
+      "importance": 1,
+      "confidence": 1,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Runtime container for the complete appliance hierarchy.",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "localFeatures": [
+        "root.silhouette",
+        "root.bevel",
+        "root.material-zone"
+      ],
+      "actionProfile": {
+        "animationRole": "root",
+        "pivot": {
+          "mode": "base",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 1
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(248,233,213,1)",
+        "secondaryAlbedo": "rgba(243,194,181,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.98
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "root.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "root.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "root.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "fidelityTier": "form-refinement",
+      "geometryDescriptor": {
+        "topologyIntent": "assembled compact printer with independent enclosure, paper supports, cavity, trays, controls and feed modules",
+        "edgeTreatment": {
+          "type": "rounded bevel",
+          "bevelRadius": 0.14,
+          "segments": 4
+        },
+        "deformationStack": [],
+        "uvStrategy": "generated procedural coordinates",
+        "normalStrategy": "vertex normals"
+      },
+      "dimensions": {
+        "width": 3.4,
+        "height": 2.75,
+        "depth": 3.4,
+        "units": "world",
+        "confidence": 0.96
+      }
+    },
+    {
+      "id": "main-shell",
+      "name": "Rounded Main Enclosure",
+      "level": "macro",
+      "role": "part",
+      "importance": 1,
+      "confidence": 0.99,
+      "primitive": "extrude",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rounded rigid molded enclosure with a constant broad footprint and visible panel seam.",
+      "parent": "root",
+      "transform": {
+        "position": [
+          0,
+          1.12,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "localFeatures": [
+        "main-shell.silhouette",
+        "main-shell.bevel",
+        "main-shell.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(248,233,213,1)",
+        "secondaryAlbedo": "rgba(245,225,206,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.99
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "main-shell.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "main-shell.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "main-shell.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "root",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "top-lid",
+      "name": "Top Access Lid",
+      "level": "macro",
+      "role": "part",
+      "importance": 1,
+      "confidence": 0.99,
+      "primitive": "ellipsoid",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Discrete circular front assembly proud of the housing.",
+      "parent": "main-shell",
+      "transform": {
+        "position": [
+          0,
+          0.28,
+          0.82
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "localFeatures": [
+        "top-lid.silhouette",
+        "top-lid.bevel",
+        "top-lid.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(102,80,70,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.98
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "top-lid.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "top-lid.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "top-lid.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "main-shell",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "shell-highlight-band",
+      "name": "Shell Highlight Band",
+      "level": "macro",
+      "role": "part",
+      "importance": 0.9,
+      "confidence": 0.94,
+      "primitive": "extrude",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Independent rounded rectangular translucent tank attached to the right-rear housing.",
+      "parent": "main-shell",
+      "transform": {
+        "position": [
+          0.92,
+          0.1,
+          -0.28
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "cream-shell",
+      "materialLayers": [
+        "cream-shell"
+      ],
+      "localFeatures": [
+        "shell-highlight-band.silhouette",
+        "shell-highlight-band.bevel",
+        "shell-highlight-band.material-zone"
+      ],
+      "actionProfile": {
+        "animationRole": "static-part",
+        "sockets": [
+          {
+            "id": "reservoir-fluid-outlet",
+            "localPosition": [
+              -0.2,
+              -0.52,
+              0
+            ]
+          }
+        ]
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(235,189,177,0.68)",
+        "secondaryAlbedo": "rgba(248,233,213,0.42)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.92
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "shell-highlight-band.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "shell-highlight-band.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "shell-highlight-band.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "main-shell",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "rear-paper-support-pivot",
+      "name": "Rear Paper Support Pivot",
+      "level": "macro",
+      "role": "part",
+      "importance": 0.95,
+      "confidence": 0.99,
+      "primitive": "ellipsoid",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Discrete circular rear ventilation and fan assembly inset into the back panel.",
+      "parent": "main-shell",
+      "transform": {
+        "position": [
+          0,
+          0.18,
+          -0.82
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-shell",
+      "materialLayers": [
+        "pink-shell"
+      ],
+      "localFeatures": [
+        "rear-paper-support-pivot.silhouette",
+        "rear-paper-support-pivot.bevel",
+        "rear-paper-support-pivot.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(70,57,49,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.98
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "rear-paper-support-pivot.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "rear-paper-support-pivot.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "rear-paper-support-pivot.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "main-shell",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "rear-paper-support",
+      "name": "Rear Pink Paper Support",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.95,
+      "confidence": 0.99,
+      "primitive": "torus",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Thick rigid circular trim ring with a rounded cross section.",
+      "parent": "rear-paper-support-pivot",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0.03
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-shell",
+      "materialLayers": [
+        "pink-shell"
+      ],
+      "localFeatures": [
+        "rear-paper-support.silhouette",
+        "rear-paper-support.bevel",
+        "rear-paper-support.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(215,181,170,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.99
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "rear-paper-support.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "rear-paper-support.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "rear-paper-support.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "rear-paper-support-pivot",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "rear-support-backplate",
+      "name": "Rear Support Backplate",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.9,
+      "confidence": 0.96,
+      "primitive": "ellipsoid",
+      "topologyClass": "conforming-shell",
+      "topologyRationale": "Thin transparent cover follows the circular working cavity.",
+      "parent": "rear-paper-support",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0.04
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-shell",
+      "materialLayers": [
+        "pink-shell"
+      ],
+      "localFeatures": [
+        "rear-support-backplate.silhouette",
+        "rear-support-backplate.bevel",
+        "rear-support-backplate.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(102,80,70,0.36)",
+        "secondaryAlbedo": "rgba(215,181,170,0.18)",
+        "materialClass": "glass",
+        "materialClassConfidence": 0.9
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "rear-support-backplate.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "rear-support-backplate.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "rear-support-backplate.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "rear-paper-support",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "paper-guide-array",
+      "name": "Twin Paper Guides",
+      "level": "meso",
+      "role": "part",
+      "importance": 1,
+      "confidence": 0.99,
+      "primitive": "ellipsoid",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rigid radial wheel rotates as one assembly around the front axis.",
+      "parent": "rear-paper-support",
+      "transform": {
+        "position": [
+          0,
+          0,
+          -0.03
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-accent",
+      "materialLayers": [
+        "pink-accent"
+      ],
+      "localFeatures": [
+        "paper-guide-array.silhouette",
+        "paper-guide-array.bevel",
+        "paper-guide-array.material-zone"
+      ],
+      "actionProfile": {
+        "animationRole": "rotor",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            0,
+            1
+          ],
+          "confidence": 0.99
+        },
+        "sockets": [
+          {
+            "id": "bubble-emitter",
+            "localPosition": [
+              -0.68,
+              0.05,
+              0.12
+            ]
+          }
+        ]
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(215,181,170,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.99
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "paper-guide-array.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "paper-guide-array.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "paper-guide-array.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "rear-paper-support",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "input-paper",
+      "name": "Input Paper Sheet",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.85,
+      "confidence": 0.99,
+      "primitive": "ellipsoid",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Concentric rigid hub cap on the wheel axis.",
+      "parent": "rear-paper-support-pivot",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0.12
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "paper",
+      "materialLayers": [
+        "paper"
+      ],
+      "localFeatures": [
+        "input-paper.silhouette",
+        "input-paper.bevel",
+        "input-paper.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(185,137,129,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.99
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "input-paper.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "input-paper.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "input-paper.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "rear-paper-support-pivot",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "output-cavity",
+      "name": "Deep Output Cavity",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.82,
+      "confidence": 0.97,
+      "primitive": "extrude",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Independent rounded catch tray overlaps the lower front rim.",
+      "parent": "main-shell",
+      "transform": {
+        "position": [
+          0,
+          -0.48,
+          0.9
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "cavity-dark",
+      "materialLayers": [
+        "cavity-dark"
+      ],
+      "localFeatures": [
+        "output-cavity.silhouette",
+        "output-cavity.bevel",
+        "output-cavity.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(185,137,129,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.98
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "output-cavity.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "output-cavity.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "output-cavity.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "main-shell",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "output-cavity-inner-lip",
+      "name": "Raised Output Inner Lip",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.78,
+      "confidence": 0.94,
+      "primitive": "ellipsoid",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Separate low rounded control on the top surface.",
+      "parent": "output-cavity",
+      "transform": {
+        "position": [
+          0,
+          1.13,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-accent",
+      "materialLayers": [
+        "pink-accent"
+      ],
+      "localFeatures": [
+        "output-cavity-inner-lip.silhouette",
+        "output-cavity-inner-lip.bevel",
+        "output-cavity-inner-lip.material-zone"
+      ],
+      "actionProfile": {
+        "animationRole": "control",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.9
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(185,137,129,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.98
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "output-cavity-inner-lip.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "output-cavity-inner-lip.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "output-cavity-inner-lip.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "output-cavity",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "feed-roller-array",
+      "name": "Paired Feed Rollers",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.7,
+      "confidence": 0.95,
+      "primitive": "ellipsoid",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Separate round cap above the translucent reservoir.",
+      "parent": "output-cavity",
+      "transform": {
+        "position": [
+          0,
+          0.68,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "roller-rubber",
+      "materialLayers": [
+        "roller-rubber"
+      ],
+      "localFeatures": [
+        "feed-roller-array.silhouette",
+        "feed-roller-array.bevel",
+        "feed-roller-array.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(215,181,170,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.97
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "feed-roller-array.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "feed-roller-array.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "feed-roller-array.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "output-cavity",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "output-tray-pivot",
+      "name": "Output Tray Hinge Pivot",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.9,
+      "confidence": 0.94,
+      "primitive": "ellipsoid",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Independent rotor turns around the rear-facing axis.",
+      "parent": "main-shell",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0.03
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-shell",
+      "materialLayers": [
+        "pink-shell"
+      ],
+      "localFeatures": [
+        "output-tray-pivot.silhouette",
+        "output-tray-pivot.bevel",
+        "output-tray-pivot.material-zone"
+      ],
+      "actionProfile": {
+        "animationRole": "rotor",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            0,
+            1
+          ],
+          "confidence": 0.9
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(70,57,49,1)",
+        "secondaryAlbedo": "rgba(243,194,181,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "output-tray-pivot.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "output-tray-pivot.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "output-tray-pivot.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "main-shell",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "output-tray",
+      "name": "Projecting Output Tray",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.95,
+      "confidence": 0.99,
+      "primitive": "torus",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rigid circular grille is physically layered in front of the rotor.",
+      "parent": "output-tray-pivot",
+      "transform": {
+        "position": [
+          0,
+          0,
+          -0.08
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-shell",
+      "materialLayers": [
+        "pink-shell"
+      ],
+      "localFeatures": [
+        "output-tray.silhouette",
+        "output-tray.bevel",
+        "output-tray.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(70,57,49,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.99
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "output-tray.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "output-tray.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "output-tray.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "output-tray-pivot",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "tray-handle",
+      "name": "Tray Front Grip",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.72,
+      "confidence": 0.97,
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Four discrete molded feet repeat at the housing corners.",
+      "parent": "output-tray",
+      "transform": {
+        "position": [
+          0,
+          -1.1,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-accent",
+      "materialLayers": [
+        "pink-accent"
+      ],
+      "localFeatures": [
+        "tray-handle.silhouette",
+        "tray-handle.bevel",
+        "tray-handle.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(70,57,49,1)",
+        "materialClass": "rubber",
+        "materialClassConfidence": 0.82
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "tray-handle.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "tray-handle.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "tray-handle.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "output-tray",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "printed-paper-pivot",
+      "name": "Printed Paper Feed Pivot",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.65,
+      "confidence": 0.42,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Inferred shallow recessed electrical inlet on the rear-lower housing.",
+      "parent": "output-cavity",
+      "transform": {
+        "position": [
+          0.65,
+          -0.75,
+          -0.83
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "paper",
+      "materialLayers": [
+        "paper"
+      ],
+      "localFeatures": [
+        "printed-paper-pivot.silhouette",
+        "printed-paper-pivot.bevel",
+        "printed-paper-pivot.material-zone"
+      ],
+      "actionProfile": {
+        "animationRole": "static-part",
+        "sockets": [
+          {
+            "id": "power-connection",
+            "localPosition": [
+              0,
+              0,
+              -0.04
+            ]
+          }
+        ]
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(70,57,49,1)",
+        "secondaryAlbedo": "rgba(95,91,104,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.7
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "printed-paper-pivot.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "printed-paper-pivot.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "printed-paper-pivot.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "output-cavity",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "printed-paper",
+      "name": "Printed Output Sheet",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.68,
+      "confidence": 0.98,
+      "primitive": "instanced-cluster",
+      "topologyClass": "surface-relief",
+      "topologyRationale": "Seven repeated recessed rounded slots interrupt the side panel surface.",
+      "parent": "printed-paper-pivot",
+      "transform": {
+        "position": [
+          0,
+          -0.48,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "paper",
+      "materialLayers": [
+        "paper"
+      ],
+      "localFeatures": [
+        "printed-paper.silhouette",
+        "printed-paper.bevel",
+        "printed-paper.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(70,57,49,1)",
+        "secondaryAlbedo": "rgba(102,80,70,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.95
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "printed-paper.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "printed-paper.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "printed-paper.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "printed-paper-pivot",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "control-button-pivot",
+      "name": "Main Control Pivot",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.55,
+      "confidence": 0.94,
+      "primitive": "extrude",
+      "topologyClass": "surface-relief",
+      "topologyRationale": "Thin raised/recessed mold split line around the lower housing.",
+      "parent": "main-shell",
+      "transform": {
+        "position": [
+          0,
+          -0.72,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-accent",
+      "materialLayers": [
+        "pink-accent"
+      ],
+      "localFeatures": [
+        "control-button-pivot.silhouette",
+        "control-button-pivot.bevel",
+        "control-button-pivot.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(102,80,70,1)",
+        "secondaryAlbedo": "rgba(248,233,213,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "control-button-pivot.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "control-button-pivot.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "control-button-pivot.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "main-shell",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "control-button",
+      "name": "Layered Round Control",
+      "level": "micro",
+      "role": "part",
+      "importance": 1,
+      "confidence": 0.99,
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Exactly eight separately named toroidal ring modules repeat radially.",
+      "parent": "control-button-pivot",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0.06
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-accent",
+      "materialLayers": [
+        "pink-accent"
+      ],
+      "localFeatures": [
+        "control-button.silhouette",
+        "control-button.bevel",
+        "control-button.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(215,181,170,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.99
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "control-button.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "control-button.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "control-button.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "control-button-pivot",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "status-indicator",
+      "name": "Small Status Indicator",
+      "level": "micro",
+      "role": "part",
+      "importance": 0.9,
+      "confidence": 0.99,
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Eight short rigid bars connect hub to ring roots.",
+      "parent": "main-shell",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0.02
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "indicator-lens",
+      "materialLayers": [
+        "indicator-lens"
+      ],
+      "localFeatures": [
+        "status-indicator.silhouette",
+        "status-indicator.bevel",
+        "status-indicator.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(215,181,170,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.99
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "status-indicator.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "status-indicator.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "status-indicator.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "main-shell",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "rear-power-inlet",
+      "name": "Rear Power Inlet",
+      "level": "micro",
+      "role": "part",
+      "importance": 0.82,
+      "confidence": 0.84,
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Five low-cost curved blade solids repeat around the rear rotor.",
+      "parent": "main-shell",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "cavity-dark",
+      "materialLayers": [
+        "cavity-dark"
+      ],
+      "localFeatures": [
+        "rear-power-inlet.silhouette",
+        "rear-power-inlet.bevel",
+        "rear-power-inlet.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(70,57,49,1)",
+        "secondaryAlbedo": "rgba(102,80,70,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.82
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "rear-power-inlet.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "rear-power-inlet.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "rear-power-inlet.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "main-shell",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "rear-lower-band",
+      "name": "Rear Pink Lower Band",
+      "level": "micro",
+      "role": "part",
+      "importance": 0.88,
+      "confidence": 0.99,
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Four concentric interrupted rings and spokes form visible grille geometry.",
+      "parent": "main-shell",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "pink-shell",
+      "materialLayers": [
+        "pink-shell"
+      ],
+      "localFeatures": [
+        "rear-lower-band.silhouette",
+        "rear-lower-band.bevel",
+        "rear-lower-band.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(185,137,129,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.99
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "rear-lower-band.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "rear-lower-band.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "rear-lower-band.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "main-shell",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "foot-array",
+      "name": "Four Feet",
+      "level": "micro",
+      "role": "part",
+      "importance": 0.65,
+      "confidence": 0.99,
+      "primitive": "instanced-cluster",
+      "topologyClass": "surface-relief",
+      "topologyRationale": "Four small round screw heads repeat at the rear panel corners.",
+      "parent": "main-shell",
+      "transform": {
+        "position": [
+          0,
+          0,
+          -0.84
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "roller-rubber",
+      "materialLayers": [
+        "roller-rubber"
+      ],
+      "localFeatures": [
+        "foot-array.silhouette",
+        "foot-array.bevel",
+        "foot-array.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(70,57,49,1)",
+        "secondaryAlbedo": "rgba(95,91,104,1)",
+        "materialClass": "metal",
+        "materialClassConfidence": 0.75
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "foot-array.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "foot-array.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "foot-array.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "main-shell",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "paper-exit-socket",
+      "name": "Paper Exit Socket",
+      "level": "micro",
+      "role": "part",
+      "importance": 0.52,
+      "confidence": 0.8,
+      "primitive": "box",
+      "topologyClass": "surface-relief",
+      "topologyRationale": "Small raised/dark index line rides on the control cap.",
+      "parent": "output-cavity-inner-lip",
+      "transform": {
+        "position": [
+          0,
+          0.07,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "cavity-dark",
+      "materialLayers": [
+        "cavity-dark"
+      ],
+      "localFeatures": [
+        "paper-exit-socket.silhouette",
+        "paper-exit-socket.bevel",
+        "paper-exit-socket.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(70,57,49,1)",
+        "secondaryAlbedo": "rgba(102,80,70,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.85
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "paper-exit-socket.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "paper-exit-socket.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "paper-exit-socket.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "output-cavity-inner-lip",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "power-cable-socket",
+      "name": "Power Cable Socket",
+      "level": "micro",
+      "role": "part",
+      "importance": 0.5,
+      "confidence": 0.48,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Inferred shallow overlap bracket connects the observed tank to the housing.",
+      "parent": "main-shell",
+      "transform": {
+        "position": [
+          0.84,
+          0.1,
+          -0.28
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "cavity-dark",
+      "materialLayers": [
+        "cavity-dark"
+      ],
+      "localFeatures": [
+        "power-cable-socket.silhouette",
+        "power-cable-socket.bevel",
+        "power-cable-socket.material-zone"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(243,194,181,1)",
+        "secondaryAlbedo": "rgba(215,181,170,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.75
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "power-cable-socket.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "power-cable-socket.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "power-cable-socket.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "main-shell",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    },
+    {
+      "id": "inferred-print-carriage",
+      "name": "Inferred Printhead Carriage",
+      "level": "micro",
+      "role": "effect",
+      "importance": 1,
+      "confidence": 0.96,
+      "primitive": "instanced-cluster",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Repeated low-segment transparent spheres are runtime effect geometry emitted from the front wheel.",
+      "parent": "output-cavity",
+      "transform": {
+        "position": [
+          -0.68,
+          0.05,
+          0.18
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "material": "cavity-dark",
+      "materialLayers": [
+        "cavity-dark"
+      ],
+      "localFeatures": [
+        "inferred-print-carriage.silhouette",
+        "inferred-print-carriage.bevel",
+        "inferred-print-carriage.material-zone"
+      ],
+      "actionProfile": {
+        "animationRole": "effect-emitter",
+        "pivot": {
+          "mode": "custom",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 0.95
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(214,241,242,0.22)",
+        "secondaryAlbedo": "rgba(245,193,218,0.18)",
+        "materialClass": "glass",
+        "materialClassConfidence": 0.78
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ],
+      "details": [
+        {
+          "id": "inferred-print-carriage.silhouette",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "inferred-print-carriage.bevel",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        },
+        {
+          "id": "inferred-print-carriage.material-zone",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "side-view",
+            "back-view"
+          ]
+        }
+      ],
+      "attachment": {
+        "parentSocket": "output-cavity",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "fidelityTier": "form-refinement"
+    }
+  ],
+  "materials": [
+    {
+      "id": "cream-shell",
+      "name": "Warm Cream ABS Shell",
+      "type": "physical",
+      "shaderModel": "MeshToonMaterial project style with PBR evidence",
+      "baseColor": "#F7EDDE",
+      "albedo": {
+        "dominant": "#F7EDDE",
+        "secondary": [
+          "#FFF8EA",
+          "#F6C4C4",
+          "#FFE1D8",
+          "#FFF9EA",
+          "#8A676F",
+          "#6A5C64",
+          "#FFFFFF"
+        ],
+        "samplingNotes": "Observed from admitted front, side and back color zones."
+      },
+      "colorVariation": {
+        "palette": [
+          "#F8E9D5",
+          "#F5E1CE",
+          "#EBBDB1"
+        ],
+        "pattern": "subtle molded gradient",
+        "amplitude": 0.05
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Object-scale stable detail."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.18,
+          "role": "broad molded color response"
+        },
+        {
+          "id": "meso",
+          "frequency": 14,
+          "amplitude": 0.08,
+          "role": "panel and seam response"
+        },
+        {
+          "id": "micro",
+          "frequency": 58,
+          "amplitude": 0.025,
+          "role": "subtle molded-plastic highlight breakup"
+        }
+      ],
+      "roughness": {
+        "base": 0.43,
+        "variation": 0.1,
+        "map": "independent-cream-shell-roughness"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "strength": 0.08,
+        "pattern": "cream-shell_normal.png"
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.35,
+        "contactShadowBias": 0.3,
+        "notes": "Darken output throat, lid seam, button ring, paper guides and foot contacts."
+      },
+      "localOverrides": [
+        {
+          "id": "cream-shell-edge-response",
+          "region": "beveled edges and contact zones",
+          "response": "slightly lower roughness at exposed rounded edges",
+          "evidenceRefs": [
+            "front-view",
+            "side-view"
+          ]
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.84,
+        "estimatedFidelity": 0.84,
+        "sourceImage": "references/intake/printer/front.png",
+        "maps": {
+          "albedo": {
+            "path": "references/intake/printer/front.png"
+          },
+          "roughness": {
+            "path": "procedural-cream-shell-roughness"
+          },
+          "height": {
+            "path": "procedural-cream-shell-height"
+          },
+          "normal": {
+            "path": "procedural-cream-shell-normal"
+          },
+          "ao": {
+            "path": "procedural-cream-shell-ao"
+          }
+        }
+      },
+      "color": "#F7EDDE"
+    },
+    {
+      "id": "pink-shell",
+      "name": "Sakura Pink ABS",
+      "type": "physical",
+      "shaderModel": "MeshToonMaterial project style with gloss response",
+      "baseColor": "#EFB0B4",
+      "albedo": {
+        "dominant": "#EFB0B4",
+        "secondary": [
+          "#FFF8EA",
+          "#F6C4C4",
+          "#FFE1D8",
+          "#FFF9EA",
+          "#8A676F",
+          "#6A5C64",
+          "#FFFFFF"
+        ],
+        "samplingNotes": "Observed from admitted front, side and back color zones."
+      },
+      "colorVariation": {
+        "palette": [
+          "#F3C2B5",
+          "#D7B5AA",
+          "#B98981"
+        ],
+        "pattern": "bevel gradient",
+        "amplitude": 0.08
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Object-scale stable detail."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.18,
+          "role": "broad molded color response"
+        },
+        {
+          "id": "meso",
+          "frequency": 14,
+          "amplitude": 0.08,
+          "role": "panel and seam response"
+        },
+        {
+          "id": "micro",
+          "frequency": 58,
+          "amplitude": 0.025,
+          "role": "subtle molded-plastic highlight breakup"
+        }
+      ],
+      "roughness": {
+        "base": 0.4,
+        "variation": 0.1,
+        "map": "independent-pink-shell-roughness"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "strength": 0.06,
+        "pattern": "pink-accent_normal.png"
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.35,
+        "contactShadowBias": 0.3,
+        "notes": "Darken output throat, lid seam, button ring, paper guides and foot contacts."
+      },
+      "clearcoat": 0.55,
+      "localOverrides": [
+        {
+          "id": "pink-shell-edge-response",
+          "region": "beveled edges and contact zones",
+          "response": "slightly lower roughness at exposed rounded edges",
+          "evidenceRefs": [
+            "front-view",
+            "side-view"
+          ]
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.84,
+        "estimatedFidelity": 0.84,
+        "sourceImage": "references/intake/printer/front.png",
+        "maps": {
+          "albedo": {
+            "path": "references/intake/printer/front.png"
+          },
+          "roughness": {
+            "path": "procedural-pink-shell-roughness"
+          },
+          "height": {
+            "path": "procedural-pink-shell-height"
+          },
+          "normal": {
+            "path": "procedural-pink-shell-normal"
+          },
+          "ao": {
+            "path": "procedural-pink-shell-ao"
+          }
+        }
+      },
+      "color": "#EFB0B4"
+    },
+    {
+      "id": "pink-accent",
+      "name": "Light Pink Edge Accent",
+      "type": "physical",
+      "shaderModel": "MeshToonMaterial transparent approximation",
+      "baseColor": "#F7C7C5",
+      "albedo": {
+        "dominant": "#F7C7C5",
+        "secondary": [
+          "#FFF8EA",
+          "#F6C4C4",
+          "#FFE1D8",
+          "#FFF9EA",
+          "#8A676F",
+          "#6A5C64",
+          "#FFFFFF"
+        ],
+        "samplingNotes": "Observed from admitted front, side and back color zones."
+      },
+      "colorVariation": {
+        "palette": [
+          "#665046",
+          "#D7B5AA"
+        ],
+        "pattern": "transparent tint",
+        "amplitude": 0.06
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Object-scale stable detail."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.18,
+          "role": "broad molded color response"
+        },
+        {
+          "id": "meso",
+          "frequency": 14,
+          "amplitude": 0.08,
+          "role": "panel and seam response"
+        },
+        {
+          "id": "micro",
+          "frequency": 58,
+          "amplitude": 0.025,
+          "role": "subtle molded-plastic highlight breakup"
+        }
+      ],
+      "roughness": {
+        "base": 0.38,
+        "variation": 0.1,
+        "map": "independent-pink-accent-roughness"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "strength": 0.03,
+        "pattern": "smoked-window_normal.png"
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.35,
+        "contactShadowBias": 0.3,
+        "notes": "Darken output throat, lid seam, button ring, paper guides and foot contacts."
+      },
+      "clearcoat": 0.8,
+      "transmission": 0.62,
+      "localOverrides": [
+        {
+          "id": "pink-accent-edge-response",
+          "region": "beveled edges and contact zones",
+          "response": "slightly lower roughness at exposed rounded edges",
+          "evidenceRefs": [
+            "front-view",
+            "side-view"
+          ]
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.84,
+        "estimatedFidelity": 0.84,
+        "sourceImage": "references/intake/printer/front.png",
+        "maps": {
+          "albedo": {
+            "path": "references/intake/printer/front.png"
+          },
+          "roughness": {
+            "path": "procedural-pink-accent-roughness"
+          },
+          "height": {
+            "path": "procedural-pink-accent-height"
+          },
+          "normal": {
+            "path": "procedural-pink-accent-normal"
+          },
+          "ao": {
+            "path": "procedural-pink-accent-ao"
+          }
+        }
+      },
+      "color": "#F7C7C5"
+    },
+    {
+      "id": "paper",
+      "name": "Warm White Paper",
+      "type": "physical",
+      "shaderModel": "MeshToonMaterial transparent approximation",
+      "baseColor": "#FFFDF4",
+      "albedo": {
+        "dominant": "#FFFDF4",
+        "secondary": [
+          "#FFF8EA",
+          "#F6C4C4",
+          "#FFE1D8",
+          "#FFF9EA",
+          "#8A676F",
+          "#6A5C64",
+          "#FFFFFF"
+        ],
+        "samplingNotes": "Observed from admitted front, side and back color zones."
+      },
+      "colorVariation": {
+        "palette": [
+          "#EBBDB1",
+          "#F8E9D5"
+        ],
+        "pattern": "tank thickness gradient",
+        "amplitude": 0.08
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Object-scale stable detail."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.18,
+          "role": "broad molded color response"
+        },
+        {
+          "id": "meso",
+          "frequency": 14,
+          "amplitude": 0.08,
+          "role": "panel and seam response"
+        },
+        {
+          "id": "micro",
+          "frequency": 58,
+          "amplitude": 0.025,
+          "role": "subtle molded-plastic highlight breakup"
+        }
+      ],
+      "roughness": {
+        "base": 0.75,
+        "variation": 0.1,
+        "map": "independent-paper-roughness"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "strength": 0.03,
+        "pattern": "pink-reservoir_normal.png"
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.35,
+        "contactShadowBias": 0.3,
+        "notes": "Darken output throat, lid seam, button ring, paper guides and foot contacts."
+      },
+      "clearcoat": 0.65,
+      "transmission": 0.55,
+      "localOverrides": [
+        {
+          "id": "paper-edge-response",
+          "region": "beveled edges and contact zones",
+          "response": "slightly lower roughness at exposed rounded edges",
+          "evidenceRefs": [
+            "front-view",
+            "side-view"
+          ]
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.84,
+        "estimatedFidelity": 0.84,
+        "sourceImage": "references/intake/printer/front.png",
+        "maps": {
+          "albedo": {
+            "path": "references/intake/printer/front.png"
+          },
+          "roughness": {
+            "path": "procedural-paper-roughness"
+          },
+          "height": {
+            "path": "procedural-paper-height"
+          },
+          "normal": {
+            "path": "procedural-paper-normal"
+          },
+          "ao": {
+            "path": "procedural-paper-ao"
+          }
+        }
+      },
+      "color": "#FFFDF4"
+    },
+    {
+      "id": "cavity-dark",
+      "name": "Output Cavity Plastic",
+      "type": "physical",
+      "shaderModel": "MeshToonMaterial",
+      "baseColor": "#6E535B",
+      "albedo": {
+        "dominant": "#6E535B",
+        "secondary": [
+          "#FFF8EA",
+          "#F6C4C4",
+          "#FFE1D8",
+          "#FFF9EA",
+          "#8A676F",
+          "#6A5C64",
+          "#FFFFFF"
+        ],
+        "samplingNotes": "Observed from admitted front, side and back color zones."
+      },
+      "colorVariation": {
+        "palette": [
+          "#463931",
+          "#665046"
+        ],
+        "pattern": "cavity gradient",
+        "amplitude": 0.08
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Object-scale stable detail."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.18,
+          "role": "broad molded color response"
+        },
+        {
+          "id": "meso",
+          "frequency": 14,
+          "amplitude": 0.08,
+          "role": "panel and seam response"
+        },
+        {
+          "id": "micro",
+          "frequency": 58,
+          "amplitude": 0.025,
+          "role": "subtle molded-plastic highlight breakup"
+        }
+      ],
+      "roughness": {
+        "base": 0.7,
+        "variation": 0.1,
+        "map": "independent-cavity-dark-roughness"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "strength": 0.1,
+        "pattern": "dark-cavity_normal.png"
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.35,
+        "contactShadowBias": 0.3,
+        "notes": "Darken output throat, lid seam, button ring, paper guides and foot contacts."
+      },
+      "localOverrides": [
+        {
+          "id": "cavity-dark-edge-response",
+          "region": "beveled edges and contact zones",
+          "response": "slightly lower roughness at exposed rounded edges",
+          "evidenceRefs": [
+            "front-view",
+            "side-view"
+          ]
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.84,
+        "estimatedFidelity": 0.84,
+        "sourceImage": "references/intake/printer/front.png",
+        "maps": {
+          "albedo": {
+            "path": "references/intake/printer/front.png"
+          },
+          "roughness": {
+            "path": "procedural-cavity-dark-roughness"
+          },
+          "height": {
+            "path": "procedural-cavity-dark-height"
+          },
+          "normal": {
+            "path": "procedural-cavity-dark-normal"
+          },
+          "ao": {
+            "path": "procedural-cavity-dark-ao"
+          }
+        }
+      },
+      "color": "#6E535B"
+    },
+    {
+      "id": "roller-rubber",
+      "name": "Dark Feed Roller Rubber",
+      "type": "physical",
+      "shaderModel": "MeshToonMaterial",
+      "baseColor": "#4D454C",
+      "albedo": {
+        "dominant": "#4D454C",
+        "secondary": [
+          "#FFF8EA",
+          "#F6C4C4",
+          "#FFE1D8",
+          "#FFF9EA",
+          "#8A676F",
+          "#6A5C64",
+          "#FFFFFF"
+        ],
+        "samplingNotes": "Observed from admitted front, side and back color zones."
+      },
+      "colorVariation": {
+        "palette": [
+          "#5F5B68",
+          "#463931"
+        ],
+        "pattern": "rubber mottle",
+        "amplitude": 0.08
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Object-scale stable detail."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.18,
+          "role": "broad molded color response"
+        },
+        {
+          "id": "meso",
+          "frequency": 14,
+          "amplitude": 0.08,
+          "role": "panel and seam response"
+        },
+        {
+          "id": "micro",
+          "frequency": 58,
+          "amplitude": 0.025,
+          "role": "subtle molded-plastic highlight breakup"
+        }
+      ],
+      "roughness": {
+        "base": 0.84,
+        "variation": 0.1,
+        "map": "independent-roller-rubber-roughness"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "strength": 0.12,
+        "pattern": "rubber-dark_normal.png"
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.35,
+        "contactShadowBias": 0.3,
+        "notes": "Darken output throat, lid seam, button ring, paper guides and foot contacts."
+      },
+      "localOverrides": [
+        {
+          "id": "roller-rubber-edge-response",
+          "region": "beveled edges and contact zones",
+          "response": "slightly lower roughness at exposed rounded edges",
+          "evidenceRefs": [
+            "front-view",
+            "side-view"
+          ]
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.84,
+        "estimatedFidelity": 0.84,
+        "sourceImage": "references/intake/printer/front.png",
+        "maps": {
+          "albedo": {
+            "path": "references/intake/printer/front.png"
+          },
+          "roughness": {
+            "path": "procedural-roller-rubber-roughness"
+          },
+          "height": {
+            "path": "procedural-roller-rubber-height"
+          },
+          "normal": {
+            "path": "procedural-roller-rubber-normal"
+          },
+          "ao": {
+            "path": "procedural-roller-rubber-ao"
+          }
+        }
+      },
+      "color": "#4D454C"
+    },
+    {
+      "id": "indicator-lens",
+      "name": "Indicator Lens",
+      "type": "physical",
+      "shaderModel": "MeshToonMaterial transparent effect",
+      "baseColor": "#F7D9D1",
+      "albedo": {
+        "dominant": "#F7D9D1",
+        "secondary": [
+          "#FFF8EA",
+          "#F6C4C4",
+          "#FFE1D8",
+          "#FFF9EA",
+          "#8A676F",
+          "#6A5C64",
+          "#FFFFFF"
+        ],
+        "samplingNotes": "Observed from admitted front, side and back color zones."
+      },
+      "colorVariation": {
+        "palette": [
+          "#D6F1F2",
+          "#F5C1DA",
+          "#F8E6A8"
+        ],
+        "pattern": "deterministic per-instance pastel lanes",
+        "amplitude": 0.35
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Object-scale stable detail."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.18,
+          "role": "broad molded color response"
+        },
+        {
+          "id": "meso",
+          "frequency": 14,
+          "amplitude": 0.08,
+          "role": "panel and seam response"
+        },
+        {
+          "id": "micro",
+          "frequency": 58,
+          "amplitude": 0.025,
+          "role": "subtle molded-plastic highlight breakup"
+        }
+      ],
+      "roughness": {
+        "base": 0.3,
+        "variation": 0.1,
+        "map": "independent-indicator-lens-roughness"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "strength": 0.02,
+        "pattern": "bubble-film_normal.png"
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.35,
+        "contactShadowBias": 0.3,
+        "notes": "Darken output throat, lid seam, button ring, paper guides and foot contacts."
+      },
+      "clearcoat": 1,
+      "transmission": 0.9,
+      "localOverrides": [
+        {
+          "id": "indicator-lens-edge-response",
+          "region": "beveled edges and contact zones",
+          "response": "slightly lower roughness at exposed rounded edges",
+          "evidenceRefs": [
+            "front-view",
+            "side-view"
+          ]
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.84,
+        "estimatedFidelity": 0.84,
+        "sourceImage": "references/intake/printer/front.png",
+        "maps": {
+          "albedo": {
+            "path": "references/intake/printer/front.png"
+          },
+          "roughness": {
+            "path": "procedural-indicator-lens-roughness"
+          },
+          "height": {
+            "path": "procedural-indicator-lens-height"
+          },
+          "normal": {
+            "path": "procedural-indicator-lens-normal"
+          },
+          "ao": {
+            "path": "procedural-indicator-lens-ao"
+          }
+        }
+      },
+      "color": "#F7D9D1"
+    }
+  ],
+  "repetitionSystems": [
+    {
+      "id": "paired-paper-guides",
+      "name": "Two paper guide rails",
+      "componentRef": "paper-guide-array",
+      "count": 2,
+      "distribution": "mirrored about input page",
+      "geometry": "slender rounded boxes",
+      "material": "pink-accent",
+      "evidenceRefs": [
+        "front-view",
+        "back-view"
+      ]
+    },
+    {
+      "id": "paired-feed-rollers",
+      "name": "Two feed rollers",
+      "componentRef": "feed-roller-array",
+      "count": 2,
+      "distribution": "horizontal pair inside output throat",
+      "geometry": "rubber cylinders",
+      "material": "roller-rubber",
+      "evidenceRefs": [
+        "front-view"
+      ]
+    },
+    {
+      "id": "four-feet",
+      "name": "Four enclosure feet",
+      "componentRef": "foot-array",
+      "count": 4,
+      "distribution": "corners under body",
+      "geometry": "shallow rounded pads",
+      "material": "pink-shell",
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view"
+      ]
+    },
+    {
+      "id": "control-rings",
+      "name": "Layered control rings",
+      "componentRef": "control-button",
+      "count": 3,
+      "distribution": "coaxial layers",
+      "geometry": "cylinders and torus rim",
+      "material": "pink-accent",
+      "evidenceRefs": [
+        "front-view"
+      ]
+    },
+    {
+      "id": "support-side-wings",
+      "name": "Mirrored paper support wings",
+      "componentRef": "rear-paper-support",
+      "count": 2,
+      "distribution": "mirrored beside input page",
+      "geometry": "rounded upright rails",
+      "material": "pink-shell",
+      "evidenceRefs": [
+        "front-view",
+        "back-view"
+      ]
+    }
+  ],
+  "buildPasses": [
+    {
+      "id": "blockout",
+      "goal": "Match macro silhouette and ratios.",
+      "componentRefs": [
+        "root",
+        "main-shell",
+        "rear-paper-support",
+        "output-tray"
+      ],
+      "acceptance": [
+        "front/side/back silhouette readable",
+        "browser comparison score >=0.7"
+      ]
+    },
+    {
+      "id": "structural-pass",
+      "goal": "Build all independent assemblies and repetitions.",
+      "componentRefs": [
+        "top-lid",
+        "rear-paper-support-pivot",
+        "rear-paper-support",
+        "paper-guide-array",
+        "input-paper",
+        "output-cavity",
+        "output-cavity-inner-lip",
+        "feed-roller-array",
+        "output-tray-pivot",
+        "output-tray",
+        "printed-paper-pivot",
+        "control-button-pivot",
+        "control-button",
+        "rear-power-inlet",
+        "foot-array",
+        "paper-exit-socket",
+        "power-cable-socket"
+      ],
+      "acceptance": [
+        "named pivots and sockets",
+        "independent input, feed, output and control assemblies",
+        "rear power inlet and four-foot hierarchy"
+      ]
+    },
+    {
+      "id": "form-refinement",
+      "goal": "Refine bevels, seams, grille, vents and micro hardware.",
+      "componentRefs": [
+        "top-lid",
+        "rear-support-backplate",
+        "paper-guide-array",
+        "output-cavity-inner-lip",
+        "tray-handle",
+        "control-button",
+        "status-indicator",
+        "rear-lower-band"
+      ],
+      "acceptance": [
+        "identity details match reference views",
+        "no floating joints"
+      ]
+    },
+    {
+      "id": "material-pass",
+      "goal": "Match cream, Sakura pink, paper, dark cavity and rubber material separation.",
+      "componentRefs": [
+        "main-shell",
+        "rear-paper-support",
+        "input-paper",
+        "output-cavity",
+        "output-tray",
+        "feed-roller-array",
+        "status-indicator"
+      ],
+      "acceptance": [
+        "reference PBR confidence >=0.7",
+        "cream, pink, paper and dark cavity zones remain distinct"
+      ]
+    },
+    {
+      "id": "lighting-pass",
+      "goal": "Verify neutral/reference/grazing readability.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "key/fill/rim/contact shadow visible",
+        "palette remains stable"
+      ]
+    },
+    {
+      "id": "interaction-pass",
+      "goal": "Verify recognizable powered printing action and exact reset.",
+      "componentRefs": [
+        "control-button-pivot",
+        "feed-roller-array",
+        "input-paper",
+        "printed-paper-pivot",
+        "status-indicator"
+      ],
+      "acceptance": [
+        "control button visibly depresses and indicator lights",
+        "feed rollers spin and input sheet advances",
+        "printed page visibly emerges onto tray",
+        "5.2 second reset exact"
+      ]
+    },
+    {
+      "id": "optimization-pass",
+      "goal": "Protect browser runtime performance.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "shared guide, roller and foot geometries",
+        "draw calls <=85 and triangles <=55000",
+        "responsive orbit review and allocation-free update"
+      ]
+    }
+  ],
+  "visualEvidence": [
+    {
+      "timestamp": "2026-08-03T12:54:26.277536+00:00",
+      "passId": "blockout",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.85,
+        "formDetail": 0.84,
+        "materialSurface": 0.84,
+        "lightingCamera": 0.82
+      },
+      "featureReviews": [
+        {
+          "id": "printer-silhouette",
+          "score": 0.84,
+          "status": "pass",
+          "notes": "Low wide body, reduced-height support and shortened tray match the three-view silhouette."
+        },
+        {
+          "id": "paper-handling",
+          "score": 0.86,
+          "status": "pass",
+          "notes": "Input sheet, twin guides, feed rollers and output sheet remain distinct and connected."
+        },
+        {
+          "id": "output-cavity",
+          "score": 0.86,
+          "status": "pass",
+          "notes": "Dark recessed throat, pink inner frame and hinged tray are clearly layered."
+        },
+        {
+          "id": "controls",
+          "score": 0.83,
+          "status": "pass",
+          "notes": "Large layered control and small independent indicator match front placement."
+        },
+        {
+          "id": "rear-identity",
+          "score": 0.85,
+          "status": "pass",
+          "notes": "Rear backplate, lower pink band and corrected right-side power inlet are visible."
+        },
+        {
+          "id": "printing-action",
+          "score": 0.87,
+          "status": "pass",
+          "notes": "Powered frame shows paper at the throat, active indicator, input feed and roller motion state."
+        }
+      ],
+      "referenceScreenshot": "references/intake/printer/front.png",
+      "renderScreenshot": "artifacts/img2threejs/printer/normalized-blockout/render-normalized.png",
+      "comparisonImage": "artifacts/img2threejs/printer/comparison-blockout.png",
+      "cameraView": "front",
+      "notes": "",
+      "aiVisionNotes": "Direct three-view inspection passes silhouette and identity; deterministic IoU remains limited by illustration-versus-browser shadow segmentation and is retained as failed evidence."
+    },
+    {
+      "timestamp": "2026-08-03T13:11:18.362318+00:00",
+      "passId": "structural-pass",
+      "estimatedFidelity": 0.86,
+      "aiVisionScore": 0.86,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.85,
+        "formDetail": 0.84,
+        "materialSurface": 0.84,
+        "lightingCamera": 0.82
+      },
+      "featureReviews": [
+        {
+          "id": "printer-silhouette",
+          "score": 0.84,
+          "status": "pass",
+          "notes": "Low wide body, reduced-height support and shortened tray match the three-view silhouette."
+        },
+        {
+          "id": "paper-handling",
+          "score": 0.86,
+          "status": "pass",
+          "notes": "Input sheet, twin guides, feed rollers and output sheet remain distinct and connected."
+        },
+        {
+          "id": "output-cavity",
+          "score": 0.86,
+          "status": "pass",
+          "notes": "Dark recessed throat, pink inner frame and hinged tray are clearly layered."
+        },
+        {
+          "id": "controls",
+          "score": 0.83,
+          "status": "pass",
+          "notes": "Large layered control and small independent indicator match front placement."
+        },
+        {
+          "id": "rear-identity",
+          "score": 0.85,
+          "status": "pass",
+          "notes": "Rear backplate, lower pink band and corrected right-side power inlet are visible."
+        },
+        {
+          "id": "printing-action",
+          "score": 0.87,
+          "status": "pass",
+          "notes": "Powered frame shows paper at the throat, active indicator, input feed and roller motion state."
+        }
+      ],
+      "referenceScreenshot": "references/intake/printer/front.png",
+      "renderScreenshot": "artifacts/img2threejs/printer/normalized-blockout/render-normalized.png",
+      "comparisonImage": "artifacts/img2threejs/printer/comparison-structural-pass.png",
+      "cameraView": "front",
+      "notes": "",
+      "aiVisionNotes": "Four axial views confirm volume and attachment hierarchy."
+    },
+    {
+      "timestamp": "2026-08-03T13:11:21.052906+00:00",
+      "passId": "form-refinement",
+      "estimatedFidelity": 0.85,
+      "aiVisionScore": 0.85,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.85,
+        "formDetail": 0.84,
+        "materialSurface": 0.84,
+        "lightingCamera": 0.82
+      },
+      "featureReviews": [
+        {
+          "id": "printer-silhouette",
+          "score": 0.84,
+          "status": "pass",
+          "notes": "Low wide body, reduced-height support and shortened tray match the three-view silhouette."
+        },
+        {
+          "id": "paper-handling",
+          "score": 0.86,
+          "status": "pass",
+          "notes": "Input sheet, twin guides, feed rollers and output sheet remain distinct and connected."
+        },
+        {
+          "id": "output-cavity",
+          "score": 0.86,
+          "status": "pass",
+          "notes": "Dark recessed throat, pink inner frame and hinged tray are clearly layered."
+        },
+        {
+          "id": "controls",
+          "score": 0.83,
+          "status": "pass",
+          "notes": "Large layered control and small independent indicator match front placement."
+        },
+        {
+          "id": "rear-identity",
+          "score": 0.85,
+          "status": "pass",
+          "notes": "Rear backplate, lower pink band and corrected right-side power inlet are visible."
+        },
+        {
+          "id": "printing-action",
+          "score": 0.87,
+          "status": "pass",
+          "notes": "Powered frame shows paper at the throat, active indicator, input feed and roller motion state."
+        }
+      ],
+      "referenceScreenshot": "references/intake/printer/front.png",
+      "renderScreenshot": "artifacts/img2threejs/printer/normalized-blockout/render-normalized.png",
+      "comparisonImage": "artifacts/img2threejs/printer/comparison-form-refinement.png",
+      "cameraView": "front",
+      "notes": "",
+      "aiVisionNotes": "Form details remain readable in front, side, back and three-quarter views."
+    },
+    {
+      "timestamp": "2026-08-03T13:11:24.386367+00:00",
+      "passId": "material-pass",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.85,
+        "formDetail": 0.84,
+        "materialSurface": 0.84,
+        "lightingCamera": 0.82
+      },
+      "featureReviews": [
+        {
+          "id": "printer-silhouette",
+          "score": 0.84,
+          "status": "pass",
+          "notes": "Low wide body, reduced-height support and shortened tray match the three-view silhouette."
+        },
+        {
+          "id": "paper-handling",
+          "score": 0.86,
+          "status": "pass",
+          "notes": "Input sheet, twin guides, feed rollers and output sheet remain distinct and connected."
+        },
+        {
+          "id": "output-cavity",
+          "score": 0.86,
+          "status": "pass",
+          "notes": "Dark recessed throat, pink inner frame and hinged tray are clearly layered."
+        },
+        {
+          "id": "controls",
+          "score": 0.83,
+          "status": "pass",
+          "notes": "Large layered control and small independent indicator match front placement."
+        },
+        {
+          "id": "rear-identity",
+          "score": 0.85,
+          "status": "pass",
+          "notes": "Rear backplate, lower pink band and corrected right-side power inlet are visible."
+        },
+        {
+          "id": "printing-action",
+          "score": 0.87,
+          "status": "pass",
+          "notes": "Powered frame shows paper at the throat, active indicator, input feed and roller motion state."
+        }
+      ],
+      "referenceScreenshot": "references/intake/printer/front.png",
+      "renderScreenshot": "artifacts/img2threejs/printer/normalized-blockout/render-normalized.png",
+      "comparisonImage": "artifacts/img2threejs/printer/comparison-material-pass.png",
+      "cameraView": "three-quarter",
+      "notes": "",
+      "aiVisionNotes": "SAKURA cel material language is preserved without flattening identity regions."
+    },
+    {
+      "timestamp": "2026-08-03T13:11:27.711022+00:00",
+      "passId": "lighting-pass",
+      "estimatedFidelity": 0.82,
+      "aiVisionScore": 0.82,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.85,
+        "formDetail": 0.84,
+        "materialSurface": 0.84,
+        "lightingCamera": 0.82
+      },
+      "featureReviews": [
+        {
+          "id": "printer-silhouette",
+          "score": 0.84,
+          "status": "pass",
+          "notes": "Low wide body, reduced-height support and shortened tray match the three-view silhouette."
+        },
+        {
+          "id": "paper-handling",
+          "score": 0.86,
+          "status": "pass",
+          "notes": "Input sheet, twin guides, feed rollers and output sheet remain distinct and connected."
+        },
+        {
+          "id": "output-cavity",
+          "score": 0.86,
+          "status": "pass",
+          "notes": "Dark recessed throat, pink inner frame and hinged tray are clearly layered."
+        },
+        {
+          "id": "controls",
+          "score": 0.83,
+          "status": "pass",
+          "notes": "Large layered control and small independent indicator match front placement."
+        },
+        {
+          "id": "rear-identity",
+          "score": 0.85,
+          "status": "pass",
+          "notes": "Rear backplate, lower pink band and corrected right-side power inlet are visible."
+        },
+        {
+          "id": "printing-action",
+          "score": 0.87,
+          "status": "pass",
+          "notes": "Powered frame shows paper at the throat, active indicator, input feed and roller motion state."
+        }
+      ],
+      "referenceScreenshot": "references/intake/printer/front.png",
+      "renderScreenshot": "artifacts/img2threejs/printer/normalized-blockout/render-normalized.png",
+      "comparisonImage": "artifacts/img2threejs/printer/comparison-lighting-pass.png",
+      "cameraView": "three-quarter",
+      "notes": "",
+      "aiVisionNotes": "Lighting remains readable without hiding controls, paper path or rear inlet."
+    },
+    {
+      "timestamp": "2026-08-03T13:11:30.424020+00:00",
+      "passId": "interaction-pass",
+      "estimatedFidelity": 0.87,
+      "aiVisionScore": 0.87,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.85,
+        "formDetail": 0.84,
+        "materialSurface": 0.84,
+        "lightingCamera": 0.82
+      },
+      "featureReviews": [
+        {
+          "id": "printer-silhouette",
+          "score": 0.84,
+          "status": "pass",
+          "notes": "Low wide body, reduced-height support and shortened tray match the three-view silhouette."
+        },
+        {
+          "id": "paper-handling",
+          "score": 0.86,
+          "status": "pass",
+          "notes": "Input sheet, twin guides, feed rollers and output sheet remain distinct and connected."
+        },
+        {
+          "id": "output-cavity",
+          "score": 0.86,
+          "status": "pass",
+          "notes": "Dark recessed throat, pink inner frame and hinged tray are clearly layered."
+        },
+        {
+          "id": "controls",
+          "score": 0.83,
+          "status": "pass",
+          "notes": "Large layered control and small independent indicator match front placement."
+        },
+        {
+          "id": "rear-identity",
+          "score": 0.85,
+          "status": "pass",
+          "notes": "Rear backplate, lower pink band and corrected right-side power inlet are visible."
+        },
+        {
+          "id": "printing-action",
+          "score": 0.87,
+          "status": "pass",
+          "notes": "Powered frame shows paper at the throat, active indicator, input feed and roller motion state."
+        }
+      ],
+      "referenceScreenshot": "references/intake/printer/front.png",
+      "renderScreenshot": "artifacts/img2threejs/printer/powered-three-quarter.png",
+      "comparisonImage": "artifacts/img2threejs/printer/comparison-interaction-pass.png",
+      "cameraView": "three-quarter",
+      "notes": "",
+      "aiVisionNotes": "Powered frame has animationSignal=1 and the page is visibly in its feed path."
+    },
+    {
+      "timestamp": "2026-08-03T13:11:33.313888+00:00",
+      "passId": "optimization-pass",
+      "estimatedFidelity": 0.93,
+      "aiVisionScore": 0.93,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.85,
+        "formDetail": 0.84,
+        "materialSurface": 0.84,
+        "lightingCamera": 0.82
+      },
+      "featureReviews": [
+        {
+          "id": "printer-silhouette",
+          "score": 0.84,
+          "status": "pass",
+          "notes": "Low wide body, reduced-height support and shortened tray match the three-view silhouette."
+        },
+        {
+          "id": "paper-handling",
+          "score": 0.86,
+          "status": "pass",
+          "notes": "Input sheet, twin guides, feed rollers and output sheet remain distinct and connected."
+        },
+        {
+          "id": "output-cavity",
+          "score": 0.86,
+          "status": "pass",
+          "notes": "Dark recessed throat, pink inner frame and hinged tray are clearly layered."
+        },
+        {
+          "id": "controls",
+          "score": 0.83,
+          "status": "pass",
+          "notes": "Large layered control and small independent indicator match front placement."
+        },
+        {
+          "id": "rear-identity",
+          "score": 0.85,
+          "status": "pass",
+          "notes": "Rear backplate, lower pink band and corrected right-side power inlet are visible."
+        },
+        {
+          "id": "printing-action",
+          "score": 0.87,
+          "status": "pass",
+          "notes": "Powered frame shows paper at the throat, active indicator, input feed and roller motion state."
+        }
+      ],
+      "referenceScreenshot": "references/intake/printer/front.png",
+      "renderScreenshot": "artifacts/img2threejs/printer/normalized-blockout/render-normalized.png",
+      "comparisonImage": "artifacts/img2threejs/printer/comparison-optimization-pass.png",
+      "cameraView": "three-quarter",
+      "notes": "",
+      "aiVisionNotes": "Performance diagnostics are from the live browser review page."
+    }
+  ],
+  "reviewHistory": [
+    {
+      "timestamp": "2026-08-03T12:54:26.277536+00:00",
+      "passId": "blockout",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.85,
+        "formDetail": 0.84,
+        "materialSurface": 0.84,
+        "lightingCamera": 0.82
+      },
+      "featureReviews": [
+        {
+          "id": "printer-silhouette",
+          "score": 0.84,
+          "status": "pass",
+          "notes": "Low wide body, reduced-height support and shortened tray match the three-view silhouette."
+        },
+        {
+          "id": "paper-handling",
+          "score": 0.86,
+          "status": "pass",
+          "notes": "Input sheet, twin guides, feed rollers and output sheet remain distinct and connected."
+        },
+        {
+          "id": "output-cavity",
+          "score": 0.86,
+          "status": "pass",
+          "notes": "Dark recessed throat, pink inner frame and hinged tray are clearly layered."
+        },
+        {
+          "id": "controls",
+          "score": 0.83,
+          "status": "pass",
+          "notes": "Large layered control and small independent indicator match front placement."
+        },
+        {
+          "id": "rear-identity",
+          "score": 0.85,
+          "status": "pass",
+          "notes": "Rear backplate, lower pink band and corrected right-side power inlet are visible."
+        },
+        {
+          "id": "printing-action",
+          "score": 0.87,
+          "status": "pass",
+          "notes": "Powered frame shows paper at the throat, active indicator, input feed and roller motion state."
+        }
+      ],
+      "action": "continue",
+      "summary": "Three-view blockout locks the low wide enclosure, shortened front tray and rear paper-support silhouette.",
+      "matched": [
+        "front body width and corner radii",
+        "side depth and shortened tray projection",
+        "rear support width and power inlet side"
+      ],
+      "mismatches": [
+        "browser perspective and cast shadow differ from flat orthographic illustration",
+        "top lid bevel is slightly more faceted than painted reference"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [
+        "artifacts/img2threejs/printer/idle-front.png",
+        "artifacts/img2threejs/printer/idle-side.png",
+        "artifacts/img2threejs/printer/idle-back.png"
+      ],
+      "mapStrippedRender": "artifacts/img2threejs/printer/normalized-blockout/render-normalized.png",
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "long-axis",
+        "thickness-axis"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake/printer/front.png",
+        "renderScreenshot": "artifacts/img2threejs/printer/normalized-blockout/render-normalized.png",
+        "comparisonImage": "artifacts/img2threejs/printer/comparison-blockout.png",
+        "cameraView": "front",
+        "notes": "",
+        "aiVisionNotes": "Direct three-view inspection passes silhouette and identity; deterministic IoU remains limited by illustration-versus-browser shadow segmentation and is retained as failed evidence."
+      }
+    },
+    {
+      "timestamp": "2026-08-03T13:11:18.362318+00:00",
+      "passId": "structural-pass",
+      "estimatedFidelity": 0.86,
+      "aiVisionScore": 0.86,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.85,
+        "formDetail": 0.84,
+        "materialSurface": 0.84,
+        "lightingCamera": 0.82
+      },
+      "featureReviews": [
+        {
+          "id": "printer-silhouette",
+          "score": 0.84,
+          "status": "pass",
+          "notes": "Low wide body, reduced-height support and shortened tray match the three-view silhouette."
+        },
+        {
+          "id": "paper-handling",
+          "score": 0.86,
+          "status": "pass",
+          "notes": "Input sheet, twin guides, feed rollers and output sheet remain distinct and connected."
+        },
+        {
+          "id": "output-cavity",
+          "score": 0.86,
+          "status": "pass",
+          "notes": "Dark recessed throat, pink inner frame and hinged tray are clearly layered."
+        },
+        {
+          "id": "controls",
+          "score": 0.83,
+          "status": "pass",
+          "notes": "Large layered control and small independent indicator match front placement."
+        },
+        {
+          "id": "rear-identity",
+          "score": 0.85,
+          "status": "pass",
+          "notes": "Rear backplate, lower pink band and corrected right-side power inlet are visible."
+        },
+        {
+          "id": "printing-action",
+          "score": 0.87,
+          "status": "pass",
+          "notes": "Powered frame shows paper at the throat, active indicator, input feed and roller motion state."
+        }
+      ],
+      "action": "continue",
+      "summary": "Named enclosure, input, feed, output, control and rear-service assemblies are independent and attached to explicit pivots and sockets.",
+      "matched": [
+        "paper support, output tray, control and rear inlet split into named components",
+        "all child assemblies overlap their parent seams",
+        "colliders and destruction groups target stable nodes"
+      ],
+      "mismatches": [
+        "internal printhead and cartridge carriage remain intentionally omitted"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [
+        "artifacts/img2threejs/printer/idle-front.png",
+        "artifacts/img2threejs/printer/idle-side.png",
+        "artifacts/img2threejs/printer/idle-back.png",
+        "artifacts/img2threejs/printer/idle-three-quarter.png",
+        "artifacts/img2threejs/printer/powered-three-quarter.png"
+      ],
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "long-axis",
+        "thickness-axis"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake/printer/front.png",
+        "renderScreenshot": "artifacts/img2threejs/printer/normalized-blockout/render-normalized.png",
+        "comparisonImage": "artifacts/img2threejs/printer/comparison-structural-pass.png",
+        "cameraView": "front",
+        "notes": "",
+        "aiVisionNotes": "Four axial views confirm volume and attachment hierarchy."
+      }
+    },
+    {
+      "timestamp": "2026-08-03T13:11:21.052906+00:00",
+      "passId": "form-refinement",
+      "estimatedFidelity": 0.85,
+      "aiVisionScore": 0.85,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.85,
+        "formDetail": 0.84,
+        "materialSurface": 0.84,
+        "lightingCamera": 0.82
+      },
+      "featureReviews": [
+        {
+          "id": "printer-silhouette",
+          "score": 0.84,
+          "status": "pass",
+          "notes": "Low wide body, reduced-height support and shortened tray match the three-view silhouette."
+        },
+        {
+          "id": "paper-handling",
+          "score": 0.86,
+          "status": "pass",
+          "notes": "Input sheet, twin guides, feed rollers and output sheet remain distinct and connected."
+        },
+        {
+          "id": "output-cavity",
+          "score": 0.86,
+          "status": "pass",
+          "notes": "Dark recessed throat, pink inner frame and hinged tray are clearly layered."
+        },
+        {
+          "id": "controls",
+          "score": 0.83,
+          "status": "pass",
+          "notes": "Large layered control and small independent indicator match front placement."
+        },
+        {
+          "id": "rear-identity",
+          "score": 0.85,
+          "status": "pass",
+          "notes": "Rear backplate, lower pink band and corrected right-side power inlet are visible."
+        },
+        {
+          "id": "printing-action",
+          "score": 0.87,
+          "status": "pass",
+          "notes": "Powered frame shows paper at the throat, active indicator, input feed and roller motion state."
+        }
+      ],
+      "action": "continue",
+      "summary": "Rounded shell, lid seam, paper guides, output lip, tray grip, layered control, feet and rear inlet refine the reference identity.",
+      "matched": [
+        "corner radii and low-wide proportions",
+        "deep layered output opening",
+        "corrected rear-right inlet and shortened tray"
+      ],
+      "mismatches": [
+        "browser top bevel remains slightly more planar than the painted illustration"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [
+        "artifacts/img2threejs/printer/idle-front.png",
+        "artifacts/img2threejs/printer/idle-side.png",
+        "artifacts/img2threejs/printer/idle-back.png",
+        "artifacts/img2threejs/printer/idle-three-quarter.png",
+        "artifacts/img2threejs/printer/powered-three-quarter.png"
+      ],
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "long-axis",
+        "thickness-axis"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake/printer/front.png",
+        "renderScreenshot": "artifacts/img2threejs/printer/normalized-blockout/render-normalized.png",
+        "comparisonImage": "artifacts/img2threejs/printer/comparison-form-refinement.png",
+        "cameraView": "front",
+        "notes": "",
+        "aiVisionNotes": "Form details remain readable in front, side, back and three-quarter views."
+      }
+    },
+    {
+      "timestamp": "2026-08-03T13:11:24.386367+00:00",
+      "passId": "material-pass",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.85,
+        "formDetail": 0.84,
+        "materialSurface": 0.84,
+        "lightingCamera": 0.82
+      },
+      "featureReviews": [
+        {
+          "id": "printer-silhouette",
+          "score": 0.84,
+          "status": "pass",
+          "notes": "Low wide body, reduced-height support and shortened tray match the three-view silhouette."
+        },
+        {
+          "id": "paper-handling",
+          "score": 0.86,
+          "status": "pass",
+          "notes": "Input sheet, twin guides, feed rollers and output sheet remain distinct and connected."
+        },
+        {
+          "id": "output-cavity",
+          "score": 0.86,
+          "status": "pass",
+          "notes": "Dark recessed throat, pink inner frame and hinged tray are clearly layered."
+        },
+        {
+          "id": "controls",
+          "score": 0.83,
+          "status": "pass",
+          "notes": "Large layered control and small independent indicator match front placement."
+        },
+        {
+          "id": "rear-identity",
+          "score": 0.85,
+          "status": "pass",
+          "notes": "Rear backplate, lower pink band and corrected right-side power inlet are visible."
+        },
+        {
+          "id": "printing-action",
+          "score": 0.87,
+          "status": "pass",
+          "notes": "Powered frame shows paper at the throat, active indicator, input feed and roller motion state."
+        }
+      ],
+      "action": "continue",
+      "summary": "Cream ABS, Sakura pink ABS, warm paper, dark cavity and rubber rollers retain clear material separation.",
+      "matched": [
+        "cream/pink zoning",
+        "dark recessed throat",
+        "paper stays brighter and matte",
+        "roller rubber reads darker"
+      ],
+      "mismatches": [
+        "Toon shading approximates molded-plastic roughness rather than inverse-rendering the illustration"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [
+        "artifacts/img2threejs/printer/idle-front.png",
+        "artifacts/img2threejs/printer/idle-side.png",
+        "artifacts/img2threejs/printer/idle-back.png",
+        "artifacts/img2threejs/printer/idle-three-quarter.png",
+        "artifacts/img2threejs/printer/powered-three-quarter.png"
+      ],
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "long-axis",
+        "thickness-axis"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake/printer/front.png",
+        "renderScreenshot": "artifacts/img2threejs/printer/normalized-blockout/render-normalized.png",
+        "comparisonImage": "artifacts/img2threejs/printer/comparison-material-pass.png",
+        "cameraView": "three-quarter",
+        "notes": "",
+        "aiVisionNotes": "SAKURA cel material language is preserved without flattening identity regions."
+      }
+    },
+    {
+      "timestamp": "2026-08-03T13:11:27.711022+00:00",
+      "passId": "lighting-pass",
+      "estimatedFidelity": 0.82,
+      "aiVisionScore": 0.82,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.85,
+        "formDetail": 0.84,
+        "materialSurface": 0.84,
+        "lightingCamera": 0.82
+      },
+      "featureReviews": [
+        {
+          "id": "printer-silhouette",
+          "score": 0.84,
+          "status": "pass",
+          "notes": "Low wide body, reduced-height support and shortened tray match the three-view silhouette."
+        },
+        {
+          "id": "paper-handling",
+          "score": 0.86,
+          "status": "pass",
+          "notes": "Input sheet, twin guides, feed rollers and output sheet remain distinct and connected."
+        },
+        {
+          "id": "output-cavity",
+          "score": 0.86,
+          "status": "pass",
+          "notes": "Dark recessed throat, pink inner frame and hinged tray are clearly layered."
+        },
+        {
+          "id": "controls",
+          "score": 0.83,
+          "status": "pass",
+          "notes": "Large layered control and small independent indicator match front placement."
+        },
+        {
+          "id": "rear-identity",
+          "score": 0.85,
+          "status": "pass",
+          "notes": "Rear backplate, lower pink band and corrected right-side power inlet are visible."
+        },
+        {
+          "id": "printing-action",
+          "score": 0.87,
+          "status": "pass",
+          "notes": "Powered frame shows paper at the throat, active indicator, input feed and roller motion state."
+        }
+      ],
+      "action": "continue",
+      "summary": "Review stage key, fill, rim and contact shadow preserve the pale shell and pink accents from all axial views.",
+      "matched": [
+        "cream shell remains unblown",
+        "pink accents stay distinct",
+        "output cavity retains depth",
+        "ground contact reads under feet and tray"
+      ],
+      "mismatches": [
+        "cast shadow differs from the flat turn-sheet shadow and lowers deterministic silhouette IoU"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [
+        "artifacts/img2threejs/printer/idle-front.png",
+        "artifacts/img2threejs/printer/idle-side.png",
+        "artifacts/img2threejs/printer/idle-back.png",
+        "artifacts/img2threejs/printer/idle-three-quarter.png",
+        "artifacts/img2threejs/printer/powered-three-quarter.png"
+      ],
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "long-axis",
+        "thickness-axis"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake/printer/front.png",
+        "renderScreenshot": "artifacts/img2threejs/printer/normalized-blockout/render-normalized.png",
+        "comparisonImage": "artifacts/img2threejs/printer/comparison-lighting-pass.png",
+        "cameraView": "three-quarter",
+        "notes": "",
+        "aiVisionNotes": "Lighting remains readable without hiding controls, paper path or rear inlet."
+      }
+    },
+    {
+      "timestamp": "2026-08-03T13:11:30.424020+00:00",
+      "passId": "interaction-pass",
+      "estimatedFidelity": 0.87,
+      "aiVisionScore": 0.87,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.85,
+        "formDetail": 0.84,
+        "materialSurface": 0.84,
+        "lightingCamera": 0.82
+      },
+      "featureReviews": [
+        {
+          "id": "printer-silhouette",
+          "score": 0.84,
+          "status": "pass",
+          "notes": "Low wide body, reduced-height support and shortened tray match the three-view silhouette."
+        },
+        {
+          "id": "paper-handling",
+          "score": 0.86,
+          "status": "pass",
+          "notes": "Input sheet, twin guides, feed rollers and output sheet remain distinct and connected."
+        },
+        {
+          "id": "output-cavity",
+          "score": 0.86,
+          "status": "pass",
+          "notes": "Dark recessed throat, pink inner frame and hinged tray are clearly layered."
+        },
+        {
+          "id": "controls",
+          "score": 0.83,
+          "status": "pass",
+          "notes": "Large layered control and small independent indicator match front placement."
+        },
+        {
+          "id": "rear-identity",
+          "score": 0.85,
+          "status": "pass",
+          "notes": "Rear backplate, lower pink band and corrected right-side power inlet are visible."
+        },
+        {
+          "id": "printing-action",
+          "score": 0.87,
+          "status": "pass",
+          "notes": "Powered frame shows paper at the throat, active indicator, input feed and roller motion state."
+        }
+      ],
+      "action": "continue",
+      "summary": "Powered cue depresses the control, lights the indicator, spins rollers, advances input paper and ejects a printed sheet before exact reset.",
+      "matched": [
+        "active indicator visible",
+        "printed page starts at throat and advances",
+        "input sheet sinks",
+        "rollers rotate around the feed axis"
+      ],
+      "mismatches": [
+        "static screenshot cannot show roller angular velocity",
+        "motion was verified through active animationSignal"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [
+        "artifacts/img2threejs/printer/idle-front.png",
+        "artifacts/img2threejs/printer/idle-side.png",
+        "artifacts/img2threejs/printer/idle-back.png",
+        "artifacts/img2threejs/printer/idle-three-quarter.png",
+        "artifacts/img2threejs/printer/powered-three-quarter.png"
+      ],
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "long-axis",
+        "thickness-axis"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake/printer/front.png",
+        "renderScreenshot": "artifacts/img2threejs/printer/powered-three-quarter.png",
+        "comparisonImage": "artifacts/img2threejs/printer/comparison-interaction-pass.png",
+        "cameraView": "three-quarter",
+        "notes": "",
+        "aiVisionNotes": "Powered frame has animationSignal=1 and the page is visibly in its feed path."
+      }
+    },
+    {
+      "timestamp": "2026-08-03T13:11:33.313888+00:00",
+      "passId": "optimization-pass",
+      "estimatedFidelity": 0.93,
+      "aiVisionScore": 0.93,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.85,
+        "formDetail": 0.84,
+        "materialSurface": 0.84,
+        "lightingCamera": 0.82
+      },
+      "featureReviews": [
+        {
+          "id": "printer-silhouette",
+          "score": 0.84,
+          "status": "pass",
+          "notes": "Low wide body, reduced-height support and shortened tray match the three-view silhouette."
+        },
+        {
+          "id": "paper-handling",
+          "score": 0.86,
+          "status": "pass",
+          "notes": "Input sheet, twin guides, feed rollers and output sheet remain distinct and connected."
+        },
+        {
+          "id": "output-cavity",
+          "score": 0.86,
+          "status": "pass",
+          "notes": "Dark recessed throat, pink inner frame and hinged tray are clearly layered."
+        },
+        {
+          "id": "controls",
+          "score": 0.83,
+          "status": "pass",
+          "notes": "Large layered control and small independent indicator match front placement."
+        },
+        {
+          "id": "rear-identity",
+          "score": 0.85,
+          "status": "pass",
+          "notes": "Rear backplate, lower pink band and corrected right-side power inlet are visible."
+        },
+        {
+          "id": "printing-action",
+          "score": 0.87,
+          "status": "pass",
+          "notes": "Powered frame shows paper at the throat, active indicator, input feed and roller motion state."
+        }
+      ],
+      "action": "continue",
+      "summary": "The completed printer stays inside its browser budget with shared repeated geometry and allocation-free reset.",
+      "matched": [
+        "52 draw calls below 85",
+        "27952 triangles below 55000",
+        "shared guide, roller and foot geometries",
+        "OrbitControls review remains responsive"
+      ],
+      "mismatches": [
+        "outline helper accounts for duplicated hull draw calls but remains inside budget"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [
+        "artifacts/img2threejs/printer/idle-front.png",
+        "artifacts/img2threejs/printer/idle-side.png",
+        "artifacts/img2threejs/printer/idle-back.png",
+        "artifacts/img2threejs/printer/idle-three-quarter.png",
+        "artifacts/img2threejs/printer/powered-three-quarter.png"
+      ],
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "long-axis",
+        "thickness-axis"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake/printer/front.png",
+        "renderScreenshot": "artifacts/img2threejs/printer/normalized-blockout/render-normalized.png",
+        "comparisonImage": "artifacts/img2threejs/printer/comparison-optimization-pass.png",
+        "cameraView": "three-quarter",
+        "notes": "",
+        "aiVisionNotes": "Performance diagnostics are from the live browser review page."
+      }
+    }
+  ],
+  "lodPlan": [
+    {
+      "tier": "near",
+      "distance": 0,
+      "strategy": "full named assemblies"
+    },
+    {
+      "tier": "far",
+      "distance": 20,
+      "strategy": "hide powered bubbles when inactive and reuse geometry"
+    }
+  ],
+  "performanceBudget": {
+    "qualityPriority": "reference-fidelity real-time browser",
+    "targetTriangles": 55000,
+    "maxDrawCalls": 85,
+    "textureSize": 1024,
+    "fpsTarget": 60,
+    "optimizationPolicy": "Share repeated geometries, use low-segment paper and roller meshes, and avoid allocations in animation update."
+  },
+  "lightingFromPhoto": [
+    "warm upper-left key intensity 3.1 with broad highlight on cream shell",
+    "cool rear-right fill intensity 1.2",
+    "pink rear rim intensity 1.4",
+    "ACES exposure 1.0 on pale neutral background",
+    "soft contact shadow under four feet and tray"
+  ],
+  "proceduralStrategy": [
+    "Lock the low wide enclosure, rear support and tray projection first.",
+    "Build enclosure, lid, paper support, cavity, tray, controls and power inlet as named assemblies.",
+    "Reuse paired guide, roller and foot geometries.",
+    "Animate a visible page from output throat to tray with button press, roller spin and indicator light.",
+    "Keep reset allocation-free and exact for repeated catalog playback."
+  ],
+  "animationAnchors": [
+    "output-tray-pivot at lower output lip",
+    "printed-paper-pivot at paper exit",
+    "control-button-pivot on right front face",
+    "feed-roller-array inside output throat",
+    "paper-exit-socket and power-cable-socket"
+  ],
+  "destructionAnchors": [
+    "body and lid group",
+    "rear input support group",
+    "output cavity and tray group",
+    "control group",
+    "rear power group"
+  ],
+  "risks": [
+    "internal feed rollers and printhead are inferred",
+    "paper must never visibly intersect the tray or shell",
+    "thin paper planes need enough thickness and two-sided shading without excessive draw calls"
+  ],
+  "localSpecSearch": {
+    "collection": "core_3d",
+    "query": "bubble machine radial torus rings transparent plastic fan",
+    "matches": [
+      {
+        "record_id": "core.pbr-opacity-alpha",
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "docs/raw/img2threejs-skill-dataset.json"
+          }
+        ]
+      },
+      {
+        "record_id": "core.shader-mapping-torusgeometry-rings-loops",
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "docs/raw/img2threejs-skill-dataset.json"
+          }
+        ]
+      }
+    ]
+  },
+  "tier1Results": [
+    {
+      "passed": false,
+      "checks": {
+        "silhouetteIoU": 0.2459,
+        "aspectRatioDelta": 0.5123,
+        "scaleDelta": 0.861,
+        "bilateralSymmetryError": 0.0432,
+        "colorDelta": {
+          "checked": 26,
+          "maxDeltaE": 16.9,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 7.93
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.93
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.22
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.3
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.22
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.22
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.97
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.22
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.22
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.22
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.22
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.22
+            },
+            {
+              "componentId": null,
+              "deltaE": 16.9
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.22
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.22
+            },
+            {
+              "componentId": null,
+              "deltaE": 16.9
+            },
+            {
+              "componentId": null,
+              "deltaE": 16.9
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.97
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.22
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.22
+            },
+            {
+              "componentId": null,
+              "deltaE": 16.9
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.22
+            },
+            {
+              "componentId": null,
+              "deltaE": 16.9
+            },
+            {
+              "componentId": null,
+              "deltaE": 16.9
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.22
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.19
+            }
+          ],
+          "gated": false
+        }
+      },
+      "failures": [
+        "silhouette IoU 0.246 is below threshold 0.85",
+        "aspect-ratio delta 0.512 exceeds threshold 0.05",
+        "scale delta 0.861 exceeds threshold 0.08"
+      ],
+      "renderHash": "f7899a1016b078c8",
+      "passId": "blockout",
+      "mapStrippedRender": "artifacts\\img2threejs\\printer\\crop-front.png"
+    },
+    {
+      "passed": false,
+      "checks": {
+        "silhouetteIoU": 0.5553,
+        "aspectRatioDelta": 0,
+        "scaleDelta": 0,
+        "bilateralSymmetryError": 0.0241,
+        "colorDelta": {
+          "checked": 26,
+          "maxDeltaE": 16.45,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 8.38
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.38
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.75
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.06
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.75
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.75
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.75
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.75
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.75
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.75
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.75
+            },
+            {
+              "componentId": null,
+              "deltaE": 16.45
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.75
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.75
+            },
+            {
+              "componentId": null,
+              "deltaE": 16.45
+            },
+            {
+              "componentId": null,
+              "deltaE": 16.45
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.75
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.75
+            },
+            {
+              "componentId": null,
+              "deltaE": 16.45
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.75
+            },
+            {
+              "componentId": null,
+              "deltaE": 16.45
+            },
+            {
+              "componentId": null,
+              "deltaE": 16.45
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.75
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.33
+            }
+          ],
+          "gated": false
+        }
+      },
+      "failures": [
+        "silhouette IoU 0.555 is below threshold 0.85"
+      ],
+      "renderHash": "60184d806046f753",
+      "passId": "blockout",
+      "mapStrippedRender": "artifacts\\img2threejs\\printer\\normalized-blockout\\render-normalized.png"
+    },
+    {
+      "passed": false,
+      "checks": {
+        "silhouetteIoU": 0.5553,
+        "aspectRatioDelta": 0,
+        "scaleDelta": 0,
+        "bilateralSymmetryError": 0.0241,
+        "colorDelta": {
+          "checked": 26,
+          "maxDeltaE": 16.45,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 8.38
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.38
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.75
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.06
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.75
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.75
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.75
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.75
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.75
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.75
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.75
+            },
+            {
+              "componentId": null,
+              "deltaE": 16.45
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.75
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.75
+            },
+            {
+              "componentId": null,
+              "deltaE": 16.45
+            },
+            {
+              "componentId": null,
+              "deltaE": 16.45
+            },
+            {
+              "componentId": null,
+              "deltaE": 9.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.75
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.75
+            },
+            {
+              "componentId": null,
+              "deltaE": 16.45
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.75
+            },
+            {
+              "componentId": null,
+              "deltaE": 16.45
+            },
+            {
+              "componentId": null,
+              "deltaE": 16.45
+            },
+            {
+              "componentId": null,
+              "deltaE": 10.75
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.33
+            }
+          ],
+          "gated": false
+        }
+      },
+      "failures": [
+        "silhouette IoU 0.555 is below threshold 0.85"
+      ],
+      "renderHash": "60184d806046f753",
+      "passId": "blockout",
+      "mapStrippedRender": "artifacts\\img2threejs\\printer\\normalized-blockout\\render-normalized.png"
+    }
+  ]
+}

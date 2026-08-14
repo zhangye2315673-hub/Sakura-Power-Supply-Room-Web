@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "object": "SAKURA articulated desk lamp",
+  "fidelity": "stylized-low-poly",
+  "definitionOfDone": [
+    "The lamp reads as a layered articulated object from front and three-quarter orbit views.",
+    "The head executes left, center, right, center, up, center as one continuous non-looping timeline.",
+    "The light cone begins at the shade aperture and is wider at its far end.",
+    "A real SpotLight, gradient volumetric cone, and circular volumetric ground pool agree on socket, direction, length, and time.",
+    "Game and gallery consume the same AppliancePerformanceSystem timeline and preserve gallery auto-rotation."
+  ],
+  "complexity": "moderate",
+  "minimumFeatures": {
+    "macro": 4,
+    "meso": 8,
+    "micro": 4,
+    "materialLayers": 5
+  },
+  "components": [
+    "three-layer base",
+    "stem and foot collar",
+    "rear yoke and axle caps",
+    "lamp-head-hinge-pivot",
+    "open shade shell and rim",
+    "inner reflector",
+    "volumetric bulb and diffuser",
+    "top-button pivot",
+    "lamp-light-socket"
+  ],
+  "materials": [
+    "pink painted base with stepped value variation",
+    "cream painted stem and shade",
+    "darker hinge hardware",
+    "warm emissive reflector/bulb/diffuser stack",
+    "transparent additive axial-gradient beam and radial-gradient pool"
+  ],
+  "rig": {
+    "primaryPivot": "lamp-head-hinge-pivot",
+    "controlPivot": "lamp-shade-top-button-pivot",
+    "effectSocket": "lamp-light-socket",
+    "effectDirection": [0, -1, 0],
+    "apertureRadiusLocal": 0.565
+  },
+  "timelineKeyframesSeconds": [0, 0.34, 0.7, 0.98, 1.28, 1.48, 1.82, 2.1, 2.42, 2.64, 3.06, 3.52, 3.94, 4.72, 5.2],
+  "executableThresholds": {
+    "continuityProbeDeltaSeconds": 0.0001,
+    "maxPoseDeltaAcrossKeyframeRadians": 0.002,
+    "sourceRadiusTolerance": 0.000001,
+    "minimumFarToNearRatio": 3,
+    "requiredFarToNearRatio": 3.35,
+    "minimumSpotAngleRadians": 0.18,
+    "beamGeometryAxis": "-Y-near/+Y-far",
+    "requiredTimelineOwners": 1
+  },
+  "requiredReviewViews": [
+    "front powered at 0.84s",
+    "three-quarter powered at 1.96s",
+    "front powered climax at 3.30s",
+    "game/gallery same-time pair at 3.30s"
+  ],
+  "blockingFailures": [
+    "near end wider than far end",
+    "beam origin outside or detached from lamp-light-socket",
+    "plain Plane, flat color card, or ordinary Line used as the beam or pool",
+    "head rotation discontinuity or repeated modulo snap after 3.94s",
+    "SpotLight target differs from volumetric-cone endpoint",
+    "game and gallery report different timeline time or beam ratio",
+    "gallery auto-rotation removed",
+    "legacy lamp-flashlight-beam or lamp-ground-light nodes remain"
+  ]
+}

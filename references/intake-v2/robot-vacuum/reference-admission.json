@@ -1,0 +1,23 @@
+{
+  "status": "pass",
+  "provider": "openai-compatible-comfly",
+  "model": "gpt-image-2",
+  "quality": "high",
+  "size": "2048x2048",
+  "output": "references/intake-v2/robot-vacuum/robot-vacuum-turnsheet-v2.png",
+  "views": ["front", "right-side", "back", "three-quarter"],
+  "checks": {
+    "technicalProbe": true,
+    "wholeSheetAdmission": false,
+    "frontAdmission": true,
+    "sideAdmission": true,
+    "backAdmission": true,
+    "threeQuarterAdmission": true,
+    "crossViewPartConsistency": true,
+    "commonGroundLine": true,
+    "noTextOrWatermark": true,
+    "noCableOrMotionEffects": true,
+    "animationAnchorsVisuallyCompatible": true
+  },
+  "notes": "The whole 2x2 sheet was correctly rejected by the single-subject coherence heuristic because it contains four separated panels. Each split view was admitted independently. Existing runtime pivots, sockets, colliders, effects, and timeline remain authoritative."
+}

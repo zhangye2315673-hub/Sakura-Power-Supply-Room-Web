@@ -1,0 +1,71 @@
+{
+  "sourceImage": "D:\\下载文件\\ChatGPT Image 2026年8月3日 16_17_49 (8).png",
+  "zonesDir": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\bubble-machine\\admitted-views",
+  "detailInventory": {
+    "scanMethod": "component-zones",
+    "targetMinDetails": 10,
+    "details": [
+      {
+        "id": "front-view",
+        "kind": "",
+        "description": "",
+        "region": {
+          "x": 0.1,
+          "y": 0.24,
+          "width": 0.26,
+          "height": 0.53,
+          "units": "normalized"
+        },
+        "scale": "",
+        "affects": "",
+        "mapsTo": {
+          "type": "",
+          "ref": ""
+        },
+        "evidenceRef": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\bubble-machine\\admitted-views\\front-view.png",
+        "confidence": 0.0
+      },
+      {
+        "id": "side-view",
+        "kind": "",
+        "description": "",
+        "region": {
+          "x": 0.4,
+          "y": 0.24,
+          "width": 0.25,
+          "height": 0.53,
+          "units": "normalized"
+        },
+        "scale": "",
+        "affects": "",
+        "mapsTo": {
+          "type": "",
+          "ref": ""
+        },
+        "evidenceRef": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\bubble-machine\\admitted-views\\side-view.png",
+        "confidence": 0.0
+      },
+      {
+        "id": "back-view",
+        "kind": "",
+        "description": "",
+        "region": {
+          "x": 0.7,
+          "y": 0.24,
+          "width": 0.28,
+          "height": 0.53,
+          "units": "normalized"
+        },
+        "scale": "",
+        "affects": "",
+        "mapsTo": {
+          "type": "",
+          "ref": ""
+        },
+        "evidenceRef": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\bubble-machine\\admitted-views\\back-view.png",
+        "confidence": 0.0
+      }
+    ]
+  },
+  "authoringInstruction": "Open each zone crop under zonesDir and replace every detail stub's kind, description, scale, affects, mapsTo, and confidence with what is actually observed. Add more detail entries per zone if a single zone contains multiple distinct marks; do not leave stubs unfilled or unlinked (mapsTo must reference a real component.localFeatures or material.localOverrides entry)."
+}

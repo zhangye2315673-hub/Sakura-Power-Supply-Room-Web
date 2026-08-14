@@ -1,0 +1,17 @@
+[
+  {
+    "id": "family-shell-silhouette",
+    "score": 0.9,
+    "notes": "The refined shell reads clearly at gameplay scale and keeps the plug identity without the old straight-cylinder silhouette."
+  },
+  {
+    "id": "seven-terminal-identities",
+    "score": 0.91,
+    "notes": "Round pins, blades, three-pin clusters, barrel cavity, USB-C face, grounding layout and pogo contacts remain distinct in the family and gameplay views."
+  },
+  {
+    "id": "tangent-cable-fillet",
+    "score": 0.9,
+    "notes": "The fixed-seed game view shows controlled low-poly quarter turns without the v1 spherical elbow bulges; analytic tests confirm tangent continuity and bounded centerlines."
+  }
+]

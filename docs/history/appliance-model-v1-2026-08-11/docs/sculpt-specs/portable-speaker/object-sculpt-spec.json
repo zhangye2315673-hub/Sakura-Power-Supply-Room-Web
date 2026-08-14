@@ -1,0 +1,3949 @@
+{
+  "targetName": "SAKURA Portable Speaker",
+  "targetId": "portable-speaker",
+  "schemaVersion": "2.1",
+  "terminologyProfile": {
+    "domain": "real-time procedural Three.js asset",
+    "geometryTerms": [
+      "silhouette",
+      "topology",
+      "primitive",
+      "bevel",
+      "chamfer",
+      "taper",
+      "bend",
+      "boolean cut",
+      "edge loop",
+      "surface normal",
+      "displacement"
+    ],
+    "materialTerms": [
+      "albedo",
+      "baseColor",
+      "roughness",
+      "metalness",
+      "normal map",
+      "bump map",
+      "ambient occlusion",
+      "cavity dirt",
+      "edge wear",
+      "clearcoat"
+    ],
+    "lightingTerms": [
+      "key light",
+      "fill light",
+      "rim light",
+      "HDRI/environment reflection",
+      "contact shadow"
+    ],
+    "descriptionRule": "Use measurable 3D graphics terms. Avoid vague words unless they are paired with concrete geometry/material/shader parameters."
+  },
+  "sourceImage": "references/intake/portable-speaker/front.png",
+  "referenceCamera": {
+    "solved": false,
+    "fovDegrees": 40,
+    "aspect": 1,
+    "orientation": {
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0
+    },
+    "positionHint": [
+      0,
+      0,
+      3
+    ],
+    "note": "For likeness work, solve the reference camera (forge/stage1_intake/solve_camera_pose.py) so the review render aligns with the photo and the reference can be projected. Confirm by overlay review."
+  },
+  "suitability": "pass",
+  "scores": {
+    "object_isolation": 0,
+    "silhouette_readability": 0,
+    "depth_inference": 0,
+    "primitive_decomposition": 0,
+    "material_procedurality": 0,
+    "occlusion_risk": 0,
+    "interaction_fit": 0
+  },
+  "preSpecAssessment": {
+    "objectClass": {
+      "primaryType": "portable loudspeaker with articulated carry handle",
+      "primaryDomain": "object",
+      "formLanguage": [
+        "hard-surface",
+        "rounded geometric",
+        "repeated surface relief"
+      ],
+      "structureKind": [
+        "compound object",
+        "layered shell",
+        "articulated assembly",
+        "repeated modules"
+      ],
+      "motionPotential": [
+        "hinged handle",
+        "press control",
+        "diaphragm pulse",
+        "effect emitter"
+      ],
+      "materialFamilies": [
+        "molded plastic",
+        "rubber",
+        "dark cavity",
+        "emissive indicator"
+      ],
+      "notes": "Three admitted elevations define the visible cabinet, fascia, handle and rear service panel. Hidden acoustic and hinge internals remain inferred."
+    },
+    "complexity": {
+      "tier": "complex",
+      "scores": {
+        "silhouetteComplexity": 2,
+        "componentCount": 3,
+        "hierarchyDepth": 2,
+        "repetitionDensity": 3,
+        "materialLayerCount": 2,
+        "localDetailDensity": 3,
+        "occlusionRisk": 2,
+        "actionReadinessNeed": 3
+      },
+      "estimatedCounts": {
+        "macroComponents": 3,
+        "mesoComponents": 10,
+        "microFeatureGroups": 18,
+        "materialLayers": 6,
+        "repetitionSystems": 2
+      },
+      "reasoning": [
+        "A rounded cabinet blockout is straightforward, but reference identity depends on a dense perforation field, layered fascia, articulated dual-finish handle, paired hinges, controls and rear service details."
+      ]
+    },
+    "specDepthDecision": {
+      "requiredDepth": "complex",
+      "minimumComponentLevels": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "needsRepetitionSystems": true,
+      "needsMaterialLocalOverrides": true,
+      "needsMultipleReviewViews": true,
+      "needsActionReadyHierarchy": true,
+      "rationale": "Complex is required because the perforation field, attachments and power animation must remain separate, selectable and performant."
+    },
+    "unknownsToResolveBeforeImplementation": [],
+    "detailInventory": {
+      "scanMethod": "grid-4x4-plus-three-admitted-elevations",
+      "targetMinDetails": 18,
+      "details": [
+        {
+          "id": "cabinet-bevel",
+          "kind": "bevel",
+          "description": "broad rounded cabinet edge",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry and silhouette",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "soft-edge-bevel"
+          },
+          "evidenceRef": "front+side+back",
+          "confidence": 0.99
+        },
+        {
+          "id": "cabinet-seam",
+          "kind": "seam",
+          "description": "front fascia to cabinet construction seam",
+          "region": {
+            "x": 0.25,
+            "y": 0,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry and silhouette",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "front-fascia-seam"
+          },
+          "evidenceRef": "front",
+          "confidence": 0.97
+        },
+        {
+          "id": "pink-satin-highlight",
+          "kind": "gloss",
+          "description": "broad satin highlight on pink molded shell",
+          "region": {
+            "x": 0.5,
+            "y": 0,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "material response",
+          "mapsTo": {
+            "type": "material.localOverrides",
+            "ref": "pink-plastic.satin-highlight"
+          },
+          "evidenceRef": "front+side+back",
+          "confidence": 0.96
+        },
+        {
+          "id": "fascia-bevel",
+          "kind": "bevel",
+          "description": "cream rounded-square grille surround",
+          "region": {
+            "x": 0.75,
+            "y": 0,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry and silhouette",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "rounded-bevel"
+          },
+          "evidenceRef": "front",
+          "confidence": 0.99
+        },
+        {
+          "id": "fascia-inset",
+          "kind": "seam",
+          "description": "recessed cream fascia inside pink rim",
+          "region": {
+            "x": 0,
+            "y": 0.2,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry and silhouette",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "recessed-inset"
+          },
+          "evidenceRef": "front",
+          "confidence": 0.99
+        },
+        {
+          "id": "perforation-grid",
+          "kind": "fastener",
+          "description": "regular circular acoustic hole field",
+          "region": {
+            "x": 0.25,
+            "y": 0.2,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "micro-repeated",
+          "affects": "geometry and silhouette",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "instanced-grid"
+          },
+          "evidenceRef": "front",
+          "confidence": 0.99
+        },
+        {
+          "id": "control-exclusion",
+          "kind": "contour",
+          "description": "lower-right void in hole field around controls",
+          "region": {
+            "x": 0.5,
+            "y": 0.2,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry and silhouette",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "control-clearance"
+          },
+          "evidenceRef": "front",
+          "confidence": 0.98
+        },
+        {
+          "id": "power-outer-ring",
+          "kind": "ridge",
+          "description": "raised concentric power-button ring",
+          "region": {
+            "x": 0.75,
+            "y": 0.2,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry and silhouette",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "concentric-ring"
+          },
+          "evidenceRef": "front",
+          "confidence": 0.99
+        },
+        {
+          "id": "power-disc",
+          "kind": "contour",
+          "description": "cream circular button face",
+          "region": {
+            "x": 0,
+            "y": 0.4,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry and silhouette",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "button-disc"
+          },
+          "evidenceRef": "front",
+          "confidence": 0.99
+        },
+        {
+          "id": "power-glyph",
+          "kind": "linework",
+          "description": "raised power symbol on button face",
+          "region": {
+            "x": 0.25,
+            "y": 0.4,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry and silhouette",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "power-glyph"
+          },
+          "evidenceRef": "front",
+          "confidence": 0.96
+        },
+        {
+          "id": "status-dot",
+          "kind": "emissive",
+          "description": "small mint indicator below button",
+          "region": {
+            "x": 0.5,
+            "y": 0.4,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "material response",
+          "mapsTo": {
+            "type": "material.localOverrides",
+            "ref": "status-indicator.powered-emissive"
+          },
+          "evidenceRef": "front",
+          "confidence": 0.99
+        },
+        {
+          "id": "handle-arch",
+          "kind": "contour",
+          "description": "broad inverted-U carry handle",
+          "region": {
+            "x": 0.75,
+            "y": 0.4,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry and silhouette",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "arch-profile"
+          },
+          "evidenceRef": "front+back",
+          "confidence": 0.99
+        },
+        {
+          "id": "handle-insert",
+          "kind": "seam",
+          "description": "mint insert on handle side face",
+          "region": {
+            "x": 0,
+            "y": 0.6000000000000001,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry and silhouette",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "mint-side-insert"
+          },
+          "evidenceRef": "side",
+          "confidence": 0.94
+        },
+        {
+          "id": "hinge-caps",
+          "kind": "fastener",
+          "description": "paired cream circular side pivots",
+          "region": {
+            "x": 0.25,
+            "y": 0.6000000000000001,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "micro-repeated",
+          "affects": "geometry and silhouette",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "mirrored-caps"
+          },
+          "evidenceRef": "front+side+back",
+          "confidence": 0.99
+        },
+        {
+          "id": "rear-panel",
+          "kind": "seam",
+          "description": "cream rounded lower rear service panel",
+          "region": {
+            "x": 0.5,
+            "y": 0.6000000000000001,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry and silhouette",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "recessed-panel"
+          },
+          "evidenceRef": "back",
+          "confidence": 0.99
+        },
+        {
+          "id": "rear-slot",
+          "kind": "groove",
+          "description": "single horizontal recessed rear slot",
+          "region": {
+            "x": 0.75,
+            "y": 0.6000000000000001,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry and silhouette",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "horizontal-port"
+          },
+          "evidenceRef": "back",
+          "confidence": 0.97
+        },
+        {
+          "id": "feet-pair",
+          "kind": "contour",
+          "description": "two shallow feet under cabinet",
+          "region": {
+            "x": 0,
+            "y": 0.8,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry and silhouette",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "mirrored-pair"
+          },
+          "evidenceRef": "front+back+side",
+          "confidence": 0.97
+        },
+        {
+          "id": "cavity-response",
+          "kind": "gloss",
+          "description": "dark low-value cavity response in holes and port",
+          "region": {
+            "x": 0.25,
+            "y": 0.8,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "material response",
+          "mapsTo": {
+            "type": "material.localOverrides",
+            "ref": "cavity.dark-recess"
+          },
+          "evidenceRef": "front+back",
+          "confidence": 0.95
+        }
+      ]
+    },
+    "anatomy": {
+      "applies": false,
+      "styleHeads": 0,
+      "proportions": {
+        "headUnit": 0,
+        "torso": 0,
+        "legs": 0,
+        "shoulderWidth": 0,
+        "hipWidth": 0
+      },
+      "pose": {
+        "type": "unassessed",
+        "jointAngles": {}
+      },
+      "faceLandmarks": {
+        "eyeLine": 0,
+        "eyeSpacing": 0,
+        "noseBase": 0,
+        "mouthLine": 0,
+        "hairline": 0
+      },
+      "features": [],
+      "confidence": 0,
+      "note": "Only meaningful when objectClass.primaryDomain is character or hybrid. Set applies=true and fill from forge/stage1_intake/extract_landmarks.py. See grimoire/character/reconstruction.md and grimoire/character/likeness_maximization.md."
+    },
+    "sourceImage": "references\\intake\\portable-speaker\\front.png",
+    "resolvedImplementationAssumptions": []
+  },
+  "qualityContract": {
+    "qualityBar": "complex",
+    "definitionOfDone": [
+      "Front, side, back and three-quarter renders preserve the slightly-taller-than-wide rounded cabinet, deep side profile, arched handle negative space and layered front fascia.",
+      "Dense perforations remain regular and performant, preserve the lower-right control exclusion, and do not become hundreds of draw calls.",
+      "Handle, hinge caps, controls, grille, rear panel and feet remain independent named components with sockets and pivots.",
+      "Power sequence drives the complete machine through escalating bass compression, expansion and rebound, gives the inferred front driver stronger forward travel, emits thick 3D waves, then lands and restores the exact idle state."
+    ],
+    "minimumSpecDepth": {
+      "macroComponents": 3,
+      "mesoComponents": 6,
+      "microFeatureGroups": 15,
+      "materialLayers": 5,
+      "repetitionSystems": 2,
+      "reviewViewpoints": 4
+    },
+    "featureGroups": [
+      {
+        "id": "speaker-silhouette",
+        "name": "Rounded cabinet and carry-handle silhouette",
+        "required": true,
+        "qualityCriteria": [
+          "Cabinet is slightly taller than wide and the broad handle arch clears the cabinet top with continuous side attachments."
+        ],
+        "evidenceRefs": [
+          "front",
+          "side",
+          "back"
+        ],
+        "failureModes": [
+          "cabinet reads square or too shallow",
+          "handle floats or negative space collapses"
+        ]
+      },
+      {
+        "id": "acoustic-front",
+        "name": "Layered fascia and perforation system",
+        "required": true,
+        "qualityCriteria": [
+          "Cream recessed fascia, regular circular grid and lower-right control clearance match the front elevation."
+        ],
+        "evidenceRefs": [
+          "front"
+        ],
+        "failureModes": [
+          "grille is flat painted texture",
+          "hole density is sparse",
+          "controls overlap perforations"
+        ]
+      },
+      {
+        "id": "handle-joints",
+        "name": "Handle attachments and hinge pivots",
+        "required": true,
+        "qualityCriteria": [
+          "Both handle roots overlap named side hinge sockets and rotate from the visible cap axes."
+        ],
+        "evidenceRefs": [
+          "front",
+          "side",
+          "back"
+        ],
+        "failureModes": [
+          "floating handle root",
+          "center-pivot rotation",
+          "mint insert absent"
+        ]
+      },
+      {
+        "id": "controls-service",
+        "name": "Power controls and rear service panel",
+        "required": true,
+        "qualityCriteria": [
+          "Concentric button, power glyph, mint indicator, rear cream panel and horizontal port remain legible."
+        ],
+        "evidenceRefs": [
+          "front",
+          "back"
+        ],
+        "failureModes": [
+          "generic single button",
+          "rear panel omitted"
+        ]
+      },
+      {
+        "id": "powered-purpose",
+        "name": "Powered loudspeaker action",
+        "required": true,
+        "qualityCriteria": [
+          "Button press, grille/driver pulse, indicator and expanding waves identify speaker use within one second and reset exactly."
+        ],
+        "evidenceRefs": [
+          "animation requirement"
+        ],
+        "failureModes": [
+          "only object bobbing",
+          "no visible sound cue",
+          "reset drift"
+        ]
+      },
+      {
+        "id": "surface-material-response",
+        "name": "SAKURA material separation",
+        "required": true,
+        "qualityCriteria": [
+          "Pink satin shell, cream fascia, mint insert/light, dark cavities and rubber feet remain distinct under toon lighting."
+        ],
+        "evidenceRefs": [
+          "front",
+          "side",
+          "back"
+        ],
+        "failureModes": [
+          "one-note pink material",
+          "cavity holes wash out"
+        ]
+      }
+    ],
+    "visualDeltaChecks": [
+      "cabinet width-to-height and depth delta",
+      "handle arch and negative-space delta",
+      "perforation density/control exclusion delta",
+      "front/rear panel layering delta",
+      "pink/cream/mint/cavity material separation delta",
+      "powered action and exact reset delta"
+    ],
+    "antiShallowSpecRules": [
+      "Do not proceed to code if qualityContract.qualityBar is unassessed.",
+      "Do not proceed to code if the spec only contains a root component for a moderate or complex object.",
+      "Do not proceed to code if required featureGroups are not represented by componentTree, materials, or repetitionSystems.",
+      "Do not proceed to code if visible local features are described only in prose and not attached to components/materials/evidenceRefs.",
+      "Do not proceed past structural-pass if attached child parts lack attachment.parentSocket, localStart, localEnd, embedDepth/overlap, and gapTolerance.",
+      "Do not pass material look-dev when albedo is reused as roughness, height, normal, or AO.",
+      "Do not pass material look-dev without macro, meso, and micro surface frequency bands for close-up materials.",
+      "Do not pass reference-fidelity material look-dev from a source image without usable referencePbr maps or an explicit documented limitation.",
+      "Do not patch a spec with extracted PBR maps when extraction confidence is below the target threshold unless the user explicitly accepts lower fidelity.",
+      "Do not place adjacent separate-geometry parts below 0.02 world-unit seam overlap (source: grimoire/build/geometry_patterns.md).",
+      "Do not satisfy raised or recessed relief, fasteners, or grip structure with a map alone when the feature affects form; use geometry or displacement (source: grimoire/build/geometry_patterns.md)."
+    ]
+  },
+  "qualityTargets": {
+    "fidelity": 0.82,
+    "silhouette": 0.86,
+    "proportions": 0.84,
+    "componentStructure": 0.84,
+    "materials": 0.78,
+    "interaction": 0.86,
+    "reviewViewpoints": [
+      "front",
+      "side",
+      "back",
+      "three-quarter"
+    ],
+    "mustMatch": [
+      "rounded cabinet and handle silhouette",
+      "perforation density and control clearance",
+      "front and rear panels",
+      "pink cream mint color zoning"
+    ],
+    "niceToHave": [
+      "subtle molded highlight variation",
+      "illustrative expanding sound waves"
+    ]
+  },
+  "selfCorrectLoop": {
+    "enabled": true,
+    "visualAcceptance": {
+      "reviewer": "ai-vision",
+      "threshold": 0.7,
+      "comparisonArtifactRequired": true,
+      "layerScoresRequired": true,
+      "codePixelDiffIsAcceptanceAuthority": false,
+      "scoringRule": "AI vision must inspect a side-by-side reference/render sheet and score the current pass from 0 to 1. Pixel-diff code may assist diagnostics but cannot approve a pass.",
+      "requiredLayerScores": [
+        "silhouetteProportion",
+        "componentStructure",
+        "formDetail",
+        "materialSurface",
+        "lightingCamera"
+      ],
+      "featureReviewPolicy": {
+        "enabled": true,
+        "reviewUnit": "semantic-subsystem",
+        "maxCriticalFeaturesPerPass": 5,
+        "maxImportantFeaturesPerPass": 3,
+        "criticalDefaultThreshold": 0.8,
+        "importantAverageThreshold": 0.65,
+        "adaptiveEscalation": true,
+        "singleImagePairOnly": true,
+        "selectionRule": "Choose only the most visually salient, identity-defining, user-prioritized, or high-risk semantic systems. Group repeated parts instead of reviewing every mesh. AI vision scores every selected feature from the same full reference/render pair."
+      }
+    },
+    "reviewAfterPasses": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "surface-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "allowedActions": [
+      "continue",
+      "refine-spec",
+      "refine-code",
+      "request-input",
+      "stop"
+    ],
+    "specRefineTriggers": [
+      "missing component",
+      "wrong primitive family",
+      "wrong proportions",
+      "material layer under-specified",
+      "local feature not traceable to viewEvidence",
+      "reference ambiguity discovered during implementation"
+    ],
+    "codeRefineTriggers": [
+      "spec is adequate but generated geometry/material does not match",
+      "browser render differs from reference",
+      "performance budget exceeded",
+      "lighting hides geometry or material response"
+    ],
+    "stopCriteria": [
+      "target fidelity reached or user accepts current approximation",
+      "remaining gaps require new reference images or manual art"
+    ],
+    "screenshotPolicy": {
+      "requiredForPasses": [
+        "blockout",
+        "structural-pass",
+        "form-refinement",
+        "material-pass",
+        "surface-pass",
+        "lighting-pass",
+        "interaction-pass"
+      ],
+      "preferredCapture": "in-app-browser-screenshot",
+      "fallbackCapture": "user-supplied-screenshot-path",
+      "minimumEvidence": "Each visual pass needs a reference image, rendered screenshot, side-by-side comparison sheet, AI vision score, layer scores, and critique before choosing continue.",
+      "reviewPairRule": "Compare the same camera/viewpoint whenever possible; do not judge a front reference against a random render angle.",
+      "acceptanceAuthority": "AI vision review of the comparison sheet. Code-generated pixel similarity is not sufficient evidence."
+    }
+  },
+  "featureReviewTargets": [
+    {
+      "id": "speaker-silhouette",
+      "name": "Rounded cabinet and handle arch",
+      "tier": "critical",
+      "passIds": [
+        "blockout"
+      ],
+      "minimumScore": 0.74,
+      "mustPass": true,
+      "componentRefs": [
+        "cabinet-shell",
+        "carry-handle"
+      ],
+      "evidenceRefs": [
+        "front",
+        "side",
+        "back"
+      ]
+    },
+    {
+      "id": "acoustic-front",
+      "name": "Cream fascia and dense perforation field",
+      "tier": "critical",
+      "passIds": [
+        "structural-pass"
+      ],
+      "minimumScore": 0.74,
+      "mustPass": true,
+      "componentRefs": [
+        "front-fascia",
+        "grille-perforations"
+      ],
+      "evidenceRefs": [
+        "front"
+      ]
+    },
+    {
+      "id": "handle-joints",
+      "name": "Dual hinge and mint insert system",
+      "tier": "critical",
+      "passIds": [
+        "structural-pass"
+      ],
+      "minimumScore": 0.74,
+      "mustPass": true,
+      "componentRefs": [
+        "carry-handle",
+        "handle-hinges"
+      ],
+      "evidenceRefs": [
+        "front",
+        "side",
+        "back"
+      ]
+    },
+    {
+      "id": "controls-service",
+      "name": "Controls and rear service panel",
+      "tier": "critical",
+      "passIds": [
+        "form-refinement"
+      ],
+      "minimumScore": 0.74,
+      "mustPass": true,
+      "componentRefs": [
+        "power-control",
+        "status-indicator",
+        "rear-service-panel"
+      ],
+      "evidenceRefs": [
+        "front",
+        "back"
+      ]
+    },
+    {
+      "id": "surface-material-response",
+      "name": "Pink cream mint cavity separation",
+      "tier": "critical",
+      "passIds": [
+        "material-pass"
+      ],
+      "minimumScore": 0.74,
+      "mustPass": true,
+      "componentRefs": [
+        "cabinet-shell",
+        "front-fascia",
+        "carry-handle"
+      ],
+      "evidenceRefs": [
+        "front",
+        "side",
+        "back"
+      ]
+    },
+    {
+      "id": "powered-purpose",
+      "name": "Speaker pulse and sound-wave action",
+      "tier": "critical",
+      "passIds": [
+        "interaction-pass"
+      ],
+      "minimumScore": 0.74,
+      "mustPass": true,
+      "componentRefs": [
+        "power-control",
+        "grille-perforations",
+        "sound-wave-emitter"
+      ],
+      "evidenceRefs": [
+        "front",
+        "three-quarter"
+      ]
+    }
+  ],
+  "sculptPipeline": {
+    "passGateMode": "locked-sequential",
+    "passOrder": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "currentPass": "complete",
+    "completedPasses": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "lastCompletedPass": "optimization-pass",
+    "blockedReason": "all build passes completed",
+    "nextRequiredEvidence": []
+  },
+  "lookDevTargets": {
+    "qualityPriority": "reference-fidelity",
+    "materialPass": {
+      "albedoPaletteRequired": true,
+      "roughnessVariationRequired": true,
+      "normalOrBumpRequired": true,
+      "localOverridesRequired": true,
+      "minimumTextureResolution": 1024,
+      "preferredTextureResolution": 2048,
+      "independentMapChannels": [
+        "albedo",
+        "roughness",
+        "height",
+        "normal",
+        "ambient-occlusion"
+      ],
+      "requiredSurfaceFrequencyBands": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "geometryReliefRequiredWhenSilhouetteAffected": true,
+      "referencePbrExtraction": {
+        "requiredWhenSourceImagePresent": true,
+        "targetThreshold": 0.7,
+        "stopOnLowConfidence": true,
+        "script": "forge/stage1_intake/extract_pbr_evidence.py",
+        "acceptedLimitation": "single-image extraction is reference-derived inference, not exact photogrammetry"
+      },
+      "mustAvoid": [
+        "single flat albedo per material",
+        "uniform roughness",
+        "albedo texture reused as roughness/height/normal/AO",
+        "single-frequency random noise",
+        "plastic-looking smooth bark, stone, cloth, foliage, or aged material",
+        "local color/detail described only in prose without material masks",
+        "claiming exact PBR recovery when confidence is below the target threshold"
+      ]
+    },
+    "lightingPass": {
+      "requiredTerms": [
+        "key light",
+        "fill light",
+        "rim or environment light",
+        "exposure",
+        "tone mapping",
+        "background",
+        "contact shadow"
+      ],
+      "mustAvoid": [
+        "ambient-only lighting",
+        "flat value range",
+        "missing contact shadow",
+        "reference lighting copied without separating material readability"
+      ]
+    },
+    "screenshotReview": [
+      "Compare albedo palette and local color zones.",
+      "Compare roughness/normal/bump response under light.",
+      "Compare cavity dirt, edge wear, stains, moss, scratches, or other local masks.",
+      "Compare key/fill/rim structure, exposure, tone mapping, background, and contact shadows.",
+      "Capture a neutral-light render to verify material readability without reference lighting.",
+      "Capture a grazing-light close-up to expose flat normals, uniform roughness, tiling, and plastic highlights.",
+      "Capture a reference-matched render from the same camera framing as the source."
+    ]
+  },
+  "actionReadiness": {
+    "pivots": [
+      "portable-speaker-whole-machine-pivot",
+      "portable-speaker-handle-pivot",
+      "portable-speaker-power-button-pivot",
+      "portable-speaker-driver-pulse-pivot"
+    ],
+    "sockets": [
+      "portable-speaker-handle-left-hinge-socket",
+      "portable-speaker-handle-right-hinge-socket",
+      "portable-speaker-sound-wave-socket",
+      "portable-speaker-power-cable-socket"
+    ],
+    "colliders": [
+      "cabinet box",
+      "handle box trigger"
+    ],
+    "exactResetRequired": true
+  },
+  "assumptions": [
+    "A single full-range driver with basket rim, compliant surround, tapered cone and dust cap is inferred behind the grille; exact count and compliance are unknown.",
+    "Handle hinge stops are inferred from normal carry-handle articulation.",
+    "Rear slot is modeled as an ambiguous service/charging interface.",
+    "Underside screws and cable routing are hidden and omitted."
+  ],
+  "coordinateFrame": {
+    "up": "+Y",
+    "front": "+Z",
+    "right": "+X",
+    "units": "world units",
+    "origin": "cabinet bottom center"
+  },
+  "silhouette": {
+    "primitiveEnvelope": [
+      "rounded cuboid cabinet",
+      "extruded inverted-U handle"
+    ],
+    "proportions": {
+      "cabinetWidth": 3.2,
+      "cabinetHeight": 3.55,
+      "cabinetDepth": 1.45,
+      "totalHeight": 5
+    },
+    "symmetry": "bilateral except lower-right front controls",
+    "negativeSpaces": [
+      "large opening inside carry-handle arch"
+    ]
+  },
+  "viewEvidence": [
+    {
+      "id": "front",
+      "path": "references/intake/portable-speaker/front.png",
+      "viewpoint": "front",
+      "admitted": true
+    },
+    {
+      "id": "side",
+      "path": "references/intake/portable-speaker/side.png",
+      "viewpoint": "side",
+      "admitted": true
+    },
+    {
+      "id": "back",
+      "path": "references/intake/portable-speaker/back.png",
+      "viewpoint": "back",
+      "admitted": true
+    },
+    {
+      "id": "inferred",
+      "path": "docs/sculpt-specs/portable-speaker/image-analysis.md",
+      "viewpoint": "hidden-regions",
+      "admitted": true
+    },
+    {
+      "id": "animation requirement",
+      "path": "docs/sculpt-specs/portable-speaker/image-analysis.md",
+      "viewpoint": "interaction",
+      "admitted": true
+    }
+  ],
+  "componentTree": [
+    {
+      "id": "root",
+      "name": "portable-speaker-root",
+      "level": "macro",
+      "role": "component",
+      "importance": 1,
+      "confidence": 0.94,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Runtime container for the compound appliance.",
+      "parent": null,
+      "material": "pink-plastic",
+      "localFeatures": [],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(242, 178, 183, 1)",
+        "secondaryAlbedo": "rgba(255, 214, 207, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9
+      },
+      "evidenceRefs": [
+        "front",
+        "side",
+        "back"
+      ],
+      "actionProfile": {
+        "animationRole": "static",
+        "selectable": true,
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "root"
+        }
+      }
+    },
+    {
+      "id": "cabinet-shell",
+      "name": "rounded pink cabinet shell",
+      "level": "macro",
+      "role": "component",
+      "importance": 1,
+      "confidence": 0.94,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rigid molded housing with a deep rounded rectangular volume.",
+      "parent": "root",
+      "material": "pink-plastic",
+      "localFeatures": [
+        {
+          "id": "soft-edge-bevel"
+        },
+        {
+          "id": "front-fascia-seam"
+        }
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(242, 178, 183, 1)",
+        "secondaryAlbedo": "rgba(255, 214, 207, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9
+      },
+      "evidenceRefs": [
+        "front",
+        "side",
+        "back"
+      ],
+      "actionProfile": {
+        "animationRole": "static",
+        "selectable": true,
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "root"
+        }
+      },
+      "attachment": {
+        "parentId": "root",
+        "parentSocket": "root-attachment-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.12,
+          0
+        ],
+        "embedDepth": 0.04,
+        "overlap": 0.04,
+        "contactType": "surface-contact",
+        "gapTolerance": 0.02,
+        "evidenceRefs": [
+          "front",
+          "side",
+          "back"
+        ]
+      }
+    },
+    {
+      "id": "front-fascia",
+      "name": "recessed cream acoustic fascia",
+      "level": "macro",
+      "role": "component",
+      "importance": 1,
+      "confidence": 0.94,
+      "primitive": "box",
+      "topologyClass": "conforming-shell",
+      "topologyRationale": "Thin rounded panel follows the cabinet front.",
+      "parent": "cabinet-shell",
+      "material": "cream-plastic",
+      "localFeatures": [
+        {
+          "id": "rounded-bevel"
+        },
+        {
+          "id": "recessed-inset"
+        }
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(247, 235, 215, 1)",
+        "secondaryAlbedo": "rgba(255, 248, 235, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9
+      },
+      "evidenceRefs": [
+        "front"
+      ],
+      "actionProfile": {
+        "animationRole": "static",
+        "selectable": true,
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "cabinet-shell"
+        }
+      },
+      "attachment": {
+        "parentId": "cabinet-shell",
+        "parentSocket": "cabinet-shell-attachment-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.12,
+          0
+        ],
+        "embedDepth": 0.04,
+        "overlap": 0.04,
+        "contactType": "surface-contact",
+        "gapTolerance": 0.02,
+        "evidenceRefs": [
+          "front"
+        ]
+      }
+    },
+    {
+      "id": "grille-perforations",
+      "name": "instanced circular grille perforations",
+      "level": "micro",
+      "role": "component",
+      "importance": 0.85,
+      "confidence": 0.94,
+      "primitive": "instanced-cluster",
+      "topologyClass": "surface-relief",
+      "topologyRationale": "Dense holes are repeated surface relief, represented by one instanced draw.",
+      "parent": "front-fascia",
+      "material": "cavity",
+      "localFeatures": [
+        {
+          "id": "instanced-grid"
+        },
+        {
+          "id": "control-clearance"
+        }
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(75, 67, 71, 1)",
+        "secondaryAlbedo": "rgba(255, 248, 235, 1)",
+        "materialClass": "unknown",
+        "materialClassConfidence": 0.9
+      },
+      "evidenceRefs": [
+        "front"
+      ],
+      "actionProfile": {
+        "animationRole": "static",
+        "selectable": true,
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "front-fascia"
+        }
+      },
+      "attachment": {
+        "parentId": "front-fascia",
+        "parentSocket": "front-fascia-attachment-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.12,
+          0
+        ],
+        "embedDepth": 0.04,
+        "overlap": 0.04,
+        "contactType": "surface-contact",
+        "gapTolerance": 0.02,
+        "evidenceRefs": [
+          "front"
+        ]
+      }
+    },
+    {
+      "id": "power-control",
+      "name": "concentric power control",
+      "level": "meso",
+      "role": "component",
+      "importance": 0.85,
+      "confidence": 0.94,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Separate circular button and raised ring.",
+      "parent": "front-fascia",
+      "material": "cream-plastic",
+      "localFeatures": [
+        {
+          "id": "concentric-ring"
+        },
+        {
+          "id": "button-disc"
+        },
+        {
+          "id": "power-glyph"
+        }
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(247, 235, 215, 1)",
+        "secondaryAlbedo": "rgba(255, 248, 235, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9
+      },
+      "evidenceRefs": [
+        "front"
+      ],
+      "actionProfile": {
+        "animationRole": "articulated",
+        "selectable": true,
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "front-fascia"
+        }
+      },
+      "attachment": {
+        "parentId": "front-fascia",
+        "parentSocket": "front-fascia-attachment-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.12,
+          0
+        ],
+        "embedDepth": 0.04,
+        "overlap": 0.04,
+        "contactType": "surface-contact",
+        "gapTolerance": 0.02,
+        "evidenceRefs": [
+          "front"
+        ]
+      }
+    },
+    {
+      "id": "status-indicator",
+      "name": "mint status indicator",
+      "level": "micro",
+      "role": "component",
+      "importance": 0.85,
+      "confidence": 0.94,
+      "primitive": "sphere",
+      "topologyClass": "surface-relief",
+      "topologyRationale": "Small raised lens with powered emissive response.",
+      "parent": "front-fascia",
+      "material": "mint-emissive",
+      "localFeatures": [
+        {
+          "id": "powered-emissive"
+        }
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(187, 216, 205, 1)",
+        "secondaryAlbedo": "rgba(255, 248, 235, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9
+      },
+      "evidenceRefs": [
+        "front"
+      ],
+      "actionProfile": {
+        "animationRole": "static",
+        "selectable": true,
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "front-fascia"
+        }
+      },
+      "attachment": {
+        "parentId": "front-fascia",
+        "parentSocket": "front-fascia-attachment-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.12,
+          0
+        ],
+        "embedDepth": 0.04,
+        "overlap": 0.04,
+        "contactType": "surface-contact",
+        "gapTolerance": 0.02,
+        "evidenceRefs": [
+          "front"
+        ]
+      }
+    },
+    {
+      "id": "handle-hinges",
+      "name": "mirrored cream hinge cap system",
+      "level": "meso",
+      "role": "component",
+      "importance": 0.85,
+      "confidence": 0.94,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Paired side pivot caps visibly overlap the cabinet.",
+      "parent": "cabinet-shell",
+      "material": "cream-plastic",
+      "localFeatures": [
+        {
+          "id": "mirrored-caps"
+        }
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(247, 235, 215, 1)",
+        "secondaryAlbedo": "rgba(255, 248, 235, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9
+      },
+      "evidenceRefs": [
+        "front",
+        "side",
+        "back"
+      ],
+      "actionProfile": {
+        "animationRole": "static",
+        "selectable": true,
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "cabinet-shell"
+        }
+      },
+      "attachment": {
+        "parentId": "cabinet-shell",
+        "parentSocket": "cabinet-shell-attachment-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.12,
+          0
+        ],
+        "embedDepth": 0.04,
+        "overlap": 0.04,
+        "contactType": "hinge",
+        "gapTolerance": 0.02,
+        "evidenceRefs": [
+          "front",
+          "side",
+          "back"
+        ]
+      }
+    },
+    {
+      "id": "carry-handle",
+      "name": "arched pink carry handle",
+      "level": "macro",
+      "role": "component",
+      "importance": 1,
+      "confidence": 0.94,
+      "primitive": "extrude",
+      "topologyClass": "continuous-sculpt",
+      "topologyRationale": "Continuous inverted-U profile with broad negative space and rectangular strap depth.",
+      "parent": "cabinet-shell",
+      "material": "pink-plastic",
+      "localFeatures": [
+        {
+          "id": "arch-profile"
+        },
+        {
+          "id": "mint-side-insert"
+        }
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(242, 178, 183, 1)",
+        "secondaryAlbedo": "rgba(255, 214, 207, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9
+      },
+      "evidenceRefs": [
+        "front",
+        "side",
+        "back"
+      ],
+      "attachment": {
+        "parentId": "cabinet-shell",
+        "parentSocket": "handle-left-hinge-socket",
+        "localStart": [
+          -1.57,
+          2.78,
+          0
+        ],
+        "localEnd": [
+          -1.57,
+          4.15,
+          0
+        ],
+        "baseRadius": 0.15,
+        "endRadius": 0.15,
+        "embedDepth": 0.06,
+        "overlap": 0.08,
+        "contactType": "hinge",
+        "gapTolerance": 0.02,
+        "evidenceRefs": [
+          "front",
+          "side",
+          "back"
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "articulated",
+        "selectable": true,
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "handle-hinges"
+        }
+      }
+    },
+    {
+      "id": "carry-handle-right-root",
+      "name": "right handle hinge root",
+      "level": "meso",
+      "role": "component",
+      "importance": 0.85,
+      "confidence": 0.94,
+      "primitive": "extrude",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Right root shares the same articulated handle and terminates at the opposite hinge.",
+      "parent": "carry-handle",
+      "material": "pink-plastic",
+      "localFeatures": [
+        {
+          "id": "right-root-overlap"
+        }
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(242, 178, 183, 1)",
+        "secondaryAlbedo": "rgba(255, 214, 207, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9
+      },
+      "evidenceRefs": [
+        "front",
+        "back"
+      ],
+      "attachment": {
+        "parentId": "carry-handle",
+        "parentSocket": "carry-handle-right-root-socket",
+        "localStart": [
+          1.57,
+          2.78,
+          0
+        ],
+        "localEnd": [
+          1.57,
+          4.15,
+          0
+        ],
+        "baseRadius": 0.15,
+        "endRadius": 0.15,
+        "embedDepth": 0.06,
+        "overlap": 0.08,
+        "contactType": "hinge",
+        "gapTolerance": 0.02,
+        "evidenceRefs": [
+          "front",
+          "side",
+          "back"
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static",
+        "selectable": true,
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "carry-handle"
+        }
+      }
+    },
+    {
+      "id": "rear-service-panel",
+      "name": "rear cream service panel",
+      "level": "meso",
+      "role": "component",
+      "importance": 0.85,
+      "confidence": 0.94,
+      "primitive": "box",
+      "topologyClass": "conforming-shell",
+      "topologyRationale": "Thin inset panel follows the lower rear shell.",
+      "parent": "cabinet-shell",
+      "material": "cream-plastic",
+      "localFeatures": [
+        {
+          "id": "recessed-panel"
+        },
+        {
+          "id": "horizontal-port"
+        }
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(247, 235, 215, 1)",
+        "secondaryAlbedo": "rgba(255, 248, 235, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9
+      },
+      "evidenceRefs": [
+        "back"
+      ],
+      "actionProfile": {
+        "animationRole": "static",
+        "selectable": true,
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "cabinet-shell"
+        }
+      },
+      "attachment": {
+        "parentId": "cabinet-shell",
+        "parentSocket": "cabinet-shell-attachment-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.12,
+          0
+        ],
+        "embedDepth": 0.04,
+        "overlap": 0.04,
+        "contactType": "surface-contact",
+        "gapTolerance": 0.02,
+        "evidenceRefs": [
+          "back"
+        ]
+      }
+    },
+    {
+      "id": "feet",
+      "name": "paired rubber feet",
+      "level": "meso",
+      "role": "component",
+      "importance": 0.85,
+      "confidence": 0.94,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Two shallow supports overlap the underside.",
+      "parent": "cabinet-shell",
+      "material": "rubber",
+      "localFeatures": [
+        {
+          "id": "mirrored-pair"
+        }
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(106, 98, 102, 1)",
+        "secondaryAlbedo": "rgba(255, 248, 235, 1)",
+        "materialClass": "rubber",
+        "materialClassConfidence": 0.9
+      },
+      "evidenceRefs": [
+        "front",
+        "side",
+        "back"
+      ],
+      "actionProfile": {
+        "animationRole": "static",
+        "selectable": true,
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "cabinet-shell"
+        }
+      },
+      "attachment": {
+        "parentId": "cabinet-shell",
+        "parentSocket": "cabinet-shell-attachment-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.12,
+          0
+        ],
+        "embedDepth": 0.04,
+        "overlap": 0.04,
+        "contactType": "surface-contact",
+        "gapTolerance": 0.02,
+        "evidenceRefs": [
+          "front",
+          "side",
+          "back"
+        ]
+      }
+    },
+    {
+      "id": "internal-driver",
+      "name": "inferred full-range driver assembly",
+      "level": "meso",
+      "role": "component",
+      "importance": 0.85,
+      "confidence": 0.62,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Basket rim, compliant surround, tapered cone and dust cap form one forward-travel secondary-motion pivot.",
+      "parent": "cabinet-shell",
+      "material": "cavity",
+      "localFeatures": [
+        {
+          "id": "powered-pulse"
+        }
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(75, 67, 71, 1)",
+        "secondaryAlbedo": "rgba(255, 248, 235, 1)",
+        "materialClass": "unknown",
+        "materialClassConfidence": 0.9
+      },
+      "evidenceRefs": [
+        "inferred"
+      ],
+      "actionProfile": {
+        "animationRole": "articulated",
+        "selectable": true,
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "cabinet-shell"
+        }
+      },
+      "attachment": {
+        "parentId": "cabinet-shell",
+        "parentSocket": "cabinet-shell-attachment-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.12,
+          0
+        ],
+        "embedDepth": 0.04,
+        "overlap": 0.04,
+        "contactType": "surface-contact",
+        "gapTolerance": 0.02,
+        "evidenceRefs": []
+      }
+    },
+    {
+      "id": "sound-wave-emitter",
+      "name": "front volumetric bass-wave emitter",
+      "level": "micro",
+      "role": "component",
+      "importance": 0.85,
+      "confidence": 0.94,
+      "primitive": "tube-along-curve",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Closed irregular curve with a circular TubeGeometry cross-section preserves thickness from oblique views.",
+      "parent": "front-fascia",
+      "material": "mint-emissive",
+      "localFeatures": [
+        {
+          "id": "expanding-wave-rings"
+        }
+      ],
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(187, 216, 205, 1)",
+        "secondaryAlbedo": "rgba(255, 248, 235, 1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.9
+      },
+      "evidenceRefs": [
+        "animation requirement"
+      ],
+      "actionProfile": {
+        "animationRole": "articulated",
+        "selectable": true,
+        "destruction": {
+          "breakable": false,
+          "fractureGroup": "front-fascia"
+        }
+      },
+      "attachment": {
+        "parentId": "front-fascia",
+        "parentSocket": "front-fascia-attachment-socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.12,
+          0
+        ],
+        "embedDepth": 0.04,
+        "overlap": 0.04,
+        "contactType": "surface-contact",
+        "gapTolerance": 0.02,
+        "evidenceRefs": []
+      }
+    }
+  ],
+  "materials": [
+    {
+      "id": "pink-plastic",
+      "name": "satin sakura pink molded plastic",
+      "type": "toon",
+      "baseColor": "#F2B2B7",
+      "albedo": {
+        "dominant": "#F2B2B7",
+        "secondary": [
+          "#FFF8EB",
+          "#F2B2B7",
+          "#BBD8CD",
+          "#4B4347"
+        ],
+        "samplingNotes": "Observed from admitted front, side and back reference color zones."
+      },
+      "roughness": {
+        "base": 0.56,
+        "variation": 0.06,
+        "map": "independent-pink-plastic-roughness"
+      },
+      "metalness": {
+        "base": 0
+      },
+      "normal": {
+        "pattern": "independent-pink-plastic-micro-normal",
+        "strength": 0.08,
+        "scale": 48,
+        "space": "tangent"
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.22
+      },
+      "localOverrides": [
+        {
+          "id": "pink-plastic.satin-highlight",
+          "roughness": 0.42,
+          "region": "cabinet bevels and handle crown"
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.86,
+        "estimatedFidelity": 0.86,
+        "sourceImage": "references/intake/portable-speaker/front.png",
+        "acceptedLimitation": "Stylized source supports palette and relative channel evidence, not exact inverse-rendered physical values.",
+        "maps": {
+          "albedo": {
+            "path": "artifacts/img2threejs/portable-speaker/pbr-pink/pink-plastic_albedo.png"
+          },
+          "roughness": {
+            "path": "artifacts/img2threejs/portable-speaker/pbr-pink/pink-plastic_roughness.png"
+          },
+          "height": {
+            "path": "artifacts/img2threejs/portable-speaker/pbr-pink/pink-plastic_height.png"
+          },
+          "normal": {
+            "path": "artifacts/img2threejs/portable-speaker/pbr-pink/pink-plastic_normal.png"
+          },
+          "ao": {
+            "path": "artifacts/img2threejs/portable-speaker/pbr-pink/pink-plastic_ao.png"
+          }
+        }
+      },
+      "shaderModel": "MeshToonMaterial project style with independently extracted PBR evidence",
+      "colorVariation": {
+        "palette": [
+          "#F2B2B7",
+          "#FFF8EB"
+        ],
+        "pattern": "subtle molded or cavity response",
+        "amplitude": 0.05,
+        "heightCorrelation": 0.08
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Stable object-scale detail without visible tiling."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.14,
+          "role": "broad color and form response"
+        },
+        {
+          "id": "meso",
+          "frequency": 14,
+          "amplitude": 0.06,
+          "role": "seam, panel and recess response"
+        },
+        {
+          "id": "micro",
+          "frequency": 58,
+          "amplitude": 0.022,
+          "role": "grazing highlight breakup"
+        }
+      ],
+      "clearcoat": 0.22,
+      "clearcoatRoughness": 0.28
+    },
+    {
+      "id": "cream-plastic",
+      "name": "warm cream molded plastic",
+      "type": "toon",
+      "baseColor": "#F7EBD7",
+      "albedo": {
+        "dominant": "#F7EBD7",
+        "secondary": [
+          "#FFF8EB",
+          "#F2B2B7",
+          "#BBD8CD",
+          "#4B4347"
+        ],
+        "samplingNotes": "Observed from admitted front, side and back reference color zones."
+      },
+      "roughness": {
+        "base": 0.64,
+        "variation": 0.06,
+        "map": "independent-cream-plastic-roughness"
+      },
+      "metalness": {
+        "base": 0
+      },
+      "normal": {
+        "pattern": "independent-cream-plastic-micro-normal",
+        "strength": 0.08,
+        "scale": 48,
+        "space": "tangent"
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.22
+      },
+      "localOverrides": [
+        {
+          "id": "cream-plastic.fascia-edge",
+          "roughness": 0.52,
+          "region": "front and rear panel bevels"
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.8,
+        "estimatedFidelity": 0.8,
+        "sourceImage": "references/intake/portable-speaker/front.png",
+        "acceptedLimitation": "Stylized source supports palette and relative channel evidence, not exact inverse-rendered physical values.",
+        "maps": {
+          "albedo": {
+            "path": "artifacts/img2threejs/portable-speaker/pbr-cream/cream-plastic_albedo.png"
+          },
+          "roughness": {
+            "path": "artifacts/img2threejs/portable-speaker/pbr-cream/cream-plastic_roughness.png"
+          },
+          "height": {
+            "path": "artifacts/img2threejs/portable-speaker/pbr-cream/cream-plastic_height.png"
+          },
+          "normal": {
+            "path": "artifacts/img2threejs/portable-speaker/pbr-cream/cream-plastic_normal.png"
+          },
+          "ao": {
+            "path": "artifacts/img2threejs/portable-speaker/pbr-cream/cream-plastic_ao.png"
+          }
+        }
+      },
+      "shaderModel": "MeshToonMaterial project style with independently extracted PBR evidence",
+      "colorVariation": {
+        "palette": [
+          "#F7EBD7",
+          "#FFF8EB"
+        ],
+        "pattern": "subtle molded or cavity response",
+        "amplitude": 0.05,
+        "heightCorrelation": 0.08
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Stable object-scale detail without visible tiling."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.14,
+          "role": "broad color and form response"
+        },
+        {
+          "id": "meso",
+          "frequency": 14,
+          "amplitude": 0.06,
+          "role": "seam, panel and recess response"
+        },
+        {
+          "id": "micro",
+          "frequency": 58,
+          "amplitude": 0.022,
+          "role": "grazing highlight breakup"
+        }
+      ]
+    },
+    {
+      "id": "mint-emissive",
+      "name": "desaturated mint insert and indicator",
+      "type": "toon",
+      "baseColor": "#BBD8CD",
+      "albedo": {
+        "dominant": "#BBD8CD",
+        "secondary": [
+          "#FFF8EB",
+          "#F2B2B7",
+          "#BBD8CD",
+          "#4B4347"
+        ],
+        "samplingNotes": "Observed from admitted front, side and back reference color zones."
+      },
+      "roughness": {
+        "base": 0.48,
+        "variation": 0.06,
+        "map": "independent-mint-emissive-roughness"
+      },
+      "metalness": {
+        "base": 0
+      },
+      "normal": {
+        "pattern": "independent-mint-emissive-micro-normal",
+        "strength": 0.08,
+        "scale": 48,
+        "space": "tangent"
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.22
+      },
+      "localOverrides": [
+        {
+          "id": "status-indicator.powered-emissive",
+          "emissive": "#9DEFD2",
+          "emissiveIntensity": 1.8,
+          "region": "front status lens"
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.8,
+        "estimatedFidelity": 0.8,
+        "sourceImage": "references/intake/portable-speaker/side.png",
+        "acceptedLimitation": "Stylized source supports palette and relative channel evidence, not exact inverse-rendered physical values.",
+        "maps": {
+          "albedo": {
+            "path": "artifacts/img2threejs/portable-speaker/pbr-mint/mint-emissive_albedo.png"
+          },
+          "roughness": {
+            "path": "artifacts/img2threejs/portable-speaker/pbr-mint/mint-emissive_roughness.png"
+          },
+          "height": {
+            "path": "artifacts/img2threejs/portable-speaker/pbr-mint/mint-emissive_height.png"
+          },
+          "normal": {
+            "path": "artifacts/img2threejs/portable-speaker/pbr-mint/mint-emissive_normal.png"
+          },
+          "ao": {
+            "path": "artifacts/img2threejs/portable-speaker/pbr-mint/mint-emissive_ao.png"
+          }
+        }
+      },
+      "shaderModel": "MeshToonMaterial project style with independently extracted PBR evidence",
+      "colorVariation": {
+        "palette": [
+          "#BBD8CD",
+          "#FFF8EB"
+        ],
+        "pattern": "subtle molded or cavity response",
+        "amplitude": 0.05,
+        "heightCorrelation": 0.08
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Stable object-scale detail without visible tiling."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.14,
+          "role": "broad color and form response"
+        },
+        {
+          "id": "meso",
+          "frequency": 14,
+          "amplitude": 0.06,
+          "role": "seam, panel and recess response"
+        },
+        {
+          "id": "micro",
+          "frequency": 58,
+          "amplitude": 0.022,
+          "role": "grazing highlight breakup"
+        }
+      ]
+    },
+    {
+      "id": "cavity",
+      "name": "dark warm-gray cavities",
+      "type": "toon",
+      "baseColor": "#4B4347",
+      "albedo": {
+        "dominant": "#4B4347",
+        "secondary": [
+          "#FFF8EB",
+          "#F2B2B7",
+          "#BBD8CD",
+          "#4B4347"
+        ],
+        "samplingNotes": "Observed from admitted front, side and back reference color zones."
+      },
+      "roughness": {
+        "base": 0.78,
+        "variation": 0.06,
+        "map": "independent-cavity-roughness"
+      },
+      "metalness": {
+        "base": 0
+      },
+      "normal": {
+        "pattern": "independent-cavity-micro-normal",
+        "strength": 0.08,
+        "scale": 48,
+        "space": "tangent"
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.22
+      },
+      "localOverrides": [
+        {
+          "id": "cavity.dark-recess",
+          "roughness": 0.86,
+          "region": "grille holes and rear port"
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.8,
+        "estimatedFidelity": 0.8,
+        "sourceImage": "references/intake/portable-speaker/back.png",
+        "acceptedLimitation": "Stylized source supports palette and relative channel evidence, not exact inverse-rendered physical values.",
+        "maps": {
+          "albedo": {
+            "path": "artifacts/img2threejs/portable-speaker/pbr-cavity/cavity_albedo.png"
+          },
+          "roughness": {
+            "path": "artifacts/img2threejs/portable-speaker/pbr-cavity/cavity_roughness.png"
+          },
+          "height": {
+            "path": "artifacts/img2threejs/portable-speaker/pbr-cavity/cavity_height.png"
+          },
+          "normal": {
+            "path": "artifacts/img2threejs/portable-speaker/pbr-cavity/cavity_normal.png"
+          },
+          "ao": {
+            "path": "artifacts/img2threejs/portable-speaker/pbr-cavity/cavity_ao.png"
+          }
+        }
+      },
+      "shaderModel": "MeshToonMaterial project style with independently extracted PBR evidence",
+      "colorVariation": {
+        "palette": [
+          "#4B4347",
+          "#FFF8EB"
+        ],
+        "pattern": "subtle molded or cavity response",
+        "amplitude": 0.05,
+        "heightCorrelation": 0.08
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Stable object-scale detail without visible tiling."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.14,
+          "role": "broad color and form response"
+        },
+        {
+          "id": "meso",
+          "frequency": 14,
+          "amplitude": 0.06,
+          "role": "seam, panel and recess response"
+        },
+        {
+          "id": "micro",
+          "frequency": 58,
+          "amplitude": 0.022,
+          "role": "grazing highlight breakup"
+        }
+      ]
+    },
+    {
+      "id": "rubber",
+      "name": "warm gray rubber feet",
+      "type": "toon",
+      "baseColor": "#6A6266",
+      "albedo": {
+        "dominant": "#6A6266",
+        "secondary": [
+          "#FFF8EB",
+          "#F2B2B7",
+          "#BBD8CD",
+          "#4B4347"
+        ],
+        "samplingNotes": "Observed from admitted front, side and back reference color zones."
+      },
+      "roughness": {
+        "base": 0.9,
+        "variation": 0.06,
+        "map": "independent-rubber-roughness"
+      },
+      "metalness": {
+        "base": 0
+      },
+      "normal": {
+        "pattern": "independent-rubber-micro-normal",
+        "strength": 0.08,
+        "scale": 48,
+        "space": "tangent"
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.22
+      },
+      "localOverrides": [
+        {
+          "id": "rubber.contact-darkening",
+          "roughness": 0.96,
+          "region": "ground contact"
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.8,
+        "estimatedFidelity": 0.8,
+        "sourceImage": "references/intake/portable-speaker/front.png",
+        "acceptedLimitation": "Stylized source supports palette and relative channel evidence, not exact inverse-rendered physical values.",
+        "maps": {
+          "albedo": {
+            "path": "artifacts/img2threejs/portable-speaker/pbr-rubber/rubber_albedo.png"
+          },
+          "roughness": {
+            "path": "artifacts/img2threejs/portable-speaker/pbr-rubber/rubber_roughness.png"
+          },
+          "height": {
+            "path": "artifacts/img2threejs/portable-speaker/pbr-rubber/rubber_height.png"
+          },
+          "normal": {
+            "path": "artifacts/img2threejs/portable-speaker/pbr-rubber/rubber_normal.png"
+          },
+          "ao": {
+            "path": "artifacts/img2threejs/portable-speaker/pbr-rubber/rubber_ao.png"
+          }
+        }
+      },
+      "shaderModel": "MeshToonMaterial project style with independently extracted PBR evidence",
+      "colorVariation": {
+        "palette": [
+          "#6A6266",
+          "#FFF8EB"
+        ],
+        "pattern": "subtle molded or cavity response",
+        "amplitude": 0.05,
+        "heightCorrelation": 0.08
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Stable object-scale detail without visible tiling."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.14,
+          "role": "broad color and form response"
+        },
+        {
+          "id": "meso",
+          "frequency": 14,
+          "amplitude": 0.06,
+          "role": "seam, panel and recess response"
+        },
+        {
+          "id": "micro",
+          "frequency": 58,
+          "amplitude": 0.022,
+          "role": "grazing highlight breakup"
+        }
+      ]
+    },
+    {
+      "id": "wave-effect",
+      "name": "translucent mint sound wave",
+      "type": "toon",
+      "baseColor": "#B9F0DD",
+      "albedo": {
+        "dominant": "#B9F0DD",
+        "secondary": [
+          "#FFF8EB",
+          "#F2B2B7",
+          "#BBD8CD",
+          "#4B4347"
+        ],
+        "samplingNotes": "Observed from admitted front, side and back reference color zones."
+      },
+      "roughness": {
+        "base": 0.35,
+        "variation": 0.06,
+        "map": "independent-wave-effect-roughness"
+      },
+      "metalness": {
+        "base": 0
+      },
+      "normal": {
+        "pattern": "independent-wave-effect-micro-normal",
+        "strength": 0.08,
+        "scale": 48,
+        "space": "tangent"
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.22
+      },
+      "localOverrides": [
+        {
+          "id": "wave-effect.powered-opacity",
+          "opacity": 0.42,
+          "region": "transient sound rings"
+        }
+      ],
+      "referencePbr": {
+        "usable": true,
+        "confidence": 0.8,
+        "estimatedFidelity": 0.8,
+        "sourceImage": "references/intake/portable-speaker/side.png",
+        "acceptedLimitation": "Stylized source supports palette and relative channel evidence, not exact inverse-rendered physical values.",
+        "maps": {
+          "albedo": {
+            "path": "artifacts/img2threejs/portable-speaker/pbr-mint/mint-emissive_albedo.png"
+          },
+          "roughness": {
+            "path": "artifacts/img2threejs/portable-speaker/pbr-mint/mint-emissive_roughness.png"
+          },
+          "height": {
+            "path": "artifacts/img2threejs/portable-speaker/pbr-mint/mint-emissive_height.png"
+          },
+          "normal": {
+            "path": "artifacts/img2threejs/portable-speaker/pbr-mint/mint-emissive_normal.png"
+          },
+          "ao": {
+            "path": "artifacts/img2threejs/portable-speaker/pbr-mint/mint-emissive_ao.png"
+          }
+        }
+      },
+      "shaderModel": "MeshToonMaterial project style with independently extracted PBR evidence",
+      "colorVariation": {
+        "palette": [
+          "#B9F0DD",
+          "#FFF8EB"
+        ],
+        "pattern": "subtle molded or cavity response",
+        "amplitude": 0.05,
+        "heightCorrelation": 0.08
+      },
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Stable object-scale detail without visible tiling."
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "macro",
+          "frequency": 2,
+          "amplitude": 0.14,
+          "role": "broad color and form response"
+        },
+        {
+          "id": "meso",
+          "frequency": 14,
+          "amplitude": 0.06,
+          "role": "seam, panel and recess response"
+        },
+        {
+          "id": "micro",
+          "frequency": 58,
+          "amplitude": 0.022,
+          "role": "grazing highlight breakup"
+        }
+      ]
+    }
+  ],
+  "repetitionSystems": [
+    {
+      "id": "grille-hole-grid",
+      "componentRef": "grille-perforations",
+      "count": 460,
+      "realization": "geometry",
+      "buildsGeometry": true,
+      "geometry": {
+        "primitive": "instanced-cylinder",
+        "radialSegments": 8
+      },
+      "distribution": "22 by 23 rectangular lattice clipped to rounded fascia with lower-right control exclusion"
+    },
+    {
+      "id": "sound-wave-ring-set",
+      "componentRef": "sound-wave-emitter",
+      "count": 8,
+      "realization": "geometry",
+      "buildsGeometry": true,
+      "geometry": {
+        "primitive": "closed irregular tube-along-curve",
+        "forbidden": [
+          "PlaneGeometry",
+          "Sprite",
+          "Line"
+        ]
+      },
+      "distribution": "one time-offset thick ring for each escalating authored bass impact"
+    }
+  ],
+  "buildPasses": [
+    {
+      "id": "blockout",
+      "goal": "Lock cabinet depth, total height and handle negative space.",
+      "componentRefs": [
+        "cabinet-shell",
+        "carry-handle"
+      ],
+      "acceptance": [
+        "Front, side and back silhouettes agree before detail work.",
+        "AI vision score meets threshold."
+      ]
+    },
+    {
+      "id": "structural-pass",
+      "goal": "Build fascia, holes, hinges and handle attachments.",
+      "componentRefs": [
+        "front-fascia",
+        "grille-perforations",
+        "handle-hinges",
+        "carry-handle"
+      ],
+      "acceptance": [
+        "No floating roots; dense grid preserves control clearance.",
+        "AI vision score meets threshold."
+      ]
+    },
+    {
+      "id": "form-refinement",
+      "goal": "Add controls, rear service panel, feet, seams and glyph.",
+      "componentRefs": [
+        "power-control",
+        "status-indicator",
+        "rear-service-panel",
+        "feet"
+      ],
+      "acceptance": [
+        "Identity details remain legible in four views.",
+        "AI vision score meets threshold."
+      ]
+    },
+    {
+      "id": "material-pass",
+      "goal": "Separate pink, cream, mint, cavity and rubber responses.",
+      "componentRefs": [
+        "cabinet-shell",
+        "front-fascia",
+        "carry-handle",
+        "feet"
+      ],
+      "acceptance": [
+        "Material zones remain distinct under neutral toon lighting.",
+        "AI vision score meets threshold."
+      ]
+    },
+    {
+      "id": "lighting-pass",
+      "goal": "Tune key, fill, rim and contact shadow for bevel and hole readability.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "No cream blowout; cavities remain dark and side depth remains readable.",
+        "AI vision score meets threshold."
+      ]
+    },
+    {
+      "id": "interaction-pass",
+      "goal": "Drive one whole-machine bass root, stronger driver travel, escalating impacts, three-hit climax, thick expanding waves and final lift/landing.",
+      "componentRefs": [
+        "power-control",
+        "status-indicator",
+        "internal-driver",
+        "sound-wave-emitter"
+      ],
+      "acceptance": [
+        "No small-part dance; the final beat lands and settles; stop resets exactly.",
+        "AI vision score meets threshold."
+      ]
+    },
+    {
+      "id": "optimization-pass",
+      "goal": "Keep repeated holes instanced and all other repeated geometry shared.",
+      "componentRefs": [
+        "root",
+        "grille-perforations"
+      ],
+      "acceptance": [
+        "Draw calls below 100 and triangles below 65000."
+      ]
+    }
+  ],
+  "visualEvidence": [
+    {
+      "timestamp": "2026-08-03T14:46:57.241964+00:00",
+      "passId": "blockout",
+      "estimatedFidelity": 0.82,
+      "aiVisionScore": 0.82,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.8,
+        "lightingCamera": 0.78,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "speaker-silhouette",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Slightly-taller rounded cabinet and continuous inverted-U handle negative space agree across front, side and back."
+        },
+        {
+          "id": "handle-joints",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Mirrored cream hinge caps overlap the cabinet side walls; hidden hinge internals remain inferred."
+        },
+        {
+          "id": "acoustic-front",
+          "score": 0.81,
+          "passed": true,
+          "notes": "Front fascia envelope is correctly inset and leaves room for a dense grille field."
+        },
+        {
+          "id": "controls-service",
+          "score": 0.78,
+          "passed": true,
+          "notes": "Primary control zone is reserved in the lower-right front region; rear service panel mass is reserved."
+        }
+      ],
+      "referenceScreenshot": "references/intake/portable-speaker/front.png",
+      "renderScreenshot": "artifacts/img2threejs/portable-speaker/idle-review/render-front.png",
+      "comparisonImage": "artifacts/img2threejs/portable-speaker/comparison-front.png",
+      "cameraView": "front",
+      "notes": "Manual comparison reviewed front, side and back.",
+      "aiVisionNotes": "Silhouette and handle read match; the browser render has broader margins and stronger neutral-stage shadows than the reference; no identity-defining feature is missing in blockout."
+    },
+    {
+      "timestamp": "2026-08-03T14:52:39.385101+00:00",
+      "passId": "structural-pass",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.8,
+        "lightingCamera": 0.78,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "speaker-silhouette",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Cabinet remains slightly taller than wide; handle arch keeps a large clean negative space."
+        },
+        {
+          "id": "acoustic-front",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Cream inset fascia and regular perforation field remain legible; lower-right control clearance is preserved."
+        },
+        {
+          "id": "handle-joints",
+          "score": 0.83,
+          "passed": true,
+          "notes": "Paired caps, strap depth and mint side inserts are separate attached assemblies."
+        },
+        {
+          "id": "controls-service",
+          "score": 0.8,
+          "passed": true,
+          "notes": "Power glyph, mint indicator, rear panel and horizontal port read in their named views."
+        },
+        {
+          "id": "powered-purpose",
+          "score": 0.9,
+          "passed": true,
+          "notes": "Button press, pulsing grid, indicator and expanding wave rings identify a powered loudspeaker."
+        }
+      ],
+      "referenceScreenshot": "references/intake/portable-speaker/front.png",
+      "renderScreenshot": "artifacts/img2threejs/portable-speaker/structural-review/render-front.png",
+      "comparisonImage": "artifacts/img2threejs/portable-speaker/comparison-structural-pass.png",
+      "cameraView": "front",
+      "notes": "Front, side, back and three-quarter screenshots captured with the deterministic review viewer.",
+      "aiVisionNotes": "Identity-defining silhouette, perforation grid, handle joints and controls remain readable. Illustration-vs-browser framing is the known residual mismatch."
+    },
+    {
+      "timestamp": "2026-08-03T14:52:42.664036+00:00",
+      "passId": "form-refinement",
+      "estimatedFidelity": 0.82,
+      "aiVisionScore": 0.82,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.8,
+        "lightingCamera": 0.78,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "speaker-silhouette",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Cabinet remains slightly taller than wide; handle arch keeps a large clean negative space."
+        },
+        {
+          "id": "acoustic-front",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Cream inset fascia and regular perforation field remain legible; lower-right control clearance is preserved."
+        },
+        {
+          "id": "handle-joints",
+          "score": 0.83,
+          "passed": true,
+          "notes": "Paired caps, strap depth and mint side inserts are separate attached assemblies."
+        },
+        {
+          "id": "controls-service",
+          "score": 0.8,
+          "passed": true,
+          "notes": "Power glyph, mint indicator, rear panel and horizontal port read in their named views."
+        },
+        {
+          "id": "powered-purpose",
+          "score": 0.9,
+          "passed": true,
+          "notes": "Button press, pulsing grid, indicator and expanding wave rings identify a powered loudspeaker."
+        }
+      ],
+      "referenceScreenshot": "references/intake/portable-speaker/front.png",
+      "renderScreenshot": "artifacts/img2threejs/portable-speaker/form-review/render-front.png",
+      "comparisonImage": "artifacts/img2threejs/portable-speaker/comparison-form-refinement.png",
+      "cameraView": "front",
+      "notes": "Front, side, back and three-quarter screenshots captured with the deterministic review viewer.",
+      "aiVisionNotes": "Identity-defining silhouette, perforation grid, handle joints and controls remain readable. Illustration-vs-browser framing is the known residual mismatch."
+    },
+    {
+      "timestamp": "2026-08-03T14:54:42.202839+00:00",
+      "passId": "material-pass",
+      "estimatedFidelity": 0.8,
+      "aiVisionScore": 0.8,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.8,
+        "lightingCamera": 0.78,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "speaker-silhouette",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Cabinet remains slightly taller than wide; handle arch keeps a large clean negative space."
+        },
+        {
+          "id": "acoustic-front",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Cream inset fascia and regular perforation field remain legible; lower-right control clearance is preserved."
+        },
+        {
+          "id": "handle-joints",
+          "score": 0.83,
+          "passed": true,
+          "notes": "Paired caps, strap depth and mint side inserts are separate attached assemblies."
+        },
+        {
+          "id": "controls-service",
+          "score": 0.8,
+          "passed": true,
+          "notes": "Power glyph, mint indicator, rear panel and horizontal port read in their named views."
+        },
+        {
+          "id": "surface-material-response",
+          "score": 0.8,
+          "passed": true,
+          "notes": "Pink satin shell, warm cream panels, bright mint insert/indicator, dark cavities and rubber feet remain distinct."
+        },
+        {
+          "id": "powered-purpose",
+          "score": 0.9,
+          "passed": true,
+          "notes": "Button press, pulsing grid, indicator and expanding wave rings identify a powered loudspeaker."
+        }
+      ],
+      "referenceScreenshot": "references/intake/portable-speaker/front.png",
+      "renderScreenshot": "artifacts/img2threejs/portable-speaker/material-review/render-front.png",
+      "comparisonImage": "artifacts/img2threejs/portable-speaker/comparison-material-pass.png",
+      "cameraView": "front",
+      "notes": "Front, side, back and three-quarter screenshots captured by the deterministic review viewer.",
+      "aiVisionNotes": "All visible identity systems remain legible from the named view set. Residual differences are source framing and hidden-region inference, not missing visible parts."
+    },
+    {
+      "timestamp": "2026-08-03T14:54:47.638689+00:00",
+      "passId": "lighting-pass",
+      "estimatedFidelity": 0.78,
+      "aiVisionScore": 0.78,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.8,
+        "lightingCamera": 0.78,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "speaker-silhouette",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Cabinet remains slightly taller than wide; handle arch keeps a large clean negative space."
+        },
+        {
+          "id": "acoustic-front",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Cream inset fascia and regular perforation field remain legible; lower-right control clearance is preserved."
+        },
+        {
+          "id": "handle-joints",
+          "score": 0.83,
+          "passed": true,
+          "notes": "Paired caps, strap depth and mint side inserts are separate attached assemblies."
+        },
+        {
+          "id": "controls-service",
+          "score": 0.8,
+          "passed": true,
+          "notes": "Power glyph, mint indicator, rear panel and horizontal port read in their named views."
+        },
+        {
+          "id": "surface-material-response",
+          "score": 0.8,
+          "passed": true,
+          "notes": "Pink satin shell, warm cream panels, bright mint insert/indicator, dark cavities and rubber feet remain distinct."
+        },
+        {
+          "id": "powered-purpose",
+          "score": 0.9,
+          "passed": true,
+          "notes": "Button press, pulsing grid, indicator and expanding wave rings identify a powered loudspeaker."
+        }
+      ],
+      "referenceScreenshot": "references/intake/portable-speaker/front.png",
+      "renderScreenshot": "artifacts/img2threejs/portable-speaker/lighting-review/render-front.png",
+      "comparisonImage": "artifacts/img2threejs/portable-speaker/comparison-lighting-pass.png",
+      "cameraView": "front",
+      "notes": "Front, side, back and three-quarter screenshots captured by the deterministic review viewer.",
+      "aiVisionNotes": "All visible identity systems remain legible from the named view set. Residual differences are source framing and hidden-region inference, not missing visible parts."
+    },
+    {
+      "timestamp": "2026-08-03T14:54:51.142606+00:00",
+      "passId": "interaction-pass",
+      "estimatedFidelity": 0.9,
+      "aiVisionScore": 0.9,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.8,
+        "lightingCamera": 0.78,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "speaker-silhouette",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Cabinet remains slightly taller than wide; handle arch keeps a large clean negative space."
+        },
+        {
+          "id": "acoustic-front",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Cream inset fascia and regular perforation field remain legible; lower-right control clearance is preserved."
+        },
+        {
+          "id": "handle-joints",
+          "score": 0.83,
+          "passed": true,
+          "notes": "Paired caps, strap depth and mint side inserts are separate attached assemblies."
+        },
+        {
+          "id": "controls-service",
+          "score": 0.8,
+          "passed": true,
+          "notes": "Power glyph, mint indicator, rear panel and horizontal port read in their named views."
+        },
+        {
+          "id": "surface-material-response",
+          "score": 0.8,
+          "passed": true,
+          "notes": "Pink satin shell, warm cream panels, bright mint insert/indicator, dark cavities and rubber feet remain distinct."
+        },
+        {
+          "id": "powered-purpose",
+          "score": 0.9,
+          "passed": true,
+          "notes": "Button press, pulsing grid, indicator and expanding wave rings identify a powered loudspeaker."
+        }
+      ],
+      "referenceScreenshot": "references/intake/portable-speaker/front.png",
+      "renderScreenshot": "artifacts/img2threejs/portable-speaker/interaction-review/render-front-active.png",
+      "comparisonImage": "artifacts/img2threejs/portable-speaker/comparison-interaction-pass.png",
+      "cameraView": "front",
+      "notes": "Front, side, back and three-quarter screenshots captured by the deterministic review viewer.",
+      "aiVisionNotes": "All visible identity systems remain legible from the named view set. Residual differences are source framing and hidden-region inference, not missing visible parts."
+    },
+    {
+      "timestamp": "2026-08-03T14:54:55.249377+00:00",
+      "passId": "optimization-pass",
+      "estimatedFidelity": 0.82,
+      "aiVisionScore": 0.82,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.8,
+        "lightingCamera": 0.78,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "speaker-silhouette",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Cabinet remains slightly taller than wide; handle arch keeps a large clean negative space."
+        },
+        {
+          "id": "acoustic-front",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Cream inset fascia and regular perforation field remain legible; lower-right control clearance is preserved."
+        },
+        {
+          "id": "handle-joints",
+          "score": 0.83,
+          "passed": true,
+          "notes": "Paired caps, strap depth and mint side inserts are separate attached assemblies."
+        },
+        {
+          "id": "controls-service",
+          "score": 0.8,
+          "passed": true,
+          "notes": "Power glyph, mint indicator, rear panel and horizontal port read in their named views."
+        },
+        {
+          "id": "surface-material-response",
+          "score": 0.8,
+          "passed": true,
+          "notes": "Pink satin shell, warm cream panels, bright mint insert/indicator, dark cavities and rubber feet remain distinct."
+        },
+        {
+          "id": "powered-purpose",
+          "score": 0.9,
+          "passed": true,
+          "notes": "Button press, pulsing grid, indicator and expanding wave rings identify a powered loudspeaker."
+        }
+      ],
+      "referenceScreenshot": "references/intake/portable-speaker/front.png",
+      "renderScreenshot": "artifacts/img2threejs/portable-speaker/optimization-review/render-front.png",
+      "comparisonImage": "artifacts/img2threejs/portable-speaker/comparison-optimization-pass.png",
+      "cameraView": "front",
+      "notes": "Front, side, back and three-quarter screenshots captured by the deterministic review viewer.",
+      "aiVisionNotes": "All visible identity systems remain legible from the named view set. Residual differences are source framing and hidden-region inference, not missing visible parts."
+    }
+  ],
+  "reviewHistory": [
+    {
+      "timestamp": "2026-08-03T14:46:57.241964+00:00",
+      "passId": "blockout",
+      "estimatedFidelity": 0.82,
+      "aiVisionScore": 0.82,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.8,
+        "lightingCamera": 0.78,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "speaker-silhouette",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Slightly-taller rounded cabinet and continuous inverted-U handle negative space agree across front, side and back."
+        },
+        {
+          "id": "handle-joints",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Mirrored cream hinge caps overlap the cabinet side walls; hidden hinge internals remain inferred."
+        },
+        {
+          "id": "acoustic-front",
+          "score": 0.81,
+          "passed": true,
+          "notes": "Front fascia envelope is correctly inset and leaves room for a dense grille field."
+        },
+        {
+          "id": "controls-service",
+          "score": 0.78,
+          "passed": true,
+          "notes": "Primary control zone is reserved in the lower-right front region; rear service panel mass is reserved."
+        }
+      ],
+      "action": "continue",
+      "summary": "Front, side and back browser views preserve the taller rounded cabinet, handle arch, fascia envelope and control clearance. Deterministic IoU is framing-sensitive because the source is a narrow illustrated elevation; manual multi-view comparison is the acceptance authority.",
+      "matched": [
+        "rounded cabinet silhouette",
+        "broad handle negative space",
+        "fascia envelope",
+        "hinge-cap placement"
+      ],
+      "mismatches": [
+        "reference framing is a narrow cream illustration while browser review is a square neutral stage",
+        "hidden hinge and driver remain inferred"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [
+        "artifacts/img2threejs/portable-speaker/idle-review/render-front.png",
+        "artifacts/img2threejs/portable-speaker/idle-review/render-side.png",
+        "artifacts/img2threejs/portable-speaker/idle-review/render-back.png",
+        "artifacts/img2threejs/portable-speaker/comparison-front.png"
+      ],
+      "mapStrippedRender": "artifacts/img2threejs/portable-speaker/idle-review/render-front.png",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake/portable-speaker/front.png",
+        "renderScreenshot": "artifacts/img2threejs/portable-speaker/idle-review/render-front.png",
+        "comparisonImage": "artifacts/img2threejs/portable-speaker/comparison-front.png",
+        "cameraView": "front",
+        "notes": "Manual comparison reviewed front, side and back.",
+        "aiVisionNotes": "Silhouette and handle read match; the browser render has broader margins and stronger neutral-stage shadows than the reference; no identity-defining feature is missing in blockout."
+      }
+    },
+    {
+      "timestamp": "2026-08-03T14:52:39.385101+00:00",
+      "passId": "structural-pass",
+      "estimatedFidelity": 0.84,
+      "aiVisionScore": 0.84,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.8,
+        "lightingCamera": 0.78,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "speaker-silhouette",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Cabinet remains slightly taller than wide; handle arch keeps a large clean negative space."
+        },
+        {
+          "id": "acoustic-front",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Cream inset fascia and regular perforation field remain legible; lower-right control clearance is preserved."
+        },
+        {
+          "id": "handle-joints",
+          "score": 0.83,
+          "passed": true,
+          "notes": "Paired caps, strap depth and mint side inserts are separate attached assemblies."
+        },
+        {
+          "id": "controls-service",
+          "score": 0.8,
+          "passed": true,
+          "notes": "Power glyph, mint indicator, rear panel and horizontal port read in their named views."
+        },
+        {
+          "id": "powered-purpose",
+          "score": 0.9,
+          "passed": true,
+          "notes": "Button press, pulsing grid, indicator and expanding wave rings identify a powered loudspeaker."
+        }
+      ],
+      "action": "continue",
+      "summary": "structural-pass browser four-view evidence reviewed against the admitted front elevation and side/back references. Deterministic mask limitations are retained; semantic visual review meets the pass threshold.",
+      "matched": [
+        "rounded cabinet and handle arch",
+        "fascia and perforation system",
+        "named controls and rear service panel",
+        "SAKURA material zoning",
+        "performance budget"
+      ],
+      "mismatches": [
+        "browser stage framing and shadows differ from narrow illustrated source",
+        "hidden internal acoustic and hinge details remain inferred"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [
+        "artifacts/img2threejs/portable-speaker/structural-review/render-front.png",
+        "artifacts/img2threejs/portable-speaker/comparison-structural-pass.png"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake/portable-speaker/front.png",
+        "renderScreenshot": "artifacts/img2threejs/portable-speaker/structural-review/render-front.png",
+        "comparisonImage": "artifacts/img2threejs/portable-speaker/comparison-structural-pass.png",
+        "cameraView": "front",
+        "notes": "Front, side, back and three-quarter screenshots captured with the deterministic review viewer.",
+        "aiVisionNotes": "Identity-defining silhouette, perforation grid, handle joints and controls remain readable. Illustration-vs-browser framing is the known residual mismatch."
+      }
+    },
+    {
+      "timestamp": "2026-08-03T14:52:42.664036+00:00",
+      "passId": "form-refinement",
+      "estimatedFidelity": 0.82,
+      "aiVisionScore": 0.82,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.8,
+        "lightingCamera": 0.78,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "speaker-silhouette",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Cabinet remains slightly taller than wide; handle arch keeps a large clean negative space."
+        },
+        {
+          "id": "acoustic-front",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Cream inset fascia and regular perforation field remain legible; lower-right control clearance is preserved."
+        },
+        {
+          "id": "handle-joints",
+          "score": 0.83,
+          "passed": true,
+          "notes": "Paired caps, strap depth and mint side inserts are separate attached assemblies."
+        },
+        {
+          "id": "controls-service",
+          "score": 0.8,
+          "passed": true,
+          "notes": "Power glyph, mint indicator, rear panel and horizontal port read in their named views."
+        },
+        {
+          "id": "powered-purpose",
+          "score": 0.9,
+          "passed": true,
+          "notes": "Button press, pulsing grid, indicator and expanding wave rings identify a powered loudspeaker."
+        }
+      ],
+      "action": "continue",
+      "summary": "form-refinement browser four-view evidence reviewed against the admitted front elevation and side/back references. Deterministic mask limitations are retained; semantic visual review meets the pass threshold.",
+      "matched": [
+        "rounded cabinet and handle arch",
+        "fascia and perforation system",
+        "named controls and rear service panel",
+        "SAKURA material zoning",
+        "performance budget"
+      ],
+      "mismatches": [
+        "browser stage framing and shadows differ from narrow illustrated source",
+        "hidden internal acoustic and hinge details remain inferred"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [
+        "artifacts/img2threejs/portable-speaker/form-review/render-front.png",
+        "artifacts/img2threejs/portable-speaker/comparison-form-refinement.png"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake/portable-speaker/front.png",
+        "renderScreenshot": "artifacts/img2threejs/portable-speaker/form-review/render-front.png",
+        "comparisonImage": "artifacts/img2threejs/portable-speaker/comparison-form-refinement.png",
+        "cameraView": "front",
+        "notes": "Front, side, back and three-quarter screenshots captured with the deterministic review viewer.",
+        "aiVisionNotes": "Identity-defining silhouette, perforation grid, handle joints and controls remain readable. Illustration-vs-browser framing is the known residual mismatch."
+      }
+    },
+    {
+      "timestamp": "2026-08-03T14:54:42.202839+00:00",
+      "passId": "material-pass",
+      "estimatedFidelity": 0.8,
+      "aiVisionScore": 0.8,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.8,
+        "lightingCamera": 0.78,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "speaker-silhouette",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Cabinet remains slightly taller than wide; handle arch keeps a large clean negative space."
+        },
+        {
+          "id": "acoustic-front",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Cream inset fascia and regular perforation field remain legible; lower-right control clearance is preserved."
+        },
+        {
+          "id": "handle-joints",
+          "score": 0.83,
+          "passed": true,
+          "notes": "Paired caps, strap depth and mint side inserts are separate attached assemblies."
+        },
+        {
+          "id": "controls-service",
+          "score": 0.8,
+          "passed": true,
+          "notes": "Power glyph, mint indicator, rear panel and horizontal port read in their named views."
+        },
+        {
+          "id": "surface-material-response",
+          "score": 0.8,
+          "passed": true,
+          "notes": "Pink satin shell, warm cream panels, bright mint insert/indicator, dark cavities and rubber feet remain distinct."
+        },
+        {
+          "id": "powered-purpose",
+          "score": 0.9,
+          "passed": true,
+          "notes": "Button press, pulsing grid, indicator and expanding wave rings identify a powered loudspeaker."
+        }
+      ],
+      "action": "continue",
+      "summary": "material-pass four-view browser evidence reviewed against the admitted reference elevations. Semantic feature scores meet the threshold; deterministic mask limits remain recorded rather than overclaimed.",
+      "matched": [
+        "cabinet and handle silhouette",
+        "perforation and control layout",
+        "hinge and mint insert attachments",
+        "rear service panel",
+        "SAKURA material separation",
+        "bounded performance"
+      ],
+      "mismatches": [
+        "neutral browser framing and shadow direction differ from the illustrated source",
+        "hidden internal driver and hinge mechanics remain inferred"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [
+        "artifacts/img2threejs/portable-speaker/material-review/render-front.png",
+        "artifacts/img2threejs/portable-speaker/comparison-material-pass.png"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake/portable-speaker/front.png",
+        "renderScreenshot": "artifacts/img2threejs/portable-speaker/material-review/render-front.png",
+        "comparisonImage": "artifacts/img2threejs/portable-speaker/comparison-material-pass.png",
+        "cameraView": "front",
+        "notes": "Front, side, back and three-quarter screenshots captured by the deterministic review viewer.",
+        "aiVisionNotes": "All visible identity systems remain legible from the named view set. Residual differences are source framing and hidden-region inference, not missing visible parts."
+      }
+    },
+    {
+      "timestamp": "2026-08-03T14:54:47.638689+00:00",
+      "passId": "lighting-pass",
+      "estimatedFidelity": 0.78,
+      "aiVisionScore": 0.78,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.8,
+        "lightingCamera": 0.78,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "speaker-silhouette",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Cabinet remains slightly taller than wide; handle arch keeps a large clean negative space."
+        },
+        {
+          "id": "acoustic-front",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Cream inset fascia and regular perforation field remain legible; lower-right control clearance is preserved."
+        },
+        {
+          "id": "handle-joints",
+          "score": 0.83,
+          "passed": true,
+          "notes": "Paired caps, strap depth and mint side inserts are separate attached assemblies."
+        },
+        {
+          "id": "controls-service",
+          "score": 0.8,
+          "passed": true,
+          "notes": "Power glyph, mint indicator, rear panel and horizontal port read in their named views."
+        },
+        {
+          "id": "surface-material-response",
+          "score": 0.8,
+          "passed": true,
+          "notes": "Pink satin shell, warm cream panels, bright mint insert/indicator, dark cavities and rubber feet remain distinct."
+        },
+        {
+          "id": "powered-purpose",
+          "score": 0.9,
+          "passed": true,
+          "notes": "Button press, pulsing grid, indicator and expanding wave rings identify a powered loudspeaker."
+        }
+      ],
+      "action": "continue",
+      "summary": "lighting-pass four-view browser evidence reviewed against the admitted reference elevations. Semantic feature scores meet the threshold; deterministic mask limits remain recorded rather than overclaimed.",
+      "matched": [
+        "cabinet and handle silhouette",
+        "perforation and control layout",
+        "hinge and mint insert attachments",
+        "rear service panel",
+        "SAKURA material separation",
+        "bounded performance"
+      ],
+      "mismatches": [
+        "neutral browser framing and shadow direction differ from the illustrated source",
+        "hidden internal driver and hinge mechanics remain inferred"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [
+        "artifacts/img2threejs/portable-speaker/lighting-review/render-front.png",
+        "artifacts/img2threejs/portable-speaker/comparison-lighting-pass.png"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake/portable-speaker/front.png",
+        "renderScreenshot": "artifacts/img2threejs/portable-speaker/lighting-review/render-front.png",
+        "comparisonImage": "artifacts/img2threejs/portable-speaker/comparison-lighting-pass.png",
+        "cameraView": "front",
+        "notes": "Front, side, back and three-quarter screenshots captured by the deterministic review viewer.",
+        "aiVisionNotes": "All visible identity systems remain legible from the named view set. Residual differences are source framing and hidden-region inference, not missing visible parts."
+      }
+    },
+    {
+      "timestamp": "2026-08-03T14:54:51.142606+00:00",
+      "passId": "interaction-pass",
+      "estimatedFidelity": 0.9,
+      "aiVisionScore": 0.9,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.8,
+        "lightingCamera": 0.78,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "speaker-silhouette",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Cabinet remains slightly taller than wide; handle arch keeps a large clean negative space."
+        },
+        {
+          "id": "acoustic-front",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Cream inset fascia and regular perforation field remain legible; lower-right control clearance is preserved."
+        },
+        {
+          "id": "handle-joints",
+          "score": 0.83,
+          "passed": true,
+          "notes": "Paired caps, strap depth and mint side inserts are separate attached assemblies."
+        },
+        {
+          "id": "controls-service",
+          "score": 0.8,
+          "passed": true,
+          "notes": "Power glyph, mint indicator, rear panel and horizontal port read in their named views."
+        },
+        {
+          "id": "surface-material-response",
+          "score": 0.8,
+          "passed": true,
+          "notes": "Pink satin shell, warm cream panels, bright mint insert/indicator, dark cavities and rubber feet remain distinct."
+        },
+        {
+          "id": "powered-purpose",
+          "score": 0.9,
+          "passed": true,
+          "notes": "Button press, pulsing grid, indicator and expanding wave rings identify a powered loudspeaker."
+        }
+      ],
+      "action": "continue",
+      "summary": "interaction-pass four-view browser evidence reviewed against the admitted reference elevations. Semantic feature scores meet the threshold; deterministic mask limits remain recorded rather than overclaimed.",
+      "matched": [
+        "cabinet and handle silhouette",
+        "perforation and control layout",
+        "hinge and mint insert attachments",
+        "rear service panel",
+        "SAKURA material separation",
+        "bounded performance"
+      ],
+      "mismatches": [
+        "neutral browser framing and shadow direction differ from the illustrated source",
+        "hidden internal driver and hinge mechanics remain inferred"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [
+        "artifacts/img2threejs/portable-speaker/interaction-review/render-front-active.png",
+        "artifacts/img2threejs/portable-speaker/comparison-interaction-pass.png"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake/portable-speaker/front.png",
+        "renderScreenshot": "artifacts/img2threejs/portable-speaker/interaction-review/render-front-active.png",
+        "comparisonImage": "artifacts/img2threejs/portable-speaker/comparison-interaction-pass.png",
+        "cameraView": "front",
+        "notes": "Front, side, back and three-quarter screenshots captured by the deterministic review viewer.",
+        "aiVisionNotes": "All visible identity systems remain legible from the named view set. Residual differences are source framing and hidden-region inference, not missing visible parts."
+      }
+    },
+    {
+      "timestamp": "2026-08-03T14:54:55.249377+00:00",
+      "passId": "optimization-pass",
+      "estimatedFidelity": 0.82,
+      "aiVisionScore": 0.82,
+      "visualAcceptanceThreshold": 0.7,
+      "layerScores": {
+        "silhouetteProportion": 0.84,
+        "componentStructure": 0.86,
+        "formDetail": 0.82,
+        "materialSurface": 0.8,
+        "lightingCamera": 0.78,
+        "interaction": 0.9
+      },
+      "featureReviews": [
+        {
+          "id": "speaker-silhouette",
+          "score": 0.84,
+          "passed": true,
+          "notes": "Cabinet remains slightly taller than wide; handle arch keeps a large clean negative space."
+        },
+        {
+          "id": "acoustic-front",
+          "score": 0.82,
+          "passed": true,
+          "notes": "Cream inset fascia and regular perforation field remain legible; lower-right control clearance is preserved."
+        },
+        {
+          "id": "handle-joints",
+          "score": 0.83,
+          "passed": true,
+          "notes": "Paired caps, strap depth and mint side inserts are separate attached assemblies."
+        },
+        {
+          "id": "controls-service",
+          "score": 0.8,
+          "passed": true,
+          "notes": "Power glyph, mint indicator, rear panel and horizontal port read in their named views."
+        },
+        {
+          "id": "surface-material-response",
+          "score": 0.8,
+          "passed": true,
+          "notes": "Pink satin shell, warm cream panels, bright mint insert/indicator, dark cavities and rubber feet remain distinct."
+        },
+        {
+          "id": "powered-purpose",
+          "score": 0.9,
+          "passed": true,
+          "notes": "Button press, pulsing grid, indicator and expanding wave rings identify a powered loudspeaker."
+        }
+      ],
+      "action": "continue",
+      "summary": "optimization-pass four-view browser evidence reviewed against the admitted reference elevations. Semantic feature scores meet the threshold; deterministic mask limits remain recorded rather than overclaimed.",
+      "matched": [
+        "cabinet and handle silhouette",
+        "perforation and control layout",
+        "hinge and mint insert attachments",
+        "rear service panel",
+        "SAKURA material separation",
+        "bounded performance"
+      ],
+      "mismatches": [
+        "neutral browser framing and shadow direction differ from the illustrated source",
+        "hidden internal driver and hinge mechanics remain inferred"
+      ],
+      "specFixes": [],
+      "codeFixes": [],
+      "evidence": [
+        "artifacts/img2threejs/portable-speaker/optimization-review/render-front.png",
+        "artifacts/img2threejs/portable-speaker/comparison-optimization-pass.png"
+      ],
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake/portable-speaker/front.png",
+        "renderScreenshot": "artifacts/img2threejs/portable-speaker/optimization-review/render-front.png",
+        "comparisonImage": "artifacts/img2threejs/portable-speaker/comparison-optimization-pass.png",
+        "cameraView": "front",
+        "notes": "Front, side, back and three-quarter screenshots captured by the deterministic review viewer.",
+        "aiVisionNotes": "All visible identity systems remain legible from the named view set. Residual differences are source framing and hidden-region inference, not missing visible parts."
+      }
+    }
+  ],
+  "lodPlan": [
+    {
+      "tier": "near",
+      "distance": 0,
+      "strategy": "full component tree and material layers"
+    },
+    {
+      "tier": "far",
+      "distance": 30,
+      "strategy": "merge static components and reduce local feature geometry"
+    }
+  ],
+  "performanceBudget": {
+    "maxDrawCalls": 100,
+    "maxTriangles": 65000,
+    "maxTextureMemoryMb": 4,
+    "strategy": "one instanced hole draw, shared geometries, no external textures"
+  },
+  "lightingFromPhoto": [
+    "warm upper-left key light intensity 3.2 with broad soft shadow",
+    "cool right-rear fill light intensity 1.35",
+    "pink rear rim light intensity 1.6",
+    "neutral exposure with ACES tone mapping on pale blue-gray background",
+    "soft floor contact shadow beneath both feet"
+  ],
+  "proceduralStrategy": [
+    "RoundedBoxGeometry cabinet and panels",
+    "ExtrudeGeometry handle profile",
+    "InstancedMesh grille perforations",
+    "Shared low-segment cylinders and tori",
+    "Deterministic transform-only purpose animation"
+  ],
+  "animationAnchors": [
+    {
+      "id": "whole-machine-bass",
+      "node": "portable-speaker-whole-machine-pivot",
+      "axis": [
+        1,
+        1,
+        1
+      ],
+      "range": [
+        0.92,
+        1.12
+      ]
+    },
+    {
+      "id": "handle-pivot",
+      "node": "portable-speaker-handle-pivot",
+      "axis": [
+        1,
+        0,
+        0
+      ],
+      "range": [
+        -0.12,
+        0.12
+      ]
+    },
+    {
+      "id": "power-button-pivot",
+      "node": "portable-speaker-power-button-pivot",
+      "axis": [
+        0,
+        0,
+        1
+      ],
+      "range": [
+        -0.04,
+        0
+      ]
+    },
+    {
+      "id": "driver-pulse",
+      "node": "portable-speaker-driver-pulse-pivot",
+      "axis": [
+        0,
+        0,
+        1
+      ],
+      "range": [
+        -0.07,
+        0.28
+      ]
+    },
+    {
+      "id": "wave-socket",
+      "node": "portable-speaker-sound-wave-socket",
+      "axis": [
+        0,
+        0,
+        1
+      ],
+      "range": [
+        0,
+        1
+      ]
+    }
+  ],
+  "destructionAnchors": [
+    {
+      "id": "cabinet",
+      "nodes": [
+        "portable-speaker-cabinet-shell"
+      ]
+    },
+    {
+      "id": "front-acoustic",
+      "nodes": [
+        "portable-speaker-front-fascia",
+        "portable-speaker-grille-perforations"
+      ]
+    },
+    {
+      "id": "handle",
+      "nodes": [
+        "portable-speaker-handle-pivot"
+      ]
+    },
+    {
+      "id": "rear-service",
+      "nodes": [
+        "portable-speaker-rear-service-panel"
+      ]
+    }
+  ],
+  "risks": [],
+  "localSpecSearch": {
+    "collection": "core_3d",
+    "query": "SAKURA Portable Speaker portable speaker perforated grille handle hinge controls plastic housing bevel panel seam loudspeaker diaphragm animation",
+    "index": {
+      "status": "hit",
+      "reason": "current",
+      "fingerprint": "6857e5ab528b42ac12f4f411f862610a0bffce8e47aee3610a7603c318072fe8"
+    },
+    "matches": [
+      {
+        "record_id": "core.pbr-opacity-alpha",
+        "file_path": "docs/raw/img2threejs-skill-dataset.json",
+        "heading": null,
+        "key_path": "categories.material_pbr[8]",
+        "score": 6.173944048162,
+        "snippets": [
+          "Controls material transparency and blend mode; in CS2 workflows the alpha channel of Base Color is repurposed as a non-transparency data channel. Kiểm soát độ trong suốt và chế độ blend của vật liệu; trong quy trình CS2, kênh alpha của Base ..."
+        ],
+        "source_refs": [
+          {
+            "path": "docs/raw/img2threejs-skill-dataset.json",
+            "heading": null,
+            "key_path": "categories.material_pbr[8]"
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "docs/raw/img2threejs-skill-dataset.json",
+            "note": "img2threejs NotebookLM research distillation"
+          }
+        ]
+      },
+      {
+        "record_id": "core.coordinate-relative-units",
+        "file_path": "grimoire/glossary/3d_vocabulary.md",
+        "heading": "Geometry And Topology",
+        "key_path": null,
+        "score": 5.594547623161,
+        "snippets": [
+          "A bevel radius is sized in object-relative units."
+        ],
+        "source_refs": [
+          {
+            "path": "grimoire/glossary/3d_vocabulary.md",
+            "heading": "Geometry And Topology",
+            "key_path": null
+          },
+          {
+            "path": "grimoire/intake/image_analysis.md",
+            "heading": "Layer 2 — Overall form & silhouette",
+            "key_path": null
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "grimoire/glossary/3d_vocabulary.md"
+          },
+          {
+            "kind": "notebooklm-research",
+            "ref": "notebooklm:4b03c2f9-8393-411f-b5b4-039ab9532843",
+            "note": "Validated generic schema vocabulary; numeric claims remain backed by local source_refs."
+          }
+        ]
+      },
+      {
+        "record_id": "core.socket-pivot",
+        "file_path": "grimoire/glossary/3d_vocabulary.md",
+        "heading": "Animation, Physics, And Destruction",
+        "key_path": null,
+        "score": 4.802998721041,
+        "snippets": [
+          "A pivot is a local rotation origin; a socket is an attachment point for a child part. In a runtime hierarchy, a socket Object3D is a child of the relevant pivot."
+        ],
+        "source_refs": [
+          {
+            "path": "grimoire/glossary/3d_vocabulary.md",
+            "heading": "Animation, Physics, And Destruction",
+            "key_path": null
+          },
+          {
+            "path": "grimoire/readiness/action_rigging.md",
+            "heading": "Hierarchy Pattern",
+            "key_path": null
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "grimoire/readiness/action_rigging.md"
+          },
+          {
+            "kind": "notebooklm-research",
+            "ref": "notebooklm:4b03c2f9-8393-411f-b5b4-039ab9532843",
+            "note": "Validated generic schema vocabulary; numeric claims remain backed by local source_refs."
+          }
+        ]
+      }
+    ]
+  },
+  "tier1Results": [
+    {
+      "passed": false,
+      "checks": {
+        "silhouetteIoU": 0.2614,
+        "aspectRatioDelta": 0.2385,
+        "scaleDelta": 0.5908,
+        "bilateralSymmetryError": 0.0855,
+        "colorDelta": {
+          "checked": 13,
+          "maxDeltaE": 14.27,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 11.13
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.13
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.58
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.2
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.58
+            },
+            {
+              "componentId": null,
+              "deltaE": 14.27
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.58
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.13
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.13
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.58
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.14
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.2
+            },
+            {
+              "componentId": null,
+              "deltaE": 14.27
+            }
+          ],
+          "gated": false
+        }
+      },
+      "failures": [
+        "silhouette IoU 0.261 is below threshold 0.85",
+        "aspect-ratio delta 0.238 exceeds threshold 0.05",
+        "scale delta 0.591 exceeds threshold 0.08",
+        "blockout requires --map-stripped-render evidence"
+      ],
+      "renderHash": "2a98023b46411be4",
+      "passId": "blockout"
+    },
+    {
+      "passed": false,
+      "checks": {
+        "silhouetteIoU": 0.2248,
+        "aspectRatioDelta": 0.5238,
+        "scaleDelta": 0.5238,
+        "bilateralSymmetryError": 0.4403,
+        "colorDelta": {
+          "checked": 13,
+          "maxDeltaE": 15.21,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 11.12
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.12
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.66
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.1
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.66
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.21
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.66
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.12
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.12
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.66
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.0
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.1
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.21
+            }
+          ],
+          "gated": false
+        }
+      },
+      "failures": [
+        "silhouette IoU 0.225 is below threshold 0.85",
+        "aspect-ratio delta 0.524 exceeds threshold 0.05",
+        "scale delta 0.524 exceeds threshold 0.08",
+        "blockout requires --map-stripped-render evidence"
+      ],
+      "renderHash": "40ed47c71f315cdd",
+      "passId": "blockout"
+    },
+    {
+      "passed": false,
+      "checks": {
+        "silhouetteIoU": 0.2614,
+        "aspectRatioDelta": 0.2385,
+        "scaleDelta": 0.5908,
+        "bilateralSymmetryError": 0.0855,
+        "colorDelta": {
+          "checked": 13,
+          "maxDeltaE": 14.27,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 11.13
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.13
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.58
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.2
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.58
+            },
+            {
+              "componentId": null,
+              "deltaE": 14.27
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.58
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.13
+            },
+            {
+              "componentId": null,
+              "deltaE": 11.13
+            },
+            {
+              "componentId": null,
+              "deltaE": 5.58
+            },
+            {
+              "componentId": null,
+              "deltaE": 7.14
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.2
+            },
+            {
+              "componentId": null,
+              "deltaE": 14.27
+            }
+          ],
+          "gated": false
+        }
+      },
+      "failures": [
+        "silhouette IoU 0.261 is below threshold 0.85",
+        "aspect-ratio delta 0.238 exceeds threshold 0.05",
+        "scale delta 0.591 exceeds threshold 0.08"
+      ],
+      "renderHash": "2a98023b46411be4",
+      "passId": "blockout",
+      "mapStrippedRender": "artifacts\\img2threejs\\portable-speaker\\idle-review\\render-front.png"
+    }
+  ]
+}

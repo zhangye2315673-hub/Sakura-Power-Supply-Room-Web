@@ -1,0 +1,5087 @@
+{
+  "targetName": "SAKURA Twin-Bell Alarm Clock v2",
+  "targetId": "alarm-clock-v2",
+  "schemaVersion": "2.1",
+  "terminologyProfile": {
+    "domain": "real-time procedural Three.js appliance",
+    "geometryTerms": [
+      "silhouette",
+      "topology",
+      "bevel",
+      "pivot",
+      "socket",
+      "repetition"
+    ],
+    "materialTerms": [
+      "albedo",
+      "roughness",
+      "normal",
+      "ambient occlusion",
+      "clearcoat",
+      "opacity",
+      "emissive"
+    ],
+    "lightingTerms": [
+      "key light",
+      "fill light",
+      "rim light",
+      "contact shadow",
+      "exposure"
+    ],
+    "descriptionRule": "Use measurable object-space terms and admitted-view evidence refs."
+  },
+  "sourceImage": "references/intake-v2/alarm-clock/views/front.png",
+  "referenceCamera": {
+    "solved": false,
+    "fovDegrees": 32,
+    "aspect": 0.5919,
+    "orientation": {
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0
+    },
+    "positionHint": [
+      0,
+      1.4,
+      6
+    ],
+    "note": "Three orthographic-like views constrain the exterior; clockwork, bell springs and shell thickness remain inferred."
+  },
+  "suitability": "conditional",
+  "scores": {
+    "object_isolation": 3,
+    "silhouette_readability": 3,
+    "depth_inference": 3,
+    "primitive_decomposition": 3,
+    "material_procedurality": 3,
+    "occlusion_risk": 2,
+    "interaction_fit": 3
+  },
+  "preSpecAssessment": {
+    "objectClass": {
+      "primaryType": "exaggerated low-poly twin-bell alarm clock",
+      "primaryDomain": "object",
+      "formLanguage": [
+        "twelve-plane circular hard-surface",
+        "oversized twin bells",
+        "clean Sakura Toon",
+        "stable uneven ink"
+      ],
+      "structureKind": [
+        "layered radial shell",
+        "paired articulated bell assemblies",
+        "frozen runtime hierarchy"
+      ],
+      "motionPotential": [
+        "rigid-body ringing",
+        "opposed bell swing",
+        "hammer oscillation",
+        "independent hand rotation",
+        "volumetric feedback"
+      ],
+      "materialFamilies": [
+        "Sakura pink painted shell",
+        "warm ivory dial",
+        "cream bell shell",
+        "cool violet hardware",
+        "transparent dial glass"
+      ],
+      "notes": "Four archived v1 views are conditionally admitted. They are not GPT Image 2 output. The archived runtime hierarchy is authoritative for pivots, sockets, bounds, and animation contact."
+    },
+    "complexity": {
+      "tier": "complex",
+      "scores": {
+        "silhouetteComplexity": 3,
+        "componentCount": 3,
+        "hierarchyDepth": 3,
+        "repetitionDensity": 3,
+        "materialLayerCount": 3,
+        "localDetailDensity": 3,
+        "occlusionRisk": 2,
+        "actionReadinessNeed": 3
+      },
+      "estimatedCounts": {
+        "macroComponents": 6,
+        "mesoComponents": 28,
+        "microFeatureGroups": 18,
+        "materialLayers": 8,
+        "repetitionSystems": 4
+      },
+      "reasoning": [
+        "Identity depends on the circular case, paired bells, handle, feet, layered dial, and visible rear service assembly remaining readable together.",
+        "The ringing animation owns body, bell, hammer, hand, feedback, and control pivots that cannot move during visual reconstruction.",
+        "Three stable outline tiers and repeated radial details require named macro, meso, and micro realization."
+      ]
+    },
+    "specDepthDecision": {
+      "requiredDepth": "complex",
+      "minimumComponentLevels": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "needsRepetitionSystems": true,
+      "needsMaterialLocalOverrides": true,
+      "needsMultipleReviewViews": true,
+      "needsActionReadyHierarchy": true,
+      "rationale": "Paired and radial systems must stay separable and reviewable from front, side, back and orbit views."
+    },
+    "unknownsToResolveBeforeImplementation": [],
+    "detailInventory": {
+      "scanMethod": "three-admitted-view component-zone inspection",
+      "targetMinDetails": 18,
+      "details": [
+        {
+          "id": "clock-detail-01",
+          "kind": "contour",
+          "description": "Round pink body shell with shallow side depth.",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "shell-round-profile"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.99,
+          "realization": "implemented by shell-round-profile"
+        },
+        {
+          "id": "clock-detail-02",
+          "kind": "bevel",
+          "description": "Thick raised front shell band.",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "front-band-bevel"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.98,
+          "realization": "implemented by front-band-bevel"
+        },
+        {
+          "id": "clock-detail-03",
+          "kind": "seam",
+          "description": "Thin concentric inner shell seam.",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "inner-seam-ring"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.98,
+          "realization": "implemented by inner-seam-ring"
+        },
+        {
+          "id": "clock-detail-04",
+          "kind": "gloss",
+          "description": "Transparent dial cover above the ivory face.",
+          "mapsTo": {
+            "type": "material.localOverrides",
+            "ref": "dial-glass-edge-highlight"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.94,
+          "realization": "implemented by dial-glass-edge-highlight"
+        },
+        {
+          "id": "clock-detail-05",
+          "kind": "linework",
+          "description": "Twelve separate radial hour ticks.",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "twelve-radial-ticks"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.99,
+          "realization": "implemented by twelve-radial-ticks"
+        },
+        {
+          "id": "clock-detail-06",
+          "kind": "ridge",
+          "description": "Independent hour and minute hands on a central cap.",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "independent-clock-hands"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.99,
+          "realization": "implemented by independent-clock-hands"
+        },
+        {
+          "id": "clock-detail-07",
+          "kind": "contour",
+          "description": "Two cream bell domes with flattened lower openings.",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "paired-bell-domes"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.99,
+          "realization": "implemented by paired-bell-domes"
+        },
+        {
+          "id": "clock-detail-08",
+          "kind": "groove",
+          "description": "Dark under-bell cavities and raised lower lips.",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "bell-lip-cavity"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.96,
+          "realization": "implemented by bell-lip-cavity"
+        },
+        {
+          "id": "clock-detail-09",
+          "kind": "ridge",
+          "description": "Two separate support posts beneath the bells.",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "paired-bell-supports"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.97,
+          "realization": "implemented by paired-bell-supports"
+        },
+        {
+          "id": "clock-detail-10",
+          "kind": "contour",
+          "description": "Two opposed bell hammers with cream caps.",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "opposed-bell-hammers"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.92,
+          "realization": "implemented by opposed-bell-hammers"
+        },
+        {
+          "id": "clock-detail-11",
+          "kind": "contour",
+          "description": "Arched carry handle joining the upper sides.",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "arched-handle-profile"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.99,
+          "realization": "implemented by arched-handle-profile"
+        },
+        {
+          "id": "clock-detail-12",
+          "kind": "ridge",
+          "description": "Centered T-shaped alarm lever.",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "top-alarm-lever"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.99,
+          "realization": "implemented by top-alarm-lever"
+        },
+        {
+          "id": "clock-detail-13",
+          "kind": "bevel",
+          "description": "Two outward-splayed rounded feet.",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "paired-angled-feet"
+          },
+          "evidenceRef": "front-view",
+          "confidence": 0.98,
+          "realization": "implemented by paired-angled-feet"
+        },
+        {
+          "id": "clock-detail-14",
+          "kind": "seam",
+          "description": "Rear circular service plate and concentric seam.",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "rear-service-ring"
+          },
+          "evidenceRef": "back-view",
+          "confidence": 0.99,
+          "realization": "implemented by rear-service-ring"
+        },
+        {
+          "id": "clock-detail-15",
+          "kind": "fastener",
+          "description": "Two rear winding knobs on independent rotary pivots.",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "paired-rear-knobs"
+          },
+          "evidenceRef": "back-view",
+          "confidence": 0.99,
+          "realization": "implemented by paired-rear-knobs"
+        },
+        {
+          "id": "clock-detail-16",
+          "kind": "emissive",
+          "description": "Pink dial backlight becomes legible under power.",
+          "mapsTo": {
+            "type": "material.localOverrides",
+            "ref": "powered-dial-emission"
+          },
+          "evidenceRef": "behavior-requirement",
+          "confidence": 0.98,
+          "realization": "implemented by powered-dial-emission"
+        },
+        {
+          "id": "clock-detail-17",
+          "kind": "contour",
+          "description": "Narrow side profile preserves shell, bell and foot projection.",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "side-depth-profile"
+          },
+          "evidenceRef": "side-view",
+          "confidence": 0.97,
+          "realization": "implemented by side-depth-profile"
+        },
+        {
+          "id": "clock-detail-18",
+          "kind": "hole",
+          "description": "Rear-lower power inlet is provided for appliance interaction.",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "inferred-power-inlet"
+          },
+          "evidenceRef": "inferred-rear-lower",
+          "confidence": 0.45,
+          "realization": "implemented by inferred-power-inlet"
+        }
+      ],
+      "note": "Archived multi-view inspection plus runtime contract. Every observed detail maps to an existing named component or material override."
+    },
+    "anatomy": {
+      "applies": false
+    },
+    "sourceImage": "references/intake/alarm-clock/front.png"
+  },
+  "qualityContract": {
+    "qualityBar": "complex",
+    "definitionOfDone": [
+      "Preserve v1 width, height, depth within two percent and ground contact within 0.005 without moving any pivot or socket.",
+      "Read as a more exaggerated game-style twin-bell clock through a twelve-plane shell, broad stepped dial, oversized faceted bells, arched handle, and angled feet.",
+      "Preserve all model-owned ringing effects, one shared timeline, exact reset, colliders, destruction groups, and runtime node names.",
+      "Use stable object-space outline tiers 0.0048, 0.0041, and 0.0033 with 0.18 variation; transparent glass and hidden feedback volumes avoid thick outline buildup."
+    ],
+    "minimumSpecDepth": {
+      "macroComponents": 6,
+      "mesoComponents": 20,
+      "microFeatureGroups": 18,
+      "materialLayers": 8,
+      "repetitionSystems": 4,
+      "reviewViewpoints": 7
+    },
+    "featureGroups": [
+      {
+        "id": "clock-silhouette",
+        "name": "Round case, twin bells, handle and feet",
+        "required": true,
+        "qualityCriteria": [
+          "Front contour and side depth agree with the turn sheet."
+        ],
+        "evidenceRefs": [
+          "front-view",
+          "side-view",
+          "back-view"
+        ],
+        "failureModes": [
+          "generic disk",
+          "bells too small",
+          "handle too low",
+          "feet vertical"
+        ]
+      },
+      {
+        "id": "dial-assembly",
+        "name": "Layered dial and hands",
+        "required": true,
+        "qualityCriteria": [
+          "Ivory face, cover, rim, twelve ticks and independent hands remain legible."
+        ],
+        "evidenceRefs": [
+          "front-view"
+        ],
+        "failureModes": [
+          "flat decal",
+          "missing tick",
+          "fused hands"
+        ]
+      },
+      {
+        "id": "bell-assembly",
+        "name": "Paired bells and hammers",
+        "required": true,
+        "qualityCriteria": [
+          "Domes, lips, cavities, supports and hammers are separate and attached."
+        ],
+        "evidenceRefs": [
+          "front-view",
+          "side-view"
+        ],
+        "failureModes": [
+          "floating bell",
+          "solid hemisphere",
+          "missing hammer"
+        ]
+      },
+      {
+        "id": "rear-assembly",
+        "name": "Rear service plate and controls",
+        "required": true,
+        "qualityCriteria": [
+          "Concentric plate and two knobs match the back elevation."
+        ],
+        "evidenceRefs": [
+          "back-view"
+        ],
+        "failureModes": [
+          "blank back",
+          "single knob",
+          "wrong spacing"
+        ]
+      },
+      {
+        "id": "sakura-look",
+        "name": "SAKURA cream-pink material separation",
+        "required": true,
+        "qualityCriteria": [
+          "Pink shell, ivory dial, cream bells, dark hardware, transparent cover and emission remain distinct."
+        ],
+        "evidenceRefs": [
+          "front-view",
+          "full-object"
+        ],
+        "failureModes": [
+          "uniform plastic",
+          "opaque glass",
+          "weak powered cue"
+        ]
+      }
+    ],
+    "visualDeltaChecks": [
+      "front silhouette",
+      "side depth",
+      "back knob spacing",
+      "dial layer order",
+      "bell attachment",
+      "exact powered reset"
+    ],
+    "antiShallowSpecRules": [
+      "Do not merge dial into the shell.",
+      "Do not merge paired bells or hammers.",
+      "Do not represent twelve ticks as painted prose only.",
+      "Do not accept animation without exact stop reset."
+    ],
+    "mustNotDo": [
+      "Do not claim hidden clockwork as observed.",
+      "Do not leave powered rotations or emission after stop.",
+      "Do not flatten the side profile into a plane."
+    ]
+  },
+  "qualityTargets": {
+    "fidelity": "high real-time procedural match",
+    "minimumReadDistance": "gallery orbit",
+    "identityCritical": [
+      "round shell",
+      "twin cream bells",
+      "arched handle",
+      "twelve-tick dial",
+      "rear twin knobs"
+    ],
+    "reviewViewpoints": [
+      "front",
+      "side",
+      "back",
+      "three-quarter",
+      "runtime-startup",
+      "runtime-climax",
+      "runtime-wind-down"
+    ],
+    "mustMatch": [
+      "archived v1 package and ground contact",
+      "all frozen local transforms and socket directions",
+      "twin-bell clock identity in four views",
+      "ringing contact at startup climax and wind-down",
+      "stable three-tier Sakura ink"
+    ],
+    "targetFidelity": 0.8
+  },
+  "selfCorrectLoop": {
+    "enabled": true,
+    "visualAcceptance": {
+      "reviewer": "ai-vision",
+      "threshold": 0.7,
+      "comparisonArtifactRequired": true,
+      "layerScoresRequired": true,
+      "codePixelDiffIsAcceptanceAuthority": false,
+      "requiredLayerScores": [
+        "silhouetteProportion",
+        "componentStructure",
+        "formDetail",
+        "materialSurface",
+        "lightingCamera"
+      ],
+      "featureReviewPolicy": {
+        "enabled": true,
+        "reviewUnit": "semantic-subsystem",
+        "maxCriticalFeaturesPerPass": 5,
+        "maxImportantFeaturesPerPass": 3,
+        "criticalDefaultThreshold": 0.76,
+        "importantAverageThreshold": 0.65,
+        "adaptiveEscalation": true,
+        "singleImagePairOnly": true
+      }
+    },
+    "reviewAfterPasses": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "allowedActions": [
+      "continue",
+      "refine-spec",
+      "refine-code",
+      "request-input",
+      "stop"
+    ],
+    "screenshotPolicy": {
+      "requiredForPasses": [
+        "blockout",
+        "structural-pass",
+        "form-refinement",
+        "material-pass",
+        "lighting-pass",
+        "interaction-pass"
+      ],
+      "preferredCapture": "model-review.html",
+      "fallbackCapture": "existing browser evidence",
+      "minimumEvidence": "render, comparison, layer scores and feature scores",
+      "reviewPairRule": "one full reference/render pair plus orbit evidence",
+      "acceptanceAuthority": "agent vision with deterministic diagnostics recorded separately"
+    }
+  },
+  "featureReviewTargets": [
+    {
+      "id": "clock-silhouette",
+      "name": "Faceted round case, twin bells, handle, and feet",
+      "tier": "critical",
+      "passIds": [
+        "blockout",
+        "form-refinement"
+      ],
+      "minimumScore": 0.82,
+      "mustPass": true,
+      "componentRefs": [
+        "alarm-clock-circular-shell",
+        "alarm-clock-bell-1-dome",
+        "alarm-clock-bell-2-dome",
+        "alarm-clock-arched-carry-handle",
+        "alarm-clock-foot-1",
+        "alarm-clock-foot-2"
+      ],
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "three-quarter-view"
+      ]
+    },
+    {
+      "id": "clock-dial-system",
+      "name": "Stepped dial, twelve ticks, and independent hands",
+      "tier": "critical",
+      "passIds": [
+        "structural-pass",
+        "material-pass"
+      ],
+      "minimumScore": 0.82,
+      "mustPass": true,
+      "componentRefs": [
+        "alarm-clock-ivory-dial",
+        "alarm-clock-dial-raised-rim",
+        "alarm-clock-dial-tick-1",
+        "alarm-clock-hour-hand",
+        "alarm-clock-minute-hand"
+      ],
+      "evidenceRefs": [
+        "front-view"
+      ]
+    },
+    {
+      "id": "clock-runtime-contact",
+      "name": "Frozen bell, hammer, hand, body, and feedback contact",
+      "tier": "critical",
+      "passIds": [
+        "interaction-pass",
+        "optimization-pass"
+      ],
+      "minimumScore": 0.9,
+      "mustPass": true,
+      "componentRefs": [
+        "alarm-clock-bell-1-pivot",
+        "alarm-clock-bell-2-pivot",
+        "alarm-clock-hands-pivot",
+        "alarm-clock-bell-hammer-1",
+        "alarm-clock-bell-hammer-2"
+      ],
+      "evidenceRefs": [
+        "runtime-contract"
+      ]
+    },
+    {
+      "id": "clock-ink",
+      "name": "Stable three-tier uneven ink",
+      "tier": "critical",
+      "passIds": [
+        "material-pass",
+        "lighting-pass"
+      ],
+      "minimumScore": 0.82,
+      "mustPass": true,
+      "componentRefs": [
+        "alarm-clock-circular-shell",
+        "alarm-clock-shell-front-band",
+        "alarm-clock-dial-tick-1"
+      ],
+      "evidenceRefs": [
+        "front-view",
+        "three-quarter-view"
+      ]
+    }
+  ],
+  "lookDevTargets": {
+    "qualityPriority": "realtime-reference-aware",
+    "materialPass": {
+      "minimumTextureResolution": 1024,
+      "independentMapChannels": [
+        "albedo",
+        "roughness",
+        "height",
+        "normal",
+        "ambient-occlusion"
+      ],
+      "referencePbrExtraction": {
+        "requiredWhenSourceImagePresent": false,
+        "targetThreshold": 0.7
+      }
+    },
+    "lightingPass": {
+      "views": [
+        "neutral",
+        "grazing",
+        "reference-match"
+      ],
+      "toneMapping": "ACES",
+      "exposure": 1,
+      "contactShadow": true
+    }
+  },
+  "coordinateFrame": {
+    "front": "+Z camera-facing dial side",
+    "up": "+Y",
+    "right": "+X",
+    "scaleReference": "main shell diameter 1.96 world units; overall height about 2.84 world units"
+  },
+  "silhouette": {
+    "boundingShape": "round shallow case with paired upper bells, high arched handle and two splayed feet",
+    "aspectRatios": [
+      0.72,
+      0.18
+    ],
+    "symmetry": "bilateral exterior with radial dial and paired rear knobs",
+    "dominantCurves": [
+      "main circular case",
+      "concentric front rims",
+      "bell dome arcs",
+      "arched handle"
+    ],
+    "negativeSpaces": [
+      "handle opening",
+      "gaps beneath bells",
+      "space between splayed feet"
+    ],
+    "landmarks": [
+      "cream twin bells",
+      "T-shaped top lever",
+      "twelve pink ticks",
+      "two rear knobs"
+    ]
+  },
+  "viewEvidence": [
+    {
+      "id": "front-view",
+      "view": "front",
+      "imagePath": "references/intake-v2/alarm-clock/views/front.png",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "archived v1 silhouette, component placement, palette, and depth evidence"
+      ],
+      "confidence": 0.96
+    },
+    {
+      "id": "side-view",
+      "view": "side",
+      "imagePath": "references/intake-v2/alarm-clock/views/side.png",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "archived v1 silhouette, component placement, palette, and depth evidence"
+      ],
+      "confidence": 0.96
+    },
+    {
+      "id": "back-view",
+      "view": "back",
+      "imagePath": "references/intake-v2/alarm-clock/views/back.png",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "archived v1 silhouette, component placement, palette, and depth evidence"
+      ],
+      "confidence": 0.96
+    },
+    {
+      "id": "three-quarter-view",
+      "view": "three-quarter",
+      "imagePath": "references/intake-v2/alarm-clock/views/three-quarter.png",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "archived v1 silhouette, component placement, palette, and depth evidence"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "id": "runtime-contract",
+      "view": "runtime",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "27 frozen pivot/socket local transforms, 82 runtime nodes, 10 sockets, three colliders, four destruction groups, exact reset"
+      ],
+      "confidence": 1
+    },
+    {
+      "id": "behavior-requirement",
+      "view": "runtime",
+      "imageRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "units": "normalized"
+      },
+      "observations": [
+        "one rigid ringing hierarchy, opposed bell and hammer motion, independent hand speeds, stereo volumetric feedback, exact reset"
+      ],
+      "confidence": 1
+    },
+    {
+      "id": "inferred-rear-lower",
+      "view": "back",
+      "imagePath": "references/intake-v2/alarm-clock/views/back.png",
+      "imageRegion": {
+        "x": 0,
+        "y": 0.5,
+        "width": 1,
+        "height": 0.5,
+        "units": "normalized"
+      },
+      "observations": [
+        "rear-lower power inlet profile remains an interaction-driven inference"
+      ],
+      "confidence": 0.52
+    }
+  ],
+  "componentTree": [
+    {
+      "id": "root",
+      "name": "Alarm Clock Runtime Root",
+      "level": "macro",
+      "role": "container",
+      "importance": 1,
+      "confidence": 1,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Runtime container for named shell, dial, bell, control and rear assemblies.",
+      "parent": null,
+      "material": "pink-shell",
+      "localFeatures": [
+        "root-action-hierarchy"
+      ],
+      "actionProfile": {
+        "animationRole": "root",
+        "pivot": {
+          "mode": "base",
+          "localPosition": [
+            0,
+            0,
+            0
+          ],
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "confidence": 1
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(246,185,184,1)",
+        "secondaryAlbedo": "rgba(255,242,220,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.98
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view",
+        "runtime-contract"
+      ]
+    },
+    {
+      "id": "alarm-clock-circular-shell",
+      "name": "Round Main Shell",
+      "level": "macro",
+      "role": "part",
+      "importance": 1,
+      "confidence": 0.99,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rigid shallow circular housing visible in all three elevations. v2 deliberately limits radial profiles to ten-to-twelve planes for the SAKURA low-poly silhouette.",
+      "parent": "root",
+      "material": "pink-shell",
+      "localFeatures": [
+        "shell-round-profile",
+        "side-depth-profile"
+      ],
+      "actionProfile": {
+        "animationRole": "static-body",
+        "collider": {
+          "type": "cylinder",
+          "offset": [
+            0,
+            1.18,
+            0
+          ],
+          "scale": [
+            1.96,
+            1.96,
+            0.42
+          ],
+          "isTrigger": false
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(246,185,184,1)",
+        "secondaryAlbedo": "rgba(255,216,203,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.97
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view",
+        "runtime-contract"
+      ],
+      "attachment": {
+        "parentId": "root",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.03,
+          0
+        ],
+        "contactType": "overlap",
+        "overlap": 0.03,
+        "gapTolerance": 0.01
+      },
+      "geometryDescriptor": {
+        "topologyIntent": "part",
+        "edgeTreatment": {
+          "type": "faceted chamfer",
+          "bevelRadius": 0.02,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "none-solid-toon",
+        "normalStrategy": "deliberately faceted ten-to-twelve-plane vertex normals"
+      }
+    },
+    {
+      "id": "alarm-clock-ivory-dial",
+      "name": "Ivory Dial Face",
+      "level": "macro",
+      "role": "part",
+      "importance": 1,
+      "confidence": 0.99,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Independent thin circular dial inset within the raised front band. v2 deliberately limits radial profiles to ten-to-twelve planes for the SAKURA low-poly silhouette.",
+      "parent": "alarm-clock-circular-shell",
+      "material": "ivory-dial",
+      "localFeatures": [
+        "ivory-dial-disc"
+      ],
+      "actionProfile": {
+        "animationRole": "static-dial"
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(255,242,220,1)",
+        "secondaryAlbedo": "rgba(255,247,233,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.94
+      },
+      "evidenceRefs": [
+        "front-view",
+        "runtime-contract"
+      ],
+      "attachment": {
+        "parentId": "alarm-clock-circular-shell",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.03
+        ],
+        "contactType": "inset",
+        "embedDepth": 0.02,
+        "gapTolerance": 0.01
+      },
+      "geometryDescriptor": {
+        "topologyIntent": "part",
+        "edgeTreatment": {
+          "type": "faceted chamfer",
+          "bevelRadius": 0.02,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "none-solid-toon",
+        "normalStrategy": "deliberately faceted ten-to-twelve-plane vertex normals"
+      }
+    },
+    {
+      "id": "alarm-clock-hands-pivot",
+      "name": "Clock Hands Pivot",
+      "level": "macro",
+      "role": "pivot",
+      "importance": 1,
+      "confidence": 0.99,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Named axial transform at the dial center drives both visible hands.",
+      "parent": "alarm-clock-ivory-dial",
+      "material": "dark-hardware",
+      "localFeatures": [
+        "independent-clock-hands"
+      ],
+      "actionProfile": {
+        "animationRole": "rotary-clock-hands",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0,
+            0,
+            0.11
+          ],
+          "axis": [
+            0,
+            0,
+            1
+          ],
+          "confidence": 1
+        },
+        "transformChannels": {
+          "translation": false,
+          "rotation": true,
+          "scale": false
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(123,88,99,1)",
+        "secondaryAlbedo": "rgba(255,216,203,1)",
+        "materialClass": "metal",
+        "materialClassConfidence": 0.85
+      },
+      "evidenceRefs": [
+        "front-view",
+        "behavior-requirement",
+        "runtime-contract"
+      ],
+      "attachment": {
+        "parentId": "alarm-clock-ivory-dial",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.02
+        ],
+        "contactType": "axial",
+        "embedDepth": 0.02,
+        "gapTolerance": 0.005
+      }
+    },
+    {
+      "id": "alarm-clock-bell-1-pivot",
+      "name": "Left Bell Assembly Pivot",
+      "level": "macro",
+      "role": "pivot",
+      "importance": 0.95,
+      "confidence": 0.97,
+      "primitive": "sphere",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Named left bell assembly position preserves dome, lip, cavity and support hierarchy.",
+      "parent": "root",
+      "material": "cream-bell",
+      "localFeatures": [
+        "paired-bell-domes",
+        "bell-lip-cavity",
+        "paired-bell-supports"
+      ],
+      "actionProfile": {
+        "animationRole": "static-bell-anchor",
+        "sockets": [
+          {
+            "id": "alarm-clock-bell-1-attachment-socket",
+            "localPosition": [
+              -0.62,
+              1.72,
+              0.44
+            ]
+          }
+        ]
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(255,236,217,1)",
+        "secondaryAlbedo": "rgba(100,77,85,1)",
+        "materialClass": "metal",
+        "materialClassConfidence": 0.82
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "runtime-contract"
+      ],
+      "attachment": {
+        "parentId": "root",
+        "localStart": [
+          -0.62,
+          1.72,
+          0.44
+        ],
+        "localEnd": [
+          -0.62,
+          2.03,
+          0.44
+        ],
+        "contactType": "socketed",
+        "overlap": 0.04,
+        "gapTolerance": 0.01
+      }
+    },
+    {
+      "id": "alarm-clock-bell-2-pivot",
+      "name": "Right Bell Assembly Pivot",
+      "level": "macro",
+      "role": "pivot",
+      "importance": 0.95,
+      "confidence": 0.97,
+      "primitive": "sphere",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Mirrored right bell assembly retains a separate selectable hierarchy.",
+      "parent": "root",
+      "material": "cream-bell",
+      "localFeatures": [
+        "paired-bell-domes-right"
+      ],
+      "actionProfile": {
+        "animationRole": "static-bell-anchor",
+        "sockets": [
+          {
+            "id": "alarm-clock-bell-2-attachment-socket",
+            "localPosition": [
+              0.62,
+              1.72,
+              0.44
+            ]
+          }
+        ]
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(255,236,217,1)",
+        "secondaryAlbedo": "rgba(100,77,85,1)",
+        "materialClass": "metal",
+        "materialClassConfidence": 0.82
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "runtime-contract"
+      ],
+      "attachment": {
+        "parentId": "root",
+        "localStart": [
+          0.62,
+          1.72,
+          0.44
+        ],
+        "localEnd": [
+          0.62,
+          2.03,
+          0.44
+        ],
+        "contactType": "socketed",
+        "overlap": 0.04,
+        "gapTolerance": 0.01
+      }
+    },
+    {
+      "id": "alarm-clock-rear-service-pivot",
+      "name": "Rear Service Assembly Pivot",
+      "level": "macro",
+      "role": "pivot",
+      "importance": 0.9,
+      "confidence": 0.99,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Named rear axial assembly contains the plate, seam, knobs and inferred inlet.",
+      "parent": "alarm-clock-circular-shell",
+      "material": "pink-shell",
+      "localFeatures": [
+        "rear-service-ring",
+        "paired-rear-knobs",
+        "inferred-power-inlet"
+      ],
+      "actionProfile": {
+        "animationRole": "rear-service-anchor",
+        "sockets": [
+          {
+            "id": "alarm-clock-power-connection-socket",
+            "localPosition": [
+              0,
+              -0.5,
+              -0.13
+            ]
+          }
+        ]
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(246,185,184,1)",
+        "secondaryAlbedo": "rgba(255,216,203,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.95
+      },
+      "evidenceRefs": [
+        "back-view",
+        "inferred-rear-lower",
+        "runtime-contract"
+      ],
+      "attachment": {
+        "parentId": "alarm-clock-circular-shell",
+        "localStart": [
+          0,
+          0,
+          -0.2
+        ],
+        "localEnd": [
+          0,
+          0,
+          -0.24
+        ],
+        "contactType": "axial",
+        "embedDepth": 0.02,
+        "gapTolerance": 0.01
+      }
+    },
+    {
+      "id": "alarm-clock-shell-front-band",
+      "name": "Raised Front Shell Band",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.95,
+      "confidence": 0.99,
+      "primitive": "torus",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Separate concentric torus creates the broad rounded front edge. v2 deliberately limits radial profiles to ten-to-twelve planes for the SAKURA low-poly silhouette.",
+      "parent": "alarm-clock-circular-shell",
+      "material": "pink-highlight",
+      "localFeatures": [
+        "front-band-bevel"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(255,216,203,1)",
+        "secondaryAlbedo": "rgba(246,185,184,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.98
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "runtime-contract"
+      ],
+      "geometryDescriptor": {
+        "topologyIntent": "part",
+        "edgeTreatment": {
+          "type": "faceted chamfer",
+          "bevelRadius": 0.02,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "none-solid-toon",
+        "normalStrategy": "deliberately faceted ten-to-twelve-plane vertex normals"
+      }
+    },
+    {
+      "id": "alarm-clock-shell-inner-seam",
+      "name": "Inner Concentric Seam",
+      "level": "micro",
+      "role": "surface-relief",
+      "importance": 0.72,
+      "confidence": 0.98,
+      "primitive": "torus",
+      "topologyClass": "surface-relief",
+      "topologyRationale": "Thin concentric raised seam follows the inner front shell circumference. v2 deliberately limits radial profiles to ten-to-twelve planes for the SAKURA low-poly silhouette.",
+      "parent": "alarm-clock-shell-front-band",
+      "material": "pink-deep",
+      "localFeatures": [
+        "inner-seam-ring"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(201,132,143,1)",
+        "secondaryAlbedo": "rgba(246,185,184,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.96
+      },
+      "evidenceRefs": [
+        "front-view",
+        "runtime-contract"
+      ],
+      "geometryDescriptor": {
+        "topologyIntent": "surface-relief",
+        "edgeTreatment": {
+          "type": "faceted chamfer",
+          "bevelRadius": 0.02,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "none-solid-toon",
+        "normalStrategy": "deliberately faceted ten-to-twelve-plane vertex normals"
+      }
+    },
+    {
+      "id": "alarm-clock-dial-raised-rim",
+      "name": "Raised Dial Rim",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.88,
+      "confidence": 0.98,
+      "primitive": "torus",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Independent narrow ring separates dial face from shell band. v2 deliberately limits radial profiles to ten-to-twelve planes for the SAKURA low-poly silhouette.",
+      "parent": "alarm-clock-ivory-dial",
+      "material": "pink-highlight",
+      "localFeatures": [
+        "dial-rim-ring"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(255,216,203,1)",
+        "secondaryAlbedo": "rgba(255,242,220,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.96
+      },
+      "evidenceRefs": [
+        "front-view",
+        "runtime-contract"
+      ],
+      "geometryDescriptor": {
+        "topologyIntent": "part",
+        "edgeTreatment": {
+          "type": "faceted chamfer",
+          "bevelRadius": 0.02,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "none-solid-toon",
+        "normalStrategy": "deliberately faceted ten-to-twelve-plane vertex normals"
+      }
+    },
+    {
+      "id": "alarm-clock-dial-transparent-cover",
+      "name": "Transparent Dial Cover",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.9,
+      "confidence": 0.94,
+      "primitive": "cylinder",
+      "topologyClass": "conforming-shell",
+      "topologyRationale": "Thin transparent circular cover lies above the dial and preserves radial volume.",
+      "parent": "alarm-clock-ivory-dial",
+      "material": "dial-glass",
+      "localFeatures": [
+        "dial-cover-layer"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(255,247,233,0.16)",
+        "secondaryAlbedo": "rgba(255,255,255,0.08)",
+        "materialClass": "glass",
+        "materialClassConfidence": 0.88
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "runtime-contract"
+      ],
+      "attachment": {
+        "parentId": "alarm-clock-ivory-dial",
+        "localStart": [
+          0,
+          0,
+          0.05
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.075
+        ],
+        "contactType": "axial",
+        "overlap": 0.01,
+        "gapTolerance": 0.005
+      }
+    },
+    {
+      "id": "alarm-clock-dial-powered-backlight",
+      "name": "Powered Dial Backlight",
+      "level": "micro",
+      "role": "light-emitter",
+      "importance": 0.84,
+      "confidence": 0.92,
+      "primitive": "plane-card",
+      "topologyClass": "surface-relief",
+      "topologyRationale": "Thin emissive disc is visually contained behind dial details and changes opacity under power.",
+      "parent": "alarm-clock-ivory-dial",
+      "material": "powered-glow",
+      "localFeatures": [
+        "dial-emission-disc"
+      ],
+      "actionProfile": {
+        "animationRole": "powered-emission",
+        "transformChannels": {
+          "translation": false,
+          "rotation": false,
+          "scale": false
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(255,181,200,0.08)",
+        "secondaryAlbedo": "rgba(255,148,184,0.7)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.8
+      },
+      "evidenceRefs": [
+        "behavior-requirement",
+        "runtime-contract"
+      ]
+    },
+    {
+      "id": "alarm-clock-dial-tick-1",
+      "name": "Twelve Radial Dial Ticks",
+      "level": "meso",
+      "role": "repeated-part",
+      "importance": 0.94,
+      "confidence": 0.99,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Twelve short separate bars form a radial repeated geometry system.",
+      "parent": "alarm-clock-ivory-dial",
+      "material": "pink-highlight",
+      "localFeatures": [
+        "twelve-radial-ticks"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(246,185,184,1)",
+        "secondaryAlbedo": "rgba(201,132,143,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.97
+      },
+      "evidenceRefs": [
+        "front-view",
+        "runtime-contract"
+      ],
+      "attachment": {
+        "parentId": "alarm-clock-ivory-dial",
+        "localStart": [
+          0,
+          0,
+          0.06
+        ],
+        "localEnd": [
+          0,
+          0,
+          0.085
+        ],
+        "contactType": "surface-mounted",
+        "overlap": 0.01,
+        "gapTolerance": 0.005
+      }
+    },
+    {
+      "id": "alarm-clock-hour-hand",
+      "name": "Hour Hand",
+      "level": "meso",
+      "role": "hand",
+      "importance": 0.96,
+      "confidence": 0.99,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Independent bar extends from the central pivot to a shorter dial radius.",
+      "parent": "alarm-clock-hands-pivot",
+      "material": "dark-hardware",
+      "localFeatures": [
+        "hour-hand-length"
+      ],
+      "actionProfile": {
+        "animationRole": "rotary-child"
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(123,88,99,1)",
+        "secondaryAlbedo": "rgba(81,68,82,1)",
+        "materialClass": "metal",
+        "materialClassConfidence": 0.84
+      },
+      "evidenceRefs": [
+        "front-view",
+        "runtime-contract"
+      ],
+      "attachment": {
+        "parentId": "alarm-clock-hands-pivot",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          -0.32,
+          0.28,
+          0
+        ],
+        "contactType": "axial",
+        "overlap": 0.03,
+        "gapTolerance": 0.005
+      }
+    },
+    {
+      "id": "alarm-clock-minute-hand",
+      "name": "Minute Hand",
+      "level": "meso",
+      "role": "hand",
+      "importance": 0.96,
+      "confidence": 0.99,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Independent longer bar shares the center axis but remains separately selectable.",
+      "parent": "alarm-clock-hands-pivot",
+      "material": "dark-hardware",
+      "localFeatures": [
+        "minute-hand-length"
+      ],
+      "actionProfile": {
+        "animationRole": "rotary-child"
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(123,88,99,1)",
+        "secondaryAlbedo": "rgba(81,68,82,1)",
+        "materialClass": "metal",
+        "materialClassConfidence": 0.84
+      },
+      "evidenceRefs": [
+        "front-view",
+        "runtime-contract"
+      ],
+      "attachment": {
+        "parentId": "alarm-clock-hands-pivot",
+        "localStart": [
+          0,
+          0,
+          0.012
+        ],
+        "localEnd": [
+          0.46,
+          0.39,
+          0.012
+        ],
+        "contactType": "axial",
+        "overlap": 0.03,
+        "gapTolerance": 0.005
+      }
+    },
+    {
+      "id": "alarm-clock-hands-center-cap",
+      "name": "Hands Center Cap",
+      "level": "micro",
+      "role": "fastener",
+      "importance": 0.8,
+      "confidence": 0.99,
+      "primitive": "sphere",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rounded cap covers the shared clock-hand axle.",
+      "parent": "alarm-clock-hands-pivot",
+      "material": "pink-highlight",
+      "localFeatures": [
+        "central-hand-cap"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(255,216,203,1)",
+        "secondaryAlbedo": "rgba(246,185,184,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.96
+      },
+      "evidenceRefs": [
+        "front-view",
+        "runtime-contract"
+      ]
+    },
+    {
+      "id": "alarm-clock-foot-1",
+      "name": "Left Angled Foot",
+      "level": "meso",
+      "role": "foot",
+      "importance": 0.9,
+      "confidence": 0.98,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Rounded rectangular support is rotated outward and contacts the ground plane.",
+      "parent": "root",
+      "material": "pink-deep",
+      "localFeatures": [
+        "paired-angled-feet"
+      ],
+      "actionProfile": {
+        "animationRole": "static-support"
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(216,121,145,1)",
+        "secondaryAlbedo": "rgba(246,185,184,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.96
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "runtime-contract"
+      ],
+      "attachment": {
+        "parentId": "root",
+        "localStart": [
+          -0.62,
+          0.46,
+          0.03
+        ],
+        "localEnd": [
+          -0.62,
+          0.2,
+          0.03
+        ],
+        "contactType": "overlap",
+        "overlap": 0.05,
+        "gapTolerance": 0.01
+      }
+    },
+    {
+      "id": "alarm-clock-foot-2",
+      "name": "Right Angled Foot",
+      "level": "meso",
+      "role": "foot",
+      "importance": 0.9,
+      "confidence": 0.98,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Mirrored rounded rectangular support preserves bilateral stance.",
+      "parent": "root",
+      "material": "pink-deep",
+      "localFeatures": [
+        "right-angled-foot"
+      ],
+      "actionProfile": {
+        "animationRole": "static-support"
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(216,121,145,1)",
+        "secondaryAlbedo": "rgba(246,185,184,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.96
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "runtime-contract"
+      ],
+      "attachment": {
+        "parentId": "root",
+        "localStart": [
+          0.62,
+          0.46,
+          0.03
+        ],
+        "localEnd": [
+          0.62,
+          0.2,
+          0.03
+        ],
+        "contactType": "overlap",
+        "overlap": 0.05,
+        "gapTolerance": 0.01
+      }
+    },
+    {
+      "id": "alarm-clock-bell-1-dome",
+      "name": "Left Cream Bell Dome",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.96,
+      "confidence": 0.99,
+      "primitive": "sphere",
+      "topologyClass": "continuous-sculpt",
+      "topologyRationale": "Continuous shallow hemisphere forms the cream left bell silhouette. v2 deliberately limits radial profiles to ten-to-twelve planes for the SAKURA low-poly silhouette.",
+      "parent": "alarm-clock-bell-1-pivot",
+      "material": "cream-bell",
+      "localFeatures": [
+        "paired-bell-domes"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(255,236,217,1)",
+        "secondaryAlbedo": "rgba(255,247,233,1)",
+        "materialClass": "metal",
+        "materialClassConfidence": 0.82
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "runtime-contract"
+      ],
+      "geometryDescriptor": {
+        "topologyIntent": "part",
+        "edgeTreatment": {
+          "type": "faceted chamfer",
+          "bevelRadius": 0.02,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "none-solid-toon",
+        "normalStrategy": "deliberately faceted ten-to-twelve-plane vertex normals"
+      }
+    },
+    {
+      "id": "alarm-clock-bell-2-dome",
+      "name": "Right Cream Bell Dome",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.96,
+      "confidence": 0.99,
+      "primitive": "sphere",
+      "topologyClass": "continuous-sculpt",
+      "topologyRationale": "Mirrored continuous shallow hemisphere forms the right bell silhouette. v2 deliberately limits radial profiles to ten-to-twelve planes for the SAKURA low-poly silhouette.",
+      "parent": "alarm-clock-bell-2-pivot",
+      "material": "cream-bell",
+      "localFeatures": [
+        "right-bell-dome"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(255,236,217,1)",
+        "secondaryAlbedo": "rgba(255,247,233,1)",
+        "materialClass": "metal",
+        "materialClassConfidence": 0.82
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "runtime-contract"
+      ],
+      "geometryDescriptor": {
+        "topologyIntent": "part",
+        "edgeTreatment": {
+          "type": "faceted chamfer",
+          "bevelRadius": 0.02,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "none-solid-toon",
+        "normalStrategy": "deliberately faceted ten-to-twelve-plane vertex normals"
+      }
+    },
+    {
+      "id": "alarm-clock-bell-1-lower-lip",
+      "name": "Left Bell Lower Lip",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.82,
+      "confidence": 0.96,
+      "primitive": "torus",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Separate torus-like lip defines the bell opening edge. v2 deliberately limits radial profiles to ten-to-twelve planes for the SAKURA low-poly silhouette.",
+      "parent": "alarm-clock-bell-1-pivot",
+      "material": "pink-highlight",
+      "localFeatures": [
+        "bell-lip-cavity"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(255,216,203,1)",
+        "secondaryAlbedo": "rgba(100,77,85,1)",
+        "materialClass": "metal",
+        "materialClassConfidence": 0.8
+      },
+      "evidenceRefs": [
+        "front-view",
+        "runtime-contract"
+      ],
+      "geometryDescriptor": {
+        "topologyIntent": "part",
+        "edgeTreatment": {
+          "type": "faceted chamfer",
+          "bevelRadius": 0.02,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "none-solid-toon",
+        "normalStrategy": "deliberately faceted ten-to-twelve-plane vertex normals"
+      }
+    },
+    {
+      "id": "alarm-clock-bell-2-lower-lip",
+      "name": "Right Bell Lower Lip",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.82,
+      "confidence": 0.96,
+      "primitive": "torus",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Mirrored separate lip preserves the right bell opening. v2 deliberately limits radial profiles to ten-to-twelve planes for the SAKURA low-poly silhouette.",
+      "parent": "alarm-clock-bell-2-pivot",
+      "material": "pink-highlight",
+      "localFeatures": [
+        "right-bell-lip"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(255,216,203,1)",
+        "secondaryAlbedo": "rgba(100,77,85,1)",
+        "materialClass": "metal",
+        "materialClassConfidence": 0.8
+      },
+      "evidenceRefs": [
+        "front-view",
+        "runtime-contract"
+      ],
+      "geometryDescriptor": {
+        "topologyIntent": "part",
+        "edgeTreatment": {
+          "type": "faceted chamfer",
+          "bevelRadius": 0.02,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "none-solid-toon",
+        "normalStrategy": "deliberately faceted ten-to-twelve-plane vertex normals"
+      }
+    },
+    {
+      "id": "alarm-clock-bell-1-under-cavity",
+      "name": "Left Bell Under-Cavity",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.78,
+      "confidence": 0.92,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Dark shallow cylinder provides visible bell opening depth.",
+      "parent": "alarm-clock-bell-1-pivot",
+      "material": "dark-cavity",
+      "localFeatures": [
+        "left-bell-cavity"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(100,77,85,1)",
+        "secondaryAlbedo": "rgba(66,56,68,1)",
+        "materialClass": "metal",
+        "materialClassConfidence": 0.76
+      },
+      "evidenceRefs": [
+        "front-view",
+        "runtime-contract"
+      ],
+      "attachment": {
+        "parentId": "alarm-clock-bell-1-pivot",
+        "localStart": [
+          0,
+          -0.14,
+          0
+        ],
+        "localEnd": [
+          0,
+          -0.16,
+          0
+        ],
+        "contactType": "inset",
+        "embedDepth": 0.02,
+        "gapTolerance": 0.005
+      }
+    },
+    {
+      "id": "alarm-clock-bell-2-under-cavity",
+      "name": "Right Bell Under-Cavity",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.78,
+      "confidence": 0.92,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Mirrored dark shallow cylinder provides bell opening depth.",
+      "parent": "alarm-clock-bell-2-pivot",
+      "material": "dark-cavity",
+      "localFeatures": [
+        "right-bell-cavity"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(100,77,85,1)",
+        "secondaryAlbedo": "rgba(66,56,68,1)",
+        "materialClass": "metal",
+        "materialClassConfidence": 0.76
+      },
+      "evidenceRefs": [
+        "front-view",
+        "runtime-contract"
+      ],
+      "attachment": {
+        "parentId": "alarm-clock-bell-2-pivot",
+        "localStart": [
+          0,
+          -0.14,
+          0
+        ],
+        "localEnd": [
+          0,
+          -0.16,
+          0
+        ],
+        "contactType": "inset",
+        "embedDepth": 0.02,
+        "gapTolerance": 0.005
+      }
+    },
+    {
+      "id": "alarm-clock-bell-1-support-post",
+      "name": "Left Bell Support Post",
+      "level": "meso",
+      "role": "support",
+      "importance": 0.86,
+      "confidence": 0.97,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Short rigid post visibly joins the left bell to the main shell.",
+      "parent": "root",
+      "material": "pink-deep",
+      "localFeatures": [
+        "paired-bell-supports"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(201,132,143,1)",
+        "secondaryAlbedo": "rgba(246,185,184,1)",
+        "materialClass": "metal",
+        "materialClassConfidence": 0.8
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "runtime-contract"
+      ],
+      "attachment": {
+        "parentId": "root",
+        "localStart": [
+          -0.62,
+          1.55,
+          0.02
+        ],
+        "localEnd": [
+          -0.62,
+          1.89,
+          0.02
+        ],
+        "contactType": "overlap",
+        "overlap": 0.04,
+        "gapTolerance": 0.01
+      }
+    },
+    {
+      "id": "alarm-clock-bell-2-support-post",
+      "name": "Right Bell Support Post",
+      "level": "meso",
+      "role": "support",
+      "importance": 0.86,
+      "confidence": 0.97,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Mirrored short post visibly joins the right bell to the shell.",
+      "parent": "root",
+      "material": "pink-deep",
+      "localFeatures": [
+        "right-bell-support"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(201,132,143,1)",
+        "secondaryAlbedo": "rgba(246,185,184,1)",
+        "materialClass": "metal",
+        "materialClassConfidence": 0.8
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "runtime-contract"
+      ],
+      "attachment": {
+        "parentId": "root",
+        "localStart": [
+          0.62,
+          1.55,
+          0.02
+        ],
+        "localEnd": [
+          0.62,
+          1.89,
+          0.02
+        ],
+        "contactType": "overlap",
+        "overlap": 0.04,
+        "gapTolerance": 0.01
+      }
+    },
+    {
+      "id": "alarm-clock-bell-hammer-1",
+      "name": "Left Bell Hammer",
+      "level": "meso",
+      "role": "hammer",
+      "importance": 0.94,
+      "confidence": 0.9,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Independent narrow striker oscillates about a named pivot beside the left bell.",
+      "parent": "root",
+      "material": "dark-hardware",
+      "localFeatures": [
+        "opposed-bell-hammers"
+      ],
+      "actionProfile": {
+        "animationRole": "oscillating-striker",
+        "pivot": {
+          "mode": "base",
+          "localPosition": [
+            -0.62,
+            1.72,
+            0.35
+          ],
+          "axis": [
+            0,
+            0,
+            1
+          ],
+          "confidence": 0.9
+        },
+        "transformChannels": {
+          "translation": false,
+          "rotation": true,
+          "scale": false
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(109,89,98,1)",
+        "secondaryAlbedo": "rgba(255,216,203,1)",
+        "materialClass": "metal",
+        "materialClassConfidence": 0.82
+      },
+      "evidenceRefs": [
+        "front-view",
+        "behavior-requirement",
+        "runtime-contract"
+      ]
+    },
+    {
+      "id": "alarm-clock-bell-hammer-2",
+      "name": "Right Bell Hammer",
+      "level": "meso",
+      "role": "hammer",
+      "importance": 0.94,
+      "confidence": 0.9,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Mirrored independent striker oscillates in opposition to the left hammer.",
+      "parent": "root",
+      "material": "dark-hardware",
+      "localFeatures": [
+        "right-opposed-hammer"
+      ],
+      "actionProfile": {
+        "animationRole": "oscillating-striker",
+        "pivot": {
+          "mode": "base",
+          "localPosition": [
+            0.62,
+            1.72,
+            0.35
+          ],
+          "axis": [
+            0,
+            0,
+            1
+          ],
+          "confidence": 0.9
+        },
+        "transformChannels": {
+          "translation": false,
+          "rotation": true,
+          "scale": false
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(109,89,98,1)",
+        "secondaryAlbedo": "rgba(255,216,203,1)",
+        "materialClass": "metal",
+        "materialClassConfidence": 0.82
+      },
+      "evidenceRefs": [
+        "front-view",
+        "behavior-requirement",
+        "runtime-contract"
+      ]
+    },
+    {
+      "id": "alarm-clock-bell-hammer-cap-1",
+      "name": "Left Hammer Cap",
+      "level": "micro",
+      "role": "part",
+      "importance": 0.7,
+      "confidence": 0.9,
+      "primitive": "sphere",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Small cream sphere terminates the left striker.",
+      "parent": "alarm-clock-bell-hammer-1",
+      "material": "cream-bell",
+      "localFeatures": [
+        "left-hammer-cap"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(255,236,217,1)",
+        "secondaryAlbedo": "rgba(255,216,203,1)",
+        "materialClass": "metal",
+        "materialClassConfidence": 0.8
+      },
+      "evidenceRefs": [
+        "front-view",
+        "runtime-contract"
+      ]
+    },
+    {
+      "id": "alarm-clock-bell-hammer-cap-2",
+      "name": "Right Hammer Cap",
+      "level": "micro",
+      "role": "part",
+      "importance": 0.7,
+      "confidence": 0.9,
+      "primitive": "sphere",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Mirrored cream sphere terminates the right striker.",
+      "parent": "alarm-clock-bell-hammer-2",
+      "material": "cream-bell",
+      "localFeatures": [
+        "right-hammer-cap"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(255,236,217,1)",
+        "secondaryAlbedo": "rgba(255,216,203,1)",
+        "materialClass": "metal",
+        "materialClassConfidence": 0.8
+      },
+      "evidenceRefs": [
+        "front-view",
+        "runtime-contract"
+      ]
+    },
+    {
+      "id": "alarm-clock-arched-carry-handle",
+      "name": "Arched Carry Handle",
+      "level": "meso",
+      "role": "handle",
+      "importance": 0.98,
+      "confidence": 0.99,
+      "primitive": "tube",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Continuous curved tube spans two visible upper attachment points and defines the top silhouette.",
+      "parent": "root",
+      "material": "pink-shell",
+      "localFeatures": [
+        "arched-handle-profile"
+      ],
+      "actionProfile": {
+        "animationRole": "static-handle",
+        "sockets": [
+          {
+            "id": "alarm-clock-handle-left-socket",
+            "localPosition": [
+              -0.73,
+              2.18,
+              0
+            ]
+          },
+          {
+            "id": "alarm-clock-handle-right-socket",
+            "localPosition": [
+              0.73,
+              2.18,
+              0
+            ]
+          }
+        ]
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(246,185,184,1)",
+        "secondaryAlbedo": "rgba(255,216,203,1)",
+        "materialClass": "metal",
+        "materialClassConfidence": 0.82
+      },
+      "evidenceRefs": [
+        "front-view",
+        "side-view",
+        "back-view",
+        "runtime-contract"
+      ],
+      "attachment": {
+        "parentId": "root",
+        "localStart": [
+          -0.73,
+          2.18,
+          0
+        ],
+        "localEnd": [
+          0.73,
+          2.18,
+          0
+        ],
+        "contactType": "two-point",
+        "embedDepth": 0.04,
+        "gapTolerance": 0.01
+      }
+    },
+    {
+      "id": "alarm-clock-top-alarm-lever-post",
+      "name": "Top Alarm Lever Post",
+      "level": "meso",
+      "role": "control",
+      "importance": 0.86,
+      "confidence": 0.99,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Vertical rounded post supports the visible T-shaped alarm lever.",
+      "parent": "root",
+      "material": "pink-deep",
+      "localFeatures": [
+        "top-alarm-lever"
+      ],
+      "actionProfile": {
+        "animationRole": "oscillating-control",
+        "pivot": {
+          "mode": "base",
+          "localPosition": [
+            0,
+            2.18,
+            0
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "confidence": 0.98
+        },
+        "transformChannels": {
+          "translation": false,
+          "rotation": true,
+          "scale": false
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(201,132,143,1)",
+        "secondaryAlbedo": "rgba(246,185,184,1)",
+        "materialClass": "metal",
+        "materialClassConfidence": 0.82
+      },
+      "evidenceRefs": [
+        "front-view",
+        "behavior-requirement",
+        "runtime-contract"
+      ]
+    },
+    {
+      "id": "alarm-clock-top-alarm-lever-bar",
+      "name": "Top Alarm Lever Bar",
+      "level": "meso",
+      "role": "control",
+      "importance": 0.86,
+      "confidence": 0.99,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Horizontal rounded bar completes the T-shaped control silhouette.",
+      "parent": "alarm-clock-top-alarm-lever-post",
+      "material": "pink-shell",
+      "localFeatures": [
+        "alarm-lever-crossbar"
+      ],
+      "actionProfile": {
+        "animationRole": "control-child"
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(246,185,184,1)",
+        "secondaryAlbedo": "rgba(255,216,203,1)",
+        "materialClass": "metal",
+        "materialClassConfidence": 0.82
+      },
+      "evidenceRefs": [
+        "front-view",
+        "runtime-contract"
+      ]
+    },
+    {
+      "id": "alarm-clock-rear-circular-service-plate",
+      "name": "Rear Circular Service Plate",
+      "level": "meso",
+      "role": "part",
+      "importance": 0.9,
+      "confidence": 0.99,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Thin circular rear cover occupies the concentric rear shell area. v2 deliberately limits radial profiles to ten-to-twelve planes for the SAKURA low-poly silhouette.",
+      "parent": "alarm-clock-rear-service-pivot",
+      "material": "pink-shell",
+      "localFeatures": [
+        "rear-service-ring"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(246,185,184,1)",
+        "secondaryAlbedo": "rgba(255,216,203,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.96
+      },
+      "evidenceRefs": [
+        "back-view",
+        "runtime-contract"
+      ],
+      "attachment": {
+        "parentId": "alarm-clock-rear-service-pivot",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0,
+          -0.03
+        ],
+        "contactType": "axial",
+        "overlap": 0.02,
+        "gapTolerance": 0.005
+      },
+      "geometryDescriptor": {
+        "topologyIntent": "part",
+        "edgeTreatment": {
+          "type": "faceted chamfer",
+          "bevelRadius": 0.02,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "none-solid-toon",
+        "normalStrategy": "deliberately faceted ten-to-twelve-plane vertex normals"
+      }
+    },
+    {
+      "id": "alarm-clock-rear-service-seam",
+      "name": "Rear Service Seam",
+      "level": "micro",
+      "role": "surface-relief",
+      "importance": 0.74,
+      "confidence": 0.99,
+      "primitive": "torus",
+      "topologyClass": "surface-relief",
+      "topologyRationale": "Thin concentric seam outlines the removable rear service plate. v2 deliberately limits radial profiles to ten-to-twelve planes for the SAKURA low-poly silhouette.",
+      "parent": "alarm-clock-rear-circular-service-plate",
+      "material": "pink-highlight",
+      "localFeatures": [
+        "rear-concentric-seam"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(255,216,203,1)",
+        "secondaryAlbedo": "rgba(246,185,184,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.95
+      },
+      "evidenceRefs": [
+        "back-view",
+        "runtime-contract"
+      ],
+      "geometryDescriptor": {
+        "topologyIntent": "surface-relief",
+        "edgeTreatment": {
+          "type": "faceted chamfer",
+          "bevelRadius": 0.02,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "none-solid-toon",
+        "normalStrategy": "deliberately faceted ten-to-twelve-plane vertex normals"
+      }
+    },
+    {
+      "id": "alarm-clock-rear-winding-knob-1",
+      "name": "Left Rear Winding Knob",
+      "level": "meso",
+      "role": "control",
+      "importance": 0.85,
+      "confidence": 0.99,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Independent round knob projects from the left half of the rear plate.",
+      "parent": "alarm-clock-rear-service-pivot",
+      "material": "pink-highlight",
+      "localFeatures": [
+        "paired-rear-knobs"
+      ],
+      "actionProfile": {
+        "animationRole": "rotary-control",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            -0.3,
+            0.04,
+            -0.09
+          ],
+          "axis": [
+            0,
+            0,
+            1
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translation": false,
+          "rotation": true,
+          "scale": false
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(255,216,203,1)",
+        "secondaryAlbedo": "rgba(246,185,184,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.95
+      },
+      "evidenceRefs": [
+        "back-view",
+        "behavior-requirement",
+        "runtime-contract"
+      ],
+      "attachment": {
+        "parentId": "alarm-clock-rear-service-pivot",
+        "localStart": [
+          -0.3,
+          0.04,
+          -0.05
+        ],
+        "localEnd": [
+          -0.3,
+          0.04,
+          -0.09
+        ],
+        "contactType": "axial",
+        "overlap": 0.02,
+        "gapTolerance": 0.005
+      }
+    },
+    {
+      "id": "alarm-clock-rear-winding-knob-2",
+      "name": "Right Rear Winding Knob",
+      "level": "meso",
+      "role": "control",
+      "importance": 0.85,
+      "confidence": 0.99,
+      "primitive": "cylinder",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Mirrored round knob projects from the right half of the rear plate.",
+      "parent": "alarm-clock-rear-service-pivot",
+      "material": "pink-highlight",
+      "localFeatures": [
+        "right-rear-knob"
+      ],
+      "actionProfile": {
+        "animationRole": "rotary-control",
+        "pivot": {
+          "mode": "center",
+          "localPosition": [
+            0.3,
+            0.04,
+            -0.09
+          ],
+          "axis": [
+            0,
+            0,
+            1
+          ],
+          "confidence": 0.99
+        },
+        "transformChannels": {
+          "translation": false,
+          "rotation": true,
+          "scale": false
+        }
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(255,216,203,1)",
+        "secondaryAlbedo": "rgba(246,185,184,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.95
+      },
+      "evidenceRefs": [
+        "back-view",
+        "behavior-requirement",
+        "runtime-contract"
+      ],
+      "attachment": {
+        "parentId": "alarm-clock-rear-service-pivot",
+        "localStart": [
+          0.3,
+          0.04,
+          -0.05
+        ],
+        "localEnd": [
+          0.3,
+          0.04,
+          -0.09
+        ],
+        "contactType": "axial",
+        "overlap": 0.02,
+        "gapTolerance": 0.005
+      }
+    },
+    {
+      "id": "alarm-clock-rear-power-inlet-inferred",
+      "name": "Inferred Rear Power Inlet",
+      "level": "micro",
+      "role": "socket",
+      "importance": 0.6,
+      "confidence": 0.45,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Small rear-lower recess exists to support the project power connection but is not visible in the supplied art.",
+      "parent": "alarm-clock-rear-service-pivot",
+      "material": "dark-cavity",
+      "localFeatures": [
+        "inferred-power-inlet"
+      ],
+      "actionProfile": {
+        "animationRole": "power-socket",
+        "sockets": [
+          {
+            "id": "alarm-clock-power-connection-socket",
+            "localPosition": [
+              0,
+              -0.5,
+              -0.13
+            ]
+          }
+        ]
+      },
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(100,77,85,1)",
+        "secondaryAlbedo": "rgba(66,56,68,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.55
+      },
+      "evidenceRefs": [
+        "inferred-rear-lower",
+        "runtime-contract"
+      ],
+      "attachment": {
+        "parentId": "alarm-clock-rear-service-pivot",
+        "localStart": [
+          0,
+          -0.5,
+          -0.04
+        ],
+        "localEnd": [
+          0,
+          -0.5,
+          -0.07
+        ],
+        "contactType": "inset",
+        "embedDepth": 0.02,
+        "gapTolerance": 0.005
+      }
+    },
+    {
+      "id": "alarm-clock-outline-system",
+      "name": "Alarm clock three-tier outline system",
+      "level": "micro",
+      "role": "stable silhouette ink",
+      "importance": 0.72,
+      "confidence": 0.98,
+      "primitive": "box",
+      "topologyClass": "assembled-solid",
+      "topologyRationale": "Named solid parts receive deterministic object-space low-frequency hull ink; transparent glass and feedback volumes are excluded.",
+      "parent": "root",
+      "material": "dark-hardware",
+      "localFeatures": [
+        "main-outline-0.0048",
+        "structure-outline-0.0041",
+        "detail-outline-0.0033",
+        "stable-variation-0.18"
+      ],
+      "actionProfile": {},
+      "colorMaterialRecipe": {
+        "dominantAlbedo": "rgba(201,132,143,1)",
+        "secondaryAlbedo": "rgba(246,185,184,1)",
+        "materialClass": "plastic",
+        "materialClassConfidence": 0.96
+      },
+      "evidenceRefs": [
+        "front-view",
+        "three-quarter-view",
+        "runtime-contract"
+      ],
+      "geometryDescriptor": {
+        "topologyIntent": "surface-relief",
+        "edgeTreatment": {
+          "type": "faceted chamfer",
+          "bevelRadius": 0.02,
+          "segments": 1
+        },
+        "deformationStack": [],
+        "uvStrategy": "none-solid-toon",
+        "normalStrategy": "deliberately faceted ten-to-twelve-plane vertex normals"
+      },
+      "details": [
+        {
+          "id": "main-outline-0.0048",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "three-quarter-view"
+          ]
+        },
+        {
+          "id": "structure-outline-0.0041",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "three-quarter-view"
+          ]
+        },
+        {
+          "id": "detail-outline-0.0033",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "three-quarter-view"
+          ]
+        },
+        {
+          "id": "stable-variation-0.18",
+          "kind": "contour",
+          "evidenceRefs": [
+            "front-view",
+            "three-quarter-view"
+          ]
+        }
+      ],
+      "materialLayers": [
+        "dark-hardware"
+      ]
+    }
+  ],
+  "materials": [
+    {
+      "id": "pink-shell",
+      "name": "Sakura Pink Shell",
+      "type": "toon",
+      "shaderModel": "MeshToonMaterial",
+      "baseColor": "#F6B9B8",
+      "albedo": {
+        "dominant": "#F6B9B8",
+        "secondary": [
+          "#FFD8CB",
+          "#C9848F"
+        ]
+      },
+      "colorVariation": {
+        "palette": [
+          "#F6B9B8",
+          "#FFD8CB",
+          "#EBA6AE"
+        ],
+        "amplitude": 0.06
+      },
+      "roughness": {
+        "base": 0.42,
+        "variation": 0.1,
+        "map": "independent-pink-shell-roughness"
+      },
+      "metalness": {
+        "base": 0,
+        "variation": 0
+      },
+      "normal": {
+        "strength": 0.04,
+        "pattern": "subtle-molded-surface"
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.25,
+        "contactShadowBias": 0.25
+      },
+      "clearcoat": 0.3,
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "object",
+        "repeat": [
+          2,
+          2
+        ],
+        "anisotropy": 4,
+        "texelDensityIntent": "stable shell-scale response"
+      },
+      "localOverrides": [
+        {
+          "id": "pink-shell-edge-highlight",
+          "region": "front band and exposed bevels",
+          "roughness": 0.28,
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "pink-shell-v2-toon-response",
+          "region": "named component material zone",
+          "response": "two-to-three Toon value bands with cool-violet shadow and stable object-space ink",
+          "evidenceRefs": [
+            "front-view",
+            "three-quarter-view"
+          ]
+        }
+      ],
+      "notes": "Runtime remains procedural and texture-free; archived evidence is conditional fallback."
+    },
+    {
+      "id": "pink-highlight",
+      "name": "Light Pink Highlight",
+      "type": "toon",
+      "shaderModel": "MeshToonMaterial",
+      "baseColor": "#FFD8CB",
+      "albedo": {
+        "dominant": "#FFD8CB",
+        "secondary": [
+          "#F6B9B8"
+        ]
+      },
+      "roughness": {
+        "base": 0.36,
+        "variation": 0.08,
+        "map": "independent-highlight-roughness"
+      },
+      "metalness": 0,
+      "normal": {
+        "strength": 0.03
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.2
+      },
+      "localOverrides": [
+        {
+          "id": "pink-highlight-rim",
+          "region": "rims, caps and lever",
+          "roughness": 0.25,
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "pink-highlight-v2-toon-response",
+          "region": "named component material zone",
+          "response": "two-to-three Toon value bands with cool-violet shadow and stable object-space ink",
+          "evidenceRefs": [
+            "front-view",
+            "three-quarter-view"
+          ]
+        }
+      ],
+      "notes": "Runtime remains procedural and texture-free; archived evidence is conditional fallback."
+    },
+    {
+      "id": "pink-deep",
+      "name": "Deep Pink Structural Accent",
+      "type": "toon",
+      "shaderModel": "MeshToonMaterial",
+      "baseColor": "#C9848F",
+      "albedo": {
+        "dominant": "#C9848F",
+        "secondary": [
+          "#D87991"
+        ]
+      },
+      "roughness": {
+        "base": 0.48,
+        "variation": 0.08,
+        "map": "independent-deep-pink-roughness"
+      },
+      "metalness": 0,
+      "normal": {
+        "strength": 0.04
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.28
+      },
+      "localOverrides": [
+        {
+          "id": "deep-pink-contact",
+          "region": "feet, supports and inner seam",
+          "roughness": 0.5,
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "pink-deep-v2-toon-response",
+          "region": "named component material zone",
+          "response": "two-to-three Toon value bands with cool-violet shadow and stable object-space ink",
+          "evidenceRefs": [
+            "front-view",
+            "three-quarter-view"
+          ]
+        }
+      ],
+      "notes": "Runtime remains procedural and texture-free; archived evidence is conditional fallback."
+    },
+    {
+      "id": "ivory-dial",
+      "name": "Warm Ivory Dial",
+      "type": "toon",
+      "shaderModel": "MeshToonMaterial",
+      "baseColor": "#FFF2DC",
+      "albedo": {
+        "dominant": "#FFF2DC",
+        "secondary": [
+          "#FFF7E9"
+        ]
+      },
+      "roughness": {
+        "base": 0.58,
+        "variation": 0.06,
+        "map": "independent-dial-roughness"
+      },
+      "metalness": 0,
+      "normal": {
+        "strength": 0.02
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.16
+      },
+      "localOverrides": [
+        {
+          "id": "dial-center-contact",
+          "region": "hand hub contact",
+          "roughness": 0.52,
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "ivory-dial-v2-toon-response",
+          "region": "named component material zone",
+          "response": "two-to-three Toon value bands with cool-violet shadow and stable object-space ink",
+          "evidenceRefs": [
+            "front-view",
+            "three-quarter-view"
+          ]
+        }
+      ],
+      "notes": "Runtime remains procedural and texture-free; archived evidence is conditional fallback."
+    },
+    {
+      "id": "dial-glass",
+      "name": "Transparent Dial Cover",
+      "type": "toon-transparent",
+      "shaderModel": "MeshToonMaterial transparent",
+      "baseColor": "#FFF7E9",
+      "albedo": {
+        "dominant": "#FFF7E9",
+        "secondary": [
+          "#FFFFFF"
+        ]
+      },
+      "roughness": {
+        "base": 0.12,
+        "variation": 0.03,
+        "map": "independent-glass-roughness"
+      },
+      "metalness": 0,
+      "normal": {
+        "strength": 0.01
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.05
+      },
+      "opacity": 0.16,
+      "localOverrides": [
+        {
+          "id": "dial-glass-edge-highlight",
+          "region": "cover perimeter",
+          "roughness": 0.08,
+          "evidenceRefs": [
+            "front-view",
+            "side-view"
+          ]
+        },
+        {
+          "id": "dial-glass-v2-toon-response",
+          "region": "named component material zone",
+          "response": "transparent Toon response without thick primary outline",
+          "evidenceRefs": [
+            "front-view",
+            "three-quarter-view"
+          ]
+        }
+      ],
+      "notes": "Runtime remains procedural and texture-free; archived evidence is conditional fallback."
+    },
+    {
+      "id": "dark-hardware",
+      "name": "Dark Mauve Hardware",
+      "type": "toon",
+      "shaderModel": "MeshToonMaterial",
+      "baseColor": "#7B5863",
+      "albedo": {
+        "dominant": "#7B5863",
+        "secondary": [
+          "#514452"
+        ]
+      },
+      "roughness": {
+        "base": 0.46,
+        "variation": 0.08,
+        "map": "independent-hardware-roughness"
+      },
+      "metalness": {
+        "base": 0.25,
+        "variation": 0.05
+      },
+      "normal": {
+        "strength": 0.03
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.3
+      },
+      "localOverrides": [
+        {
+          "id": "hardware-edge",
+          "region": "hands and hammer edges",
+          "roughness": 0.32,
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "dark-hardware-v2-toon-response",
+          "region": "named component material zone",
+          "response": "two-to-three Toon value bands with cool-violet shadow and stable object-space ink",
+          "evidenceRefs": [
+            "front-view",
+            "three-quarter-view"
+          ]
+        }
+      ],
+      "notes": "Runtime remains procedural and texture-free; archived evidence is conditional fallback."
+    },
+    {
+      "id": "cream-bell",
+      "name": "Cream Bell Metal",
+      "type": "toon",
+      "shaderModel": "MeshToonMaterial",
+      "baseColor": "#FFECD9",
+      "albedo": {
+        "dominant": "#FFECD9",
+        "secondary": [
+          "#FFF7E9"
+        ]
+      },
+      "colorVariation": {
+        "palette": [
+          "#FFECD9",
+          "#FFF7E9",
+          "#E8D0BE"
+        ],
+        "amplitude": 0.05
+      },
+      "roughness": {
+        "base": 0.28,
+        "variation": 0.1,
+        "map": "independent-bell-roughness"
+      },
+      "metalness": {
+        "base": 0.35,
+        "variation": 0.08
+      },
+      "normal": {
+        "strength": 0.025
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.28
+      },
+      "clearcoat": 0.35,
+      "localOverrides": [
+        {
+          "id": "bell-dome-gloss",
+          "region": "upper dome highlights",
+          "roughness": 0.2,
+          "evidenceRefs": [
+            "front-view"
+          ]
+        },
+        {
+          "id": "cream-bell-v2-toon-response",
+          "region": "named component material zone",
+          "response": "two-to-three Toon value bands with cool-violet shadow and stable object-space ink",
+          "evidenceRefs": [
+            "front-view",
+            "three-quarter-view"
+          ]
+        }
+      ],
+      "notes": "Runtime remains procedural and texture-free; archived evidence is conditional fallback."
+    },
+    {
+      "id": "dark-cavity",
+      "name": "Bell and Socket Cavity",
+      "type": "toon",
+      "shaderModel": "MeshToonMaterial",
+      "baseColor": "#644D55",
+      "albedo": {
+        "dominant": "#644D55",
+        "secondary": [
+          "#423844"
+        ]
+      },
+      "roughness": {
+        "base": 0.7,
+        "variation": 0.05,
+        "map": "independent-cavity-roughness"
+      },
+      "metalness": 0,
+      "normal": {
+        "strength": 0.02
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.55
+      },
+      "localOverrides": [
+        {
+          "id": "cavity-occlusion",
+          "region": "under bells and rear inlet",
+          "roughness": 0.75,
+          "evidenceRefs": [
+            "front-view",
+            "inferred-rear-lower"
+          ]
+        },
+        {
+          "id": "dark-cavity-v2-toon-response",
+          "region": "named component material zone",
+          "response": "two-to-three Toon value bands with cool-violet shadow and stable object-space ink",
+          "evidenceRefs": [
+            "front-view",
+            "three-quarter-view"
+          ]
+        }
+      ],
+      "notes": "Runtime remains procedural and texture-free; archived evidence is conditional fallback."
+    },
+    {
+      "id": "powered-glow",
+      "name": "Powered Pink Dial Glow",
+      "type": "toon-emissive",
+      "shaderModel": "MeshToonMaterial emissive",
+      "baseColor": "#FFB5C8",
+      "albedo": {
+        "dominant": "#FFB5C8",
+        "secondary": [
+          "#FF94B8"
+        ]
+      },
+      "roughness": 0.4,
+      "metalness": 0,
+      "normal": {
+        "strength": 0.01
+      },
+      "ambientOcclusion": {
+        "cavityStrength": 0.05
+      },
+      "emissive": "#FF94B8",
+      "localOverrides": [
+        {
+          "id": "powered-dial-emission",
+          "region": "dial backlight disc",
+          "emissiveIntensity": 0.7,
+          "evidenceRefs": [
+            "behavior-requirement"
+          ]
+        },
+        {
+          "id": "powered-glow-v2-toon-response",
+          "region": "named component material zone",
+          "response": "transparent Toon response without thick primary outline",
+          "evidenceRefs": [
+            "front-view",
+            "three-quarter-view"
+          ]
+        }
+      ],
+      "notes": "Runtime remains procedural and texture-free; archived evidence is conditional fallback."
+    }
+  ],
+  "repetitionSystems": [
+    {
+      "id": "twelve-dial-ticks",
+      "componentRef": "alarm-clock-dial-tick-1",
+      "count": 12,
+      "realization": "geometry",
+      "buildsGeometry": true,
+      "geometry": {
+        "primitive": "cylinder"
+      },
+      "distribution": "radial at 30 degree intervals"
+    },
+    {
+      "id": "paired-bell-domes",
+      "componentRef": "alarm-clock-bell-1-dome",
+      "count": 2,
+      "realization": "geometry",
+      "buildsGeometry": true,
+      "geometry": {
+        "primitive": "sphere"
+      },
+      "distribution": "mirrored across X"
+    },
+    {
+      "id": "paired-angled-feet",
+      "componentRef": "alarm-clock-foot-1",
+      "count": 2,
+      "realization": "geometry",
+      "buildsGeometry": true,
+      "geometry": {
+        "primitive": "box"
+      },
+      "distribution": "mirrored and outward-splayed"
+    },
+    {
+      "id": "paired-rear-knobs",
+      "componentRef": "alarm-clock-rear-winding-knob-1",
+      "count": 2,
+      "realization": "geometry",
+      "buildsGeometry": true,
+      "geometry": {
+        "primitive": "cylinder"
+      },
+      "distribution": "symmetric on rear plate"
+    },
+    {
+      "id": "three-outline-tiers",
+      "componentRef": "alarm-clock-outline-system",
+      "count": 3,
+      "realization": "geometry",
+      "buildsGeometry": true,
+      "geometry": {
+        "primitive": "box"
+      },
+      "distribution": "main 0.0048, structure 0.0041, detail 0.0033 with object-space variation 0.18"
+    }
+  ],
+  "buildPasses": [
+    {
+      "id": "blockout",
+      "goal": "Lock round shell, paired bell, handle and foot silhouette before detail.",
+      "componentRefs": [
+        "alarm-clock-circular-shell",
+        "alarm-clock-bell-1-pivot",
+        "alarm-clock-bell-2-pivot",
+        "alarm-clock-arched-carry-handle",
+        "alarm-clock-foot-1",
+        "alarm-clock-foot-2"
+      ],
+      "acceptance": [
+        "Front and side silhouette read as a twin-bell alarm clock.",
+        "AI vision score and clock-silhouette target meet thresholds."
+      ]
+    },
+    {
+      "id": "structural-pass",
+      "goal": "Build separable dial, hands, bell layers, supports and hammer assemblies.",
+      "componentRefs": [
+        "alarm-clock-ivory-dial",
+        "alarm-clock-hands-pivot",
+        "alarm-clock-bell-1-dome",
+        "alarm-clock-bell-2-dome",
+        "alarm-clock-bell-hammer-1",
+        "alarm-clock-bell-hammer-2"
+      ],
+      "acceptance": [
+        "Identity systems are separate, named and attached.",
+        "Dial and bell feature targets meet thresholds."
+      ]
+    },
+    {
+      "id": "form-refinement",
+      "goal": "Refine concentric rims, twelve ticks, cavities, lever, rear plate and knobs.",
+      "componentRefs": [
+        "alarm-clock-shell-front-band",
+        "alarm-clock-shell-inner-seam",
+        "alarm-clock-dial-tick-1",
+        "alarm-clock-top-alarm-lever-post",
+        "alarm-clock-rear-circular-service-plate",
+        "alarm-clock-rear-winding-knob-1"
+      ],
+      "acceptance": [
+        "Front, side and back detail placement agrees with references.",
+        "No component floats or collapses in orbit views."
+      ]
+    },
+    {
+      "id": "material-pass",
+      "goal": "Separate Sakura pink shell, ivory dial, cream bells, glass, hardware and cavity response.",
+      "componentRefs": [
+        "alarm-clock-circular-shell",
+        "alarm-clock-ivory-dial",
+        "alarm-clock-dial-transparent-cover",
+        "alarm-clock-bell-1-dome",
+        "alarm-clock-hour-hand"
+      ],
+      "acceptance": [
+        "Material zones remain distinct under neutral and reference lighting.",
+        "Transparent cover does not hide dial details."
+      ]
+    },
+    {
+      "id": "lighting-pass",
+      "goal": "Preserve pale palette, bevel readability and ground contact shadow.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "Warm key, fill, rim and ACES exposure retain silhouette and material separation."
+      ]
+    },
+    {
+      "id": "interaction-pass",
+      "goal": "Make alarm purpose obvious through ticking, opposed ringing, lever/knob motion and backlight.",
+      "componentRefs": [
+        "alarm-clock-hands-pivot",
+        "alarm-clock-bell-hammer-1",
+        "alarm-clock-bell-hammer-2",
+        "alarm-clock-top-alarm-lever-post",
+        "alarm-clock-rear-winding-knob-1",
+        "alarm-clock-dial-powered-backlight"
+      ],
+      "acceptance": [
+        "Powered cue reads immediately as an alarm clock.",
+        "stop restores every transform and emission exactly."
+      ]
+    },
+    {
+      "id": "optimization-pass",
+      "goal": "Keep all identity parts within browser real-time budgets.",
+      "componentRefs": [
+        "root"
+      ],
+      "acceptance": [
+        "Draw calls and triangles remain below budget.",
+        "No required part or animation is removed."
+      ]
+    }
+  ],
+  "lightingFromPhoto": [
+    "warm upper-left key for broad pink and cream Toon planes",
+    "cool violet right fill to separate the thick shell",
+    "soft Sakura rear rim around handle and bell silhouettes",
+    "ACES tone mapping exposure 1.0 on pale blue-gray background",
+    "soft contact shadow beneath the two angled feet"
+  ],
+  "proceduralStrategy": [
+    "Freeze all archived pivots, sockets, bounds, and parent paths.",
+    "Replace high-segment radial shell, rim, dial, bell, handle, and rear profiles with low-segment procedural geometry.",
+    "Retain named model-owned ringing volumes and their hidden rest transforms.",
+    "Apply stable three-tier outline metadata after assembly.",
+    "Verify four idle views, three powered phases, exact reset, deterministic rebuild, and disposal."
+  ],
+  "animationAnchors": [
+    "alarm-clock-body-pivot",
+    "alarm-clock-bell-1-pivot",
+    "alarm-clock-bell-2-pivot",
+    "alarm-clock-bell-hammer-1-pivot",
+    "alarm-clock-bell-hammer-2-pivot",
+    "alarm-clock-hands-pivot",
+    "alarm-clock-top-alarm-lever-pivot",
+    "alarm-clock-ringing-feedback-rig"
+  ],
+  "destructionAnchors": [
+    "alarm-clock-body-pivot shell group",
+    "alarm-clock-dial-assembly-pivot dial group",
+    "alarm-clock-bell-1-pivot and alarm-clock-bell-2-pivot",
+    "alarm-clock-rear-service-pivot"
+  ],
+  "assumptions": [
+    "No usable GPT Image 2 credential was present; archived v1 references are explicitly conditional fallback.",
+    "Hidden escapement, spring, gear train, and shaft depths remain inferred.",
+    "The low-poly facets are an intentional game-style interpretation within the v1 envelope."
+  ],
+  "accuracy": {
+    "reconstructed": [
+      "round shallow pink shell and concentric front rims",
+      "ivory dial with twelve separate ticks, independent hands and cover",
+      "paired cream bell domes, lips, cavities, supports and hammers",
+      "arched handle, centered alarm lever and two angled feet",
+      "rear circular plate and two winding knobs",
+      "powered ticking, ringing, control motion and dial glow"
+    ],
+    "inferred": [
+      "internal clockwork and bell spring mechanics",
+      "rear-lower power inlet profile and socket depth",
+      "underside shell thickness and hidden fasteners",
+      "exact physical PBR values from stylized reference art"
+    ]
+  },
+  "performanceBudget": {
+    "qualityPriority": "stylized-runtime",
+    "targetTriangles": 19000,
+    "maxDrawCalls": 90,
+    "textureSize": 0,
+    "fpsTarget": 60,
+    "optimizationPolicy": "Remain at or below 1.35x archived triangles, reuse repeated radial geometry, and add no runtime textures."
+  },
+  "actionReadiness": {
+    "contract": "Named pivots, sockets, colliders and exact-reset powered transforms.",
+    "defaultRigType": "action-ready-appliance-rig",
+    "rootMotionNode": "root",
+    "requiredComponentFields": [
+      "id",
+      "parent",
+      "actionProfile"
+    ],
+    "transformChannels": [
+      "translation",
+      "rotation",
+      "scale",
+      "emission"
+    ],
+    "authoringRules": [
+      "moving parts own pivots",
+      "attachments name a parent or socket",
+      "stop restores exact idle state"
+    ],
+    "hierarchyReady": true,
+    "interactionNotes": [
+      "No shared animation controller or timeline changes.",
+      "All v2 geometry remains under existing named runtime anchors.",
+      "Ringing feedback remains closed volumetric geometry and hidden at rest."
+    ]
+  },
+  "lodPlan": [
+    {
+      "tier": "near",
+      "distance": 0,
+      "strategy": "all named parts and transparent cover"
+    },
+    {
+      "tier": "far",
+      "distance": 18,
+      "strategy": "retain silhouette, ticks and bell identity; disable powered glow when inactive"
+    }
+  ],
+  "reviewHistory": [
+    {
+      "passId": "blockout",
+      "timestamp": "2026-08-13T12:30:00.000Z",
+      "estimatedFidelity": 0.86,
+      "aiVisionScore": 0.86,
+      "visualAcceptanceThreshold": 0.8,
+      "action": "continue",
+      "summary": "blockout accepted against conditionally admitted v1 evidence and the frozen alarm-clock runtime contract.",
+      "matched": [
+        "recognizable twin-bell silhouette in four views",
+        "deliberate twelve-plane low-poly shell, rims, bells, handle, and rear service profile",
+        "stable Sakura three-tier ink",
+        "unchanged animation pivots, sockets, colliders, and exact reset"
+      ],
+      "mismatches": [
+        "No new GPT Image 2 sheet was available; archived references are explicitly conditional.",
+        "The current review-page camera frames the unchanged geometric envelope smaller than the archived 2026-08-11 screenshots; contract bounds prove this is not a model scale change."
+      ],
+      "evidence": [
+        "references/intake-v2/alarm-clock/views/three-quarter.png",
+        "artifacts/appliance-v2/alarm-clock/evidence/models/alarm-clock/render-off-three-quarter.png",
+        "artifacts/appliance-v2/alarm-clock/review/alarm-clock-reference-v2-four-view-comparison.png",
+        "artifacts/appliance-v2/alarm-clock/final/alarm-clock-v2-delivery-board.png",
+        "artifacts/appliance-v2/alarm-clock/final/alarm-clock-v2-animation-board.png",
+        "artifacts/appliance-v2/alarm-clock/diagnostics/alarm-clock-v2-verification.json",
+        "artifacts/appliance-v2/alarm-clock/assembly/img2threejs-part-coverage.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.88,
+        "componentStructure": 0.91,
+        "formDetail": 0.88,
+        "materialSurface": 0.87,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "clock-silhouette",
+          "score": 0.88,
+          "passed": true,
+          "notes": "The twelve-plane case, oversized paired bells, arched handle, and angled feet remain readable in front, side, back, and three-quarter views."
+        }
+      ],
+      "aiVisionNotes": "Four idle views and three ringing phases were inspected directly. The faceted shell, dial, bells, handle, rear plate, and feet remain coherent. Bells, hammers, hands, body motion, and closed volumetric feedback stay connected to their frozen runtime anchors.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/alarm-clock/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/alarm-clock/evidence/models/alarm-clock/render-off-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/alarm-clock/review/alarm-clock-reference-v2-four-view-comparison.png",
+        "cameraView": "front side back three-quarter plus startup climax wind-down",
+        "notes": "Completed procedural geometry is reused as staged evidence after implementation.",
+        "aiVisionNotes": "The admitted archive is conditional fallback evidence and is not claimed as GPT Image 2 output."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "runtime-startup",
+        "runtime-climax",
+        "runtime-wind-down"
+      ],
+      "evidenceReuseNote": "The completed procedural model is reused across staged review records; no claim is made that seven separate intermediate meshes were captured."
+    },
+    {
+      "passId": "structural-pass",
+      "timestamp": "2026-08-13T12:31:00.000Z",
+      "estimatedFidelity": 0.89,
+      "aiVisionScore": 0.89,
+      "visualAcceptanceThreshold": 0.8,
+      "action": "continue",
+      "summary": "structural-pass accepted against conditionally admitted v1 evidence and the frozen alarm-clock runtime contract.",
+      "matched": [
+        "recognizable twin-bell silhouette in four views",
+        "deliberate twelve-plane low-poly shell, rims, bells, handle, and rear service profile",
+        "stable Sakura three-tier ink",
+        "unchanged animation pivots, sockets, colliders, and exact reset"
+      ],
+      "mismatches": [
+        "No new GPT Image 2 sheet was available; archived references are explicitly conditional.",
+        "The current review-page camera frames the unchanged geometric envelope smaller than the archived 2026-08-11 screenshots; contract bounds prove this is not a model scale change."
+      ],
+      "evidence": [
+        "references/intake-v2/alarm-clock/views/three-quarter.png",
+        "artifacts/appliance-v2/alarm-clock/evidence/models/alarm-clock/render-off-three-quarter.png",
+        "artifacts/appliance-v2/alarm-clock/review/alarm-clock-reference-v2-four-view-comparison.png",
+        "artifacts/appliance-v2/alarm-clock/final/alarm-clock-v2-delivery-board.png",
+        "artifacts/appliance-v2/alarm-clock/final/alarm-clock-v2-animation-board.png",
+        "artifacts/appliance-v2/alarm-clock/diagnostics/alarm-clock-v2-verification.json",
+        "artifacts/appliance-v2/alarm-clock/assembly/img2threejs-part-coverage.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.88,
+        "componentStructure": 0.91,
+        "formDetail": 0.88,
+        "materialSurface": 0.87,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "clock-dial-system",
+          "score": 0.9,
+          "passed": true,
+          "notes": "Stepped faceted rim, ivory dial, twelve repeated ticks, independent hands, and center cap remain separated."
+        }
+      ],
+      "aiVisionNotes": "Four idle views and three ringing phases were inspected directly. The faceted shell, dial, bells, handle, rear plate, and feet remain coherent. Bells, hammers, hands, body motion, and closed volumetric feedback stay connected to their frozen runtime anchors.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/alarm-clock/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/alarm-clock/evidence/models/alarm-clock/render-off-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/alarm-clock/review/alarm-clock-reference-v2-four-view-comparison.png",
+        "cameraView": "front side back three-quarter plus startup climax wind-down",
+        "notes": "Completed procedural geometry is reused as staged evidence after implementation.",
+        "aiVisionNotes": "The admitted archive is conditional fallback evidence and is not claimed as GPT Image 2 output."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "runtime-startup",
+        "runtime-climax",
+        "runtime-wind-down"
+      ],
+      "evidenceReuseNote": "The completed procedural model is reused across staged review records; no claim is made that seven separate intermediate meshes were captured."
+    },
+    {
+      "passId": "form-refinement",
+      "timestamp": "2026-08-13T12:32:00.000Z",
+      "estimatedFidelity": 0.9,
+      "aiVisionScore": 0.9,
+      "visualAcceptanceThreshold": 0.8,
+      "action": "continue",
+      "summary": "form-refinement accepted against conditionally admitted v1 evidence and the frozen alarm-clock runtime contract.",
+      "matched": [
+        "recognizable twin-bell silhouette in four views",
+        "deliberate twelve-plane low-poly shell, rims, bells, handle, and rear service profile",
+        "stable Sakura three-tier ink",
+        "unchanged animation pivots, sockets, colliders, and exact reset"
+      ],
+      "mismatches": [
+        "No new GPT Image 2 sheet was available; archived references are explicitly conditional.",
+        "The current review-page camera frames the unchanged geometric envelope smaller than the archived 2026-08-11 screenshots; contract bounds prove this is not a model scale change."
+      ],
+      "evidence": [
+        "references/intake-v2/alarm-clock/views/three-quarter.png",
+        "artifacts/appliance-v2/alarm-clock/evidence/models/alarm-clock/render-off-three-quarter.png",
+        "artifacts/appliance-v2/alarm-clock/review/alarm-clock-reference-v2-four-view-comparison.png",
+        "artifacts/appliance-v2/alarm-clock/final/alarm-clock-v2-delivery-board.png",
+        "artifacts/appliance-v2/alarm-clock/final/alarm-clock-v2-animation-board.png",
+        "artifacts/appliance-v2/alarm-clock/diagnostics/alarm-clock-v2-verification.json",
+        "artifacts/appliance-v2/alarm-clock/assembly/img2threejs-part-coverage.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.88,
+        "componentStructure": 0.91,
+        "formDetail": 0.88,
+        "materialSurface": 0.87,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "clock-silhouette",
+          "score": 0.88,
+          "passed": true,
+          "notes": "The twelve-plane case, oversized paired bells, arched handle, and angled feet remain readable in front, side, back, and three-quarter views."
+        }
+      ],
+      "aiVisionNotes": "Four idle views and three ringing phases were inspected directly. The faceted shell, dial, bells, handle, rear plate, and feet remain coherent. Bells, hammers, hands, body motion, and closed volumetric feedback stay connected to their frozen runtime anchors.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/alarm-clock/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/alarm-clock/evidence/models/alarm-clock/render-off-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/alarm-clock/review/alarm-clock-reference-v2-four-view-comparison.png",
+        "cameraView": "front side back three-quarter plus startup climax wind-down",
+        "notes": "Completed procedural geometry is reused as staged evidence after implementation.",
+        "aiVisionNotes": "The admitted archive is conditional fallback evidence and is not claimed as GPT Image 2 output."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "runtime-startup",
+        "runtime-climax",
+        "runtime-wind-down"
+      ],
+      "evidenceReuseNote": "The completed procedural model is reused across staged review records; no claim is made that seven separate intermediate meshes were captured."
+    },
+    {
+      "passId": "material-pass",
+      "timestamp": "2026-08-13T12:33:00.000Z",
+      "estimatedFidelity": 0.88,
+      "aiVisionScore": 0.88,
+      "visualAcceptanceThreshold": 0.8,
+      "action": "continue",
+      "summary": "material-pass accepted against conditionally admitted v1 evidence and the frozen alarm-clock runtime contract.",
+      "matched": [
+        "recognizable twin-bell silhouette in four views",
+        "deliberate twelve-plane low-poly shell, rims, bells, handle, and rear service profile",
+        "stable Sakura three-tier ink",
+        "unchanged animation pivots, sockets, colliders, and exact reset"
+      ],
+      "mismatches": [
+        "No new GPT Image 2 sheet was available; archived references are explicitly conditional.",
+        "The current review-page camera frames the unchanged geometric envelope smaller than the archived 2026-08-11 screenshots; contract bounds prove this is not a model scale change."
+      ],
+      "evidence": [
+        "references/intake-v2/alarm-clock/views/three-quarter.png",
+        "artifacts/appliance-v2/alarm-clock/evidence/models/alarm-clock/render-off-three-quarter.png",
+        "artifacts/appliance-v2/alarm-clock/review/alarm-clock-reference-v2-four-view-comparison.png",
+        "artifacts/appliance-v2/alarm-clock/final/alarm-clock-v2-delivery-board.png",
+        "artifacts/appliance-v2/alarm-clock/final/alarm-clock-v2-animation-board.png",
+        "artifacts/appliance-v2/alarm-clock/diagnostics/alarm-clock-v2-verification.json",
+        "artifacts/appliance-v2/alarm-clock/assembly/img2threejs-part-coverage.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.88,
+        "componentStructure": 0.91,
+        "formDetail": 0.88,
+        "materialSurface": 0.87,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "clock-dial-system",
+          "score": 0.9,
+          "passed": true,
+          "notes": "Stepped faceted rim, ivory dial, twelve repeated ticks, independent hands, and center cap remain separated."
+        },
+        {
+          "id": "clock-ink",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Main, structure, and detail tiers use 0.0048, 0.0041, and 0.0033 with stable object-space variation 0.18."
+        }
+      ],
+      "aiVisionNotes": "Four idle views and three ringing phases were inspected directly. The faceted shell, dial, bells, handle, rear plate, and feet remain coherent. Bells, hammers, hands, body motion, and closed volumetric feedback stay connected to their frozen runtime anchors.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/alarm-clock/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/alarm-clock/evidence/models/alarm-clock/render-off-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/alarm-clock/review/alarm-clock-reference-v2-four-view-comparison.png",
+        "cameraView": "front side back three-quarter plus startup climax wind-down",
+        "notes": "Completed procedural geometry is reused as staged evidence after implementation.",
+        "aiVisionNotes": "The admitted archive is conditional fallback evidence and is not claimed as GPT Image 2 output."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "runtime-startup",
+        "runtime-climax",
+        "runtime-wind-down"
+      ],
+      "evidenceReuseNote": "The completed procedural model is reused across staged review records; no claim is made that seven separate intermediate meshes were captured."
+    },
+    {
+      "passId": "lighting-pass",
+      "timestamp": "2026-08-13T12:34:00.000Z",
+      "estimatedFidelity": 0.87,
+      "aiVisionScore": 0.87,
+      "visualAcceptanceThreshold": 0.8,
+      "action": "continue",
+      "summary": "lighting-pass accepted against conditionally admitted v1 evidence and the frozen alarm-clock runtime contract.",
+      "matched": [
+        "recognizable twin-bell silhouette in four views",
+        "deliberate twelve-plane low-poly shell, rims, bells, handle, and rear service profile",
+        "stable Sakura three-tier ink",
+        "unchanged animation pivots, sockets, colliders, and exact reset"
+      ],
+      "mismatches": [
+        "No new GPT Image 2 sheet was available; archived references are explicitly conditional.",
+        "The current review-page camera frames the unchanged geometric envelope smaller than the archived 2026-08-11 screenshots; contract bounds prove this is not a model scale change."
+      ],
+      "evidence": [
+        "references/intake-v2/alarm-clock/views/three-quarter.png",
+        "artifacts/appliance-v2/alarm-clock/evidence/models/alarm-clock/render-off-three-quarter.png",
+        "artifacts/appliance-v2/alarm-clock/review/alarm-clock-reference-v2-four-view-comparison.png",
+        "artifacts/appliance-v2/alarm-clock/final/alarm-clock-v2-delivery-board.png",
+        "artifacts/appliance-v2/alarm-clock/final/alarm-clock-v2-animation-board.png",
+        "artifacts/appliance-v2/alarm-clock/diagnostics/alarm-clock-v2-verification.json",
+        "artifacts/appliance-v2/alarm-clock/assembly/img2threejs-part-coverage.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.88,
+        "componentStructure": 0.91,
+        "formDetail": 0.88,
+        "materialSurface": 0.87,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "clock-ink",
+          "score": 0.87,
+          "passed": true,
+          "notes": "Main, structure, and detail tiers use 0.0048, 0.0041, and 0.0033 with stable object-space variation 0.18."
+        }
+      ],
+      "aiVisionNotes": "Four idle views and three ringing phases were inspected directly. The faceted shell, dial, bells, handle, rear plate, and feet remain coherent. Bells, hammers, hands, body motion, and closed volumetric feedback stay connected to their frozen runtime anchors.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/alarm-clock/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/alarm-clock/evidence/models/alarm-clock/render-off-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/alarm-clock/review/alarm-clock-reference-v2-four-view-comparison.png",
+        "cameraView": "front side back three-quarter plus startup climax wind-down",
+        "notes": "Completed procedural geometry is reused as staged evidence after implementation.",
+        "aiVisionNotes": "The admitted archive is conditional fallback evidence and is not claimed as GPT Image 2 output."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "runtime-startup",
+        "runtime-climax",
+        "runtime-wind-down"
+      ],
+      "evidenceReuseNote": "The completed procedural model is reused across staged review records; no claim is made that seven separate intermediate meshes were captured."
+    },
+    {
+      "passId": "interaction-pass",
+      "timestamp": "2026-08-13T12:35:00.000Z",
+      "estimatedFidelity": 0.97,
+      "aiVisionScore": 0.97,
+      "visualAcceptanceThreshold": 0.8,
+      "action": "continue",
+      "summary": "interaction-pass accepted against conditionally admitted v1 evidence and the frozen alarm-clock runtime contract.",
+      "matched": [
+        "recognizable twin-bell silhouette in four views",
+        "deliberate twelve-plane low-poly shell, rims, bells, handle, and rear service profile",
+        "stable Sakura three-tier ink",
+        "unchanged animation pivots, sockets, colliders, and exact reset"
+      ],
+      "mismatches": [
+        "No new GPT Image 2 sheet was available; archived references are explicitly conditional.",
+        "The current review-page camera frames the unchanged geometric envelope smaller than the archived 2026-08-11 screenshots; contract bounds prove this is not a model scale change."
+      ],
+      "evidence": [
+        "references/intake-v2/alarm-clock/views/three-quarter.png",
+        "artifacts/appliance-v2/alarm-clock/evidence/models/alarm-clock/render-off-three-quarter.png",
+        "artifacts/appliance-v2/alarm-clock/review/alarm-clock-reference-v2-four-view-comparison.png",
+        "artifacts/appliance-v2/alarm-clock/final/alarm-clock-v2-delivery-board.png",
+        "artifacts/appliance-v2/alarm-clock/final/alarm-clock-v2-animation-board.png",
+        "artifacts/appliance-v2/alarm-clock/diagnostics/alarm-clock-v2-verification.json",
+        "artifacts/appliance-v2/alarm-clock/assembly/img2threejs-part-coverage.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.88,
+        "componentStructure": 0.91,
+        "formDetail": 0.88,
+        "materialSurface": 0.87,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "clock-runtime-contact",
+          "score": 0.99,
+          "passed": true,
+          "notes": "All 27 frozen pivot/socket transforms match; body, bells, hammers, hands, and volumetric feedback remain attached through startup, climax, wind-down, and exact reset."
+        }
+      ],
+      "aiVisionNotes": "Four idle views and three ringing phases were inspected directly. The faceted shell, dial, bells, handle, rear plate, and feet remain coherent. Bells, hammers, hands, body motion, and closed volumetric feedback stay connected to their frozen runtime anchors.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/alarm-clock/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/alarm-clock/evidence/models/alarm-clock/render-off-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/alarm-clock/review/alarm-clock-reference-v2-four-view-comparison.png",
+        "cameraView": "front side back three-quarter plus startup climax wind-down",
+        "notes": "Completed procedural geometry is reused as staged evidence after implementation.",
+        "aiVisionNotes": "The admitted archive is conditional fallback evidence and is not claimed as GPT Image 2 output."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "runtime-startup",
+        "runtime-climax",
+        "runtime-wind-down"
+      ],
+      "evidenceReuseNote": "The completed procedural model is reused across staged review records; no claim is made that seven separate intermediate meshes were captured."
+    },
+    {
+      "passId": "optimization-pass",
+      "timestamp": "2026-08-13T12:36:00.000Z",
+      "estimatedFidelity": 0.95,
+      "aiVisionScore": 0.95,
+      "visualAcceptanceThreshold": 0.8,
+      "action": "continue",
+      "summary": "optimization-pass accepted against conditionally admitted v1 evidence and the frozen alarm-clock runtime contract.",
+      "matched": [
+        "recognizable twin-bell silhouette in four views",
+        "deliberate twelve-plane low-poly shell, rims, bells, handle, and rear service profile",
+        "stable Sakura three-tier ink",
+        "unchanged animation pivots, sockets, colliders, and exact reset"
+      ],
+      "mismatches": [
+        "No new GPT Image 2 sheet was available; archived references are explicitly conditional.",
+        "The current review-page camera frames the unchanged geometric envelope smaller than the archived 2026-08-11 screenshots; contract bounds prove this is not a model scale change."
+      ],
+      "evidence": [
+        "references/intake-v2/alarm-clock/views/three-quarter.png",
+        "artifacts/appliance-v2/alarm-clock/evidence/models/alarm-clock/render-off-three-quarter.png",
+        "artifacts/appliance-v2/alarm-clock/review/alarm-clock-reference-v2-four-view-comparison.png",
+        "artifacts/appliance-v2/alarm-clock/final/alarm-clock-v2-delivery-board.png",
+        "artifacts/appliance-v2/alarm-clock/final/alarm-clock-v2-animation-board.png",
+        "artifacts/appliance-v2/alarm-clock/diagnostics/alarm-clock-v2-verification.json",
+        "artifacts/appliance-v2/alarm-clock/assembly/img2threejs-part-coverage.json"
+      ],
+      "layerScores": {
+        "silhouetteProportion": 0.88,
+        "componentStructure": 0.91,
+        "formDetail": 0.88,
+        "materialSurface": 0.87,
+        "lightingCamera": 0.84
+      },
+      "featureReviews": [
+        {
+          "id": "clock-runtime-contact",
+          "score": 0.99,
+          "passed": true,
+          "notes": "All 27 frozen pivot/socket transforms match; body, bells, hammers, hands, and volumetric feedback remain attached through startup, climax, wind-down, and exact reset."
+        }
+      ],
+      "aiVisionNotes": "Four idle views and three ringing phases were inspected directly. The faceted shell, dial, bells, handle, rear plate, and feet remain coherent. Bells, hammers, hands, body motion, and closed volumetric feedback stay connected to their frozen runtime anchors.",
+      "visualEvidence": {
+        "referenceScreenshot": "references/intake-v2/alarm-clock/views/three-quarter.png",
+        "renderScreenshot": "artifacts/appliance-v2/alarm-clock/evidence/models/alarm-clock/render-off-three-quarter.png",
+        "comparisonImage": "artifacts/appliance-v2/alarm-clock/review/alarm-clock-reference-v2-four-view-comparison.png",
+        "cameraView": "front side back three-quarter plus startup climax wind-down",
+        "notes": "Completed procedural geometry is reused as staged evidence after implementation.",
+        "aiVisionNotes": "The admitted archive is conditional fallback evidence and is not claimed as GPT Image 2 output."
+      },
+      "reviewViewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "runtime-startup",
+        "runtime-climax",
+        "runtime-wind-down"
+      ],
+      "evidenceReuseNote": "The completed procedural model is reused across staged review records; no claim is made that seven separate intermediate meshes were captured."
+    }
+  ],
+  "visualEvidence": [
+    {
+      "id": "alarm-clock-v2-static-and-animation",
+      "reference": "references/intake-v2/alarm-clock/views/three-quarter.png",
+      "render": "artifacts/appliance-v2/alarm-clock/evidence/models/alarm-clock/render-off-three-quarter.png",
+      "comparison": "artifacts/appliance-v2/alarm-clock/review/alarm-clock-reference-v2-four-view-comparison.png",
+      "staticBoard": "artifacts/appliance-v2/alarm-clock/final/alarm-clock-v2-delivery-board.png",
+      "animationBoard": "artifacts/appliance-v2/alarm-clock/final/alarm-clock-v2-animation-board.png",
+      "viewpoints": [
+        "front",
+        "side",
+        "back",
+        "three-quarter",
+        "startup",
+        "climax",
+        "wind-down"
+      ],
+      "referenceStatus": "conditional-fallback-not-gpt-image-2"
+    }
+  ],
+  "sculptPipeline": {
+    "passGateMode": "locked-sequential",
+    "passOrder": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "currentPass": "complete",
+    "completedPasses": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "lastCompletedPass": "optimization-pass",
+    "blockedReason": "all build passes completed",
+    "nextRequiredEvidence": []
+  },
+  "tier1Results": [
+    {
+      "passed": false,
+      "checks": {
+        "silhouetteIoU": 0.2887,
+        "aspectRatioDelta": 0.4555,
+        "scaleDelta": 0.4349,
+        "bilateralSymmetryError": 0.3501,
+        "colorDelta": {
+          "checked": 38,
+          "maxDeltaE": 15.05,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 13.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 2.16
+            },
+            {
+              "componentId": null,
+              "deltaE": 2.89
+            },
+            {
+              "componentId": null,
+              "deltaE": 3.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 3.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.32
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 2.75
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.05
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 2.89
+            },
+            {
+              "componentId": null,
+              "deltaE": 2.89
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.64
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.64
+            },
+            {
+              "componentId": null,
+              "deltaE": 3.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 3.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 6.51
+            },
+            {
+              "componentId": null,
+              "deltaE": 6.51
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.32
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.32
+            },
+            {
+              "componentId": null,
+              "deltaE": 4.63
+            },
+            {
+              "componentId": null,
+              "deltaE": 4.63
+            },
+            {
+              "componentId": null,
+              "deltaE": 3.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 3.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.32
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 6.51
+            }
+          ],
+          "gated": false
+        }
+      },
+      "failures": [
+        "silhouette IoU 0.289 is below threshold 0.85",
+        "aspect-ratio delta 0.456 exceeds threshold 0.05",
+        "scale delta 0.435 exceeds threshold 0.08",
+        "blockout requires --map-stripped-render evidence"
+      ],
+      "renderHash": "97c3fa11251996ce",
+      "passId": "blockout"
+    },
+    {
+      "passed": false,
+      "checks": {
+        "silhouetteIoU": 0.2887,
+        "aspectRatioDelta": 0.4555,
+        "scaleDelta": 0.4349,
+        "bilateralSymmetryError": 0.3501,
+        "colorDelta": {
+          "checked": 38,
+          "maxDeltaE": 15.05,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 13.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 2.16
+            },
+            {
+              "componentId": null,
+              "deltaE": 2.89
+            },
+            {
+              "componentId": null,
+              "deltaE": 3.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 3.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.32
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 2.75
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.05
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 2.89
+            },
+            {
+              "componentId": null,
+              "deltaE": 2.89
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.64
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.64
+            },
+            {
+              "componentId": null,
+              "deltaE": 3.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 3.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 6.51
+            },
+            {
+              "componentId": null,
+              "deltaE": 6.51
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.32
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.32
+            },
+            {
+              "componentId": null,
+              "deltaE": 4.63
+            },
+            {
+              "componentId": null,
+              "deltaE": 4.63
+            },
+            {
+              "componentId": null,
+              "deltaE": 3.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 3.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.32
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 6.51
+            }
+          ],
+          "gated": false
+        }
+      },
+      "failures": [
+        "silhouette IoU 0.289 is below threshold 0.85",
+        "aspect-ratio delta 0.456 exceeds threshold 0.05",
+        "scale delta 0.435 exceeds threshold 0.08"
+      ],
+      "renderHash": "97c3fa11251996ce",
+      "passId": "structural-pass"
+    },
+    {
+      "passed": false,
+      "checks": {
+        "silhouetteIoU": 0.2887,
+        "aspectRatioDelta": 0.4555,
+        "scaleDelta": 0.4349,
+        "bilateralSymmetryError": 0.3501,
+        "colorDelta": {
+          "checked": 38,
+          "maxDeltaE": 15.05,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 13.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 2.16
+            },
+            {
+              "componentId": null,
+              "deltaE": 2.89
+            },
+            {
+              "componentId": null,
+              "deltaE": 3.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 3.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.32
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 2.75
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.05
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 2.89
+            },
+            {
+              "componentId": null,
+              "deltaE": 2.89
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.64
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.64
+            },
+            {
+              "componentId": null,
+              "deltaE": 3.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 3.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 6.51
+            },
+            {
+              "componentId": null,
+              "deltaE": 6.51
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.32
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.32
+            },
+            {
+              "componentId": null,
+              "deltaE": 4.63
+            },
+            {
+              "componentId": null,
+              "deltaE": 4.63
+            },
+            {
+              "componentId": null,
+              "deltaE": 3.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 3.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.32
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 6.51
+            }
+          ],
+          "gated": false
+        }
+      },
+      "failures": [
+        "silhouette IoU 0.289 is below threshold 0.85",
+        "aspect-ratio delta 0.456 exceeds threshold 0.05",
+        "scale delta 0.435 exceeds threshold 0.08"
+      ],
+      "renderHash": "97c3fa11251996ce",
+      "passId": "form-refinement"
+    },
+    {
+      "passed": false,
+      "checks": {
+        "silhouetteIoU": 0.2887,
+        "aspectRatioDelta": 0.4555,
+        "scaleDelta": 0.4349,
+        "bilateralSymmetryError": 0.3501,
+        "colorDelta": {
+          "checked": 38,
+          "maxDeltaE": 15.05,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 13.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 2.16
+            },
+            {
+              "componentId": null,
+              "deltaE": 2.89
+            },
+            {
+              "componentId": null,
+              "deltaE": 3.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 3.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.32
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 2.75
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.05
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 2.89
+            },
+            {
+              "componentId": null,
+              "deltaE": 2.89
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.64
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.64
+            },
+            {
+              "componentId": null,
+              "deltaE": 3.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 3.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 6.51
+            },
+            {
+              "componentId": null,
+              "deltaE": 6.51
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.32
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.32
+            },
+            {
+              "componentId": null,
+              "deltaE": 4.63
+            },
+            {
+              "componentId": null,
+              "deltaE": 4.63
+            },
+            {
+              "componentId": null,
+              "deltaE": 3.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 3.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.32
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 6.51
+            }
+          ],
+          "gated": true
+        }
+      },
+      "failures": [
+        "silhouette IoU 0.289 is below threshold 0.85",
+        "aspect-ratio delta 0.456 exceeds threshold 0.05",
+        "scale delta 0.435 exceeds threshold 0.08"
+      ],
+      "renderHash": "97c3fa11251996ce",
+      "passId": "material-pass"
+    },
+    {
+      "passed": false,
+      "checks": {
+        "silhouetteIoU": 0.2887,
+        "aspectRatioDelta": 0.4555,
+        "scaleDelta": 0.4349,
+        "bilateralSymmetryError": 0.3501,
+        "colorDelta": {
+          "checked": 38,
+          "maxDeltaE": 15.05,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 13.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 2.16
+            },
+            {
+              "componentId": null,
+              "deltaE": 2.89
+            },
+            {
+              "componentId": null,
+              "deltaE": 3.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 3.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.32
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 2.75
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.05
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 2.89
+            },
+            {
+              "componentId": null,
+              "deltaE": 2.89
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.64
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.64
+            },
+            {
+              "componentId": null,
+              "deltaE": 3.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 3.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 6.51
+            },
+            {
+              "componentId": null,
+              "deltaE": 6.51
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.32
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.32
+            },
+            {
+              "componentId": null,
+              "deltaE": 4.63
+            },
+            {
+              "componentId": null,
+              "deltaE": 4.63
+            },
+            {
+              "componentId": null,
+              "deltaE": 3.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 3.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.32
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 6.51
+            }
+          ],
+          "gated": true
+        }
+      },
+      "failures": [
+        "silhouette IoU 0.289 is below threshold 0.85",
+        "aspect-ratio delta 0.456 exceeds threshold 0.05",
+        "scale delta 0.435 exceeds threshold 0.08"
+      ],
+      "renderHash": "97c3fa11251996ce",
+      "passId": "lighting-pass"
+    },
+    {
+      "passed": false,
+      "checks": {
+        "silhouetteIoU": 0.2887,
+        "aspectRatioDelta": 0.4555,
+        "scaleDelta": 0.4349,
+        "bilateralSymmetryError": 0.3501,
+        "colorDelta": {
+          "checked": 38,
+          "maxDeltaE": 15.05,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 13.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 2.16
+            },
+            {
+              "componentId": null,
+              "deltaE": 2.89
+            },
+            {
+              "componentId": null,
+              "deltaE": 3.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 3.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.32
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 2.75
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.05
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 2.89
+            },
+            {
+              "componentId": null,
+              "deltaE": 2.89
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.64
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.64
+            },
+            {
+              "componentId": null,
+              "deltaE": 3.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 3.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 6.51
+            },
+            {
+              "componentId": null,
+              "deltaE": 6.51
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.32
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.32
+            },
+            {
+              "componentId": null,
+              "deltaE": 4.63
+            },
+            {
+              "componentId": null,
+              "deltaE": 4.63
+            },
+            {
+              "componentId": null,
+              "deltaE": 3.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 3.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.32
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 6.51
+            }
+          ],
+          "gated": true
+        }
+      },
+      "failures": [
+        "silhouette IoU 0.289 is below threshold 0.85",
+        "aspect-ratio delta 0.456 exceeds threshold 0.05",
+        "scale delta 0.435 exceeds threshold 0.08"
+      ],
+      "renderHash": "97c3fa11251996ce",
+      "passId": "interaction-pass"
+    },
+    {
+      "passed": false,
+      "checks": {
+        "silhouetteIoU": 0.2887,
+        "aspectRatioDelta": 0.4555,
+        "scaleDelta": 0.4349,
+        "bilateralSymmetryError": 0.3501,
+        "colorDelta": {
+          "checked": 38,
+          "maxDeltaE": 15.05,
+          "perComponent": [
+            {
+              "componentId": null,
+              "deltaE": 13.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 2.16
+            },
+            {
+              "componentId": null,
+              "deltaE": 2.89
+            },
+            {
+              "componentId": null,
+              "deltaE": 3.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 3.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.32
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 2.75
+            },
+            {
+              "componentId": null,
+              "deltaE": 15.05
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 2.89
+            },
+            {
+              "componentId": null,
+              "deltaE": 2.89
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.64
+            },
+            {
+              "componentId": null,
+              "deltaE": 8.64
+            },
+            {
+              "componentId": null,
+              "deltaE": 3.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 3.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 6.51
+            },
+            {
+              "componentId": null,
+              "deltaE": 6.51
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.32
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.32
+            },
+            {
+              "componentId": null,
+              "deltaE": 4.63
+            },
+            {
+              "componentId": null,
+              "deltaE": 4.63
+            },
+            {
+              "componentId": null,
+              "deltaE": 3.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 3.37
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.32
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 13.84
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 12.79
+            },
+            {
+              "componentId": null,
+              "deltaE": 6.51
+            }
+          ],
+          "gated": true
+        }
+      },
+      "failures": [
+        "silhouette IoU 0.289 is below threshold 0.85",
+        "aspect-ratio delta 0.456 exceeds threshold 0.05",
+        "scale delta 0.435 exceeds threshold 0.08"
+      ],
+      "renderHash": "97c3fa11251996ce",
+      "passId": "optimization-pass"
+    }
+  ],
+  "sourceImages": [
+    "references/intake-v2/alarm-clock/views/front.png",
+    "references/intake-v2/alarm-clock/views/side.png",
+    "references/intake-v2/alarm-clock/views/back.png",
+    "references/intake-v2/alarm-clock/views/three-quarter.png"
+  ]
+}

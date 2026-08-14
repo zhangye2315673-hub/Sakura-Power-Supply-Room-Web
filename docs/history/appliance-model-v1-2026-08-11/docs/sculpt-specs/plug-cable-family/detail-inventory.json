@@ -1,0 +1,251 @@
+{
+  "sourceImage": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\plug-cable-family\\reference-v1-round-two-pin.png",
+  "zonesDir": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\plug-cable-family\\detail-zones",
+  "detailInventory": {
+    "scanMethod": "component-zones-plus-grid-3x3",
+    "targetMinDetails": 10,
+    "details": [
+      {
+        "id": "front-chamfer",
+        "kind": "bevel",
+        "description": "主壳前肩的克制单段倒角形成连续亮边",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "0.04 shell radius",
+        "affects": "procedural geometry",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "outer-shell.front-chamfer"
+        },
+        "evidenceRef": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\plug-cable-family\\detail-zones\\zone-r0c1.png",
+        "confidence": 0.96
+      },
+      {
+        "id": "terminal-spacing",
+        "kind": "contour",
+        "description": "双圆针保持平行、等长并与中心轴对称",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "pin spacing 0.15",
+        "affects": "procedural geometry",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "terminal-assembly.terminal-layout"
+        },
+        "evidenceRef": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\plug-cable-family\\detail-zones\\zone-r0c1.png",
+        "confidence": 1
+      },
+      {
+        "id": "faceplate-seam",
+        "kind": "seam",
+        "description": "接口面圈与主壳之间保留清晰但不夸张的构造缝",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "0.01 axial seam",
+        "affects": "procedural geometry",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "interface-faceplate.perimeter-seam"
+        },
+        "evidenceRef": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\plug-cable-family\\detail-zones\\zone-r0c1.png",
+        "confidence": 0.94
+      },
+      {
+        "id": "shell-facets",
+        "kind": "contour",
+        "description": "主壳竖向低多边形面在三段 Toon 光下形成宽色带",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "12 radial facets",
+        "affects": "procedural geometry",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "outer-shell.radial-facets"
+        },
+        "evidenceRef": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\plug-cable-family\\detail-zones\\zone-r1c1.png",
+        "confidence": 0.98
+      },
+      {
+        "id": "status-inset",
+        "kind": "emissive",
+        "description": "侧面状态点改为浅内嵌圆点并保留交互发光",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "0.024 radius",
+        "affects": "procedural geometry",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "status-indicator.recessed-dot"
+        },
+        "evidenceRef": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\plug-cable-family\\detail-zones\\zone-r1c2.png",
+        "confidence": 0.92
+      },
+      {
+        "id": "rear-chamfer",
+        "kind": "bevel",
+        "description": "主壳后缘通过短倒角收向后颈而非球形鼓包",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "0.035 shell radius",
+        "affects": "procedural geometry",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "outer-shell.rear-chamfer"
+        },
+        "evidenceRef": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\plug-cable-family\\detail-zones\\zone-r1c1.png",
+        "confidence": 0.94
+      },
+      {
+        "id": "strain-relief-rings",
+        "kind": "ridge",
+        "description": "护线套使用两道浅环脊表达真实弯折保护结构",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "0.008 relief",
+        "affects": "procedural geometry",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "strain-relief.shallow-rings"
+        },
+        "evidenceRef": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\plug-cable-family\\detail-zones\\zone-r2c1.png",
+        "confidence": 0.88
+      },
+      {
+        "id": "cable-socket-overlap",
+        "kind": "seam",
+        "description": "线身嵌入护线套并至少重叠 0.02 世界单位",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "0.02 overlap",
+        "affects": "procedural geometry",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "strain-relief.cable-overlap"
+        },
+        "evidenceRef": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\plug-cable-family\\detail-zones\\zone-r2c1.png",
+        "confidence": 0.98
+      },
+      {
+        "id": "cable-radial-facets",
+        "kind": "contour",
+        "description": "线身使用八边圆截面以保持城市风格的平面折光",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "8 radial segments",
+        "affects": "procedural geometry",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "cable-body.radial-facets"
+        },
+        "evidenceRef": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\plug-cable-family\\detail-zones\\zone-r2c1.png",
+        "confidence": 0.96
+      },
+      {
+        "id": "tangent-fillet",
+        "kind": "contour",
+        "description": "每个正交折点使用不越界的相切四分之一圆角",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "0.13 radius clamped to 28 percent",
+        "affects": "procedural geometry",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "cable-body.tangent-fillet"
+        },
+        "evidenceRef": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\plug-cable-family\\detail-zones\\zone-r2c1.png",
+        "confidence": 1
+      },
+      {
+        "id": "cool-shadow-bands",
+        "kind": "contour",
+        "description": "外壳与线身保持三段色阶并把暗部偏向冷紫",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "3 toon bands",
+        "affects": "toon material response",
+        "mapsTo": {
+          "type": "material.localOverrides",
+          "ref": "shell-toon.cool-violet-shadow-bands"
+        },
+        "evidenceRef": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\plug-cable-family\\detail-zones\\zone-r1c1.png",
+        "confidence": 0.98
+      },
+      {
+        "id": "ink-outline",
+        "kind": "contour",
+        "description": "主壳、面圈与线身使用深紫倒置壳墨线，微小针脚不重复加粗",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "units": "normalized"
+        },
+        "scale": "0.0030-0.0033",
+        "affects": "toon material response",
+        "mapsTo": {
+          "type": "material.localOverrides",
+          "ref": "shell-toon.restrained-ink-outline"
+        },
+        "evidenceRef": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\plug-cable-family\\detail-zones\\zone-r1c1.png",
+        "confidence": 0.98
+      }
+    ]
+  },
+  "authoringInstruction": "Open each zone crop under zonesDir and replace every detail stub's kind, description, scale, affects, mapsTo, and confidence with what is actually observed. Add more detail entries per zone if a single zone contains multiple distinct marks; do not leave stubs unfilled or unlinked (mapsTo must reference a real component.localFeatures or material.localOverrides entry)."
+}

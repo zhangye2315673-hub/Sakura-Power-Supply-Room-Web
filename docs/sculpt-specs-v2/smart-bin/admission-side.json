@@ -1,0 +1,14 @@
+﻿{
+  "admitted": true,
+  "reasons": [],
+  "provenance": {
+    "viewpoint": "reference",
+    "sourcePath": "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake-v2\\smart-bin\\views\\side.png",
+    "width": 1200,
+    "height": 830,
+    "foregroundCoverage": 0.3147,
+    "largestComponentFraction": 0.9698,
+    "pHash": 16623292596145068120,
+    "duplicateOfHash": null
+  }
+}

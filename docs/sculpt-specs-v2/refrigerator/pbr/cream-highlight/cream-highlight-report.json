@@ -1,0 +1,83 @@
+{
+  "ok": true,
+  "verdict": "pass",
+  "confidence": 0.93,
+  "estimatedFidelity": 0.93,
+  "targetThreshold": 0.7,
+  "materialId": "cream-highlight",
+  "sourceImage": "E:\\AI\\codexAI\\sakula\\arrow-cube\\references\\intake-v2\\refrigerator\\views\\three-quarter.png",
+  "outDir": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs-v2\\refrigerator\\pbr\\cream-highlight",
+  "palette": [
+    "#9E8A96",
+    "#F8E4D1",
+    "#DECDC5",
+    "#C1A6AE",
+    "#2B242C"
+  ],
+  "maps": {
+    "albedo": {
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs-v2\\refrigerator\\pbr\\cream-highlight\\cream-highlight_albedo.png",
+      "url": "cream-highlight_albedo.png",
+      "channel": "albedo",
+      "source": "reference-pixel-extraction"
+    },
+    "roughness": {
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs-v2\\refrigerator\\pbr\\cream-highlight\\cream-highlight_roughness.png",
+      "url": "cream-highlight_roughness.png",
+      "channel": "roughness",
+      "source": "reference-pixel-extraction"
+    },
+    "height": {
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs-v2\\refrigerator\\pbr\\cream-highlight\\cream-highlight_height.png",
+      "url": "cream-highlight_height.png",
+      "channel": "height",
+      "source": "reference-pixel-extraction"
+    },
+    "normal": {
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs-v2\\refrigerator\\pbr\\cream-highlight\\cream-highlight_normal.png",
+      "url": "cream-highlight_normal.png",
+      "channel": "normal",
+      "source": "reference-pixel-extraction"
+    },
+    "ao": {
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs-v2\\refrigerator\\pbr\\cream-highlight\\cream-highlight_ao.png",
+      "url": "cream-highlight_ao.png",
+      "channel": "ao",
+      "source": "reference-pixel-extraction"
+    }
+  },
+  "diagnostics": {
+    "sourceWidth": 627,
+    "sourceHeight": 627,
+    "mapSize": 1024,
+    "cropBBoxPixels": {
+      "x": 0,
+      "y": 2,
+      "width": 543,
+      "height": 598
+    },
+    "mask": {
+      "backgroundColor": "#F5EFEA",
+      "backgroundNoise": 1.414,
+      "transparentPixelFraction": 0.0,
+      "foregroundCoverage": 0.4583
+    },
+    "mapStats": {
+      "valueRange": 0.6384,
+      "heightP90Gradient": 0.06407,
+      "roughnessBase": 0.684,
+      "roughnessVariation": 0.113,
+      "normalStrength": 0.231,
+      "blurRadius": 21
+    },
+    "palette": [
+      "#9E8A96",
+      "#F8E4D1",
+      "#DECDC5",
+      "#C1A6AE",
+      "#2B242C"
+    ]
+  },
+  "warnings": [],
+  "limitation": "single-image PBR extraction is an estimate; 70%+ extraction confidence still needs render screenshot review"
+}

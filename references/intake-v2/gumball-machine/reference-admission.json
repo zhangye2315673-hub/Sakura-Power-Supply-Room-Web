@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "targetId": "gumball-machine-v2",
+  "generation": {
+    "provider": "Comfly OpenAI-compatible API",
+    "model": "gpt-image-2",
+    "quality": "high",
+    "size": "2048x2048",
+    "runtimeOnlyCredential": true,
+    "responseRecoveredFromSidecar": true,
+    "notes": "The API returned a valid result URL before the client timeout; the generated PNG was recovered from that response without a second generation request."
+  },
+  "suitability": "pass-with-runtime-constraints",
+  "views": [
+    { "role": "front", "path": "references/intake-v2/gumball-machine/views/front.png", "width": 1024, "height": 1024, "foregroundCoverage": 0.2937, "largestComponentFraction": 0.942, "pHash": "16545273273064279350", "admitted": true },
+    { "role": "side", "path": "references/intake-v2/gumball-machine/views/side.png", "width": 1024, "height": 1024, "foregroundCoverage": 0.292, "largestComponentFraction": 0.9395, "pHash": "16484186447853293165", "admitted": true },
+    { "role": "back", "path": "references/intake-v2/gumball-machine/views/back.png", "width": 1024, "height": 1024, "foregroundCoverage": 0.2927, "largestComponentFraction": 0.9404, "pHash": "16475181308575455843", "admitted": true },
+    { "role": "three-quarter", "path": "references/intake-v2/gumball-machine/views/three-quarter.png", "width": 1024, "height": 1024, "foregroundCoverage": 0.3285, "largestComponentFraction": 0.9464, "pHash": "12792135462862571362", "admitted": true }
+  ],
+  "visualReview": {
+    "consistentGroundLine": true,
+    "consistentMacroPartCount": true,
+    "identityReadable": true,
+    "runtimeConflict": "The generated internal capsule presentation is bowl-like, while the frozen runtime owns 17 two-piece capsules and prize pivots. The generated image is admitted for silhouette, palette, facet language and hierarchy only; v1 rig evidence controls capsule count, pivot locations and animation geometry."
+  }
+}

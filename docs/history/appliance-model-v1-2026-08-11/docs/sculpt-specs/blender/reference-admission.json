@@ -1,0 +1,13 @@
+{
+  "targetId": "blender",
+  "verdict": "pass",
+  "views": [
+    { "viewpoint": "front", "path": "references/intake/blender/front.png", "width": 557, "height": 941, "foregroundCoverage": 0.2039, "pHash": "16778922534704290409", "admitted": true },
+    { "viewpoint": "side", "path": "references/intake/blender/side.png", "width": 557, "height": 941, "foregroundCoverage": 0.2072, "pHash": "16849820139696790113", "admitted": true },
+    { "viewpoint": "back", "path": "references/intake/blender/back.png", "width": 558, "height": 941, "foregroundCoverage": 0.2078, "pHash": "13243903639133473331", "admitted": true }
+  ],
+  "notes": [
+    "All three views are technically suitable and contain one connected foreground subject.",
+    "The source is a clean stylized turn sheet rather than a calibrated manufacturing drawing."
+  ]
+}

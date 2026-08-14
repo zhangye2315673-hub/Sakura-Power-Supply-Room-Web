@@ -1,0 +1,736 @@
+{
+  "targetName": "SAKURA Fan v2",
+  "sourceImage": "references/intake-v2/fan/views/front.png",
+  "preSpecAssessment": {
+    "objectClass": {
+      "primaryType": "faceted articulated tabletop axial fan",
+      "primaryDomain": "object",
+      "formLanguage": [
+        "hard-surface",
+        "low-poly",
+        "faceted",
+        "retro game appliance"
+      ],
+      "structureKind": [
+        "compound object",
+        "layered radial guard",
+        "articulated assembly",
+        "repeated modules"
+      ],
+      "motionPotential": [
+        "rotor spin",
+        "head yaw",
+        "head tilt",
+        "dial turn",
+        "air emission"
+      ],
+      "materialFamilies": [
+        "molded plastic",
+        "guard structure",
+        "emissive indicator"
+      ],
+      "notes": "Archived runtime contract owns dimensions and animation anchors; admitted images own observed form."
+    },
+    "complexity": {
+      "tier": "complex",
+      "scores": {
+        "silhouetteComplexity": 2,
+        "componentCount": 3,
+        "hierarchyDepth": 3,
+        "repetitionDensity": 3,
+        "materialLayerCount": 2,
+        "localDetailDensity": 3,
+        "occlusionRisk": 2,
+        "actionReadinessNeed": 3
+      },
+      "estimatedCounts": {
+        "macroComponents": 6,
+        "mesoComponents": 14,
+        "microFeatureGroups": 20,
+        "materialLayers": 6,
+        "repetitionSystems": 5
+      },
+      "reasoning": [
+        "Nested yaw, tilt and rotor pivots require a frozen action-ready hierarchy.",
+        "Two guard faces, rings, spokes, bridges, blades and vents create multiple repeated systems."
+      ]
+    },
+    "specDepthDecision": {
+      "requiredDepth": "complex",
+      "minimumComponentLevels": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "needsRepetitionSystems": true,
+      "needsMaterialLocalOverrides": true,
+      "needsMultipleReviewViews": true,
+      "needsActionReadyHierarchy": true,
+      "rationale": "The visual replacement touches articulated and repeated geometry with strict bounds and sockets."
+    },
+    "unknownsToResolveBeforeImplementation": [],
+    "detailInventory": {
+      "scanMethod": "four-view component review",
+      "targetMinDetails": 20,
+      "details": [
+        {
+          "id": "detail-01",
+          "kind": "contour",
+          "description": "Circular head stays within the archived 0.655 half-width.",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "guard-assembly"
+          },
+          "evidenceRef": "references/intake-v2/fan/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-02",
+          "kind": "contour",
+          "description": "Front outer ring is the primary graphic silhouette.",
+          "region": {
+            "x": 0.25,
+            "y": 0,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "front-outer-ring"
+          },
+          "evidenceRef": "references/intake-v2/fan/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-03",
+          "kind": "contour",
+          "description": "Rear ring is depth-separated and connected by four bridges.",
+          "region": {
+            "x": 0.5,
+            "y": 0,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "rear-outer-ring"
+          },
+          "evidenceRef": "references/intake-v2/fan/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-04",
+          "kind": "linework",
+          "description": "Three inner rings remain countable on each guard face.",
+          "region": {
+            "x": 0.75,
+            "y": 0,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "concentric-rings"
+          },
+          "evidenceRef": "references/intake-v2/fan/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-05",
+          "kind": "linework",
+          "description": "Eight low-sided spokes remain countable on each guard face.",
+          "region": {
+            "x": 0,
+            "y": 0.2,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "radial-spokes"
+          },
+          "evidenceRef": "references/intake-v2/fan/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-06",
+          "kind": "contour",
+          "description": "Five broad swept blades preserve radial clearance.",
+          "region": {
+            "x": 0.25,
+            "y": 0.2,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "rotor-assembly"
+          },
+          "evidenceRef": "references/intake-v2/fan/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-07",
+          "kind": "contour",
+          "description": "Cream center cap carries five restrained Sakura petals.",
+          "region": {
+            "x": 0.5,
+            "y": 0.2,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "front-medallion"
+          },
+          "evidenceRef": "references/intake-v2/fan/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-08",
+          "kind": "contour",
+          "description": "Tapered fourteen-sided motor barrel reads in side view.",
+          "region": {
+            "x": 0.75,
+            "y": 0.2,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "motor-housing"
+          },
+          "evidenceRef": "references/intake-v2/fan/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-09",
+          "kind": "linework",
+          "description": "Five horizontal rear vents remain aligned.",
+          "region": {
+            "x": 0,
+            "y": 0.4,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "rear-vents"
+          },
+          "evidenceRef": "references/intake-v2/fan/views/back.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-10",
+          "kind": "contour",
+          "description": "Visible central shaft bridges motor and rotor.",
+          "region": {
+            "x": 0.25,
+            "y": 0.4,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "motor-shaft"
+          },
+          "evidenceRef": "references/intake-v2/fan/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-11",
+          "kind": "fastener",
+          "description": "Large lateral hinge cap makes the tilt axis readable.",
+          "region": {
+            "x": 0.5,
+            "y": 0.4,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "tilt-hinge"
+          },
+          "evidenceRef": "references/intake-v2/fan/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-12",
+          "kind": "contour",
+          "description": "Tapered support remains fixed while the head yaws.",
+          "region": {
+            "x": 0.75,
+            "y": 0.4,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "support-column"
+          },
+          "evidenceRef": "references/intake-v2/fan/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-13",
+          "kind": "contour",
+          "description": "Beveled trapezoidal base retains the v1 ground and width.",
+          "region": {
+            "x": 0,
+            "y": 0.6000000000000001,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "base-shell"
+          },
+          "evidenceRef": "references/intake-v2/fan/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-14",
+          "kind": "seam",
+          "description": "Pink lower rail and dark panel seam remain separated.",
+          "region": {
+            "x": 0.25,
+            "y": 0.6000000000000001,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "base-rail"
+          },
+          "evidenceRef": "references/intake-v2/fan/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-15",
+          "kind": "ridge",
+          "description": "Front dial retains frozen center and index.",
+          "region": {
+            "x": 0.5,
+            "y": 0.6000000000000001,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "speed-dial"
+          },
+          "evidenceRef": "references/intake-v2/fan/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-16",
+          "kind": "emissive",
+          "description": "Small indicator remains above the dial.",
+          "region": {
+            "x": 0.75,
+            "y": 0.6000000000000001,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "status-indicator"
+          },
+          "evidenceRef": "references/intake-v2/fan/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-17",
+          "kind": "contour",
+          "description": "Air emitter stays on the front guard.",
+          "region": {
+            "x": 0,
+            "y": 0.8,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "air-emitter"
+          },
+          "evidenceRef": "references/intake-v2/fan/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-18",
+          "kind": "contour",
+          "description": "Four cable sockets remain root children at archived positions.",
+          "region": {
+            "x": 0.25,
+            "y": 0.8,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "scene-edge-sockets"
+          },
+          "evidenceRef": "references/intake-v2/fan/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-19",
+          "kind": "linework",
+          "description": "Ink widths are 0.0048, 0.0041 and 0.0033 with stable 0.18 variation.",
+          "region": {
+            "x": 0.5,
+            "y": 0.8,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "materialSurface",
+          "mapsTo": {
+            "type": "material.localOverrides",
+            "ref": "outline-hierarchy"
+          },
+          "evidenceRef": "references/intake-v2/fan/views/three-quarter.png",
+          "confidence": 0.96
+        },
+        {
+          "id": "detail-20",
+          "kind": "linework",
+          "description": "Cream, pink and plum zones use two-to-three-band Toon response.",
+          "region": {
+            "x": 0.75,
+            "y": 0.8,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "geometry, materialSurface",
+          "mapsTo": {
+            "type": "material.localOverrides",
+            "ref": "toon-palette"
+          },
+          "evidenceRef": "references/intake-v2/fan/views/three-quarter.png",
+          "confidence": 0.96
+        }
+      ]
+    },
+    "anatomy": {
+      "applies": false,
+      "styleHeads": 0,
+      "proportions": {
+        "headUnit": 0,
+        "torso": 0,
+        "legs": 0,
+        "shoulderWidth": 0,
+        "hipWidth": 0
+      },
+      "pose": {
+        "type": "unassessed",
+        "jointAngles": {}
+      },
+      "faceLandmarks": {
+        "eyeLine": 0,
+        "eyeSpacing": 0,
+        "noseBase": 0,
+        "mouthLine": 0,
+        "hairline": 0
+      },
+      "features": [],
+      "confidence": 0,
+      "note": "Only meaningful when objectClass.primaryDomain is character or hybrid. Set applies=true and fill from forge/stage1_intake/extract_landmarks.py. See grimoire/character/reconstruction.md and grimoire/character/likeness_maximization.md."
+    },
+    "sourceImage": "references/intake-v2/fan/views/front.png"
+  },
+  "qualityContract": {
+    "qualityBar": "complex",
+    "definitionOfDone": [
+      "Four static views preserve fan identity inside the archived Box3.",
+      "All frozen nodes and sockets keep parent paths and transforms within 1e-4.",
+      "Five blades, six inner rings, sixteen spokes, four bridges and five vents remain countable.",
+      "Startup, climax, wind-down and reset retain the one-owner fan performance timeline.",
+      "Three stable outline widths remain readable without temporal shimmer."
+    ],
+    "minimumSpecDepth": {
+      "macroComponents": 6,
+      "mesoComponents": 12,
+      "microFeatureGroups": 20,
+      "materialLayers": 5,
+      "repetitionSystems": 5,
+      "reviewViewpoints": 4
+    },
+    "featureGroups": [
+      {
+        "id": "fan-silhouette",
+        "name": "Circular head support and base silhouette",
+        "required": true,
+        "qualityCriteria": [
+          "Full tree stays inside the archived bounds and ground."
+        ],
+        "evidenceRefs": [
+          "front-view",
+          "side-view",
+          "back-view",
+          "three-quarter-view"
+        ],
+        "failureModes": [
+          "head growth",
+          "soft inflated base"
+        ]
+      },
+      {
+        "id": "guard-rotor-system",
+        "name": "Dual guard and five-blade rotor",
+        "required": true,
+        "qualityCriteria": [
+          "All repeated counts and blade clearance remain intact."
+        ],
+        "evidenceRefs": [
+          "front-view",
+          "side-view"
+        ],
+        "failureModes": [
+          "blade clipping",
+          "fused guards"
+        ]
+      },
+      {
+        "id": "motor-hinge-support",
+        "name": "Motor hinge and fixed support",
+        "required": true,
+        "qualityCriteria": [
+          "Head-only yaw keeps the column stationary and attached."
+        ],
+        "evidenceRefs": [
+          "side-view",
+          "back-view"
+        ],
+        "failureModes": [
+          "floating hinge",
+          "moving support"
+        ]
+      },
+      {
+        "id": "controls-anchors",
+        "name": "Dial indicator emitters and cable sockets",
+        "required": true,
+        "qualityCriteria": [
+          "Frozen transforms remain within 1e-4."
+        ],
+        "evidenceRefs": [
+          "front-view",
+          "side-view",
+          "back-view",
+          "three-quarter-view"
+        ],
+        "failureModes": [
+          "moved dial",
+          "old-position emission"
+        ]
+      },
+      {
+        "id": "outline-hierarchy",
+        "name": "Stable unequal SAKURA ink",
+        "required": true,
+        "qualityCriteria": [
+          "All three widths and 0.18 variation remain stable."
+        ],
+        "evidenceRefs": [
+          "three-quarter-view"
+        ],
+        "failureModes": [
+          "uniform outline",
+          "temporal shimmer"
+        ]
+      }
+    ],
+    "visualDeltaChecks": [
+      "full-tree bounds delta",
+      "guard depth and blade clearance delta",
+      "pivot/socket transform delta",
+      "outline tier delta"
+    ],
+    "antiShallowSpecRules": [
+      "Do not proceed to code if qualityContract.qualityBar is unassessed.",
+      "Do not proceed to code if the spec only contains a root component for a moderate or complex object.",
+      "Do not proceed to code if required featureGroups are not represented by componentTree, materials, or repetitionSystems.",
+      "Do not proceed to code if visible local features are described only in prose and not attached to components/materials/evidenceRefs.",
+      "Do not proceed past structural-pass if attached child parts lack attachment.parentSocket, localStart, localEnd, embedDepth/overlap, and gapTolerance.",
+      "Do not pass material look-dev when albedo is reused as roughness, height, normal, or AO.",
+      "Do not pass material look-dev without macro, meso, and micro surface frequency bands for close-up materials.",
+      "Do not pass reference-fidelity material look-dev from a source image without usable referencePbr maps or an explicit documented limitation.",
+      "Do not patch a spec with extracted PBR maps when extraction confidence is below the target threshold unless the user explicitly accepts lower fidelity.",
+      "Do not place adjacent separate-geometry parts below 0.02 world-unit seam overlap (source: grimoire/build/geometry_patterns.md).",
+      "Do not satisfy raised or recessed relief, fasteners, or grip structure with a map alone when the feature affects form; use geometry or displacement (source: grimoire/build/geometry_patterns.md).",
+      "Adjacent components must overlap by at least 0.02 world units at shared seams (source: grimoire/build/geometry_patterns.md).",
+      "Raised or recessed relief and fasteners must be geometry, instanced micro-parts, or displacement; a map alone is an approximation (source: grimoire/build/geometry_patterns.md)."
+    ],
+    "mustNotDo": [
+      "Do not proceed to code if qualityContract.qualityBar is unassessed.",
+      "Do not proceed to code if the spec only contains a root component for a moderate or complex object.",
+      "Do not proceed to code if required featureGroups are not represented by componentTree, materials, or repetitionSystems.",
+      "Do not proceed to code if visible local features are described only in prose and not attached to components/materials/evidenceRefs.",
+      "Do not proceed past structural-pass if attached child parts lack attachment.parentSocket, localStart, localEnd, embedDepth/overlap, and gapTolerance.",
+      "Do not pass material look-dev when albedo is reused as roughness, height, normal, or AO.",
+      "Do not pass material look-dev without macro, meso, and micro surface frequency bands for close-up materials.",
+      "Do not pass reference-fidelity material look-dev from a source image without usable referencePbr maps or an explicit documented limitation.",
+      "Do not patch a spec with extracted PBR maps when extraction confidence is below the target threshold unless the user explicitly accepts lower fidelity.",
+      "Do not place adjacent separate-geometry parts below 0.02 world-unit seam overlap (source: grimoire/build/geometry_patterns.md).",
+      "Do not satisfy raised or recessed relief, fasteners, or grip structure with a map alone when the feature affects form; use geometry or displacement (source: grimoire/build/geometry_patterns.md).",
+      "Adjacent components must overlap by at least 0.02 world units at shared seams (source: grimoire/build/geometry_patterns.md).",
+      "Raised or recessed relief and fasteners must be geometry, instanced micro-parts, or displacement; a map alone is an approximation (source: grimoire/build/geometry_patterns.md)."
+    ]
+  },
+  "localSpecSearch": {
+    "collection": "core_3d",
+    "query": "Sakura Desk Fan desk fan radial wire guard five curved blades motor housing tilt pivot procedural hard surface appliance toon material",
+    "index": {
+      "status": "hit",
+      "reason": "current",
+      "fingerprint": "6857e5ab528b42ac12f4f411f862610a0bffce8e47aee3610a7603c318072fe8"
+    },
+    "matches": [
+      {
+        "record_id": "core.socket-pivot",
+        "file_path": "grimoire/glossary/3d_vocabulary.md",
+        "heading": "Animation, Physics, And Destruction",
+        "key_path": null,
+        "score": 6.208524523517,
+        "snippets": [
+          "A pivot is a local rotation origin; a socket is an attachment point for a child part. In a runtime hierarchy, a socket Object3D is a child of the relevant pivot."
+        ],
+        "source_refs": [
+          {
+            "path": "grimoire/glossary/3d_vocabulary.md",
+            "heading": "Animation, Physics, And Destruction",
+            "key_path": null
+          },
+          {
+            "path": "grimoire/readiness/action_rigging.md",
+            "heading": "Hierarchy Pattern",
+            "key_path": null
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "grimoire/readiness/action_rigging.md"
+          },
+          {
+            "kind": "notebooklm-research",
+            "ref": "notebooklm:4b03c2f9-8393-411f-b5b4-039ab9532843",
+            "note": "Validated generic schema vocabulary; numeric claims remain backed by local source_refs."
+          }
+        ]
+      },
+      {
+        "record_id": "core.description-honest-uncertainty-single-image-limits-convention",
+        "file_path": "docs/raw/img2threejs-skill-dataset.json",
+        "heading": null,
+        "key_path": "categories.description_conventions[6]",
+        "score": 5.181894808844,
+        "snippets": [
+          "... định' thay vì bịa ra chi tiết trông hợp lý nhưng không thấy trong ảnh tham chiếu. Recognition cues: Any attribute for a surface not visible in the reference image should be flagged explicitly rather than filled with a guessed value; This is ..."
+        ],
+        "source_refs": [
+          {
+            "path": "docs/raw/img2threejs-skill-dataset.json",
+            "heading": null,
+            "key_path": "categories.description_conventions[6]"
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "docs/raw/img2threejs-skill-dataset.json",
+            "note": "img2threejs NotebookLM research distillation"
+          }
+        ]
+      },
+      {
+        "record_id": "core.shader-mapping-customshadermaterial-csm-weathering-hooks",
+        "file_path": "docs/raw/img2threejs-skill-dataset.json",
+        "heading": null,
+        "key_path": "categories.rendering_shader_mapping[1]",
+        "score": 5.050750963312,
+        "snippets": [
+          "Extension library exposing csm_* output variables to inject procedural noise/masks into an otherwise-standard lit material, used for dynamic tarnish/patina effects. Thư viện mở rộng cung cấp các biến đầu ra csm_* để chèn nhiễu/mặt nạ thủ tục vào ..."
+        ],
+        "source_refs": [
+          {
+            "path": "docs/raw/img2threejs-skill-dataset.json",
+            "heading": null,
+            "key_path": "categories.rendering_shader_mapping[1]"
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "docs/raw/img2threejs-skill-dataset.json",
+            "note": "img2threejs NotebookLM research distillation"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "model": "dehumidifier",
+  "requestedProvider": "GPT Image 2 via Comfly",
+  "status": "conditional-existing-reference-fallback",
+  "generated": false,
+  "reason": "No safely accessible API credential was available in this execution environment.",
+  "sources": [
+    "references/intake/dehumidifier/front.png",
+    "references/intake/dehumidifier/side.png",
+    "references/intake/dehumidifier/back.png",
+    "docs/history/appliance-model-v1-2026-08-11/screenshots/models/dehumidifier/idle-three-quarter.png"
+  ],
+  "claim": "These files are admitted existing references, not GPT Image 2 output."
+}

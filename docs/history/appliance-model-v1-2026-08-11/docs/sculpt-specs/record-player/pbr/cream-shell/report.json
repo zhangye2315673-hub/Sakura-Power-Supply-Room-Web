@@ -1,0 +1,83 @@
+{
+  "ok": true,
+  "verdict": "pass",
+  "confidence": 0.895,
+  "estimatedFidelity": 0.895,
+  "targetThreshold": 0.7,
+  "materialId": "cream-shell",
+  "sourceImage": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\record-player\\pbr\\cream-shell\\source-crop.png",
+  "outDir": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\record-player\\pbr\\cream-shell",
+  "palette": [
+    "#EEB5AD",
+    "#302820",
+    "#DECAB7",
+    "#BC9B8E",
+    "#877165"
+  ],
+  "maps": {
+    "albedo": {
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\record-player\\pbr\\cream-shell\\cream-shell_albedo.png",
+      "url": "cream-shell_albedo.png",
+      "channel": "albedo",
+      "source": "reference-pixel-extraction"
+    },
+    "roughness": {
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\record-player\\pbr\\cream-shell\\cream-shell_roughness.png",
+      "url": "cream-shell_roughness.png",
+      "channel": "roughness",
+      "source": "reference-pixel-extraction"
+    },
+    "height": {
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\record-player\\pbr\\cream-shell\\cream-shell_height.png",
+      "url": "cream-shell_height.png",
+      "channel": "height",
+      "source": "reference-pixel-extraction"
+    },
+    "normal": {
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\record-player\\pbr\\cream-shell\\cream-shell_normal.png",
+      "url": "cream-shell_normal.png",
+      "channel": "normal",
+      "source": "reference-pixel-extraction"
+    },
+    "ao": {
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs\\record-player\\pbr\\cream-shell\\cream-shell_ao.png",
+      "url": "cream-shell_ao.png",
+      "channel": "ao",
+      "source": "reference-pixel-extraction"
+    }
+  },
+  "diagnostics": {
+    "sourceWidth": 350,
+    "sourceHeight": 110,
+    "mapSize": 1024,
+    "cropBBoxPixels": {
+      "x": 0,
+      "y": 0,
+      "width": 350,
+      "height": 91
+    },
+    "mask": {
+      "backgroundColor": "#F4E4D0",
+      "backgroundNoise": 27.586,
+      "transparentPixelFraction": 0.0,
+      "foregroundCoverage": 0.0833
+    },
+    "mapStats": {
+      "valueRange": 0.7351,
+      "heightP90Gradient": 0.01753,
+      "roughnessBase": 0.68,
+      "roughnessVariation": 0.05,
+      "normalStrength": 0.177,
+      "blurRadius": 21
+    },
+    "palette": [
+      "#EEB5AD",
+      "#302820",
+      "#DECAB7",
+      "#BC9B8E",
+      "#877165"
+    ]
+  },
+  "warnings": [],
+  "limitation": "single-image PBR extraction is an estimate; 70%+ extraction confidence still needs render screenshot review"
+}

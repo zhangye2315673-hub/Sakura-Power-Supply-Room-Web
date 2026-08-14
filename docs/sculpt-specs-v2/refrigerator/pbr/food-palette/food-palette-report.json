@@ -1,0 +1,83 @@
+{
+  "ok": true,
+  "verdict": "pass",
+  "confidence": 0.93,
+  "estimatedFidelity": 0.93,
+  "targetThreshold": 0.7,
+  "materialId": "food-palette",
+  "sourceImage": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\history\\appliance-model-v1-2026-08-11\\screenshots\\models\\refrigerator\\active-climax-2.8.png",
+  "outDir": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs-v2\\refrigerator\\pbr\\food-palette",
+  "palette": [
+    "#DBDAE0",
+    "#B5BCBD",
+    "#79757C",
+    "#FEF8F6",
+    "#EB8E7E"
+  ],
+  "maps": {
+    "albedo": {
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs-v2\\refrigerator\\pbr\\food-palette\\food-palette_albedo.png",
+      "url": "food-palette_albedo.png",
+      "channel": "albedo",
+      "source": "reference-pixel-extraction"
+    },
+    "roughness": {
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs-v2\\refrigerator\\pbr\\food-palette\\food-palette_roughness.png",
+      "url": "food-palette_roughness.png",
+      "channel": "roughness",
+      "source": "reference-pixel-extraction"
+    },
+    "height": {
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs-v2\\refrigerator\\pbr\\food-palette\\food-palette_height.png",
+      "url": "food-palette_height.png",
+      "channel": "height",
+      "source": "reference-pixel-extraction"
+    },
+    "normal": {
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs-v2\\refrigerator\\pbr\\food-palette\\food-palette_normal.png",
+      "url": "food-palette_normal.png",
+      "channel": "normal",
+      "source": "reference-pixel-extraction"
+    },
+    "ao": {
+      "path": "E:\\AI\\codexAI\\sakula\\arrow-cube\\docs\\sculpt-specs-v2\\refrigerator\\pbr\\food-palette\\food-palette_ao.png",
+      "url": "food-palette_ao.png",
+      "channel": "ao",
+      "source": "reference-pixel-extraction"
+    }
+  },
+  "diagnostics": {
+    "sourceWidth": 1200,
+    "sourceHeight": 830,
+    "mapSize": 1024,
+    "cropBBoxPixels": {
+      "x": 20,
+      "y": 104,
+      "width": 1180,
+      "height": 726
+    },
+    "mask": {
+      "backgroundColor": "#EDF1F7",
+      "backgroundNoise": 0.0,
+      "transparentPixelFraction": 0.0,
+      "foregroundCoverage": 0.3019
+    },
+    "mapStats": {
+      "valueRange": 0.5423,
+      "heightP90Gradient": 0.05303,
+      "roughnessBase": 0.681,
+      "roughnessVariation": 0.088,
+      "normalStrength": 0.218,
+      "blurRadius": 21
+    },
+    "palette": [
+      "#DBDAE0",
+      "#B5BCBD",
+      "#79757C",
+      "#FEF8F6",
+      "#EB8E7E"
+    ]
+  },
+  "warnings": [],
+  "limitation": "single-image PBR extraction is an estimate; 70%+ extraction confidence still needs render screenshot review"
+}

@@ -1,0 +1,42 @@
+{
+  "name": "arrow-cube",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "A procedural 3D arrow-escape puzzle using Sakura Crossing's cel-shaded visual language.",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "tsc && vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "test": "playwright test",
+    "verify:visual": "playwright test tests/visual.spec.ts",
+    "verify:appliance-performance": "playwright test tests/appliance-performance.spec.ts --project=desktop-chrome --reporter=line",
+    "inspect:canvas": "node scripts/inspect-threejs-canvas.mjs",
+    "inspect:connection": "node scripts/inspect-plug-connection.mjs",
+    "inspect:appliances": "node scripts/inspect-appliance-drag.mjs",
+    "inspect:depth": "node scripts/inspect-appliance-depth.mjs",
+    "verify:levels": "esbuild scripts/verify-levels.ts --bundle --platform=node --format=esm --outfile=node_modules/.cache/arrow-cube/verify-levels.mjs && node node_modules/.cache/arrow-cube/verify-levels.mjs",
+    "verify:plug-collision": "esbuild scripts/verify-plug-segment-collision.ts --bundle --platform=node --format=esm --outfile=node_modules/.cache/arrow-cube/verify-plug-segment-collision.mjs && node node_modules/.cache/arrow-cube/verify-plug-segment-collision.mjs",
+    "verify:random-levels": "esbuild scripts/verify-random-levels.ts --bundle --platform=node --format=esm --outfile=node_modules/.cache/arrow-cube/verify-random-levels.mjs && node node_modules/.cache/arrow-cube/verify-random-levels.mjs",
+    "verify:double-ended": "esbuild scripts/verify-double-ended-challenge.ts --bundle --platform=node --format=esm --outfile=node_modules/.cache/arrow-cube/verify-double-ended-challenge.mjs && node node_modules/.cache/arrow-cube/verify-double-ended-challenge.mjs",
+    "verify:rush": "esbuild scripts/verify-rush-challenges.ts --bundle --platform=node --format=esm --outfile=node_modules/.cache/arrow-cube/verify-rush-challenges.mjs && node node_modules/.cache/arrow-cube/verify-rush-challenges.mjs",
+    "generate:random-templates": "esbuild scripts/generate-random-templates.ts --bundle --platform=node --format=esm --outfile=node_modules/.cache/arrow-cube/generate-random-templates.mjs && node node_modules/.cache/arrow-cube/generate-random-templates.mjs",
+    "generate:rush-layouts": "esbuild scripts/generate-rush-layouts.ts --bundle --platform=node --format=esm --outfile=node_modules/.cache/arrow-cube/generate-rush-layouts.mjs && node node_modules/.cache/arrow-cube/generate-rush-layouts.mjs",
+    "generate:double-ended-templates": "esbuild scripts/generate-double-ended-templates.ts --bundle --platform=node --format=esm --outfile=node_modules/.cache/arrow-cube/generate-double-ended-templates.mjs && node node_modules/.cache/arrow-cube/generate-double-ended-templates.mjs",
+    "find:level-seed": "esbuild scripts/find-level-seed.ts --bundle --platform=node --format=esm --outfile=node_modules/.cache/arrow-cube/find-level-seed.mjs && node node_modules/.cache/arrow-cube/find-level-seed.mjs"
+  },
+  "dependencies": {
+    "animejs": "^4.5.0",
+    "lucide": "^1.31.0",
+    "three": "^0.184.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.60.0",
+    "@types/node": "^25.9.0",
+    "@types/pngjs": "^6.0.5",
+    "@types/three": "^0.184.1",
+    "pngjs": "^7.0.0",
+    "typescript": "^6.0.3",
+    "vite": "^8.2.0"
+  }
+}
