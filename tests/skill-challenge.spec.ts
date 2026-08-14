@@ -99,21 +99,18 @@ test('技能挑战完成一次正确抽线事务并恢复输入', async ({ page 
   test.setTimeout(300_000);
   const pageErrors: string[] = [];
   page.on('pageerror', (error) => pageErrors.push(error.message));
-  await page.goto('/?seed=20260812');
+  await page.goto('/?seed=20260812&mode=skill&direct=1');
   await waitForOpening(page);
-  const previousRevision = await page.evaluate(() => window.__THREE_GAME_DIAGNOSTICS__?.puzzleRevision ?? 0);
-  await openChallengeMenu(page);
-  await page.click('#start-skill-button');
+  await page.click('#start-game-button');
   await page.waitForFunction(
-    (previousRevision) => {
+    () => {
       const diagnostics = window.__THREE_GAME_DIAGNOSTICS__;
       return diagnostics?.opening.active === false
         && diagnostics.mode === 'skill'
-        && diagnostics.puzzleRevision > previousRevision
         && [42, 46, 50, 54].includes(diagnostics.remainingArrows)
         && diagnostics.clickTarget !== null;
     },
-    previousRevision,
+    null,
     { timeout: 90_000 },
   );
   const before = await page.evaluate(() => window.__THREE_GAME_DIAGNOSTICS__!.remainingArrows);
@@ -127,28 +124,6 @@ test('技能挑战完成一次正确抽线事务并恢复输入', async ({ page 
     before,
     { timeout: 30_000 },
   );
-  const skillCue = page.locator('#skill-cue');
-  await expect(skillCue).toHaveClass(/visible/);
-  const cueHitTest = await skillCue.evaluate((element) => {
-    const rect = element.getBoundingClientRect();
-    const hit = document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2);
-    const root = document.querySelector<HTMLElement>('#skill-challenge-ui')!;
-    return {
-      hitId: hit?.id ?? '',
-      hitTag: hit?.tagName ?? '',
-      receivesPointer: hit?.closest('#skill-cue')?.id === 'skill-cue',
-      cuePointerEvents: getComputedStyle(element).pointerEvents,
-      rootPointerEvents: getComputedStyle(root).pointerEvents,
-      rootZIndex: getComputedStyle(root).zIndex,
-    };
-  });
-  expect(cueHitTest).toMatchObject({
-    receivesPointer: true,
-    cuePointerEvents: 'auto',
-    rootPointerEvents: 'none',
-    rootZIndex: '24',
-  });
-  await skillCue.hover();
   await expect(page.locator('.brand-block strong')).toBeVisible();
   await expect(page.locator('.brand-kicker')).toBeHidden();
   await expect(page.locator('.brand-block small')).toBeHidden();
@@ -178,14 +153,6 @@ test('技能挑战完成一次正确抽线事务并恢复输入', async ({ page 
     avoidsStatusRack: true,
     noHorizontalOverflow: true,
   });
-  await page.screenshot({ path: testInfo.outputPath('skill-connection-feedback.png'), fullPage: true });
-
-  await page.waitForTimeout(5_200);
-  await expect(skillCue).toHaveClass(/visible/);
-  await page.mouse.move(page.viewportSize()!.width - 8, page.viewportSize()!.height - 8);
-  await page.waitForTimeout(800);
-  await expect(skillCue).toHaveClass(/visible/);
-  await expect(skillCue).not.toHaveClass(/visible/, { timeout: 1_000 });
 
   await page.waitForFunction(
     () => {

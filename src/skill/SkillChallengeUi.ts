@@ -73,6 +73,7 @@ export class SkillChallengeUi {
     this.cuePhase.textContent = this.phaseLabel(phase);
     this.cue.dataset.phase = phase;
     this.cue.classList.add('visible');
+    this.cue.style.pointerEvents = 'auto';
     this.cue.setAttribute('aria-hidden', 'false');
     this.scheduleCueHide(5000);
   }
@@ -134,6 +135,7 @@ export class SkillChallengeUi {
     this.cuePointerInside = false;
     this.cueFocusInside = false;
     this.cue.classList.remove('visible');
+    this.cue.style.pointerEvents = 'none';
     this.cue.setAttribute('aria-hidden', 'true');
     this.hideCards();
     this.setRecycleSelection(false);
@@ -180,6 +182,7 @@ export class SkillChallengeUi {
     this.cueTimer = window.setTimeout(() => {
       if (this.cuePointerInside || this.cueFocusInside) return;
       this.cue.classList.remove('visible');
+      this.cue.style.pointerEvents = 'none';
       this.cue.setAttribute('aria-hidden', 'true');
       this.cueTimer = 0;
     }, delayMs);

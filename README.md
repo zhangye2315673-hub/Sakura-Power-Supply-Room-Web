@@ -91,7 +91,7 @@ references/     视觉参考与验收素材
 这个仓库作为樱色插线室的正式项目仓库和版本依据：
 
 - `main` 保存当前确认过的最新版本。
-- 每次重要更新完成后创建一个版本标签，例如 `snapshot-2026.08.14`。
+- 每次确认可用的新版本创建语义化标签，例如 `v0.1.0`、`v0.2.0`；阶段性备份可使用 `snapshot-YYYY.MM.DD`。
 - 开发中的修改先放在独立分支，验证通过后再更新 `main`。
 - `node_modules`、`dist`、测试结果和临时截图不进入仓库。
 
@@ -99,20 +99,21 @@ references/     视觉参考与验收素材
 
 ```powershell
 git fetch --tags
-git switch --detach snapshot-2026.08.14
+git switch --detach v0.1.0
 ```
 
 从旧版本创建一个可继续修改的恢复分支：
 
 ```powershell
-git switch -c restore/snapshot-2026.08.14 snapshot-2026.08.14
+git switch -c restore/v0.1.0 v0.1.0
 ```
 
 这样不会破坏当前 `main`，也便于比较和选择性恢复文件。
 
 ## 当前基准
 
-- 首个正式仓库快照：`snapshot-2026.08.14`
+- 首个正式版本：`v0.1.0`
+- 初始上传快照：`snapshot-2026.08.14`
 - 生产构建：已通过 `npm run build`
 - 项目状态：持续开发中
 
