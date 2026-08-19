@@ -13,6 +13,7 @@ import {
   PLUG_STYLE_IDS,
   createPlugHead,
 } from '../src/render/PlugParts';
+import { LAMP_BEAM_FAR_TO_NEAR_RATIO } from '../src/appliances/performance/LampPerformance';
 import type { ArrowDefinition } from '../src/puzzle/types';
 
 function expectFiniteGeometry(geometry: THREE.BufferGeometry): void {
@@ -224,15 +225,262 @@ test('skill tint updates the cable and every colored plug-head surface together'
   const shell = model.root.getObjectByName('plug-outer-shell') as THREE.Mesh;
   const shoulder = model.root.getObjectByName('plug-front-shoulder') as THREE.Mesh;
   const sleeve = model.root.getObjectByName('plug-strain-relief') as THREE.Mesh;
-  const initial = [shell, shoulder, sleeve].map((mesh) => (mesh.material as THREE.MeshToonMaterial).color.clone());
+  const rearNeck = model.root.getObjectByName('plug-rear-neck') as THREE.Mesh;
+  const face = model.root.getObjectByName('plug-interface-faceplate') as THREE.Mesh;
+  const indicator = model.root.getObjectByName('plug-status-indicator') as THREE.Mesh;
+  const tailRing = model.root.getObjectByName('plug-cable-tail-ring') as THREE.Mesh;
+  const tailCap = model.root.getObjectByName('plug-cable-tail-cap') as THREE.Mesh;
+  const cable = model.root.getObjectByName(`${definition.id}-cable`) as THREE.Mesh;
+  const terminalMeshes: THREE.Mesh[] = [];
+  model.root.getObjectByName('plug-terminal-assembly')?.traverse((object) => {
+    if (object instanceof THREE.Mesh) terminalMeshes.push(object);
+  });
+  const coloredParts = [
+    cable, shell, shoulder, sleeve, rearNeck, face, indicator, tailRing, tailCap, ...terminalMeshes,
+  ];
+  const initial = coloredParts.map((mesh) => (mesh.material as THREE.MeshToonMaterial).color.clone());
   model.setSkillTint(0x4f2b23, 0.78);
-  const tinted = [shell, shoulder, sleeve].map((mesh) => (mesh.material as THREE.MeshToonMaterial).color.clone());
+  const tinted = coloredParts.map((mesh) => (mesh.material as THREE.MeshToonMaterial).color.clone());
   expect(tinted.some((color, index) => !color.equals(initial[index]))).toBe(true);
-  expect(tinted.every((color) => color.r < initial[0].r || color.g < initial[0].g)).toBe(true);
+  expect(tinted.every((color, index) => !color.equals(initial[index]))).toBe(true);
+
+  model.setHovered(true);
+  model.setHovered(false);
+  const afterHover = coloredParts.map((mesh) => (mesh.material as THREE.MeshToonMaterial).color.clone());
+  expect(afterHover.every((color, index) => color.equals(tinted[index]))).toBe(true);
+
   model.setSkillTint(null);
-  expect((shell.material as THREE.MeshToonMaterial).color.equals(initial[0])).toBe(true);
-  expect((shoulder.material as THREE.MeshToonMaterial).color.equals(initial[1])).toBe(true);
-  expect((sleeve.material as THREE.MeshToonMaterial).color.equals(initial[2])).toBe(true);
+  expect(coloredParts.every((mesh, index) => (
+    mesh.material as THREE.MeshToonMaterial
+  ).color.equals(initial[index]))).toBe(true);
+  model.dispose();
+});
+
+test('lamp glow preserves line colors and lights the complete cable group with a fixed directional beam', () => {
+  const definition: ArrowDefinition = {
+    id: 'plug-cable-lamp-glow',
+    path: [[5, 5, 5], [6, 5, 5]],
+    exitDirection: '+X',
+    color: 0x55a9a7,
+    lengthClass: 'short',
+  };
+  const model = new PlugCableModel(definition, 'usb-c');
+  const partNames = [
+    `${definition.id}-cable`,
+    'plug-strain-relief',
+    'plug-rear-neck',
+    'plug-outer-shell',
+    'plug-front-shoulder',
+    'plug-interface-faceplate',
+    'plug-status-indicator',
+    'plug-cable-tail-ring',
+    'plug-cable-tail-cap',
+  ];
+  const visibleParts = partNames.map((name) => model.root.getObjectByName(name) as THREE.Mesh);
+  model.root.getObjectByName('plug-terminal-assembly')?.traverse((object) => {
+    if (object instanceof THREE.Mesh) visibleParts.push(object);
+  });
+  const materials = visibleParts.map((mesh) => mesh.material as THREE.MeshToonMaterial);
+  const initialColors = materials.map((material) => material.color.clone());
+
+  model.setSkillGlow(0.86);
+  expect(materials.every((material, index) => material.color.equals(initialColors[index]))).toBe(true);
+  expect(materials.every((material) => material.emissive.getHex() !== 0)).toBe(true);
+  expect(materials.every((material) => material.emissiveIntensity >= 0.5)).toBe(true);
+
+  model.setHovered(true);
+  model.setHovered(false);
+  expect(materials.every((material) => material.emissive.getHex() !== 0)).toBe(true);
+  expect(model.skillVisualState.glowStrength).toBeCloseTo(0.86, 8);
+  expect(model.skillVisualState.cableColor).toBe(definition.color);
+
+  expect(model.root.getObjectByName('lamp-cable-guide')).toBeUndefined();
+  model.setLampGuide('head');
+  const guides: THREE.Group[] = [];
+  model.root.traverse((object) => {
+    if (object instanceof THREE.Group && object.name === 'lamp-cable-guide') guides.push(object);
+  });
+  expect(guides).toHaveLength(1);
+  model.root.updateMatrixWorld(true);
+  expect(guides[0].visible).toBe(true);
+  expect(model.skillVisualState.lampGuideEnd).toBe('head');
+  const beamDirection = new THREE.Vector3(0, 1, 0).applyQuaternion(
+    guides[0].getWorldQuaternion(new THREE.Quaternion()),
+  );
+  expect(beamDirection.dot(new THREE.Vector3(1, 0, 0))).toBeGreaterThan(0.999);
+  const beam = guides[0].getObjectByName('lamp-cable-guide-beam') as THREE.Mesh<
+    THREE.BufferGeometry,
+    THREE.ShaderMaterial
+  >;
+  expect(beam.material).toBeInstanceOf(THREE.ShaderMaterial);
+  expect(beam.geometry).toBeInstanceOf(THREE.CylinderGeometry);
+  const beamStartY = beam.position.y - beam.scale.y * 0.5;
+  const apertureY = beamStartY + beam.scale.y * 0.08;
+  const apertureRadius = beam.scale.x * (1 + (LAMP_BEAM_FAR_TO_NEAR_RATIO - 1) * 0.08);
+  expect(beamStartY).toBeLessThan(PLUG_HEAD_ENVELOPE.bodyRange[1]);
+  expect(apertureY).toBeCloseTo(PLUG_HEAD_ENVELOPE.bodyRange[1], 8);
+  expect(apertureY).toBeLessThan(PLUG_HEAD_ENVELOPE.pinRange[0]);
+  expect(apertureRadius).toBeCloseTo(PLUG_HEAD_ENVELOPE.maxRadius * 0.94, 8);
+  const beamPosition = beam.position.clone();
+  model.updateAvailableHints(0.4, 3.2);
+  expect(beam.position.equals(beamPosition)).toBe(true);
+
+  model.setLampGuide(null);
+  model.setSkillGlow(0);
+  expect(guides[0].visible).toBe(false);
+  expect(materials.every((material, index) => material.color.equals(initialColors[index]))).toBe(true);
+  model.dispose();
+});
+
+test('refrigerator freeze defaults to color until the ice presentation is enabled', () => {
+  const definition: ArrowDefinition = {
+    id: 'plug-cable-refrigerator-frost',
+    path: [[4, 4, 4], [5, 4, 4], [5, 5, 4]],
+    exitDirection: '+Y',
+    color: 0xe98b47,
+    lengthClass: 'short',
+  };
+  const model = new PlugCableModel(definition, 'three-pin');
+  const visibleParts = [
+    'plug-strain-relief',
+    'plug-rear-neck',
+    'plug-outer-shell',
+    'plug-front-shoulder',
+    'plug-interface-faceplate',
+    'plug-cable-tail-ring',
+    'plug-cable-tail-cap',
+  ].map((name) => model.root.getObjectByName(name) as THREE.Mesh);
+  const initial = visibleParts.map((mesh) => (mesh.material as THREE.MeshToonMaterial).color.clone());
+  const cableIceShell = model.root.getObjectByName(`${definition.id}-cable-ice-shell`);
+  const plugIceShell = model.root.getObjectByName('plug-frozen-shell') as THREE.Group;
+  const tailIceShell = model.root.getObjectByName('plug-cable-tail-frozen-shell') as THREE.Group;
+  expect(cableIceShell).toBeUndefined();
+  expect(plugIceShell.visible).toBe(false);
+  expect(tailIceShell.visible).toBe(false);
+
+  model.setFrozen(1, 1);
+  expect(model.skillVisualState.freezeAmount).toBe(1);
+  expect(model.skillVisualState.freezeProgress).toBe(1);
+  expect(model.skillVisualState.glowStrength).toBe(0);
+  expect(visibleParts.every((mesh, index) => (
+    !(mesh.material as THREE.MeshToonMaterial).color.equals(initial[index])
+  ))).toBe(true);
+  expect((model.material.userData.freezeAmount as { value: number }).value).toBe(1);
+  expect((model.material.userData.freezeProgress as { value: number }).value).toBe(1);
+  expect(model.material.customProgramCacheKey()).toContain('cable-base-v5-progressive-freeze');
+  expect(cableIceShell).toBeUndefined();
+  expect(plugIceShell.visible).toBe(false);
+  expect(tailIceShell.visible).toBe(false);
+  expect(model.skillVisualState.iceShellVisible).toBe(false);
+  expect(model.skillVisualState.plugIceShellCount).toBe(0);
+  expect(model.skillVisualState.iceShellOpacity).toBe(0);
+
+  const frozen = visibleParts.map((mesh) => (mesh.material as THREE.MeshToonMaterial).color.clone());
+  model.setHovered(true);
+  model.setHovered(false);
+  expect(visibleParts.every((mesh, index) => (
+    (mesh.material as THREE.MeshToonMaterial).color.equals(frozen[index])
+  ))).toBe(true);
+
+  model.setFrozen(0, 0);
+  expect(visibleParts.every((mesh, index) => (
+    (mesh.material as THREE.MeshToonMaterial).color.equals(initial[index])
+  ))).toBe(true);
+  expect(cableIceShell).toBeUndefined();
+  expect(plugIceShell.visible).toBe(false);
+  expect(tailIceShell.visible).toBe(false);
+  model.dispose();
+});
+
+test('refrigerator ice presentation adds a translucent casing with mostly flat irregular ice spikes', () => {
+  const definition: ArrowDefinition = {
+    id: 'plug-cable-refrigerator-ice',
+    path: [[3, 3, 3], [5, 3, 3], [5, 5, 3], [5, 5, 4]],
+    exitDirection: '+Z',
+    color: 0xe98b47,
+    lengthClass: 'medium',
+  };
+  const model = new PlugCableModel(definition, 'three-pin');
+  model.setRefrigeratorIceGeometryEnabled(true);
+
+  const cableIceShell = model.root.getObjectByName(`${definition.id}-cable-ice-shell`) as THREE.Mesh;
+  const plugIceShell = model.root.getObjectByName('plug-frozen-shell') as THREE.Group;
+  const spikes = model.root.getObjectByName(`${definition.id}-ice-spikes`) as THREE.Group;
+  expect(cableIceShell).toBeDefined();
+  expect(cableIceShell.getObjectByName(`${definition.id}-cable-ice-shell-ink`)).toBeDefined();
+  expect(cableIceShell.visible).toBe(false);
+  expect(plugIceShell.children.length).toBeGreaterThan(5);
+  expect(plugIceShell.visible).toBe(false);
+  expect(spikes.children.length).toBeGreaterThanOrEqual(7);
+  expect(spikes.children.every((spike) => spike.children.some(({ userData }) => userData.isOutline === true))).toBe(true);
+  const cableOutline = model.root.getObjectByName(`${definition.id}-cable-ink`) as THREE.Mesh<
+    THREE.BufferGeometry,
+    THREE.ShaderMaterial
+  >;
+  const cableOutlineThickness = cableOutline.material.uniforms.uThickness.value as number;
+  expect(spikes.children.every((spike) => {
+    const outline = spike.children.find(({ userData }) => userData.isOutline === true) as THREE.Mesh<
+      THREE.BufferGeometry,
+      THREE.ShaderMaterial
+    >;
+    return (outline.material.uniforms.uThickness.value as number) >= cableOutlineThickness * 2;
+  })).toBe(true);
+
+  const flatSpikes = spikes.children.filter(({ userData }) => userData.iceSpikeShape === 'flat-blade');
+  const pointedSpikes = spikes.children.filter(({ userData }) => userData.iceSpikeShape === 'pointed');
+  expect(flatSpikes.length).toBeGreaterThan(pointedSpikes.length);
+  const scaleSignatures = new Set(spikes.children.map(({ userData }) => {
+    const scale = userData.baseScale as THREE.Vector3;
+    return `${scale.x.toFixed(4)}:${scale.y.toFixed(4)}:${scale.z.toFixed(4)}`;
+  }));
+  expect(scaleSignatures.size).toBeGreaterThan(spikes.children.length * 0.8);
+  const pathPositions = spikes.children.map(({ userData }) => userData.pathT as number);
+  expect(pathPositions.every(Number.isFinite)).toBe(true);
+  expect(pathPositions.filter((t) => t < 1 / 3).length).toBeGreaterThanOrEqual(2);
+  expect(pathPositions.filter((t) => t >= 1 / 3 && t < 2 / 3).length).toBeGreaterThanOrEqual(2);
+  expect(pathPositions.filter((t) => t >= 2 / 3).length).toBeGreaterThanOrEqual(2);
+  expect(spikes.children.every(({ userData }) => (userData.surfaceRadiusFactor as number) <= 1.02)).toBe(true);
+
+  const tailCap = model.root.getObjectByName('plug-cable-tail-cap') as THREE.Mesh;
+  const initialTailColor = (tailCap.material as THREE.MeshToonMaterial).color.clone();
+  model.setFrozen(1, 0.34);
+  expect(plugIceShell.visible).toBe(true);
+  expect(spikes.children.filter((spike) => spike.visible).length).toBeGreaterThan(0);
+  expect(spikes.children.filter((spike) => spike.visible).length).toBeLessThan(spikes.children.length);
+  expect((tailCap.material as THREE.MeshToonMaterial).color.equals(initialTailColor)).toBe(true);
+  expect(model.material.userData.progressiveFreeze).toBe(true);
+
+  model.setFrozen(1, 1);
+  expect(cableIceShell.visible).toBe(true);
+  const cableIceMaterial = cableIceShell.material as THREE.MeshPhysicalMaterial;
+  const plugIcePart = plugIceShell.children.find((child) => child instanceof THREE.Mesh) as THREE.Mesh;
+  const plugIceMaterial = plugIcePart.material as THREE.MeshPhysicalMaterial;
+  const spikeIceMaterial = (spikes.children[0] as THREE.Mesh).material as THREE.MeshPhysicalMaterial;
+  expect(cableIceMaterial.opacity).toBeCloseTo(0.86, 5);
+  expect(cableIceMaterial.roughness).toBeGreaterThanOrEqual(0.5);
+  expect(plugIceMaterial.opacity).toBeCloseTo(0.86, 5);
+  expect(plugIceMaterial.color.getHex()).toBe(cableIceMaterial.color.getHex());
+  expect(spikeIceMaterial.color.getHex()).toBe(cableIceMaterial.color.getHex());
+  expect(spikeIceMaterial.opacity).toBeCloseTo(0.96, 5);
+  expect(spikes.children.every((spike) => {
+    const outline = spike.children.find(({ userData }) => userData.isOutline === true) as THREE.Mesh<
+      THREE.BufferGeometry,
+      THREE.ShaderMaterial
+    >;
+    return outline.userData.iceSpikeRootFade === true
+      && outline.material.uniforms.uRootFadeEnabled.value === 1
+      && outline.material.uniforms.uRootFadeStart.value < outline.material.uniforms.uRootFadeEnd.value;
+  })).toBe(true);
+  expect(plugIceShell.visible).toBe(true);
+  expect(spikes.visible).toBe(true);
+  expect(spikes.children.every((spike) => spike.visible)).toBe(true);
+  expect(model.skillVisualState.iceShellVisible).toBe(true);
+  expect(model.skillVisualState.plugIceShellCount).toBe(1);
+
+  model.setFrozen(0, 0);
+  expect(cableIceShell.visible).toBe(false);
+  expect(plugIceShell.visible).toBe(false);
+  expect(spikes.visible).toBe(false);
   model.dispose();
 });
 

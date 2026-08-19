@@ -151,6 +151,7 @@ export type SkyRig = {
   update: (cameraPosition: THREE.Vector3, cameraQuaternion: THREE.Quaternion, elapsed: number) => void;
   updateTheme: (elapsed: number) => void;
   setThemeProgress: (progress: number) => void;
+  setExplorationProgress: (progress: number) => void;
   setQualityTier: (tier: NightQualityTier) => void;
   setReducedMotion: (reduced: boolean) => void;
   dispose: () => void;
@@ -171,6 +172,7 @@ export function buildSky(scene: THREE.Scene, radius = 112): SkyRig {
         uNightMid: { value: new THREE.Color(0x252b55) },
         uNightHaze: { value: new THREE.Color(0x5d526e) },
         uThemeProgress: { value: 0 },
+        uExplorationProgress: { value: 0 },
         uBands: { value: 26 },
       },
       vertexShader: /* glsl */ `
@@ -183,7 +185,7 @@ export function buildSky(scene: THREE.Scene, radius = 112): SkyRig {
       `,
       fragmentShader: /* glsl */ `
         uniform vec3 uTop, uMid, uHaze, uNightTop, uNightMid, uNightHaze;
-        uniform float uBands, uThemeProgress;
+        uniform float uBands, uThemeProgress, uExplorationProgress;
         varying vec3 vLocal;
         void main() {
           float h = normalize(vLocal).y;
@@ -197,6 +199,7 @@ export function buildSky(scene: THREE.Scene, radius = 112): SkyRig {
           night = mix(night, uNightTop, smoothstep(0.25, 0.9, t));
           night = mix(night, uNightHaze, smoothstep(0.1, -0.06, h) * 0.45);
           color = mix(color, night, uThemeProgress);
+          color = mix(color, color * vec3(0.035, 0.04, 0.065), uExplorationProgress);
           gl_FragColor = vec4(color, 1.0);
         }
       `,
@@ -252,8 +255,28 @@ export function buildSky(scene: THREE.Scene, radius = 112): SkyRig {
   const domeMaterial = dome.material as THREE.ShaderMaterial;
   const nightCloudColor = new THREE.Color(0x5f6882);
   const nightShadeColor = new THREE.Color(0x343a55);
+  const explorationCloudColor = new THREE.Color(0x090b15);
+  const explorationShadeColor = new THREE.Color(0x03040a);
   let themeProgress = 0;
+  let explorationProgress = 0;
   let reducedMotion = false;
+  const applyTheme = () => {
+    domeMaterial.uniforms.uThemeProgress.value = themeProgress;
+    domeMaterial.uniforms.uExplorationProgress.value = explorationProgress;
+    stars.material.uniforms.uProgress.value = themeProgress;
+    cloudMaterial.color.set(PAL.cloud).lerp(nightCloudColor, themeProgress).lerp(explorationCloudColor, explorationProgress);
+    shadeMaterial.color.set(PAL.cloudShade).lerp(nightShadeColor, themeProgress).lerp(explorationShadeColor, explorationProgress);
+    cloudMaterial.opacity = THREE.MathUtils.lerp(
+      THREE.MathUtils.lerp(0.48, 0.28, themeProgress),
+      0.045,
+      explorationProgress,
+    );
+    shadeMaterial.opacity = THREE.MathUtils.lerp(
+      THREE.MathUtils.lerp(0.25, 0.34, themeProgress),
+      0.07,
+      explorationProgress,
+    );
+  };
   return {
     dome,
     clouds,
@@ -279,12 +302,11 @@ export function buildSky(scene: THREE.Scene, radius = 112): SkyRig {
     },
     setThemeProgress(progress) {
       themeProgress = THREE.MathUtils.clamp(progress, 0, 1);
-      domeMaterial.uniforms.uThemeProgress.value = themeProgress;
-      stars.material.uniforms.uProgress.value = themeProgress;
-      cloudMaterial.color.set(PAL.cloud).lerp(nightCloudColor, themeProgress);
-      shadeMaterial.color.set(PAL.cloudShade).lerp(nightShadeColor, themeProgress);
-      cloudMaterial.opacity = THREE.MathUtils.lerp(0.48, 0.28, themeProgress);
-      shadeMaterial.opacity = THREE.MathUtils.lerp(0.25, 0.34, themeProgress);
+      applyTheme();
+    },
+    setExplorationProgress(progress) {
+      explorationProgress = THREE.MathUtils.clamp(progress, 0, 1);
+      applyTheme();
     },
     setQualityTier(tier) {
       stars.points.geometry.setDrawRange(0, tier === 'high' || tier === 'reduced' ? STAR_COUNT : 90);

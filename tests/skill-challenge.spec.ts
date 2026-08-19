@@ -31,7 +31,7 @@ async function expectMenuFitsViewport(page: Page): Promise<void> {
       noHorizontalOverflow: document.documentElement.scrollWidth <= viewportWidth + 1,
     };
   });
-  expect(result.labels).toEqual(['随机挑战', 'RUSH挑战', '双头挑战', '技能挑战']);
+  expect(result.labels).toEqual(['随机挑战', '探索模式', 'RUSH挑战', '双头挑战', '技能挑战', '烤面包机技能测试']);
   expect(result.allTextFits).toBe(true);
   expect(result.menuFits).toBe(true);
   expect(result.noHorizontalOverflow).toBe(true);
@@ -61,13 +61,14 @@ test('挑战模式菜单在桌面端与移动端均可完整展开和关闭', as
   }
 });
 
-test('四种挑战入口连接到各自现有或新增模式', async ({ page }) => {
+test('五种挑战入口连接到各自现有或新增模式', async ({ page }) => {
   test.setTimeout(300_000);
   const cases = [
-    { selector: '#start-random-button', mode: 'random', challengeKind: 'standard' },
-    { selector: '#start-rush-button', mode: 'rush', challengeKind: null },
-    { selector: '#start-double-ended-button', mode: 'random', challengeKind: 'double-ended' },
-    { selector: '#start-skill-button', mode: 'skill', challengeKind: 'standard' },
+    { selector: '#start-random-button', mode: 'random', challengeKind: 'standard', testId: null },
+    { selector: '#start-rush-button', mode: 'rush', challengeKind: null, testId: null },
+    { selector: '#start-double-ended-button', mode: 'random', challengeKind: 'double-ended', testId: null },
+    { selector: '#start-skill-button', mode: 'skill', challengeKind: 'standard', testId: null },
+    { selector: '#start-skill-test-button', mode: 'skill', challengeKind: 'standard', testId: 'toaster' },
   ] as const;
 
   for (const entry of cases) {
@@ -77,18 +78,21 @@ test('四种挑战入口连接到各自现有或新增模式', async ({ page }) 
     await openChallengeMenu(page);
     await page.click(entry.selector);
     await page.waitForFunction(
-      ({ mode, challengeKind, previousRevision }) => {
+      ({ mode, challengeKind, testId, previousRevision }) => {
         const diagnostics = window.__THREE_GAME_DIAGNOSTICS__;
         return diagnostics?.opening.active === false
           && diagnostics.puzzleRevision > previousRevision
           && diagnostics.mode === mode
           && (challengeKind === null || diagnostics.challengeKind === challengeKind)
+          && (testId === null || diagnostics.skill?.testId === testId)
           && diagnostics.totalArrows > 0;
       },
       { ...entry, previousRevision },
       { timeout: 90_000 },
     );
-    if (entry.mode === 'rush') await expect(page.locator('#rush-briefing-panel')).toBeVisible();
+    if (entry.mode === 'rush') {
+      await expect(page.locator('#rush-briefing-panel')).toBeVisible({ timeout: 60_000 });
+    }
     if (entry.challengeKind === 'double-ended') {
       await expect(page.locator('#double-ended-briefing-panel')).toBeVisible({ timeout: 60_000 });
     }

@@ -2,8 +2,8 @@ import { expect, test } from '@playwright/test';
 import { PNG } from 'pngjs';
 
 const ASSETS = [
-  'lamp-spotlight-crown', 'humidifier-glass-wiper', 'fan-airflow-ribbon',
-  'dehumidifier-shield-droplets', 'refrigerator-ice-shell', 'hair-dryer-heat-ribbon',
+  'humidifier-glass-wiper', 'fan-airflow-ribbon',
+  'dehumidifier-shield-droplets', 'hair-dryer-heat-ribbon',
   'bubble-shell-wave-membrane', 'radio-sequence-markers', 'kettle-steam-ribbon',
   'blender-energy-shards', 'gacha-card-frame', 'record-note-orb-ring',
   'alarm-time-ring', 'popcorn-heart-crown', 'stand-mixer-status-token',

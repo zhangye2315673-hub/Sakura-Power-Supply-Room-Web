@@ -6,6 +6,11 @@ interface ThreeGameDiagnostics {
   puzzleRevision: number;
   layoutSignature: string;
   mode: 'campaign' | 'random' | 'skill' | 'rush';
+  exploration: {
+    active: boolean;
+    environmentScale: number;
+    lanternPreserved: boolean;
+  };
   challengeKind: 'standard' | 'double-ended' | null;
   levelId: number | null;
   shape: 'cube' | 'cuboid' | 'octahedron' | 'pyramid' | 'cylinder' | 'sphere' | 'torus' | 'arch' | null;
@@ -92,6 +97,9 @@ interface ThreeGameDiagnostics {
     matchedNodes: string[];
     missingFunctionalNode: boolean;
     lightIntensity: number;
+    neonMaterialCount: number;
+    neonIntensity: number;
+    poweredReveal: number;
   }>;
   performances: {
     sessions: number;
@@ -138,6 +146,8 @@ interface ThreeGameDiagnostics {
   randomLives: number;
   randomGameOver: boolean;
   skill: {
+    testId: import('./skill/SkillTestMode').SkillTestId | null;
+    invulnerable: boolean;
     registrySize: number;
     phase: import('./skill/SkillChallengeEngine').SkillChallengePhase;
     inputLocked: boolean;
@@ -145,9 +155,48 @@ interface ThreeGameDiagnostics {
     maxLives: number;
     buff: import('./skill/SkillChallengeEngine').SkillStatusId | null;
     debuff: import('./skill/SkillChallengeEngine').SkillStatusId | null;
+    lampHintCableId: string | null;
+    cableEffects: Array<{
+      id: string;
+      baseColor: number;
+      cableColor: number;
+      tailColor: number;
+      glowStrength: number;
+      freezeAmount: number;
+      freezeProgress: number;
+      iceShellVisible: boolean;
+      iceShellOpacity: number;
+      plugIceShellCount: number;
+      lampGuideEnd: 'head' | 'tail' | null;
+    }>;
+    effectAssets: string[];
+    steamReveal: {
+      active: boolean;
+      progress: number;
+      origin: number;
+      direction: 'left-to-right' | 'right-to-left';
+    };
+    steamClear: {
+      active: boolean;
+      progress: number;
+      origin: number;
+      direction: 'left-to-right' | 'right-to-left';
+    };
     printerCopyReady: boolean;
     cardCount: number;
     presentation: import('./skill/SkillPresentationController').SkillPresentationDiagnostics;
+    televisionReconstruction: import('./skill/TelevisionReconstructionTransition').TelevisionReconstructionDiagnostics;
+    toasterHeatSwap: import('./skill/ToasterHeatSwapTransition').ToasterHeatSwapDiagnostics;
+    refrigeratorFreeze: import('./skill/RefrigeratorFreezePresentation').RefrigeratorFreezeDiagnostics;
+    refrigeratorScreenIce: import('./skill/RefrigeratorScreenIceOverlay').RefrigeratorScreenIceDiagnostics;
+    coldParticles: {
+      progress: number;
+      snowflakeCount: number;
+    };
+    screenEffect: {
+      mode: import('./style/post').SkillScreenEffect;
+      progress: number;
+    };
   } | null;
   rush: {
     challengeId: string;
@@ -273,6 +322,10 @@ interface Window {
   __APPLIANCE_PERFORMANCE_TIME_OVERRIDE__?: number;
   /** Exact ballistic age used by fixed-time appliance visual evidence. */
   __APPLIANCE_PERFORMANCE_FLIGHT_TIME_OVERRIDE__?: number;
+  /** Fixed fan steam-clear progress used only by visual evidence. */
+  __STEAM_CLEAR_PROGRESS_OVERRIDE__?: number;
+  /** Fixed humidifier steam-reveal progress used only by visual evidence. */
+  __STEAM_REVEAL_PROGRESS_OVERRIDE__?: number;
   __THREE_GAME_DIAGNOSTICS__?: ThreeGameDiagnostics;
   __APPLIANCE_GALLERY_DIAGNOSTICS__?: {
     open: boolean;
@@ -282,6 +335,8 @@ interface Window {
     cycle: number;
     power: number;
     animationSignal: number;
+    neonMaterialCount: number;
+    neonIntensity: number;
     lidRotationX: number | null;
     refrigeratorDoorRotationY: number | null;
     refrigeratorInteriorVisible: boolean | null;

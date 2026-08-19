@@ -24,7 +24,7 @@ export class ApplianceGallery {
   private readonly controls: OrbitControls;
   private readonly modelStage = new THREE.Group();
   private readonly performances = new AppliancePerformanceSystem();
-  private readonly sensory = new ApplianceSensoryController();
+  private readonly sensory = new ApplianceSensoryController(0.48);
   private readonly petals = new PetalField();
   private readonly floor = new THREE.Mesh(
     new THREE.CircleGeometry(4.5, 48),
@@ -452,6 +452,9 @@ export class ApplianceGallery {
     this.controls.update(delta);
     this.renderer.render(this.scene, this.camera);
     const performanceState = this.performances.getStateSummary();
+    const sensoryState = this.sensory.getDiagnostics().find(
+      (item) => item.kind === this.currentDefinition.id,
+    );
     window.__APPLIANCE_GALLERY_DIAGNOSTICS__ = {
       open: this.isOpen,
       selected: this.currentDefinition.id,
@@ -460,6 +463,8 @@ export class ApplianceGallery {
       cycle,
       power: presentationPower,
       animationSignal: this.galleryTarget?.root.userData.appliancePerformanceSignal ?? 0,
+      neonMaterialCount: sensoryState?.neonMaterialCount ?? 0,
+      neonIntensity: sensoryState?.neonIntensity ?? 0,
       lidRotationX: this.current?.root.getObjectByName('rice-cooker-lid-hinge-pivot')?.rotation.x ?? null,
       refrigeratorDoorRotationY: this.current?.root.getObjectByName('refrigerator-upper-door-pivot')?.rotation.y ?? null,
       refrigeratorInteriorVisible: this.current?.root.getObjectByName('refrigerator-upper-interior-content')?.visible ?? null,

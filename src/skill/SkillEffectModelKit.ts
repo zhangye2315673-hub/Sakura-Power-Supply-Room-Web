@@ -6,8 +6,8 @@ import type { ApplianceKind } from '../systems/ApplianceCatalog';
 import type { SkillChallengeState } from './SkillChallengeEngine';
 
 export type SkillEffectAssetId =
-  | 'lamp-spotlight-crown' | 'humidifier-glass-wiper' | 'fan-airflow-ribbon'
-  | 'dehumidifier-shield-droplets' | 'refrigerator-ice-shell' | 'hair-dryer-heat-ribbon'
+  | 'humidifier-glass-wiper' | 'fan-airflow-ribbon'
+  | 'dehumidifier-shield-droplets' | 'hair-dryer-heat-ribbon'
   | 'bubble-shell-wave-membrane' | 'radio-sequence-markers' | 'kettle-steam-ribbon'
   | 'blender-energy-shards' | 'gacha-card-frame' | 'record-note-orb-ring'
   | 'alarm-time-ring' | 'popcorn-heart-crown' | 'stand-mixer-status-token'
@@ -15,11 +15,9 @@ export type SkillEffectAssetId =
   | 'induction-heat-ring' | 'speaker-bass-wave-arcs';
 
 export const SKILL_EFFECT_ASSET_REFERENCES: Readonly<Record<SkillEffectAssetId, string>> = {
-  'lamp-spotlight-crown': 'references/skill-effects/intake/lamp-spotlight-crown/reference.png',
   'humidifier-glass-wiper': 'references/skill-effects/intake/humidifier-glass-wiper/reference.png',
   'fan-airflow-ribbon': 'references/skill-effects/intake/fan-airflow-ribbon/reference.png',
   'dehumidifier-shield-droplets': 'references/skill-effects/intake/dehumidifier-shield-droplets/reference.png',
-  'refrigerator-ice-shell': 'references/skill-effects/intake/refrigerator-ice-shell/reference.png',
   'hair-dryer-heat-ribbon': 'references/skill-effects/intake/hair-dryer-heat-ribbon/reference.png',
   'bubble-shell-wave-membrane': 'references/skill-effects/intake/bubble-shell-wave-membrane/reference.png',
   'radio-sequence-markers': 'references/skill-effects/intake/radio-sequence-markers/reference.png',
@@ -40,11 +38,7 @@ export const SKILL_EFFECT_ASSET_REFERENCES: Readonly<Record<SkillEffectAssetId, 
 type EffectInstance = { root: THREE.Group; age: number; duration: number; seed: number };
 
 const ASSET_BY_APPLIANCE: Partial<Record<ApplianceKind, SkillEffectAssetId>> = {
-  lamp: 'lamp-spotlight-crown',
-  humidifier: 'humidifier-glass-wiper',
-  fan: 'fan-airflow-ribbon',
   dehumidifier: 'dehumidifier-shield-droplets',
-  refrigerator: 'refrigerator-ice-shell',
   'hair-dryer': 'hair-dryer-heat-ribbon',
   'bubble-machine': 'bubble-shell-wave-membrane',
   radio: 'radio-sequence-markers',
@@ -118,6 +112,14 @@ export class SkillEffectModelKit {
     };
   }
 
+  get activeAssetIds(): string[] {
+    const assets = new Set<string>();
+    this.root.traverse((object) => {
+      if (typeof object.userData.assetId === 'string') assets.add(object.userData.assetId);
+    });
+    return [...assets];
+  }
+
   play(appliance: ApplianceKind, targets: readonly THREE.Vector3[] = []): void {
     const asset = ASSET_BY_APPLIANCE[appliance];
     if (!asset) return;
@@ -172,9 +174,7 @@ export class SkillEffectModelKit {
     this.persistentSignature = signature;
     this.persistent.clear();
 
-    if (state.debuff?.id === 'frozen-plug') {
-      state.debuff.targetCableIds.forEach((id) => this.attach('refrigerator-ice-shell', cablePositions.get(id)));
-    } else if (state.debuff?.id === 'overheated-plug') {
+    if (state.debuff?.id === 'overheated-plug') {
       state.debuff.targetCableIds.forEach((id) => this.attach('microwave-double-heat-ring', cablePositions.get(id)));
     }
     if (state.buff?.id === 'induction-reveal') {
@@ -320,10 +320,6 @@ export class SkillEffectModelKit {
     root.add(socket);
 
     switch (asset) {
-      case 'lamp-spotlight-crown':
-        this.ring(pivot, 'target-ring', 0.5, 0.1, this.coral);
-        [-0.32, 0, 0.32].forEach((x, index) => this.mesh(pivot, `crown-point-${index + 1}`, new THREE.ConeGeometry(0.16, index === 1 ? 0.48 : 0.34, 4), this.yellow, [x, 0.58, 0]));
-        break;
       case 'humidifier-glass-wiper':
         this.mesh(pivot, 'wiper-glass-edge', new THREE.BoxGeometry(1.5, 0.22, 0.16, 3, 1, 1), this.ice, [0, 0.18, 0]);
         this.mesh(pivot, 'wiper-arm', new THREE.CapsuleGeometry(0.11, 0.48, 4, 8), this.coral, [0, -0.2, 0], [0, 0, Math.PI / 2]);
@@ -337,12 +333,6 @@ export class SkillEffectModelKit {
       case 'dehumidifier-shield-droplets':
         this.ring(pivot, 'segmented-shield', 0.62, 0.16, this.ice);
         [-0.75, 0.75].forEach((x, index) => this.mesh(pivot, `water-drop-${index + 1}`, new THREE.OctahedronGeometry(0.17, 1), this.ice, [x, -0.2 + index * 0.35, 0]));
-        break;
-      case 'refrigerator-ice-shell':
-        for (let index = 0; index < 8; index += 1) {
-          const angle = (index / 8) * Math.PI * 2;
-          this.mesh(pivot, `ice-plate-${index + 1}`, new THREE.OctahedronGeometry(0.23, 0), this.ice, [Math.cos(angle) * 0.5, Math.sin(angle) * 0.5, 0], [0, 0, angle], [1, 1.45, 0.65]);
-        }
         break;
       case 'bubble-shell-wave-membrane':
         this.mesh(pivot, 'bubble-shell', new THREE.SphereGeometry(0.68, 16, 10), this.bubble, [0, 0, 0], [0, 0, 0], [1, 1, 0.42]);

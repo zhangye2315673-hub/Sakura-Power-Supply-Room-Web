@@ -30,8 +30,10 @@ export class ApplianceModelKit {
 
   constructor(readonly options: ApplianceModelOptions) {
     this.root.name = `appliance-model-${options.id}`;
+    this.root.userData.applianceAccent = options.accent;
     this.nodes.set('root', this.root);
     this.indicatorMaterial = this.material(0x81798f, { emissive: 0x000000 });
+    this.indicatorMaterial.emissiveIntensity = 0;
   }
 
   material(

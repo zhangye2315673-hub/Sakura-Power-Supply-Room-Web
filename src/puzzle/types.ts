@@ -48,6 +48,11 @@ export const ARROW_RADIUS = 0.105;
 export const COLLISION_RADIUS = 0.15;
 export const PLUG_HEAD_MAX_RADIUS = 0.18;
 export const PLUG_HEAD_MAX_LENGTH = 0.64;
+// Distance from the cable socket to the visible end of the single-ended tail.
+// The tail cap is centred 0.55 radii behind the socket and has a 0.76-radius
+// extent, so its outer terminal is exactly 1.31 radii from the socket.
+export const CABLE_TAIL_TERMINAL_LENGTH = ARROW_RADIUS * 1.31;
+export const TERMINAL_PRESERVING_SOCKET_SHIFT = PLUG_HEAD_MAX_LENGTH - CABLE_TAIL_TERMINAL_LENGTH;
 export const PLUG_HEAD_BODY_CLEARANCE_LENGTH = 0.52;
 export const PLUG_HEAD_PIN_RADIUS = 0.035;
 export const PLUG_HEAD_PIN_CLEARANCE = 0.08;
@@ -72,6 +77,7 @@ export type ArrowDefinition = {
   color: number;
   lengthClass: ArrowLengthClass;
   doubleEnded?: boolean;
+  terminalAnchorMode?: 'preserve-external-endpoints';
 };
 
 export type PuzzleDefinition = {
@@ -99,6 +105,31 @@ export function gridPointToWorld(point: GridPoint, target = new THREE.Vector3())
     (point[1] - GRID_HALF) * LANE_PITCH,
     (point[2] - GRID_HALF) * LANE_PITCH,
   );
+}
+
+export function cableSocketPointsToWorld(definition: ArrowDefinition): THREE.Vector3[] {
+  const points = definition.path.map((point) => gridPointToWorld(point));
+  if (definition.terminalAnchorMode !== 'preserve-external-endpoints' || points.length < 2) {
+    return points;
+  }
+  const tailDirection = points[0].clone().sub(points[1]).normalize();
+  const headDirection = DIRECTION_VECTORS[definition.exitDirection];
+  points[0].addScaledVector(tailDirection, TERMINAL_PRESERVING_SOCKET_SHIFT);
+  points[points.length - 1].addScaledVector(headDirection, -TERMINAL_PRESERVING_SOCKET_SHIFT);
+  return points;
+}
+
+export function cableExternalTerminalPositions(definition: ArrowDefinition): Readonly<{
+  tail: THREE.Vector3;
+  head: THREE.Vector3;
+}> {
+  const points = cableSocketPointsToWorld(definition);
+  const tailDirection = points[0].clone().sub(points[1]).normalize();
+  const headDirection = DIRECTION_VECTORS[definition.exitDirection];
+  return {
+    tail: points[0].clone().addScaledVector(tailDirection, CABLE_TAIL_TERMINAL_LENGTH),
+    head: points[points.length - 1].clone().addScaledVector(headDirection, PLUG_HEAD_MAX_LENGTH),
+  };
 }
 
 export function directionKeyFromDelta(delta: GridPoint): DirectionKey {

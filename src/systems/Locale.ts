@@ -18,16 +18,18 @@ const zh = {
   'start.enter': '进入第一关',
   'start.challenge': '挑战模式',
   'start.random': '随机挑战',
+  'start.explore': '探索模式',
   'start.rush': 'RUSH挑战',
   'start.double': '双头挑战',
   'start.skill': '技能挑战',
+  'start.skillTest': '冰箱技能测试',
   'start.waiting': '线路准备中…',
   'start.preparing': '正在准备第一关…',
   'start.connecting': '正在接通…',
   'start.reload': '重新加载',
   'start.object': '开放式插头线束',
   'start.footer.controls': '拖动旋转 · 滚轮缩放 · 点击理线',
-  'start.footer.modes': '第一关 · 四种挑战模式',
+  'start.footer.modes': '第一关 · 六种挑战模式',
   'hud.subtitle': '樱色插线室',
   'hud.remaining': '剩余线路',
   'status.find': '寻找出口畅通的插头精灵',
@@ -55,8 +57,10 @@ const zh = {
   'flash.hintUnavailable': '当前没有可提示的插头',
   'flash.wait': '当前插线动画结束后才能返回主界面',
   'mode.random': '随机挑战',
+  'mode.explore': '探索模式',
   'mode.rush': 'RUSH 速度挑战',
   'mode.skill': '技能挑战',
+  'mode.skillTest': '冰箱技能测试',
   'mode.level': '第 {level} 关 · {shape}',
   'continue.next': '进入下一关 →',
   'continue.random': '进入随机挑战 →',
@@ -130,16 +134,18 @@ const en: Record<keyof typeof zh, string> = {
   'start.enter': 'Enter Level 1',
   'start.challenge': 'CHALLENGE MODES',
   'start.random': 'RANDOM CHALLENGE',
+  'start.explore': 'EXPLORATION MODE',
   'start.rush': 'RUSH CHALLENGE',
   'start.double': 'DOUBLE-PLUG',
   'start.skill': 'SKILL CHALLENGE',
+  'start.skillTest': 'REFRIGERATOR SKILL TEST',
   'start.waiting': 'PREPARING CABLES…',
   'start.preparing': 'Preparing Level 1…',
   'start.connecting': 'Connecting…',
   'start.reload': 'Reload',
   'start.object': 'OPEN-ENDED PLUG CABLE BUNDLE',
   'start.footer.controls': 'DRAG TO ORBIT · WHEEL TO ZOOM · CLICK TO UNTANGLE',
-  'start.footer.modes': 'LEVEL 1 · FOUR CHALLENGE MODES',
+  'start.footer.modes': 'LEVEL 1 · SIX CHALLENGE MODES',
   'hud.subtitle': 'SAKURA CABLE ROOM',
   'hud.remaining': 'REMAINING',
   'status.find': 'Find a plug cable with a clear exit',
@@ -167,8 +173,10 @@ const en: Record<keyof typeof zh, string> = {
   'flash.hintUnavailable': 'No removable plug is available to reveal',
   'flash.wait': 'Wait for the current connection animation before returning home',
   'mode.random': 'RANDOM CHALLENGE',
+  'mode.explore': 'EXPLORATION MODE',
   'mode.rush': 'RUSH SPEED TRIAL',
   'mode.skill': 'SKILL CHALLENGE',
+  'mode.skillTest': 'REFRIGERATOR SKILL TEST',
   'mode.level': 'LEVEL {level} · {shape}',
   'continue.next': 'NEXT LEVEL →',
   'continue.random': 'RANDOM CHALLENGE →',
@@ -276,9 +284,11 @@ export function applyStaticTranslations(): void {
   setText('#home-button', t('actions.home'));
   setText('#challenge-mode-button', t('start.challenge'));
   setText('#start-random-button', t('start.random'));
+  setText('#start-explore-button', t('start.explore'));
   setText('#start-rush-button', t('start.rush'));
   setText('#start-double-ended-button', t('start.double'));
   setText('#start-skill-button', t('start.skill'));
+  setText('#start-skill-test-button', t('start.skillTest'));
   setText('#appliance-gallery-button', t('actions.gallery'));
   setText('#reset-button', t('actions.reset'));
   setText('#new-button', t('actions.random'));

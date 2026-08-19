@@ -9,6 +9,10 @@ export const CABLE_FILLET_RADIUS = 0.13;
 export const CABLE_FILLET_LEG_LIMIT = 0.28;
 export const CABLE_FILLET_MIN_RADIUS = 0.025;
 export const CABLE_FILLET_ARC_SEGMENTS = 4;
+export const REFRIGERATOR_FREEZE_COLOR = 0x6fc2d0;
+export const REFRIGERATOR_ICE_COLOR = 0x7dced8;
+export const REFRIGERATOR_ICE_OPACITY = 0.86;
+export const REFRIGERATOR_SPIKE_OPACITY = 0.96;
 
 const EPSILON = 1e-6;
 const zAxis = new THREE.Vector3(0, 0, 1);
@@ -47,24 +51,350 @@ export function createCableToonMaterial(
   material.userData.materialRole = 'cable-rubber';
   material.userData.radialSegments = CABLE_RADIAL_SEGMENTS;
   const visualInflation = { value: 0 };
+  const freezeAmount = { value: 0 };
+  const freezeProgress = { value: 0 };
+  const freezeSeed = { value: 0 };
   const previousOnBeforeCompile = material.onBeforeCompile.bind(material);
   const previousProgramCacheKey = material.customProgramCacheKey.bind(material);
   material.userData.visualInflation = visualInflation;
+  material.userData.freezeAmount = freezeAmount;
+  material.userData.freezeProgress = freezeProgress;
+  material.userData.freezeSeed = freezeSeed;
+  material.userData.progressiveFreeze = true;
   material.onBeforeCompile = (shader, renderer) => {
     previousOnBeforeCompile(shader, renderer);
     shader.uniforms.uCableVisualInflation = visualInflation;
+    shader.uniforms.uCableFreezeAmount = freezeAmount;
+    shader.uniforms.uCableFreezeProgress = freezeProgress;
+    shader.uniforms.uCableFreezeSeed = freezeSeed;
     shader.vertexShader = shader.vertexShader
       .replace(
         '#include <common>',
-        '#include <common>\nuniform float uCableVisualInflation;',
+        `#include <common>
+uniform float uCableVisualInflation;
+attribute float aCableProgress;
+varying float vCableFreezeProgress;`,
       )
       .replace(
         '#include <begin_vertex>',
-        '#include <begin_vertex>\ntransformed += objectNormal * uCableVisualInflation;',
+        `#include <begin_vertex>
+vCableFreezeProgress = aCableProgress;
+transformed += objectNormal * uCableVisualInflation;`,
+      );
+    shader.fragmentShader = shader.fragmentShader
+      .replace(
+        '#include <common>',
+        `#include <common>
+uniform float uCableFreezeAmount;
+uniform float uCableFreezeProgress;
+uniform float uCableFreezeSeed;
+varying float vCableFreezeProgress;`,
+      )
+      .replace(
+        'vec4 diffuseColor = vec4( diffuse, opacity );',
+        `vec4 diffuseColor = vec4( diffuse, opacity );
+float cableFreezeDistance = 1.0 - vCableFreezeProgress;
+float cableFreezeFront = 1.0 - smoothstep(
+  uCableFreezeProgress - 0.075,
+  uCableFreezeProgress + 0.025,
+  cableFreezeDistance
+);
+if (uCableFreezeProgress > 0.985) cableFreezeFront = 1.0;
+float cableFreezeCoverage = clamp(cableFreezeFront * uCableFreezeAmount, 0.0, 1.0);
+vec3 cableFrozenColor = vec3(0.49, 0.81, 0.85);
+diffuseColor.rgb = mix(diffuseColor.rgb, cableFrozenColor, cableFreezeCoverage * 0.9);`,
       );
   };
-  material.customProgramCacheKey = () => `${previousProgramCacheKey()}-cable-visual-inflation-v1`;
+  material.customProgramCacheKey = () => `${previousProgramCacheKey()}-cable-base-v5-progressive-freeze`;
   return material;
+}
+
+export type CableIceShellMaterial = THREE.MeshPhysicalMaterial & {
+  userData: {
+    iceAmount?: { value: number };
+    iceProgress?: { value: number };
+    [key: string]: unknown;
+  };
+};
+
+export function createCableIceShellMaterial(): CableIceShellMaterial {
+  const material = new THREE.MeshPhysicalMaterial({
+    name: 'sakura-cable-ice-shell',
+    color: REFRIGERATOR_ICE_COLOR,
+    emissive: 0x214f5f,
+    emissiveIntensity: 0.02,
+    roughness: 0.66,
+    metalness: 0,
+    clearcoat: 0.3,
+    clearcoatRoughness: 0.34,
+    transmission: 0,
+    ior: 1.31,
+    thickness: CABLE_RADIUS * 0.82,
+    attenuationColor: new THREE.Color(0x5fb8c7),
+    attenuationDistance: 1.25,
+    specularIntensity: 0.78,
+    specularColor: new THREE.Color(0xc8f1f3),
+    transparent: true,
+    opacity: 0.46,
+    depthWrite: false,
+    alphaTest: 0.012,
+    flatShading: false,
+  }) as CableIceShellMaterial;
+  const amount = { value: 0 };
+  const progress = { value: 0 };
+  material.userData.materialRole = 'cable-ice-shell';
+  material.userData.iceAmount = amount;
+  material.userData.iceProgress = progress;
+  material.onBeforeCompile = (shader) => {
+    shader.uniforms.uIceAmount = amount;
+    shader.uniforms.uIceProgress = progress;
+    shader.vertexShader = shader.vertexShader.replace(
+      '#include <common>',
+      `#include <common>
+attribute float aCableProgress;
+varying float vIceCableProgress;
+varying vec3 vIceViewNormal;`,
+    ).replace(
+      '#include <begin_vertex>',
+      `#include <begin_vertex>
+vIceCableProgress = aCableProgress;
+vIceViewNormal = normalize(normalMatrix * objectNormal);`,
+    );
+    shader.fragmentShader = shader.fragmentShader.replace(
+      '#include <common>',
+      `#include <common>
+varying float vIceCableProgress;
+varying vec3 vIceViewNormal;
+uniform float uIceAmount;
+uniform float uIceProgress;`,
+    ).replace(
+      'vec4 diffuseColor = vec4( diffuse, opacity );',
+      `vec4 diffuseColor = vec4( diffuse, opacity );
+float iceDistance = 1.0 - vIceCableProgress;
+float iceFront = 1.0 - smoothstep(
+  uIceProgress - 0.075,
+  uIceProgress + 0.025,
+  iceDistance
+);
+if (uIceProgress > 0.985) iceFront = 1.0;
+float iceCoverage = clamp(iceFront * uIceAmount, 0.0, 1.0);
+if (iceCoverage < 0.012) discard;
+float iceRim = pow(1.0 - clamp(abs(vIceViewNormal.z), 0.0, 1.0), 1.18);
+// The original cable stays visible through the centre while the enlarged
+// silhouette becomes denser. This makes the layer read as a clear ice casing
+// around rubber instead of another flat cable colour.
+diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.84, 0.94, 0.91), iceRim * 0.12);
+diffuseColor.a *= iceCoverage;`,
+    );
+  };
+  material.customProgramCacheKey = () => 'sakura-cable-ice-shell-v3';
+  return material;
+}
+
+export function setCableIceShell(
+  material: CableIceShellMaterial,
+  amount: number,
+  progress: number,
+): void {
+  const nextAmount = THREE.MathUtils.clamp(amount, 0, 1);
+  const nextProgress = THREE.MathUtils.clamp(progress, 0, 1);
+  if (material.userData.iceAmount) material.userData.iceAmount.value = nextAmount;
+  if (material.userData.iceProgress) material.userData.iceProgress.value = nextProgress;
+  material.visible = nextAmount > 0.001;
+}
+
+function stableIceNoise(x: number, y: number, z: number, seed: number): number {
+  const value = Math.sin(
+    x * 17.17 + y * 31.73 + z * 11.41 + seed * 53.19,
+  ) * 43758.5453;
+  return value - Math.floor(value);
+}
+
+const ICE_FACET_COLORS = [
+  new THREE.Color(0x6fc2d0),
+  new THREE.Color(0x7dced8),
+  new THREE.Color(0x9edfe2),
+  new THREE.Color(0xb7e6e3),
+  new THREE.Color(0xd6f0e8),
+] as const;
+
+function addIceFacetColors(geometry: THREE.BufferGeometry, seed: number): void {
+  const position = geometry.getAttribute('position');
+  const colors = new Float32Array(position.count * 3);
+  const triangleColor = new THREE.Color();
+  for (let index = 0; index < position.count; index += 3) {
+    const end = Math.min(index + 3, position.count);
+    let centerX = 0;
+    let centerY = 0;
+    let centerZ = 0;
+    for (let vertex = index; vertex < end; vertex += 1) {
+      centerX += position.getX(vertex);
+      centerY += position.getY(vertex);
+      centerZ += position.getZ(vertex);
+    }
+    const divisor = Math.max(1, end - index);
+    const tone = stableIceNoise(
+      Math.round(centerX / divisor * 17),
+      Math.round(centerY / divisor * 17),
+      Math.round(centerZ / divisor * 17),
+      seed + index * 0.013,
+    );
+    triangleColor.copy(ICE_FACET_COLORS[Math.min(
+      ICE_FACET_COLORS.length - 1,
+      Math.floor(tone * ICE_FACET_COLORS.length),
+    )]);
+    for (let vertex = index; vertex < end; vertex += 1) {
+      colors[vertex * 3] = triangleColor.r;
+      colors[vertex * 3 + 1] = triangleColor.g;
+      colors[vertex * 3 + 2] = triangleColor.b;
+    }
+  }
+  geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+}
+
+/**
+ * A calm, continuous frost casing. The old implementation deliberately
+ * varied every ring and every triangle; that read as shattered glass once
+ * the camera moved. This keeps the original silhouette and adds only a soft
+ * low-poly inflation around it.
+ */
+export function createRoundedIceShellGeometry(
+  source: THREE.BufferGeometry,
+  baseOffset = 0.012,
+): THREE.BufferGeometry {
+  const geometry = source.clone();
+  if (!geometry.getAttribute('normal')) geometry.computeVertexNormals();
+  const position = geometry.getAttribute('position');
+  const normal = geometry.getAttribute('normal');
+  for (let index = 0; index < position.count; index += 1) {
+    position.setXYZ(
+      index,
+      position.getX(index) + normal.getX(index) * baseOffset,
+      position.getY(index) + normal.getY(index) * baseOffset,
+      position.getZ(index) + normal.getZ(index) * baseOffset,
+    );
+  }
+  position.needsUpdate = true;
+  geometry.computeVertexNormals();
+  geometry.computeBoundingBox();
+  geometry.computeBoundingSphere();
+  geometry.userData.iceShell = true;
+  return geometry;
+}
+
+export function createFacetedIceShellGeometry(
+  source: THREE.BufferGeometry,
+  seed: number,
+  baseOffset = 0.012,
+  variation = 0.014,
+): THREE.BufferGeometry {
+  const geometry = source.index ? source.toNonIndexed() : source.clone();
+  if (!geometry.getAttribute('normal')) geometry.computeVertexNormals();
+  const position = geometry.getAttribute('position');
+  const normal = geometry.getAttribute('normal');
+  for (let index = 0; index < position.count; index += 1) {
+    const x = position.getX(index);
+    const y = position.getY(index);
+    const z = position.getZ(index);
+    const broad = Math.round(stableIceNoise(
+      Math.round(x * 14) / 14,
+      Math.round(y * 14) / 14,
+      Math.round(z * 14) / 14,
+      seed,
+    ) * 4) / 4;
+    const shard = stableIceNoise(
+      Math.round(x * 29) / 29,
+      Math.round(y * 29) / 29,
+      Math.round(z * 29) / 29,
+      seed + 0.731,
+    );
+    const shardLift = Math.max(0, (shard - 0.73) / 0.27);
+    const offset = baseOffset + broad * variation + shardLift * variation * 0.72;
+    position.setXYZ(
+      index,
+      x + normal.getX(index) * offset,
+      y + normal.getY(index) * offset,
+      z + normal.getZ(index) * offset,
+    );
+  }
+  position.needsUpdate = true;
+  geometry.computeVertexNormals();
+  addIceFacetColors(geometry, seed);
+  geometry.computeBoundingBox();
+  geometry.computeBoundingSphere();
+  geometry.userData.iceShell = true;
+  return geometry;
+}
+
+export function createCableIceShellGeometry(
+  curve: THREE.Curve<THREE.Vector3>,
+  seed: number,
+): THREE.BufferGeometry {
+  void seed;
+  const length = Math.max(curve.getLength(), CABLE_RADIUS * 2);
+  const segmentCount = Math.max(16, Math.ceil(length / 0.11));
+  const radialSegments = 8;
+  const tube = new THREE.TubeGeometry(
+    curve,
+    segmentCount,
+    CABLE_RADIUS * 1.1,
+    radialSegments,
+    false,
+  );
+  const capRadius = CABLE_RADIUS * 1.1;
+  const startCap = new THREE.SphereGeometry(capRadius, radialSegments, 6);
+  const endCap = new THREE.SphereGeometry(capRadius, radialSegments, 6);
+  const tubeVertexCount = tube.getAttribute('position').count;
+  const startCapVertexCount = startCap.getAttribute('position').count;
+  startCap.translate(curve.getPointAt(0).x, curve.getPointAt(0).y, curve.getPointAt(0).z);
+  endCap.translate(curve.getPointAt(1).x, curve.getPointAt(1).y, curve.getPointAt(1).z);
+  const geometry = mergeGeometries([tube, startCap, endCap], false);
+  tube.dispose();
+  startCap.dispose();
+  endCap.dispose();
+  if (!geometry) throw new Error('Unable to merge rounded cable ice shell geometry.');
+  const totalVertexCount = geometry.getAttribute('position').count;
+  const progress = new Float32Array(tubeVertexCount);
+  for (let ring = 0; ring <= segmentCount; ring += 1) {
+    const value = ring / segmentCount;
+    for (let radial = 0; radial <= radialSegments; radial += 1) {
+      progress[ring * (radialSegments + 1) + radial] = value;
+    }
+  }
+  const fullProgress = new Float32Array(totalVertexCount);
+  fullProgress.set(progress, 0);
+  for (let index = tubeVertexCount; index < totalVertexCount; index += 1) {
+    fullProgress[index] = index < tubeVertexCount + startCapVertexCount ? 0 : 1;
+  }
+  geometry.setAttribute('aCableProgress', new THREE.BufferAttribute(fullProgress, 1));
+  geometry.computeBoundingBox();
+  geometry.computeBoundingSphere();
+  geometry.userData.iceShell = true;
+  return geometry;
+}
+
+/** Build one rounded low-poly ice mass with a seed-specific melt bulge. */
+export function createIceAccretionGeometry(seed: number): THREE.BufferGeometry {
+  const variant = Math.floor(stableIceNoise(seed, 8.7, 3.1, seed + 0.41) * 3);
+  const geometry = new THREE.SphereGeometry(1, 8, 5);
+  const position = geometry.getAttribute('position');
+  for (let index = 0; index < position.count; index += 1) {
+    const point = new THREE.Vector3(position.getX(index), position.getY(index), position.getZ(index));
+    const direction = point.clone().normalize();
+    let radius = 0.92 + stableIceNoise(index, variant + 1.7, 6.4, seed + 0.91) * 0.1;
+    if (variant === 0 && direction.y > 0.2) radius += direction.y * 0.1;
+    if (variant === 1 && direction.x < -0.12) radius += Math.abs(direction.x) * 0.08;
+    if (variant === 2 && direction.z > 0.1) radius += direction.z * 0.1;
+    if (direction.y < -0.48 && Math.abs(direction.x) < 0.55) radius += 0.06;
+    point.multiplyScalar(radius);
+    position.setXYZ(index, point.x, point.y, point.z);
+  }
+  position.needsUpdate = true;
+  geometry.computeVertexNormals();
+  geometry.computeBoundingBox();
+  geometry.computeBoundingSphere();
+  geometry.userData.iceAccretion = true;
+  return geometry;
 }
 
 export function setCableVisualInflation(
@@ -73,6 +403,20 @@ export function setCableVisualInflation(
 ): void {
   const uniform = material.userData.visualInflation as { value: number } | undefined;
   if (uniform) uniform.value = Math.max(0, inflation);
+}
+
+export function setCableFreeze(
+  material: THREE.MeshToonMaterial,
+  amount: number,
+  progress: number,
+  seed: number,
+): void {
+  const amountUniform = material.userData.freezeAmount as { value: number } | undefined;
+  const progressUniform = material.userData.freezeProgress as { value: number } | undefined;
+  const seedUniform = material.userData.freezeSeed as { value: number } | undefined;
+  if (amountUniform) amountUniform.value = THREE.MathUtils.clamp(amount, 0, 1);
+  if (progressUniform) progressUniform.value = THREE.MathUtils.clamp(progress, 0, 1);
+  if (seedUniform) seedUniform.value = seed;
 }
 
 class QuarterCircleCurve3 extends THREE.Curve<THREE.Vector3> {
@@ -229,6 +573,12 @@ export function createCappedTubeGeometry(
   const geometry = mergeGeometries(parts, false);
   parts.forEach((part) => part.dispose());
   if (!geometry) throw new Error('Unable to merge capped cable tube geometry.');
+  const uv = geometry.getAttribute('uv');
+  const progress = new Float32Array(geometry.getAttribute('position').count);
+  if (uv) {
+    for (let index = 0; index < progress.length; index += 1) progress[index] = uv.getX(index);
+  }
+  geometry.setAttribute('aCableProgress', new THREE.BufferAttribute(progress, 1));
   geometry.computeBoundingBox();
   geometry.computeBoundingSphere();
   return geometry;

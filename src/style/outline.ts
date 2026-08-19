@@ -8,11 +8,21 @@ const vertexShader = /* glsl */ `
   uniform float uVariation;
   uniform float uVariationPhase;
   uniform float uVisualInflation;
+  uniform float uRevealEnabled;
+  uniform float uRevealProgress;
+  uniform float uRootFadeEnabled;
+  uniform float uRootFadeStart;
+  uniform float uRootFadeEnd;
   uniform vec2 uResolution;
+  attribute float aCableProgress;
+  varying float vOutlineCableProgress;
+  varying float vOutlineLocalY;
   ${SOFT_CAGE_UNIFORM_GLSL}
   ${SOFT_CAGE_FUNCTION_GLSL}
 
   void main() {
+    vOutlineCableProgress = aCableProgress;
+    vOutlineLocalY = position.y;
     vec4 world = modelMatrix * vec4(position, 1.0);
     world.xyz += normalize(mat3(modelMatrix) * normal) * uVisualInflation;
     world.xyz = softApplyCage(world.xyz);
@@ -38,8 +48,29 @@ const vertexShader = /* glsl */ `
 const fragmentShader = /* glsl */ `
   uniform vec3 uColor;
   uniform float uOpacity;
+  uniform float uRevealEnabled;
+  uniform float uRevealProgress;
+  uniform float uRootFadeEnabled;
+  uniform float uRootFadeStart;
+  uniform float uRootFadeEnd;
+  varying float vOutlineCableProgress;
+  varying float vOutlineLocalY;
   void main() {
-    gl_FragColor = vec4(uColor, uOpacity);
+    if (uRevealEnabled > 0.5) {
+      float revealDistance = 1.0 - vOutlineCableProgress;
+      float reveal = 1.0 - smoothstep(
+        uRevealProgress - 0.075,
+        uRevealProgress + 0.025,
+        revealDistance
+      );
+      if (uRevealProgress > 0.985) reveal = 1.0;
+      if (reveal < 0.012) discard;
+    }
+    float rootFade = uRootFadeEnabled > 0.5
+      ? smoothstep(uRootFadeStart, uRootFadeEnd, vOutlineLocalY)
+      : 1.0;
+    if (rootFade < 0.012) discard;
+    gl_FragColor = vec4(uColor, uOpacity * rootFade);
   }
 `;
 
@@ -67,7 +98,7 @@ function smoothGeometry(geometry: THREE.BufferGeometry): THREE.BufferGeometry {
   }
 
   for (const name of Object.keys(result.attributes)) {
-    if (name !== 'position' && name !== 'normal') result.deleteAttribute(name);
+    if (name !== 'position' && name !== 'normal' && name !== 'aCableProgress') result.deleteAttribute(name);
   }
   geometryCache.set(geometry, result);
   return result;
@@ -84,6 +115,11 @@ export function addHullOutline(
       uVariation: { value: 0 },
       uVariationPhase: { value: 0 },
       uVisualInflation: { value: 0 },
+      uRevealEnabled: { value: 0 },
+      uRevealProgress: { value: 1 },
+      uRootFadeEnabled: { value: 0 },
+      uRootFadeStart: { value: 0 },
+      uRootFadeEnd: { value: 0.2 },
       uColor: { value: new THREE.Color(color) },
       uOpacity: { value: 1 },
       uResolution: { value: resolution.clone() },
@@ -140,4 +176,31 @@ export function setHullOutlineVisualInflation(outline: THREE.Mesh | null, inflat
   if (!outline?.userData.isOutline || !(outline.material instanceof THREE.ShaderMaterial)) return;
   const uniform = outline.material.uniforms.uVisualInflation;
   if (uniform) uniform.value = Math.max(0, inflation);
+}
+
+export function setHullOutlineReveal(outline: THREE.Mesh | null, progress: number | null): void {
+  if (!outline?.userData.isOutline || !(outline.material instanceof THREE.ShaderMaterial)) return;
+  const uniforms = outline.material.uniforms;
+  if (uniforms.uRevealEnabled) uniforms.uRevealEnabled.value = progress === null ? 0 : 1;
+  if (uniforms.uRevealProgress) {
+    uniforms.uRevealProgress.value = progress === null ? 1 : THREE.MathUtils.clamp(progress, 0, 1);
+  }
+}
+
+/**
+ * Softens the lower part of an outline without fading the mesh itself. Ice
+ * spikes use this to keep a bold outer silhouette while their buried root
+ * visually merges into the surrounding ice shell.
+ */
+export function setHullOutlineRootFade(
+  outline: THREE.Mesh | null,
+  start: number | null,
+  end = 0.24,
+): void {
+  if (!outline?.userData.isOutline || !(outline.material instanceof THREE.ShaderMaterial)) return;
+  const uniforms = outline.material.uniforms;
+  if (uniforms.uRootFadeEnabled) uniforms.uRootFadeEnabled.value = start === null ? 0 : 1;
+  if (start === null) return;
+  if (uniforms.uRootFadeStart) uniforms.uRootFadeStart.value = start;
+  if (uniforms.uRootFadeEnd) uniforms.uRootFadeEnd.value = Math.max(start + 0.001, end);
 }

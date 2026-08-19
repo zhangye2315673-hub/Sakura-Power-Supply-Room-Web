@@ -4,7 +4,7 @@ import {
   DIRECTION_VECTORS,
   EXIT_DISTANCE,
   LANE_PITCH,
-  gridPointToWorld,
+  cableSocketPointsToWorld,
   type ArrowDefinition,
   type ArrowRuntime,
   type CableEnd,
@@ -43,10 +43,11 @@ function spatialKey(x: number, y: number, z: number): number {
 export function sampleArrowPath(definition: ArrowDefinition): THREE.Vector3[] {
   const points: THREE.Vector3[] = [];
   const spacing = LANE_PITCH * 0.2;
+  const socketPoints = cableSocketPointsToWorld(definition);
 
   for (let index = 0; index < definition.path.length - 1; index += 1) {
-    const start = gridPointToWorld(definition.path[index]);
-    const end = gridPointToWorld(definition.path[index + 1]);
+    const start = socketPoints[index];
+    const end = socketPoints[index + 1];
     const distance = start.distanceTo(end);
     const steps = Math.max(2, Math.ceil(distance / spacing));
     for (let step = 0; step <= steps; step += 1) {

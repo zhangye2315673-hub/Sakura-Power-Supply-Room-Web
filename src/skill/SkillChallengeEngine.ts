@@ -318,7 +318,7 @@ const APPLIANCE_SKILL_DEFINITIONS: readonly ApplianceSkillDefinition[] = [
         { type: 'reconstruct', cableIds: targets },
       ], targets, { topologyChanged: true });
     }, (ctx) => ctx.remainingCables.length > 1 ? 'normal-risk' : null),
-  basicDefinition('radio', 'route-broadcast', '三步路线广播', '按 123—123 提示可连续抽出的路线。', 'positive', null,
+  basicDefinition('radio', 'route-broadcast', '三步路线广播', '持续标记接下来三根可抽线路，当前目标会脉冲提示。', 'positive', null,
     (ctx) => ctx.removalSequence.length > 0,
     (ctx) => {
       const targets = ctx.removalSequence.slice(0, 3);
@@ -547,6 +547,13 @@ export class SkillChallengeEngine {
     this.stateValue = this.createInitialState(seed);
     this.transaction = null;
     this.pendingCards = [];
+  }
+
+  primeForSkillTest(commands: readonly SkillCommand[]): void {
+    if (this.stateValue.phase !== 'idle' || this.transaction || this.stateValue.skillEventIndex !== 0) {
+      throw new Error('Skill test state can only be primed before its first transaction.');
+    }
+    this.applyCommands(commands);
   }
 
   beginManualPull(cableId: string, appliance: ApplianceKind): boolean {

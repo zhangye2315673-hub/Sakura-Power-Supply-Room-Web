@@ -3,6 +3,54 @@ import * as THREE from 'three';
 export const LAMP_PERFORMANCE_DURATION = 5.2;
 export const LAMP_BEAM_SOURCE_RADIUS_LOCAL = 0.565;
 export const LAMP_BEAM_FAR_TO_NEAR_RATIO = 3.35;
+export const LAMP_BEAM_DEFAULT_LENGTH_LOCAL = 5.4;
+
+export type LampVolumetricBeam = THREE.Mesh<THREE.BufferGeometry, THREE.ShaderMaterial>;
+
+export function createLampVolumetricBeam(
+  name = 'lamp-volumetric-light-cone',
+): LampVolumetricBeam {
+  const material = new THREE.ShaderMaterial({
+    uniforms: { uOpacity: { value: 0.15 } },
+    vertexShader: `
+      varying float vAxial;
+      void main() {
+        vAxial = clamp(position.y + 0.5, 0.0, 1.0);
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }
+    `,
+    fragmentShader: `
+      varying float vAxial;
+      uniform float uOpacity;
+      void main() {
+        float nearFeather = smoothstep(0.0, 0.08, vAxial);
+        float farFeather = 1.0 - smoothstep(0.72, 1.0, vAxial);
+        float body = mix(0.92, 0.34, vAxial);
+        vec3 warm = mix(vec3(1.0, 0.94, 0.66), vec3(1.0, 0.73, 0.34), vAxial);
+        gl_FragColor = vec4(warm, uOpacity * body * nearFeather * farFeather);
+      }
+    `,
+    transparent: true,
+    side: THREE.DoubleSide,
+    depthWrite: false,
+    blending: THREE.AdditiveBlending,
+  });
+  // Local -Y is the lamp mouth; local +Y is the widening far end.
+  const geometry = new THREE.CylinderGeometry(
+    LAMP_BEAM_FAR_TO_NEAR_RATIO,
+    1,
+    1,
+    32,
+    6,
+    true,
+  );
+  const beam = new THREE.Mesh(geometry, material);
+  beam.name = name;
+  beam.visible = false;
+  beam.renderOrder = 5;
+  beam.frustumCulled = false;
+  return beam;
+}
 
 export type LampBeamDiagnostics = {
   timelineTime: number;

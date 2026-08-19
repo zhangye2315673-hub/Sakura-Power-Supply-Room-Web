@@ -10,7 +10,7 @@ import {
   ARROW_RADIUS,
   STATIC_BODY_CLEARANCE,
   STATIC_PLUG_CLEARANCE,
-  gridPointToWorld,
+  cableSocketPointsToWorld,
   type ArrowDefinition,
   type CableEnd,
   type GridPoint,
@@ -31,9 +31,10 @@ type Segment = {
 };
 
 function segmentsFor(definition: ArrowDefinition): Segment[] {
-  return definition.path.slice(0, -1).map((point, index) => ({
-    start: gridPointToWorld(point),
-    end: gridPointToWorld(definition.path[index + 1]),
+  const socketPoints = cableSocketPointsToWorld(definition);
+  return socketPoints.slice(0, -1).map((point, index) => ({
+    start: point,
+    end: socketPoints[index + 1],
     index,
   }));
 }
@@ -143,7 +144,7 @@ const PLUG_CONTACT_RADIUS = PLUG_HEAD_PIN_RADIUS + PLUG_HEAD_PIN_CLEARANCE;
 
 function plugEnvelope(definition: ArrowDefinition, end: CableEnd = 'head'): PlugEnvelope {
   const endpointIndex = end === 'head' ? definition.path.length - 1 : 0;
-  const head = gridPointToWorld(definition.path[endpointIndex]);
+  const head = cableSocketPointsToWorld(definition)[endpointIndex];
   const directionKey = end === 'head'
     ? definition.exitDirection
     : directionKeyFromDelta([
@@ -170,6 +171,22 @@ function plugEnvelopes(definition: ArrowDefinition): PlugEnvelope[] {
   return definition.doubleEnded
     ? [plugEnvelope(definition, 'head'), plugEnvelope(definition, 'tail')]
     : [plugEnvelope(definition, 'head')];
+}
+
+function nonAdjacentSegmentsForPlug(
+  segments: readonly Segment[],
+  end: CableEnd,
+): Segment[] {
+  if (segments.length === 0) return [];
+  const ordered = end === 'head' ? [...segments].reverse() : [...segments];
+  const feedDirection = ordered[0].end.clone().sub(ordered[0].start).normalize();
+  const adjacentIndices = new Set<number>();
+  for (const segment of ordered) {
+    const direction = segment.end.clone().sub(segment.start).normalize();
+    if (Math.abs(direction.dot(feedDirection)) < 0.999) break;
+    adjacentIndices.add(segment.index);
+  }
+  return segments.filter((segment) => !adjacentIndices.has(segment.index));
 }
 
 function envelopeAgainstBodyIsClear(envelope: PlugEnvelope, segment: Segment): boolean {
@@ -224,9 +241,8 @@ export function validatePuzzleGeometry(definitions: readonly ArrowDefinition[]):
 
     const ownPlugs = plugEnvelopes(definition);
     ownPlugs.forEach((ownPlug, plugIndex) => {
-      const nonAdjacentSegments = plugIndex === 0
-        ? ownSegments.slice(0, -1)
-        : ownSegments.slice(1);
+      const end: CableEnd = plugIndex === 0 ? 'head' : 'tail';
+      const nonAdjacentSegments = nonAdjacentSegmentsForPlug(ownSegments, end);
       for (const segment of nonAdjacentSegments) {
         if (envelopeAgainstBodyIsClear(ownPlug, segment)) continue;
         const distanceSq = Math.min(
@@ -239,7 +255,7 @@ export function validatePuzzleGeometry(definitions: readonly ArrowDefinition[]):
     if (definition.doubleEnded && !envelopesAreClear(ownPlugs[0], ownPlugs[1])) {
       issues.push({ kind: 'head-tail-overlap', arrowId: definition.id });
     }
-    const tail = gridPointToWorld(definition.path[0]);
+    const tail = cableSocketPointsToWorld(definition)[0];
     const headTailDistanceSq = pointSegmentDistanceSq(tail, ownPlugs[0].body.start, ownPlugs[0].contacts.end);
     if (!definition.doubleEnded && headTailDistanceSq < plugClearanceSq) {
       issues.push({

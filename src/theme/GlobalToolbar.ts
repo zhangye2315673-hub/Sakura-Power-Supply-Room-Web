@@ -17,6 +17,7 @@ export class GlobalToolbar {
   private readonly audioButton = document.createElement('button');
   private readonly unsubscribeTheme: () => void;
   private readonly unsubscribeAudio: () => void;
+  private themeLocked = false;
 
   constructor(
     private readonly theme: ThemeController,
@@ -46,7 +47,16 @@ export class GlobalToolbar {
     this.element.remove();
   }
 
-  private readonly onThemeClick = () => this.theme.toggle();
+  setThemeLocked(locked: boolean): void {
+    this.themeLocked = locked;
+    this.themeButton.disabled = locked;
+    this.themeButton.title = locked ? '探索模式固定为夜晚' : this.themeButton.title;
+    this.themeButton.setAttribute('aria-disabled', String(locked));
+  }
+
+  private readonly onThemeClick = () => {
+    if (!this.themeLocked) this.theme.toggle();
+  };
   private readonly onAudioClick = () => this.audio.setMuted(!this.audio.muted, true);
 
   private renderTheme(snapshot: ThemeSnapshot): void {
@@ -57,6 +67,7 @@ export class GlobalToolbar {
     this.themeButton.setAttribute('aria-label', label);
     this.themeButton.setAttribute('aria-pressed', String(snapshot.targetMode === 'night'));
     this.themeButton.dataset.mode = snapshot.targetMode;
+    if (this.themeLocked) this.themeButton.title = '探索模式固定为夜晚';
   }
 
   private renderAudio(muted: boolean): void {

@@ -35,8 +35,13 @@ type ChannelSample = {
 };
 
 const CHANNEL_ANGLES = [-0.82, 0, 0.82] as const;
-const INITIAL_SWITCHES = [0.94, 1.84] as const;
-const RAPID_SWITCH_TIMES = [2.72, 3.0, 3.28, 3.56, 3.84, 4.12] as const;
+export const TELEVISION_INITIAL_SWITCHES = [0.94, 1.84] as const;
+export const TELEVISION_RAPID_SWITCH_TIMES = [2.72, 3.0, 3.28, 3.56, 3.84, 4.12] as const;
+export const TELEVISION_RECONSTRUCTION_FINAL_LOCK_TIME = 4.48;
+export const TELEVISION_RECONSTRUCTION_COMMIT_TIME = 5.12;
+
+const INITIAL_SWITCHES = TELEVISION_INITIAL_SWITCHES;
+const RAPID_SWITCH_TIMES = TELEVISION_RAPID_SWITCH_TIMES;
 
 function pulse(time: number, start: number, peak: number, end: number): number {
   return THREE.MathUtils.smoothstep(time, start, peak)

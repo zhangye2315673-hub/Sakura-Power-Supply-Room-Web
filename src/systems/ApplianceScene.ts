@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-import { PAL } from '../style/palette';
 import { ARROW_COLORS } from '../style/palette';
 import type { PlugStyleId } from '../render/PlugParts';
 import { createApplianceModel } from '../appliances/models';
@@ -124,7 +123,7 @@ export class ApplianceTarget {
   activeTimeRemaining = 0;
   lifecycleScale = 1;
   private readonly materials = new Set<THREE.Material>();
-  private readonly indicatorMaterial: THREE.MeshToonMaterial;
+  readonly indicatorMaterial: THREE.MeshToonMaterial;
   private readonly softDeform: SoftDeformController | null;
   private readonly deviceBounds = new THREE.Box3();
   private readonly connectionSocketsByEdge: Partial<Record<
@@ -198,9 +197,6 @@ export class ApplianceTarget {
     this.isConnecting = true;
     this.pulse = 1;
     if (this.state === 'idle') this.state = 'connected';
-    this.indicatorMaterial.color.set(color).lerp(new THREE.Color(PAL.paper), 0.25);
-    this.indicatorMaterial.emissive.set(color);
-    this.indicatorMaterial.emissiveIntensity = 0.34;
     this.root.userData.sensoryConnectionColor = color;
   }
 
@@ -219,9 +215,6 @@ export class ApplianceTarget {
     this.lifecycleScale = 1;
     this.root.visible = true;
     this.pulse = 1;
-    this.indicatorMaterial.color.set(PAL.blossomLight);
-    this.indicatorMaterial.emissive.set(color);
-    this.indicatorMaterial.emissiveIntensity = 1.15;
     this.root.userData.sensoryConnectionColor = color;
   }
 
@@ -257,6 +250,11 @@ export class ApplianceTarget {
     this.lifecycleScale = 1;
     this.root.visible = true;
     this.pulse = 0;
+    // The shared model-kit status sphere is a construction placeholder, not a
+    // gameplay light. Keep it dark across random-challenge reuse; appliance-
+    // specific performance systems own any real display or power animation.
+    this.indicatorMaterial.emissive.setHex(0x000000);
+    this.indicatorMaterial.emissiveIntensity = 0;
     this.softDeform?.reset();
     this.resetPoweredState();
   }

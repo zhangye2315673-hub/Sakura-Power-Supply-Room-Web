@@ -6,6 +6,8 @@ import type { PetalField } from './PetalField';
 import { createSakuraPetalGeometry } from './PetalVisual';
 import { PAL } from '../style/palette';
 import {
+  createLampVolumetricBeam,
+  LAMP_BEAM_DEFAULT_LENGTH_LOCAL,
   LAMP_BEAM_FAR_TO_NEAR_RATIO,
   LAMP_BEAM_SOURCE_RADIUS_LOCAL,
   type LampBeamDiagnostics,
@@ -616,7 +618,7 @@ export class ApplianceSpectacleSystem {
     const farRadius = sourceRadius * LAMP_BEAM_FAR_TO_NEAR_RATIO;
     this.basePosition.set(0, 0, 0);
     session.target.root.localToWorld(this.basePosition);
-    const defaultLength = 5.4 * unit;
+    const defaultLength = LAMP_BEAM_DEFAULT_LENGTH_LOCAL * unit;
     const floorDistance = direction.y < -0.16
       ? (socket.y - this.basePosition.y) / -direction.y
       : Number.NaN;
@@ -1286,41 +1288,9 @@ export class ApplianceSpectacleSystem {
   }
 
   private buildAccessorySlot(): AccessorySlot {
-    const beamMaterial = new THREE.ShaderMaterial({
-      uniforms: { uOpacity: { value: 0.15 } },
-      vertexShader: `
-        varying float vAxial;
-        void main() {
-          vAxial = clamp(position.y + 0.5, 0.0, 1.0);
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-        }
-      `,
-      fragmentShader: `
-        varying float vAxial;
-        uniform float uOpacity;
-        void main() {
-          float nearFeather = smoothstep(0.0, 0.08, vAxial);
-          float farFeather = 1.0 - smoothstep(0.72, 1.0, vAxial);
-          float body = mix(0.92, 0.34, vAxial);
-          vec3 warm = mix(vec3(1.0, 0.94, 0.66), vec3(1.0, 0.73, 0.34), vAxial);
-          gl_FragColor = vec4(warm, uOpacity * body * nearFeather * farFeather);
-        }
-      `,
-      transparent: true,
-      side: THREE.DoubleSide,
-      depthWrite: false,
-      blending: THREE.AdditiveBlending,
-    });
-    this.materials.add(beamMaterial);
-    // CylinderGeometry radiusTop is the +Y end. +Y is aligned with the emitted
-    // direction, so the broad radius must be first and the aperture radius last.
-    const beamGeometry = new THREE.CylinderGeometry(LAMP_BEAM_FAR_TO_NEAR_RATIO, 1, 1, 32, 6, true);
-    this.geometries.add(beamGeometry);
-    const beam = new THREE.Mesh(beamGeometry, beamMaterial);
-    beam.name = 'lamp-volumetric-light-cone';
-    beam.visible = false;
-    beam.renderOrder = 5;
-    beam.frustumCulled = false;
+    const beam = createLampVolumetricBeam();
+    this.materials.add(beam.material);
+    this.geometries.add(beam.geometry);
     this.root.add(beam);
 
     const lightPoolMaterial = new THREE.ShaderMaterial({

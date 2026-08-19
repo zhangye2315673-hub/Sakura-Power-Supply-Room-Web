@@ -1,10 +1,10 @@
 import * as THREE from 'three';
-import type { ApplianceTarget } from '../systems/ApplianceScene';
 import type { SkyRig } from '../style/sky';
 import type { NightQualityTier } from './ThemeController';
 
 export type LanternSnapshot = {
   position: [number, number];
+  worldPosition: [number, number, number];
   target: [number, number];
   intensity: number;
   targetIntensity: number;
@@ -37,8 +37,12 @@ const NIGHT = {
   hemiGround: new THREE.Color(0x77788e),
 };
 
+const EXPLORATION_FOG = new THREE.Color(0x070914);
+const EXPLORATION_AMBIENT = 0.015;
+
 export class NightEnvironment {
   private progress = 0;
+  private explorationProgress = 0;
   private quality: NightQualityTier = 'high';
   private readonly lanternPoint = new THREE.PointLight(0xffd7b0, 0, 18, 1.45);
   private readonly lanternNdc = new THREE.Vector2(0, 0);
@@ -80,9 +84,20 @@ export class NightEnvironment {
 
   setThemeProgress(progress: number): void {
     this.progress = THREE.MathUtils.clamp(progress, 0, 1);
+    this.applyEnvironmentLighting();
+  }
+
+  setExplorationProgress(progress: number): void {
+    this.explorationProgress = THREE.MathUtils.clamp(progress, 0, 1);
+    this.applyEnvironmentLighting();
+    this.sky.setExplorationProgress(this.explorationProgress);
+  }
+
+  private applyEnvironmentLighting(): void {
     const fog = this.scene.fog instanceof THREE.Fog ? this.scene.fog : null;
     if (fog) {
       fog.color.copy(DAY.fog).lerp(NIGHT.fog, this.progress);
+      fog.color.lerp(EXPLORATION_FOG, this.explorationProgress * this.progress);
       fog.near = THREE.MathUtils.lerp(this.baseFogNear, this.baseFogNear * 0.88, this.progress);
       fog.far = THREE.MathUtils.lerp(this.baseFogFar, this.baseFogFar * 0.88, this.progress);
     }
@@ -91,10 +106,11 @@ export class NightEnvironment {
     this.lights.bounce.color.copy(DAY.bounce).lerp(NIGHT.bounce, this.progress);
     this.lights.hemi.color.copy(DAY.hemiSky).lerp(NIGHT.hemiSky, this.progress);
     this.lights.hemi.groundColor.copy(DAY.hemiGround).lerp(NIGHT.hemiGround, this.progress);
-    this.lights.sun.intensity = THREE.MathUtils.lerp(2.25, 0.82, this.progress);
-    this.lights.fill.intensity = THREE.MathUtils.lerp(1.08, 0.62, this.progress);
-    this.lights.bounce.intensity = THREE.MathUtils.lerp(0.34, 0.28, this.progress);
-    this.lights.hemi.intensity = THREE.MathUtils.lerp(1.12, 0.68, this.progress);
+    const ambientScale = THREE.MathUtils.lerp(1, EXPLORATION_AMBIENT, this.explorationProgress * this.progress);
+    this.lights.sun.intensity = THREE.MathUtils.lerp(2.25, 0.82, this.progress) * ambientScale;
+    this.lights.fill.intensity = THREE.MathUtils.lerp(1.08, 0.62, this.progress) * ambientScale;
+    this.lights.bounce.intensity = THREE.MathUtils.lerp(0.34, 0.28, this.progress) * ambientScale;
+    this.lights.hemi.intensity = THREE.MathUtils.lerp(1.12, 0.68, this.progress) * ambientScale;
     this.sky.setThemeProgress(this.progress);
   }
 
@@ -111,7 +127,6 @@ export class NightEnvironment {
   update(delta: number, elapsed: number, options: {
     opening: boolean;
     galleryOpen: boolean;
-    appliances: readonly ApplianceTarget[];
     openingFocus?: THREE.Vector3;
   }): void {
     const forceCenter = options.galleryOpen || this.pointerOverUi || !this.pointerActive;
@@ -120,7 +135,7 @@ export class NightEnvironment {
     this.lanternNdc.lerp(desired, response);
     const desiredIntensity = options.galleryOpen
       ? 0
-      : forceCenter ? 0.68 : this.inApplianceZone ? 0.82 : options.opening ? 1.04 : 1;
+      : forceCenter ? 0.68 : options.opening ? 1.04 : 1;
     this.lanternTargetIntensity = desiredIntensity;
     const intensityResponse = 1 - Math.exp(-delta / (forceCenter ? 0.4 : 0.12));
     this.lanternIntensity = THREE.MathUtils.lerp(
@@ -142,21 +157,6 @@ export class NightEnvironment {
       const focusDepth = options.openingFocus.clone().sub(this.camera.position).dot(this.cameraDirection);
       this.raycaster.ray.at(Math.max(1, focusDepth), this.lanternWorld);
     }
-    if (this.inApplianceZone && !forceCenter) {
-      const pointerX = this.lanternNdc.x * 0.5 + 0.5;
-      const pointerY = 0.5 - this.lanternNdc.y * 0.5;
-      const nearest = options.appliances.reduce<{ target: ApplianceTarget; distance: number } | null>(
-        (best, target) => {
-          const distance = Math.hypot(
-            target.screenPosition.x - pointerX,
-            target.screenPosition.y - pointerY,
-          );
-          return best === null || distance < best.distance ? { target, distance } : best;
-        },
-        null,
-      );
-      if (nearest && nearest.distance < 0.24) nearest.target.root.getWorldPosition(this.lanternWorld);
-    }
     this.lanternWorld.addScaledVector(this.cameraDirection, -2.2);
     this.lanternPoint.position.copy(this.lanternWorld);
     const shimmer = this.reducedMotion ? 1 : 0.985 + Math.sin(elapsed * 2.3) * 0.015;
@@ -169,6 +169,7 @@ export class NightEnvironment {
   get lantern(): LanternSnapshot {
     return {
       position: [this.lanternNdc.x, this.lanternNdc.y],
+      worldPosition: [this.lanternWorld.x, this.lanternWorld.y, this.lanternWorld.z],
       target: [this.lanternTarget.x, this.lanternTarget.y],
       intensity: this.lanternIntensity,
       targetIntensity: this.lanternTargetIntensity,

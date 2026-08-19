@@ -367,20 +367,6 @@ export function createDehumidifierModel(options: ApplianceModelOptions): Applian
   shellHighlight.position.set(-0.02, 2.5, 0.666);
   setPart(shellHighlight, 'shell-highlight', true);
 
-  const shoulderFacetGeometry = rounded(0.13, 0.82, 0.024, 0.02, 2);
-  for (const [side, x, tilt] of [['left', -0.935, 0.12], ['right', 0.935, -0.12]] as const) {
-    const facet = kit.mesh(
-      `dehumidifier-front-${side}-shoulder-facet`,
-      shoulderFacetGeometry,
-      creamLight,
-      bodyPivot,
-      false,
-    );
-    facet.position.set(x, 2.05, 0.626);
-    facet.rotation.z = tilt;
-    setPart(facet, 'upper-shell-facets', true);
-  }
-
   // The tank has a forward translation pivot and release socket for catalog interaction.
   const tankPivot = kit.pivot('dehumidifier-water-tank-slide-pivot', wholeMachinePivot);
   tankPivot.userData.translationAxis = [0, 0, 1];

@@ -16,6 +16,7 @@ export type SkillScreenEffect =
   | 'bathroom-steam'
   | 'coffee-lock'
   | 'television-glitch'
+  | 'toaster-heat'
   | 'printer-scan'
   | 'iridescent-bubble';
 
@@ -95,12 +96,13 @@ const gradeShader: ShaderDefinition = {
     uVignette: { value: 0.1 },
     uWarmth: { value: 0.045 },
     uThemeProgress: { value: 0 },
+    uExplorationProgress: { value: 0 },
   },
   vertexShader,
   fragmentShader: /* glsl */ `
     uniform sampler2D tDiffuse;
     uniform vec3 uShadowTint, uLightTint;
-    uniform float uSaturation, uLift, uVignette, uWarmth, uThemeProgress;
+    uniform float uSaturation, uLift, uVignette, uWarmth, uThemeProgress, uExplorationProgress;
     varying vec2 vUv;
 
     vec3 linearToSRGB(vec3 c) {
@@ -117,7 +119,7 @@ const gradeShader: ShaderDefinition = {
       float k = smoothstep(0.02, 0.55, l);
       c *= mix(uShadowTint, uLightTint, k);
       c += vec3(uWarmth, uWarmth * 0.45, 0.0) * l * 0.35;
-      c += uLift * (1.0 - k);
+      c += uLift * (1.0 - k) * (1.0 - uExplorationProgress);
       c = mix(vec3(l), c, uSaturation);
       float r = length(vUv - 0.5) * 1.42;
       c *= 1.0 - uVignette * pow(clamp(r, 0.0, 1.0), 2.6);
@@ -125,7 +127,7 @@ const gradeShader: ShaderDefinition = {
       float nightLuma = dot(srgb, vec3(0.2126, 0.7152, 0.0722));
       vec3 night = mix(vec3(nightLuma), srgb, 1.14) * 0.77;
       night *= vec3(0.97, 0.99, 1.04);
-      night += vec3(0.025, 0.03, 0.062) * (1.0 - nightLuma);
+      night += vec3(0.025, 0.03, 0.062) * (1.0 - nightLuma) * (1.0 - uExplorationProgress);
       gl_FragColor = vec4(mix(srgb, night, uThemeProgress), 1.0);
     }
   `,
@@ -139,6 +141,7 @@ const lanternShader: ShaderDefinition = {
     uAspect: { value: 1 },
     uIntensity: { value: 0 },
     uThemeProgress: { value: 0 },
+    uExplorationProgress: { value: 0 },
     uColor: { value: new THREE.Color(0xffcfad) },
   },
   vertexShader,
@@ -146,12 +149,12 @@ const lanternShader: ShaderDefinition = {
     uniform sampler2D tDiffuse;
     uniform sampler2D tDepth;
     uniform vec2 uLantern;
-    uniform float uAspect, uIntensity, uThemeProgress;
+    uniform float uAspect, uIntensity, uThemeProgress, uExplorationProgress;
     uniform vec3 uColor;
     varying vec2 vUv;
 
     void main() {
-      vec3 color = texture2D(tDiffuse, vUv).rgb;
+      vec3 normalColor = texture2D(tDiffuse, vUv).rgb;
       float depth = texture2D(tDepth, vUv).x;
       vec2 delta = vUv - (uLantern * 0.5 + 0.5);
       delta.x *= uAspect;
@@ -159,6 +162,14 @@ const lanternShader: ShaderDefinition = {
       float core = exp(-pow(distanceToLight / 0.062, 2.0));
       float falloff = exp(-pow(distanceToLight / 0.155, 1.38));
       float sceneMask = 1.0 - smoothstep(0.994, 1.0, depth);
+      float peak = max(normalColor.r, max(normalColor.g, normalColor.b));
+      float trough = min(normalColor.r, min(normalColor.g, normalColor.b));
+      float chroma = peak - trough;
+      float neonKeep = smoothstep(0.52, 0.88, peak) * smoothstep(0.09, 0.28, chroma);
+      vec3 explorationDark = normalColor * mix(0.025, 0.72, neonKeep);
+      vec3 color = mix(normalColor, explorationDark, uExplorationProgress);
+      float reveal = clamp(falloff * 1.08, 0.0, 1.0) * sceneMask;
+      color = mix(color, normalColor, reveal * uExplorationProgress);
       // Preserve the lantern's bloom-like centre while taking exactly five
       // percent off the hottest core so cable intersections do not white out.
       float exposure = (core * 0.2527 + falloff * 0.38) * uIntensity * uThemeProgress * sceneMask;
@@ -265,18 +276,681 @@ const fxaaShader: ShaderDefinition = {
   `,
 };
 
-const skillEffectShader: ShaderDefinition = {
+const steamBlurShader: ShaderDefinition = {
   uniforms: {
     tDiffuse: { value: null },
-    uTexel: { value: new THREE.Vector2() },
-    uTime: { value: 0 },
-    uEffect: { value: 0 },
+    uDirection: { value: new THREE.Vector2() },
   },
   vertexShader,
   fragmentShader: /* glsl */ `
     uniform sampler2D tDiffuse;
+    uniform vec2 uDirection;
+    varying vec2 vUv;
+
+    void main() {
+      vec3 color = texture2D(tDiffuse, vUv).rgb * 0.18;
+      color += texture2D(tDiffuse, vUv + uDirection).rgb * 0.16;
+      color += texture2D(tDiffuse, vUv - uDirection).rgb * 0.16;
+      color += texture2D(tDiffuse, vUv + uDirection * 2.0).rgb * 0.12;
+      color += texture2D(tDiffuse, vUv - uDirection * 2.0).rgb * 0.12;
+      color += texture2D(tDiffuse, vUv + uDirection * 3.0).rgb * 0.08;
+      color += texture2D(tDiffuse, vUv - uDirection * 3.0).rgb * 0.08;
+      color += texture2D(tDiffuse, vUv + uDirection * 4.0).rgb * 0.05;
+      color += texture2D(tDiffuse, vUv - uDirection * 4.0).rgb * 0.05;
+      gl_FragColor = vec4(color, 1.0);
+    }
+  `,
+};
+
+type SteamTrailPoint = {
+  x: number;
+  y: number;
+  radius: number;
+  life: number;
+};
+
+type SteamMicroDrop = {
+  x: number;
+  y: number;
+  radius: number;
+  maxRadius: number;
+  growthRate: number;
+  opacity: number;
+  age: number;
+  life: number;
+  active: boolean;
+};
+
+type SteamMotionStyle = 'surge' | 'burst' | 'stutter' | 'steady';
+
+type SteamDrop = {
+  x: number;
+  y: number;
+  radius: number;
+  vx: number;
+  vy: number;
+  drift: number;
+  resistance: number;
+  mobility: number;
+  motionStyle: SteamMotionStyle;
+  phase: number;
+  burstAt: number;
+  burstTriggered: boolean;
+  sizeVelocity: number;
+  motionTimer: number;
+  distanceSinceTrail: number;
+  nextTrailDistance: number;
+  wait: number;
+  age: number;
+  life: number;
+  trail: SteamTrailPoint[];
+};
+
+/**
+ * Small CPU-side condensation field. It is deliberately a single low-resolution
+ * texture: the scene stays in the existing Three.js post stack while this field
+ * only carries droplet height (R) and wet trails (G).
+ */
+class SteamCondensationField {
+  readonly texture: THREE.CanvasTexture;
+  readonly canvas: HTMLCanvasElement;
+  private readonly context: CanvasRenderingContext2D;
+  private readonly microDrops: SteamMicroDrop[] = [];
+  private readonly drops: SteamDrop[] = [];
+  private width = 256;
+  private height = 144;
+  private randomState = 0x6d2b79f5;
+  private elapsed = 0;
+  private lastStep = 0;
+  private lastPaint = -1;
+  private spawnClock = 0;
+  private microSpawnClock = 0;
+  private active = false;
+
+  constructor() {
+    this.canvas = document.createElement('canvas');
+    this.canvas.width = this.width;
+    this.canvas.height = this.height;
+    const context = this.canvas.getContext('2d');
+    if (!context) throw new Error('Unable to create the steam condensation canvas.');
+    this.context = context;
+    this.texture = new THREE.CanvasTexture(this.canvas);
+    this.texture.minFilter = THREE.LinearFilter;
+    this.texture.magFilter = THREE.LinearFilter;
+    this.texture.wrapS = THREE.ClampToEdgeWrapping;
+    this.texture.wrapT = THREE.ClampToEdgeWrapping;
+    this.texture.colorSpace = THREE.NoColorSpace;
+    this.texture.needsUpdate = true;
+    this.seedMicroDrops();
+    this.paint();
+  }
+
+  setSize(width: number, height: number): void {
+    const nextWidth = Math.max(128, Math.min(480, Math.floor(width)));
+    const nextHeight = Math.max(72, Math.min(320, Math.floor(height)));
+    if (nextWidth === this.width && nextHeight === this.height) return;
+    this.width = nextWidth;
+    this.height = nextHeight;
+    this.canvas.width = nextWidth;
+    this.canvas.height = nextHeight;
+    this.seedMicroDrops();
+    this.paint();
+  }
+
+  get texel(): THREE.Vector2 {
+    return new THREE.Vector2(1 / this.width, 1 / this.height);
+  }
+
+  activate(): void {
+    if (this.active) return;
+    this.active = true;
+    this.elapsed = 0;
+    this.lastStep = 0;
+    this.lastPaint = -1;
+    this.spawnClock = 0;
+    this.microSpawnClock = 0;
+    this.drops.length = 0;
+    this.seedMicroDrops();
+    for (let index = 0; index < 18; index += 1) this.spawnDrop(index / 18);
+    this.paint();
+  }
+
+  deactivate(): void {
+    this.active = false;
+    this.drops.length = 0;
+    this.paint();
+  }
+
+  update(time: number): void {
+    if (!this.active) return;
+    if (this.lastStep <= 0) this.lastStep = time;
+    const delta = Math.min(0.05, Math.max(0, time - this.lastStep));
+    this.lastStep = time;
+    this.elapsed += delta;
+    this.spawnClock += delta;
+    this.microSpawnClock += delta;
+
+    while (this.spawnClock > 0.72 && this.drops.length < 26) {
+      this.spawnClock -= 0.72;
+      this.spawnDrop();
+    }
+
+    while (this.microSpawnClock > 0.14) {
+      this.microSpawnClock -= 0.14;
+      this.spawnMicroDrop();
+    }
+
+    for (const micro of this.microDrops) {
+      if (!micro.active) continue;
+      micro.age += delta;
+      micro.radius = Math.min(micro.maxRadius, micro.radius + micro.growthRate * delta);
+      if (micro.age > micro.life) this.resetMicroDrop(micro);
+    }
+
+    if (this.drops.length < 26 && this.nextRandom() < delta * 0.34) {
+      const start = Math.floor(this.nextRandom() * this.microDrops.length);
+      for (let offset = 0; offset < this.microDrops.length; offset += 1) {
+        const micro = this.microDrops[(start + offset) % this.microDrops.length];
+        if (!micro.active || micro.age < 1.8 || micro.radius < 0.0082) continue;
+        this.spawnDrop(-1, micro);
+        micro.active = false;
+        break;
+      }
+    }
+
+    for (const drop of this.drops) {
+      drop.age += delta;
+      drop.phase += delta;
+      const sizeMotion = 0.35 + THREE.MathUtils.clamp(drop.vy / 0.08, 0, 1);
+      drop.radius = THREE.MathUtils.clamp(
+        drop.radius + drop.sizeVelocity * sizeMotion * delta,
+        0.0085,
+        0.042,
+      );
+      drop.wait = Math.max(0, drop.wait - delta);
+      if (drop.wait <= 0) {
+        let pulseScale = 1;
+        let frictionScale = 1;
+        if (drop.motionStyle === 'surge') {
+          const cycle = (drop.phase + drop.burstAt) % 4.4;
+          if (cycle < 0.85) {
+            pulseScale = 2.45;
+            frictionScale = 0.55;
+          } else if (cycle < 2.65) {
+            pulseScale = 0.08;
+            frictionScale = 2.75;
+          } else {
+            pulseScale = 2.1;
+            frictionScale = 0.72;
+          }
+        } else if (drop.motionStyle === 'burst') {
+          if (!drop.burstTriggered && drop.phase >= drop.burstAt) {
+            drop.vy = Math.max(drop.vy, 0.07 + this.nextRandom() * 0.035);
+            drop.resistance *= 0.52;
+            drop.burstTriggered = true;
+          }
+          pulseScale = drop.burstTriggered ? 1.35 : 0.08;
+          frictionScale = drop.burstTriggered ? 0.68 : 1.9;
+        } else if (drop.motionStyle === 'stutter') {
+          pulseScale = 1.65;
+          frictionScale = 2.2;
+        } else {
+          pulseScale = 0.82;
+          frictionScale = 0.86;
+        }
+
+        drop.motionTimer -= delta;
+        if (drop.motionTimer <= 0) {
+          const sizeFactor = THREE.MathUtils.clamp((drop.radius - 0.01) / 0.032, 0, 1);
+          drop.motionTimer = 0.28 + this.nextRandom() * 0.72;
+          drop.resistance = 0.45 + this.nextRandom() * 1.3 + (1 - drop.mobility) * 0.55;
+          drop.drift = (this.nextRandom() - 0.5) * (0.16 - sizeFactor * 0.06);
+          const pauseThreshold = drop.motionStyle === 'stutter'
+            ? 0.24 + drop.mobility * 0.28
+            : 0.38 + drop.mobility * 0.5;
+          if (drop.vy < (drop.motionStyle === 'stutter' ? 0.021 : 0.007) && this.nextRandom() > pauseThreshold) {
+            drop.wait = 0.16 + this.nextRandom() * (0.72 - drop.mobility * 0.34);
+          }
+        }
+
+        const sizeFactor = THREE.MathUtils.clamp((drop.radius - 0.01) / 0.032, 0, 1);
+        const gravityPulseChance = (0.16 + sizeFactor * 1.22)
+          * (0.62 + drop.mobility * 0.9)
+          * pulseScale
+          * delta;
+        if (this.nextRandom() < gravityPulseChance) {
+          drop.vy = Math.min(
+            0.125,
+            drop.vy + (0.007 + this.nextRandom() * 0.026) * (0.55 + sizeFactor) * (0.68 + drop.mobility * 0.58),
+          );
+          drop.drift = THREE.MathUtils.clamp(
+            drop.drift + (this.nextRandom() - 0.5) * 0.045,
+            -0.12,
+            0.12,
+          );
+        }
+        const friction = (0.004 + drop.vy * 0.12)
+          * (0.72 + drop.resistance * 0.55)
+          * frictionScale;
+        drop.vy = Math.max(0, drop.vy - friction * delta);
+        const targetVx = drop.vy * drop.drift;
+        drop.vx = THREE.MathUtils.lerp(drop.vx, targetVx, 1 - Math.exp(-delta * 3.2));
+        const previousX = drop.x;
+        const previousY = drop.y;
+        if (drop.vy > 0.0005) {
+          drop.x += drop.vx * delta;
+          drop.y += drop.vy * delta;
+        }
+        drop.distanceSinceTrail += Math.hypot(drop.x - previousX, drop.y - previousY);
+
+        if (drop.distanceSinceTrail >= drop.nextTrailDistance && drop.radius > 0.012) {
+          const beadRadius = drop.radius * (0.18 + this.nextRandom() * 0.18);
+          drop.trail.push({
+            x: drop.x + (this.nextRandom() - 0.5) * drop.radius * 0.28,
+            y: drop.y - drop.radius * (0.35 + this.nextRandom() * 0.35),
+            radius: beadRadius,
+            life: 1,
+          });
+          if (drop.trail.length > 14) drop.trail.shift();
+          drop.radius = Math.max(0.01, Math.sqrt(Math.max(0.0001, drop.radius * drop.radius - beadRadius * beadRadius * 0.42)));
+          drop.distanceSinceTrail = 0;
+          const speedFactor = THREE.MathUtils.clamp(drop.vy / 0.085, 0, 1);
+          drop.nextTrailDistance = drop.radius * (0.85 + this.nextRandom() * 1.15) * (1 - speedFactor * 0.35);
+        }
+
+        const aspect = this.width / this.height;
+        for (const micro of this.microDrops) {
+          if (!micro.active) continue;
+          const dx = (micro.x - drop.x) * aspect;
+          const dy = micro.y - drop.y;
+          if (Math.hypot(dx, dy) > drop.radius * 0.72 + micro.radius) continue;
+          const dropArea = drop.radius * drop.radius;
+          const microArea = micro.radius * micro.radius;
+          drop.radius = Math.min(0.042, Math.sqrt(dropArea + microArea * 0.78));
+          drop.vy = Math.min(0.125, drop.vy + 0.0035 + micro.radius * 0.42);
+          drop.resistance *= 0.88;
+          drop.motionTimer = Math.min(drop.motionTimer, 0.12);
+          drop.trail.push({
+            x: micro.x,
+            y: micro.y,
+            radius: micro.radius * 0.86,
+            life: 1,
+          });
+          if (drop.trail.length > 14) drop.trail.shift();
+          micro.active = false;
+        }
+      }
+      for (const point of drop.trail) point.life -= delta * 0.115;
+      while (drop.trail.length > 1 && drop.trail[0].life <= 0) drop.trail.shift();
+    }
+
+    for (let first = 0; first < this.drops.length; first += 1) {
+      const a = this.drops[first];
+      for (let second = first + 1; second < this.drops.length; second += 1) {
+        const b = this.drops[second];
+        const mergeDistance = (a.radius + b.radius) * 0.68;
+        if (Math.hypot(a.x - b.x, a.y - b.y) > mergeDistance || a.radius > 0.038 || b.radius > 0.038) continue;
+        const areaA = a.radius * a.radius;
+        const areaB = b.radius * b.radius;
+        const area = areaA + areaB;
+        a.x = (a.x * areaA + b.x * areaB) / area;
+        a.y = (a.y * areaA + b.y * areaB) / area;
+        a.radius = Math.min(0.042, Math.sqrt(area));
+        const mergedMomentum = (a.vy * areaA + b.vy * areaB) / area;
+        a.vy = Math.min(0.125, Math.max(a.vy, b.vy, mergedMomentum + 0.013 + a.radius * 0.25));
+        a.vx = (a.vx * areaA + b.vx * areaB) / area;
+        a.sizeVelocity = (a.sizeVelocity * areaA + b.sizeVelocity * areaB) / area;
+        a.wait = Math.min(a.wait, b.wait);
+        a.resistance *= 0.72;
+        a.mobility = Math.max(a.mobility, b.mobility, 0.82);
+        a.motionTimer = Math.min(a.motionTimer, 0.08);
+        a.trail.push(...b.trail.slice(-3));
+        this.drops.splice(second, 1);
+        second -= 1;
+      }
+    }
+
+    for (let index = this.drops.length - 1; index >= 0; index -= 1) {
+      const drop = this.drops[index];
+      if (drop.y > 1.08 || drop.age > drop.life) this.drops.splice(index, 1);
+    }
+    if (this.drops.length < 14) this.spawnDrop();
+    if (this.lastPaint < 0 || time - this.lastPaint > 1 / 30) {
+      this.lastPaint = time;
+      this.paint();
+    }
+  }
+
+  dispose(): void {
+    this.texture.dispose();
+  }
+
+  private nextRandom(): number {
+    let value = this.randomState += 0x6d2b79f5;
+    value = Math.imul(value ^ value >>> 15, value | 1);
+    value ^= value + Math.imul(value ^ value >>> 7, value | 61);
+    return ((value ^ value >>> 14) >>> 0) / 4294967296;
+  }
+
+  private seedMicroDrops(): void {
+    this.microDrops.length = 0;
+    this.randomState = 0x6d2b79f5;
+    for (let index = 0; index < 260; index += 1) this.microDrops.push(this.createMicroDrop());
+  }
+
+  private createMicroDrop(): SteamMicroDrop {
+    const radiusSeed = this.nextRandom();
+    const radius = 0.0042 + Math.pow(radiusSeed, 0.72) * 0.0062;
+    const micro: SteamMicroDrop = {
+      x: 0.5,
+      y: 0.5,
+      radius,
+      maxRadius: radius + 0.0012 + this.nextRandom() * 0.0038,
+      growthRate: 0.00005 + this.nextRandom() * 0.0002,
+      opacity: 0.38 + this.nextRandom() * 0.42,
+      age: this.nextRandom() * 7,
+      life: 10 + this.nextRandom() * 20,
+      active: true,
+    };
+    this.placeMicroDrop(micro);
+    return micro;
+  }
+
+  private placeMicroDrop(micro: SteamMicroDrop): void {
+    const region = this.nextRandom();
+    if (region < 0.7) {
+      micro.x = 0.02 + this.nextRandom() * 0.96;
+      micro.y = 0.02 + this.nextRandom() * 0.96;
+    } else if (region < 0.85) {
+      micro.x = 0.025 + this.nextRandom() * 0.95;
+      micro.y = 0.01 + this.nextRandom() * 0.3;
+    } else {
+      micro.x = this.nextRandom() < 0.5
+        ? 0.012 + this.nextRandom() * 0.13
+        : 0.858 + this.nextRandom() * 0.13;
+      micro.y = 0.025 + this.nextRandom() * 0.95;
+    }
+  }
+
+  private resetMicroDrop(micro: SteamMicroDrop): void {
+    const radiusSeed = this.nextRandom();
+    const radius = 0.0042 + Math.pow(radiusSeed, 0.72) * 0.0062;
+    this.placeMicroDrop(micro);
+    micro.radius = radius;
+    micro.maxRadius = radius + 0.0012 + this.nextRandom() * 0.0038;
+    micro.growthRate = 0.00005 + this.nextRandom() * 0.0002;
+    micro.opacity = 0.38 + this.nextRandom() * 0.42;
+    micro.age = 0;
+    micro.life = 10 + this.nextRandom() * 20;
+    micro.active = true;
+  }
+
+  private spawnMicroDrop(): void {
+    const inactive = this.microDrops.find((micro) => !micro.active);
+    if (inactive) {
+      this.resetMicroDrop(inactive);
+      return;
+    }
+    if (this.microDrops.length < 320) {
+      const micro = this.createMicroDrop();
+      micro.age = 0;
+      this.microDrops.push(micro);
+      return;
+    }
+    let oldest: SteamMicroDrop | null = null;
+    let oldestProgress = 0;
+    for (const micro of this.microDrops) {
+      const progress = micro.age / micro.life;
+      if (progress <= oldestProgress) continue;
+      oldest = micro;
+      oldestProgress = progress;
+    }
+    if (oldest && oldestProgress > 0.82) this.resetMicroDrop(oldest);
+  }
+
+  private spawnDrop(sequence = -1, origin?: Pick<SteamMicroDrop, 'x' | 'y' | 'radius'>): void {
+    const edge = sequence >= 0 ? sequence : this.nextRandom();
+    let x = 0.5;
+    let y = 0;
+    if (origin) {
+      x = origin.x;
+      y = origin.y;
+    } else if (edge < 0.62) {
+      x = 0.05 + this.nextRandom() * 0.9;
+      y = -0.02 + this.nextRandom() * 0.1;
+    } else if (edge < 0.72) {
+      x = 0.015 + this.nextRandom() * 0.09;
+      y = 0.04 + this.nextRandom() * 0.44;
+    } else if (edge < 0.82) {
+      x = 0.895 + this.nextRandom() * 0.09;
+      y = 0.04 + this.nextRandom() * 0.44;
+    } else {
+      x = 0.1 + this.nextRandom() * 0.8;
+      y = 0.08 + this.nextRandom() * 0.42;
+    }
+    const mobility = 0.22 + this.nextRandom() * 0.78;
+    const styleRoll = this.nextRandom();
+    const motionStyle: SteamMotionStyle = styleRoll < 0.25
+      ? 'surge'
+      : styleRoll < 0.5
+        ? 'burst'
+        : styleRoll < 0.75
+          ? 'stutter'
+          : 'steady';
+    let vy = 0.018 + this.nextRandom() * 0.022;
+    let wait = 0.1 + this.nextRandom() * 0.6;
+    let burstAt = this.nextRandom() * 4.4;
+    if (motionStyle === 'surge') {
+      vy = 0.035 + this.nextRandom() * 0.03;
+      wait = 0.05 + this.nextRandom() * 0.3;
+    } else if (motionStyle === 'burst') {
+      vy = this.nextRandom() * 0.006;
+      wait = 0.5 + this.nextRandom() * 1.3;
+      burstAt = 1.4 + this.nextRandom() * 2.4;
+    } else if (motionStyle === 'stutter') {
+      vy = 0.008 + this.nextRandom() * 0.017;
+      wait = 0.2 + this.nextRandom();
+    }
+    const sizeRoll = this.nextRandom();
+    const sizeVelocity = sizeRoll < 0.35
+      ? 0.0007 + this.nextRandom() * 0.0011
+      : sizeRoll < 0.65
+        ? -(0.0005 + this.nextRandom() * 0.0008)
+        : (this.nextRandom() - 0.5) * 0.00016;
+    this.drops.push({
+      x,
+      y,
+      radius: origin
+        ? Math.max(0.009, origin.radius * (0.95 + this.nextRandom() * 0.22))
+        : 0.0105 + this.nextRandom() * 0.0135,
+      vx: (this.nextRandom() - 0.5) * 0.003,
+      vy,
+      drift: (this.nextRandom() - 0.5) * 0.08,
+      resistance: 0.52 + this.nextRandom() * 1.08 + (1 - mobility) * 0.36,
+      mobility,
+      motionStyle,
+      phase: 0,
+      burstAt,
+      burstTriggered: false,
+      sizeVelocity,
+      motionTimer: 0.15 + this.nextRandom() * 0.6,
+      distanceSinceTrail: 0,
+      nextTrailDistance: 0.018 + this.nextRandom() * 0.032,
+      wait,
+      age: 0,
+      life: 15 + this.nextRandom() * 12,
+      trail: [],
+    });
+  }
+
+  private paint(): void {
+    const context = this.context;
+    context.imageSmoothingEnabled = true;
+    context.imageSmoothingQuality = 'high';
+    context.globalCompositeOperation = 'source-over';
+    context.fillStyle = 'rgb(0,0,0)';
+    context.fillRect(0, 0, this.width, this.height);
+    context.globalCompositeOperation = 'lighter';
+    const drawMask = (
+      x: number,
+      y: number,
+      radius: number,
+      color: string,
+      stretchX = 0.78,
+      stretchY = 1.12,
+      opacity = 0.88,
+    ): void => {
+      const gradient = context.createRadialGradient(x, y, 0, x, y, radius);
+      gradient.addColorStop(0, color.replace('ALPHA', opacity.toFixed(3)));
+      gradient.addColorStop(0.58, color.replace('ALPHA', (opacity * 0.48).toFixed(3)));
+      gradient.addColorStop(1, color.replace('ALPHA', '0'));
+      context.fillStyle = gradient;
+      context.beginPath();
+      context.ellipse(x, y, radius * stretchX, radius * stretchY, 0, 0, Math.PI * 2);
+      context.fill();
+    };
+
+    const drawTeardropMask = (
+      x: number,
+      y: number,
+      radius: number,
+      lean: number,
+      speed: number,
+      opacity = 0.92,
+    ): void => {
+      const tipY = -radius * (0.9 + speed * 0.34);
+      const baseY = radius * (0.72 + speed * 0.04);
+      const halfWidth = radius * (0.4 - speed * 0.028);
+      const gradient = context.createLinearGradient(x, y + tipY, x, y + baseY);
+      gradient.addColorStop(0, `rgba(255,0,0,${(opacity * 0.3).toFixed(3)})`);
+      gradient.addColorStop(0.24, `rgba(255,0,0,${(opacity * 0.52).toFixed(3)})`);
+      gradient.addColorStop(0.62, `rgba(255,0,0,${(opacity * 0.88).toFixed(3)})`);
+      gradient.addColorStop(1, `rgba(255,0,0,${(opacity * 0.72).toFixed(3)})`);
+      context.save();
+      context.filter = 'blur(0.65px)';
+      context.fillStyle = gradient;
+      context.beginPath();
+      context.moveTo(x + lean, y + tipY);
+      context.bezierCurveTo(
+        x + lean * 0.58 - radius * 0.12,
+        y - radius * 0.6,
+        x - halfWidth,
+        y - radius * 0.1,
+        x - halfWidth,
+        y + radius * 0.24,
+      );
+      context.bezierCurveTo(
+        x - halfWidth * 0.92,
+        y + radius * 0.58,
+        x - halfWidth * 0.42,
+        y + baseY,
+        x,
+        y + baseY,
+      );
+      context.bezierCurveTo(
+        x + halfWidth * 0.42,
+        y + baseY,
+        x + halfWidth * 0.92,
+        y + radius * 0.58,
+        x + halfWidth,
+        y + radius * 0.24,
+      );
+      context.bezierCurveTo(
+        x + halfWidth,
+        y - radius * 0.1,
+        x + lean * 0.58 + radius * 0.12,
+        y - radius * 0.6,
+        x + lean,
+        y + tipY,
+      );
+      context.closePath();
+      context.fill();
+      context.restore();
+    };
+
+    for (const micro of this.microDrops) {
+      if (!micro.active) continue;
+      const fadeIn = THREE.MathUtils.clamp(micro.age / 0.9, 0, 1);
+      const fadeOut = THREE.MathUtils.clamp((micro.life - micro.age) / 1.4, 0, 1);
+      drawMask(
+        micro.x * this.width,
+        micro.y * this.height,
+        micro.radius * this.height,
+        'rgba(255,0,0,ALPHA)',
+        0.72 + micro.radius * 18,
+        0.92 + micro.radius * 24,
+        micro.opacity * fadeIn * fadeOut,
+      );
+    }
+    for (const drop of this.drops) {
+      for (const bead of drop.trail) {
+        drawMask(
+          bead.x * this.width,
+          bead.y * this.height,
+          Math.max(1.2, bead.radius * this.height * 1.9),
+          'rgba(0,255,0,ALPHA)',
+          0.86,
+          1.34,
+          Math.max(0, bead.life) * 0.1,
+        );
+        drawMask(
+          bead.x * this.width,
+          bead.y * this.height,
+          Math.max(0.7, bead.radius * this.height),
+          'rgba(255,0,0,ALPHA)',
+          0.74,
+          1.06,
+          Math.max(0, bead.life) * 0.4,
+        );
+      }
+      const x = drop.x * this.width;
+      const y = drop.y * this.height;
+      const radius = drop.radius * this.height;
+      const speed = THREE.MathUtils.clamp(drop.vy / 0.085, 0, 1);
+      const tailLean = THREE.MathUtils.clamp(-drop.drift * radius * 1.45, -radius * 0.25, radius * 0.25);
+      // One authored outline replaces the former stack of three ellipses. The
+      // lower head stays narrow while motion only lengthens the pointed tail.
+      drawTeardropMask(x, y, radius, tailLean, speed);
+    }
+    context.globalCompositeOperation = 'source-over';
+    this.texture.needsUpdate = true;
+  }
+}
+
+const skillEffectShader: ShaderDefinition = {
+  uniforms: {
+    tDiffuse: { value: null },
+    tScene: { value: null },
+    uCondensation: { value: null },
+    uTexel: { value: new THREE.Vector2() },
+    uCondensationTexel: { value: new THREE.Vector2() },
+    uTime: { value: 0 },
+    uEffect: { value: 0 },
+    uEffectProgress: { value: 0 },
+    uThemeProgress: { value: 0 },
+    uSteamClearProgress: { value: 0 },
+    uSteamClearOrigin: { value: 0.1 },
+    uSteamClearDirection: { value: 1 },
+    uSteamRevealProgress: { value: 1 },
+    uSteamRevealOrigin: { value: 0.1 },
+    uSteamRevealDirection: { value: 1 },
+  },
+  vertexShader,
+  fragmentShader: /* glsl */ `
+    uniform sampler2D tDiffuse;
+    uniform sampler2D tScene;
+    uniform sampler2D uCondensation;
     uniform vec2 uTexel;
+    uniform vec2 uCondensationTexel;
     uniform float uTime;
+    uniform float uThemeProgress;
+    uniform float uEffectProgress;
+    uniform float uSteamClearProgress;
+    uniform float uSteamClearOrigin;
+    uniform float uSteamClearDirection;
+    uniform float uSteamRevealProgress;
+    uniform float uSteamRevealOrigin;
+    uniform float uSteamRevealDirection;
     uniform int uEffect;
     varying vec2 vUv;
 
@@ -284,19 +958,140 @@ const skillEffectShader: ShaderDefinition = {
       return fract(sin(dot(point, vec2(127.1, 311.7))) * 43758.5453);
     }
 
+    float noise(vec2 point) {
+      vec2 cell = floor(point);
+      vec2 local = fract(point);
+      local = local * local * (3.0 - 2.0 * local);
+      float a = hash(cell);
+      float b = hash(cell + vec2(1.0, 0.0));
+      float c = hash(cell + vec2(0.0, 1.0));
+      float d = hash(cell + vec2(1.0, 1.0));
+      return mix(mix(a, b, local.x), mix(c, d, local.x), local.y);
+    }
+
+    float fbm(vec2 point) {
+      return noise(point) * 0.58 + noise(point * 2.03 + 13.7) * 0.28 + noise(point * 4.11 - 7.2) * 0.14;
+    }
+
     void main() {
       vec2 uv = vUv;
       vec3 color = texture2D(tDiffuse, uv).rgb;
       if (uEffect == 1) {
-        float wave = sin(uv.y * 18.0 + uTime * 0.7) * 0.5 + 0.5;
-        vec2 drift = vec2(sin(uv.y * 11.0 + uTime) * uTexel.x * 5.0, uTexel.y * 3.0);
-        vec3 blur = texture2D(tDiffuse, uv + drift).rgb;
-        blur += texture2D(tDiffuse, uv - drift).rgb;
-        blur += texture2D(tDiffuse, uv + vec2(uTexel.x * 7.0, 0.0)).rgb;
-        blur += texture2D(tDiffuse, uv - vec2(uTexel.x * 7.0, 0.0)).rgb;
-        blur *= 0.25;
-        float mist = 0.28 + wave * 0.16 + hash(floor(uv * 24.0)) * 0.04;
-        color = mix(color, blur * vec3(0.91, 0.98, 1.02) + vec3(0.1), mist);
+        // Bathroom glass is not a uniform Gaussian blur. The low-resolution
+        // field stores droplet height in R and wet trails in G; the shader
+        // reconstructs a cheap normal, then lets the clear scene bend inside
+        // each droplet while the wider scene stays frosted and milky.
+        float moisture = texture2D(uCondensation, uv).r;
+        float wetTrail = texture2D(uCondensation, uv).g;
+        float trailL = texture2D(uCondensation, uv - vec2(uCondensationTexel.x, 0.0)).g;
+        float trailR = texture2D(uCondensation, uv + vec2(uCondensationTexel.x, 0.0)).g;
+        float heightL = texture2D(uCondensation, uv - vec2(uCondensationTexel.x, 0.0)).r;
+        float heightR = texture2D(uCondensation, uv + vec2(uCondensationTexel.x, 0.0)).r;
+        float heightD = texture2D(uCondensation, uv - vec2(0.0, uCondensationTexel.y)).r;
+        float heightU = texture2D(uCondensation, uv + vec2(0.0, uCondensationTexel.y)).r;
+        vec2 gradient = vec2(heightR - heightL, heightU - heightD);
+        float dropBody = smoothstep(0.025, 0.17, moisture);
+        vec3 dropNormal = normalize(vec3(-gradient * 6.0, 1.0));
+
+        float cloud = fbm(uv * vec2(4.7, 3.9) + vec2(uTime * 0.018, -uTime * 0.012));
+        float topCondensation = smoothstep(0.56, 1.0, uv.y);
+        float sideCondensation = smoothstep(0.5, 1.0, abs(uv.x - 0.5) * 2.0);
+        float edgeCondensation = topCondensation * 0.26 + sideCondensation * 0.15;
+        float dayWeight = 1.0 - uThemeProgress;
+        float fog = clamp(0.34 + dayWeight * 0.055 + cloud * 0.45 + edgeCondensation - wetTrail * 0.12, 0.24, 0.94);
+
+        vec2 softFlow = vec2(
+          noise(uv * vec2(3.4, 2.9) + uTime * 0.025) - 0.5,
+          noise(uv * vec2(2.6, 4.2) - uTime * 0.018) - 0.5
+        ) * uTexel * 2.3;
+        vec3 clearScene = texture2D(tScene, uv).rgb;
+        vec3 diffused = texture2D(tDiffuse, uv + softFlow).rgb;
+        float diffusedLuma = dot(diffused, vec3(0.2126, 0.7152, 0.0722));
+        diffused = mix(diffused, vec3(diffusedLuma), 0.12);
+        vec3 frosted = mix(clearScene, diffused, smoothstep(0.12, 0.82, fog));
+        frosted = mix(frosted, vec3(0.84, 0.91, 0.93), fog * 0.24);
+
+        vec2 refractedUv = uv + gradient * uTexel * (43.0 + dayWeight * 7.0) * dropBody;
+        vec3 refractedClear = texture2D(tScene, refractedUv).rgb;
+        vec3 refractedBlur = texture2D(tDiffuse, refractedUv + softFlow).rgb;
+        vec3 refractedScene = mix(refractedClear, refractedBlur, 0.44 + dayWeight * 0.16);
+        float dropletClarity = dropBody * (0.24 + wetTrail * 0.04);
+        color = mix(frosted, refractedScene, clamp(dropletClarity, 0.0, 0.48));
+        vec2 trailShift = vec2((noise(uv * vec2(9.0, 3.0) + uTime * 0.04) - 0.5) * uTexel.x * 8.0, 0.0);
+        vec3 trailClear = texture2D(tScene, uv + trailShift).rgb;
+        vec3 trailBlur = texture2D(tDiffuse, uv + trailShift + softFlow).rgb;
+        vec3 trailScene = mix(trailClear, trailBlur, 0.42 + dayWeight * 0.18);
+        color = mix(color, trailScene, clamp(wetTrail * 0.2, 0.0, 0.15));
+        float trailRim = smoothstep(0.025, 0.18, abs(trailR - trailL));
+        color += vec3(0.1, 0.15, 0.17) * trailRim * 0.08;
+
+        // Cell jitter and varied radii avoid the regular pin-grid look. The
+        // slow life cycle keeps condensation changing while wet trails clear it.
+        vec2 microDomain = vec2(
+          uv.x * 58.0 + uv.y * 13.0,
+          uv.y * 34.0 - uv.x * 9.0
+        );
+        vec2 microCell = floor(microDomain);
+        vec2 microCellUv = fract(microDomain);
+        vec2 microJitter = vec2(
+          hash(microCell + vec2(17.3, 4.1)),
+          hash(microCell + vec2(8.7, 29.4))
+        ) - 0.5;
+        vec2 microLocal = microCellUv - (0.5 + microJitter * 0.88);
+        float microSeed = hash(microCell);
+        float microSizeSeed = hash(microCell + vec2(41.2, 13.8));
+        float microRadius = mix(0.15, 0.32, pow(microSizeSeed, 0.72));
+        float microDistance = length(microLocal * vec2(1.0, 1.18));
+        float microShape = 1.0 - smoothstep(microRadius * 0.38, microRadius, microDistance);
+        float microCycle = fract(uTime * 0.035 + hash(microCell + vec2(73.4, 9.6)));
+        float microLife = smoothstep(0.0, 0.12, microCycle) * (1.0 - smoothstep(0.82, 1.0, microCycle));
+        float clearedByFlow = 1.0 - smoothstep(0.025, 0.2, moisture + wetTrail * 0.9);
+        float micro = microShape * step(0.72, microSeed) * microLife * clearedByFlow
+          * (0.78 + edgeCondensation * 0.88);
+        vec2 microNormal = normalize(microLocal + vec2(0.0001)) * uTexel * (5.0 + microSeed * 4.0);
+        vec3 microScene = texture2D(tDiffuse, uv + microNormal).rgb;
+        color = mix(color, microScene, micro * (0.28 + dayWeight * 0.05));
+        float microCore = 1.0 - smoothstep(microRadius * 0.22, microRadius * 0.52, microDistance);
+        float microRim = clamp(microShape - microCore, 0.0, 1.0)
+          * step(0.72, microSeed) * microLife * clearedByFlow;
+        float microSide = dot(normalize(microLocal + vec2(0.0001)), normalize(vec2(-0.48, 0.72)));
+        color *= 1.0 - microRim * (0.055 + dayWeight * 0.025) * max(0.0, -microSide);
+        color += vec3(0.12, 0.18, 0.2) * microRim * (0.16 + max(0.0, microSide) * 0.1);
+
+        vec3 lightDirection = normalize(vec3(-0.34, 0.65, 0.78));
+        float dropletLight = pow(max(dot(dropNormal, lightDirection), 0.0), 18.0) * dropBody;
+        float dropletRim = smoothstep(0.08, 0.65, length(gradient) * 13.0) * dropBody;
+        float dropletShade = dot(dropNormal.xy, vec2(0.42, -0.58)) * dropBody;
+        color *= 1.0 - max(0.0, -dropletShade) * 0.08;
+        color *= 1.0 - dropletRim * (0.055 + dayWeight * 0.025);
+        color += vec3(0.13, 0.19, 0.21) * dropletLight * 0.22;
+        color += vec3(0.09, 0.14, 0.16) * dropletRim * 0.15;
+
+        float revealProgress = clamp(uSteamRevealProgress, 0.0, 1.0);
+        float revealTravel = smoothstep(0.03, 0.96, revealProgress);
+        float revealStart = uSteamRevealOrigin - uSteamRevealDirection * 0.14;
+        float revealEnd = uSteamRevealDirection > 0.0 ? 1.16 : -0.16;
+        float revealFront = mix(revealStart, revealEnd, revealTravel);
+        float revealTurbulence = (noise(vec2(uv.y * 5.4, uTime * 0.42)) - 0.5) * 0.07;
+        revealTurbulence += sin(uv.y * 15.0 - uTime * 0.75) * 0.012;
+        float revealSignedDistance = uSteamRevealDirection
+          * (revealFront + revealTurbulence - uv.x);
+        float revealCoverage = smoothstep(-0.095, 0.095, revealSignedDistance);
+        float revealStrength = smoothstep(0.0, 0.16, revealProgress)
+          * mix(0.34, 1.0, smoothstep(0.1, 0.88, revealProgress));
+        color = mix(clearScene, color, revealCoverage * revealStrength);
+
+        if (uSteamClearProgress > 0.0) {
+          float clearProgress = smoothstep(0.0, 1.0, clamp(uSteamClearProgress, 0.0, 1.0));
+          float startFront = uSteamClearOrigin - uSteamClearDirection * 0.18;
+          float endFront = uSteamClearDirection > 0.0 ? 1.16 : -0.16;
+          float front = mix(startFront, endFront, clearProgress);
+          float turbulence = (noise(vec2(uv.y * 7.0, uTime * 1.35)) - 0.5) * 0.085;
+          turbulence += sin(uv.y * 21.0 + uTime * 3.0) * 0.014;
+          float signedDistance = uSteamClearDirection * (uv.x - front - turbulence);
+          float steamRemaining = smoothstep(-0.075, 0.075, signedDistance);
+          color = mix(clearScene, color, steamRemaining);
+        }
       } else if (uEffect == 2) {
         float dripNoise = hash(vec2(floor(uv.x * 13.0), 3.0));
         float drip = smoothstep(0.78 - dripNoise * 0.34, 0.72 - dripNoise * 0.34, uv.y);
@@ -321,6 +1116,62 @@ const skillEffectShader: ShaderDefinition = {
         shifted.b = texture2D(tDiffuse, refracted - vec2(uTexel.x * 2.0, 0.0)).b;
         float shell = smoothstep(0.53, 0.35, radius) * smoothstep(0.08, 0.42, radius);
         color = mix(color, shifted + vec3(0.035, 0.025, 0.05), shell * 0.36);
+      } else if (uEffect == 6) {
+        float progress = clamp(uEffectProgress, 0.0, 1.0);
+        float heatIn = smoothstep(0.015, 0.16, progress);
+        float heatOut = 1.0 - smoothstep(0.82, 1.0, progress);
+        float heat = heatIn * heatOut;
+        float swapPulse = exp(-pow((progress - 0.735) / 0.095, 2.0));
+
+        // A full-screen field of rising convection cells replaces the old red
+        // filter. Different scales and speeds keep the motion from reading as
+        // water ripples or television scan lines.
+        vec2 coarseDomain = vec2(
+          uv.x * 5.4 + noise(vec2(uv.y * 2.1, uTime * 0.09)) * 1.15,
+          uv.y * 4.2 - uTime * 0.34
+        );
+        float coarse = noise(coarseDomain);
+        vec2 middleDomain = vec2(
+          uv.x * 13.0 + coarse * 2.2 - uTime * 0.08,
+          uv.y * 9.0 - uTime * 0.72
+        );
+        float middle = noise(middleDomain);
+        float fine = noise(vec2(
+          uv.x * 31.0 + middle * 3.1 + uTime * 0.13,
+          uv.y * 22.0 - uTime * 1.42
+        ));
+        float cellField = coarse * 0.56 + middle * 0.32 + fine * 0.12;
+        float broadCells = smoothstep(0.29, 0.72, cellField);
+        float brokenEdges = smoothstep(0.37, 0.74, middle * 0.68 + fine * 0.32);
+        float heatField = clamp(broadCells * 0.8 + brokenEdges * 0.48, 0.0, 1.0);
+
+        float strength = heat * (1.0 + swapPulse * 0.58);
+        vec2 displacementPixels = vec2(
+          (middle - 0.5) * 24.0 + (fine - 0.5) * 6.0,
+          (coarse - 0.5) * 6.5
+        );
+        vec2 heatedUv = clamp(
+          uv + displacementPixels * uTexel * heatField * strength,
+          vec2(0.002),
+          vec2(0.998)
+        );
+        vec3 refracted = texture2D(tDiffuse, heatedUv).rgb;
+        vec2 softDirection = normalize(displacementPixels + vec2(0.001)) * uTexel * 2.15;
+        vec3 softSample = texture2D(tDiffuse, clamp(heatedUv + softDirection, vec2(0.002), vec2(0.998))).rgb;
+        float softAmount = heatField * strength * (0.16 + swapPulse * 0.1);
+        vec3 heatedScene = mix(refracted, softSample, softAmount);
+
+        // The whole screen now visibly warms up again, while the stronger
+        // peach-red grade still concentrates inside the moving heat cells.
+        float luma = dot(heatedScene, vec3(0.2126, 0.7152, 0.0722));
+        vec3 screenWarm = heatedScene * vec3(1.08, 0.91, 0.83);
+        screenWarm += vec3(0.055, 0.006, 0.0) * (0.32 + luma * 0.68);
+        heatedScene = mix(heatedScene, screenWarm, heat * (0.22 + swapPulse * 0.065));
+        vec3 warmGrade = heatedScene * vec3(1.045, 0.965, 0.9);
+        warmGrade += vec3(0.064, 0.012, 0.002) * (0.28 + luma * 0.72);
+        float warmAmount = heatField * heat * (0.15 + swapPulse * 0.09);
+        heatedScene = mix(heatedScene, warmGrade, warmAmount);
+        color = mix(color, heatedScene, heat * (0.72 + heatField * 0.28));
       }
       gl_FragColor = vec4(color, 1.0);
     }
@@ -347,17 +1198,37 @@ export class SakuraPipeline {
   private readonly targetA: THREE.WebGLRenderTarget;
   private readonly targetB: THREE.WebGLRenderTarget;
   private readonly bloomTarget: THREE.WebGLRenderTarget;
+  private readonly steamTargetA: THREE.WebGLRenderTarget;
+  private readonly steamTargetB: THREE.WebGLRenderTarget;
   private readonly ink = makeQuad(inkShader);
   private readonly grade = makeQuad(gradeShader);
   private readonly lantern = makeQuad(lanternShader);
   private readonly bloom = makeQuad(bloomShader);
   private readonly bloomComposite = makeQuad(bloomCompositeShader);
   private readonly fxaa = makeQuad(fxaaShader);
+  private readonly steamBlur = makeQuad(steamBlurShader);
   private readonly skillEffect = makeQuad(skillEffectShader);
+  private readonly steamCondensation = new SteamCondensationField();
   private qualityTier: NightQualityTier = 'high';
   private themeProgress = 0;
+  private explorationProgress = 0;
+  private skillEffectMode: SkillScreenEffect = 'none';
+  private steamClearActive = false;
+  private steamClearStartedAt = 0;
+  private steamClearProgress = 0;
+  private steamClearOrigin = 0.1;
+  private steamClearDirection: -1 | 1 = 1;
+  private readonly steamClearDuration = 2.4;
+  private steamRevealActive = false;
+  private steamRevealStartedAt = 0;
+  private steamRevealProgress = 1;
+  private steamRevealOrigin = 0.1;
+  private steamRevealDirection: -1 | 1 = 1;
+  private steamRevealDuration = 5.2;
   private renderWidth = 2;
   private renderHeight = 2;
+  private steamWidth = 2;
+  private steamHeight = 2;
 
   constructor(
     private readonly renderer: THREE.WebGLRenderer,
@@ -391,8 +1262,16 @@ export class SakuraPipeline {
       type: THREE.UnsignedByteType,
       depthBuffer: false,
     });
+    this.steamTargetA = new THREE.WebGLRenderTarget(2, 2, {
+      ...options,
+      type: THREE.UnsignedByteType,
+      depthBuffer: false,
+    });
+    this.steamTargetB = this.steamTargetA.clone();
     this.ink.material.uniforms.tDepth.value = this.sceneTarget.depthTexture;
     this.lantern.material.uniforms.tDepth.value = this.sceneTarget.depthTexture;
+    this.skillEffect.material.uniforms.uCondensation.value = this.steamCondensation.texture;
+    this.skillEffect.material.uniforms.uCondensationTexel.value.copy(this.steamCondensation.texel);
   }
 
   setSize(width: number, height: number): void {
@@ -413,6 +1292,7 @@ export class SakuraPipeline {
     this.targetA.setSize(renderWidth, renderHeight);
     this.targetB.setSize(renderWidth, renderHeight);
     this.resizeBloomTarget();
+    this.resizeSteamTargets();
 
     const texel = new THREE.Vector2(1 / renderWidth, 1 / renderHeight);
     this.ink.material.uniforms.uTexel.value.copy(texel);
@@ -463,13 +1343,57 @@ export class SakuraPipeline {
     this.renderer.setRenderTarget(fxaaTarget);
     this.fxaa.quad.render(this.renderer);
 
-    this.skillEffect.material.uniforms.tDiffuse.value = fxaaTarget.texture;
-    this.skillEffect.material.uniforms.uTime.value = performance.now() * 0.001;
+    const skillEffectScene = fxaaTarget.texture;
+    let skillEffectSource = skillEffectScene;
+    const effectTime = performance.now() * 0.001;
+    let finishSteamClearAfterRender = false;
+    if (this.steamRevealActive) {
+      const evidenceProgress = window.__STEAM_REVEAL_PROGRESS_OVERRIDE__;
+      this.steamRevealProgress = Number.isFinite(evidenceProgress)
+        ? THREE.MathUtils.clamp(evidenceProgress!, 0, 1)
+        : THREE.MathUtils.clamp(
+            (effectTime - this.steamRevealStartedAt) / this.steamRevealDuration,
+            0,
+            1,
+          );
+      this.skillEffect.material.uniforms.uSteamRevealProgress.value = this.steamRevealProgress;
+      if (this.steamRevealProgress >= 1) this.steamRevealActive = false;
+    }
+    if (this.steamClearActive) {
+      const evidenceProgress = window.__STEAM_CLEAR_PROGRESS_OVERRIDE__;
+      this.steamClearProgress = Number.isFinite(evidenceProgress)
+        ? THREE.MathUtils.clamp(evidenceProgress!, 0, 1)
+        : THREE.MathUtils.clamp(
+            (effectTime - this.steamClearStartedAt) / this.steamClearDuration,
+            0,
+            1,
+          );
+      this.skillEffect.material.uniforms.uSteamClearProgress.value = this.steamClearProgress;
+      finishSteamClearAfterRender = this.steamClearProgress >= 1;
+    }
+    if (this.skillEffectMode === 'bathroom-steam') {
+      this.steamCondensation.update(effectTime);
+      this.steamBlur.material.uniforms.tDiffuse.value = fxaaTarget.texture;
+      this.steamBlur.material.uniforms.uDirection.value.set(this.size.x > 0 ? 4.7 / this.size.x : 0, 0);
+      this.renderer.setRenderTarget(this.steamTargetA);
+      this.steamBlur.quad.render(this.renderer);
+
+      this.steamBlur.material.uniforms.tDiffuse.value = this.steamTargetA.texture;
+      this.steamBlur.material.uniforms.uDirection.value.set(0, this.steamHeight > 0 ? 1.35 / this.steamHeight : 0);
+      this.renderer.setRenderTarget(this.steamTargetB);
+      this.steamBlur.quad.render(this.renderer);
+      skillEffectSource = this.steamTargetB.texture;
+    }
+
+    this.skillEffect.material.uniforms.tDiffuse.value = skillEffectSource;
+    this.skillEffect.material.uniforms.tScene.value = skillEffectScene;
+    this.skillEffect.material.uniforms.uTime.value = effectTime;
     this.renderer.setRenderTarget(null);
     this.skillEffect.quad.render(this.renderer);
+    if (finishSteamClearAfterRender) this.finishSteamClear();
   }
 
-  setSkillEffect(effect: SkillScreenEffect): void {
+  setSkillEffect(effect: SkillScreenEffect, immediate = false): void {
     const modes: Record<SkillScreenEffect, number> = {
       none: 0,
       'bathroom-steam': 1,
@@ -477,8 +1401,87 @@ export class SakuraPipeline {
       'television-glitch': 3,
       'printer-scan': 4,
       'iridescent-bubble': 5,
+      'toaster-heat': 6,
     };
+    if (!immediate && effect === 'none' && this.steamClearActive && this.skillEffectMode === 'bathroom-steam') {
+      return;
+    }
+    if (effect !== this.skillEffectMode || immediate) {
+      this.cancelSteamClear();
+      this.cancelSteamReveal(effect === 'bathroom-steam' ? 1 : 0);
+      if (effect === 'bathroom-steam') this.steamCondensation.activate();
+      else this.steamCondensation.deactivate();
+    }
+    this.skillEffectMode = effect;
     this.skillEffect.material.uniforms.uEffect.value = modes[effect];
+    if (effect !== 'toaster-heat') {
+      this.skillEffect.material.uniforms.uEffectProgress.value = 0;
+    }
+  }
+
+  setSkillEffectProgress(progress: number): void {
+    this.skillEffect.material.uniforms.uEffectProgress.value = THREE.MathUtils.clamp(progress, 0, 1);
+  }
+
+  get skillEffectState(): Readonly<{ mode: SkillScreenEffect; progress: number }> {
+    return {
+      mode: this.skillEffectMode,
+      progress: Number(this.skillEffect.material.uniforms.uEffectProgress.value),
+    };
+  }
+
+  beginSteamReveal(originX: number, duration = 5.2): void {
+    this.setSkillEffect('bathroom-steam', true);
+    this.steamRevealOrigin = THREE.MathUtils.clamp(originX, 0, 1);
+    this.steamRevealDirection = this.steamRevealOrigin < 0.5 ? 1 : -1;
+    this.steamRevealStartedAt = performance.now() * 0.001;
+    this.steamRevealDuration = Math.max(0.1, duration);
+    this.steamRevealProgress = 0.0001;
+    this.steamRevealActive = true;
+    this.skillEffect.material.uniforms.uSteamRevealOrigin.value = this.steamRevealOrigin;
+    this.skillEffect.material.uniforms.uSteamRevealDirection.value = this.steamRevealDirection;
+    this.skillEffect.material.uniforms.uSteamRevealProgress.value = this.steamRevealProgress;
+  }
+
+  beginSteamClear(originX: number): void {
+    if (this.skillEffectMode !== 'bathroom-steam') return;
+    this.steamRevealActive = false;
+    this.steamClearOrigin = THREE.MathUtils.clamp(originX, 0, 1);
+    this.steamClearDirection = this.steamClearOrigin < 0.5 ? 1 : -1;
+    this.steamClearStartedAt = performance.now() * 0.001;
+    this.steamClearProgress = 0.0001;
+    this.steamClearActive = true;
+    this.skillEffect.material.uniforms.uSteamClearOrigin.value = this.steamClearOrigin;
+    this.skillEffect.material.uniforms.uSteamClearDirection.value = this.steamClearDirection;
+    this.skillEffect.material.uniforms.uSteamClearProgress.value = this.steamClearProgress;
+  }
+
+  get steamClearState(): Readonly<{
+    active: boolean;
+    progress: number;
+    origin: number;
+    direction: 'left-to-right' | 'right-to-left';
+  }> {
+    return {
+      active: this.steamClearActive,
+      progress: this.steamClearProgress,
+      origin: this.steamClearOrigin,
+      direction: this.steamClearDirection > 0 ? 'left-to-right' : 'right-to-left',
+    };
+  }
+
+  get steamRevealState(): Readonly<{
+    active: boolean;
+    progress: number;
+    origin: number;
+    direction: 'left-to-right' | 'right-to-left';
+  }> {
+    return {
+      active: this.steamRevealActive,
+      progress: this.steamRevealProgress,
+      origin: this.steamRevealOrigin,
+      direction: this.steamRevealDirection > 0 ? 'left-to-right' : 'right-to-left',
+    };
   }
 
   setThemeProgress(progress: number): void {
@@ -486,9 +1489,19 @@ export class SakuraPipeline {
     this.themeProgress = value;
     this.grade.material.uniforms.uThemeProgress.value = value;
     this.lantern.material.uniforms.uThemeProgress.value = value;
+    this.skillEffect.material.uniforms.uThemeProgress.value = value;
     this.bloomComposite.material.uniforms.uStrength.value = this.qualityTier === 'minimal' ? 0 : value * 0.2;
     this.ink.material.uniforms.uInk.value.set(PAL.ink).lerp(NIGHT_INK, value);
-    this.ink.material.uniforms.uStrength.value = THREE.MathUtils.lerp(0.92, 0.76, value);
+    this.ink.material.uniforms.uStrength.value = THREE.MathUtils.lerp(0.92, 0.76, value)
+      * THREE.MathUtils.lerp(1, 0.12, this.explorationProgress);
+  }
+
+  setExplorationProgress(progress: number): void {
+    this.explorationProgress = THREE.MathUtils.clamp(progress, 0, 1);
+    this.grade.material.uniforms.uExplorationProgress.value = this.explorationProgress;
+    this.lantern.material.uniforms.uExplorationProgress.value = this.explorationProgress;
+    this.ink.material.uniforms.uStrength.value = THREE.MathUtils.lerp(0.92, 0.76, this.themeProgress)
+      * THREE.MathUtils.lerp(1, 0.12, this.explorationProgress);
   }
 
   setLantern(position: THREE.Vector2, intensity: number): void {
@@ -508,6 +1521,9 @@ export class SakuraPipeline {
     this.targetA.dispose();
     this.targetB.dispose();
     this.bloomTarget.dispose();
+    this.steamTargetA.dispose();
+    this.steamTargetB.dispose();
+    this.steamCondensation.dispose();
     for (const pass of [
       this.ink,
       this.grade,
@@ -515,6 +1531,7 @@ export class SakuraPipeline {
       this.bloom,
       this.bloomComposite,
       this.fxaa,
+      this.steamBlur,
       this.skillEffect,
     ]) {
       pass.quad.dispose();
@@ -528,5 +1545,38 @@ export class SakuraPipeline {
     const height = Math.max(2, Math.floor(this.renderHeight * scale));
     this.bloomTarget.setSize(width, height);
     this.bloom.material.uniforms.uTexel.value.set(1 / width, 1 / height);
+  }
+
+
+  private cancelSteamClear(): void {
+    this.steamClearActive = false;
+    this.steamClearProgress = 0;
+    this.skillEffect.material.uniforms.uSteamClearProgress.value = 0;
+  }
+
+  private cancelSteamReveal(progress: number): void {
+    this.steamRevealActive = false;
+    this.steamRevealProgress = THREE.MathUtils.clamp(progress, 0, 1);
+    this.skillEffect.material.uniforms.uSteamRevealProgress.value = this.steamRevealProgress;
+  }
+
+  private finishSteamClear(): void {
+    this.cancelSteamClear();
+    this.cancelSteamReveal(0);
+    this.steamCondensation.deactivate();
+    this.skillEffectMode = 'none';
+    this.skillEffect.material.uniforms.uEffect.value = 0;
+  }
+
+  private resizeSteamTargets(): void {
+    this.steamWidth = Math.max(2, Math.floor(this.renderWidth * 0.28));
+    this.steamHeight = Math.max(2, Math.floor(this.renderHeight * 0.28));
+    this.steamTargetA.setSize(this.steamWidth, this.steamHeight);
+    this.steamTargetB.setSize(this.steamWidth, this.steamHeight);
+    this.steamCondensation.setSize(
+      Math.floor(this.renderWidth * 0.34),
+      Math.floor(this.renderHeight * 0.34),
+    );
+    this.skillEffect.material.uniforms.uCondensationTexel.value.copy(this.steamCondensation.texel);
   }
 }

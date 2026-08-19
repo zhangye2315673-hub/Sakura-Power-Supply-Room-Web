@@ -61,6 +61,13 @@ assert.equal(
   undefined,
   'the dehumidifier must not keep an unexplained detached status dot beside its central control',
 );
+for (const side of ['left', 'right']) {
+  assert.equal(
+    gameBuild.root.getObjectByName(`dehumidifier-front-${side}-shoulder-facet`),
+    undefined,
+    `the ${side} front shoulder must use the continuous upper shell instead of a clipping add-on facet`,
+  );
+}
 assert.ok(controlPivot, 'the central control needs a stable front-face pivot');
 assert.equal(particles.length, 18, 'the skill must own exactly eighteen volumetric humidity actors');
 assert.ok(controlFace && controlGlint, 'the central control must retain its face and glint');

@@ -1,11 +1,10 @@
 import * as THREE from 'three';
 import { createTimeline, type Timeline } from 'animejs';
-import { CSS2DObject, CSS2DRenderer } from 'three/addons/renderers/CSS2DRenderer.js';
+import { CSS2DRenderer } from 'three/addons/renderers/CSS2DRenderer.js';
 import { Line2 } from 'three/addons/lines/Line2.js';
-import { LineGeometry } from 'three/addons/lines/LineGeometry.js';
 import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
 import { PAL } from '../style/palette';
-import { cel } from '../style/toon';
+import { cel, flat } from '../style/toon';
 import type { SkillResolution, SkillStatusId } from './SkillChallengeEngine';
 
 type PresentationPhase = 'idle' | 'cue' | 'target-lock' | 'commit' | 'impact' | 'result' | 'settle' | 'cleanup';
@@ -13,6 +12,7 @@ type PresentationPhase = 'idle' | 'cue' | 'target-lock' | 'commit' | 'impact' | 
 export type SkillPresentationTarget = Readonly<{
   cableId: string;
   position: THREE.Vector3;
+  direction?: THREE.Vector3;
   path?: readonly THREE.Vector3[];
 }>;
 
@@ -30,6 +30,9 @@ export type SkillPresentationDiagnostics = Readonly<{
   autoRemovalOrder: string[];
   autoRemovalStartsMs: number[];
   radioPulseOrder: number[];
+  radioGuideTargetIds: string[];
+  radioGuideCurrentId: string | null;
+  radioGuideVisibleCount: number;
   cleanupCount: number;
 }>;
 
@@ -53,6 +56,9 @@ const emptyDiagnostics = (): SkillPresentationDiagnostics => ({
   autoRemovalOrder: [],
   autoRemovalStartsMs: [],
   radioPulseOrder: [],
+  radioGuideTargetIds: [],
+  radioGuideCurrentId: null,
+  radioGuideVisibleCount: 0,
   cleanupCount: 0,
 });
 
@@ -154,7 +160,10 @@ export class SkillPresentationController {
   readonly cssRenderer = new CSS2DRenderer();
 
   private readonly transient = new THREE.Group();
+  private readonly radioGuide = new THREE.Group();
   private readonly materials = new Set<THREE.Material>();
+  private readonly radioGuideMaterials = new Set<THREE.Material>();
+  private radioGuideEntries: Array<{ cableId: string; root: THREE.Group }> = [];
   private timeline: Timeline | null = null;
   private statusTimeline: Timeline | null = null;
   private readonly transientTimers = new Set<number>();
@@ -169,7 +178,8 @@ export class SkillPresentationController {
   ) {
     this.root.name = 'skill-presentation-root';
     this.transient.name = 'skill-presentation-transient';
-    this.root.add(this.transient);
+    this.radioGuide.name = 'radio-route-guide';
+    this.root.add(this.transient, this.radioGuide);
     this.scene.add(this.root);
     this.cssRenderer.domElement.className = 'skill-world-overlay';
     this.cssRenderer.domElement.setAttribute('aria-hidden', 'true');
@@ -188,6 +198,9 @@ export class SkillPresentationController {
       ...this.diagnosticsValue,
       materialCount: this.materials.size,
       riceCableVisualScale: this.hooks.getRiceCableVisualScale(),
+      radioGuideTargetIds: this.radioGuideEntries.map(({ cableId }) => cableId),
+      radioGuideCurrentId: this.radioGuideEntries[0]?.cableId ?? null,
+      radioGuideVisibleCount: this.radioGuideEntries.length,
     };
   }
 
@@ -213,8 +226,14 @@ export class SkillPresentationController {
     };
 
     if (resolution.appliance === 'radio') return this.playRadio(resolution, normalizedTargets, token);
-    if (resolution.appliance === 'robot-vacuum') return this.playRobotVacuum(resolution, normalizedTargets, token);
-    if (resolution.appliance === 'rice-cooker') return this.playRiceCooker(resolution, normalizedTargets, token);
+    if (resolution.appliance === 'robot-vacuum') {
+      const duration = this.playRobotVacuum(resolution, normalizedTargets, token);
+      return duration;
+    }
+    if (resolution.appliance === 'rice-cooker') {
+      const duration = this.playRiceCooker(resolution, normalizedTargets, token);
+      return duration;
+    }
     this.diagnosticsValue = { ...this.diagnosticsValue, phase: 'settle', activeTimelines: 0 };
     return resolution.topologyChanged ? 900 : 650;
   }
@@ -243,13 +262,60 @@ export class SkillPresentationController {
     }).add(state, { scale: target, duration: statusId === 'rice-thick-cable' ? 420 : 340 });
   }
 
-  update(): void {
-    // Anime.js owns timing. This is the stable Game-loop hook for future
-    // per-frame occlusion and reduced-motion handling.
+  update(elapsed: number): void {
+    this.radioGuideEntries.forEach(({ root }, index) => {
+      const baseScale = index === 0 ? 0.96 : 0.78;
+      const pulse = index === 0 ? 1 + Math.sin(elapsed * 5.4) * 0.08 : 1;
+      root.scale.setScalar(baseScale * pulse);
+    });
+  }
+
+  syncRadioGuide(targets: readonly SkillPresentationTarget[]): void {
+    const targetIds = targets.map(({ cableId }) => cableId);
+    const currentIds = this.radioGuideEntries.map(({ cableId }) => cableId);
+    if (targetIds.length !== currentIds.length || targetIds.some((id, index) => id !== currentIds[index])) {
+      this.clearRadioGuide();
+      this.radioGuideEntries = targets.map((target, index) => ({
+        cableId: target.cableId,
+        root: this.createPersistentRadioGuide(index),
+      }));
+    }
+    const screenUp = new THREE.Vector3(0, 1, 0).applyQuaternion(this.camera.quaternion);
+    const screenRight = new THREE.Vector3(1, 0, 0).applyQuaternion(this.camera.quaternion);
+    const inverseCamera = this.camera.quaternion.clone().invert();
+    targets.forEach((target, index) => {
+      const entry = this.radioGuideEntries[index];
+      if (!entry) return;
+      const cameraDirection = (target.direction ?? screenUp).clone().normalize().applyQuaternion(inverseCamera);
+      const projectedDirection = new THREE.Vector2(cameraDirection.x, cameraDirection.y);
+      if (projectedDirection.lengthSq() > 0.001) projectedDirection.normalize();
+
+      // A plug pointing toward the top of the screen occupies the same space as the
+      // normal label offset. Move those labels sideways while keeping them above
+      // the plug, so the marker never sits inside the plug head.
+      const upwardOverlap = THREE.MathUtils.smoothstep(projectedDirection.y, 0.2, 0.86);
+      const stableSide = index % 2 === 0 ? 1 : -1;
+      const lateralOffset = stableSide * upwardOverlap * 0.5;
+      const verticalOffset = 0.79 - upwardOverlap * 0.08;
+      entry.root.position
+        .copy(target.position)
+        .addScaledVector(screenUp, verticalOffset)
+        .addScaledVector(screenRight, lateralOffset);
+
+      const tail = entry.root.getObjectByName('radio-guide-tail');
+      if (tail) {
+        const towardPlug = new THREE.Vector2(-lateralOffset, -verticalOffset).normalize();
+        tail.position.set(towardPlug.x * 0.47, towardPlug.y * 0.37, 0.095);
+        tail.rotation.z = Math.atan2(-towardPlug.x, towardPlug.y);
+      }
+    });
   }
 
   render(): void {
     this.transient.traverse((object) => {
+      if (object.userData.skillBillboard === true) object.quaternion.copy(this.camera.quaternion);
+    });
+    this.radioGuide.traverse((object) => {
       if (object.userData.skillBillboard === true) object.quaternion.copy(this.camera.quaternion);
     });
     this.cssRenderer.render(this.scene, this.camera);
@@ -266,6 +332,7 @@ export class SkillPresentationController {
   reset(): void {
     this.generation += 1;
     this.cancelTransient(true);
+    this.clearRadioGuide();
     this.statusTimeline?.cancel();
     this.statusTimeline = null;
     this.riceVisualScale = 1;
@@ -281,11 +348,6 @@ export class SkillPresentationController {
     this.timeline.pause();
     this.timeline.seek(Math.max(0, Math.min(timeMs, this.timeline.duration)), false, true);
     this.transient.traverse((object) => {
-      if (object instanceof CSS2DObject) {
-        object.element.style.opacity = '1';
-        object.element.style.transform = 'translate(-50%, -50%) scale(1)';
-        return;
-      }
       if (object instanceof THREE.Mesh || object instanceof Line2) {
         object.visible = true;
         if (object.scale.lengthSq() < 0.01) object.scale.setScalar(1);
@@ -333,109 +395,21 @@ export class SkillPresentationController {
     this.root.removeFromParent();
     this.materials.forEach((material) => material.dispose());
     this.materials.clear();
+    this.radioGuideMaterials.forEach((material) => material.dispose());
+    this.radioGuideMaterials.clear();
   }
 
   private playRadio(resolution: SkillResolution, targets: readonly SkillPresentationTarget[], token: number): number {
-    const points = targets.slice(0, 3).map((target) => target.position.clone());
-    const labels = points.map((point, index) => this.createNumberLabel(index + 1, point));
-    const nodes = points.map((point, index) => this.createRadioBeacon(point, index));
-    const lines = points.length > 1 ? [this.createRouteLine(points)] : [];
-    const labelStates = labels.map(({ element }) => {
-      Object.assign(element.style, { opacity: '0', transform: 'translate(-50%, -50%) scale(0.45)' });
-      return { opacity: 0, scale: 0.45 };
-    });
-    const nodeStates = nodes.map(() => ({ scale: 0.2, turn: 0 }));
-    nodes.forEach((node) => node.scale.setScalar(0.2));
-    const lineState = { opacity: 0, dash: 0 };
-    lines.forEach((line) => { line.material.opacity = 0; line.material.dashOffset = 0; });
-
     const timeline = this.makeTimeline(token);
     timeline.label('cue', 0);
-    // The confirmed radio grammar is 123—123, not one simultaneous flash.
-    for (let pass = 0; pass < 2; pass += 1) {
-      points.forEach((_, index) => {
-        const at = pass * 1120 + index * 320;
-        timeline.call(() => this.setPhase('target-lock', token), at);
-        timeline.call(() => {
-          if (token !== this.generation) return;
-          this.diagnosticsValue = {
-            ...this.diagnosticsValue,
-            radioPulseOrder: [...this.diagnosticsValue.radioPulseOrder, index + 1],
-          };
-        }, at);
-        timeline.add(labelStates[index], {
-          opacity: 1,
-          scale: pass === 0 ? 1 : 1.08,
-          duration: 150,
-          ease: 'outBack(1.7)',
-          onUpdate: () => {
-            const { element } = labels[index];
-            const state = labelStates[index];
-            element.style.opacity = `${state.opacity}`;
-            element.style.transform = `translate(-50%, -50%) scale(${state.scale})`;
-          },
-        }, at);
-        timeline.add(nodeStates[index], {
-          scale: pass === 0 ? 0.52 : 0.58,
-          turn: nodeStates[index].turn + Math.PI * 0.32,
-          duration: 150,
-          ease: 'outBack(1.55)',
-          onUpdate: () => {
-            nodes[index].scale.setScalar(nodeStates[index].scale);
-            nodes[index].rotation.z = nodeStates[index].turn;
-          },
-        }, at);
-        timeline.add(labelStates[index], {
-          opacity: 0.2,
-          scale: 0.72,
-          duration: 120,
-          onUpdate: () => {
-            const { element } = labels[index];
-            const state = labelStates[index];
-            element.style.opacity = `${state.opacity}`;
-            element.style.transform = `translate(-50%, -50%) scale(${state.scale})`;
-          },
-        }, at + 180);
-        timeline.add(nodeStates[index], {
-          scale: 0.32,
-          duration: 120,
-          onUpdate: () => nodes[index].scale.setScalar(nodeStates[index].scale),
-        }, at + 180);
-      });
-    }
-    timeline.call(() => this.setPhase('commit', token), 2040);
-    timeline.add(lineState, {
-      opacity: 0.9,
-      dash: -1.4,
-      duration: 360,
-      ease: 'inOut(2)',
-      onUpdate: () => lines.forEach((line) => {
-        line.material.opacity = lineState.opacity;
-        line.material.dashOffset = lineState.dash;
-      }),
-    }, 2040);
-    timeline.call(() => this.setPhase('impact', token), 2220);
-    timeline.call(() => this.setPhase('result', token), 2400);
-    timeline.add(lineState, {
-      opacity: 0,
-      duration: 220,
-      onUpdate: () => lines.forEach((line) => { line.material.opacity = lineState.opacity; }),
-    }, 2420);
-    labelStates.forEach((state, index) => timeline.add(state, {
-      opacity: 0,
-      scale: 0.72,
-      duration: 200,
-      onUpdate: () => {
-        const { element } = labels[index];
-        element.style.opacity = `${state.opacity}`;
-        element.style.transform = `translate(-50%, -50%) scale(${state.scale})`;
-      },
-    }, 2440 + index * 50));
-    timeline.call(() => this.finishTimeline(token), 2760);
-
-    this.diagnosticsValue = { ...this.diagnosticsValue, labelCount: labels.length, lineCount: lines.length, meshCount: nodes.length };
+    timeline.call(() => this.setPhase('target-lock', token), 0);
+    timeline.call(() => this.setPhase('commit', token), 180);
+    timeline.call(() => this.setPhase('result', token), 360);
+    timeline.call(() => this.finishTimeline(token), 520);
+    this.diagnosticsValue = { ...this.diagnosticsValue, labelCount: 0, lineCount: 0, meshCount: 0 };
     void resolution;
-    return 2820;
+    void targets;
+    return 560;
   }
 
   private playRiceCooker(resolution: SkillResolution, targets: readonly SkillPresentationTarget[], token: number): number {
@@ -596,17 +570,6 @@ export class SkillPresentationController {
     return resultAt + 380;
   }
 
-  private createNumberLabel(value: number, position: THREE.Vector3): CSS2DObject {
-    const element = document.createElement('div');
-    element.className = 'skill-world-number';
-    element.textContent = `${value}`;
-    const label = new CSS2DObject(element);
-    label.name = `skill-world-number-${value}`;
-    label.position.copy(position).add(new THREE.Vector3(0, 0.54, 0));
-    this.transient.add(label);
-    return label;
-  }
-
   private createShieldFrame(position: THREE.Vector3, index: number, accent: number): THREE.Group {
     const group = new THREE.Group();
     group.name = `skill-target-beacon-${index + 1}`;
@@ -632,29 +595,119 @@ export class SkillPresentationController {
     return group;
   }
 
-  private createRadioBeacon(position: THREE.Vector3, index: number): THREE.Group {
-    const group = this.createShieldFrame(position, index, index === 1 ? PAL.yellow : 0x75d8ca);
-    const dark = makeMaterial(0x453b58);
-    const signal = makeMaterial(index === 1 ? 0xf09a55 : PAL.blossomDeep);
-    this.materials.add(dark);
-    this.materials.add(signal);
-    const mast = new THREE.Mesh(new THREE.ConeGeometry(0.085, 0.27, 3), dark);
-    mast.position.y = -0.02;
-    mast.renderOrder = 91;
-    const cap = new THREE.Mesh(new THREE.OctahedronGeometry(0.045, 0), signal);
-    cap.position.y = 0.14;
-    cap.renderOrder = 92;
-    group.add(mast, cap);
+  private createPersistentRadioGuide(index: number): THREE.Group {
+    const root = new THREE.Group();
+    root.name = `radio-route-guide-${index + 1}`;
+    root.userData.skillBillboard = true;
+    root.renderOrder = 150;
+    const material = (color: number): THREE.MeshToonMaterial => {
+      const result = makeMaterial(color);
+      // Sky clouds are transparent and Three.js renders the transparent queue
+      // after opaque objects. Keep the guide fully opaque visually, but place
+      // it in that same queue so its high renderOrder can put it above clouds.
+      result.transparent = true;
+      result.opacity = 1;
+      result.needsUpdate = true;
+      this.radioGuideMaterials.add(result);
+      return result;
+    };
+    const plateMaterial = material(index === 0 ? 0xfff1cf : 0xfff8e8);
+    const frameMaterial = flat(index === 0 ? PAL.blossomDeep : 0x5fc9c1);
+    frameMaterial.transparent = true;
+    frameMaterial.opacity = 1;
+    frameMaterial.depthTest = false;
+    frameMaterial.depthWrite = false;
+    frameMaterial.needsUpdate = true;
+    this.radioGuideMaterials.add(frameMaterial);
+    const inkMaterial = flat(0x453b58);
+    inkMaterial.transparent = true;
+    inkMaterial.opacity = 1;
+    inkMaterial.depthTest = false;
+    inkMaterial.depthWrite = false;
+    inkMaterial.needsUpdate = true;
+    this.radioGuideMaterials.add(inkMaterial);
+    const darkMaterial = material(0x453b58);
+    const signalMaterial = material(index === 0 ? PAL.blossomDeep : 0x5fc9c1);
+
+    const makePlateGeometry = (scale = 1, volumetric = true): THREE.BufferGeometry => {
+      const shape = new THREE.Shape();
+      shape.moveTo(-0.43 * scale, -0.3 * scale);
+      shape.lineTo(0.31 * scale, -0.32 * scale);
+      shape.lineTo(0.43 * scale, -0.19 * scale);
+      shape.lineTo(0.41 * scale, 0.25 * scale);
+      shape.lineTo(0.29 * scale, 0.34 * scale);
+      shape.lineTo(-0.35 * scale, 0.32 * scale);
+      shape.lineTo(-0.44 * scale, 0.18 * scale);
+      shape.closePath();
+      if (!volumetric) {
+        // The bubble is one outlined object. The inset color is intentionally a
+        // flat face so its own perimeter cannot create a second dark contour.
+        return new THREE.ShapeGeometry(shape);
+      }
+      const geometry = new THREE.ExtrudeGeometry(shape, {
+        depth: 0.07,
+        // The appliance/cable outline shader needs a volumetric silhouette.
+        // A single flat billboard only exposes its side faces, which made the
+        // old radio bubble outline look thin and broken while moving.
+        bevelEnabled: true,
+        bevelThickness: 0.028,
+        bevelSize: 0.026,
+        bevelOffset: 0,
+        bevelSegments: 1,
+        curveSegments: 1,
+      });
+      geometry.translate(0, 0, -0.035);
+      return geometry;
+    };
+
+    const outerInk = new THREE.Mesh(makePlateGeometry(1.055), inkMaterial);
+    outerInk.name = 'radio-guide-outer-ink';
+    outerInk.renderOrder = 149;
+    outerInk.userData.outlineTier = 'main';
+    outerInk.userData.outlineStable = true;
+    root.add(outerInk);
+
+    const frame = new THREE.Mesh(makePlateGeometry(), frameMaterial);
+    frame.name = 'radio-guide-frame';
+    frame.renderOrder = 150;
+    root.add(frame);
+
+    const plate = new THREE.Mesh(makePlateGeometry(0.88, false), plateMaterial);
+    plate.name = 'radio-guide-bubble';
+    plate.position.z = 0.055;
+    plate.renderOrder = 153;
+    root.add(plate);
+
+    const tail = new THREE.Mesh(new THREE.ConeGeometry(0.12, 0.22, 3), frameMaterial);
+    tail.name = 'radio-guide-tail';
+    tail.position.set(0, -0.37, 0.095);
+    tail.rotation.z = Math.PI;
+    tail.renderOrder = 151;
+    root.add(tail);
+
+    const mast = new THREE.Mesh(new THREE.ConeGeometry(0.085, 0.36, 4), darkMaterial);
+    mast.name = 'radio-guide-mast';
+    mast.position.set(0, -0.025, 0.13);
+    mast.renderOrder = 154;
+    root.add(mast);
+    const cap = new THREE.Mesh(new THREE.OctahedronGeometry(0.075, 0), signalMaterial);
+    cap.position.set(0, 0.19, 0.14);
+    cap.renderOrder = 155;
+    root.add(cap);
     [-1, 1].forEach((side) => {
       [0, 1].forEach((level) => {
-        const wave = new THREE.Mesh(new THREE.BoxGeometry(0.11 + level * 0.035, 0.045, 0.05), signal);
-        wave.position.set(side * (0.14 + level * 0.055), 0.04 - level * 0.075, 0.015);
-        wave.rotation.z = side * (0.26 + level * 0.08);
-        wave.renderOrder = 91;
-        group.add(wave);
+        const wave = new THREE.Mesh(
+          new THREE.BoxGeometry(0.19 + level * 0.07, level === 0 ? 0.065 : 0.055, 0.065),
+          signalMaterial,
+        );
+        wave.position.set(side * (0.2 + level * 0.085), 0.07 - level * 0.12, 0.14);
+        wave.rotation.z = side * (0.38 + level * 0.05);
+        wave.renderOrder = 154;
+        root.add(wave);
       });
     });
-    return group;
+    this.radioGuide.add(root);
+    return root;
   }
 
   private createRobotVacuumBeacon(position: THREE.Vector3, index: number): THREE.Group {
@@ -687,36 +740,11 @@ export class SkillPresentationController {
     return group;
   }
 
-  private createRouteLine(points: readonly THREE.Vector3[]): Line2 {
-    const geometry = new LineGeometry();
-    geometry.setPositions(points.flatMap((point) => [point.x, point.y + 0.18, point.z]));
-    const material = new LineMaterial({
-      color: 0x5fc9c1,
-      linewidth: 3.2,
-      transparent: true,
-      opacity: 0,
-      dashed: true,
-      dashScale: 1.4,
-      dashSize: 0.28,
-      gapSize: 0.16,
-      depthTest: false,
-      depthWrite: false,
-    });
-    material.resolution.copy(this.getRendererSize());
-    this.materials.add(material);
-    const line = new Line2(geometry, material);
-    line.name = 'skill-route-line';
-    line.renderOrder = 89;
-    line.computeLineDistances();
-    this.transient.add(line);
-    return line;
-  }
-
-  private getRendererSize(): THREE.Vector2 {
-    return new THREE.Vector2(
-      this.cssRenderer.domElement.clientWidth || window.innerWidth,
-      this.cssRenderer.domElement.clientHeight || window.innerHeight,
-    );
+  private clearRadioGuide(): void {
+    this.clearGroup(this.radioGuide);
+    this.radioGuideEntries = [];
+    this.radioGuideMaterials.forEach((material) => material.dispose());
+    this.radioGuideMaterials.clear();
   }
 
   private makeTimeline(token: number): Timeline {
@@ -807,7 +835,6 @@ export class SkillPresentationController {
             this.materials.delete(material);
           });
         }
-        if (object instanceof CSS2DObject) object.element.remove();
       });
     });
   }

@@ -7,7 +7,7 @@ const hudOnly = process.argv.includes('--hud-only');
 const assetArgIndex = process.argv.indexOf('--asset');
 const selectedAssets = assetArgIndex >= 0 ? [process.argv[assetArgIndex + 1]] : assets;
 const assets = [
-  'lamp-spotlight-crown', 'humidifier-glass-wiper', 'fan-airflow-ribbon',
+  'humidifier-glass-wiper', 'fan-airflow-ribbon',
   'dehumidifier-shield-droplets', 'refrigerator-ice-shell', 'hair-dryer-heat-ribbon',
   'bubble-shell-wave-membrane', 'radio-sequence-markers', 'kettle-steam-ribbon',
   'blender-energy-shards', 'gacha-card-frame', 'record-note-orb-ring',

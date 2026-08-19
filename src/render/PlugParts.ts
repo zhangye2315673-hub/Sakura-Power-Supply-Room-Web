@@ -8,6 +8,11 @@ import {
 } from '../puzzle/types';
 import { PAL } from '../style/palette';
 import { cel } from '../style/toon';
+import {
+  REFRIGERATOR_FREEZE_COLOR,
+  REFRIGERATOR_ICE_COLOR,
+  REFRIGERATOR_ICE_OPACITY,
+} from './CableGeometry';
 
 export type PlugStyleId =
   | 'round-two-pin'
@@ -59,10 +64,14 @@ export const PLUG_HEAD_ENVELOPE = Object.freeze({
 export type PlugHead = {
   root: THREE.Group;
   shell: THREE.Mesh;
+  frozenShell: THREE.Group;
   pickMeshes: THREE.Mesh[];
   styleId: PlugStyleId;
   setHovered: (hovered: boolean, nightProgress?: number) => void;
   setSkillTint: (color: THREE.ColorRepresentation | null, strength?: number) => void;
+  setSkillGlow: (strength?: number) => void;
+  setFrozenGeometryEnabled: (enabled: boolean) => void;
+  setFrozen: (amount?: number) => void;
   setBlockedFlash: (amount: number) => void;
   reset: () => void;
   dispose: () => void;
@@ -190,6 +199,9 @@ export function createPlugHead(
   const shellColor = lineColor.clone().lerp(new THREE.Color(PAL.paper), 0.09);
   const faceColor = lineColor.clone().lerp(new THREE.Color(PAL.paper), 0.17);
   const sleeveColor = lineColor.clone().multiplyScalar(0.87);
+  const pinColor = new THREE.Color(0xa7a0ad);
+  const darkColor = new THREE.Color(0x554d63);
+  const inactiveIndicatorColor = new THREE.Color(0x625a70);
   const shellMaterial = tagMaterial(
     cel({ color: shellColor, bands: 3, tint: 0x6c5f8c, flatShading: true }),
     'plug-shell-toon',
@@ -206,12 +218,12 @@ export function createPlugHead(
     'strain-relief',
   );
   const pinMaterial = tagMaterial(
-    cel({ color: 0xa7a0ad, bands: 3, tint: 0x554c64, flatShading: true }),
+    cel({ color: pinColor, bands: 3, tint: 0x554c64, flatShading: true }),
     'plug-metal-toon',
     'terminal-metal',
   );
   const darkMaterial = tagMaterial(
-    cel({ color: 0x554d63, bands: 2, tint: 0x443c52, flatShading: true }),
+    cel({ color: darkColor, bands: 2, tint: 0x443c52, flatShading: true }),
     'plug-cavity-toon',
     'interface-cavity',
   );
@@ -224,12 +236,21 @@ export function createPlugHead(
   }), 'plug-indicator-toon', 'status-indicator');
   let skillTintColor: THREE.Color | null = null;
   let skillTintStrength = 0;
+  let skillGlowStrength = 0;
+  let frozenAmount = 0;
   let isHovered = false;
   const hoverLight = new THREE.Color(PAL.blossomLight);
 
   const tinted = (base: THREE.Color): THREE.Color => {
     const result = base.clone();
     if (skillTintColor) result.lerp(skillTintColor, skillTintStrength);
+    if (frozenAmount > 0) {
+      const terminal = base === pinColor || base === darkColor;
+      result.lerp(
+        new THREE.Color(REFRIGERATOR_FREEZE_COLOR),
+        frozenAmount * (terminal ? 0.84 : 0.9),
+      );
+    }
     return result;
   };
 
@@ -237,16 +258,52 @@ export function createPlugHead(
     shellMaterial.color.copy(tinted(shellColor));
     faceMaterial.color.copy(tinted(faceColor));
     sleeveMaterial.color.copy(tinted(sleeveColor));
+    pinMaterial.color.copy(tinted(pinColor));
+    darkMaterial.color.copy(tinted(darkColor));
     if (isHovered) {
       shellMaterial.color.lerp(hoverLight, 0.2);
     }
-    indicatorMaterial.emissive.copy(skillTintColor ?? lineColor);
-    shellMaterial.emissive.set(0x000000);
-    shellMaterial.emissiveIntensity = 1;
-    faceMaterial.emissive.set(0x000000);
-    faceMaterial.emissiveIntensity = 1;
-    sleeveMaterial.emissive.set(0x000000);
-    sleeveMaterial.emissiveIntensity = 1;
+    const indicatorBase = isHovered || energized
+      ? new THREE.Color(PAL.blossomLight)
+      : inactiveIndicatorColor;
+    indicatorMaterial.color.copy(tinted(indicatorBase));
+
+    const coloredMaterials: readonly [THREE.MeshToonMaterial, THREE.Color][] = [
+      [shellMaterial, shellColor],
+      [faceMaterial, faceColor],
+      [sleeveMaterial, sleeveColor],
+      [pinMaterial, pinColor],
+      [darkMaterial, darkColor],
+    ];
+    for (const [material, base] of coloredMaterials) {
+      if (skillGlowStrength > 0) {
+        material.emissive.copy(base);
+        material.emissiveIntensity = 0.5 + skillGlowStrength * 0.72;
+      } else if (skillTintColor) {
+        material.emissive.copy(skillTintColor);
+        material.emissiveIntensity = 0.22;
+      } else if (frozenAmount > 0) {
+        material.emissive.set(0x86bdd1);
+        material.emissiveIntensity = frozenAmount * 0.045;
+      } else {
+        material.emissive.set(0x000000);
+        material.emissiveIntensity = 1;
+      }
+    }
+    indicatorMaterial.emissive.copy(
+      skillGlowStrength > 0 ? lineColor : skillTintColor ?? (frozenAmount > 0 ? new THREE.Color(0xbceeff) : lineColor),
+    );
+    indicatorMaterial.emissiveIntensity = skillGlowStrength > 0
+      ? 0.78 + skillGlowStrength * 0.72
+      : skillTintColor
+        ? 0.42
+        : frozenAmount > 0
+          ? 0.3 + frozenAmount * 0.36
+        : isHovered
+          ? 0.92
+          : energized
+            ? 1
+            : 0.16;
   };
 
   const assembly = tagPart(new THREE.Group(), 'plug-assembly', styleId);
@@ -381,6 +438,77 @@ export function createPlugHead(
   indicatorGroup.add(indicatorRecess, indicator);
 
   const terminal = terminalMesh(styleId, pinMaterial, darkMaterial);
+  const frozenShell = new THREE.Group();
+  frozenShell.name = 'plug-frozen-shell';
+  frozenShell.visible = false;
+  frozenShell.userData.iceShell = true;
+  frozenShell.scale.setScalar(1.095);
+  let frozenGeometryEnabled = false;
+  let frozenShellMaterial: THREE.MeshPhysicalMaterial | null = null;
+
+  const ensureFrozenShellGeometry = () => {
+    if (frozenShell.children.length > 0) return;
+    frozenShellMaterial = new THREE.MeshPhysicalMaterial({
+      name: 'sakura-plug-refrigerator-ice-shell',
+      color: REFRIGERATOR_ICE_COLOR,
+      emissive: 0x254f61,
+      emissiveIntensity: 0.025,
+      roughness: 0.58,
+      metalness: 0,
+      clearcoat: 0.42,
+      clearcoatRoughness: 0.34,
+      transparent: true,
+      opacity: 0,
+      depthWrite: false,
+      side: THREE.DoubleSide,
+      flatShading: true,
+    });
+    frozenShellMaterial.userData.materialRole = 'plug-refrigerator-ice-shell';
+
+    [sleeve, rearNeck, shell, frontShoulder, face].forEach((source) => {
+      const icePart = new THREE.Mesh(source.geometry, frozenShellMaterial!);
+      icePart.name = `ice-${source.name}`;
+      icePart.position.copy(source.position);
+      icePart.quaternion.copy(source.quaternion);
+      icePart.scale.copy(source.scale);
+      icePart.renderOrder = 5;
+      icePart.userData.iceShell = true;
+      const iceOutline = addHullOutline(icePart, 0.0054, PAL.ink);
+      iceOutline.userData.iceShellOutline = true;
+      frozenShell.add(icePart);
+    });
+
+    const terminalIce = terminal.clone(true);
+    terminalIce.name = 'ice-terminal-assembly';
+    const outlineNodes: THREE.Object3D[] = [];
+    const terminalIceMeshes: THREE.Mesh[] = [];
+    terminalIce.traverse((object) => {
+      if (object.userData.isOutline === true) {
+        outlineNodes.push(object);
+        return;
+      }
+      if (!(object instanceof THREE.Mesh)) return;
+      object.material = frozenShellMaterial!;
+      object.renderOrder = 5;
+      object.userData.iceShell = true;
+      terminalIceMeshes.push(object);
+    });
+    outlineNodes.forEach((object) => object.removeFromParent());
+    terminalIceMeshes.forEach((iceMesh) => {
+      const iceOutline = addHullOutline(iceMesh, 0.0048, PAL.ink);
+      iceOutline.userData.iceShellOutline = true;
+    });
+    frozenShell.add(terminalIce);
+  };
+
+  const refreshFrozenShell = () => {
+    const visible = frozenGeometryEnabled && frozenAmount > 0.01;
+    frozenShell.visible = visible;
+    frozenShell.userData.amount = visible ? frozenAmount : 0;
+    if (frozenShellMaterial) {
+      frozenShellMaterial.opacity = visible ? REFRIGERATOR_ICE_OPACITY * frozenAmount : 0;
+    }
+  };
   const cableSocket = new THREE.Object3D();
   cableSocket.name = 'plug-cable-socket';
   cableSocket.userData.socket = true;
@@ -404,6 +532,7 @@ export function createPlugHead(
     face,
     terminal,
     indicatorGroup,
+    frozenShell,
     jointPick,
     hoverFocus,
   );
@@ -452,18 +581,20 @@ export function createPlugHead(
   const reset = () => {
     skillTintColor = null;
     skillTintStrength = 0;
+    skillGlowStrength = 0;
+    frozenAmount = 0;
     isHovered = false;
     refreshColor();
-    shellMaterial.emissive.set(0x000000);
-    shellMaterial.emissiveIntensity = 1;
-    indicatorMaterial.color.set(energized ? PAL.blossomLight : 0x625a70);
-    indicatorMaterial.emissive.copy(lineColor);
-    indicatorMaterial.emissiveIntensity = energized ? 1 : 0.16;
+    refreshFrozenShell();
+    hoverFocus.visible = false;
+    hoverInnerMaterial.opacity = 0;
+    hoverOuterMaterial.opacity = 0;
   };
 
   return {
     root,
     shell,
+    frozenShell,
     pickMeshes,
     styleId,
     setHovered(hovered, nightProgress = 0) {
@@ -471,8 +602,6 @@ export function createPlugHead(
       isHovered = hovered;
       void nightProgress;
       refreshColor();
-      indicatorMaterial.color.set(hovered ? PAL.blossomLight : energized ? PAL.blossomLight : 0x625a70);
-      indicatorMaterial.emissiveIntensity = hovered ? 0.92 : energized ? 1 : 0.16;
       hoverFocus.visible = hovered;
       const focusColor = new THREE.Color(PAL.blossomLight);
       hoverInnerMaterial.color.copy(focusColor);
@@ -486,6 +615,28 @@ export function createPlugHead(
       skillTintColor = color === null ? null : new THREE.Color(color);
       skillTintStrength = color === null ? 0 : Math.max(0, Math.min(1, strength));
       refreshColor();
+    },
+    setSkillGlow(strength = 0) {
+      skillGlowStrength = Math.max(0, Math.min(1, strength));
+      refreshColor();
+    },
+    setFrozenGeometryEnabled(enabled) {
+      frozenGeometryEnabled = enabled;
+      if (enabled) ensureFrozenShellGeometry();
+      refreshFrozenShell();
+    },
+    setFrozen(amount = 0) {
+      frozenAmount = Math.max(0, Math.min(1, amount));
+      refreshColor();
+      refreshFrozenShell();
+      const ink = new THREE.Color(PAL.ink);
+      const frozenInk = new THREE.Color(0x405d70);
+      root.traverse((object) => {
+        if (!(object instanceof THREE.Mesh) || object.userData.isOutline !== true) return;
+        if (!(object.material instanceof THREE.ShaderMaterial)) return;
+        const color = object.material.uniforms.uColor?.value;
+        if (color instanceof THREE.Color) color.copy(ink).lerp(frozenInk, frozenAmount * 0.58);
+      });
     },
     setBlockedFlash(amount) {
       shellMaterial.emissive.set(PAL.redDeep);

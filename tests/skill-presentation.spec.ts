@@ -34,16 +34,14 @@ async function show(page: Page, skill: SkillKind) {
 
 const presentation = (page: Page) => page.evaluate(() => window.__THREE_GAME_DIAGNOSTICS__!.skill!.presentation);
 
-test('radio presents three ordered targets and fully cleans temporary feedback', async ({ page }) => {
+test('radio resolves its transient cue without creating numbers or route lines', async ({ page }) => {
   test.setTimeout(240_000);
   await enterEvidenceGame(page);
   const active = await show(page, 'radio');
   expect(active.targetCount).toBe(3);
-  expect(active.labelCount).toBe(3);
-  expect(active.lineCount).toBe(1);
-  expect(active.meshCount).toBe(3);
-  await expect.poll(async () => (await presentation(page)).radioPulseOrder.length, { timeout: 15_000 }).toBe(6);
-  expect((await presentation(page)).radioPulseOrder).toEqual([1, 2, 3, 1, 2, 3]);
+  expect(active.labelCount).toBe(0);
+  expect(active.lineCount).toBe(0);
+  expect(active.meshCount).toBe(0);
 
   await expect.poll(async () => (await presentation(page)).skillId, { timeout: 15_000 }).toBeNull();
   const cleaned = await presentation(page);
@@ -51,7 +49,7 @@ test('radio presents three ordered targets and fully cleans temporary feedback',
   expect(cleaned.lineCount).toBe(0);
   expect(cleaned.meshCount).toBe(0);
   expect(cleaned.activeTimelines).toBe(0);
-  expect(cleaned.phaseHistory).toEqual(['cue', 'target-lock', 'commit', 'impact', 'result', 'settle', 'cleanup']);
+  expect(cleaned.phaseHistory).toEqual(['cue', 'target-lock', 'commit', 'result', 'settle', 'cleanup']);
   expect(await page.locator('.skill-world-number').count()).toBe(0);
 });
 

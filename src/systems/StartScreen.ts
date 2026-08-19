@@ -3,9 +3,11 @@ import { applyStaticTranslations, t, type TranslationKey } from './Locale';
 type StartScreenOptions = {
   onStart: () => void;
   onRandom: () => void;
+  onExplore: () => void;
   onRush: () => void;
   onDoubleEnded: () => void;
   onSkill: () => void;
+  onSkillTest: () => void;
   onProgress?: (progress: number) => void;
 };
 
@@ -15,18 +17,22 @@ export class StartScreen {
   private readonly challengeButton = this.getElement<HTMLButtonElement>('#challenge-mode-button');
   private readonly challengeMenu = this.getElement<HTMLElement>('#challenge-mode-menu');
   private readonly randomButton = this.getElement<HTMLButtonElement>('#start-random-button');
+  private readonly exploreButton = this.getElement<HTMLButtonElement>('#start-explore-button');
   private readonly rushButton = this.getElement<HTMLButtonElement>('#start-rush-button');
   private readonly doubleEndedButton = this.getElement<HTMLButtonElement>('#start-double-ended-button');
   private readonly skillButton = this.getElement<HTMLButtonElement>('#start-skill-button');
+  private readonly skillTestButton = this.getElement<HTMLButtonElement>('#start-skill-test-button');
   private readonly status = this.getElement<HTMLElement>('#start-loading-status');
   private readonly percent = this.getElement<HTMLElement>('#start-loading-percent');
   private readonly progressBar = this.getElement<HTMLElement>('.start-progress');
   private readonly objectState = this.getElement<HTMLElement>('#start-object-state');
   private readonly onStart: () => void;
   private readonly onRandom: () => void;
+  private readonly onExplore: () => void;
   private readonly onRush: () => void;
   private readonly onDoubleEnded: () => void;
   private readonly onSkill: () => void;
+  private readonly onSkillTest: () => void;
   private readonly onProgress?: (progress: number) => void;
   private animationFrame = 0;
   private lastFrameAt = 0;
@@ -44,16 +50,20 @@ export class StartScreen {
   constructor(options: StartScreenOptions) {
     this.onStart = options.onStart;
     this.onRandom = options.onRandom;
+    this.onExplore = options.onExplore;
     this.onRush = options.onRush;
     this.onDoubleEnded = options.onDoubleEnded;
     this.onSkill = options.onSkill;
+    this.onSkillTest = options.onSkillTest;
     this.onProgress = options.onProgress;
     this.startButton.addEventListener('click', this.handleStart);
     this.challengeButton.addEventListener('click', this.toggleChallengeMenu);
     this.randomButton.addEventListener('click', this.handleRandom);
+    this.exploreButton.addEventListener('click', this.handleExplore);
     this.rushButton.addEventListener('click', this.handleRush);
     this.doubleEndedButton.addEventListener('click', this.handleDoubleEnded);
     this.skillButton.addEventListener('click', this.handleSkill);
+    this.skillTestButton.addEventListener('click', this.handleSkillTest);
     document.addEventListener('pointerdown', this.handleOutsidePointer);
     document.addEventListener('keydown', this.handleKeyDown);
     document.documentElement.classList.add('opening-active');
@@ -109,9 +119,11 @@ export class StartScreen {
     this.startButton.disabled = false;
     this.challengeButton.disabled = false;
     this.randomButton.disabled = false;
+    this.exploreButton.disabled = false;
     this.rushButton.disabled = false;
     this.doubleEndedButton.disabled = false;
     this.skillButton.disabled = false;
+    this.skillTestButton.disabled = false;
     this.startButton.textContent = t('start.enter');
     this.startButton.classList.add('ready');
     this.element.classList.add('ready');
@@ -133,9 +145,11 @@ export class StartScreen {
     this.startButton.disabled = true;
     this.challengeButton.disabled = true;
     this.randomButton.disabled = true;
+    this.exploreButton.disabled = true;
     this.rushButton.disabled = true;
     this.doubleEndedButton.disabled = true;
     this.skillButton.disabled = true;
+    this.skillTestButton.disabled = true;
     this.closeChallengeMenu();
     this.startButton.textContent = t('start.connecting');
     this.element.classList.add('connecting');
@@ -163,9 +177,11 @@ export class StartScreen {
     this.startButton.disabled = !this.ready;
     this.challengeButton.disabled = !this.ready;
     this.randomButton.disabled = !this.ready;
+    this.exploreButton.disabled = !this.ready;
     this.rushButton.disabled = !this.ready;
     this.doubleEndedButton.disabled = !this.ready;
     this.skillButton.disabled = !this.ready;
+    this.skillTestButton.disabled = !this.ready;
     this.closeChallengeMenu();
     document.documentElement.classList.add('opening-active');
     this.refreshLocale();
@@ -185,9 +201,11 @@ export class StartScreen {
     this.startButton.removeEventListener('click', this.handleStart);
     this.challengeButton.removeEventListener('click', this.toggleChallengeMenu);
     this.randomButton.removeEventListener('click', this.handleRandom);
+    this.exploreButton.removeEventListener('click', this.handleExplore);
     this.rushButton.removeEventListener('click', this.handleRush);
     this.doubleEndedButton.removeEventListener('click', this.handleDoubleEnded);
     this.skillButton.removeEventListener('click', this.handleSkill);
+    this.skillTestButton.removeEventListener('click', this.handleSkillTest);
     document.removeEventListener('pointerdown', this.handleOutsidePointer);
     document.removeEventListener('keydown', this.handleKeyDown);
     cancelAnimationFrame(this.animationFrame);
@@ -219,6 +237,12 @@ export class StartScreen {
     this.onRandom();
   };
 
+  private readonly handleExplore = () => {
+    if (!this.ready || this.leaving) return;
+    this.closeChallengeMenu();
+    this.onExplore();
+  };
+
   private readonly handleDoubleEnded = () => {
     if (!this.ready || this.leaving) return;
     this.closeChallengeMenu();
@@ -229,6 +253,12 @@ export class StartScreen {
     if (!this.ready || this.leaving) return;
     this.closeChallengeMenu();
     this.onSkill();
+  };
+
+  private readonly handleSkillTest = () => {
+    if (!this.ready || this.leaving) return;
+    this.closeChallengeMenu();
+    this.onSkillTest();
   };
 
   private readonly toggleChallengeMenu = () => {

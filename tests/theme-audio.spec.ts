@@ -1,10 +1,18 @@
 import { expect, test } from '@playwright/test';
+import * as THREE from 'three';
 import { APPLIANCE_CATALOG } from '../src/systems/ApplianceCatalog';
 import { APPLIANCE_SENSORY_PROFILES } from '../src/appliances/ApplianceSensoryProfiles';
 import { APPLIANCE_AUDIO_PROFILES } from '../src/audio/ApplianceAudioProfiles';
 import { AdaptiveNightQuality } from '../src/theme/AdaptiveQuality';
 import { ApplianceSensoryController } from '../src/appliances/ApplianceSensoryController';
 import { createApplianceModel } from '../src/appliances/models';
+import { ARROW_COLORS } from '../src/style/palette';
+import { enterPreparedGame } from './helpers/enterGame';
+import { ApplianceTarget } from '../src/systems/ApplianceScene';
+
+function relativeLuminance(color: THREE.Color): number {
+  return color.r * 0.2126 + color.g * 0.7152 + color.b * 0.0722;
+}
 
 test('adaptive night quality degrades after two seconds and restores after eight', () => {
   const changes: string[] = [];
@@ -41,7 +49,7 @@ test('all 29 appliances have sensory and four-stage audio profiles', () => {
   expect(APPLIANCE_AUDIO_PROFILES.printer.duration).toBeGreaterThan(5.2);
 });
 
-test('all 29 appliance models expose a real functional light node', () => {
+test('all 29 appliance models expose functional material nodes without generic point lights', () => {
   const sensory = new ApplianceSensoryController();
   const targets = APPLIANCE_CATALOG.map((definition, index) => {
     const model = createApplianceModel(definition.id, {
@@ -61,7 +69,180 @@ test('all 29 appliance models expose a real functional light node', () => {
   const diagnostics = sensory.getDiagnostics();
   expect(diagnostics).toHaveLength(29);
   expect(diagnostics.filter((item) => item.missingFunctionalNode)).toEqual([]);
+  expect(diagnostics.every((item) => item.lightIntensity === 0)).toBe(true);
+  expect(sensory.root.children).toHaveLength(0);
   sensory.dispose();
+});
+
+test('routing lifecycle never turns the shared appliance indicator into a generic glow point', () => {
+  APPLIANCE_CATALOG.forEach((definition, index) => {
+    const target = new ApplianceTarget(definition, ARROW_COLORS[index % ARROW_COLORS.length], [0.5, 0.5]);
+    const sharedIndicators: THREE.MeshToonMaterial[] = [
+      target.indicatorMaterial,
+    ].filter((material): material is THREE.MeshToonMaterial => Boolean(material));
+    const assertNoGenericGlow = () => {
+      expect(sharedIndicators.every((material) => material.emissive.getHex() === 0)).toBe(true);
+    };
+
+    assertNoGenericGlow();
+    target.reserve(ARROW_COLORS[index % ARROW_COLORS.length]);
+    assertNoGenericGlow();
+    target.activate(ARROW_COLORS[(index + 1) % ARROW_COLORS.length]);
+    assertNoGenericGlow();
+    target.reset();
+    assertNoGenericGlow();
+    target.dispose();
+  });
+});
+
+test('all 29 appliances glow on their own accent materials only at night', () => {
+  test.setTimeout(240_000);
+  const missingNeon: string[] = [];
+  const neutralGlow: string[] = [];
+  const daylightDrift: string[] = [];
+
+  APPLIANCE_CATALOG.forEach((definition) => {
+    ARROW_COLORS.forEach((accent) => {
+      const model = createApplianceModel(definition.id, {
+        id: definition.id,
+        accent,
+        referencePath: definition.referencePath,
+      });
+      const materialNames = new Map<THREE.Material, string[]>();
+      model.root.traverse((object) => {
+        if (!(object instanceof THREE.Mesh) || object.userData.isOutline) return;
+        const entries = Array.isArray(object.material) ? object.material : [object.material];
+        entries.forEach((material) => {
+          const names = materialNames.get(material) ?? [];
+          names.push(object.name);
+          materialNames.set(material, names);
+        });
+      });
+      const baselines = [...model.materials].flatMap((material) => {
+        const toon = material as THREE.MeshToonMaterial;
+        if (!(toon.color instanceof THREE.Color) || !(toon.emissive instanceof THREE.Color)) return [];
+        const colorHsl = { h: 0, s: 0, l: 0 };
+        toon.color.getHSL(colorHsl);
+        const chroma = Math.max(toon.color.r, toon.color.g, toon.color.b)
+          - Math.min(toon.color.r, toon.color.g, toon.color.b);
+        return [{
+          material: toon,
+          names: materialNames.get(material) ?? [],
+          neutral: chroma < 0.14 || colorHsl.l > 0.82,
+          emissive: toon.emissive.clone(),
+          emissiveIntensity: toon.emissiveIntensity,
+        }];
+      });
+      const target = {
+        root: model.root,
+        state: 'idle' as const,
+        kind: definition.id,
+        facingSide: 1 as const,
+        getActiveElapsed: () => 0,
+      };
+      const sensory = new ApplianceSensoryController();
+      sensory.register([target]);
+      sensory.update([target], 1, 1.25);
+      const night = sensory.getDiagnostics()[0];
+      const key = `${definition.id}@${accent.toString(16).padStart(6, '0')}`;
+      if (!night || night.neonMaterialCount === 0) missingNeon.push(key);
+      if (night && (night.neonIntensity <= 0.3 || night.neonIntensity >= 0.5)) missingNeon.push(`${key}:intensity`);
+      baselines.forEach(({ material, names, neutral, emissive, emissiveIntensity }) => {
+        if (!neutral) return;
+        if (!material.emissive.equals(emissive) || material.emissiveIntensity !== emissiveIntensity) {
+          neutralGlow.push(`${key}:${names.join('|')}`);
+        }
+      });
+
+      sensory.update([target], 0, 2.75);
+      baselines.forEach(({ material, names, emissive, emissiveIntensity }) => {
+        if (!material.emissive.equals(emissive) || material.emissiveIntensity !== emissiveIntensity) {
+          daylightDrift.push(`${key}:${names.join('|')}`);
+        }
+      });
+      sensory.dispose();
+      const geometries = new Set<THREE.BufferGeometry>();
+      model.root.traverse((object) => {
+        if (object instanceof THREE.Mesh) geometries.add(object.geometry);
+      });
+      geometries.forEach((geometry) => geometry.dispose());
+      model.materials.forEach((material) => material.dispose());
+    });
+  });
+
+  expect(missingNeon).toEqual([]);
+  expect(neutralGlow).toEqual([]);
+  expect(daylightDrift).toEqual([]);
+
+  const washerDefinition = APPLIANCE_CATALOG.find((definition) => definition.id === 'washer')!;
+  const washer = createApplianceModel('washer', {
+    id: 'washer',
+    accent: ARROW_COLORS[0],
+    referencePath: washerDefinition.referencePath,
+  });
+  const washerTarget = {
+    root: washer.root,
+    state: 'idle' as const,
+    kind: 'washer' as const,
+    facingSide: 1 as const,
+    getActiveElapsed: () => 0,
+  };
+  const gallerySensory = new ApplianceSensoryController(0.48);
+  gallerySensory.register([washerTarget]);
+  gallerySensory.update([washerTarget], 1, 1.25);
+  const galleryWasher = gallerySensory.getDiagnostics().find((item) => item.kind === 'washer');
+  expect(galleryWasher?.neonIntensity ?? 1).toBeGreaterThan(0.15);
+  expect(galleryWasher?.neonIntensity ?? 1).toBeLessThan(0.23);
+  gallerySensory.dispose();
+});
+
+test('warm and cool stand-mixer neon colors have balanced perceived brightness', () => {
+  const definition = APPLIANCE_CATALOG.find((item) => item.id === 'stand-mixer')!;
+  const peakContributions: number[] = [];
+
+  ARROW_COLORS.forEach((accent) => {
+    const model = createApplianceModel('stand-mixer', {
+      id: 'stand-mixer',
+      accent,
+      referencePath: definition.referencePath,
+    });
+    const baselines = new Map([...model.materials].flatMap((material) => {
+      const toon = material as THREE.MeshToonMaterial;
+      if (!(toon.emissive instanceof THREE.Color)) return [];
+      return [[material, {
+        emissive: toon.emissive.clone(),
+        emissiveIntensity: toon.emissiveIntensity,
+      }] as const];
+    }));
+    const target = {
+      root: model.root,
+      state: 'idle' as const,
+      kind: 'stand-mixer' as const,
+      facingSide: 1 as const,
+      getActiveElapsed: () => 0,
+    };
+    const sensory = new ApplianceSensoryController();
+    sensory.register([target]);
+    sensory.update([target], 1, 1.25);
+    const contributions = [...model.materials].flatMap((material) => {
+      const toon = material as THREE.MeshToonMaterial;
+      const baseline = baselines.get(material);
+      if (!(toon.emissive instanceof THREE.Color) || !baseline) return [];
+      if (
+        toon.emissive.equals(baseline.emissive)
+        && toon.emissiveIntensity === baseline.emissiveIntensity
+      ) return [];
+      return [relativeLuminance(toon.emissive) * toon.emissiveIntensity];
+    });
+    peakContributions.push(Math.max(...contributions));
+    sensory.dispose();
+  });
+
+  const brightest = Math.max(...peakContributions);
+  const dimmest = Math.min(...peakContributions);
+  expect(dimmest).toBeGreaterThan(0.13);
+  expect(brightest).toBeLessThan(0.19);
+  expect(brightest / dimmest).toBeLessThan(1.25);
 });
 
 test('theme defaults to day, persists only after manual toggle, and syncs browser color', async ({ page }) => {
@@ -129,33 +310,20 @@ test('rapid toggle reverses from the current transition progress', async ({ page
   ).toBeLessThan(0.02);
 });
 
-test('lantern follows canvas input, dims at appliance edges, and returns on UI hover', async ({ page }) => {
-  test.setTimeout(180_000);
-  await page.goto('/?theme=night&level=1');
+test('lantern follows canvas input across appliances at full strength and returns on UI hover', async ({ page }) => {
+  test.setTimeout(300_000);
+  await page.goto('/?theme=night&seed=90&mode=random&direct=1');
   await page.waitForFunction(() => (window.__THREE_GAME_DIAGNOSTICS__?.theme.progress ?? 0) > 0.98);
-  await page.waitForFunction(
-    () => window.__THREE_GAME_DIAGNOSTICS__?.opening.ready === true
-      && document.querySelector<HTMLButtonElement>('#start-game-button')?.disabled === false,
-    null,
-    { timeout: 150_000 },
-  );
-  await page.locator('#start-game-button').click({ force: true });
-  await page.waitForFunction(
-    () => {
-      const diagnostics = window.__THREE_GAME_DIAGNOSTICS__;
-      return diagnostics?.opening.active === false
-        && diagnostics.sceneVisibility.appliances
-        && diagnostics.appliances.length > 0
-        && diagnostics.clickTarget !== null;
-    },
-    null,
-    { timeout: 150_000 },
-  );
+  await enterPreparedGame(page);
   const canvas = page.locator('#game-canvas');
   const box = await canvas.boundingBox();
   expect(box).not.toBeNull();
   if (!box) return;
-  await page.mouse.move(box.x + box.width * 0.5, box.y + box.height * 0.48);
+  await canvas.dispatchEvent('pointermove', {
+    pointerType: 'mouse',
+    clientX: box.x + box.width * 0.5,
+    clientY: box.y + box.height * 0.48,
+  });
   await expect.poll(
     async () => page.evaluate(() => window.__THREE_GAME_DIAGNOSTICS__?.theme.lantern.returning ?? true),
     { timeout: 30_000 },
@@ -164,7 +332,16 @@ test('lantern follows canvas input, dims at appliance edges, and returns on UI h
     async () => page.evaluate(() => window.__THREE_GAME_DIAGNOSTICS__?.theme.lantern.intensity ?? 0),
     { timeout: 30_000 },
   ).toBeGreaterThan(0.85);
-  await page.mouse.move(box.x + box.width * 0.08, box.y + box.height * 0.5);
+  const edgeAppliance = await page.evaluate(() => (
+    window.__THREE_GAME_DIAGNOSTICS__?.appliances.find((item) => item.screenX < 0.24) ?? null
+  ));
+  expect(edgeAppliance).not.toBeNull();
+  if (!edgeAppliance) return;
+  await canvas.dispatchEvent('pointermove', {
+    pointerType: 'mouse',
+    clientX: box.x + box.width * edgeAppliance.screenX,
+    clientY: box.y + box.height * edgeAppliance.screenY,
+  });
   await expect.poll(
     async () => page.evaluate(() => window.__THREE_GAME_DIAGNOSTICS__?.theme.lantern.inApplianceZone ?? false),
     { timeout: 30_000 },
@@ -172,8 +349,24 @@ test('lantern follows canvas input, dims at appliance edges, and returns on UI h
   await expect.poll(
     async () => page.evaluate(() => window.__THREE_GAME_DIAGNOSTICS__?.theme.lantern.intensity ?? 1),
     { timeout: 30_000 },
-  ).toBeGreaterThan(0.72);
-  expect(await page.evaluate(() => window.__THREE_GAME_DIAGNOSTICS__?.theme.lantern.intensity ?? 1)).toBeLessThan(0.9);
+  ).toBeGreaterThan(0.95);
+  const firstWorld = await page.evaluate(
+    () => window.__THREE_GAME_DIAGNOSTICS__?.theme.lantern.worldPosition ?? [0, 0, 0],
+  );
+  await canvas.dispatchEvent('pointermove', {
+    pointerType: 'mouse',
+    clientX: box.x + box.width * (edgeAppliance.screenX + 0.02),
+    clientY: box.y + box.height * edgeAppliance.screenY,
+  });
+  await page.waitForTimeout(260);
+  const secondWorld = await page.evaluate(
+    () => window.__THREE_GAME_DIAGNOSTICS__?.theme.lantern.worldPosition ?? [0, 0, 0],
+  );
+  expect(Math.hypot(
+    secondWorld[0] - firstWorld[0],
+    secondWorld[1] - firstWorld[1],
+    secondWorld[2] - firstWorld[2],
+  )).toBeGreaterThan(0.05);
   await page.locator('#theme-button').dispatchEvent('pointermove', {
     pointerType: 'mouse',
     clientX: 0,

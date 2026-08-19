@@ -276,7 +276,7 @@ test('refrigerator has a true cavity hierarchy and seven volumetric semantic pro
   expect(model.root.userData.refrigeratorRouteContract.sideClearance).toBeGreaterThanOrEqual(0.48);
 });
 
-test('refrigerator completes staggered launch, legal party orbit, exact return and close', () => {
+test('refrigerator keeps food inside while opening, holding cold, and closing', () => {
   const model = createRefrigeratorModel({ id: 'refrigerator', accent: 0xe8aec4 });
   const animation = createApplianceMechanicalAnimation('refrigerator', model.root);
   const baseline = pose(model.root);
@@ -290,9 +290,11 @@ test('refrigerator completes staggered launch, legal party orbit, exact return a
   expect(model.root.getObjectByName('refrigerator-food-performance-root')?.visible).toBe(true);
 
   animation.update(0.94, 1);
-  const stagger = model.root.userData.refrigeratorPerformanceDiagnostics;
-  expect(stagger.launchedProps).toBe(1);
-  expect(stagger.props.filter((prop: { phase: string }) => prop.phase === 'launch')).toHaveLength(1);
+  const opened = model.root.userData.refrigeratorPerformanceDiagnostics;
+  expect(opened.launchedProps).toBe(0);
+  expect(opened.props.every((prop: { phase: string; distanceFromHome: number }) => (
+    prop.phase === 'home' && prop.distanceFromHome < 1e-7
+  ))).toBe(true);
 
   animation.update(2.32, 1);
   const orbit = model.root.userData.refrigeratorPerformanceDiagnostics;
@@ -305,20 +307,19 @@ test('refrigerator completes staggered launch, legal party orbit, exact return a
   });
 
   animation.update(3.4, 1);
-  const party = model.root.userData.refrigeratorPerformanceDiagnostics;
-  expect(party.phase).toBe('party');
-  expect(party.gatheredProps).toBe(REQUIRED_PROPS.length);
-  expect(party.visibleProps).toBe(REQUIRED_PROPS.length);
-  party.props.forEach((prop: { phase: string; position: number[] }) => {
-    expect(prop.phase).toBe('front-party');
-    expect(prop.position[2]).toBeGreaterThan(1.6);
-  });
+  const hold = model.root.userData.refrigeratorPerformanceDiagnostics;
+  expect(hold.phase).toBe('hold');
+  expect(hold.gatheredProps).toBe(0);
+  expect(hold.visibleProps).toBe(REQUIRED_PROPS.length);
+  expect(hold.props.every((prop: { phase: string; distanceFromHome: number }) => (
+    prop.phase === 'home' && prop.distanceFromHome < 1e-7
+  ))).toBe(true);
 
   animation.update(4.62, 1);
-  const returned = model.root.userData.refrigeratorPerformanceDiagnostics;
-  expect(returned.returnedProps).toBe(REQUIRED_PROPS.length);
-  expect(returned.props.every((prop: { distanceFromHome: number }) => prop.distanceFromHome < 1e-7)).toBe(true);
-  expect(returned.doorOpen).toBeGreaterThan(0.98);
+  const held = model.root.userData.refrigeratorPerformanceDiagnostics;
+  expect(held.returnedProps).toBe(0);
+  expect(held.props.every((prop: { distanceFromHome: number }) => prop.distanceFromHome < 1e-7)).toBe(true);
+  expect(held.doorOpen).toBeGreaterThan(0.98);
 
   animation.update(5.17, 0.05);
   const closed = model.root.userData.refrigeratorPerformanceDiagnostics;
@@ -331,7 +332,7 @@ test('refrigerator completes staggered launch, legal party orbit, exact return a
   expect(model.root.userData.refrigeratorPerformanceDiagnostics).toBeUndefined();
 });
 
-test('refrigerator uses one shared timeline with no generic food or frost particles', () => {
+test('refrigerator uses one shared timeline with no flying food or generic frost particles', () => {
   const gameModel = createRefrigeratorModel({ id: 'refrigerator', accent: 0xe8aec4 });
   const galleryModel = createRefrigeratorModel({ id: 'refrigerator', accent: 0xe8aec4 });
   const gameSystem = new AppliancePerformanceSystem();
@@ -351,7 +352,9 @@ test('refrigerator uses one shared timeline with no generic food or frost partic
   expect(gameSummary.sessions).toBe(1);
   expect(gameSummary.timelineOwners).toBe(1);
   expect(gameSummary.elapsedByKind.refrigerator).toBeCloseTo(3.4, 7);
-  expect(gameSummary.refrigerator?.gatheredProps).toBe(REQUIRED_PROPS.length);
+  expect(gameSummary.refrigerator?.gatheredProps).toBe(0);
+  expect(gameSummary.refrigerator?.launchedProps).toBe(0);
+  expect(gameSummary.refrigerator?.forbiddenLegacyEffects).toContain('flying-food');
   expect(gameSummary.activeByKind.food).toBeUndefined();
   expect(gameSummary.activeByKind.debris).toBe(0);
   expect(gameSummary.refrigerator).toEqual(gallerySummary.refrigerator);

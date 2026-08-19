@@ -24,7 +24,7 @@ export type RefrigeratorPropDiagnostics = {
   category: string;
   homeZone: string;
   homeSocket: string;
-  phase: 'home' | 'launch' | 'orbit' | 'front-party' | 'return';
+  phase: 'home';
   position: [number, number, number];
   currentHome: [number, number, number];
   distanceFromHome: number;
@@ -37,7 +37,7 @@ export type RefrigeratorPropDiagnostics = {
 
 export type RefrigeratorPerformanceDiagnostics = {
   timelineTime: number;
-  phase: 'idle' | 'open' | 'launch' | 'party' | 'return' | 'close';
+  phase: 'idle' | 'open' | 'hold' | 'close';
   doorOpen: number;
   upperDoorAngle: number;
   lowerDoorAngle: number;
@@ -51,26 +51,17 @@ export type RefrigeratorPerformanceDiagnostics = {
   props: RefrigeratorPropDiagnostics[];
   timelineOwner: 'AppliancePerformanceSystem';
   modelOwner: 'refrigerator-food-performance-root';
-  forbiddenLegacyEffects: readonly ['PlaneGeometry', 'Line', 'Sprite', 'generic-food-pool', 'generic-debris-pool'];
+  forbiddenLegacyEffects: readonly ['PlaneGeometry', 'Line', 'Sprite', 'flying-food', 'generic-food-pool', 'generic-debris-pool'];
 };
 
 function smoothRange(time: number, start: number, end: number): number {
   return THREE.MathUtils.smoothstep(time, start, end);
 }
 
-function samplePolyline(target: THREE.Vector3, points: readonly THREE.Vector3[], progress: number): void {
-  const scaled = THREE.MathUtils.clamp(progress, 0, 1) * (points.length - 1);
-  const index = Math.min(points.length - 2, Math.floor(scaled));
-  const local = THREE.MathUtils.smoothstep(scaled - index, 0, 1);
-  target.copy(points[index]).lerp(points[index + 1], local);
-}
-
 function phaseAt(time: number, power: number): RefrigeratorPerformanceDiagnostics['phase'] {
   if (power <= 0.01 || time < 0.12) return 'idle';
   if (time < 0.88) return 'open';
-  if (time < 2.05) return 'launch';
-  if (time < 3.68) return 'party';
-  if (time < 4.7) return 'return';
+  if (time < 4.7) return 'hold';
   return 'close';
 }
 
@@ -113,8 +104,9 @@ function partyWaypoints(meta: RefrigeratorPropMeta, home: THREE.Vector3): THREE.
 }
 
 /**
- * Refrigerator-only choreography. Every moving food is a named model pivot;
- * there are no detached generic particles and no second animation owner.
+ * Refrigerator-only choreography. Food stays inside the cabinet; the skill's
+ * cold front is presented by the screen, snow and cable frost systems instead
+ * of unrelated models flying through the puzzle.
  */
 export function applyRefrigeratorPerformance(root: THREE.Group, time: number, power: number): void {
   const p = THREE.MathUtils.clamp(power, 0, 1);
@@ -136,83 +128,29 @@ export function applyRefrigeratorPerformance(root: THREE.Group, time: number, po
 
   root.updateMatrixWorld(true);
   const foodRoot = root.getObjectByName('refrigerator-food-performance-root');
-  const foodVisible = p > 0.01 && time >= 0.42 && time < 5.17;
+  const foodVisible = interiorVisible;
   if (foodRoot) foodRoot.visible = foodVisible;
 
   const props = (foodRoot?.children ?? []).filter((object) => object.userData.refrigeratorProp) as THREE.Group[];
   const diagnostics: RefrigeratorPropDiagnostics[] = [];
   const home = new THREE.Vector3();
   const position = new THREE.Vector3();
-  let launchedProps = 0;
-  let gatheredProps = 0;
-  let returnedProps = 0;
 
   props.forEach((prop) => {
     const meta = prop.userData.refrigeratorProp as RefrigeratorPropMeta;
     currentHome(root, meta, home);
     const waypoints = partyWaypoints(meta, home);
-    const launchStart = 0.88 + meta.launchIndex * 0.105;
-    const launchEnd = launchStart + 0.4;
-    const orbitEnd = 2.82 + meta.launchIndex * 0.018;
-    const returnStart = 3.68 + meta.launchIndex * 0.055;
-    const returnEnd = returnStart + 0.54;
-    let propPhase: RefrigeratorPropDiagnostics['phase'] = 'home';
-
     position.copy(home);
-    if (time >= launchStart && time < launchEnd) {
-      propPhase = 'launch';
-      const progress = smoothRange(time, launchStart, launchEnd);
-      position.lerpVectors(home, waypoints[0], progress);
-      position.y += Math.sin(progress * Math.PI) * (0.34 + meta.launchIndex * 0.025);
-      launchedProps += 1;
-    } else if (time >= launchEnd && time < orbitEnd) {
-      propPhase = 'orbit';
-      const progress = (time - launchEnd) / Math.max(0.01, orbitEnd - launchEnd);
-      samplePolyline(position, waypoints, progress);
-      position.y += Math.sin(progress * Math.PI * 6 + meta.launchIndex) * 0.08;
-      launchedProps += 1;
-    } else if (time >= orbitEnd && time < returnStart) {
-      propPhase = 'front-party';
-      position.copy(waypoints[waypoints.length - 1]);
-      position.x += Math.sin(time * (5.6 + meta.launchIndex * 0.17) + meta.launchIndex) * 0.16;
-      position.y += Math.abs(Math.sin(time * (7.4 + meta.launchIndex * 0.13) + meta.launchIndex * 0.7)) * 0.28;
-      position.z += Math.cos(time * 3.2 + meta.launchIndex) * 0.07;
-      launchedProps += 1;
-      gatheredProps += 1;
-    } else if (time >= returnStart && time < returnEnd) {
-      propPhase = 'return';
-      const progress = smoothRange(time, returnStart, returnEnd);
-      const gather = waypoints[waypoints.length - 1];
-      if (progress < 0.58) {
-        position.lerpVectors(gather, waypoints[0], THREE.MathUtils.smoothstep(progress / 0.58, 0, 1));
-      } else {
-        position.lerpVectors(waypoints[0], home, THREE.MathUtils.smoothstep((progress - 0.58) / 0.42, 0, 1));
-      }
-      position.y += Math.sin(progress * Math.PI) * 0.24;
-      launchedProps += 1;
-    } else if (time >= returnEnd) {
-      position.copy(home);
-      returnedProps += 1;
-    }
-
     prop.position.copy(position);
-    if (propPhase !== 'home') {
-      const energy = propPhase === 'front-party' ? 1 : 0.72;
-      prop.rotation.x = Math.sin(time * 4.2 + meta.launchIndex) * 0.34 * energy;
-      prop.rotation.y = time * (1.25 + meta.launchIndex * 0.09) * energy;
-      prop.rotation.z = Math.sin(time * 6.1 + meta.launchIndex * 0.8) * 0.42 * energy;
-      const pulse = propPhase === 'front-party'
-        ? 1.08 + Math.sin(time * 8 + meta.launchIndex) * 0.045
-        : 1;
-      prop.scale.setScalar(pulse);
-    }
+    prop.rotation.set(0, 0, 0);
+    prop.scale.setScalar(1);
 
     diagnostics.push({
       id: meta.id,
       category: meta.category,
       homeZone: meta.homeZone,
       homeSocket: meta.homeSocket,
-      phase: propPhase,
+      phase: 'home',
       position: [position.x, position.y, position.z],
       currentHome: [home.x, home.y, home.z],
       distanceFromHome: position.distanceTo(home),
@@ -238,15 +176,15 @@ export function applyRefrigeratorPerformance(root: THREE.Group, time: number, po
     upperDoorAngle,
     lowerDoorAngle,
     visibleProps: foodVisible ? props.length : 0,
-    launchedProps,
-    gatheredProps,
-    returnedProps,
+    launchedProps: 0,
+    gatheredProps: 0,
+    returnedProps: 0,
     pathClearancePass: diagnostics.every((prop) => prop.minimumSideClearance >= 0.48 && prop.rearToFrontViaSide),
     cabinetHalfWidth: CABINET_HALF_X,
     sideRouteX: SIDE_ROUTE_X,
     props: diagnostics,
     timelineOwner: 'AppliancePerformanceSystem',
     modelOwner: 'refrigerator-food-performance-root',
-    forbiddenLegacyEffects: ['PlaneGeometry', 'Line', 'Sprite', 'generic-food-pool', 'generic-debris-pool'],
+    forbiddenLegacyEffects: ['PlaneGeometry', 'Line', 'Sprite', 'flying-food', 'generic-food-pool', 'generic-debris-pool'],
   } satisfies RefrigeratorPerformanceDiagnostics;
 }
