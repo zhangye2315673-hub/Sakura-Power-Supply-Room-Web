@@ -3,7 +3,7 @@ import { PAL } from '../style/palette';
 import type { ArrowDefinition, LevelDefinition, PuzzleDefinition } from '../puzzle/types';
 import type { SkillCommand } from './SkillChallengeEngine';
 
-export type SkillTestId = 'lamp' | 'fan' | 'humidifier' | 'radio' | 'television' | 'toaster' | 'refrigerator';
+export type SkillTestId = 'lamp' | 'fan' | 'humidifier' | 'radio' | 'television' | 'toaster' | 'refrigerator' | 'washer';
 
 export type SkillTestDefinition = Readonly<{
   id: SkillTestId;
@@ -28,6 +28,8 @@ const TOASTER_TEST_SEED = 0x5a6f2026;
 const TOASTER_TEST_ACCENT = PAL.orange;
 const REFRIGERATOR_TEST_SEED = 0x4a6f2026;
 const REFRIGERATOR_TEST_ACCENT = PAL.blue;
+const WASHER_TEST_SEED = 0x3a6f2026;
+const WASHER_TEST_ACCENT = PAL.teal;
 
 const LAMP_TEST_LEVEL: LevelDefinition = {
   id: 0,
@@ -158,6 +160,19 @@ const REFRIGERATOR_TEST_ARROWS: readonly ArrowDefinition[] = LAMP_TEST_ARROWS.ma
   color: REFRIGERATOR_TEST_ACCENT,
 }));
 
+const WASHER_TEST_LEVEL: LevelDefinition = {
+  ...LAMP_TEST_LEVEL,
+  seed: WASHER_TEST_SEED,
+  label: '洗衣机技能测试',
+};
+
+const WASHER_TEST_ARROWS: readonly ArrowDefinition[] = LAMP_TEST_ARROWS.map((arrow) => ({
+  ...arrow,
+  id: arrow.id.replace('lamp-test-', 'washer-test-'),
+  path: arrow.path.map((point) => [...point] as typeof point),
+  color: WASHER_TEST_ACCENT,
+}));
+
 const lampDefinition = APPLIANCE_CATALOG.find((definition) => definition.id === 'lamp');
 if (!lampDefinition) throw new Error('Lamp appliance definition is missing.');
 const fanDefinition = APPLIANCE_CATALOG.find((definition) => definition.id === 'fan');
@@ -172,6 +187,8 @@ const toasterDefinition = APPLIANCE_CATALOG.find((definition) => definition.id =
 if (!toasterDefinition) throw new Error('Toaster appliance definition is missing.');
 const refrigeratorDefinition = APPLIANCE_CATALOG.find((definition) => definition.id === 'refrigerator');
 if (!refrigeratorDefinition) throw new Error('Refrigerator appliance definition is missing.');
+const washerDefinition = APPLIANCE_CATALOG.find((definition) => definition.id === 'washer');
+if (!washerDefinition) throw new Error('Washer appliance definition is missing.');
 
 const FAN_INITIAL_COMMANDS = [{
   type: 'set-status',
@@ -250,7 +267,16 @@ export const REFRIGERATOR_SKILL_TEST: SkillTestDefinition = Object.freeze({
   initialCommands: [],
 });
 
-export const DEFAULT_SKILL_TEST = REFRIGERATOR_SKILL_TEST;
+export const WASHER_SKILL_TEST: SkillTestDefinition = Object.freeze({
+  id: 'washer',
+  appliance: 'washer',
+  accent: WASHER_TEST_ACCENT,
+  level: WASHER_TEST_LEVEL,
+  applianceDefinition: washerDefinition,
+  initialCommands: [],
+});
+
+export const DEFAULT_SKILL_TEST = WASHER_SKILL_TEST;
 
 export function getSkillTestDefinition(id: string | null): SkillTestDefinition | null {
   if (id === 'lamp') return LAMP_SKILL_TEST;
@@ -260,6 +286,7 @@ export function getSkillTestDefinition(id: string | null): SkillTestDefinition |
   if (id === 'television') return TELEVISION_SKILL_TEST;
   if (id === 'toaster') return TOASTER_SKILL_TEST;
   if (id === 'refrigerator') return REFRIGERATOR_SKILL_TEST;
+  if (id === 'washer') return WASHER_SKILL_TEST;
   return null;
 }
 
@@ -272,6 +299,7 @@ export function buildSkillTestPuzzle(test: SkillTestDefinition): PuzzleDefinitio
     television: TELEVISION_TEST_ARROWS,
     toaster: TOASTER_TEST_ARROWS,
     refrigerator: REFRIGERATOR_TEST_ARROWS,
+    washer: WASHER_TEST_ARROWS,
   };
   const arrows = arrowsByTest[test.id];
   const prefix = `${test.id}-test-`;

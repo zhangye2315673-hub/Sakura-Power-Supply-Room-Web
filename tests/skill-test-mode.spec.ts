@@ -11,6 +11,7 @@ import {
   REFRIGERATOR_SKILL_TEST,
   TELEVISION_SKILL_TEST,
   TOASTER_SKILL_TEST,
+  WASHER_SKILL_TEST,
   buildSkillTestPuzzle,
 } from '../src/skill/SkillTestMode';
 
@@ -117,6 +118,77 @@ test('refrigerator skill test exposes enough exits for the freeze-plugs debuff',
     'refrigerator-test-side',
     'refrigerator-test-depth',
   ]));
+});
+
+test('washer skill test fixture exposes the three initial exits for spin-remove', () => {
+  const puzzle = buildSkillTestPuzzle(WASHER_SKILL_TEST);
+  const availableIds = new Set(availableCableEnds(puzzle.arrows.map(makeRuntime)).map(({ id }) => id));
+
+  expect(puzzle.arrows).toHaveLength(4);
+  expect(WASHER_SKILL_TEST.initialCommands).toEqual([]);
+  expect(new Set(puzzle.arrows.map((arrow) => arrow.color))).toEqual(new Set([WASHER_SKILL_TEST.accent]));
+  expect(availableIds.has('washer-test-blocked')).toBe(false);
+  expect(availableIds).toEqual(new Set([
+    'washer-test-key',
+    'washer-test-side',
+    'washer-test-depth',
+  ]));
+  expect(puzzle.solution).toEqual([
+    'washer-test-key',
+    'washer-test-blocked',
+    'washer-test-side',
+    'washer-test-depth',
+  ]);
+});
+
+test('washer skill test removes up to two remaining cables after its trigger connection', async ({ page }) => {
+  test.setTimeout(180_000);
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/?theme=day&mode=skill-test&direct=1');
+  await page.waitForFunction(
+    () => window.__THREE_GAME_DIAGNOSTICS__?.opening.ready === true,
+    null,
+    { timeout: 90_000 },
+  );
+  await page.click('#start-game-button');
+  await page.waitForFunction(
+    () => {
+      const diagnostics = window.__THREE_GAME_DIAGNOSTICS__;
+      return diagnostics?.opening.active === false
+        && diagnostics.skill?.testId === 'washer'
+        && diagnostics.totalArrows === 4
+        && diagnostics.clickTarget !== null;
+    },
+    null,
+    { timeout: 90_000 },
+  );
+
+  const initial = await page.evaluate(() => window.__THREE_GAME_DIAGNOSTICS__!);
+  expect(initial.appliances.map(({ kind }) => kind)).toEqual(['washer']);
+  expect(initial.skill?.invulnerable).toBe(true);
+  expect(initial.skill?.effectAssets).toEqual([]);
+  await expect(page.locator('#skill-cue-source')).toHaveText('洗衣机');
+  await expect(page.locator('#skill-cue-title')).toHaveText('脱水甩线');
+  await expect(page.locator('#skill-cue-detail')).toHaveText('从全部剩余线中甩出最多两根。');
+
+  const target = await page.evaluate(() => window.__THREE_GAME_DIAGNOSTICS__!.clickTarget!);
+  await page.mouse.click(target.x, target.y);
+  await page.waitForFunction(
+    () => {
+      const diagnostics = window.__THREE_GAME_DIAGNOSTICS__;
+      return diagnostics?.remainingArrows === 1
+        && diagnostics.skill?.inputLocked === true
+        && diagnostics.performances?.kinds.includes('washer') === true;
+    },
+    null,
+    { timeout: 45_000 },
+  );
+  await expect(page.locator('#skill-cue-title')).toHaveText('脱水甩线');
+  await page.waitForFunction(
+    () => window.__THREE_GAME_DIAGNOSTICS__?.skill?.inputLocked === false,
+    null,
+    { timeout: 45_000 },
+  );
 });
 
 test('fan steam remains animated and frosted in the daytime theme', async ({ page }) => {
