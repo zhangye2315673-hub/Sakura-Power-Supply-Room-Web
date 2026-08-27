@@ -34,6 +34,25 @@ const LEGACY_EFFECT_NAMES = new RegExp([
   'hair-dryer-warm-airflow',
 ].join('|'));
 
+const HIDDEN_STATUS_MARKER = /(?:^|[-_])(status-indicator|status-dot|status-lamp|status-light|status-lens|power-led|power-status-indicator)(?:[-_]|$)/i;
+
+test('power and status marker meshes stay hidden across appliance models', () => {
+  const visibleMarkers: string[] = [];
+  APPLIANCE_CATALOG.forEach((definition) => {
+    const model = createApplianceModel(definition.id, {
+      id: definition.id,
+      accent: 0xe8aec4,
+      referencePath: definition.referencePath,
+    });
+    model.root.traverse((object) => {
+      if (object instanceof THREE.Mesh && object.visible && HIDDEN_STATUS_MARKER.test(object.name)) {
+        visibleMarkers.push(`${definition.id}:${object.name}`);
+      }
+    });
+  });
+  expect(visibleMarkers).toEqual([]);
+});
+
 function rigPose(root: THREE.Group): string {
   const values: Array<[string, number[], boolean]> = [];
   root.traverse((object) => {

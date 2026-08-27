@@ -132,6 +132,35 @@ test('every plug publishes stable named parts and sockets inside the rotated env
   }
 });
 
+test('plug interface cavity and electrical contacts keep fixed colors during skill tint', () => {
+  for (const styleId of PLUG_STYLE_IDS) {
+    const head = createPlugHead(0xe86b82, 1, false, styleId);
+    const materials = new Map<string, THREE.MeshToonMaterial>();
+    head.root.traverse((object) => {
+      if (!(object instanceof THREE.Mesh)) return;
+      const objectMaterials = Array.isArray(object.material) ? object.material : [object.material];
+      objectMaterials.forEach((material) => {
+        const role = material.userData.materialRole as string | undefined;
+        if (role && material instanceof THREE.MeshToonMaterial) materials.set(role, material);
+      });
+    });
+    const shell = materials.get('outer-shell')!;
+    const cavity = materials.get('interface-cavity')!;
+    const terminal = materials.get('terminal-metal')!;
+    const initialCavityColor = cavity.color.getHex();
+    const initialTerminalColor = terminal.color.getHex();
+
+    head.setSkillTint(0x4b79c9, 1, 0);
+
+    expect(shell.color.getHex()).toBe(0x4b79c9);
+    expect(cavity.color.getHex()).toBe(initialCavityColor);
+    expect(terminal.color.getHex()).toBe(initialTerminalColor);
+    expect(cavity.emissive.getHex()).toBe(0x000000);
+    expect(terminal.emissive.getHex()).toBe(0x000000);
+    head.dispose();
+  }
+});
+
 test('static and double-ended cables survive repeated extraction rebuilds without NaN', () => {
   const base: ArrowDefinition = {
     id: 'plug-cable-v2-rebuild',
@@ -188,6 +217,73 @@ test('cable geometry overlaps plug sockets instead of ending at a visible butt j
   model.dispose();
 });
 
+test('rice thickness deforms the real cable and plug joint geometry without adding a shell', () => {
+  const definition: ArrowDefinition = {
+    id: 'plug-cable-real-thickness',
+    path: [[5, 5, 5], [7, 5, 5]],
+    exitDirection: '+X',
+    color: 0xe86b82,
+    lengthClass: 'medium',
+    doubleEnded: true,
+  };
+  const model = new PlugCableModel(definition, 'round-two-pin');
+  const cableName = `${definition.id}-cable`;
+  const initialCable = model.root.getObjectByName(cableName) as THREE.Mesh;
+  const initialCablePositions = Float32Array.from(
+    initialCable.geometry.getAttribute('position').array as ArrayLike<number>,
+  );
+  initialCable.geometry.computeBoundingBox();
+  const initialCableDiameter = initialCable.geometry.boundingBox!.max.y
+    - initialCable.geometry.boundingBox!.min.y;
+  const sleeves: THREE.Mesh[] = [];
+  model.root.traverse((object) => {
+    if (object instanceof THREE.Mesh && object.name === 'plug-strain-relief') sleeves.push(object);
+  });
+  expect(sleeves).toHaveLength(2);
+  const lowerJointRadius = (mesh: THREE.Mesh) => {
+    const position = mesh.geometry.getAttribute('position');
+    let radius = 0;
+    for (let index = 0; index < position.count; index += 1) {
+      if (position.getY(index) > 0.04) continue;
+      radius = Math.max(radius, Math.hypot(position.getX(index), position.getZ(index)));
+    }
+    return radius;
+  };
+  const initialJointRadius = lowerJointRadius(sleeves[0]);
+
+  model.setVisualThickness(1.5);
+  const thickCable = model.root.getObjectByName(cableName) as THREE.Mesh;
+  thickCable.geometry.computeBoundingBox();
+  const thickCableDiameter = thickCable.geometry.boundingBox!.max.y
+    - thickCable.geometry.boundingBox!.min.y;
+  const thickCablePositions = thickCable.geometry.getAttribute('position');
+  expect(thickCableDiameter).toBeGreaterThan(initialCableDiameter * 1.45);
+  expect(Array.from(thickCablePositions.array as ArrayLike<number>)).not.toEqual(
+    Array.from(initialCablePositions),
+  );
+  expect(thickCable.geometry.userData.visualThicknessScale).toBeCloseTo(1.5, 8);
+  expect((model.material.userData.visualInflation as { value: number }).value).toBe(0);
+  expect(lowerJointRadius(sleeves[0])).toBeGreaterThan(initialJointRadius * 1.45);
+  expect(lowerJointRadius(sleeves[1])).toBeGreaterThan(initialJointRadius * 1.45);
+  expect(model.root.getObjectByName(`${definition.id}-rice-thickness-shell`)).toBeUndefined();
+  expect(model.skillVisualState.geometryThicknessScale).toBeCloseTo(1.5, 8);
+  expect(model.skillVisualState.plugJointThicknessScale).toBeCloseTo(1.5, 8);
+
+  model.setMotionDistance(0.48);
+  const rebuiltCable = model.root.getObjectByName(cableName) as THREE.Mesh;
+  expect(rebuiltCable.geometry.userData.visualThicknessScale).toBeCloseTo(1.5, 8);
+
+  model.setVisualThickness(1);
+  const restoredCable = model.root.getObjectByName(cableName) as THREE.Mesh;
+  restoredCable.geometry.computeBoundingBox();
+  const restoredCableDiameter = restoredCable.geometry.boundingBox!.max.y
+    - restoredCable.geometry.boundingBox!.min.y;
+  expect(restoredCableDiameter).toBeCloseTo(initialCableDiameter, 6);
+  expect(lowerJointRadius(sleeves[0])).toBeCloseTo(initialJointRadius, 6);
+  expect(model.skillVisualState.geometryThicknessScale).toBe(1);
+  expect(model.skillVisualState.plugJointThicknessScale).toBe(1);
+  model.dispose();
+});
 test('hover, blocked flash, prepare and reset keep the existing public interaction contract', () => {
   const definition: ArrowDefinition = {
     id: 'plug-cable-v2-states',

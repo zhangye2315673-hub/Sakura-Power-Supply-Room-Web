@@ -1,5 +1,38 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import {
+  AirVent,
+  AlarmClock,
+  Blender,
+  Bubbles,
+  Candy,
+  ChefHat,
+  CircleGauge,
+  Coffee,
+  Computer,
+  CookingPot,
+  createElement,
+  Droplets,
+  Fan,
+  Gamepad2,
+  GlassWater,
+  Heater,
+  Lamp,
+  Microwave,
+  PanelTop,
+  Popcorn,
+  Printer,
+  Radio,
+  Refrigerator,
+  Smartphone,
+  Speaker,
+  Trash2,
+  Turntable,
+  Tv,
+  WashingMachine,
+  Wind,
+  type IconNode,
+} from 'lucide';
 import { createApplianceModel } from '../appliances/models';
 import {
   poweredAnimationState,
@@ -14,6 +47,38 @@ import { PetalField } from './PetalField';
 import type { ThemeController } from '../theme/ThemeController';
 import type { AudioManager } from '../audio/AudioManager';
 import { ApplianceSensoryController } from '../appliances/ApplianceSensoryController';
+
+const APPLIANCE_ICON_NODES: Record<ApplianceKind, IconNode> = {
+  lamp: Lamp,
+  fan: Fan,
+  radio: Radio,
+  television: Tv,
+  humidifier: AirVent,
+  toaster: PanelTop,
+  refrigerator: Refrigerator,
+  washer: WashingMachine,
+  microwave: Microwave,
+  'coffee-maker': Coffee,
+  kettle: GlassWater,
+  'rice-cooker': CookingPot,
+  phone: Smartphone,
+  'robot-vacuum': CircleGauge,
+  'bubble-machine': Bubbles,
+  'gumball-machine': Candy,
+  'popcorn-machine': Popcorn,
+  'alarm-clock': AlarmClock,
+  'smart-bin': Trash2,
+  'record-player': Turntable,
+  'stand-mixer': ChefHat,
+  printer: Printer,
+  'induction-cooktop': Heater,
+  blender: Blender,
+  dehumidifier: Droplets,
+  'portable-speaker': Speaker,
+  'hair-dryer': Wind,
+  'desktop-computer': Computer,
+  'game-controller': Gamepad2,
+};
 
 export class ApplianceGallery {
   private readonly element = document.createElement('section');
@@ -32,7 +97,6 @@ export class ApplianceGallery {
   );
   private readonly title = document.createElement('strong');
   private readonly subtitle = document.createElement('span');
-  private readonly accuracy = document.createElement('p');
   private readonly list = document.createElement('div');
   private readonly resetButton = document.createElement('button');
   private readonly rotateButton = document.createElement('button');
@@ -97,7 +161,7 @@ export class ApplianceGallery {
     this.closeButton.textContent = '关闭';
     headerNav.append(this.resetButton, this.rotateButton, this.closeButton);
     this.canvas.className = 'appliance-gallery-canvas';
-    stage.append(this.canvas, this.accuracy);
+    stage.append(this.canvas);
     this.list.className = 'appliance-gallery-list';
     footer.prepend(this.list);
     document.querySelector('#app')?.append(this.element);
@@ -129,7 +193,13 @@ export class ApplianceGallery {
       const button = document.createElement('button');
       button.type = 'button';
       button.dataset.applianceKind = definition.id;
-      button.innerHTML = `<i style="--accent:#${ARROW_COLORS[index % ARROW_COLORS.length].toString(16).padStart(6, '0')}"></i><b>${definition.label}</b><small>${definition.sizeTier} · ${definition.plugStyleId}</small>`;
+      const accent = `#${ARROW_COLORS[index % ARROW_COLORS.length].toString(16).padStart(6, '0')}`;
+      const icon = createElement(APPLIANCE_ICON_NODES[definition.id], {
+        'aria-hidden': 'true',
+        class: 'appliance-gallery-list-icon',
+      });
+      button.innerHTML = `<i style="--accent:${accent}"></i><b>${definition.label}</b><small>${definition.sizeTier} · ${definition.plugStyleId}</small>`;
+      button.append(icon);
       button.addEventListener('click', () => this.select(definition.id));
       this.list.append(button);
     });
@@ -252,10 +322,7 @@ export class ApplianceGallery {
     this.softDeform = new SoftDeformController(current.root);
     this.title.textContent = definition.label;
     this.subtitle.textContent = `${definition.sizeTier} · ${definition.plugStyleId} · 通电动画自动循环`;
-    const inferred = current.accuracy.inferred;
-    this.accuracy.textContent = inferred.length > 0
-      ? `参考图可见结构已重建；推测区域：${inferred.join('、')}`
-      : '参考图可见轮廓、结构层次和身份细节已重建。';
+
     this.list.querySelectorAll('button').forEach((button) => {
       button.classList.toggle('active', (button as HTMLElement).dataset.applianceKind === kind);
     });

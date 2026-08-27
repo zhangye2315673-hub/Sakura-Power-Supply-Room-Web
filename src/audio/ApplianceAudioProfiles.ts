@@ -2,6 +2,7 @@ import type { ApplianceKind } from '../systems/ApplianceCatalog';
 import {
   POWERED_ACTIVE_DURATION,
   PRINTER_POWERED_ACTIVE_DURATION,
+  WASHER_POWERED_ACTIVE_DURATION,
 } from '../appliances/poweredAnimation';
 
 export type ApplianceAudioStage = {
@@ -59,7 +60,15 @@ export const APPLIANCE_AUDIO_PROFILES = {
   humidifier: audio('water', 96, 0.17, 0.28, 0.04, ['水泵', '雾化嘶声', '云团闷响', '停机']),
   toaster: audio('heat', 105, 0.14, 0.09, 0.025, ['压杆', '加热', '弹起', '吐司落下']),
   refrigerator: audio('motor', 62, 0.16, 0.08, 0.018, ['压缩机', '门封', '内部轻响', '关门']),
-  washer: audio('water', 74, 0.2, 0.22, 0.035, ['锁门', '进水', '滚筒', '减速']),
+  washer: audio(
+    'water',
+    74,
+    0.2,
+    0.22,
+    0.035,
+    ['锁门', '进水', '滚筒', '减速'],
+    WASHER_POWERED_ACTIVE_DURATION,
+  ),
   microwave: audio('heat', 60, 0.17, 0.08, 0.012, ['按键', '继电器', '低频运行', '结束音']),
   'coffee-maker': audio('water', 88, 0.18, 0.24, 0.035, ['开关', '水泵', '滴滤', '蒸汽收尾']),
   kettle: audio('heat', 96, 0.2, 0.3, 0.04, ['开关', '加热嘶声', '沸腾', '跳闸']),

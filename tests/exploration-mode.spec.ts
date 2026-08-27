@@ -73,14 +73,14 @@ async function capturePrepared(page: import('@playwright/test').Page, mode: 'ran
 }
 
 test('exploration entry reuses the random challenge contract and locks extreme night', async ({ page }) => {
-  test.setTimeout(240_000);
+  test.setTimeout(300_000);
   await page.goto('/');
   await page.waitForFunction(() => window.__THREE_GAME_DIAGNOSTICS__?.opening.ready === true, null, { timeout: 90_000 });
   await page.click('#challenge-mode-button');
   await expect(page.locator('#start-explore-button')).toHaveText('探索模式');
   await page.click('#start-explore-button');
   await page.waitForFunction(() => window.__THREE_GAME_DIAGNOSTICS__?.opening.active === false, null, { timeout: 120_000 });
-  await page.waitForURL((url) => url.searchParams.get('mode') === 'explore', { timeout: 35_000 });
+  await page.waitForURL((url) => url.searchParams.get('mode') === 'explore', { timeout: 90_000 });
   const diagnostics = await page.evaluate(() => window.__THREE_GAME_DIAGNOSTICS__!);
   expect(diagnostics.mode).toBe('random');
   expect(diagnostics.exploration).toEqual({

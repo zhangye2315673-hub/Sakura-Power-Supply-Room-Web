@@ -11,7 +11,11 @@ for (const viewport of [
     await page.waitForFunction(() => Boolean(window.__THREE_GAME_DIAGNOSTICS__));
     const layout = await page.evaluate(() => {
       const toolbar = document.querySelector<HTMLElement>('#global-toolbar');
-      const controls = [...document.querySelectorAll<HTMLButtonElement>('#global-toolbar button')];
+      const controls = [
+        ...document.querySelectorAll<HTMLButtonElement>(
+          '#global-toolbar > button, #global-toolbar > #season-picker > #season-button',
+        ),
+      ];
       const existing = document.querySelector<HTMLButtonElement>('#home-button');
       if (existing) {
         existing.style.transition = 'none';

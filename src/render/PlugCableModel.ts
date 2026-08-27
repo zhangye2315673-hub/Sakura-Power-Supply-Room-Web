@@ -5,7 +5,6 @@ import {
   setHullOutlineRootFade,
   setHullOutlineReveal,
   setHullOutlineStyle,
-  setHullOutlineVisualInflation,
 } from '../style/outline';
 import { PAL } from '../style/palette';
 import { cel } from '../style/toon';
@@ -35,6 +34,7 @@ import {
 import {
   type CableIceShellMaterial,
   CABLE_RADIUS,
+  COFFEE_STAIN_COLOR,
   createCableIceShellMaterial,
   createCableToonMaterial,
   createRoundedIceShellGeometry,
@@ -43,9 +43,11 @@ import {
   REFRIGERATOR_ICE_COLOR,
   REFRIGERATOR_ICE_OPACITY,
   REFRIGERATOR_SPIKE_OPACITY,
+  setCableCoffeeStain,
   setCableFreeze,
   setCableIceShell,
-  setCableVisualInflation,
+  setCableOverheat,
+  setCableSkillSweep,
 } from './CableGeometry';
 
 const up = new THREE.Vector3(0, 1, 0);
@@ -75,6 +77,10 @@ const AVAILABLE_HINT_PULSE_SPEED = 5.2;
 const AVAILABLE_HINT_PULSE_AMOUNT = 0.11;
 const AVAILABLE_HINT_BOB_SPEED = 4.1;
 const AVAILABLE_HINT_BOB_AMOUNT = PLUG_HEAD_MAX_RADIUS * 0.08;
+const RECYCLE_HOVER_COLOR = 0x5ff2cf;
+const RECYCLE_SELECTED_COLOR = 0xffdf72;
+const BASE_CABLE_OUTLINE_THICKNESS = 0.00345;
+const RECYCLE_SELECTED_OUTLINE_COLOR = 0x17141f;
 const LAMP_GUIDE_APERTURE_RADIUS = PLUG_HEAD_MAX_RADIUS * 0.94;
 const LAMP_GUIDE_SCALE = LAMP_GUIDE_APERTURE_RADIUS / LAMP_BEAM_SOURCE_RADIUS_LOCAL;
 const LAMP_GUIDE_LENGTH = LAMP_BEAM_DEFAULT_LENGTH_LOCAL * LAMP_GUIDE_SCALE;
@@ -154,6 +160,51 @@ function transformedGeometry(
   return geometry;
 }
 
+type GeometryThicknessState = {
+  geometry: THREE.BufferGeometry;
+  basePositions: Float32Array;
+  baseNormals: Float32Array;
+  baseBoundingBox: THREE.Box3;
+  baseBoundingSphere: THREE.Sphere;
+};
+
+function captureGeometryThicknessState(geometry: THREE.BufferGeometry): GeometryThicknessState {
+  const position = geometry.getAttribute('position');
+  const normal = geometry.getAttribute('normal');
+  geometry.computeBoundingBox();
+  geometry.computeBoundingSphere();
+  return {
+    geometry,
+    basePositions: Float32Array.from(position.array as ArrayLike<number>),
+    baseNormals: Float32Array.from(normal.array as ArrayLike<number>),
+    baseBoundingBox: geometry.boundingBox!.clone(),
+    baseBoundingSphere: geometry.boundingSphere!.clone(),
+  };
+}
+
+function applyGeometryThickness(
+  state: GeometryThicknessState | null,
+  scale: number,
+): void {
+  if (!state) return;
+  const position = state.geometry.getAttribute('position') as THREE.BufferAttribute;
+  const inflation = CABLE_RADIUS * (scale - 1);
+  for (let index = 0; index < position.count; index += 1) {
+    const offset = index * 3;
+    position.setXYZ(
+      index,
+      state.basePositions[offset] + state.baseNormals[offset] * inflation,
+      state.basePositions[offset + 1] + state.baseNormals[offset + 1] * inflation,
+      state.basePositions[offset + 2] + state.baseNormals[offset + 2] * inflation,
+    );
+  }
+  position.needsUpdate = true;
+  state.geometry.boundingBox = state.baseBoundingBox.clone().expandByScalar(inflation);
+  state.geometry.boundingSphere = state.baseBoundingSphere.clone();
+  state.geometry.boundingSphere.radius += inflation;
+  state.geometry.userData.visualThicknessScale = scale;
+}
+
 type IceSpikeShape = 'flat-blade' | 'pointed';
 
 function seededRandom(seed: number): () => number {
@@ -221,15 +272,60 @@ export class PlugCableModel {
   private iceSpikeMaterial: THREE.MeshPhysicalMaterial | null = null;
   private skillTintColor: THREE.Color | null = null;
   private skillTintStrength = 0;
+  private skillTintEmissionScale = 1;
   private skillGlowStrength = 0;
+  private coffeeStainAmount = 0;
+  private coffeeStainReveal = 0;
+  private coffeeStainDirection = 0;
+  private overheatTarget = 0;
+  private overheatAmount = 0;
+  private overheatReveal = 0;
+  private overheatTurns = 2;
+  private inductionRevealActive = false;
+  private inductionHeatTarget = 0;
+  private inductionHeatAmount = 0;
+  private inductionRingAge = 0;
+  private readonly inductionRingRoot = new THREE.Group();
+  private readonly inductionInnerRingMaterial = cel({
+    color: 0xffd45a,
+    tint: 0xb5653b,
+    emissive: 0xff9d38,
+    emissiveIntensity: 0.3,
+    bands: 3,
+  });
+  private readonly inductionOuterRingMaterial = cel({
+    color: 0xe85b55,
+    tint: 0x8f3949,
+    emissive: 0xc83e42,
+    emissiveIntensity: 0.24,
+    bands: 3,
+  });
+  private readonly inductionInnerRing = new THREE.Mesh(
+    new THREE.TorusGeometry(CABLE_RADIUS * 1.52, CABLE_RADIUS * 0.18, 8, 28),
+    this.inductionInnerRingMaterial,
+  );
+  private readonly inductionOuterRing = new THREE.Mesh(
+    new THREE.TorusGeometry(CABLE_RADIUS * 2.08, CABLE_RADIUS * 0.24, 8, 32),
+    this.inductionOuterRingMaterial,
+  );
+  private inductionRingProgresses: [number, number] = [0.5, 0.5];
+  private inductionRingTangentAlignments: [number, number] = [1, 1];
   private freezeAmount = 0;
   private freezeProgress = 0;
   private isHovered = false;
+  private recycleSelectionState: 'none' | 'hover' | 'selected' = 'none';
+  private recycleSelectionPulse = 0;
+  private recycleSelectionScale = 1;
+  private recycleSelectionStartedAt: number | null = null;
+  private readonly recycleSelectionCenter = new THREE.Vector3();
+  private readonly bundleSpacingOffset = new THREE.Vector3();
   private bodyMesh: THREE.Mesh | null = null;
   private iceShellMesh: THREE.Mesh | null = null;
   private iceShellOutlineMesh: THREE.Mesh | null = null;
   private currentIceCurve: THREE.Curve<THREE.Vector3> | null = null;
   private outlineMesh: THREE.Mesh | null = null;
+  private bodyThicknessState: GeometryThicknessState | null = null;
+  private outlineThicknessState: GeometryThicknessState | null = null;
   private lastMotionDistance = 0;
   private lastMotionEnd: CableEnd = 'head';
   private hintRevealProgress = 1;
@@ -257,6 +353,7 @@ export class PlugCableModel {
       tint: 0x625874,
     });
     this.basePoints = cableSocketPointsToWorld(definition);
+    new THREE.Box3().setFromPoints(this.basePoints).getCenter(this.recycleSelectionCenter);
     this.cumulativeLengths = [0];
     for (let index = 1; index < this.basePoints.length; index += 1) {
       this.cumulativeLengths.push(
@@ -298,7 +395,22 @@ export class PlugCableModel {
     this.iceSpikesRoot.userData.iceSpikes = true;
     this.tailRoot.name = 'plug-cable-tail-assembly';
     this.tailRoot.add(tailBand, tailCap, this.tailIceShell);
-    this.root.add(this.head.root, this.tailHead?.root ?? this.tailRoot, this.iceSpikesRoot);
+    this.inductionRingRoot.name = `${definition.id}-induction-heat-rings`;
+    this.inductionRingRoot.visible = false;
+    this.inductionRingRoot.userData.effectId = 'induction-heat-ring';
+    this.inductionInnerRing.name = `${definition.id}-induction-inner-yellow-ring`;
+    this.inductionOuterRing.name = `${definition.id}-induction-outer-red-ring`;
+    this.inductionInnerRing.renderOrder = 7;
+    this.inductionOuterRing.renderOrder = 7;
+    this.inductionInnerRing.castShadow = false;
+    this.inductionOuterRing.castShadow = false;
+    this.inductionRingRoot.add(this.inductionInnerRing, this.inductionOuterRing);
+    this.root.add(
+      this.head.root,
+      this.tailHead?.root ?? this.tailRoot,
+      this.iceSpikesRoot,
+      this.inductionRingRoot,
+    );
     this.build(this.basePoints, true);
   }
 
@@ -310,12 +422,43 @@ export class PlugCableModel {
     this.tailHead?.setHovered(hovered && (!end || end === 'tail'), night);
   }
 
-  setSkillTint(color: number | null, strength = 0.42): void {
+  setRecycleSelectionState(state: 'none' | 'hover' | 'selected'): void {
+    if (this.recycleSelectionState === state) return;
+    this.recycleSelectionState = state;
+    this.recycleSelectionStartedAt = null;
+    if (state === 'selected') this.applyRecycleSelectionScale(1);
+    if (state === 'none') {
+      this.recycleSelectionPulse = 0;
+      this.applyRecycleSelectionScale(1);
+    }
+    this.refreshCableVisual();
+    this.head.setRecycleSelectionState(state, this.recycleSelectionPulse);
+    this.tailHead?.setRecycleSelectionState(state, this.recycleSelectionPulse);
+  }
+
+  updateRecycleSelection(elapsed: number): void {
+    if (this.recycleSelectionState === 'none') return;
+    if (this.recycleSelectionStartedAt === null) this.recycleSelectionStartedAt = elapsed;
+    const selectionAge = elapsed - this.recycleSelectionStartedAt;
+    if (this.recycleSelectionState === 'selected') {
+      this.recycleSelectionPulse = (Math.sin(selectionAge * 10) + 1) * 0.5;
+      this.applyRecycleSelectionScale(1);
+    } else {
+      this.recycleSelectionPulse = (Math.sin(selectionAge * 6.2) + 1) * 0.5;
+      this.applyRecycleSelectionScale(1.012 + this.recycleSelectionPulse * 0.016);
+    }
+    this.refreshCableVisual();
+    this.head.setRecycleSelectionState(this.recycleSelectionState, this.recycleSelectionPulse);
+    this.tailHead?.setRecycleSelectionState(this.recycleSelectionState, this.recycleSelectionPulse);
+  }
+
+  setSkillTint(color: number | null, strength = 0.42, emissionScale = 1): void {
     this.skillTintColor = color === null ? null : new THREE.Color(color);
     this.skillTintStrength = color === null ? 0 : THREE.MathUtils.clamp(strength, 0, 1);
+    this.skillTintEmissionScale = color === null ? 1 : THREE.MathUtils.clamp(emissionScale, 0, 1);
     this.refreshCableVisual();
-    this.head.setSkillTint(color, strength);
-    this.tailHead?.setSkillTint(color, strength);
+    this.head.setSkillTint(color, strength, emissionScale);
+    this.tailHead?.setSkillTint(color, strength, emissionScale);
   }
 
   setSkillGlow(strength = 0): void {
@@ -323,6 +466,108 @@ export class PlugCableModel {
     this.refreshCableVisual();
     this.head.setSkillGlow(this.skillGlowStrength);
     this.tailHead?.setSkillGlow(this.skillGlowStrength);
+  }
+
+  setSkillSweep(progress: number, strength = 0, color = 0x9b7bc8): void {
+    setCableSkillSweep(this.material, progress, strength, color);
+  }
+
+  setCoffeeStain(amount: number, reveal: number, elapsed: number, direction: number): void {
+    this.coffeeStainAmount = THREE.MathUtils.clamp(amount, 0, 1);
+    this.coffeeStainReveal = THREE.MathUtils.clamp(reveal, 0, 1);
+    this.coffeeStainDirection = direction >= 0.5 ? 1 : 0;
+    setCableCoffeeStain(
+      this.material,
+      this.coffeeStainAmount,
+      this.coffeeStainReveal,
+      this.freezeSeed,
+      elapsed,
+      this.coffeeStainDirection,
+    );
+    const startFromHead = this.coffeeStainDirection >= 0.5;
+    const headDistance = startFromHead ? 0 : 1;
+    const tailDistance = startFromHead ? 1 : 0;
+    const endpointCoverage = (distance: number): number => THREE.MathUtils.smoothstep(
+      this.coffeeStainReveal,
+      Math.max(0, distance - 0.035),
+      Math.min(1, distance + 0.11),
+    );
+    const headCoverage = endpointCoverage(headDistance) * this.coffeeStainAmount;
+    const tailCoverage = endpointCoverage(tailDistance) * this.coffeeStainAmount;
+    this.head.setSkillTint(COFFEE_STAIN_COLOR, headCoverage);
+    this.tailHead?.setSkillTint(COFFEE_STAIN_COLOR, tailCoverage);
+    this.tailMaterial.color.copy(this.tailBaseColor).lerp(new THREE.Color(COFFEE_STAIN_COLOR), tailCoverage);
+    this.tailMaterial.emissive.set(COFFEE_STAIN_COLOR);
+    this.tailMaterial.emissiveIntensity = tailCoverage * 0.22;
+  }
+
+  clearCoffeeStain(): void {
+    if (this.coffeeStainAmount <= 0 && this.coffeeStainReveal <= 0) return;
+    this.coffeeStainAmount = 0;
+    this.coffeeStainReveal = 0;
+    this.coffeeStainDirection = 0;
+    setCableCoffeeStain(this.material, 0, 0, this.freezeSeed, 0, 0);
+    this.head.setSkillTint(null);
+    this.tailHead?.setSkillTint(null);
+    this.refreshCableVisual();
+  }
+
+  setOverheated(enabled: boolean, turnsRemaining = 2): void {
+    this.overheatTarget = enabled ? 1 : 0;
+    this.overheatTurns = Math.max(1, Math.round(turnsRemaining));
+  }
+
+  setInductionReveal(enabled: boolean): void {
+    if (this.inductionRevealActive === enabled) return;
+    this.inductionRevealActive = enabled;
+    this.inductionHeatTarget = enabled ? 0.62 : 0;
+    this.inductionRingAge = 0;
+    this.inductionRingRoot.visible = enabled;
+    if (!enabled) {
+      this.inductionHeatAmount = 0;
+      this.inductionRingProgresses = [0.5, 0.5];
+      this.inductionRingTangentAlignments = [1, 1];
+    }
+  }
+
+  updateOverheat(delta: number, elapsed: number): void {
+    const response = this.overheatTarget > this.overheatAmount ? 8.5 : 13;
+    this.overheatAmount = THREE.MathUtils.damp(
+      this.overheatAmount,
+      this.overheatTarget,
+      response,
+      Math.max(0, delta),
+    );
+    if (this.overheatTarget > 0.5) {
+      this.overheatReveal = Math.min(1, this.overheatReveal + Math.max(0, delta) / 0.42);
+    } else if (this.overheatAmount < 0.002) {
+      this.overheatAmount = 0;
+      this.overheatReveal = 0;
+    }
+    this.inductionHeatAmount = THREE.MathUtils.damp(
+      this.inductionHeatAmount,
+      this.inductionHeatTarget,
+      7.5,
+      Math.max(0, delta),
+    );
+    const cableHeatAmount = Math.max(this.overheatAmount, this.inductionHeatAmount);
+    const cableHeatTurns = this.overheatAmount >= this.inductionHeatAmount ? this.overheatTurns : 2;
+    const cableHeatReveal = this.overheatTarget > 0.5 ? this.overheatReveal : 1;
+    setCableOverheat(
+      this.material,
+      cableHeatAmount,
+      cableHeatTurns,
+      elapsed,
+      cableHeatReveal,
+    );
+    this.head.setOverheated(
+      this.overheatAmount,
+      this.overheatTurns,
+      elapsed,
+      this.overheatReveal,
+      this.pathLength,
+    );
+    this.updateInductionRings(delta);
   }
 
   setRefrigeratorIceGeometryEnabled(enabled: boolean): void {
@@ -356,7 +601,10 @@ export class PlugCableModel {
     this.tailIceShell.userData.amount = 0;
     this.refreshRefrigeratorIceGeometry();
     this.refreshCableVisual();
-    if (this.outlineMesh?.material instanceof THREE.ShaderMaterial) {
+    if (
+      this.recycleSelectionState === 'none'
+      && this.outlineMesh?.material instanceof THREE.ShaderMaterial
+    ) {
       const outlineColor = this.outlineMesh.material.uniforms.uColor?.value;
       if (outlineColor instanceof THREE.Color) {
         outlineColor.set(PAL.ink).lerp(
@@ -402,7 +650,7 @@ export class PlugCableModel {
       this.tailAvailableHint = createAvailableEndHint();
       this.tailHead.root.add(this.tailAvailableHint);
       this.tailAvailableHint.visible = false;
-      this.tailHead.setSkillTint(this.skillTintColor, this.skillTintStrength);
+      this.tailHead.setSkillTint(this.skillTintColor, this.skillTintStrength, this.skillTintEmissionScale);
       this.tailHead.setSkillGlow(this.skillGlowStrength);
       this.tailHead.setFrozenGeometryEnabled(this.refrigeratorIceGeometryEnabled);
       this.tailHead.setFrozen(this.freezeAmount);
@@ -481,12 +729,34 @@ export class PlugCableModel {
   resetMaterial(): void {
     this.skillTintColor = null;
     this.skillTintStrength = 0;
+    this.skillTintEmissionScale = 1;
     this.skillGlowStrength = 0;
+    this.setSkillSweep(0, 0);
+    this.coffeeStainAmount = 0;
+    this.coffeeStainReveal = 0;
+    this.coffeeStainDirection = 0;
+    setCableCoffeeStain(this.material, 0, 0, this.freezeSeed, 0, 0);
+    this.overheatTarget = 0;
+    this.overheatAmount = 0;
+    this.overheatReveal = 0;
+    this.overheatTurns = 2;
+    this.inductionRevealActive = false;
+    this.inductionHeatTarget = 0;
+    this.inductionHeatAmount = 0;
+    this.inductionRingAge = 0;
+    this.inductionRingRoot.visible = false;
+    this.inductionRingProgresses = [0.5, 0.5];
+    this.inductionRingTangentAlignments = [1, 1];
+    setCableOverheat(this.material, 0, 2, 0, 0);
     this.freezeAmount = 0;
     this.freezeProgress = 0;
     setCableFreeze(this.material, 0, 0, 0);
     this.tailIceShell.visible = false;
     this.isHovered = false;
+    this.recycleSelectionState = 'none';
+    this.recycleSelectionPulse = 0;
+    this.recycleSelectionStartedAt = null;
+    this.applyRecycleSelectionScale(1);
     this.refreshCableVisual();
     this.setLampGuide(null);
     this.head.root.scale.setScalar(PLUG_HEAD_SCALE);
@@ -500,7 +770,7 @@ export class PlugCableModel {
 
   resetPose(): void {
     this.root.visible = true;
-    this.root.position.set(0, 0, 0);
+    this.applyRootPresentationTransform();
     if (this.lastMotionDistance > 0.004) this.setMotionDistance(0, this.lastMotionEnd);
     else this.lastMotionDistance = 0;
     this.lastMotionEnd = 'head';
@@ -509,13 +779,25 @@ export class PlugCableModel {
 
   setVisualThickness(scale: number): void {
     this.visualThickness = THREE.MathUtils.clamp(scale, 1, 2.4);
-    const inflation = CABLE_RADIUS * (this.visualThickness - 1);
-    setCableVisualInflation(this.material, inflation);
-    setHullOutlineVisualInflation(this.outlineMesh, inflation);
+    applyGeometryThickness(this.bodyThicknessState, this.visualThickness);
+    applyGeometryThickness(this.outlineThicknessState, this.visualThickness);
+    this.head.setCableJointThickness(this.visualThickness);
+    this.tailHead?.setCableJointThickness(this.visualThickness);
+    this.tailRoot.scale.set(this.visualThickness, 1, this.visualThickness);
   }
 
   get visualThicknessScale(): number {
     return this.visualThickness;
+  }
+
+  getBundleBaseCenter(target = new THREE.Vector3()): THREE.Vector3 {
+    return target.copy(this.recycleSelectionCenter);
+  }
+
+  setBundleSpacingOffset(offset: THREE.Vector3 | null): void {
+    if (offset) this.bundleSpacingOffset.copy(offset);
+    else this.bundleSpacingOffset.set(0, 0, 0);
+    this.applyRootPresentationTransform();
   }
 
   get skillVisualState(): Readonly<{
@@ -523,11 +805,41 @@ export class PlugCableModel {
     cableColor: number;
     tailColor: number;
     glowStrength: number;
+    skillTintStrength: number;
+    skillTintEmissionScale: number;
+    skillSweepProgress: number;
+    skillSweepStrength: number;
+    recycleSelectionState: 'none' | 'hover' | 'selected';
+    recycleHighlightStrength: number;
+    recyclePulse: number;
+    recycleScale: number;
+    bundleSpacingOffset: number[];
+    bundleSpacingOffsetLength: number;
+    overheatAmount: number;
+    overheatReveal: number;
+    overheatTurns: number;
+    inductionRevealActive: boolean;
+    inductionHeatAmount: number;
+    inductionRingCount: number;
+    inductionRingProgresses: [number, number];
+    inductionRingTangentAlignments: [number, number];
+    inductionRingMotion: string;
+    plugOverheatAmount: number;
+    plugOverheatReveal: number;
+    plugOverheatMaterialCount: number;
+    plugOverheatPathScale: number;
     freezeAmount: number;
     freezeProgress: number;
+    coffeeStainAmount: number;
+    coffeeStainReveal: number;
+    coffeeStainDirection: number;
     iceShellVisible: boolean;
     iceShellOpacity: number;
     plugIceShellCount: number;
+    visualThicknessScale: number;
+    geometryThicknessScale: number;
+    plugJointThicknessScale: number;
+    fakeTailPlugVisible: boolean;
     lampGuideEnd: CableEnd | null;
   }> {
     return {
@@ -535,12 +847,46 @@ export class PlugCableModel {
       cableColor: this.material.color.getHex(),
       tailColor: this.tailMaterial.color.getHex(),
       glowStrength: this.skillGlowStrength,
+      skillTintStrength: this.skillTintStrength,
+      skillTintEmissionScale: this.skillTintEmissionScale,
+      skillSweepProgress: (this.material.userData.skillSweepProgress as { value: number } | undefined)?.value ?? 0,
+      skillSweepStrength: (this.material.userData.skillSweepStrength as { value: number } | undefined)?.value ?? 0,
+      recycleSelectionState: this.recycleSelectionState,
+      recycleHighlightStrength: this.recycleSelectionState === 'selected'
+        ? 1
+        : this.recycleSelectionState === 'hover'
+          ? 0.78
+          : 0,
+      recyclePulse: this.recycleSelectionPulse,
+      recycleScale: this.recycleSelectionScale,
+      bundleSpacingOffset: this.bundleSpacingOffset.toArray(),
+      bundleSpacingOffsetLength: this.bundleSpacingOffset.length(),
+      overheatAmount: this.overheatAmount,
+      overheatReveal: this.overheatReveal,
+      overheatTurns: this.overheatTurns,
+      inductionRevealActive: this.inductionRevealActive,
+      inductionHeatAmount: this.inductionHeatAmount,
+      inductionRingCount: this.inductionRingRoot.visible ? 2 : 0,
+      inductionRingProgresses: [...this.inductionRingProgresses],
+      inductionRingTangentAlignments: [...this.inductionRingTangentAlignments],
+      inductionRingMotion: 'opposed-path-ping-pong',
+      plugOverheatAmount: this.head.overheatVisualState.amount,
+      plugOverheatReveal: this.head.overheatVisualState.reveal,
+      plugOverheatMaterialCount: this.head.overheatVisualState.materialCount,
+      plugOverheatPathScale: this.head.overheatVisualState.pathScale,
       freezeAmount: this.freezeAmount,
       freezeProgress: this.freezeProgress,
+      coffeeStainAmount: this.coffeeStainAmount,
+      coffeeStainReveal: this.coffeeStainReveal,
+      coffeeStainDirection: this.coffeeStainDirection,
       iceShellVisible: this.iceShellMesh?.visible ?? false,
       iceShellOpacity: this.iceShellMaterial?.opacity ?? 0,
       plugIceShellCount: Number(this.head.frozenShell.visible)
         + Number(this.tailHead?.frozenShell.visible ?? this.tailIceShell.visible),
+      visualThicknessScale: this.visualThickness,
+      geometryThicknessScale: this.bodyMesh?.geometry.userData.visualThicknessScale ?? 1,
+      plugJointThicknessScale: this.head.cableJointThicknessScale,
+      fakeTailPlugVisible: this.tailHead !== null && !this.definition.doubleEnded,
       lampGuideEnd: this.headLampGuide?.visible ? 'head' : this.tailLampGuide?.visible ? 'tail' : null,
     };
   }
@@ -575,6 +921,10 @@ export class PlugCableModel {
     return (end === 'tail' ? this.tailHead : this.head)?.root.getWorldPosition(target) ?? target;
   }
 
+  getHeadWorldQuaternion(target = new THREE.Quaternion(), end: CableEnd = 'head'): THREE.Quaternion {
+    return (end === 'tail' ? this.tailHead : this.head)?.root.getWorldQuaternion(target) ?? target;
+  }
+
   dispose(): void {
     this.root.removeFromParent();
     this.clearRefrigeratorIceGeometry(true);
@@ -583,14 +933,20 @@ export class PlugCableModel {
     (this.outlineMesh?.material as THREE.Material | undefined)?.dispose();
     this.head.dispose();
     this.tailHead?.dispose();
+    this.inductionInnerRing.geometry.dispose();
+    this.inductionOuterRing.geometry.dispose();
+    this.inductionInnerRingMaterial.dispose();
+    this.inductionOuterRingMaterial.dispose();
     this.tailRoot.traverse((object) => {
       if (object instanceof THREE.Mesh) object.geometry.dispose();
     });
     this.material.dispose();
     this.tailMaterial.dispose();
     this.bodyMesh = null;
+    this.bodyThicknessState = null;
     this.currentIceCurve = null;
     this.outlineMesh = null;
+    this.outlineThicknessState = null;
     this.pickMeshes.length = 0;
   }
 
@@ -616,6 +972,38 @@ export class PlugCableModel {
         .lerp(orientedPoints[index], (distance - segmentStart) / segmentLength);
     }
     return orientedPoints[orientedPoints.length - 1].clone();
+  }
+
+  private updateInductionRings(delta: number): void {
+    if (!this.inductionRevealActive || !this.currentIceCurve) {
+      this.inductionRingRoot.visible = false;
+      return;
+    }
+    this.inductionRingRoot.visible = true;
+    this.inductionRingAge += Math.max(0, delta);
+    const curveLength = Math.max(this.currentIceCurve.getLength(), CABLE_RADIUS * 8);
+    const segmentDuration = Math.max(0.72, curveLength * 0.46 / 1.15);
+    const phase = (this.inductionRingAge / segmentDuration) % 4;
+    const signedTravel = phase < 1
+      ? phase
+      : phase < 3
+        ? 2 - phase
+        : phase - 4;
+    const innerProgress = THREE.MathUtils.clamp(0.5 + signedTravel * 0.46, 0.04, 0.96);
+    const outerProgress = THREE.MathUtils.clamp(0.5 - signedTravel * 0.46, 0.04, 0.96);
+    this.inductionRingProgresses = [innerProgress, outerProgress];
+    this.inductionRingTangentAlignments = [
+      this.placeInductionRing(this.inductionInnerRing, innerProgress),
+      this.placeInductionRing(this.inductionOuterRing, outerProgress),
+    ];
+  }
+
+  private placeInductionRing(ring: THREE.Mesh, progress: number): number {
+    if (!this.currentIceCurve) return 0;
+    const tangent = this.currentIceCurve.getTangentAt(progress, new THREE.Vector3()).normalize();
+    ring.position.copy(this.currentIceCurve.getPointAt(progress, new THREE.Vector3()));
+    ring.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), tangent);
+    return new THREE.Vector3(0, 0, 1).applyQuaternion(ring.quaternion).dot(tangent);
   }
 
   private ensureRefrigeratorIceMaterials(): void {
@@ -812,27 +1200,46 @@ export class PlugCableModel {
   }
 
   private refreshCableVisual(): void {
+    const recycleColor = this.recycleSelectionState === 'selected'
+      ? new THREE.Color(RECYCLE_SELECTED_COLOR)
+      : this.recycleSelectionState === 'hover'
+        ? new THREE.Color(RECYCLE_HOVER_COLOR)
+        : null;
     const displayColor = this.baseColor.clone();
     if (this.skillTintColor) displayColor.lerp(this.skillTintColor, this.skillTintStrength);
-    if (this.isHovered) displayColor.lerp(new THREE.Color(PAL.blossomLight), 0.22);
+    if (this.isHovered && !recycleColor) displayColor.lerp(new THREE.Color(PAL.blossomLight), 0.22);
+    if (recycleColor) {
+      displayColor.lerp(recycleColor, this.recycleSelectionState === 'selected' ? 0.56 : 0.38);
+    }
     this.material.color.copy(displayColor);
 
     const tailColor = this.tailBaseColor.clone();
     if (this.skillTintColor) tailColor.lerp(this.skillTintColor, this.skillTintStrength);
     const tailFreeze = THREE.MathUtils.smoothstep(this.freezeProgress, 0.76, 1) * this.freezeAmount;
     if (tailFreeze > 0) tailColor.lerp(new THREE.Color(REFRIGERATOR_FREEZE_COLOR), tailFreeze * 0.9);
+    if (recycleColor) {
+      tailColor.lerp(recycleColor, this.recycleSelectionState === 'selected' ? 0.58 : 0.4);
+    }
     this.tailMaterial.color.copy(tailColor);
 
-    if (this.skillGlowStrength > 0) {
+    if (recycleColor) {
+      const intensity = this.recycleSelectionState === 'selected'
+        ? 0.34 + this.recycleSelectionPulse * 0.2
+        : 0.16 + this.recycleSelectionPulse * 0.1;
+      this.material.emissive.copy(recycleColor);
+      this.material.emissiveIntensity = intensity;
+      this.tailMaterial.emissive.copy(recycleColor);
+      this.tailMaterial.emissiveIntensity = intensity;
+    } else if (this.skillGlowStrength > 0) {
       this.material.emissive.copy(this.baseColor);
       this.material.emissiveIntensity = 0.58 + this.skillGlowStrength * 0.82;
       this.tailMaterial.emissive.copy(this.tailBaseColor);
       this.tailMaterial.emissiveIntensity = 0.58 + this.skillGlowStrength * 0.82;
     } else if (this.skillTintColor) {
       this.material.emissive.copy(this.skillTintColor);
-      this.material.emissiveIntensity = 0.3;
+      this.material.emissiveIntensity = 0.3 * this.skillTintEmissionScale;
       this.tailMaterial.emissive.copy(this.skillTintColor);
-      this.tailMaterial.emissiveIntensity = 0.3;
+      this.tailMaterial.emissiveIntensity = 0.3 * this.skillTintEmissionScale;
     } else if (this.freezeAmount > 0) {
       this.material.emissive.set(0x000000);
       this.material.emissiveIntensity = 1;
@@ -844,6 +1251,37 @@ export class PlugCableModel {
       this.tailMaterial.emissive.set(0x000000);
       this.tailMaterial.emissiveIntensity = 1;
     }
+
+    if (this.outlineMesh) {
+      const outlineColor = this.recycleSelectionState === 'selected'
+        ? new THREE.Color(RECYCLE_SELECTED_OUTLINE_COLOR)
+        : new THREE.Color(PAL.ink).lerp(
+          new THREE.Color(0x405d70),
+          this.recycleSelectionState === 'none' ? this.freezeAmount * this.freezeProgress * 0.62 : 0,
+        );
+      const pulseThickness = this.recycleSelectionState === 'selected'
+        ? 0.0012 * this.recycleSelectionPulse
+        : 0.0003 * this.recycleSelectionPulse;
+      setHullOutlineStyle(this.outlineMesh, {
+        thickness: this.recycleSelectionState === 'selected'
+          ? 0.009 + pulseThickness
+          : this.recycleSelectionState === 'hover'
+            ? 0.0052 + pulseThickness
+            : BASE_CABLE_OUTLINE_THICKNESS,
+        color: outlineColor,
+      });
+    }
+  }
+
+  private applyRecycleSelectionScale(scale: number): void {
+    this.recycleSelectionScale = scale;
+    this.root.scale.setScalar(scale);
+    this.applyRootPresentationTransform();
+  }
+
+  private applyRootPresentationTransform(): void {
+    this.root.position.copy(this.bundleSpacingOffset)
+      .addScaledVector(this.recycleSelectionCenter, 1 - this.recycleSelectionScale);
   }
 
   private updateLampGuide(guide: THREE.Group, elapsed: number): void {
@@ -864,6 +1302,8 @@ export class PlugCableModel {
       previousOutline?.geometry.dispose();
       (previousOutline?.material as THREE.Material | undefined)?.dispose();
     }
+    this.bodyThicknessState = null;
+    this.outlineThicknessState = null;
     this.pickMeshes.length = 0;
 
     const firstDirection = points[1].clone().sub(points[0]).normalize();
@@ -899,8 +1339,12 @@ export class PlugCableModel {
     mesh.receiveShadow = true;
     mesh.userData.arrowId = this.definition.id;
     mesh.userData.cableFillets = roundedCable.geometry.userData.cableFillets;
-    this.outlineMesh = withOutline ? addHullOutline(mesh, 0.00345) : null;
+    this.outlineMesh = withOutline ? addHullOutline(mesh, BASE_CABLE_OUTLINE_THICKNESS) : null;
     this.bodyMesh = mesh;
+    this.bodyThicknessState = captureGeometryThicknessState(mesh.geometry);
+    this.outlineThicknessState = this.outlineMesh
+      ? captureGeometryThicknessState(this.outlineMesh.geometry)
+      : null;
     this.currentIceCurve = roundedCable.curve;
     this.setVisualThickness(this.visualThickness);
     mesh.userData.cableEnd = 'head';

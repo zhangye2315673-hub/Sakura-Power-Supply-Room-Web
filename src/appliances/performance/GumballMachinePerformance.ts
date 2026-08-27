@@ -9,8 +9,12 @@ export type GumballMachinePerformancePhase =
   | 'second-bounce'
   | 'rolling'
   | 'opening'
-  | 'prize-settle'
+  | 'prize-drop'
+  | 'prize-first-bounce'
+  | 'prize-second-bounce'
   | 'settled';
+
+export type GumballMachinePrizeKind = 'star' | 'flower' | 'key' | 'bear';
 
 export type GumballMachinePerformanceDiagnostics = {
   time: number;
@@ -25,7 +29,11 @@ export type GumballMachinePerformanceDiagnostics = {
   outputCapsuleVisible: boolean;
   bounceIndex: 0 | 1 | 2;
   shellSeparation: number;
+  prizeKind: GumballMachinePrizeKind;
   toyVisible: boolean;
+  toyBounceIndex: 0 | 1 | 2;
+  toyGrounded: boolean;
+  toyWorldY: number;
   visibleSuccessBursts: number;
   timelineOwner: 'AppliancePerformanceSystem';
   effectOwner: 'gumball-machine-model-rig';
@@ -58,8 +66,10 @@ function phaseAt(time: number): GumballMachinePerformancePhase {
   if (time < 3.42) return 'first-bounce';
   if (time < 3.73) return 'second-bounce';
   if (time < 4.05) return 'rolling';
-  if (time < 4.4) return 'opening';
-  if (time < 4.95) return 'prize-settle';
+  if (time < 4.42) return 'opening';
+  if (time < 4.72) return 'prize-drop';
+  if (time < 4.98) return 'prize-first-bounce';
+  if (time < 5.17) return 'prize-second-bounce';
   return 'settled';
 }
 
@@ -87,6 +97,13 @@ export function createGumballMachinePerformance(root: THREE.Group): GumballMachi
   const outputLeft = node<THREE.Group>('gumball-machine-output-capsule-left-shell-pivot');
   const outputRight = node<THREE.Group>('gumball-machine-output-capsule-right-shell-pivot');
   const outputToy = node<THREE.Group>('gumball-machine-output-prize-pivot');
+  const prizeKinds: readonly GumballMachinePrizeKind[] = ['star', 'flower', 'key', 'bear'];
+  const outputPrizes = new Map<GumballMachinePrizeKind, THREE.Mesh>(
+    prizeKinds.flatMap((kind) => {
+      const prize = node<THREE.Mesh>(`gumball-machine-output-${kind}-prize`);
+      return prize ? [[kind, prize] as const] : [];
+    }),
+  );
   const successBursts = Array.from({ length: 3 }, (_, index) => (
     node<THREE.Group>(`gumball-machine-success-burst-${index + 1}-pivot`)
   )).filter((entry): entry is THREE.Group => Boolean(entry));
@@ -101,6 +118,17 @@ export function createGumballMachinePerformance(root: THREE.Group): GumballMachi
   const selected = capsules[SELECTED_CAPSULE_INDEX - 1] ?? capsules[0] ?? null;
 
   const outputLanding = new THREE.Vector3(-0.28, 0.46, 6.8);
+  const toyRelease = new THREE.Vector3(-0.22, 1.18, 6.9);
+  const toyLanding = new THREE.Vector3(-0.06, 0.2, 7.12);
+  let prizeCycleIndex = -1;
+  let prizeCycleActive = false;
+  let activePrizeKind: GumballMachinePrizeKind = prizeKinds[0];
+
+  const beginPrizeCycle = (): void => {
+    prizeCycleIndex = (prizeCycleIndex + 1) % prizeKinds.length;
+    activePrizeKind = prizeKinds[prizeCycleIndex];
+    prizeCycleActive = true;
+  };
 
   const writeDiagnostics = (diagnostics: GumballMachinePerformanceDiagnostics): void => {
     root.userData.gumballMachinePerformanceDiagnostics = diagnostics;
@@ -120,17 +148,23 @@ export function createGumballMachinePerformance(root: THREE.Group): GumballMachi
       outputCapsuleVisible: false,
       bounceIndex: 0,
       shellSeparation: 0,
+      prizeKind: activePrizeKind,
       toyVisible: false,
+      toyBounceIndex: 0,
+      toyGrounded: false,
+      toyWorldY: toyLanding.y,
       visibleSuccessBursts: 0,
       timelineOwner: 'AppliancePerformanceSystem',
       effectOwner: 'gumball-machine-model-rig',
       forbiddenPrimitives: ['PlaneGeometry', 'Sprite', 'Line'],
     });
+    prizeCycleActive = false;
   };
 
   reset();
   return {
     apply: (time, power) => {
+      if (!prizeCycleActive) beginPrizeCycle();
       const p = THREE.MathUtils.clamp(power, 0, 1);
       const crankProgress = THREE.MathUtils.clamp((time - 0.04) / 0.58, 0, 1);
       const crankTurn = easedBackOut(crankProgress) * TWO_PI;
@@ -251,19 +285,50 @@ export function createGumballMachinePerformance(root: THREE.Group): GumballMachi
       }
 
       let toyVisible = false;
+      let toyBounceIndex: 0 | 1 | 2 = 0;
+      let toyGrounded = false;
       if (outputToy) {
-        toyVisible = time >= 4.12;
+        toyVisible = time >= 4.2;
         outputToy.visible = toyVisible;
+        outputToy.userData.prizeKind = activePrizeKind;
+        outputPrizes.forEach((prize, kind) => {
+          prize.visible = kind === activePrizeKind;
+        });
         if (toyVisible) {
-          const squeeze = THREE.MathUtils.smoothstep(time, 4.12, 4.34);
-          const drop = THREE.MathUtils.smoothstep(time, 4.34, 4.62);
-          const toyBounce = time >= 4.61 && time < 4.86
-            ? Math.sin(THREE.MathUtils.clamp((time - 4.61) / 0.25, 0, 1) * Math.PI) * 0.16
-            : 0;
-          outputToy.position.y += squeeze * 0.42 - drop * 0.36 + toyBounce;
-          outputToy.position.z += squeeze * 0.12;
-          outputToy.rotation.y += squeeze * 0.72 + drop * 0.38;
-          outputToy.rotation.z += squeeze * -0.28 + drop * 0.18;
+          if (time < 4.42) {
+            const reveal = easedBackOut(THREE.MathUtils.clamp((time - 4.2) / 0.22, 0, 1));
+            outputToy.position.lerpVectors(
+              new THREE.Vector3(outputLanding.x, outputLanding.y + 0.08, outputLanding.z + 0.02),
+              toyRelease,
+              reveal,
+            );
+            outputToy.rotation.set(-0.08 + reveal * 0.12, -0.16 + reveal * 0.42, 0.05 - reveal * 0.18);
+          } else if (time < 4.72) {
+            const drop = THREE.MathUtils.clamp((time - 4.42) / 0.3, 0, 1);
+            const gravity = drop * drop;
+            outputToy.position.set(
+              THREE.MathUtils.lerp(toyRelease.x, toyLanding.x, drop),
+              THREE.MathUtils.lerp(toyRelease.y, toyLanding.y, gravity),
+              THREE.MathUtils.lerp(toyRelease.z, toyLanding.z, drop),
+            );
+            outputToy.rotation.set(0.04 + drop * 0.34, 0.26 + drop * 0.9, -0.13 + drop * 0.31);
+          } else if (time < 4.98) {
+            toyBounceIndex = 1;
+            const bounce = THREE.MathUtils.clamp((time - 4.72) / 0.26, 0, 1);
+            outputToy.position.copy(toyLanding);
+            outputToy.position.y += Math.sin(bounce * Math.PI) * 0.34;
+            outputToy.rotation.set(0.38 - bounce * 0.16, 1.16 + bounce * 0.34, 0.18 - bounce * 0.1);
+          } else if (time < 5.17) {
+            toyBounceIndex = 2;
+            const bounce = THREE.MathUtils.clamp((time - 4.98) / 0.19, 0, 1);
+            outputToy.position.copy(toyLanding);
+            outputToy.position.y += Math.sin(bounce * Math.PI) * 0.13;
+            outputToy.rotation.set(0.22 - bounce * 0.08, 1.5 + bounce * 0.18, 0.08 - bounce * 0.05);
+          } else {
+            toyGrounded = true;
+            outputToy.position.copy(toyLanding);
+            outputToy.rotation.set(0.14, 1.68, 0.03);
+          }
         }
       }
 
@@ -298,7 +363,11 @@ export function createGumballMachinePerformance(root: THREE.Group): GumballMachi
         outputCapsuleVisible: Boolean(output?.visible),
         bounceIndex,
         shellSeparation: openingOvershoot * 0.84,
+        prizeKind: activePrizeKind,
         toyVisible,
+        toyBounceIndex,
+        toyGrounded,
+        toyWorldY: outputToy?.position.y ?? toyLanding.y,
         visibleSuccessBursts,
         timelineOwner: 'AppliancePerformanceSystem',
         effectOwner: 'gumball-machine-model-rig',

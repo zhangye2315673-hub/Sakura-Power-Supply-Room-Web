@@ -76,17 +76,27 @@ import {
   SkillEffectModelKit,
   type SkillEffectAssetId,
 } from '../skill/SkillEffectModelKit';
+import { SoundWaveShieldPresentation } from '../skill/SoundWaveShieldPresentation';
+import { DehumidifierDryShieldPresentation } from '../skill/DehumidifierDryShieldPresentation';
+import {
+  PortableSpeakerSpacingPresentation,
+  type PortableSpeakerSpacingTarget,
+} from '../skill/PortableSpeakerSpacingPresentation';
 import { ThemeController, type ThemeMode } from '../theme/ThemeController';
 import { GlobalToolbar } from '../theme/GlobalToolbar';
 import { NightEnvironment } from '../theme/NightEnvironment';
 import { AdaptiveNightQuality } from '../theme/AdaptiveQuality';
+import { SeasonController } from '../theme/SeasonController';
 import { ApplianceSensoryController } from '../appliances/ApplianceSensoryController';
 import { POWERED_ACTIVE_DURATION } from '../appliances/poweredAnimation';
 import { AudioManager } from '../audio/AudioManager';
 import { TelevisionReconstructionTransition } from '../skill/TelevisionReconstructionTransition';
 import { ToasterHeatSwapTransition } from '../skill/ToasterHeatSwapTransition';
 import { RefrigeratorFreezePresentation } from '../skill/RefrigeratorFreezePresentation';
+import { KETTLE_THAW_DURATION, KettleThawPresentation } from '../skill/KettleThawPresentation';
 import { RefrigeratorScreenIceOverlay } from '../skill/RefrigeratorScreenIceOverlay';
+import { WasherSpinPresentation } from '../skill/WasherSpinPresentation';
+import { BubbleShieldPresentation } from '../skill/BubbleShieldPresentation';
 import {
   DEFAULT_SKILL_TEST,
   buildSkillTestPuzzle,
@@ -97,10 +107,12 @@ import {
 type GameMode = 'campaign' | 'random' | 'skill' | 'rush';
 type RushFlow = 'sequence' | 'random-pool';
 
+const DIAGNOSTICS_PUBLISH_INTERVAL_FRAMES = 6;
+
 type ArrowAnimation = {
   arrow: ArrowRuntime;
   model: PlugCableModel;
-  kind: 'exit' | 'bump';
+  kind: 'exit' | 'bump' | 'skill-fling';
   target: ApplianceTarget | null;
   queueAfterExit: boolean;
   elapsed: number;
@@ -109,6 +121,14 @@ type ArrowAnimation = {
   direction: THREE.Vector3;
   end: CableEnd;
   autoCommitted?: boolean;
+  originPosition?: THREE.Vector3;
+  originQuaternion?: THREE.Quaternion;
+  originScale?: THREE.Vector3;
+  bundleCenterWorld?: THREE.Vector3;
+  flightAngularVelocity?: THREE.Vector3;
+  maxScreenRadius?: number;
+  previousFlightDistance?: number;
+  distanceMonotonic?: boolean;
 };
 
 type CableChoice = Readonly<{ arrow: ArrowRuntime; end: CableEnd }>;
@@ -136,6 +156,7 @@ type PuzzleWorkerResponse = {
 
 const easeOutCubic = (value: number): number => 1 - (1 - value) ** 3;
 const MAX_HINT_USES = 3;
+const SKILL_RECYCLE_SELECTION_COMMIT_DELAY_MS = 850;
 
 export class Game {
   private readonly renderer: THREE.WebGLRenderer;
@@ -157,6 +178,7 @@ export class Game {
   private readonly performances = new AppliancePerformanceSystem();
   private readonly sensory = new ApplianceSensoryController();
   private readonly theme = new ThemeController();
+  private readonly season = new SeasonController();
   private readonly audio = new AudioManager();
   private readonly sun = new THREE.DirectionalLight(PAL.sun, 2.25);
   private readonly fill = new THREE.DirectionalLight(PAL.fill, 1.08);
@@ -190,10 +212,16 @@ export class Game {
     onCardSelected: (index) => this.handleSkillCardSelected(index),
   });
   private readonly skillEffects = new SkillEffectModelKit();
+  private readonly bubbleShield = new BubbleShieldPresentation();
+  private readonly soundWaveShield = new SoundWaveShieldPresentation();
+  private readonly dehumidifierDryShield = new DehumidifierDryShieldPresentation();
+  private readonly portableSpeakerSpacing = new PortableSpeakerSpacingPresentation();
   private readonly televisionReconstruction = new TelevisionReconstructionTransition();
   private readonly toasterHeatSwap = new ToasterHeatSwapTransition();
   private readonly refrigeratorFreeze = new RefrigeratorFreezePresentation();
+  private readonly kettleThaw = new KettleThawPresentation();
   private readonly refrigeratorScreenIce: RefrigeratorScreenIceOverlay;
+  private readonly washerSpin = new WasherSpinPresentation();
   private readonly skillPresentation: SkillPresentationController;
   private readonly puzzleWorker: Worker;
   private readonly prefetchWorker: Worker;
@@ -246,18 +274,40 @@ export class Game {
   private skillSettleCueTimer = 0;
   private skillSettleTimer = 0;
   private skillEvidenceCleanupTimer = 0;
+  private skillRecycleSelectionTimer = 0;
   private skillEvidenceVisible = false;
   private activeSkillTest: SkillTestDefinition | null = null;
+  private coffeeLockExitTarget: ApplianceTarget | null = null;
+  private coffeeStainElapsed = 0;
+  private coffeeStainStrength = 0;
+  private readonly coffeeStainDuration = 4.8;
+  private readonly coffeeStainProfiles = new Map<string, { delay: number; direction: number }>();
+  private skillTestRandomLayout = false;
   private readonly skillTransientHighlights = new Set<string>();
+  private readonly skillColorShufflePreview = new Map<string, {
+    color: number;
+    strength: number;
+    emissionScale: number;
+  }>();
   private skillTransientScreenEffect: SkillScreenEffect = 'none';
-  private pendingSkillAutoRemoval: string[] = [];
   private readonly skillAutoRemovalEnds = new Map<string, CableEnd>();
+  private pendingWasherFlingRemovals: ArrowRuntime[] = [];
+  private washerFlingHistory: Array<{
+    id: string;
+    maxScreenRadius: number;
+    distanceMonotonic: boolean;
+  }> = [];
+  private readonly washerFlightEuler = new THREE.Euler();
+  private readonly washerFlightQuaternion = new THREE.Quaternion();
+  private readonly washerFlightWorldPosition = new THREE.Vector3();
+  private readonly washerFlightProjectedPosition = new THREE.Vector3();
   private radioRouteCableIds: string[] = [];
   private openingActive = true;
   private openingTransitioning = false;
   private initialPuzzlePreparing = false;
   private openingCameraPhase: 'idle' | 'insert' | 'hold' | 'fade-out' | 'background-hold' | 'reveal' | 'pull' = 'idle';
   private openingCameraElapsed = 0;
+  private lastOpeningFrameElapsed = 0;
   private readonly openingCameraFinal = new THREE.Vector3();
   private readonly openingCameraClose = new THREE.Vector3();
   private readonly openingCameraFinalTarget = new THREE.Vector3(0, 0.05, 0);
@@ -319,6 +369,12 @@ export class Game {
   };
   private readonly onPuzzleGenerated = (event: MessageEvent<PuzzleWorkerResponse>) => {
     const result = event.data;
+    if (result.puzzle && this.activeSkillTest && this.skillTestRandomLayout) {
+      result.puzzle.arrows = result.puzzle.arrows.map((arrow) => ({
+        ...arrow,
+        color: this.activeSkillTest!.accent,
+      }));
+    }
     if (result.requestId !== this.puzzleRequestId) return;
     if (!result.puzzle) {
       this.hud.showLoadError(result.error ?? '线路生成失败');
@@ -388,6 +444,9 @@ export class Game {
     this.scene.add(this.performances.root);
     this.scene.add(this.sensory.root);
     this.scene.add(this.skillEffects.root);
+    this.scene.add(this.bubbleShield.root);
+    this.scene.add(this.soundWaveShield.root);
+    this.scene.add(this.dehumidifierDryShield.root);
     this.arrowRoot.add(this.televisionReconstruction.root);
     this.arrowRoot.add(this.toasterHeatSwap.root);
     this.arrowRoot.visible = false;
@@ -415,6 +474,19 @@ export class Game {
       getRiceCableVisualScale: () => (
         [...this.models.values()][0]?.visualThicknessScale ?? 1
       ),
+      getCableBaseColor: (cableId) => this.models.get(cableId)?.skillVisualState.baseColor ?? null,
+      setCableSkillSweep: (cableId, progress, strength, color) => {
+        this.models.get(cableId)?.setSkillSweep(progress, strength, color);
+      },
+      setCableSkillTint: (cableId, color, strength, emissionScale) => {
+        if (color === null) this.skillColorShufflePreview.delete(cableId);
+        else this.skillColorShufflePreview.set(cableId, { color, strength, emissionScale });
+        this.models.get(cableId)?.setSkillTint(color, strength, emissionScale);
+      },
+      commitCableColors: (changes) => {
+        this.applySkillRecolors(changes);
+        this.publishDiagnostics();
+      },
     });
     this.nightEnvironment = new NightEnvironment(
       this.canvas,
@@ -427,10 +499,16 @@ export class Game {
       this.pipeline.setQualityTier(tier);
       this.nightEnvironment.setQualityTier(tier);
     });
-    this.globalToolbar = new GlobalToolbar(this.theme, this.audio, this.hud.languageButton);
+    this.globalToolbar = new GlobalToolbar(this.theme, this.season, this.audio, this.hud.languageButton);
     const initialTheme = this.theme.snapshot;
+    const initialEnvironment = this.season.resolveEnvironment(initialTheme.progress);
+    const initialSeason = this.season.snapshot;
     this.pipeline.setThemeProgress(initialTheme.progress);
     this.nightEnvironment.setThemeProgress(initialTheme.progress);
+    this.nightEnvironment.setSeasonEnvironment(initialEnvironment);
+    this.sky.setSeasonWeights(initialSeason.weights);
+    this.petals.setSeasonState(initialSeason.weights, initialTheme.progress);
+    this.openingScene.setSeasonState(initialSeason.weights, initialTheme.progress);
     this.nightEnvironment.setReducedMotion(initialTheme.reducedMotion);
     this.startScreen.setStage('start.loading.sky', 0.12, 0.22);
     this.puzzleWorker = new Worker(new URL('../puzzle/generator.worker.ts', import.meta.url), {
@@ -471,8 +549,11 @@ export class Game {
     // on a software-rendered screen ray being visible behind another model.
     // The hook still enters the normal handleClick/connection/timeline path.
     if (Number.isFinite(window.__APPLIANCE_PERFORMANCE_TIME_OVERRIDE__)) {
+      window.__FINISH_OPENING_FOR_EVIDENCE__ = () => this.finishOpeningForEvidence();
+      window.__SETTLE_APPLIANCE_FOR_EVIDENCE__ = () => this.settleApplianceForEvidence();
       window.__ACTIVATE_APPLIANCE_FOR_EVIDENCE__ = (kind) => this.activateApplianceForEvidence(kind);
       window.__ACTIVATE_RUSH_CABLE_FOR_EVIDENCE__ = (id) => this.activateRushCableForEvidence(id);
+      window.__PULL_CABLE_FOR_EVIDENCE__ = (id, end = 'head') => this.pullCableForEvidence(id, end);
       window.__SHOW_SKILL_EFFECT_FOR_EVIDENCE__ = (asset, yaw = 0) => {
         if (!(asset in SKILL_EFFECT_ASSET_REFERENCES)) return false;
         this.arrowRoot.visible = false;
@@ -501,11 +582,20 @@ export class Game {
     const exploreRequested = params.get('mode') === 'explore' && params.get('direct') === '1';
     const doubleRequested = params.get('mode') === 'double' && params.get('direct') === '1';
     const skillRequested = params.get('mode') === 'skill' && params.get('direct') === '1';
-    const requestedSkillTest = params.get('mode') === 'skill-test' && params.get('direct') === '1'
-      ? getSkillTestDefinition(params.get('skill') ?? DEFAULT_SKILL_TEST.id)
-      : null;
+    const washerRandomShortcut = params.get('washer-random') === '1';
+    const requestedSkillTest = washerRandomShortcut
+      ? getSkillTestDefinition('washer')
+      : params.get('mode') === 'skill-test' && params.get('direct') === '1'
+        ? getSkillTestDefinition(params.get('skill') ?? DEFAULT_SKILL_TEST.id)
+        : null;
     const skillTestRequested = requestedSkillTest !== null;
+    const randomSkillTestLayout = skillTestRequested
+      && (requestedSkillTest.id === 'washer'
+        || requestedSkillTest.id === 'microwave'
+        || washerRandomShortcut
+        || params.get('layout') === 'random');
     const rushRequested = params.get('mode') === 'rush' && params.get('direct') === '1';
+    this.skillTestRandomLayout = randomSkillTestLayout;
     this.setActiveSkillTest(requestedSkillTest);
     this.setExplorationMode(exploreRequested);
     if (rushRequested) {
@@ -517,7 +607,9 @@ export class Game {
     const staleRandomUrl = params.get('mode') === 'random' && !randomRequested;
     const directChallengeRequested = randomRequested || exploreRequested || doubleRequested || skillRequested || skillTestRequested;
     const initialSeed = skillTestRequested
-      ? requestedSkillTest.level.seed
+      ? randomSkillTestLayout
+        ? (hasExplicitSeed ? parsedSeed >>> 0 : createRandomSeed())
+        : requestedSkillTest.level.seed
       : rushRequested && this.currentRushChallenge
       ? this.currentRushChallenge.level.seed
       : directChallengeRequested
@@ -530,7 +622,9 @@ export class Game {
       : doubleRequested
         ? getDoubleEndedLevel(initialSeed)
         : skillTestRequested
-          ? requestedSkillTest.level
+          ? randomSkillTestLayout
+            ? getSkillChallengeLevel(initialSeed)
+            : requestedSkillTest.level
         : skillRequested
           ? getSkillChallengeLevel(initialSeed)
           : exploreRequested
@@ -580,6 +674,7 @@ export class Game {
     this.nightEnvironment.dispose();
     this.sky.dispose();
     this.theme.dispose();
+    this.season.dispose();
     this.audio.dispose();
     this.sensory.dispose();
     this.petals.dispose();
@@ -592,8 +687,12 @@ export class Game {
     this.skillPresentation.dispose();
     this.televisionReconstruction.dispose();
     this.toasterHeatSwap.dispose();
+    this.washerSpin.dispose();
     this.refrigeratorScreenIce.dispose();
     this.skillEffects.dispose();
+    this.bubbleShield.dispose();
+    this.soundWaveShield.dispose();
+    this.dehumidifierDryShield.dispose();
     this.startScreen.dispose();
     this.rushUi.dispose();
     this.doubleEndedUi.dispose();
@@ -623,6 +722,7 @@ export class Game {
     window.clearTimeout(this.skillCommitTimer);
     window.clearTimeout(this.skillSettleCueTimer);
     window.clearTimeout(this.skillEvidenceCleanupTimer);
+    window.clearTimeout(this.skillRecycleSelectionTimer);
   }
 
   private readonly resetCurrentPuzzle = () => {
@@ -709,29 +809,40 @@ export class Game {
 
   private readonly startSkillTestFromOpening = () => {
     if (!this.leaveOpeningForModeSelection()) return;
-    this.loadSkillTest(DEFAULT_SKILL_TEST);
+    const test = this.activeSkillTest ?? DEFAULT_SKILL_TEST;
+    const seed = this.activeSkillTest ? (this.puzzle?.seed ?? createRandomSeed()) : createRandomSeed();
+    this.loadSkillTest(test, seed);
   };
 
-  private loadSkillTest(test: SkillTestDefinition): void {
+  private loadSkillTest(test: SkillTestDefinition, seed = createRandomSeed()): void {
     this.setExplorationMode(false);
     this.cancelPrefetch();
     this.setActiveSkillTest(test);
+    this.skillTestRandomLayout = test.id === 'washer'
+      || test.id === 'microwave';
     this.currentRushChallenge = null;
     this.rushRound = null;
     this.rushFlow = null;
     this.rushUi.hide();
     this.doubleEndedUi.hide();
     this.petals.mesh.visible = true;
-    this.skillEngine = this.createSkillEngine(test.level.seed);
+    const level = this.skillTestRandomLayout ? getSkillChallengeLevel(seed) : test.level;
+    this.skillEngine = this.createSkillEngine(seed);
     this.setSkillInputLocked(false);
     this.skillUi.setVisible(true);
-    this.appliances.setReplacementFilter((definition) => definition.id === test.appliance);
-    this.loadPuzzle(test.level.seed, test.level, 'skill');
+    this.appliances.setReplacementFilter((definition) => {
+      if (test.id === 'rice-cooker' && this.skillEngine?.state.debuff?.id === 'rice-thick-cable') {
+        return definition.id === 'blender';
+      }
+      return definition.id === test.appliance;
+    });
+    this.loadPuzzle(seed, level, 'skill');
   }
 
   private loadSkillChallenge(seed: number): void {
     this.setExplorationMode(false);
     this.setActiveSkillTest(null);
+    this.skillTestRandomLayout = false;
     this.currentRushChallenge = null;
     this.rushRound = null;
     this.rushFlow = null;
@@ -769,7 +880,15 @@ export class Game {
 
   private setActiveSkillTest(test: SkillTestDefinition | null): void {
     this.activeSkillTest = test;
+    if (!test) this.skillTestRandomLayout = false;
     document.documentElement.classList.toggle('skill-test-active', test !== null);
+    document.documentElement.classList.toggle('skill-test-popcorn', test?.id === 'popcorn-machine');
+    document.documentElement.classList.toggle('skill-test-alarm', test?.id === 'alarm-clock');
+    document.documentElement.classList.toggle('skill-test-stand-mixer', test?.id === 'stand-mixer');
+    document.documentElement.classList.toggle('skill-test-printer', test?.id === 'printer');
+    document.documentElement.classList.toggle('skill-test-induction-cooktop', test?.id === 'induction-cooktop');
+    document.documentElement.classList.toggle('skill-test-dehumidifier', test?.id === 'dehumidifier');
+    document.documentElement.classList.toggle('skill-test-portable-speaker', test?.id === 'portable-speaker');
   }
 
   private setExplorationMode(active: boolean): void {
@@ -900,8 +1019,14 @@ export class Game {
     window.clearTimeout(this.skillEvidenceCleanupTimer);
     this.skillPresentation.reset();
     this.skillEffects.reset();
+    this.bubbleShield.reset();
+    this.soundWaveShield.reset();
+    this.dehumidifierDryShield.reset();
+    this.portableSpeakerSpacing.reset(this.getPortableSpeakerSpacingTargets());
     this.televisionReconstruction.reset();
     this.toasterHeatSwap.reset();
+    this.washerSpin.reset();
+    this.kettleThaw.reset();
     this.refrigeratorFreeze.reset();
     this.petals.setColdProgress(0);
     this.appliances.reset();
@@ -917,7 +1042,11 @@ export class Game {
     window.clearTimeout(this.skillCommitTimer);
     window.clearTimeout(this.skillSettleCueTimer);
     this.skillTransientHighlights.clear();
-    this.pendingSkillAutoRemoval = [];
+    this.pendingWasherFlingRemovals = [];
+    this.coffeeLockExitTarget = null;
+    this.coffeeStainElapsed = 0;
+    this.coffeeStainStrength = 0;
+    this.coffeeStainProfiles.clear();
     this.skillAutoRemovalEnds.clear();
     this.radioRouteCableIds = [];
     if (this.currentMode === 'skill') {
@@ -941,7 +1070,8 @@ export class Game {
       this.hintUsesRemaining = MAX_HINT_USES;
     }
     this.hud.setRandomLives(
-      this.currentMode === 'random' || (this.currentMode === 'skill' && !this.activeSkillTest),
+      this.currentMode === 'random'
+        || (this.currentMode === 'skill' && (!this.activeSkillTest || this.activeSkillTest.id === 'popcorn-machine')),
       this.randomLives,
       this.currentMode === 'skill' ? this.skillEngine?.state.maxLives ?? 3 : 3,
     );
@@ -1130,8 +1260,8 @@ export class Game {
     if (this.openingActive && this.puzzle === null) {
       this.startScreen.setStage('start.loading.first', 0.24, 0.56);
     }
-    if (mode === 'skill' && this.activeSkillTest) {
-      const testPuzzle = buildSkillTestPuzzle(this.activeSkillTest);
+    if (mode === 'skill' && this.activeSkillTest && !this.skillTestRandomLayout) {
+      const testPuzzle = buildSkillTestPuzzle(this.activeSkillTest, seed);
       this.generationMs = 0;
       if (this.openingActive && this.puzzle === null && !this.initialPuzzlePreparing) {
         this.initialPuzzlePreparing = true;
@@ -1174,7 +1304,10 @@ export class Game {
       this.skillUi.setVisible(true);
       this.skillUi.render(this.skillEngine.state);
       this.appliances.setReplacementFilter(this.activeSkillTest
-        ? (definition) => definition.id === this.activeSkillTest?.appliance
+        ? (definition) => this.activeSkillTest?.id === 'rice-cooker'
+          && this.skillEngine?.state.debuff?.id === 'rice-thick-cable'
+          ? definition.id === 'blender'
+          : definition.id === this.activeSkillTest?.appliance
         : (definition) => {
             const debuffActive = this.skillEngine?.state.debuff !== null;
             return !debuffActive || ![
@@ -1194,7 +1327,8 @@ export class Game {
       this.hintUsesRemaining = MAX_HINT_USES;
     }
     this.hud.setRandomLives(
-      this.currentMode === 'random' || (this.currentMode === 'skill' && !this.activeSkillTest),
+      this.currentMode === 'random'
+        || (this.currentMode === 'skill' && (!this.activeSkillTest || this.activeSkillTest.id === 'popcorn-machine')),
       this.randomLives,
       this.currentMode === 'skill' ? this.skillEngine?.state.maxLives ?? 3 : 3,
     );
@@ -1225,6 +1359,9 @@ export class Game {
         this.preloadMaxSliceMs = Math.max(this.preloadMaxSliceMs, buildMs);
       }, configuredDefinitions, activeColors);
     }
+    this.appliances.setSingleTargetColorAliases(
+      this.activeSkillTest?.id === 'blender' ? activeColors : [],
+    );
     this.appliances.setRequiredColors(
       this.currentMode === 'rush' ? [] : this.arrows.map((arrow) => arrow.definition.color),
     );
@@ -1252,7 +1389,12 @@ export class Game {
           0.82 + ((index + 1) / this.arrows.length) * 0.11,
         );
       }
-      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+      const shouldYieldModelBuild = !staged
+        || (index + 1) % 5 === 0
+        || index === this.arrows.length - 1;
+      if (shouldYieldModelBuild) {
+        await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+      }
     }
     this.modelBuildMs = performance.now() - modelBuildStartedAt;
 
@@ -1308,9 +1450,12 @@ export class Game {
       url.searchParams.delete('skill');
     } else if (this.currentMode === 'skill' && this.activeSkillTest) {
       url.searchParams.delete('level');
+      url.searchParams.delete('layout');
       url.searchParams.set('mode', 'skill-test');
       url.searchParams.set('skill', this.activeSkillTest.id);
       url.searchParams.set('direct', '1');
+      if (this.skillTestRandomLayout) url.searchParams.set('layout', 'random');
+      else url.searchParams.delete('layout');
       url.searchParams.delete('rush');
     } else if (this.currentMode === 'skill') {
       url.searchParams.delete('level');
@@ -1381,24 +1526,37 @@ export class Game {
 
   private clearPuzzle(): void {
     window.clearTimeout(this.skillEvidenceCleanupTimer);
+    window.clearTimeout(this.skillRecycleSelectionTimer);
     this.setHovered(null);
     this.animations.length = 0;
     this.pendingApplianceConnections.length = 0;
     this.skillAutoRemovalEnds.clear();
+    this.pendingWasherFlingRemovals = [];
+    this.washerFlingHistory = [];
+    this.coffeeLockExitTarget = null;
+    this.coffeeStainElapsed = 0;
+    this.coffeeStainStrength = 0;
+    this.coffeeStainProfiles.clear();
     this.radioRouteCableIds = [];
     this.connections.clear();
     this.performances.reset();
     this.skillPresentation.reset();
     this.skillEffects.reset();
+    this.bubbleShield.reset();
+    this.soundWaveShield.reset();
+    this.dehumidifierDryShield.reset();
+    this.portableSpeakerSpacing.reset(this.getPortableSpeakerSpacingTargets());
     this.televisionReconstruction.reset();
     this.toasterHeatSwap.reset();
+    this.washerSpin.reset();
+    this.kettleThaw.reset();
     this.refrigeratorFreeze.reset();
     this.petals.setColdProgress(0);
     this.appliances.clear();
     this.appliances.setRequiredColors([]);
     this.applianceRoutingRevision = this.appliances.routingRevision;
     for (const model of this.models.values()) {
-      this.arrowRoot.remove(model.root);
+      model.root.parent?.remove(model.root);
       model.dispose();
     }
     this.models.clear();
@@ -1443,7 +1601,7 @@ export class Game {
         object.updateWorldMatrix(true, true);
 
         const compileStartedAt = performance.now();
-        this.renderer.compile(this.scene, this.camera);
+        this.renderer.compile(object, this.camera, this.scene);
         this.preloadMaxSliceMs = Math.max(
           this.preloadMaxSliceMs,
           performance.now() - compileStartedAt,
@@ -1455,7 +1613,9 @@ export class Game {
           index < cableRoots.length ? 'start.loading.materials' : 'start.loading.applianceMaterials',
           0.94 + ((index + 1) / batches.length) * 0.045,
         );
-        await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+        if ((index + 1) % 5 === 0 || index === batches.length - 1) {
+          await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+        }
       }
     } finally {
       cableModels.forEach((model) => model.setIceShellWarmupVisible(false));
@@ -1612,6 +1772,39 @@ export class Game {
     this.scene.add(this.hemi);
   }
 
+  private finishOpeningForEvidence(): boolean {
+    if (!Number.isFinite(window.__APPLIANCE_PERFORMANCE_TIME_OVERRIDE__) || !this.puzzle) return false;
+    this.openingActive = false;
+    this.openingTransitioning = false;
+    this.openingCameraPhase = 'idle';
+    this.openingCameraElapsed = 0;
+    this.openingScene.root.visible = false;
+    this.arrowRoot.visible = true;
+    this.appliances.root.visible = this.currentMode !== 'rush';
+    this.connections.root.visible = this.currentMode !== 'rush';
+    this.petals.mesh.visible = this.currentMode !== 'rush';
+    this.startScreen.finishExit();
+    this.sceneTransitionCurtain.style.opacity = '0';
+    this.sceneTransitionCurtain.classList.remove('visible');
+    this.orbit.setAngles(0.76, this.currentLevel?.shape === 'sphere' ? 0.66 : 0.56);
+    this.orbit.setRadius(this.currentLevel?.cameraRadius ?? 19.2);
+    this.refreshAvailability(true);
+    this.showActiveSkillTestCue();
+    this.publishDiagnostics();
+    return true;
+  }
+
+  private settleApplianceForEvidence(): boolean {
+    if (!Number.isFinite(window.__APPLIANCE_PERFORMANCE_TIME_OVERRIDE__)) return false;
+    if (this.openingActive || this.openingTransitioning || this.animations.length > 0) return false;
+    const replaced = this.appliances.replaceActiveTargetForEvidence();
+    if (!replaced) return false;
+    this.syncRequiredColors();
+    this.refreshAvailability(false);
+    this.publishDiagnostics();
+    return true;
+  }
+
   /**
    * Deterministic selection hook for fixed-time visual evidence. It is only
    * installed when the performance clock override is present, and still
@@ -1641,7 +1834,41 @@ export class Game {
     const clientX = rect.left + ((projected.x + 1) * 0.5) * rect.width;
     const clientY = rect.top + ((1 - projected.y) * 0.5) * rect.height;
     this.handleClick(clientX, clientY, arrow.definition.id, end);
+    const animation = this.animations.find((candidate) =>
+      candidate.arrow === arrow && candidate.kind === 'exit');
+    if (animation) {
+      animation.elapsed = animation.duration;
+      animation.wallClockStartedAtSeconds = null;
+      this.updateAnimations(0, performance.now() * 0.001);
+    }
     return arrow.state !== 'idle' || this.animations.some((animation) => animation.arrow === arrow);
+  }
+
+  private pullCableForEvidence(id?: string, end: CableEnd = 'head'): boolean {
+    if (this.openingActive || this.openingTransitioning || this.animations.length > 0 || this.randomGameOver) return false;
+    this.refreshAvailability(false);
+    const choice = id
+      ? this.availableChoices.find(({ arrow, end: choiceEnd }) =>
+        arrow.definition.id === id && choiceEnd === end,
+      ) ?? this.availableChoices.find(({ arrow }) => arrow.definition.id === id)
+      : undefined;
+    const forcedChoice = id
+      ? this.arrows.find((arrow) => arrow.definition.id === id && arrow.state === 'idle')
+      : undefined;
+    const selected = choice
+      ?? (forcedChoice ? { arrow: forcedChoice, end } : undefined)
+      ?? this.availableChoices[0];
+    if (!selected) return false;
+    this.handleClick(0, 0, selected.arrow.definition.id, selected.end);
+    const animation = this.animations.find((candidate) =>
+      candidate.arrow === selected.arrow && candidate.kind === 'exit');
+    if (Number.isFinite(window.__APPLIANCE_PERFORMANCE_TIME_OVERRIDE__) && animation) {
+      this.publishDiagnostics();
+      animation.elapsed = animation.duration;
+      animation.wallClockStartedAtSeconds = null;
+      this.updateAnimations(0, performance.now() * 0.001);
+    }
+    return selected.arrow.state !== 'idle' || this.animations.some((candidate) => candidate.arrow === selected.arrow);
   }
 
   private activateRushCableForEvidence(id: string): boolean {
@@ -1688,6 +1915,10 @@ export class Game {
     };
     this.skillPresentation.reset();
     this.skillEffects.reset();
+    this.bubbleShield.reset();
+    this.soundWaveShield.reset();
+    this.dehumidifierDryShield.reset();
+    this.portableSpeakerSpacing.reset(this.getPortableSpeakerSpacingTargets());
     this.arrowRoot.visible = true;
     this.skillEvidenceVisible = true;
     this.skillPresentation.root.visible = true;
@@ -1848,7 +2079,11 @@ export class Game {
       if (!this.activeSkillTest) this.hud.showBlocked();
       this.audio.playInteraction('blocked');
       if (this.currentMode === 'random') this.loseRandomLife();
-      if (this.currentMode === 'skill') this.handleSkillBlockedAttempt(Boolean(fakePlug));
+      if (this.currentMode === 'skill') {
+        const impactPosition = result.contact
+          ?? model.getHeadWorldPosition(new THREE.Vector3(), picked.end);
+        this.handleSkillBlockedAttempt(Boolean(fakePlug), impactPosition);
+      }
       if (this.currentMode === 'rush') this.rushRound?.recordMistake();
     }
   }
@@ -1869,19 +2104,29 @@ export class Game {
     this.skillInputLocked = locked;
     this.skillUi.setInputLocked(locked);
     this.orbit.setEnabled(!locked || selectionMode);
-    this.orbit.setClickOnly(locked && selectionMode);
+    this.orbit.setClickOnly(false);
     this.appliances.setInteractionEnabled(!locked);
     if (locked) this.setHovered(null);
   }
 
-  private handleSkillBlockedAttempt(fakePlug: boolean): void {
-    if (this.activeSkillTest) return;
+  private handleSkillBlockedAttempt(fakePlug: boolean, impactPosition: THREE.Vector3): void {
+    const wasSoundWaveProtected = this.skillEngine?.state.buff?.id === 'soothing-record';
+    if (this.activeSkillTest) {
+      const activeBuff = this.skillEngine?.state.buff?.id;
+      const testingMatchingProtection = (this.activeSkillTest.id === 'bubble-machine'
+          && activeBuff === 'iridescent-bubble')
+        || (this.activeSkillTest.id === 'record-player'
+          && activeBuff === 'soothing-record');
+      if (!testingMatchingProtection) return;
+    }
     const result = this.skillEngine?.handleBlockedAttempt(fakePlug);
     if (!result || !this.skillEngine) return;
     this.randomLives = result.lives;
     this.hud.setRandomLives(true, result.lives, this.skillEngine.state.maxLives);
     this.skillUi.render(this.skillEngine.state);
+    this.syncSkillPresentation();
     if (result.protected) {
+      if (wasSoundWaveProtected) this.soundWaveShield.playImpact(impactPosition);
       this.hud.flash('防护状态抵挡了这次错误');
       return;
     }
@@ -1926,11 +2171,16 @@ export class Game {
     const resolution = outcome.resolution;
     let presentationDuration: number | undefined;
 
+    if (outcome.coffeeBlocked && engine.state.debuff?.id === 'coffee-lock'
+      && engine.state.debuff.turnsRemaining === 0) {
+      this.coffeeLockExitTarget = _target;
+    }
+
     if (resolution) {
       if (resolution.appliance === 'radio') {
         this.radioRouteCableIds = [...resolution.targetCableIds];
       }
-      presentationDuration = this.playSkillPresentation(resolution);
+      presentationDuration = this.playSkillPresentation(resolution, _target);
       if (resolution.appliance === 'refrigerator') {
         this.refrigeratorFreeze.activate(resolution.targetCableIds);
       }
@@ -1938,19 +2188,26 @@ export class Game {
         ? 'television-glitch'
         : resolution.appliance === 'toaster'
           ? 'toaster-heat'
+        : resolution.appliance === 'kettle'
+          ? 'kettle-thaw-heat'
         : resolution.appliance === 'printer'
           ? 'printer-scan'
           : 'none';
+      if (resolution.appliance === 'printer') {
+        this.pipeline.setSkillEffect('printer-scan');
+        this.publishDiagnostics();
+      }
       this.skillTransientHighlights.clear();
-      if (!this.isDedicatedSkillPresentation(resolution)) {
+      if (!this.isDedicatedSkillPresentation(resolution) && resolution.appliance !== 'popcorn-machine') {
         resolution.targetCableIds.forEach((id) => this.skillTransientHighlights.add(id));
       }
       const definition = APPLIANCE_SKILL_REGISTRY.get(resolution.appliance);
       this.skillUi.showCue(resolution.label, 'cue', definition?.description ?? '', _target.label);
       this.beginFanSteamClear(resolution, _target);
       this.beginHumidifierSteamReveal(resolution, _target);
+      this.beginCoffeeSplash(resolution);
       this.applySkillCommands(resolution.commands, resolution.appliance, _target);
-      this.queueSkillCommitCue();
+      this.queueSkillCommitCue('效果生效', resolution.appliance === 'blender' ? 4_680 : 220);
     } else if (outcome.coffeeBlocked) {
       this.skillUi.showCue('技能被封锁', 'cue', '咖啡封技生效中，本次家电技能不会发动。', _target.label);
       this.queueSkillCommitCue('已阻止');
@@ -1966,10 +2223,6 @@ export class Game {
       this.queueSkillCommitCue(isLastCable ? '挑战收尾' : '无效果');
     }
 
-    if (outcome.consumePrinterCopy) {
-      const next = this.createSkillContext().removalSequence[0];
-      if (next) this.pendingSkillAutoRemoval.push(next);
-    }
     this.syncSkillState();
 
     if (engine.state.phase === 'select-card') {
@@ -1989,8 +2242,13 @@ export class Game {
     return resolution.appliance === 'radio'
       || resolution.appliance === 'robot-vacuum'
       || resolution.appliance === 'rice-cooker'
+      || resolution.appliance === 'blender'
+      || resolution.appliance === 'stand-mixer'
       || resolution.appliance === 'toaster'
-      || resolution.appliance === 'refrigerator';
+      || resolution.appliance === 'refrigerator'
+      || resolution.appliance === 'kettle'
+      || resolution.appliance === 'washer'
+      || resolution.appliance === 'portable-speaker';
   }
 
   private beginFanSteamClear(resolution: SkillResolution, sourceTarget?: ApplianceTarget): void {
@@ -2015,10 +2273,102 @@ export class Game {
     this.pipeline.beginSteamReveal(humidifier?.screenPosition.x ?? 0.1, POWERED_ACTIVE_DURATION);
   }
 
-  private playSkillPresentation(resolution: SkillResolution): number | undefined {
-    const targetIds = resolution.appliance === 'rice-cooker'
+  private beginCoffeeSplash(resolution: SkillResolution): void {
+    const createsCoffeeLock = resolution.appliance === 'coffee-maker' && resolution.commands.some((command) =>
+      command.type === 'set-status'
+      && command.slot === 'debuff'
+      && command.status.id === 'coffee-lock');
+    if (!createsCoffeeLock) return;
+    this.coffeeStainElapsed = 0;
+    this.coffeeStainStrength = 0;
+    this.prepareCoffeeStainProfiles();
+    this.pipeline.beginCoffeeSplash();
+  }
+
+  private prepareCoffeeStainProfiles(): void {
+    this.coffeeStainProfiles.clear();
+    const points = this.arrows.flatMap(({ definition }) => definition.path);
+    if (points.length === 0) return;
+    const minX = Math.min(...points.map(([x]) => x));
+    const maxY = Math.max(...points.map(([, y]) => y));
+    const minZ = Math.min(...points.map(([, , z]) => z));
+    const maxX = Math.max(...points.map(([x]) => x));
+    const minY = Math.min(...points.map(([, y]) => y));
+    const maxZ = Math.max(...points.map(([, , z]) => z));
+    const diagonal = Math.max(1, Math.hypot(maxX - minX, maxY - minY, maxZ - minZ));
+    const distanceFromInkCorner = ([x, y, z]: readonly [number, number, number]): number => Math.hypot(
+      x - minX,
+      maxY - y,
+      z - minZ,
+    ) / diagonal;
+    for (const { definition } of this.arrows) {
+      const tailDistance = distanceFromInkCorner(definition.path[0]);
+      const headDistance = distanceFromInkCorner(definition.path[definition.path.length - 1]);
+      const nearestDistance = Math.min(...definition.path.map(distanceFromInkCorner));
+      const seed = [...definition.id].reduce((value, character) => (
+        Math.imul(value ^ character.charCodeAt(0), 16777619) >>> 0
+      ), 2166136261) / 4294967295;
+      this.coffeeStainProfiles.set(definition.id, {
+        delay: THREE.MathUtils.clamp(nearestDistance * 0.38 + (seed - 0.5) * 0.045, 0, 0.44),
+        direction: headDistance <= tailDistance ? 1 : 0,
+      });
+    }
+  }
+
+  private updateCoffeeStain(delta: number, elapsed: number): void {
+    const coffeeLock = this.skillEngine?.state.debuff?.id === 'coffee-lock'
+      ? this.skillEngine.state.debuff
+      : null;
+    if (!coffeeLock) return;
+    if (this.coffeeStainProfiles.size === 0) this.prepareCoffeeStainProfiles();
+    this.coffeeStainElapsed += delta;
+    const evidenceProgress = window.__COFFEE_STAIN_PROGRESS_OVERRIDE__;
+    const progress = Number.isFinite(evidenceProgress)
+      ? THREE.MathUtils.clamp(evidenceProgress!, 0, 1)
+      : THREE.MathUtils.clamp(this.coffeeStainElapsed / this.coffeeStainDuration, 0, 1);
+    const targetStrength = (coffeeLock.turnsRemaining ?? 0) / 4;
+    const blend = 1 - Math.exp(-delta * 2.8);
+    this.coffeeStainStrength = THREE.MathUtils.lerp(this.coffeeStainStrength, targetStrength, blend);
+    for (const [id, model] of this.models) {
+      const profile = this.coffeeStainProfiles.get(id) ?? { delay: 0, direction: 0 };
+      const localProgress = THREE.MathUtils.clamp(
+        (progress - profile.delay) / Math.max(0.001, 1 - profile.delay),
+        0,
+        1,
+      );
+      const reveal = localProgress * localProgress * (3 - 2 * localProgress);
+      model.setCoffeeStain(this.coffeeStainStrength, reveal, elapsed, profile.direction);
+    }
+  }
+
+  private playSkillPresentation(
+    resolution: SkillResolution,
+    sourceTarget?: ApplianceTarget,
+  ): number | undefined {
+    if (resolution.appliance === 'portable-speaker') {
+      return this.portableSpeakerSpacing.start(this.getPortableSpeakerSpacingTargets());
+    }
+    if (resolution.appliance === 'kettle') {
+      const frozenCableIds = this.skillEngine?.state.debuff?.id === 'frozen-plug'
+        ? [...this.skillEngine.state.debuff.targetCableIds]
+        : [...this.refrigeratorFreeze.diagnostics.targetCableIds];
+      const kettle = sourceTarget?.kind === 'kettle'
+        ? sourceTarget
+        : this.appliances.targets.find((target) => target.kind === 'kettle' && target.state === 'active');
+      const getTimelineElapsed = kettle ? () => kettle.getActiveElapsed() : undefined;
+      this.refrigeratorFreeze.beginThaw(KETTLE_THAW_DURATION, getTimelineElapsed);
+      return this.kettleThaw.start({
+        targetCableIds: frozenCableIds,
+        getTimelineElapsed,
+      });
+    }
+    const targetIds = resolution.appliance === 'rice-cooker' || resolution.appliance === 'stand-mixer'
       ? this.arrows.filter((candidate) => candidate.state !== 'removed').map((candidate) => candidate.definition.id)
-      : resolution.targetCableIds;
+      : resolution.appliance === 'blender'
+        ? resolution.commands.flatMap((command) => command.type === 'recolor'
+          ? command.changes.map(({ cableId }) => cableId)
+          : [])
+        : resolution.targetCableIds;
     const targets = targetIds
       .map((id): SkillPresentationTarget | null => {
         const model = this.models.get(id);
@@ -2027,7 +2377,7 @@ export class Game {
         return {
           cableId: id,
           position: model.getHeadWorldPosition(new THREE.Vector3()),
-          path: resolution.appliance === 'rice-cooker'
+          path: resolution.appliance === 'rice-cooker' || resolution.appliance === 'stand-mixer'
             ? arrow?.samplePoints.map((point) => point.clone())
             : undefined,
         };
@@ -2045,6 +2395,23 @@ export class Game {
           if (snapshot) this.skillAutoRemovalEnds.set(id, snapshot.end);
         });
       }
+      if (resolution.appliance === 'washer') {
+        this.pendingWasherFlingRemovals = [];
+        this.washerFlingHistory = [];
+        const snapshotEnds = availableCableEnds(this.arrows);
+        resolution.targetCableIds.forEach((id) => {
+          const snapshot = snapshotEnds.find((candidate) => candidate.id === id);
+          if (snapshot) this.skillAutoRemovalEnds.set(id, snapshot.end);
+        });
+        return this.washerSpin.start({
+          cableRoot: this.arrowRoot,
+          camera: this.camera,
+          arrows: this.arrows,
+          models: this.models,
+          targetIds: resolution.targetCableIds,
+          onLaunch: (cableId, launch) => this.animateSkillAutoRemoval(cableId, true, launch),
+        });
+      }
       return this.skillPresentation.play(resolution, targets);
     }
     this.skillEffects.play(resolution.appliance, targets.map((target) => target.position));
@@ -2052,6 +2419,8 @@ export class Game {
       || resolution.appliance === 'toaster'
       || resolution.appliance === 'refrigerator'
       ? POWERED_ACTIVE_DURATION * 1_000
+      : resolution.appliance === 'printer'
+        ? 1_400
       : undefined;
   }
 
@@ -2063,12 +2432,17 @@ export class Game {
     for (const command of commands) {
       switch (command.type) {
         case 'auto-remove':
-          if (source !== 'robot-vacuum' && command.source !== 'robot-vacuum') {
+          if (
+            source !== 'robot-vacuum'
+            && command.source !== 'robot-vacuum'
+            && source !== 'washer'
+            && command.source !== 'washer'
+          ) {
             command.cableIds.forEach((id) => this.commitSkillAutoRemoval(id));
           }
           break;
         case 'recolor':
-          this.applySkillRecolors(command.changes);
+          if (source !== 'blender') this.applySkillRecolors(command.changes);
           break;
         case 'reconstruct':
           if (source === 'television') this.beginTelevisionReconstruction(command.cableIds, sourceTarget);
@@ -2143,11 +2517,12 @@ export class Game {
         const trial = remaining.map((entry) => (
           entry === arrow ? candidate : replacements.get(entry.definition.id) ?? entry.definition
         ));
-        const targetRuntime = makeRuntime(candidate);
         const trialRuntimes = trial.map(makeRuntime);
+        const targetRuntime = trialRuntimes.find((runtime) => runtime.definition.id === id);
         if (
-          skillTopologyDefinitionsAreCommitSafe(trial) &&
-          checkCableEndExit(targetRuntime, trialRuntimes, 'head').clear
+          targetRuntime
+          && skillTopologyDefinitionsAreCommitSafe(trial)
+          && checkCableEndExit(targetRuntime, trialRuntimes, 'head').clear
         ) {
           replacements.set(id, candidate);
           break;
@@ -2247,28 +2622,91 @@ export class Game {
     return true;
   }
 
-  private animateSkillAutoRemoval(cableId: string): boolean {
+  private animateSkillAutoRemoval(
+    cableId: string,
+    washerFling = false,
+    washerLaunch?: Readonly<{ directionWorld: THREE.Vector3; bundleCenterWorld: THREE.Vector3 }>,
+    followNormalPull = false,
+  ): boolean {
     const arrow = this.arrows.find((candidate) => candidate.definition.id === cableId && candidate.state === 'idle');
     const model = this.models.get(cableId);
     if (!arrow || !model) return false;
-    const end = this.skillAutoRemovalEnds.get(cableId);
-    if (!end) return false;
+    const end = this.skillAutoRemovalEnds.get(cableId) ?? 'head';
     arrow.state = 'moving';
     model.setAvailableEnds([]);
+
+    let originPosition: THREE.Vector3 | undefined;
+    let originQuaternion: THREE.Quaternion | undefined;
+    let originScale: THREE.Vector3 | undefined;
+    if (washerFling) {
+      model.root.updateWorldMatrix(true, false);
+      originPosition = model.root.getWorldPosition(new THREE.Vector3());
+      originQuaternion = model.root.getWorldQuaternion(new THREE.Quaternion());
+      originScale = model.root.getWorldScale(new THREE.Vector3());
+      this.scene.attach(model.root);
+      model.root.position.copy(originPosition);
+      model.root.quaternion.copy(originQuaternion);
+      model.root.scale.copy(originScale);
+    }
+
     this.animations.push({
       arrow,
       model,
-      kind: 'exit',
+      kind: washerFling ? 'skill-fling' : 'exit',
       target: null,
       queueAfterExit: false,
       elapsed: 0,
       wallClockStartedAtSeconds: null,
-      duration: Math.min(0.62, 0.4 + model.pathLength * 0.025),
-      direction: DIRECTION_VECTORS[cableEndDirection(arrow.definition, end)].clone(),
+      duration: washerFling
+        ? 2.35
+        : followNormalPull
+          ? Math.min(1.5, 0.66 + model.pathLength * 0.065)
+          : Math.min(0.62, 0.4 + model.pathLength * 0.025),
+      direction: washerFling
+        ? washerLaunch?.directionWorld.clone().normalize() ?? new THREE.Vector3(1, 0, 0)
+        : DIRECTION_VECTORS[cableEndDirection(arrow.definition, end)].clone(),
       end,
       autoCommitted: true,
+      originPosition,
+      originQuaternion,
+      originScale,
+      bundleCenterWorld: washerFling ? washerLaunch?.bundleCenterWorld.clone() : undefined,
+      flightAngularVelocity: washerFling
+        ? this.getWasherFlightAngularVelocity(cableId)
+        : undefined,
     });
     return true;
+  }
+
+  private triggerPrinterCopyAutoRemoval(): void {
+    const context = this.createSkillContext();
+    const cableId = context.removalSequence[0] ?? context.availableCableIds[0];
+    if (!cableId) return;
+    const availableEnd = availableCableEnds(this.arrows).find((candidate) => candidate.id === cableId);
+    if (availableEnd) this.skillAutoRemovalEnds.set(cableId, availableEnd.end);
+    if (!this.animateSkillAutoRemoval(cableId, false, undefined, true)) return;
+    this.skillTransientScreenEffect = 'printer-scan';
+    this.pipeline.setSkillEffect('printer-scan');
+    this.skillUi.showCue(
+      '复印抽线',
+      'commit',
+      '正确线离开线组时，复印线立即跟随抽出；它不会连接家电。',
+      '打印机',
+    );
+    this.publishDiagnostics();
+  }
+
+  private getWasherFlightAngularVelocity(cableId: string): THREE.Vector3 {
+    let hash = 0;
+    for (let index = 0; index < cableId.length; index += 1) {
+      hash = (hash * 31 + cableId.charCodeAt(index)) >>> 0;
+    }
+    const sign = (hash & 1) === 0 ? 1 : -1;
+    return new THREE.Vector3(
+      sign * (3.4 + ((hash >>> 3) % 17) / 10),
+      -sign * (4.1 + ((hash >>> 8) % 19) / 10),
+      sign * (2.8 + ((hash >>> 13) % 23) / 10),
+    );
   }
 
   private handleSkillCardSelected(index: number): void {
@@ -2291,17 +2729,20 @@ export class Game {
       ? 'television-glitch'
       : resolution.appliance === 'toaster'
         ? 'toaster-heat'
+      : resolution.appliance === 'kettle'
+        ? 'kettle-thaw-heat'
       : resolution.appliance === 'printer'
         ? 'printer-scan'
         : 'none';
-    if (!this.isDedicatedSkillPresentation(resolution)) {
+    if (!this.isDedicatedSkillPresentation(resolution) && resolution.appliance !== 'popcorn-machine') {
       resolution.targetCableIds.forEach((id) => this.skillTransientHighlights.add(id));
     }
     const definition = APPLIANCE_SKILL_REGISTRY.get(resolution.appliance);
     this.skillUi.showCue(resolution.label, 'cue', definition?.description ?? '', '扭蛋技能选定');
-    this.queueSkillCommitCue();
+    this.queueSkillCommitCue('效果生效', resolution.appliance === 'blender' ? 4_680 : 220);
     this.beginFanSteamClear(resolution);
     this.beginHumidifierSteamReveal(resolution);
+    this.beginCoffeeSplash(resolution);
     this.applySkillCommands(resolution.commands, resolution.appliance);
     this.syncSkillState();
     if (this.skillEngine.state.phase === 'select-recycle-target') {
@@ -2312,6 +2753,8 @@ export class Game {
   }
 
   private beginSkillRecycleSelection(): void {
+    window.clearTimeout(this.skillRecycleSelectionTimer);
+    for (const model of this.models.values()) model.setRecycleSelectionState('none');
     this.skillUi.hideCards();
     this.skillUi.setRecycleSelection(true);
     this.setSkillInputLocked(true, true);
@@ -2320,18 +2763,24 @@ export class Game {
 
   private commitSkillRecycleSelection(arrow: ArrowRuntime): void {
     if (!this.skillEngine || this.skillEngine.state.phase !== 'select-recycle-target') return;
+    const model = this.models.get(arrow.definition.id);
+    this.setHovered(null);
+    model?.setRecycleSelectionState('selected');
     this.skillEngine.commitRecycleSelection(arrow.definition.id);
     this.skillUi.setRecycleSelection(false);
-    this.commitSkillAutoRemoval(arrow.definition.id);
-    this.finishSkillResolution(true);
+    this.setSkillInputLocked(true);
+    this.publishDiagnostics();
+    window.clearTimeout(this.skillRecycleSelectionTimer);
+    this.skillRecycleSelectionTimer = window.setTimeout(() => {
+      this.skillRecycleSelectionTimer = 0;
+      model?.setRecycleSelectionState('none');
+      this.commitSkillAutoRemoval(arrow.definition.id);
+      this.finishSkillResolution(true);
+    }, SKILL_RECYCLE_SELECTION_COMMIT_DELAY_MS);
   }
 
   private finishSkillResolution(topologyChanged: boolean, presentationDuration?: number): void {
     if (!this.skillEngine) return;
-    while (this.pendingSkillAutoRemoval.length > 0) {
-      const cableId = this.pendingSkillAutoRemoval.shift();
-      if (cableId) this.commitSkillAutoRemoval(cableId);
-    }
     this.syncSkillState();
     if (this.skillEngine.state.phase === 'failed') {
       this.randomGameOver = true;
@@ -2355,17 +2804,29 @@ export class Game {
         && presentation.autoRemovalOrder.length < presentation.targetCount;
       const exitsPending = presentation.skillId === 'snapshot-sweep'
         && this.animations.some((animation) => animation.autoCommitted);
-      if (sequencePending || exitsPending) {
+      const washerPending = this.washerSpin.diagnostics.active
+        || this.animations.some((animation) => animation.autoCommitted);
+      const kettlePending = this.kettleThaw.diagnostics.active;
+      const coffeePending = this.skillEngine.state.debuff?.id === 'coffee-lock'
+        && this.skillEngine.state.debuff.turnsRemaining === 0
+        && (this.coffeeLockExitTarget?.activeTimeRemaining ?? 0) > 0;
+      if (sequencePending || exitsPending || washerPending || kettlePending || coffeePending) {
         this.skillSettleTimer = window.setTimeout(settleWhenReady, 100);
         return;
       }
+      this.commitPendingWasherFlingRemovals();
       const remaining = this.arrows.length - this.removedCount;
       this.skillTransientHighlights.clear();
+      this.kettleThaw.reset();
       this.skillTransientScreenEffect = 'none';
       this.skillPresentation.complete();
+      this.skillEngine.clearExhaustedCoffeeLock();
+      this.coffeeLockExitTarget = null;
       this.skillEngine.settle();
       this.syncSkillState();
       this.setSkillInputLocked(false);
+      this.syncRequiredColors();
+      this.applianceRoutingRevision = this.appliances.routingRevision;
       this.refreshAvailability(false);
       if (remaining === 0 && this.connections.activeCount === 0) {
         this.hud.showComplete();
@@ -2383,9 +2844,28 @@ export class Game {
   private syncSkillState(): void {
     if (!this.skillEngine) return;
     this.randomLives = this.skillEngine.state.currentLives;
-    this.hud.setRandomLives(!this.activeSkillTest, this.randomLives, this.skillEngine.state.maxLives);
+    this.hud.setRandomLives(
+      !this.activeSkillTest || this.activeSkillTest.id === 'popcorn-machine',
+      this.randomLives,
+      this.skillEngine.state.maxLives,
+    );
     this.skillUi.render(this.skillEngine.state);
     this.syncSkillPresentation();
+  }
+
+  private getPortableSpeakerSpacingTargets(): PortableSpeakerSpacingTarget[] {
+    return this.arrows
+      .filter((arrow) => arrow.state === 'idle' || arrow.state === 'bumping')
+      .map((arrow): PortableSpeakerSpacingTarget | null => {
+        const model = this.models.get(arrow.definition.id);
+        if (!model?.root.visible) return null;
+        return {
+          id: arrow.definition.id,
+          center: model.getBundleBaseCenter(),
+          setOffset: (offset) => model.setBundleSpacingOffset(offset),
+        };
+      })
+      .filter((target): target is PortableSpeakerSpacingTarget => target !== null);
   }
 
   private syncSkillPresentation(): void {
@@ -2397,36 +2877,123 @@ export class Game {
     const glowHighlighted = new Set<string>([
       ...this.skillTransientHighlights,
       ...(state.lampHintCableId ? [state.lampHintCableId] : []),
-      ...(state.popcornHintCableId ? [state.popcornHintCableId] : []),
       ...(state.debuff?.id === 'overheated-plug' ? state.debuff.targetCableIds : []),
     ]);
     const revealAll = state.buff?.id === 'induction-reveal';
+    const inductionCableIds = new Set(
+      revealAll ? this.availableChoices.map(({ arrow }) => arrow.definition.id) : [],
+    );
     const screenEffect: SkillScreenEffect = this.skillTransientScreenEffect !== 'none'
       ? this.skillTransientScreenEffect
-      : state.debuff?.id === 'bathroom-steam'
+      : state.debuff?.id === 'bathroom-steam' && this.activeSkillTest?.id !== 'alarm-clock'
         ? 'bathroom-steam'
         : state.debuff?.id === 'coffee-lock'
           ? 'coffee-lock'
-          : state.buff?.id === 'iridescent-bubble'
-            ? 'iridescent-bubble'
-            : 'none';
+          : 'none';
     this.pipeline.setSkillEffect(screenEffect);
+    if (screenEffect === 'coffee-lock') {
+      const turns = state.debuff?.id === 'coffee-lock' ? state.debuff.turnsRemaining ?? 0 : 0;
+      this.pipeline.setSkillEffectProgress(turns / 4);
+    }
     const cablePositions = new Map<string, THREE.Vector3>();
-    for (const [id, model] of this.models) cablePositions.set(id, model.getHeadWorldPosition());
+    const cableOrientations = new Map<string, THREE.Quaternion>();
+    for (const [id, model] of this.models) {
+      cablePositions.set(id, model.getHeadWorldPosition());
+      cableOrientations.set(id, model.getHeadWorldQuaternion());
+    }
     const availablePositions = this.availableChoices
       .map(({ arrow, end }) => this.models.get(arrow.definition.id)?.getHeadWorldPosition(new THREE.Vector3(), end))
       .filter((position): position is THREE.Vector3 => Boolean(position));
+    const hintPositions = new Map<string, THREE.Vector3>();
+    const hintOrientations = new Map<string, THREE.Quaternion>();
+    this.availableChoices.forEach(({ arrow, end }) => {
+      const model = this.models.get(arrow.definition.id);
+      if (!model) return;
+      hintPositions.set(arrow.definition.id, model.getHeadWorldPosition(new THREE.Vector3(), end));
+      hintOrientations.set(arrow.definition.id, model.getHeadWorldQuaternion(new THREE.Quaternion(), end));
+    });
     this.skillEffects.root.visible = this.currentMode === 'skill' && !this.openingActive;
     this.skillPresentation.root.visible = (this.currentMode === 'skill' || this.skillEvidenceVisible) && !this.openingActive;
-    this.skillEffects.syncPersistent(state, cablePositions, availablePositions);
+    this.skillEffects.syncPersistent(
+      state,
+      cablePositions,
+      cableOrientations,
+      availablePositions,
+      hintPositions,
+      hintOrientations,
+    );
+    const bubbleShieldTargets = this.arrows
+      .filter((arrow) => arrow.state !== 'removed')
+      .map((arrow) => this.models.get(arrow.definition.id)?.root)
+      .filter((root): root is THREE.Group => Boolean(root?.visible));
+    this.bubbleShield.sync(
+      this.currentMode === 'skill'
+        && !this.openingActive
+        && state.buff?.id === 'iridescent-bubble',
+      bubbleShieldTargets,
+    );
+    this.soundWaveShield.sync(
+      this.currentMode === 'skill'
+        && !this.openingActive
+        && state.buff?.id === 'soothing-record',
+      bubbleShieldTargets,
+    );
+    const dehumidifier = this.appliances.targets.find((target) => (
+      target.kind === 'dehumidifier' && target.root.visible
+    ));
+    this.dehumidifierDryShield.sync(
+      this.currentMode === 'skill'
+        && !this.openingActive
+        && state.buff?.id === 'dry-shield',
+      state.buff?.id === 'dry-shield' ? state.buff.turnsRemaining : null,
+      bubbleShieldTargets,
+      dehumidifier?.root.getWorldPosition(new THREE.Vector3()),
+    );
+    this.portableSpeakerSpacing.sync(
+      this.currentMode === 'skill'
+        && !this.openingActive
+        && state.buff?.id === 'bass-spacing',
+      this.getPortableSpeakerSpacingTargets(),
+    );
+    this.petals.setCanopyFlow(this.dehumidifierDryShield.petalFlow);
     this.skillPresentation.syncRiceStatus(state.debuff?.id ?? null);
+    const microwaveTurns = state.debuff?.id === 'overheated-plug'
+      ? state.debuff.turnsRemaining ?? 2
+      : 2;
+    const overheatedCableIds = new Set(
+      state.debuff?.id === 'overheated-plug' ? state.debuff.targetCableIds : [],
+    );
     for (const [id, model] of this.models) {
       model.setFakeTailPlug(fakeIds.has(id));
-      if (state.debuff?.id === 'coffee-lock') model.setSkillTint(0x4f2b23, 0.78);
-      else if (state.debuff?.id === 'rice-thick-cable') model.setSkillTint(0xf6e3a1, 0.28);
-      else model.setSkillTint(null);
+      model.setOverheated(overheatedCableIds.has(id), microwaveTurns);
+      model.setInductionReveal(inductionCableIds.has(id));
+      if (state.debuff?.id === 'coffee-lock') {
+        model.setSkillTint(null);
+      }
+      else {
+        model.clearCoffeeStain();
+        if (state.debuff?.id === 'rice-thick-cable') model.setSkillTint(0xf6e3a1, 0.28);
+        else model.setSkillTint(null);
+      }
 
-      model.setSkillGlow(glowHighlighted.has(id) || revealAll ? 0.86 : 0);
+      const colorShufflePreview = this.skillColorShufflePreview.get(id);
+      if (colorShufflePreview) {
+        model.setSkillTint(
+          colorShufflePreview.color,
+          colorShufflePreview.strength,
+          colorShufflePreview.emissionScale,
+        );
+      }
+
+      model.setSkillGlow(
+        overheatedCableIds.has(id)
+          ? 0.42
+          : glowHighlighted.has(id)
+            ? 0.86
+            : inductionCableIds.has(id)
+              ? 0.18
+            : 0,
+      );
       const lampGuideEnd = state.lampHintCableId === id
         ? this.availableChoices.find(({ arrow }) => arrow.definition.id === id)?.end ?? 'head'
         : null;
@@ -2463,7 +3030,9 @@ export class Game {
       || this.randomGameOver
       || (this.currentMode === 'rush' && this.rushRound?.phase !== 'running')
       || this.doubleEndedUi.briefingVisible
-      || (this.currentMode === 'skill' && this.skillInputLocked)
+      || (this.currentMode === 'skill'
+        && this.skillInputLocked
+        && this.skillEngine?.state.phase !== 'select-recycle-target')
     ) {
       this.setHovered(null);
       return;
@@ -2480,10 +3049,14 @@ export class Game {
     this.raycaster.setFromCamera(this.pointer, this.camera);
 
     const targets: THREE.Mesh[] = [];
+    const recycleSelectionActive = this.currentMode === 'skill'
+      && this.skillEngine?.state.phase === 'select-recycle-target';
     for (const arrow of this.arrows) {
       if (
         arrow.state !== 'idle'
-        || (this.currentMode !== 'rush' && !this.appliances.canHandleColor(arrow.definition.color))
+        || (!recycleSelectionActive
+          && this.currentMode !== 'rush'
+          && !this.appliances.canHandleColor(arrow.definition.color))
       ) continue;
       const model = this.models.get(arrow.definition.id);
       if (model) targets.push(...model.pickMeshes);
@@ -2499,17 +3072,49 @@ export class Game {
 
   private setHovered(picked: { id: string; end: CableEnd } | null, force = false): void {
     if (!force && this.hoveredId === picked?.id && this.hoveredEnd === picked?.end) return;
-    if (this.hoveredId) this.models.get(this.hoveredId)?.setHovered(false);
+    const recycleSelectionActive = this.currentMode === 'skill'
+      && this.skillEngine?.state.phase === 'select-recycle-target';
+    if (this.hoveredId) {
+      const previousModel = this.models.get(this.hoveredId);
+      previousModel?.setHovered(false);
+      if (recycleSelectionActive) previousModel?.setRecycleSelectionState('none');
+    }
     this.hoveredId = picked?.id ?? null;
     this.hoveredEnd = picked?.end ?? null;
-    if (picked) this.models.get(picked.id)?.setHovered(true, picked.end, this.theme.snapshot.progress);
+    if (picked) {
+      const model = this.models.get(picked.id);
+      model?.setHovered(true, picked.end, this.theme.snapshot.progress);
+      if (recycleSelectionActive) model?.setRecycleSelectionState('hover');
+    }
+    const diagnostics = window.__THREE_GAME_DIAGNOSTICS__;
+    if (diagnostics) {
+      diagnostics.hoveredArrow = this.hoveredId;
+      diagnostics.hoveredCableEnd = this.hoveredEnd;
+      if (diagnostics.skill) {
+        for (const effect of diagnostics.skill.cableEffects) {
+          const model = this.models.get(effect.id);
+          if (model) Object.assign(effect, model.skillVisualState);
+        }
+      }
+    }
   }
 
   private update(delta: number, elapsed: number): void {
+    const openingWallDelta = this.lastOpeningFrameElapsed > 0
+      ? Math.min(5, Math.max(delta, elapsed - this.lastOpeningFrameElapsed))
+      : delta;
+    this.lastOpeningFrameElapsed = elapsed;
     this.theme.update(delta);
     const themeSnapshot = this.theme.snapshot;
+    this.season.update(delta, themeSnapshot.progress);
+    const seasonSnapshot = this.season.snapshot;
+    const seasonEnvironment = this.season.resolveEnvironment(themeSnapshot.progress);
     this.pipeline.setThemeProgress(themeSnapshot.progress);
     this.nightEnvironment.setThemeProgress(themeSnapshot.progress);
+    this.nightEnvironment.setSeasonEnvironment(seasonEnvironment);
+    this.sky.setSeasonWeights(seasonSnapshot.weights);
+    this.petals.setSeasonState(seasonSnapshot.weights, themeSnapshot.progress);
+    this.openingScene.setSeasonState(seasonSnapshot.weights, themeSnapshot.progress);
     this.nightEnvironment.setReducedMotion(themeSnapshot.reducedMotion);
     if (this.hoveredId && this.hoveredEnd) {
       this.models.get(this.hoveredId)?.setHovered(true, this.hoveredEnd, themeSnapshot.progress);
@@ -2531,12 +3136,19 @@ export class Game {
     this.orbit.update(delta);
     this.appliances.setOrbitState(this.orbit.getState());
     this.sky.update(this.camera.position, this.camera.quaternion, elapsed);
-    this.openingScene.update(delta, elapsed, this.camera);
-    this.updateOpeningCameraTransition(delta);
-    this.petals.update(delta);
+    this.openingScene.update(delta, elapsed, this.camera, openingWallDelta);
+    this.updateOpeningCameraTransition(openingWallDelta);
     this.skillEffects.update(delta, elapsed);
+    this.bubbleShield.update(delta, elapsed, this.orbit.getState());
+    this.soundWaveShield.update(delta, elapsed);
+    this.dehumidifierDryShield.update(delta, elapsed);
+    this.portableSpeakerSpacing.update(delta, this.getPortableSpeakerSpacingTargets());
+    this.petals.setCanopyFlow(this.dehumidifierDryShield.petalFlow);
+    this.petals.update(delta);
     this.televisionReconstruction.update(this.camera);
     this.toasterHeatSwap.update();
+    this.kettleThaw.update();
+    this.washerSpin.update(delta);
     this.refrigeratorFreeze.syncStatus(
       this.skillEngine?.state.debuff?.id === 'frozen-plug'
         ? this.skillEngine.state.debuff.targetCableIds
@@ -2556,6 +3168,8 @@ export class Game {
     );
     const refrigeratorTestPreview = this.activeSkillTest?.id === 'refrigerator';
     for (const [id, model] of this.models) {
+      model.updateRecycleSelection(elapsed);
+      model.updateOverheat(delta, elapsed);
       const frozen = this.refrigeratorFreeze.hasTarget(id);
       // The formal skill can run on large boards. Build the heavier ice shell
       // only for its actual targets; the dedicated test keeps all cables warm.
@@ -2565,10 +3179,16 @@ export class Game {
         frozen ? this.refrigeratorFreeze.cableProgress : 0,
       );
     }
+    this.updateCoffeeStain(delta, elapsed);
     const toasterHeatSwap = this.toasterHeatSwap.diagnostics;
     if (toasterHeatSwap.active) this.pipeline.setSkillEffect('toaster-heat');
     if (toasterHeatSwap.active) {
       this.pipeline.setSkillEffectProgress(toasterHeatSwap.screenProgress);
+    }
+    const kettleThaw = this.kettleThaw.diagnostics;
+    if (kettleThaw.phase !== 'idle') {
+      this.pipeline.setSkillEffect('kettle-thaw-heat');
+      this.pipeline.setSkillEffectProgress(kettleThaw.progress);
     }
     this.syncRadioRouteGuide();
     this.skillPresentation.update(elapsed);
@@ -2637,6 +3257,37 @@ export class Game {
         const prepare = progress < 0.14 ? Math.sin((progress / 0.14) * Math.PI) : 0;
         animation.model.setPrepare(prepare, animation.end);
         animation.model.setMotionDistance(easeOutCubic(progress) * travelDistance, animation.end);
+      } else if (animation.kind === 'skill-fling') {
+        const travelProgress = progress * (0.62 + progress * 0.38);
+        const travel = travelProgress * 36;
+        animation.model.root.position.copy(animation.originPosition ?? new THREE.Vector3())
+          .addScaledVector(animation.direction, travel);
+        animation.model.root.quaternion.copy(animation.originQuaternion ?? new THREE.Quaternion());
+        animation.model.root.scale.copy(animation.originScale ?? new THREE.Vector3(1, 1, 1));
+        // Each cable tumbles with its own three-axis angular velocity while
+        // its center of mass continues on the outward flight path.
+        const flightAngularVelocity = animation.flightAngularVelocity;
+        if (flightAngularVelocity) {
+          this.washerFlightEuler.set(
+            flightAngularVelocity.x * animation.elapsed,
+            flightAngularVelocity.y * animation.elapsed,
+            flightAngularVelocity.z * animation.elapsed,
+            'XYZ',
+          );
+          this.washerFlightQuaternion.setFromEuler(this.washerFlightEuler);
+          animation.model.root.quaternion.multiply(this.washerFlightQuaternion);
+        }
+        const worldPosition = animation.model.root.getWorldPosition(this.washerFlightWorldPosition);
+        const flightDistance = worldPosition.distanceTo(animation.originPosition ?? worldPosition);
+        const projected = this.washerFlightProjectedPosition.copy(worldPosition).project(this.camera);
+        animation.maxScreenRadius = Math.max(
+          animation.maxScreenRadius ?? 0,
+          Math.abs(projected.x),
+          Math.abs(projected.y),
+        );
+        animation.distanceMonotonic = (animation.distanceMonotonic ?? true)
+          && flightDistance + 0.0001 >= (animation.previousFlightDistance ?? 0);
+        animation.previousFlightDistance = flightDistance;
       } else {
         const pulse = Math.sin(progress * Math.PI);
         animation.model.setMotionDistance(pulse * 0.16, animation.end);
@@ -2646,14 +3297,29 @@ export class Game {
       if (progress < 1) continue;
       this.animations.splice(index, 1);
 
-      if (animation.kind === 'exit') {
+      if (animation.kind === 'exit' || animation.kind === 'skill-fling') {
         const start = (animation.end === 'head'
           ? animation.arrow.samplePoints[animation.arrow.samplePoints.length - 1]
           : animation.arrow.samplePoints[0])
           .clone()
           .addScaledVector(animation.direction, 1.9);
         animation.model.root.visible = false;
+        if (animation.kind === 'skill-fling') {
+          this.washerFlingHistory.push({
+            id: animation.arrow.definition.id,
+            maxScreenRadius: animation.maxScreenRadius ?? 0,
+            distanceMonotonic: animation.distanceMonotonic ?? true,
+          });
+        }
         if (animation.autoCommitted) {
+          if (animation.kind === 'skill-fling') {
+            // Keep the visual flight completion frame lightweight. Rule state,
+            // HUD, audio, routing, and availability are committed as one batch
+            // only after the drum has finished regrouping.
+            this.pendingWasherFlingRemovals.push(animation.arrow);
+            this.skillAutoRemovalEnds.delete(animation.arrow.definition.id);
+            continue;
+          }
           this.completeRemoval(animation.arrow, false);
           this.skillEngine?.notifyAutoRemoved(animation.arrow.definition.id);
           this.skillAutoRemovalEnds.delete(animation.arrow.definition.id);
@@ -2699,13 +3365,53 @@ export class Game {
     }
   }
 
-  private completeRemoval(arrow: ArrowRuntime, manualSkillRemoval = true): void {
+  private completeRemoval(
+    arrow: ArrowRuntime,
+    manualSkillRemoval = true,
+  ): void {
     arrow.state = 'removed';
     this.removedCount += 1;
     const remaining = this.arrows.length - this.removedCount;
     this.hud.updateProgress(remaining, this.arrows.length);
     this.hud.showRemoved(remaining);
     this.audio.playInteraction('cable-success');
+    this.syncRequiredColors();
+    if (this.currentMode === 'rush') {
+      this.rushRound?.recordRemoval();
+      if (remaining === 0) this.finishRushSuccess();
+    }
+    if (this.currentMode === 'skill' && manualSkillRemoval) {
+      const triggerPrinterCopy = this.skillEngine?.commitManualRemoval(
+        arrow.definition.id,
+        remaining > 0,
+      ) ?? false;
+      if (triggerPrinterCopy) {
+        this.syncSkillState();
+        this.triggerPrinterCopyAutoRemoval();
+      }
+    }
+    this.refreshAvailability(false);
+  }
+
+  private commitPendingWasherFlingRemovals(): void {
+    if (this.pendingWasherFlingRemovals.length === 0) return;
+    const pending = this.pendingWasherFlingRemovals.splice(0);
+    let committed = 0;
+    for (const arrow of pending) {
+      if (arrow.state === 'removed') continue;
+      arrow.state = 'removed';
+      this.removedCount += 1;
+      committed += 1;
+      this.skillEngine?.notifyAutoRemoved(arrow.definition.id);
+    }
+    if (committed === 0) return;
+    const remaining = this.arrows.length - this.removedCount;
+    this.hud.updateProgress(remaining, this.arrows.length);
+    this.hud.showRemoved(remaining);
+    this.audio.playInteraction('cable-success');
+  }
+
+  private syncRequiredColors(): void {
     this.appliances.setRequiredColors(
       this.currentMode === 'rush'
         ? []
@@ -2713,14 +3419,6 @@ export class Game {
           .filter((candidate) => candidate.state !== 'removed')
           .map((candidate) => candidate.definition.color),
     );
-    if (this.currentMode === 'rush') {
-      this.rushRound?.recordRemoval();
-      if (remaining === 0) this.finishRushSuccess();
-    }
-    if (this.currentMode === 'skill' && manualSkillRemoval) {
-      this.skillEngine?.commitManualRemoval(arrow.definition.id);
-    }
-    this.refreshAvailability(false);
   }
 
   private finishRushSuccess(): void {
@@ -2805,7 +3503,11 @@ export class Game {
     if (this.applianceGallery?.visible || this.contextUnavailable) return;
     this.pipeline.render();
     this.skillPresentation.render();
-    this.publishDiagnostics();
+    if (this.frame % DIAGNOSTICS_PUBLISH_INTERVAL_FRAMES === 0) {
+      this.publishDiagnostics();
+    } else {
+      this.publishLiveDiagnostics();
+    }
   }
 
   private resize(): void {
@@ -2946,9 +3648,66 @@ export class Game {
     return results;
   }
 
+  private publishLiveDiagnostics(): void {
+    const diagnostics = window.__THREE_GAME_DIAGNOSTICS__;
+    if (!diagnostics) {
+      this.publishDiagnostics();
+      return;
+    }
+    diagnostics.frame = this.frame;
+    diagnostics.activeAnimations = this.animations.length
+      + this.pendingApplianceConnections.length
+      + this.connections.activeCount;
+    diagnostics.activeConnections = this.connections.activeCount;
+    diagnostics.activeBurstPetals = this.petals.activeBurstCount;
+    diagnostics.queuedConnections = this.pendingApplianceConnections.length;
+    diagnostics.remainingArrows = this.arrows.length - this.removedCount;
+    diagnostics.appliances = this.appliances.getStateSummary();
+    if (diagnostics.skill && this.skillEngine) {
+      diagnostics.skill.phase = this.skillEngine.state.phase;
+      diagnostics.skill.inputLocked = this.skillInputLocked;
+      diagnostics.skill.presentation = this.skillPresentation.diagnostics;
+      diagnostics.skill.washerSpin = this.washerSpin.diagnostics;
+      diagnostics.skill.screenEffect = this.pipeline.skillEffectState;
+      if (
+        this.skillRecycleSelectionTimer !== 0
+        || this.skillEngine.state.buff?.id === 'induction-reveal'
+        || this.skillEngine.state.debuff?.id === 'overheated-plug'
+        || this.skillPresentation.diagnostics.skillId === 'color-shuffle'
+      ) {
+        for (const effect of diagnostics.skill.cableEffects) {
+          const model = this.models.get(effect.id);
+          if (model) Object.assign(effect, model.skillVisualState);
+        }
+      }
+    }
+  }
+
   private publishDiagnostics(): void {
     const info = this.renderer.info;
     const activeAnimation = this.animations[0];
+    const activeFlingMotions = this.animations
+      .filter((animation) => animation.kind === 'skill-fling')
+      .map((animation) => {
+        const worldPosition = animation.model.root.getWorldPosition(new THREE.Vector3());
+        const projected = worldPosition.clone().project(this.camera);
+        return {
+          id: animation.arrow.definition.id,
+          progress: Math.min(1, animation.elapsed / animation.duration),
+          worldPosition: worldPosition.toArray(),
+          worldDistanceFromLaunch: worldPosition.distanceTo(
+            animation.originPosition ?? worldPosition,
+          ),
+          distanceFromBundleCenter: worldPosition.distanceTo(
+            animation.bundleCenterWorld ?? worldPosition,
+          ),
+          angularVelocity: animation.flightAngularVelocity?.toArray() ?? [],
+          direction: animation.direction.toArray(),
+          screenX: projected.x,
+          screenY: projected.y,
+          detachedFromCableRoot: animation.model.root.parent !== this.arrowRoot,
+        };
+      });
     const lengthMix = this.arrows.reduce(
       (mix, arrow) => {
         mix[arrow.definition.lengthClass] += 1;
@@ -2983,13 +3742,25 @@ export class Game {
             lives: this.skillEngine.state.currentLives,
             maxLives: this.skillEngine.state.maxLives,
             buff: this.skillEngine.state.buff?.id ?? null,
+            buffTurnsRemaining: this.skillEngine.state.buff?.turnsRemaining ?? null,
             debuff: this.skillEngine.state.debuff?.id ?? null,
+            debuffTurnsRemaining: this.skillEngine.state.debuff?.turnsRemaining ?? null,
+            remainingCableIds: this.arrows.filter((arrow) => arrow.state !== 'removed').map((arrow) => arrow.definition.id),
             lampHintCableId: this.skillEngine.state.lampHintCableId,
+            popcornHintCableId: this.skillEngine.state.popcornHintCableId,
             cableEffects: [...this.models].map(([id, model]) => ({
               id,
               ...model.skillVisualState,
             })),
             effectAssets: this.skillEffects.activeAssetIds,
+            popcornTransientCount: this.skillEffects.popcornTransientCount,
+            microwaveMarkers: this.skillEffects.microwaveMarkerDiagnostics,
+            popcornMarkers: this.skillEffects.popcornMarkerDiagnostics,
+            bubbleShield: this.bubbleShield.diagnostics,
+            soundWaveShield: this.soundWaveShield.diagnostics,
+            dehumidifierDryShield: this.dehumidifierDryShield.diagnostics,
+            portableSpeakerSpacing: this.portableSpeakerSpacing.diagnostics,
+            dehumidifierCanopyPetals: this.petals.canopyFlowState,
             steamReveal: this.pipeline.steamRevealState,
             steamClear: this.pipeline.steamClearState,
             printerCopyReady: this.skillEngine.state.printerCopyReady,
@@ -2998,6 +3769,8 @@ export class Game {
             televisionReconstruction: this.televisionReconstruction.diagnostics,
             toasterHeatSwap: this.toasterHeatSwap.diagnostics,
             refrigeratorFreeze: this.refrigeratorFreeze.diagnostics,
+            kettleThaw: this.kettleThaw.diagnostics,
+            washerSpin: this.washerSpin.diagnostics,
             refrigeratorScreenIce: this.refrigeratorScreenIce.diagnostics,
             coldParticles: this.petals.coldState,
             screenEffect: this.pipeline.skillEffectState,
@@ -3052,6 +3825,8 @@ export class Game {
         + this.connections.activeCount,
       queuedConnections: this.pendingApplianceConnections.length,
       activeConnections: this.connections.activeCount,
+      activeFlingMotions,
+      completedFlingMotions: this.washerFlingHistory.map((entry) => ({ ...entry })),
       activeMotion: activeAnimation
         ? {
             id: activeAnimation.arrow.definition.id,
@@ -3070,8 +3845,14 @@ export class Game {
       performances: this.performances.getStateSummary(),
       sensory: this.sensory.getDiagnostics(),
       theme: {
+        season: this.season.snapshot,
+        seasonParticles: this.petals.seasonState,
         ...this.theme.snapshot,
         stars: this.sky.stars.geometry.drawRange.count,
+        explorationEyes: {
+          pairs: this.sky.explorationEyes.geometry.drawRange.count,
+          progress: Number((this.sky.explorationEyes.material as THREE.ShaderMaterial).uniforms.uProgress.value),
+        },
         lantern: this.nightEnvironment.lantern,
         quality: this.adaptiveQuality.getDiagnostics(),
       },

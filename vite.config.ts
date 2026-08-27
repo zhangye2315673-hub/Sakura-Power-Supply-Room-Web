@@ -17,6 +17,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         game: fileURLToPath(new URL('./index.html', import.meta.url)),
+        gachaCardPreview: fileURLToPath(new URL('./gacha-card-preview.html', import.meta.url)),
         modelReview: fileURLToPath(new URL('./model-review.html', import.meta.url)),
         skillPresentationReview: fileURLToPath(new URL('./skill-presentation-review.html', import.meta.url)),
       },

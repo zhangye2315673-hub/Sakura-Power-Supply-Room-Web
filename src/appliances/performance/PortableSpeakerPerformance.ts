@@ -1,15 +1,16 @@
 import * as THREE from 'three';
 
 export const PORTABLE_SPEAKER_TIMELINE_OWNER = 'AppliancePerformanceSystem';
+export const PORTABLE_SPEAKER_ACTIVE_DURATION = 5.45;
 
-type BassBeat = {
+export type PortableSpeakerBassBeat = {
   time: number;
   strength: number;
   waveSlot: number;
   section: 'groove' | 'build' | 'climax' | 'final';
 };
 
-const BASS_BEATS: readonly BassBeat[] = [
+export const PORTABLE_SPEAKER_BASS_BEATS: readonly PortableSpeakerBassBeat[] = [
   // Tighter spacing gives the speaker a quicker groove while retaining a
   // longer run of overlapping pulses through the climax.
   { time: 0.38, strength: 0.44, waveSlot: 1, section: 'groove' },
@@ -33,7 +34,7 @@ export type PortableSpeakerPerformanceDiagnostics = {
   wholeMachineNode: 'portable-speaker-whole-machine-pivot';
   driverNode: 'portable-speaker-driver-pulse-pivot';
   beatCount: number;
-  activeBeatSection: BassBeat['section'] | null;
+  activeBeatSection: PortableSpeakerBassBeat['section'] | null;
   bodyCompression: number;
   bodyExpansion: number;
   driverTravel: number;
@@ -124,9 +125,9 @@ export function applyPortableSpeakerPerformance(
   let expansion = 0;
   let rebound = 0;
   let dominantStrength = 0;
-  let activeSection: BassBeat['section'] | null = null;
+  let activeSection: PortableSpeakerBassBeat['section'] | null = null;
 
-  BASS_BEATS.forEach((beat) => {
+  PORTABLE_SPEAKER_BASS_BEATS.forEach((beat) => {
     const squeeze = pulse(time, beat.time - 0.105, beat.time, beat.time + 0.042) * beat.strength;
     const blast = pulse(time, beat.time + 0.018, beat.time + 0.098, beat.time + 0.205) * beat.strength;
     const settleAge = time - (beat.time + 0.13);
@@ -225,7 +226,7 @@ export function applyPortableSpeakerPerformance(
 
   if (waveRoot) waveRoot.position.y += finalLift + landingSettle * 0.018;
   let activeWaveCount = 0;
-  BASS_BEATS.forEach((beat) => {
+  PORTABLE_SPEAKER_BASS_BEATS.forEach((beat) => {
     const wave = root.getObjectByName(`portable-speaker-bass-wave-ring-${beat.waveSlot}`) as THREE.Mesh | null;
     if (!wave) return;
     const age = time - (beat.time + 0.035);
@@ -261,7 +262,7 @@ export function applyPortableSpeakerPerformance(
     timeline: time,
     wholeMachineNode: 'portable-speaker-whole-machine-pivot',
     driverNode: 'portable-speaker-driver-pulse-pivot',
-    beatCount: BASS_BEATS.filter((beat) => time >= beat.time).length,
+    beatCount: PORTABLE_SPEAKER_BASS_BEATS.filter((beat) => time >= beat.time).length,
     activeBeatSection: activeSection,
     bodyCompression: compression,
     bodyExpansion: expansion,

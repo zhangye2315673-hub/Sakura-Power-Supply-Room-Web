@@ -19,6 +19,7 @@ export type SkillStatusId =
   | 'soothing-record'
   | 'continue'
   | 'induction-reveal'
+  | 'bass-spacing'
   | 'bathroom-steam'
   | 'frozen-plug'
   | 'coffee-lock'
@@ -135,6 +136,7 @@ type ManualTransaction = {
   appliance: ApplianceKind;
   coffeeBlocked: boolean;
   preexistingPrinterCopy: boolean;
+  printerCopyConsumedOnExit: boolean;
   microwavePendingDecrement: boolean;
 };
 
@@ -338,7 +340,7 @@ const APPLIANCE_SKILL_DEFINITIONS: readonly ApplianceSkillDefinition[] = [
       { type: 'clear-status', slot: 'debuff', reason: 'kettle' },
     ]),
     (ctx) => hasDebuff(ctx, 'frozen-plug') ? 'normal-benefit' : null),
-  basicDefinition('coffee-maker', 'coffee-lock', '咖啡封技', '遮蔽线色并封锁后续四次家电技能。', 'negative', 'debuff',
+  basicDefinition('coffee-maker', 'coffee-lock', '咖啡封技', '咖啡覆盖线色，并封锁后续四次家电技能；连接与普通动画照常。', 'negative', 'debuff',
     (ctx) => noDebuff(ctx) && ctx.remainingCables.length > 0,
     (ctx) => resolution({ id: 'coffee-lock', appliance: 'coffee-maker', label: '咖啡封技' }, [{
       type: 'set-status', slot: 'debuff', status: status('coffee-lock', 'coffee-maker', 4, [], ctx.state.skillEventIndex),
@@ -398,7 +400,7 @@ const APPLIANCE_SKILL_DEFINITIONS: readonly ApplianceSkillDefinition[] = [
     (ctx) => timed(ctx.state.debuff) && !timed(ctx.state.buff)
       ? 'normal-benefit'
       : timed(ctx.state.buff) || timed(ctx.state.debuff) ? 'normal-risk' : null),
-  basicDefinition('popcorn-machine', 'popcorn-meal', '爆米花加餐与出口提示', '增加生命上限并标记一个出口。', 'positive', null,
+  basicDefinition('popcorn-machine', 'popcorn-meal', '爆米花加餐与出口提示', '生命上限 +1，并用跳动爆米花标记一个当前可抽插头。', 'positive', null,
     (ctx) => ctx.remainingCables.length > 0,
     (ctx, rng) => {
       const target = rng.pick(available(ctx));
@@ -406,7 +408,7 @@ const APPLIANCE_SKILL_DEFINITIONS: readonly ApplianceSkillDefinition[] = [
       if (target) commands.push({ type: 'set-hint', source: 'popcorn', cableId: target.id });
       return resolution({ id: 'popcorn-meal', appliance: 'popcorn-machine', label: '爆米花加餐与出口提示' }, commands, target ? [target.id] : []);
     }, (ctx) => ctx.remainingCables.length > 0 ? 'strong-benefit' : null),
-  basicDefinition('stand-mixer', 'normalize-statuses', '搅拌均匀', '把仍存在的限回合状态统一设为两回合。', 'mixed', null,
+  basicDefinition('stand-mixer', 'normalize-statuses', '搅拌均匀', '先正常推进 1 回合，再把仍存在的限回合 BUFF／DEBUFF 统一整理为 2 回合。', 'mixed', null,
     (ctx) => timed(ctx.state.buff) || timed(ctx.state.debuff),
     () => resolution({ id: 'normalize-statuses', appliance: 'stand-mixer', label: '搅拌均匀' }, [
       { type: 'normalize-timed-statuses', turns: 2 },
@@ -424,7 +426,7 @@ const APPLIANCE_SKILL_DEFINITIONS: readonly ApplianceSkillDefinition[] = [
       { type: 'grant-continue' },
     ]),
     (ctx) => noBuff(ctx) || ctx.state.buff?.id === 'continue' || ctx.state.reviveUsedThisChallenge ? 'strong-benefit' : null),
-  basicDefinition('microwave', 'timed-meal', '限时取餐', '标记一根真实出口并给出两次处理机会。', 'negative', 'debuff',
+  basicDefinition('microwave', 'timed-meal', '限时取餐', '随机高亮一根当前可拔的线；必须在接下来两次成功拔线内拔出它，否则失去一格生命。', 'negative', 'debuff',
     (ctx) => noDebuff(ctx) && available(ctx).length > 0,
     (ctx, rng) => {
       const target = rng.pick(available(ctx))!;
@@ -444,14 +446,12 @@ const APPLIANCE_SKILL_DEFINITIONS: readonly ApplianceSkillDefinition[] = [
       type: 'set-status', slot: 'buff', status: status('induction-reveal', 'induction-cooktop', 3, [], ctx.state.skillEventIndex),
     }]),
     (ctx) => noBuff(ctx) && ctx.remainingCables.length > 0 ? 'normal-benefit' : null),
-  basicDefinition('portable-speaker', 'bass-expand', '低音扩圈', '把最多三根空间受阻线移动到可抽外圈。', 'positive', null,
-    (ctx) => ctx.remainingCables.some((cable) => !cable.available),
-    (ctx, rng) => {
-      const targets = rng.shuffle(ctx.remainingCables.filter((cable) => !cable.available).map((cable) => cable.id)).slice(0, 3);
-      return resolution({ id: 'bass-expand', appliance: 'portable-speaker', label: '低音扩圈' }, [
-        { type: 'expand', cableIds: targets },
-      ], targets, { topologyChanged: true });
-    }, (ctx) => ctx.remainingCables.some((cable) => !cable.available) ? 'strong-benefit' : null),
+  basicDefinition('portable-speaker', 'bass-spacing', '节拍扩距', '线组随音乐逐拍压缩、膨胀，最终保持 2 倍线间距 3 回合；只改变视觉间距，不改变可抽判定。', 'positive', 'buff',
+    (ctx) => noBuff(ctx) && ctx.remainingCables.length > 1,
+    (ctx) => resolution({ id: 'bass-spacing', appliance: 'portable-speaker', label: '节拍扩距' }, [{
+      type: 'set-status', slot: 'buff', status: status('bass-spacing', 'portable-speaker', 3, [], ctx.state.skillEventIndex),
+    }]),
+    (ctx) => noBuff(ctx) && ctx.remainingCables.length > 1 ? 'normal-benefit' : null),
   basicDefinition('smart-bin', 'recycle-cable', '指定回收', '直接选择并回收任意一根剩余线。', 'positive', null,
     (ctx) => ctx.remainingCables.length > 0,
     () => resolution({ id: 'recycle-cable', appliance: 'smart-bin', label: '指定回收' }, [
@@ -563,14 +563,15 @@ export class SkillChallengeEngine {
       appliance,
       coffeeBlocked: this.stateValue.debuff?.id === 'coffee-lock',
       preexistingPrinterCopy: this.stateValue.printerCopyReady,
+      printerCopyConsumedOnExit: false,
       microwavePendingDecrement: false,
     };
     this.stateValue.phase = 'manual-exit';
     return true;
   }
 
-  commitManualRemoval(cableId: string): void {
-    if (!this.transaction || this.transaction.cableId !== cableId) return;
+  commitManualRemoval(cableId: string, hasRemainingCables = true): boolean {
+    if (!this.transaction || this.transaction.cableId !== cableId) return false;
     if (this.stateValue.debuff?.id === 'overheated-plug') {
       if (this.stateValue.debuff.targetCableIds.includes(cableId)) {
         this.stateValue.debuff = null;
@@ -580,7 +581,13 @@ export class SkillChallengeEngine {
     }
     this.removeCableReferences(cableId);
     this.advanceExistingTurnStates(1, true);
+    const consumePrinterCopy = this.transaction.preexistingPrinterCopy && hasRemainingCables;
+    if (consumePrinterCopy) {
+      this.stateValue.printerCopyReady = false;
+      this.transaction.printerCopyConsumedOnExit = true;
+    }
     this.stateValue.phase = 'connecting';
+    return consumePrinterCopy;
   }
 
   resolveConnected(context: SkillContext, isLastCable: boolean): {
@@ -592,7 +599,9 @@ export class SkillChallengeEngine {
     const transaction = this.transaction;
     this.stateValue.phase = 'skill-cue';
     let resolved: SkillResolution | null = null;
-    if (!isLastCable && !transaction.coffeeBlocked) {
+    const printerAlreadyCopiedThisPull = transaction.appliance === 'printer'
+      && transaction.preexistingPrinterCopy;
+    if (!isLastCable && !transaction.coffeeBlocked && !printerAlreadyCopiedThisPull) {
       const definition = APPLIANCE_SKILL_REGISTRY.get(transaction.appliance);
       if (definition?.canTrigger(context)) {
         const rng = new DeterministicRng(this.derivedSeed(this.stateValue.skillEventIndex));
@@ -609,8 +618,7 @@ export class SkillChallengeEngine {
     if (transaction.microwavePendingDecrement && this.stateValue.debuff?.id === 'overheated-plug') {
       this.advanceMicrowave(1);
     }
-    const consumePrinterCopy = transaction.preexistingPrinterCopy && context.remainingCables.length > 0;
-    if (consumePrinterCopy) this.stateValue.printerCopyReady = false;
+    const consumePrinterCopy = transaction.printerCopyConsumedOnExit;
     if (this.stateValue.currentLives === 0) {
       // Damage is committed before presentation settles. Never let the
       // presentation phase overwrite a terminal rules result.
@@ -647,6 +655,12 @@ export class SkillChallengeEngine {
   settle(): void {
     if (this.stateValue.phase === 'complete' || this.stateValue.phase === 'failed') return;
     this.stateValue.phase = 'idle';
+  }
+
+  clearExhaustedCoffeeLock(): void {
+    if (this.stateValue.debuff?.id === 'coffee-lock' && this.stateValue.debuff.turnsRemaining === 0) {
+      this.stateValue.debuff = null;
+    }
   }
 
   notifyAutoRemoved(cableId: string): void {
@@ -794,6 +808,9 @@ export class SkillChallengeEngine {
   private advanceStatus(instance: StatusInstance | null, amount: number): StatusInstance | null {
     if (!instance || instance.turnsRemaining === null) return instance;
     const nextTurns = Math.max(0, instance.turnsRemaining - amount);
+    if (instance.id === 'coffee-lock' && nextTurns === 0) {
+      return { ...instance, turnsRemaining: 0 };
+    }
     return nextTurns === 0 ? null : { ...instance, turnsRemaining: nextTurns };
   }
 

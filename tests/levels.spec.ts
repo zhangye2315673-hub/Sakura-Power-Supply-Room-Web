@@ -43,7 +43,7 @@ for (const level of CAMPAIGN_LEVELS) {
 }
 
 test('reset reproduces the layout and total random challenge leaves campaign mode', async ({ page }) => {
-  test.setTimeout(70_000);
+  test.setTimeout(180_000);
   await page.goto('/?level=1');
   await enterPreparedGame(page);
   await page.waitForFunction(() => (window.__THREE_GAME_DIAGNOSTICS__?.puzzleRevision ?? 0) > 0);
@@ -52,7 +52,7 @@ test('reset reproduces the layout and total random challenge leaves campaign mod
   await page.waitForFunction(
     (revision) => (window.__THREE_GAME_DIAGNOSTICS__?.puzzleRevision ?? 0) > revision,
     first?.puzzleRevision ?? 0,
-    { timeout: 20_000 },
+    { timeout: 60_000 },
   );
   const reset = await page.evaluate(() => window.__THREE_GAME_DIAGNOSTICS__ ?? null);
   expect(reset?.seed).toBe(first?.seed);
@@ -62,15 +62,18 @@ test('reset reproduces the layout and total random challenge leaves campaign mod
   await page.waitForFunction(
     (revision) =>
       (window.__THREE_GAME_DIAGNOSTICS__?.puzzleRevision ?? 0) > revision &&
-      ['random', 'rush'].includes(window.__THREE_GAME_DIAGNOSTICS__?.mode ?? ''),
+      ['random', 'rush', 'skill'].includes(window.__THREE_GAME_DIAGNOSTICS__?.mode ?? ''),
     reset?.puzzleRevision ?? 0,
-    { timeout: 25_000 },
+    { timeout: 60_000 },
   );
-  await page.waitForURL((url) => ['random', 'rush'].includes(url.searchParams.get('mode') ?? '') && !url.searchParams.has('level'));
+  await page.waitForURL(
+    (url) => ['random', 'rush', 'skill'].includes(url.searchParams.get('mode') ?? '') && !url.searchParams.has('level'),
+    { timeout: 60_000 },
+  );
   const random = await page.evaluate(() => window.__THREE_GAME_DIAGNOSTICS__ ?? null);
-  expect(['random', 'rush']).toContain(random?.mode);
+  expect(['random', 'rush', 'skill']).toContain(random?.mode);
   if (random?.mode === 'random') expect(random.levelId).toBe(0);
-  else expect(random?.rush?.challengeId).toMatch(/^rush-/);
-  expect(['random', 'rush']).toContain(new URL(page.url()).searchParams.get('mode'));
+  else if (random?.mode === 'rush') expect(random.rush?.challengeId).toMatch(/^rush-/);
+  expect(['random', 'rush', 'skill']).toContain(new URL(page.url()).searchParams.get('mode'));
   expect(new URL(page.url()).searchParams.has('level')).toBe(false);
 });

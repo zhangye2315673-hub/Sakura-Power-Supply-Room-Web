@@ -3,7 +3,7 @@ import * as THREE from 'three';
 const FREEZE_COMPLETE_TIME = 3.45;
 const ACTIVE_DURATION = 5.2;
 const PERSISTENT_ENVIRONMENT_AMOUNT = 0.86;
-const THAW_DURATION = 1.05;
+const DEFAULT_THAW_DURATION = 1.05;
 const MAX_VISUAL_FRAME_STEP = 0.2;
 
 export type RefrigeratorFreezePhase = 'idle' | 'freezing' | 'persistent' | 'thawing';
@@ -29,6 +29,9 @@ export class RefrigeratorFreezePresentation {
   private environmentAmountValue = 0;
   private cableAmountValue = 0;
   private cableProgressValue = 0;
+  private thawDurationValue = DEFAULT_THAW_DURATION;
+  private thawTimelineOrigin = 0;
+  private getThawTimelineElapsed: (() => number) | null = null;
   private readonly targetCableIdsValue = new Set<string>();
 
   activate(cableIds: readonly string[]): void {
@@ -40,6 +43,19 @@ export class RefrigeratorFreezePresentation {
     this.environmentAmountValue = 0;
     this.cableAmountValue = this.targetCableIdsValue.size > 0 ? 1 : 0;
     this.cableProgressValue = 0;
+    this.thawDurationValue = DEFAULT_THAW_DURATION;
+    this.thawTimelineOrigin = 0;
+    this.getThawTimelineElapsed = null;
+  }
+
+  beginThaw(duration = DEFAULT_THAW_DURATION, getTimelineElapsed?: () => number): void {
+    if (this.targetCableIdsValue.size === 0) return;
+    this.phaseValue = 'thawing';
+    this.elapsedValue = 0;
+    this.lastUpdateAt = performance.now() * 0.001;
+    this.thawDurationValue = Math.max(0.001, duration);
+    this.getThawTimelineElapsed = getTimelineElapsed ?? null;
+    this.thawTimelineOrigin = Math.max(0, this.getThawTimelineElapsed?.() ?? 0);
   }
 
   syncStatus(cableIds: readonly string[]): void {
@@ -54,9 +70,7 @@ export class RefrigeratorFreezePresentation {
       return;
     }
     if (this.targetCableIdsValue.size > 0 && this.phaseValue !== 'thawing') {
-      this.phaseValue = 'thawing';
-      this.elapsedValue = 0;
-      this.lastUpdateAt = performance.now() * 0.001;
+      this.beginThaw();
     }
   }
 
@@ -103,12 +117,15 @@ export class RefrigeratorFreezePresentation {
       return;
     }
     if (this.phaseValue === 'thawing') {
-      this.elapsedValue = Math.min(THAW_DURATION, this.elapsedValue + step);
-      const remaining = 1 - THREE.MathUtils.smoothstep(this.elapsedValue, 0, THAW_DURATION);
+      const timelineElapsed = this.getThawTimelineElapsed?.();
+      this.elapsedValue = Number.isFinite(timelineElapsed)
+        ? Math.min(this.thawDurationValue, Math.max(0, (timelineElapsed ?? 0) - this.thawTimelineOrigin))
+        : Math.min(this.thawDurationValue, this.elapsedValue + step);
+      const remaining = 1 - THREE.MathUtils.smoothstep(this.elapsedValue, 0, this.thawDurationValue);
       this.environmentAmountValue = PERSISTENT_ENVIRONMENT_AMOUNT * remaining;
       this.cableAmountValue = remaining;
       this.cableProgressValue = 1;
-      if (this.elapsedValue >= THAW_DURATION - 1e-6) this.reset();
+      if (this.elapsedValue >= this.thawDurationValue - 1e-6) this.reset();
     }
   }
 
@@ -119,6 +136,9 @@ export class RefrigeratorFreezePresentation {
     this.environmentAmountValue = 0;
     this.cableAmountValue = 0;
     this.cableProgressValue = 0;
+    this.thawDurationValue = DEFAULT_THAW_DURATION;
+    this.thawTimelineOrigin = 0;
+    this.getThawTimelineElapsed = null;
     this.targetCableIdsValue.clear();
   }
 

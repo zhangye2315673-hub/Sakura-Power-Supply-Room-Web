@@ -7,27 +7,24 @@ import type { SkillChallengeState } from './SkillChallengeEngine';
 
 export type SkillEffectAssetId =
   | 'humidifier-glass-wiper' | 'fan-airflow-ribbon'
-  | 'dehumidifier-shield-droplets' | 'hair-dryer-heat-ribbon'
+  | 'hair-dryer-heat-ribbon'
   | 'bubble-shell-wave-membrane' | 'radio-sequence-markers' | 'kettle-steam-ribbon'
-  | 'blender-energy-shards' | 'gacha-card-frame' | 'record-note-orb-ring'
-  | 'alarm-time-ring' | 'popcorn-heart-crown' | 'stand-mixer-status-token'
+  | 'blender-energy-shards' | 'gacha-card-frame'
+  | 'alarm-time-ring' | 'popcorn-target-marker'
   | 'controller-continue-token' | 'controller-impact-star' | 'microwave-double-heat-ring'
   | 'induction-heat-ring' | 'speaker-bass-wave-arcs';
 
 export const SKILL_EFFECT_ASSET_REFERENCES: Readonly<Record<SkillEffectAssetId, string>> = {
   'humidifier-glass-wiper': 'references/skill-effects/intake/humidifier-glass-wiper/reference.png',
   'fan-airflow-ribbon': 'references/skill-effects/intake/fan-airflow-ribbon/reference.png',
-  'dehumidifier-shield-droplets': 'references/skill-effects/intake/dehumidifier-shield-droplets/reference.png',
   'hair-dryer-heat-ribbon': 'references/skill-effects/intake/hair-dryer-heat-ribbon/reference.png',
   'bubble-shell-wave-membrane': 'references/skill-effects/intake/bubble-shell-wave-membrane/reference.png',
   'radio-sequence-markers': 'references/skill-effects/intake/radio-sequence-markers/reference.png',
   'kettle-steam-ribbon': 'references/skill-effects/intake/kettle-steam-ribbon/reference.png',
   'blender-energy-shards': 'references/skill-effects/intake/blender-energy-shards/reference.png',
   'gacha-card-frame': 'references/skill-effects/intake/gacha-card-frame/reference.png',
-  'record-note-orb-ring': 'references/skill-effects/intake/record-note-orb-ring/reference.png',
   'alarm-time-ring': 'references/skill-effects/intake/alarm-time-ring/reference.png',
-  'popcorn-heart-crown': 'references/skill-effects/intake/popcorn-heart-crown/reference.png',
-  'stand-mixer-status-token': 'references/skill-effects/intake/stand-mixer-status-token/reference.png',
+  'popcorn-target-marker': 'references/skill-effects/intake/popcorn-target-marker/reference.png',
   'controller-continue-token': 'references/skill-effects/intake/controller-continue-token/reference.png',
   'controller-impact-star': 'references/skill-effects/intake/controller-impact-star/reference.png',
   'microwave-double-heat-ring': 'references/skill-effects/intake/microwave-double-heat-ring/reference.png',
@@ -37,21 +34,21 @@ export const SKILL_EFFECT_ASSET_REFERENCES: Readonly<Record<SkillEffectAssetId, 
 
 type EffectInstance = { root: THREE.Group; age: number; duration: number; seed: number };
 
+const POPCORN_PLANE_TO_PLUG_DIRECTION = new THREE.Quaternion()
+  .setFromAxisAngle(new THREE.Vector3(1, 0, 0), -Math.PI / 2);
+
+function popcornMarkerQuaternion(plugQuaternion: THREE.Quaternion): THREE.Quaternion {
+  return plugQuaternion.clone().multiply(POPCORN_PLANE_TO_PLUG_DIRECTION);
+}
+
 const ASSET_BY_APPLIANCE: Partial<Record<ApplianceKind, SkillEffectAssetId>> = {
-  dehumidifier: 'dehumidifier-shield-droplets',
   'hair-dryer': 'hair-dryer-heat-ribbon',
-  'bubble-machine': 'bubble-shell-wave-membrane',
   radio: 'radio-sequence-markers',
   kettle: 'kettle-steam-ribbon',
-  blender: 'blender-energy-shards',
   'gumball-machine': 'gacha-card-frame',
-  'record-player': 'record-note-orb-ring',
-  'alarm-clock': 'alarm-time-ring',
-  'popcorn-machine': 'popcorn-heart-crown',
-  'stand-mixer': 'stand-mixer-status-token',
+  'popcorn-machine': 'popcorn-target-marker',
   'game-controller': 'controller-continue-token',
   microwave: 'microwave-double-heat-ring',
-  'induction-cooktop': 'induction-heat-ring',
   'portable-speaker': 'speaker-bass-wave-arcs',
 };
 
@@ -85,6 +82,9 @@ export class SkillEffectModelKit {
   private readonly persistent = new THREE.Group();
   private readonly transient = new THREE.Group();
   private readonly materials = new Set<THREE.Material>();
+  private readonly textures = new Set<THREE.Texture>();
+  private heatCoreTexture: THREE.CanvasTexture | null = null;
+  private heatArcTexture: THREE.CanvasTexture | null = null;
   private readonly instances: EffectInstance[] = [];
   private readonly pools = new Map<SkillEffectAssetId, THREE.Group[]>();
   private persistentSignature = '';
@@ -120,9 +120,80 @@ export class SkillEffectModelKit {
     return [...assets];
   }
 
+  get popcornTransientCount(): number {
+    return this.transient.children
+      .filter((child) => child.userData.assetId === 'popcorn-target-marker')
+      .length;
+  }
+
+  get microwaveMarkerDiagnostics(): Array<{
+    cableId: string;
+    quaternion: [number, number, number, number];
+    rings: Array<{ type: string; depthTest: boolean }>;
+  }> {
+    return this.persistent.children
+      .filter((child) => child.userData.assetId === 'microwave-double-heat-ring')
+      .map((child) => ({
+        cableId: String(child.userData.cableId ?? ''),
+        quaternion: child.quaternion.toArray(),
+        rings: ['heat-chance-one', 'heat-chance-two'].map((name) => {
+          const ring = child.getObjectByName(name);
+          const material = ring instanceof THREE.Mesh ? ring.material : null;
+          return {
+            type: ring?.type ?? 'missing',
+            depthTest: material instanceof THREE.Material ? material.depthTest : false,
+          };
+        }),
+      }));
+  }
+
+  get popcornMarkerDiagnostics(): Array<{
+    cableId: string;
+    position: [number, number, number];
+    kernelCount: number;
+    ringSegmentCount: number;
+    rayCount: number;
+    ringTubeRadius: number;
+    directionAlignment: number;
+    orientationMode: string;
+    kernelAngularGaps: number[];
+  }> {
+    return this.persistent.children
+      .filter((child) => child.userData.assetId === 'popcorn-target-marker')
+      .map((child) => {
+        const ringSegment = child.getObjectByName('popcorn-ring-segment-1');
+        const ringTubeRadius = ringSegment instanceof THREE.Mesh
+          && ringSegment.geometry instanceof THREE.TorusGeometry
+          ? ringSegment.geometry.parameters.tube
+          : 0;
+        const hintDirection = child.userData.hintDirection;
+        const markerDirection = new THREE.Vector3(0, 0, 1).applyQuaternion(child.quaternion).normalize();
+        const kernelAngles = (child.getObjectByName('popcorn-kernels')?.children ?? [])
+          .map((kernel) => kernel.userData.basePosition)
+          .filter((position): position is THREE.Vector3 => position instanceof THREE.Vector3)
+          .map((position) => Math.atan2(position.y, position.x))
+          .sort((a, b) => a - b);
+        const kernelAngularGaps = kernelAngles.map((angle, index) => {
+          const next = kernelAngles[(index + 1) % kernelAngles.length] ?? angle;
+          return (next - angle + Math.PI * 2) % (Math.PI * 2);
+        });
+        return {
+          cableId: String(child.userData.cableId ?? ''),
+          position: child.position.toArray(),
+          kernelCount: child.getObjectByName('popcorn-kernels')?.children.length ?? 0,
+          ringSegmentCount: child.getObjectByName('popcorn-target-ring')?.children.length ?? 0,
+          rayCount: child.getObjectByName('popcorn-rays')?.children.length ?? 0,
+          ringTubeRadius,
+          directionAlignment: hintDirection instanceof THREE.Vector3 ? markerDirection.dot(hintDirection) : 0,
+          orientationMode: String(child.userData.orientationMode ?? ''),
+          kernelAngularGaps,
+        };
+      });
+  }
+
   play(appliance: ApplianceKind, targets: readonly THREE.Vector3[] = []): void {
     const asset = ASSET_BY_APPLIANCE[appliance];
-    if (!asset) return;
+    if (!asset || asset === 'popcorn-target-marker') return;
     const root = this.acquire(asset);
     root.name = `skill-effect-${asset}`;
     root.userData.assetId = asset;
@@ -158,34 +229,54 @@ export class SkillEffectModelKit {
   syncPersistent(
     state: Readonly<SkillChallengeState>,
     cablePositions: ReadonlyMap<string, THREE.Vector3>,
-    availablePositions: readonly THREE.Vector3[],
+    cableOrientations: ReadonlyMap<string, THREE.Quaternion>,
+    _availablePositions: readonly THREE.Vector3[],
+    hintPositions: ReadonlyMap<string, THREE.Vector3>,
+    hintOrientations: ReadonlyMap<string, THREE.Quaternion>,
   ): void {
     if (this.evidenceAsset) return;
+    this.syncPersistentMarkerTransforms(cablePositions, cableOrientations, hintPositions, hintOrientations);
+    const popcornTargetPosition = state.popcornHintCableId
+      ? hintPositions.get(state.popcornHintCableId)
+      : null;
     const signature = JSON.stringify({
       buff: state.buff?.id ?? null,
       debuff: state.debuff?.id ?? null,
       targets: state.debuff?.targetCableIds ?? [],
+      turns: state.debuff?.id === 'overheated-plug' ? state.debuff.turnsRemaining : null,
       cablePositions: [...cablePositions].map(([id, position]) => [id, position.toArray().map((value) => value.toFixed(2))]),
-      available: state.buff?.id === 'induction-reveal'
-        ? availablePositions.map((position) => position.toArray().map((value) => value.toFixed(2)))
-        : [],
+      popcornTarget: state.popcornHintCableId,
+      popcornPosition: popcornTargetPosition?.toArray().map((value) => value.toFixed(2)) ?? null,
     });
     if (signature === this.persistentSignature) return;
     this.persistentSignature = signature;
     this.persistent.clear();
 
     if (state.debuff?.id === 'overheated-plug') {
-      state.debuff.targetCableIds.forEach((id) => this.attach('microwave-double-heat-ring', cablePositions.get(id)));
+      state.debuff.targetCableIds.forEach((id) => {
+        const marker = this.attach('microwave-double-heat-ring', cablePositions.get(id), 0.72);
+        if (marker) {
+          marker.userData.cableId = id;
+          marker.userData.turnsRemaining = state.debuff?.turnsRemaining ?? 2;
+          const orientation = cableOrientations.get(id);
+          if (orientation) marker.quaternion.copy(orientation);
+        }
+      });
     }
-    if (state.buff?.id === 'induction-reveal') {
-      availablePositions.forEach((position) => this.attach('induction-heat-ring', position));
-    } else if (state.buff?.id === 'dry-shield') {
-      this.attach('dehumidifier-shield-droplets', new THREE.Vector3(0, 0.2, 1.75), 2.8);
-    } else if (state.buff?.id === 'iridescent-bubble') {
-      this.attach('bubble-shell-wave-membrane', new THREE.Vector3(0, 0.1, 1.65), 3.5);
-    } else if (state.buff?.id === 'soothing-record') {
-      this.attach('record-note-orb-ring', new THREE.Vector3(0, 0.5, 1.9), 1.7);
-    } else if (state.buff?.id === 'continue') {
+    if (state.popcornHintCableId) {
+      const marker = this.attach('popcorn-target-marker', hintPositions.get(state.popcornHintCableId), 0.86);
+      if (marker) {
+        marker.userData.cableId = state.popcornHintCableId;
+        marker.userData.anchorPosition = marker.position.clone();
+        marker.userData.orientationMode = 'plug-end';
+        const orientation = hintOrientations.get(state.popcornHintCableId);
+        if (orientation) {
+          marker.quaternion.copy(popcornMarkerQuaternion(orientation));
+          marker.userData.hintDirection = new THREE.Vector3(0, 1, 0).applyQuaternion(orientation).normalize();
+        }
+      }
+    }
+    if (state.buff?.id === 'continue') {
       this.attach('controller-continue-token', new THREE.Vector3(0, -0.15, 1.9), 1.6);
     }
   }
@@ -198,13 +289,26 @@ export class SkillEffectModelKit {
       const enter = THREE.MathUtils.smoothstep(progress, 0, 0.2);
       const exit = 1 - THREE.MathUtils.smoothstep(progress, 0.72, 1);
       instance.root.scale.setScalar(Math.max(0.001, enter * exit * 1.2));
-      instance.root.rotation.y = Math.sin(elapsed * 3.2 + instance.seed) * 0.16;
-      instance.root.rotation.z = Math.sin(elapsed * 4.1 + instance.seed) * 0.05;
+      if (instance.root.userData.assetId === 'popcorn-target-marker') {
+        this.updatePopcornBurst(instance.root, progress, elapsed, instance.seed);
+      } else {
+        instance.root.rotation.y = Math.sin(elapsed * 3.2 + instance.seed) * 0.16;
+        instance.root.rotation.z = Math.sin(elapsed * 4.1 + instance.seed) * 0.05;
+      }
       if (progress < 1) continue;
       this.release(instance.root);
       this.instances.splice(index, 1);
     }
     this.persistent.children.forEach((child, index) => {
+      const asset = child.userData.assetId as SkillEffectAssetId | undefined;
+      if (asset === 'microwave-double-heat-ring') {
+        this.updateMicrowaveMarker(child, elapsed);
+        return;
+      }
+      if (asset === 'popcorn-target-marker') {
+        this.updatePopcornMarker(child, elapsed);
+        return;
+      }
       const pulse = 1 + Math.sin(elapsed * 3.6 + index * 0.8) * 0.06;
       child.scale.setScalar((Number(child.userData.baseScale) || 1) * pulse);
       child.rotation.y += delta * 0.45;
@@ -233,11 +337,13 @@ export class SkillEffectModelKit {
     this.pools.clear();
     this.materials.forEach((material) => material.dispose());
     this.materials.clear();
+    this.textures.forEach((texture) => texture.dispose());
+    this.textures.clear();
     this.root.removeFromParent();
   }
 
-  private attach(asset: SkillEffectAssetId, position?: THREE.Vector3, scale = 0.72): void {
-    if (!position) return;
+  private attach(asset: SkillEffectAssetId, position?: THREE.Vector3, scale = 0.72): THREE.Group | null {
+    if (!position) return null;
     const model = this.acquire(asset);
     model.position.copy(position);
     model.scale.setScalar(scale);
@@ -245,6 +351,7 @@ export class SkillEffectModelKit {
     model.userData.assetId = asset;
     model.userData.referencePath = SKILL_EFFECT_ASSET_REFERENCES[asset];
     this.persistent.add(model);
+    return model;
   }
 
   private acquire(asset: SkillEffectAssetId): THREE.Group {
@@ -254,6 +361,9 @@ export class SkillEffectModelKit {
     model.rotation.set(0, 0, 0);
     model.scale.setScalar(1);
     model.userData.assetId = asset;
+    delete model.userData.anchorPosition;
+    delete model.userData.cableId;
+    delete model.userData.turnsRemaining;
     return model;
   }
 
@@ -310,6 +420,232 @@ export class SkillEffectModelKit {
     return this.mesh(parent, name, new THREE.TubeGeometry(new THREE.CatmullRomCurve3(points), 24, radius, 7, false), material);
   }
 
+  private heatTexture(kind: 'core' | 'arc'): THREE.CanvasTexture {
+    const existing = kind === 'core' ? this.heatCoreTexture : this.heatArcTexture;
+    if (existing) return existing;
+    const canvas = document.createElement('canvas');
+    canvas.width = 128;
+    canvas.height = 128;
+    const context = canvas.getContext('2d');
+    if (!context) throw new Error('Unable to create microwave marker texture.');
+    context.clearRect(0, 0, 128, 128);
+    if (kind === 'core') {
+      const gradient = context.createRadialGradient(64, 64, 0, 64, 64, 62);
+      gradient.addColorStop(0, 'rgba(255,255,238,1)');
+      gradient.addColorStop(0.16, 'rgba(255,225,130,0.98)');
+      gradient.addColorStop(0.42, 'rgba(255,116,30,0.58)');
+      gradient.addColorStop(1, 'rgba(255,40,0,0)');
+      context.fillStyle = gradient;
+      context.fillRect(0, 0, 128, 128);
+    } else {
+      context.lineCap = 'round';
+      context.shadowColor = 'rgba(255,132,34,0.42)';
+      context.shadowBlur = 5;
+      context.lineWidth = 18;
+      context.strokeStyle = 'rgba(50,30,58,0.96)';
+      context.beginPath();
+      context.arc(64, 64, 45, -Math.PI * 0.39, Math.PI * 0.39);
+      context.stroke();
+      context.shadowBlur = 0;
+      context.lineWidth = 8;
+      context.strokeStyle = 'rgba(255,255,245,1)';
+      context.beginPath();
+      context.arc(64, 64, 45, -Math.PI * 0.39, Math.PI * 0.39);
+      context.stroke();
+    }
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.name = `microwave-${kind}-texture`;
+    texture.colorSpace = THREE.SRGBColorSpace;
+    texture.needsUpdate = true;
+    this.textures.add(texture);
+    if (kind === 'core') this.heatCoreTexture = texture;
+    else this.heatArcTexture = texture;
+    return texture;
+  }
+
+  private sprite(
+    parent: THREE.Object3D,
+    name: string,
+    texture: THREE.Texture,
+    color: THREE.ColorRepresentation,
+    size: number,
+    opacity: number,
+    rotation = 0,
+    blending: THREE.Blending = THREE.AdditiveBlending,
+  ): THREE.Sprite {
+    const material = new THREE.SpriteMaterial({
+      map: texture,
+      color,
+      opacity,
+      transparent: true,
+      depthTest: true,
+      depthWrite: false,
+      blending,
+      rotation,
+    });
+    this.materials.add(material);
+    const sprite = new THREE.Sprite(material);
+    sprite.name = name;
+    sprite.scale.setScalar(size);
+    sprite.userData.baseScale = size;
+    sprite.renderOrder = 8;
+    parent.add(sprite);
+    return sprite;
+  }
+
+  private texturedPlane(
+    parent: THREE.Object3D,
+    name: string,
+    texture: THREE.Texture,
+    color: THREE.ColorRepresentation,
+    size: number,
+    opacity: number,
+    rotation = 0,
+  ): THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial> {
+    const geometry = new THREE.PlaneGeometry(1, 1);
+    geometry.rotateX(Math.PI * 0.5);
+    const material = new THREE.MeshBasicMaterial({
+      map: texture,
+      color,
+      opacity,
+      transparent: true,
+      depthTest: true,
+      depthWrite: false,
+      side: THREE.DoubleSide,
+      blending: THREE.NormalBlending,
+    });
+    this.materials.add(material);
+    const plane = new THREE.Mesh(geometry, material);
+    plane.name = name;
+    plane.scale.set(size, size, 1);
+    plane.rotation.y = rotation;
+    plane.userData.baseScale = size;
+    plane.renderOrder = 8;
+    parent.add(plane);
+    return plane;
+  }
+
+  private syncPersistentMarkerTransforms(
+    cablePositions: ReadonlyMap<string, THREE.Vector3>,
+    cableOrientations: ReadonlyMap<string, THREE.Quaternion>,
+    hintPositions: ReadonlyMap<string, THREE.Vector3>,
+    hintOrientations: ReadonlyMap<string, THREE.Quaternion>,
+  ): void {
+    this.persistent.children.forEach((child) => {
+      const cableId = String(child.userData.cableId ?? '');
+      const popcornMarker = child.userData.assetId === 'popcorn-target-marker';
+      if (!popcornMarker && child.userData.assetId !== 'microwave-double-heat-ring') return;
+      const position = (popcornMarker ? hintPositions : cablePositions).get(cableId);
+      const orientation = popcornMarker ? hintOrientations.get(cableId) : cableOrientations.get(cableId);
+      if (position) child.position.copy(position);
+      if (position && popcornMarker) child.userData.anchorPosition = position.clone();
+      if (orientation) {
+        child.quaternion.copy(popcornMarker ? popcornMarkerQuaternion(orientation) : orientation);
+        if (popcornMarker) {
+          child.userData.orientationMode = 'plug-end';
+          child.userData.hintDirection = new THREE.Vector3(0, 1, 0).applyQuaternion(orientation).normalize();
+        }
+      }
+    });
+  }
+
+  private updatePopcornMarker(root: THREE.Object3D, elapsed: number): void {
+    const baseScale = Number(root.userData.baseScale) || 1;
+    const anchor = root.userData.anchorPosition;
+    if (anchor instanceof THREE.Vector3) {
+      root.position.copy(anchor);
+      root.position.addScaledVector(
+        new THREE.Vector3(0, 0, 1).applyQuaternion(root.quaternion),
+        Math.sin(elapsed * 3.8) * 0.055,
+      );
+    }
+    root.scale.setScalar(baseScale * (1 + Math.sin(elapsed * 4.6) * 0.035));
+    const pivot = root.getObjectByName('pulse-pivot');
+    if (pivot) pivot.rotation.z = Math.sin(elapsed * 2.7) * 0.045;
+    this.posePopcornKernels(root, elapsed, 0);
+    this.pulsePopcornAccents(root, elapsed, 0);
+  }
+
+  private updatePopcornBurst(root: THREE.Object3D, progress: number, elapsed: number, seed: number): void {
+    const burst = Math.sin(Math.PI * THREE.MathUtils.clamp(progress, 0, 1));
+    const pivot = root.getObjectByName('pulse-pivot');
+    if (pivot) {
+      pivot.rotation.y = Math.sin(elapsed * 4.8 + seed) * 0.12;
+      pivot.rotation.z = Math.sin(elapsed * 6.4 + seed) * 0.08;
+    }
+    this.posePopcornKernels(root, elapsed, burst * 0.38);
+    this.pulsePopcornAccents(root, elapsed, burst * 0.72);
+  }
+
+  private posePopcornKernels(root: THREE.Object3D, elapsed: number, expansion: number): void {
+    const kernels = root.getObjectByName('popcorn-kernels');
+    kernels?.children.forEach((kernel, index) => {
+      const basePosition = kernel.userData.basePosition;
+      if (!(basePosition instanceof THREE.Vector3)) return;
+      const direction = basePosition.clone().setZ(0).normalize();
+      kernel.position.copy(basePosition).addScaledVector(direction, expansion);
+      kernel.position.y += Math.sin(elapsed * 5.2 + index * 1.9) * 0.045;
+      kernel.rotation.z = Math.sin(elapsed * 4.1 + index * 1.4) * 0.11;
+      kernel.scale.setScalar(1 + Math.sin(elapsed * 6.2 + index) * 0.035 + expansion * 0.3);
+    });
+  }
+
+  private pulsePopcornAccents(root: THREE.Object3D, elapsed: number, burst: number): void {
+    const ring = root.getObjectByName('popcorn-target-ring');
+    if (ring) ring.rotation.z = elapsed * 0.24;
+    ring?.children.forEach((segment, index) => {
+      const pulse = 0.9 + (Math.sin(elapsed * 5.4 - index * 0.78) + 1) * 0.08 + burst * 0.24;
+      segment.scale.setScalar(pulse);
+    });
+    const rays = root.getObjectByName('popcorn-rays');
+    rays?.children.forEach((ray, index) => {
+      const pulse = Math.max(0.55, 0.72 + Math.sin(elapsed * 6.8 - index * 0.95) * 0.18 + burst * 0.5);
+      ray.scale.set(1, pulse, 1);
+    });
+  }
+
+  private updateMicrowaveMarker(root: THREE.Object3D, elapsed: number): void {
+    const turns = Number(root.userData.turnsRemaining) || 2;
+    const urgent = turns <= 1;
+    const baseScale = Number(root.userData.baseScale) || 1;
+    const pulseSpeed = urgent ? 5.2 : 3.4;
+    const pulse = 1 + Math.sin(elapsed * pulseSpeed) * (urgent ? 0.065 : 0.038);
+    root.scale.setScalar(baseScale * pulse);
+    const core = root.getObjectByName('heat-core') as THREE.Sprite | undefined;
+    const halo = root.getObjectByName('heat-halo') as THREE.Sprite | undefined;
+    const chanceOne = root.getObjectByName('heat-chance-one') as THREE.Mesh | undefined;
+    const chanceTwo = root.getObjectByName('heat-chance-two') as THREE.Mesh | undefined;
+    if (core?.material instanceof THREE.SpriteMaterial) {
+      core.material.color.set(urgent ? 0xffb0a0 : 0xfff0b0);
+      core.material.opacity = urgent ? 1 : 0.9;
+    }
+    if (halo?.material instanceof THREE.SpriteMaterial) {
+      halo.material.color.set(urgent ? 0xff351f : 0xff7a24);
+      halo.material.opacity = (urgent ? 0.46 : 0.34) + Math.sin(elapsed * pulseSpeed) * 0.04;
+      halo.material.rotation = -elapsed * (urgent ? 0.34 : 0.2);
+    }
+    [chanceOne, chanceTwo].forEach((chance, index) => {
+      if (!(chance?.material instanceof THREE.MeshBasicMaterial)) return;
+      chance.material.color.set(urgent ? 0xff3a25 : 0xff9a24);
+      chance.material.opacity = 1;
+      chance.rotation.y = (index === 0 ? 0 : Math.PI)
+        + Math.sin(elapsed * 1.15) * 0.025;
+      const chanceBaseScale = Number(chance.userData.baseScale) || 1;
+      const chancePulse = index === 0 && urgent ? 1 + Math.sin(elapsed * 7.2) * 0.055 : 1;
+      chance.scale.set(chanceBaseScale * chancePulse, chanceBaseScale * chancePulse, 1);
+    });
+    if (chanceTwo) chanceTwo.visible = turns > 1;
+    const sparks = root.getObjectByName('heat-sparks');
+    if (sparks) {
+      sparks.rotation.z = elapsed * (urgent ? 1.15 : 0.72);
+      sparks.children.forEach((spark, index) => {
+        const sparkPulse = 0.72 + (Math.sin(elapsed * (4.2 + index * 0.17) + index) + 1) * 0.22;
+        const sparkBaseScale = Number(spark.userData.baseScale) || 0.06;
+        spark.scale.setScalar(sparkBaseScale * sparkPulse);
+      });
+    }
+  }
+
   private build(asset: SkillEffectAssetId): THREE.Group {
     const root = new THREE.Group();
     const pivot = new THREE.Group();
@@ -330,10 +666,6 @@ export class SkillEffectModelKit {
         this.ring(pivot, 'nozzle-socket-ring', 0.18, 0.06, this.coral).position.x = -0.82;
         break;
       }
-      case 'dehumidifier-shield-droplets':
-        this.ring(pivot, 'segmented-shield', 0.62, 0.16, this.ice);
-        [-0.75, 0.75].forEach((x, index) => this.mesh(pivot, `water-drop-${index + 1}`, new THREE.OctahedronGeometry(0.17, 1), this.ice, [x, -0.2 + index * 0.35, 0]));
-        break;
       case 'bubble-shell-wave-membrane':
         this.mesh(pivot, 'bubble-shell', new THREE.SphereGeometry(0.68, 16, 10), this.bubble, [0, 0, 0], [0, 0, 0], [1, 1, 0.42]);
         this.ring(pivot, 'impact-wave', 0.84, 0.045, this.purple);
@@ -350,12 +682,6 @@ export class SkillEffectModelKit {
         this.mesh(pivot, 'card-face', new THREE.BoxGeometry(0.7, 1.02, 0.14), this.teal, [0, 0, 0.05]);
         this.mesh(pivot, 'card-emblem', new THREE.ExtrudeGeometry(heartShape(), { depth: 0.07, bevelEnabled: true, bevelSize: 0.03, bevelThickness: 0.03 }), this.cream, [0, 0, 0.14], [0, 0, 0], [0.36, 0.36, 0.36]);
         break;
-      case 'record-note-orb-ring':
-        this.mesh(pivot, 'note-orb', new THREE.SphereGeometry(0.3, 12, 8), this.yellow);
-        this.ring(pivot, 'sound-ring-inner', 0.5, 0.05, this.cream);
-        this.ring(pivot, 'sound-ring-outer', 0.72, 0.035, this.yellow);
-        this.mesh(pivot, 'note-stem', new THREE.BoxGeometry(0.08, 0.45, 0.08), this.coral, [0.12, 0.22, 0]);
-        break;
       case 'alarm-time-ring':
         this.ring(pivot, 'time-ring', 0.58, 0.1, this.teal);
         this.ring(pivot, 'time-ripple', 0.82, 0.035, this.cream);
@@ -364,22 +690,126 @@ export class SkillEffectModelKit {
           this.mesh(pivot, `tick-${index + 1}`, new THREE.BoxGeometry(0.08, 0.18, 0.08), this.coral, [Math.cos(angle) * 0.58, Math.sin(angle) * 0.58, 0], [0, 0, angle - Math.PI / 2]);
         }
         break;
-      case 'popcorn-heart-crown':
-        this.mesh(pivot, 'heart-cluster', new THREE.ExtrudeGeometry(heartShape(), { depth: 0.16, bevelEnabled: true, bevelSize: 0.04, bevelThickness: 0.04 }), this.cream, [0, 0, -0.08]);
-        this.mesh(pivot, 'prompt-crown', new THREE.ConeGeometry(0.28, 0.42, 5), this.yellow, [0, 0.62, 0]);
+      case 'popcorn-target-marker': {
+        pivot.position.z = 0.28;
+        const kernels = new THREE.Group();
+        kernels.name = 'popcorn-kernels';
+        pivot.add(kernels);
+        const kernelPositions: Array<readonly [number, number, number]> = Array.from(
+          { length: 3 },
+          (_, index) => {
+            const angle = Math.PI / 2 + index * Math.PI * 2 / 3;
+            return [Math.cos(angle) * 0.26, Math.sin(angle) * 0.26, 0] as const;
+          },
+        );
+        kernelPositions.forEach((position, index) => {
+          const kernel = new THREE.Group();
+          kernel.name = `popcorn-kernel-${index + 1}`;
+          kernel.position.set(...position);
+          kernel.userData.basePosition = kernel.position.clone();
+          kernels.add(kernel);
+          const lobeOffsets: Array<readonly [number, number, number]> = [
+            [-0.08, 0.04, 0],
+            [0.08, 0.05, 0.01],
+            [0, 0.12, -0.02],
+            [0, -0.03, 0.035],
+          ];
+          lobeOffsets.forEach((offset, lobeIndex) => this.mesh(
+            kernel,
+            `popcorn-kernel-${index + 1}-lobe-${lobeIndex + 1}`,
+            new THREE.DodecahedronGeometry(0.105, 0),
+            this.cream,
+            offset,
+            [0, lobeIndex * 0.42, lobeIndex * 0.31],
+            [1, 0.86 + lobeIndex * 0.035, 0.92],
+          ));
+          this.mesh(
+            kernel,
+            `popcorn-kernel-${index + 1}-core`,
+            new THREE.CylinderGeometry(0.085, 0.105, 0.13, 6),
+            this.yellow,
+            [0, -0.09, 0],
+            [Math.PI / 2, 0, 0],
+          );
+        });
+        const targetRing = new THREE.Group();
+        targetRing.name = 'popcorn-target-ring';
+        pivot.add(targetRing);
+        for (let index = 0; index < 8; index += 1) {
+          this.mesh(
+            targetRing,
+            `popcorn-ring-segment-${index + 1}`,
+            new THREE.TorusGeometry(0.54, 0.055, 6, 10, Math.PI * 0.18),
+            index % 2 === 0 ? this.teal : this.yellow,
+            [0, 0, index % 2 === 0 ? -0.025 : 0.025],
+            [0, 0, index * Math.PI / 4],
+            [1, 1, 1],
+          );
+        }
+        const rays = new THREE.Group();
+        rays.name = 'popcorn-rays';
+        pivot.add(rays);
+        for (let index = 0; index < 6; index += 1) {
+          const angle = index * Math.PI / 3;
+          this.mesh(
+            rays,
+            `popcorn-ray-${index + 1}`,
+            new THREE.BoxGeometry(0.055, 0.2, 0.085),
+            index % 2 === 0 ? this.coral : this.teal,
+            [Math.cos(angle) * 0.75, Math.sin(angle) * 0.75, index % 2 === 0 ? -0.035 : 0.035],
+            [0, 0, angle - Math.PI / 2],
+            [1, 1, 1],
+          );
+        }
         break;
-      case 'stand-mixer-status-token': case 'controller-continue-token':
-        this.ring(pivot, 'token-ring', 0.58, 0.13, asset === 'stand-mixer-status-token' ? this.purple : this.coral);
+      }
+      case 'controller-continue-token':
+        this.ring(pivot, 'token-ring', 0.58, 0.13, this.coral);
         this.mesh(pivot, 'token-core', new THREE.CylinderGeometry(0.42, 0.42, 0.14, 20), this.cream, [0, 0, 0], [Math.PI / 2, 0, 0]);
-        this.mesh(pivot, 'token-mark', new THREE.ExtrudeGeometry(asset === 'stand-mixer-status-token' ? starShape(6, 0.3, 0.16) : heartShape(), { depth: 0.08, bevelEnabled: false }), this.teal, [0, 0, 0.1], [0, 0, 0], [0.7, 0.7, 0.7]);
+        this.mesh(pivot, 'token-mark', new THREE.ExtrudeGeometry(heartShape(), { depth: 0.08, bevelEnabled: false }), this.teal, [0, 0, 0.1], [0, 0, 0], [0.7, 0.7, 0.7]);
         break;
       case 'controller-impact-star':
         this.mesh(pivot, 'impact-star', new THREE.ExtrudeGeometry(starShape(9), { depth: 0.12, bevelEnabled: true, bevelSize: 0.035, bevelThickness: 0.035 }), this.coral, [0, 0, -0.06]);
         break;
-      case 'microwave-double-heat-ring':
-        this.ring(pivot, 'heat-ring-outer', 0.6, 0.12, this.coral);
-        this.ring(pivot, 'heat-ring-inner', 0.36, 0.07, this.yellow);
+      case 'microwave-double-heat-ring': {
+        this.sprite(pivot, 'heat-halo', this.heatTexture('core'), 0xff6d20, 0.9, 0.2);
+        this.sprite(pivot, 'heat-core', this.heatTexture('core'), 0xfff0b0, 0.42, 0.72);
+        this.texturedPlane(
+          pivot,
+          'heat-chance-one',
+          this.heatTexture('arc'),
+          0xff9a24,
+          1.18,
+          1,
+          0,
+        );
+        this.texturedPlane(
+          pivot,
+          'heat-chance-two',
+          this.heatTexture('arc'),
+          0xff9a24,
+          1.18,
+          1,
+          Math.PI,
+        );
+        const sparks = new THREE.Group();
+        sparks.name = 'heat-sparks';
+        pivot.add(sparks);
+        for (let index = 0; index < 6; index += 1) {
+          const angle = (index / 6) * Math.PI * 2 + 0.31;
+          const radius = 0.66 + (index % 2) * 0.055;
+          const spark = this.sprite(
+            sparks,
+            `heat-spark-${index + 1}`,
+            this.heatTexture('core'),
+            index % 2 === 0 ? 0xfff08a : 0xff5528,
+            0.055 + (index % 3) * 0.01,
+            0.68,
+          );
+          spark.position.set(Math.cos(angle) * radius, Math.sin(angle) * radius, 0.02);
+        }
         break;
+      }
       case 'induction-heat-ring':
         this.ring(pivot, 'induction-ring-outer', 0.48, 0.08, this.coral);
         this.ring(pivot, 'induction-ring-inner', 0.27, 0.045, this.yellow);

@@ -17,6 +17,7 @@ const vertexShader = /* glsl */ `
   attribute float aCableProgress;
   varying float vOutlineCableProgress;
   varying float vOutlineLocalY;
+  varying float vOutlineFacing;
   ${SOFT_CAGE_UNIFORM_GLSL}
   ${SOFT_CAGE_FUNCTION_GLSL}
 
@@ -29,6 +30,7 @@ const vertexShader = /* glsl */ `
 
     vec4 mv = viewMatrix * world;
     vec3 n = normalize(normalMatrix * normal);
+    vOutlineFacing = abs(dot(n, normalize(-mv.xyz)));
     vec4 clip = projectionMatrix * mv;
     vec3 clipN = normalize((projectionMatrix * vec4(n, 0.0)).xyz);
     vec2 aspect = vec2(uResolution.y / uResolution.x, 1.0);
@@ -53,9 +55,12 @@ const fragmentShader = /* glsl */ `
   uniform float uRootFadeEnabled;
   uniform float uRootFadeStart;
   uniform float uRootFadeEnd;
+  uniform float uSilhouetteOnly;
   varying float vOutlineCableProgress;
   varying float vOutlineLocalY;
+  varying float vOutlineFacing;
   void main() {
+    if (uSilhouetteOnly > 0.5 && vOutlineFacing > 0.3) discard;
     if (uRevealEnabled > 0.5) {
       float revealDistance = 1.0 - vOutlineCableProgress;
       float reveal = 1.0 - smoothstep(
@@ -120,6 +125,7 @@ export function addHullOutline(
       uRootFadeEnabled: { value: 0 },
       uRootFadeStart: { value: 0 },
       uRootFadeEnd: { value: 0.2 },
+      uSilhouetteOnly: { value: 0 },
       uColor: { value: new THREE.Color(color) },
       uOpacity: { value: 1 },
       uResolution: { value: resolution.clone() },
@@ -176,6 +182,16 @@ export function setHullOutlineVisualInflation(outline: THREE.Mesh | null, inflat
   if (!outline?.userData.isOutline || !(outline.material instanceof THREE.ShaderMaterial)) return;
   const uniform = outline.material.uniforms.uVisualInflation;
   if (uniform) uniform.value = Math.max(0, inflation);
+}
+
+export function setHullOutlineSilhouetteOnly(
+  outline: THREE.Mesh | null,
+  enabled: boolean,
+): void {
+  if (!outline?.userData.isOutline || !(outline.material instanceof THREE.ShaderMaterial)) return;
+  const uniform = outline.material.uniforms.uSilhouetteOnly;
+  if (uniform) uniform.value = enabled ? 1 : 0;
+  outline.userData.outlineSilhouetteOnly = enabled;
 }
 
 export function setHullOutlineReveal(outline: THREE.Mesh | null, progress: number | null): void {

@@ -5,7 +5,7 @@ import {
   type ApplianceModelBuild,
   type ApplianceModelOptions,
 } from '../ApplianceModelKit';
-import { setHullOutlineStyle } from '../../style/outline';
+import { setHullOutlineSilhouetteOnly, setHullOutlineStyle } from '../../style/outline';
 
 const V2_REFERENCE_PATH = 'references/intake-v2/gumball-machine/views/front.png';
 
@@ -19,7 +19,7 @@ function stableOutlinePhase(name: string): number {
 }
 
 function applyGumballMachineOutlineHierarchy(root: THREE.Object3D): void {
-  const mainSilhouette = /rounded-frustum-base-shell|transparent-globe-shell|domed-top-lid|wide-top-lid-rim|globe-seat-ring|pink-lower-base-ring|pink-arched-dispense-frame|protruding-dispense-tray/;
+  const mainSilhouette = /rounded-frustum-base-shell|transparent-globe-shell|domed-top-lid|wide-top-lid-rim|globe-seat-ring|pink-lower-base-ring|pink-arched-dispense-frame|protruding-dispense-tray|gumball-machine-output-(?:capsule|star-prize|flower-prize|key-prize|bear-prize)/;
   const fineDetail = /foot-|purpose-status|capsule-.*(?:equator-seam|prize)|output-|success-burst|rear-service-panel-seam|rear-cable-notch|center-boss|round-release-button/;
   root.traverse((object) => {
     if (!(object instanceof THREE.Mesh) || object.userData.isOutline !== true) return;
@@ -671,7 +671,6 @@ export function createGumballMachineModel(options: ApplianceModelOptions): Appli
       outputCapsuleShellGeometry(side === 'left' ? 'upper' : 'lower'),
       capsuleClear,
       pivot,
-      false,
     );
     upper.renderOrder = 3;
     upper.userData.explodeWithParent = true;
@@ -685,31 +684,33 @@ export function createGumballMachineModel(options: ApplianceModelOptions): Appli
   const outputSeam = kit.mesh(
     'gumball-machine-output-capsule-equator-seam',
     new THREE.TorusGeometry(0.285, 0.018, 5, 24),
-    accentSoft,
-    outputPivot,
-    false,
+    creamLight,
+    outputLeft,
   );
   outputSeam.rotation.x = Math.PI * 0.5;
+  outputSeam.userData.part = 'output-capsule-clear-cap-seam';
   outputSeam.userData.explodeWithParent = true;
 
-  const outputToyPivot = kit.pivot('gumball-machine-output-prize-pivot', outputPivot);
+  const outputToyPivot = kit.pivot('gumball-machine-output-prize-pivot');
   outputToyPivot.visible = false;
-  outputToyPivot.position.set(0, 0.055, 0.02);
+  outputToyPivot.position.set(-0.22, 0.68, 6.88);
   outputToyPivot.rotation.set(-0.08, -0.16, 0.05);
   outputToyPivot.userData.performanceEffect = true;
-  outputToyPivot.userData.prizeKind = 'flower';
-  const outputToy = kit.mesh(
-    'gumball-machine-output-flower-prize',
-    toyGeometries.get('flower')!,
-    toyPalette[1],
-    outputToyPivot,
-    false,
-  );
-  outputToy.scale.setScalar(1.12);
-  outputToy.userData.part = 'output-flower-prize';
-  outputToy.userData.capsulePrize = true;
-  outputToy.userData.prizeKind = 'flower';
-  outputToy.userData.explodeWithParent = true;
+  outputToyPivot.userData.prizeKind = 'star';
+  toyKinds.forEach((kind, index) => {
+    const outputToy = kit.mesh(
+      `gumball-machine-output-${kind}-prize`,
+      toyGeometries.get(kind)!,
+      toyPalette[index],
+      outputToyPivot,
+    );
+    outputToy.visible = kind === 'star';
+    outputToy.scale.setScalar(2.24);
+    outputToy.userData.part = `output-${kind}-prize`;
+    outputToy.userData.capsulePrize = true;
+    outputToy.userData.prizeKind = kind;
+    outputToy.userData.explodeWithParent = true;
+  });
 
   // Exactly three chunky success bursts. They are bevelled extrusions with
   // measurable depth, not Plane/Sprite decoration.
@@ -786,5 +787,11 @@ export function createGumballMachineModel(options: ApplianceModelOptions): Appli
     pooled: false,
   };
   applyGumballMachineOutlineHierarchy(build.root);
+  setHullOutlineSilhouetteOnly(
+    build.root.getObjectByName(
+      'gumball-machine-output-capsule-left-clear-upper-shell-ink',
+    ) as THREE.Mesh | null,
+    true,
+  );
   return build;
 }

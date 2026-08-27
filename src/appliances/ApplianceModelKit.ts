@@ -2,6 +2,8 @@ import * as THREE from 'three';
 import { addHullOutline } from '../style/outline';
 import { cel } from '../style/toon';
 
+const HIDDEN_STATUS_MARKER = /(?:^|[-_])(status-indicator|status-dot|status-lamp|status-light|status-lens|power-led|power-status-indicator)(?:[-_]|$)/i;
+
 export type ApplianceModelBuild = {
   root: THREE.Group;
   indicatorMaterial: THREE.MeshToonMaterial;
@@ -119,6 +121,10 @@ export class ApplianceModelKit {
   }
 
   finish(accuracy: ApplianceModelBuild['accuracy']): ApplianceModelBuild {
+    this.root.traverse((object) => {
+      if (!(object instanceof THREE.Mesh) || !HIDDEN_STATUS_MARKER.test(object.name)) return;
+      object.visible = false;
+    });
     this.root.userData.sculptRuntime = {
       nodes: Object.fromEntries(this.nodes),
       sockets: Object.fromEntries(this.sockets),

@@ -31,7 +31,7 @@ async function expectMenuFitsViewport(page: Page): Promise<void> {
       noHorizontalOverflow: document.documentElement.scrollWidth <= viewportWidth + 1,
     };
   });
-  expect(result.labels).toEqual(['随机挑战', '探索模式', 'RUSH挑战', '双头挑战', '技能挑战', '洗衣机技能测试']);
+  expect(result.labels).toEqual(['随机挑战', '探索模式', 'RUSH挑战', '双头挑战', '技能挑战', '唱片机技能测试']);
   expect(result.allTextFits).toBe(true);
   expect(result.menuFits).toBe(true);
   expect(result.noHorizontalOverflow).toBe(true);
@@ -62,13 +62,13 @@ test('挑战模式菜单在桌面端与移动端均可完整展开和关闭', as
 });
 
 test('五种挑战入口连接到各自现有或新增模式', async ({ page }) => {
-  test.setTimeout(300_000);
+  test.setTimeout(600_000);
   const cases = [
     { selector: '#start-random-button', mode: 'random', challengeKind: 'standard', testId: null },
     { selector: '#start-rush-button', mode: 'rush', challengeKind: null, testId: null },
     { selector: '#start-double-ended-button', mode: 'random', challengeKind: 'double-ended', testId: null },
     { selector: '#start-skill-button', mode: 'skill', challengeKind: 'standard', testId: null },
-    { selector: '#start-skill-test-button', mode: 'skill', challengeKind: 'standard', testId: 'washer' },
+    { selector: '#start-skill-test-button', mode: 'skill', challengeKind: 'standard', testId: 'printer' },
   ] as const;
 
   for (const entry of cases) {

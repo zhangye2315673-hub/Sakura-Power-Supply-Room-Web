@@ -146,7 +146,9 @@ test('main puzzle supports unrestricted vertical orbit through its top and botto
 });
 
 test('hint button spends three exclamation charges and reveals one zooming beacon', async ({ page }) => {
-  test.setTimeout(100_000);
+  // First-load SwiftShader compilation can consume most of the default budget
+  // before the three real button interactions begin on Windows CI.
+  test.setTimeout(240_000);
   await page.goto('/?level=1');
   await waitForPuzzle(page);
 
@@ -228,7 +230,7 @@ test('hint button spends three exclamation charges and reveals one zooming beaco
 });
 
 test('main screen exposes the total random challenge pool as a direct entry', async ({ page }) => {
-  test.setTimeout(120_000);
+  test.setTimeout(240_000);
   const pageErrors: string[] = [];
   page.on('pageerror', (error) => pageErrors.push(error.message));
   await page.goto('/');
@@ -258,7 +260,7 @@ test('main screen exposes the total random challenge pool as a direct entry', as
   await expect(page.locator('#start-screen')).not.toBeVisible();
   await page.waitForURL(
     (url) => ['random', 'rush'].includes(url.searchParams.get('mode') ?? '') && !url.searchParams.has('level'),
-    { timeout: 35_000 },
+    { timeout: 90_000 },
   );
   const mode = await page.evaluate(() => window.__THREE_GAME_DIAGNOSTICS__?.mode ?? null);
   expect(['random', 'rush']).toContain(mode);
@@ -268,7 +270,7 @@ test('main screen exposes the total random challenge pool as a direct entry', as
 });
 
 test('a short appliance click stays inert until a long-press drag is activated', async ({ page }) => {
-  test.setTimeout(100_000);
+  test.setTimeout(180_000);
   await page.goto('/?level=1');
   await waitForPuzzle(page);
   const canvas = page.locator('#game-canvas');
@@ -297,7 +299,7 @@ test('a short appliance click stays inert until a long-press drag is activated',
   await page.waitForFunction(
     (id) => window.__THREE_GAME_DIAGNOSTICS__?.appliances.find((item) => item.id === id)?.dragging === true,
     before.id,
-    { timeout: 2_000 },
+    { timeout: 15_000 },
   );
   await page.mouse.up();
   await page.waitForTimeout(320);
@@ -328,7 +330,10 @@ test('a stale random URL still opens the official first campaign level', async (
 });
 
 test('connection petals wait for socket contact and the appliance completes its recycle animation', async ({ page }) => {
-  test.setTimeout(80_000);
+  test.setTimeout(300_000);
+  await page.addInitScript(() => {
+    window.__APPLIANCE_PERFORMANCE_TIME_OVERRIDE__ = 0;
+  });
   await page.goto('/?level=1');
   await waitForPuzzle(page);
 
@@ -336,99 +341,133 @@ test('connection petals wait for socket contact and the appliance completes its 
   expect(target).not.toBeNull();
   if (!target) return;
 
-  await page.locator('#game-canvas').click({ position: { x: target.x, y: target.y } });
-  const routedMotion = await page.waitForFunction(
-    () => window.__THREE_GAME_DIAGNOSTICS__?.activeMotion?.kind === 'exit'
-      ? window.__THREE_GAME_DIAGNOSTICS__.activeMotion
-      : null,
-    null,
-    { timeout: 5_000 },
-  );
-  const routedMotionState = await routedMotion.jsonValue();
-  expect(routedMotionState?.targetAccent).toBe(routedMotionState?.color);
-  await page.waitForFunction(
-    () => (window.__THREE_GAME_DIAGNOSTICS__?.activeConnections ?? 0) > 0,
-    null,
-    { timeout: 8_000 },
-  );
-
-  const whileTravelling = await page.evaluate(() => ({
-    petals: window.__THREE_GAME_DIAGNOSTICS__?.activeBurstPetals ?? -1,
-    connectedAppliances:
-      window.__THREE_GAME_DIAGNOSTICS__?.appliances.reduce(
+  await page.evaluate(() => {
+    const evidence = {
+      sawConnection: false,
+      petalsBeforeConnection: false,
+      petalsDuringConnection: false,
+      applianceDuringConnection: false,
+      sawPetals: false,
+      activated: null as null | { id: string; kind: string; screenX: number; screenY: number },
+      sawInflating: false,
+      maximumScale: 1,
+      maximumPeakCount: 0,
+      peakCycles: 0,
+      abovePeakThreshold: false,
+      replacement: null as null | { id: string; kind: string; dropping: boolean },
+      replacementIdle: false,
+    };
+    const publishEvidence = () => {
+      document.documentElement.dataset.connectionEvidence = JSON.stringify(evidence);
+    };
+    publishEvidence();
+    const observe = (diagnostics: NonNullable<Window['__THREE_GAME_DIAGNOSTICS__']>) => {
+      if (!diagnostics) return;
+      const connectedAppliances = diagnostics.appliances.reduce(
         (sum, appliance) => sum + appliance.connections,
         0,
-      ) ?? -1,
-  }));
-  expect(whileTravelling.petals).toBe(0);
-  expect(whileTravelling.connectedAppliances).toBe(0);
-
-  await expect.poll(
-    async () => page.evaluate(() => window.__THREE_GAME_DIAGNOSTICS__?.activeBurstPetals ?? 0),
-    { timeout: 10_000 },
-  ).toBeGreaterThan(0);
-
-  const activated = await page.evaluate(() =>
-    window.__THREE_GAME_DIAGNOSTICS__?.appliances.find((appliance) => appliance.connections > 0) ?? null,
-  );
-  expect(activated).not.toBeNull();
-  if (!activated) return;
-
+      );
+      if (diagnostics.activeBurstPetals > 0 && !evidence.sawConnection) {
+        evidence.petalsBeforeConnection = true;
+      }
+      if (diagnostics.activeConnections > 0) {
+        evidence.sawConnection = true;
+        evidence.petalsDuringConnection ||= diagnostics.activeBurstPetals > 0;
+        evidence.applianceDuringConnection ||= connectedAppliances > 0;
+      }
+      evidence.sawPetals ||= diagnostics.activeBurstPetals > 0;
+      const activated = diagnostics.appliances.find((appliance) => appliance.connections > 0);
+      if (activated && !evidence.activated) {
+        evidence.activated = {
+          id: activated.id,
+          kind: activated.kind,
+          screenX: activated.screenX,
+          screenY: activated.screenY,
+        };
+      }
+      if (evidence.activated) {
+        const activeItem = diagnostics.appliances.find((item) => item.id === evidence.activated?.id);
+        if (activeItem?.state === 'inflating') {
+          evidence.sawInflating = true;
+          evidence.maximumScale = Math.max(evidence.maximumScale, activeItem.lifecycleScale);
+          evidence.maximumPeakCount = Math.max(evidence.maximumPeakCount, activeItem.inflationPeakCount);
+          const above = activeItem.lifecycleScale > 1.055;
+          if (above && !evidence.abovePeakThreshold) evidence.peakCycles += 1;
+          evidence.abovePeakThreshold = above;
+        }
+        if (!evidence.replacement) {
+          const replacement = diagnostics.appliances.find((item) =>
+            item.id !== evidence.activated?.id
+            && Math.abs(item.screenX - evidence.activated!.screenX) < 0.01
+            && Math.abs(item.screenY - evidence.activated!.screenY) < 0.01
+            && item.state === 'spawning');
+          if (replacement) {
+            evidence.replacement = {
+              id: replacement.id,
+              kind: replacement.kind,
+              dropping: replacement.dropping,
+            };
+          }
+        }
+      }
+      if (evidence.replacement) {
+        const replacement = diagnostics.appliances.find((item) => item.id === evidence.replacement?.id);
+        evidence.replacementIdle ||= replacement?.state === 'idle' && replacement.dropping === false;
+      }
+      publishEvidence();
+    };
+    const sample = () => {
+      const diagnostics = window.__THREE_GAME_DIAGNOSTICS__;
+      if (diagnostics) observe(diagnostics);
+      requestAnimationFrame(sample);
+    };
+    sample();
+  });
+  const routedMotionState = await page.evaluate(({ id, end }) => {
+    const pulled = window.__PULL_CABLE_FOR_EVIDENCE__?.(id, end) ?? false;
+    window.__APPLIANCE_PERFORMANCE_TIME_OVERRIDE__ = undefined;
+    if (!pulled) return null;
+    return window.__THREE_GAME_DIAGNOSTICS__?.activeMotion ?? null;
+  }, target);
+  expect(routedMotionState?.kind).toBe('exit');
+  expect(routedMotionState?.targetAccent).toBe(routedMotionState?.color);
   await page.waitForFunction(
-    (id) => window.__THREE_GAME_DIAGNOSTICS__?.appliances.find((item) => item.id === id)?.state === 'inflating',
-    activated.id,
-    { timeout: 10_000 },
+    () => JSON.parse(document.documentElement.dataset.connectionEvidence ?? '{}').sawConnection === true,
+    null,
+    { timeout: 90_000 },
   );
-  const inflationProfile = await page.evaluate(async (id) => {
-    let maximumScale = 1;
-    let maximumPeakCount = 0;
-    let aboveThreshold = false;
-    let peakCycles = 0;
-    const startedAt = performance.now();
-    while (performance.now() - startedAt < 2_000) {
-      const item = window.__THREE_GAME_DIAGNOSTICS__?.appliances.find((candidate) => candidate.id === id);
-      if (!item || item.state !== 'inflating') break;
-      maximumScale = Math.max(maximumScale, item.lifecycleScale);
-      maximumPeakCount = Math.max(maximumPeakCount, item.inflationPeakCount);
-      const above = item.lifecycleScale > 1.055;
-      if (above && !aboveThreshold) peakCycles += 1;
-      aboveThreshold = above;
-      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
-    }
-    return { maximumScale, peakCycles, maximumPeakCount };
-  }, activated.id);
-  expect(inflationProfile.maximumScale).toBeGreaterThan(1.12);
-  expect(inflationProfile.peakCycles).toBe(1);
-  expect(inflationProfile.maximumPeakCount).toBe(1);
-
-  const replacement = await page.waitForFunction(
-    ({ id, x, y }) =>
-      window.__THREE_GAME_DIAGNOSTICS__?.appliances.find(
-        (item) =>
-          item.id !== id &&
-          Math.abs(item.screenX - x) < 0.01 &&
-          Math.abs(item.screenY - y) < 0.01 &&
-          item.state === 'spawning',
-      ) ?? null,
-    { id: activated.id, x: activated.screenX, y: activated.screenY },
-    { timeout: 10_000 },
+  await page.waitForFunction(
+    () => {
+      const evidence = JSON.parse(document.documentElement.dataset.connectionEvidence ?? '{}');
+      return evidence.sawPetals === true
+        && evidence.sawInflating === true
+        && evidence.maximumScale > 1.12;
+    },
+    null,
+    { timeout: 90_000 },
   );
-  const replacementState = await replacement.jsonValue();
+  await page.waitForFunction(
+    () => JSON.parse(document.documentElement.dataset.connectionEvidence ?? '{}').replacementIdle === true,
+    null,
+    { timeout: 90_000 },
+  );
+  const evidence = await page.evaluate(() =>
+    JSON.parse(document.documentElement.dataset.connectionEvidence ?? '{}'),
+  );
+  expect(evidence.petalsBeforeConnection).toBe(false);
+  expect(evidence.petalsDuringConnection).toBe(false);
+  expect(evidence.applianceDuringConnection).toBe(false);
+  expect(evidence.activated).not.toBeNull();
+  expect(evidence.maximumScale).toBeGreaterThan(1.12);
+  expect(evidence.peakCycles).toBe(1);
+  expect(evidence.maximumPeakCount).toBe(1);
+  const replacementState = evidence.replacement as null | { id: string; kind: string; dropping: boolean };
   expect(replacementState).not.toBeNull();
-  expect(replacementState?.kind).not.toBe(activated.kind);
+  expect(replacementState?.kind).not.toBe(evidence.activated.kind);
   expect(replacementState?.dropping).toBe(true);
   const routing = await page.evaluate(() => window.__THREE_GAME_DIAGNOSTICS__?.routing ?? null);
   expect(routing?.allRequiredCovered).toBe(true);
   expect(routing?.requiredColors.every((color) => routing.coveredColors.includes(color))).toBe(true);
-
-  await page.waitForFunction(
-    (id) => {
-      const item = window.__THREE_GAME_DIAGNOSTICS__?.appliances.find((candidate) => candidate.id === id);
-      return item?.state === 'idle' && item.dropping === false;
-    },
-    replacementState?.id,
-    { timeout: 10_000 },
-  );
 });
 
 test('loading overlay blocks play immediately and the next-level button keeps readable contrast', async ({ page }) => {

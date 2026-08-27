@@ -278,7 +278,12 @@ export class ApplianceTarget {
     const fixedPerformanceTime = window.__APPLIANCE_PERFORMANCE_TIME_OVERRIDE__;
     this.activeElapsed = Number.isFinite(fixedPerformanceTime)
       ? Math.max(0, fixedPerformanceTime as number)
-      : Math.max(0, now - this.activeStartedAt);
+      : this.kind === 'washer'
+        // The washer cable bundle uses the render delta with a capped catch-up step.
+        // Advancing the appliance by wall time would let one slow frame stop and
+        // recycle the washer while the cable bundle is still regrouping.
+        ? Math.max(0, this.activeElapsed + Math.max(0, delta))
+        : Math.max(0, now - this.activeStartedAt);
     const activeDuration = poweredActiveDuration(this.kind);
     const powered = poweredAnimationState(this.activeElapsed, this.kind);
     this.activeTimeRemaining = Math.max(0, activeDuration - this.activeElapsed);
@@ -568,6 +573,7 @@ export class ApplianceScene {
   private readonly assignments = new Map<string, ApplianceTarget>();
   private readonly requiredColors = new Set<number>();
   private readonly colorPlugStyles = new Map<number, PlugStyleId>();
+  private readonly colorRoutingAliases = new Map<number, number>();
   private readonly raycaster = new THREE.Raycaster();
   private readonly pointer = new THREE.Vector2();
   private readonly projected = new THREE.Vector3();
@@ -700,6 +706,7 @@ export class ApplianceScene {
     this.assignments.clear();
     this.requiredColors.clear();
     this.colorPlugStyles.clear();
+    this.colorRoutingAliases.clear();
     this.targets.forEach((target) => target.dispose());
     this.targets.length = 0;
     this.pendingSpawns.length = 0;
@@ -729,9 +736,21 @@ export class ApplianceScene {
 
   getPlugStyleForColor(color: number): PlugStyleId {
     const style = this.colorPlugStyles.get(color)
-      ?? this.targets.find((target) => target.accent === color)?.plugStyleId;
+      ?? this.targets.find((target) => target.accent === (this.colorRoutingAliases.get(color) ?? color))?.plugStyleId;
     if (!style) throw new Error(`No appliance plug style registered for color ${color}.`);
     return style;
+  }
+
+  setSingleTargetColorAliases(colors: readonly number[]): void {
+    this.colorRoutingAliases.clear();
+    const target = this.targets.length === 1 ? this.targets[0] : null;
+    if (target) {
+      colors.forEach((color) => {
+        this.colorRoutingAliases.set(color, target.accent);
+        this.colorPlugStyles.set(color, target.plugStyleId);
+      });
+    }
+    this.syncRoutingRevision();
   }
 
   get routingRevision(): number {
@@ -769,7 +788,8 @@ export class ApplianceScene {
   }
 
   canQueueColor(color: number): boolean {
-    return this.targets.some((target) => target.accent === color && !target.isDropping);
+    const routedColor = this.colorRoutingAliases.get(color) ?? color;
+    return this.targets.some((target) => target.accent === routedColor && !target.isDropping);
   }
 
   canHandleColor(color: number): boolean {
@@ -796,10 +816,19 @@ export class ApplianceScene {
     allRequiredCovered: boolean;
     reservations: Array<{ cableId: string; color: number; targetId: string }>;
   } {
-    const coveredColors = [...new Set(this.targets.map((target) => target.accent))];
-    const assignableColors = [...new Set(
+    const coveredColors = [...new Set([
+      ...this.targets.map((target) => target.accent),
+      ...this.colorRoutingAliases.keys(),
+    ])];
+    const assignableTargetColors = new Set(
       this.targets.filter((target) => this.isAssignableTarget(target)).map((target) => target.accent),
-    )];
+    );
+    const assignableColors = [...new Set([
+      ...assignableTargetColors,
+      ...[...this.colorRoutingAliases]
+        .filter(([, routedColor]) => assignableTargetColors.has(routedColor))
+        .map(([color]) => color),
+    ])];
     const requiredColors = [...this.requiredColors];
     return {
       requiredColors,
@@ -930,6 +959,26 @@ export class ApplianceScene {
     });
     recycle.forEach((target) => this.replaceTarget(target, camera, screenDepth, now));
     this.syncRoutingRevision();
+  }
+
+  replaceActiveTargetForEvidence(): boolean {
+    const camera = this.camera;
+    const target = this.targets.find((candidate) => candidate.state !== 'idle');
+    if (!camera || !target) return false;
+    camera.updateMatrixWorld(true);
+    const screenDepth = camera.position.length() + BACK_LAYER_OFFSET;
+    const targetIndex = this.targets.indexOf(target);
+    this.replaceTarget(target, camera, screenDepth, performance.now() * 0.001);
+    const replacement = this.targets[targetIndex];
+    if (!replacement || replacement === target) return false;
+    for (let index = this.pendingSpawns.length - 1; index >= 0; index -= 1) {
+      if (this.pendingSpawns[index].target === replacement) this.pendingSpawns.splice(index, 1);
+    }
+    replacement.reset();
+    replacement.depthScale = screenDepth / REFERENCE_SCREEN_DEPTH;
+    this.positionTarget(replacement, camera, screenDepth);
+    this.syncRoutingRevision();
+    return true;
   }
 
   beginOpeningCameraTransition(): void {
@@ -1766,8 +1815,9 @@ export class ApplianceScene {
   }
 
   private assignmentCandidates(color: number): ApplianceTarget[] {
+    const routedColor = this.colorRoutingAliases.get(color) ?? color;
     return this.targets.filter((target) => (
-      target.accent === color
+      target.accent === routedColor
       && target.state === 'idle'
       && this.isAssignableTarget(target)
     ));
@@ -1781,7 +1831,8 @@ export class ApplianceScene {
       target.isLifecycleTransitioning ? 1 : 0,
       target.isConnecting ? 1 : 0,
     ].join(':')).join('|');
-    const signature = `${[...this.requiredColors].join(',')}#${targetSignature}`;
+    const aliasSignature = [...this.colorRoutingAliases].map(([color, routedColor]) => `${color}:${routedColor}`).join(',');
+    const signature = `${[...this.requiredColors].join(',')}#${targetSignature}#${aliasSignature}`;
     if (signature === this.routingStateSignature) return;
     this.routingStateSignature = signature;
     this.routingStateRevision += 1;

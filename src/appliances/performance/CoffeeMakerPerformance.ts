@@ -182,7 +182,14 @@ export function applyCoffeeMakerPerformance(root: THREE.Group, time: number, pow
     if (!volume.visible) return;
     visibleSteamVolumes += 1;
     const lane = Number(volume.userData.lane ?? 0);
-    volume.position.set(lane * 0.055 + Math.sin(time * 2 + index) * 0.05, phase * (0.8 + peak * 0.52), Math.cos(time * 1.6 + index) * 0.04);
+    const forwardDrift = THREE.MathUtils.smoothstep(phase, 0.02, 0.16) * 0.4
+      + THREE.MathUtils.smoothstep(phase, 0.16, 1) * (0.1 + peak * 0.08);
+    volume.position.set(
+      lane * 0.055 + Math.sin(time * 2 + index) * 0.05 * phase,
+      phase * (0.8 + peak * 0.52),
+      forwardDrift + Math.cos(time * 1.6 + index) * 0.025 * phase,
+    );
+    volume.userData.risePhase = phase;
     volume.scale.set(0.55 + life * 0.72, 0.7 + life * (0.8 + peak * 0.28), 0.55 + life * 0.72);
   });
   setEffectMaterial(root, 'steam', steamStrength * 0.48, steamStrength * 0.1);
@@ -207,7 +214,13 @@ export function applyCoffeeMakerPerformance(root: THREE.Group, time: number, pow
     point.visible = life > 0.14;
     if (!point.visible) return;
     visibleWarmLightPoints += 1;
-    point.position.set(Number(point.userData.lane ?? 0) * 0.075, 0.12 + phase * (0.78 + peak * 0.35), Math.sin(index * 1.9) * 0.12);
+    const forwardDrift = THREE.MathUtils.smoothstep(phase, 0.04, 0.25) * (0.4 + peak * 0.08)
+      + THREE.MathUtils.smoothstep(phase, 0.25, 1) * 0.08;
+    point.position.set(
+      Number(point.userData.lane ?? 0) * 0.075 * phase,
+      0.04 + phase * (0.86 + peak * 0.35),
+      forwardDrift + Math.sin(index * 1.9) * 0.035 * phase,
+    );
     point.scale.setScalar(0.65 + life * 0.9);
   });
   setEffectMaterial(root, 'warm-light', aromaStrength * 0.86, aromaStrength * (0.9 + peak * 1.5));

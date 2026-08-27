@@ -21,12 +21,14 @@ test('coffee maker owns a transparent hopper with sculpted creased beans and no 
   const model = build();
   const beanBodies: THREE.Mesh[] = [];
   const beanCreases: THREE.Mesh[] = [];
+  const beanPivots: THREE.Object3D[] = [];
   const planes: string[] = [];
   const legacy: string[] = [];
   model.root.traverse((object) => {
     if (object instanceof THREE.Mesh && object.geometry.type === 'PlaneGeometry') planes.push(object.name);
     if (/^coffee-maker-sculpted-bean-\d+$/.test(object.name)) beanBodies.push(object as THREE.Mesh);
     if (/^coffee-maker-bean-central-crease-\d+$/.test(object.name)) beanCreases.push(object as THREE.Mesh);
+    if (/^coffee-maker-hopper-bean-pivot-\d+$/.test(object.name)) beanPivots.push(object);
     if (LEGACY_EFFECT.test(object.name)) legacy.push(object.name);
   });
 
@@ -41,6 +43,10 @@ test('coffee maker owns a transparent hopper with sculpted creased beans and no 
   expect(beanBodies.every((bean) => bean.scale.x > bean.scale.z)).toBe(true);
   expect(beanCreases).toHaveLength(30);
   expect(beanCreases.every((crease) => crease.geometry.type === 'TubeGeometry')).toBe(true);
+  expect(beanPivots.every((bean) => bean.userData.restingPattern === 'deterministic-loose-pile')).toBe(true);
+  expect(new Set(beanPivots.map((bean) => bean.position.y.toFixed(3))).size).toBeGreaterThan(12);
+  expect(new Set(beanPivots.map((bean) => bean.position.x.toFixed(3))).size).toBeGreaterThan(24);
+  expect(new Set(beanPivots.map((bean) => bean.position.z.toFixed(3))).size).toBeGreaterThan(24);
   expect(planes).toEqual([]);
   expect(legacy).toEqual([]);
   expect(model.root.userData.coffeeMakerEffectContract).toMatchObject({
@@ -79,16 +85,38 @@ test('coffee maker timeline shows pre-infusion, heavy extraction, pressure peak 
   expect(peakState.visibleAromaCurls).toBe(5);
   expect(peakState.visibleWarmLightPoints).toBeGreaterThan(6);
   peak.root.updateWorldMatrix(true, true);
+  const steamSocket = peak.root.getObjectByName('coffee-maker-steam-socket')!;
+  const steamRigOrigin = peak.root.getObjectByName('coffee-maker-volumetric-steam-rig')!;
+  expect(Math.abs(steamSocket.position.x)).toBeLessThan(0.001);
+  expect(Math.abs(steamSocket.position.z)).toBeLessThan(0.001);
+  expect(Math.abs(steamRigOrigin.position.x)).toBeLessThan(0.001);
+  expect(Math.abs(steamRigOrigin.position.z)).toBeLessThan(0.001);
   const upperShell = peak.root.getObjectByName('coffee-maker-upper-rounded-shell')!;
   const upperShellBounds = new THREE.Box3().setFromObject(upperShell);
   const penetratingEffects: string[] = [];
   const steamRig = peak.root.getObjectByName('coffee-maker-volumetric-steam-rig')!;
   steamRig.traverse((object) => {
-    if (object instanceof THREE.Mesh && object.visible) {
-      if (new THREE.Box3().setFromObject(object).intersectsBox(upperShellBounds)) penetratingEffects.push(object.name);
+    if (!(object instanceof THREE.Mesh) || !object.visible) return;
+    const positions = object.geometry.getAttribute('position') as THREE.BufferAttribute;
+    for (let index = 0; index < positions.count; index += 1) {
+      const vertex = new THREE.Vector3().fromBufferAttribute(positions, index).applyMatrix4(object.matrixWorld);
+      if (!upperShellBounds.containsPoint(vertex)) continue;
+      penetratingEffects.push(object.name);
+      break;
     }
   });
   expect(penetratingEffects).toEqual([]);
+  const visibleSteamPivots = Array.from({ length: 12 }, (_, index) => (
+    peak.root.getObjectByName(`coffee-maker-steam-volume-pivot-${index + 1}`)!
+  )).filter((object) => object.visible);
+  const lowestSteam = visibleSteamPivots.reduce((lowest, object) => (
+    object.position.y < lowest.position.y ? object : lowest
+  ));
+  const highestSteam = visibleSteamPivots.reduce((highest, object) => (
+    object.position.y > highest.position.y ? object : highest
+  ));
+  expect(lowestSteam.position.z).toBeLessThan(0.16);
+  expect(highestSteam.position.z).toBeGreaterThan(lowestSteam.position.z + 0.2);
   expect(peakState.timelineOwner).toBe('AppliancePerformanceSystem');
   expect(peakState.effectOwner).toBe('coffee-maker-model-rig');
   expect(peakState.sharedSpectacleEffects).toBe('disabled');

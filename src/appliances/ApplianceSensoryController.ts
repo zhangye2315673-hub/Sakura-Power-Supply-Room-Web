@@ -29,6 +29,8 @@ type TargetState = {
   neonMaterialCount: number;
   neonIntensity: number;
   poweredReveal: number;
+  poweredLight: THREE.PointLight | null;
+  poweredLightColor: THREE.Color;
 };
 
 const NIGHT_NEON_DEFAULT = { intensity: 0.36, pulseRate: 1.45 } as const;
@@ -43,11 +45,13 @@ const NIGHT_NEON_FULL = 0.9;
 const NIGHT_NEON_TARGET_LUMINANCE = 0.5;
 const NIGHT_NEON_MIN_GAIN = 0.42;
 const NIGHT_NEON_MAX_GAIN = 1.8;
-const EXPLORATION_NEON_BOOST = 1.68;
+const EXPLORATION_NEON_BOOST = 1.76;
 const EXPLORATION_POWERED_REVEAL_START = 0.06;
 const EXPLORATION_POWERED_REVEAL_FULL = 0.92;
-const EXPLORATION_POWERED_BODY_INTENSITY = 0.78;
-const EXPLORATION_POWERED_ACCENT_MIX = 0.48;
+const EXPLORATION_POWERED_BODY_INTENSITY = 0.88;
+const EXPLORATION_POWERED_ACCENT_MIX = 0.52;
+const EXPLORATION_POWERED_LIGHT_INTENSITY = 1.25;
+const EXPLORATION_POWERED_LIGHT_DISTANCE = 9.5;
 
 function hueDistance(first: number, second: number): number {
   const distance = Math.abs(first - second);
@@ -135,7 +139,7 @@ export class ApplianceSensoryController {
         state: target.state,
         matchedNodes: state.matchedNodes,
         missingFunctionalNode: state.matchedNodes.length === 0,
-        lightIntensity: 0,
+        lightIntensity: state.poweredLight?.intensity ?? 0,
         neonMaterialCount: state.neonMaterialCount,
         neonIntensity: state.neonIntensity,
         poweredReveal: state.poweredReveal,
@@ -167,6 +171,7 @@ export class ApplianceSensoryController {
           EXPLORATION_POWERED_REVEAL_FULL,
         ) * exploration
       : 0;
+    this.updatePoweredLight(target, state, elapsed);
 
     state.materials.forEach((entry) => {
       const {
@@ -289,6 +294,8 @@ export class ApplianceSensoryController {
       ).size,
       neonIntensity: 0,
       poweredReveal: 0,
+      poweredLight: null,
+      poweredLightColor: (accent ?? new THREE.Color(0xd8b5a6)).clone().lerp(new THREE.Color(0xfff0df), 0.68),
     };
     this.targets.set(target, state);
     return state;
@@ -308,7 +315,43 @@ export class ApplianceSensoryController {
     return baseline;
   }
 
+  private updatePoweredLight(
+    target: AppliancePerformanceTarget,
+    state: TargetState,
+    elapsed: number,
+  ): void {
+    if (state.poweredReveal <= 0.001) {
+      this.removePoweredLight(state);
+      return;
+    }
+    if (!state.poweredLight) {
+      state.poweredLight = new THREE.PointLight(
+        state.poweredLightColor,
+        0,
+        EXPLORATION_POWERED_LIGHT_DISTANCE,
+        1.65,
+      );
+      state.poweredLight.name = `exploration-powered-fill-${target.kind}`;
+      state.poweredLight.castShadow = false;
+      this.root.add(state.poweredLight);
+    }
+    target.root.getWorldPosition(state.poweredLight.position);
+    state.poweredLight.position.y += 0.45;
+    state.poweredLight.intensity = EXPLORATION_POWERED_LIGHT_INTENSITY
+      * state.poweredReveal
+      * (0.97 + Math.sin(elapsed * 2.1 + neonPhase(target.kind)) * 0.03);
+  }
+
+  private removePoweredLight(state: TargetState): void {
+    if (!state.poweredLight) return;
+    state.poweredLight.removeFromParent();
+    state.poweredLight.dispose();
+    state.poweredLight = null;
+  }
+
   private removeTarget(target: AppliancePerformanceTarget): void {
+    const state = this.targets.get(target);
+    if (state) this.removePoweredLight(state);
     this.targets.delete(target);
   }
 }

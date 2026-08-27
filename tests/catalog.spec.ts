@@ -10,6 +10,7 @@ import {
   drivePoweredAnimation,
   POWERED_ACTIVE_DURATION,
   PRINTER_POWERED_ACTIVE_DURATION,
+  WASHER_POWERED_ACTIVE_DURATION,
   POWERED_WIND_DOWN_DURATION,
   poweredActiveDuration,
   poweredAnimationState,
@@ -49,6 +50,9 @@ test('game and gallery share the same powered animation clock', () => {
   ]);
 
   expect(poweredActiveDuration('printer')).toBe(PRINTER_POWERED_ACTIVE_DURATION);
+  expect(poweredActiveDuration('washer')).toBe(WASHER_POWERED_ACTIVE_DURATION);
+  expect(WASHER_POWERED_ACTIVE_DURATION).toBeGreaterThan(6.6);
+  expect(poweredAnimationState(5.2, 'washer').active).toBe(true);
   expect(PRINTER_POWERED_ACTIVE_DURATION).toBeGreaterThan(POWERED_ACTIVE_DURATION);
   expect(poweredAnimationState(POWERED_ACTIVE_DURATION, 'printer').active).toBe(true);
   expect(poweredAnimationState(PRINTER_POWERED_ACTIVE_DURATION, 'printer')).toEqual({
@@ -338,7 +342,8 @@ test('appliance gallery exposes all models with a live orbitable WebGL preview',
       },
       definition.id,
     );
-    await expect(page.locator('.appliance-gallery-stage > p')).not.toHaveText('');
+    await expect(page.locator('.appliance-gallery-header strong')).toHaveText(definition.label);
+    await expect(page.locator('.appliance-gallery-header strong + span')).toContainText(definition.sizeTier);
   }
 
   const canvas = page.locator('.appliance-gallery-canvas');

@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import type { SkyRig } from '../style/sky';
 import type { NightQualityTier } from './ThemeController';
+import { SEASON_PROFILES, type SeasonEnvironmentState } from './SeasonProfiles';
 
 export type LanternSnapshot = {
   position: [number, number];
@@ -17,24 +18,6 @@ type LightingRig = {
   fill: THREE.DirectionalLight;
   bounce: THREE.DirectionalLight;
   hemi: THREE.HemisphereLight;
-};
-
-const DAY = {
-  fog: new THREE.Color(0xd4e8fa),
-  sun: new THREE.Color(0xfff1d2),
-  fill: new THREE.Color(0xaab4ec),
-  bounce: new THREE.Color(0xd8cbe8),
-  hemiSky: new THREE.Color(0xd4e8fa),
-  hemiGround: new THREE.Color(0x9d89aa),
-};
-
-const NIGHT = {
-  fog: new THREE.Color(0x202641),
-  sun: new THREE.Color(0xd6ddf4),
-  fill: new THREE.Color(0xaeb8d5),
-  bounce: new THREE.Color(0xc4a8bd),
-  hemiSky: new THREE.Color(0xb5c2dc),
-  hemiGround: new THREE.Color(0x77788e),
 };
 
 const EXPLORATION_FOG = new THREE.Color(0x070914);
@@ -54,6 +37,7 @@ export class NightEnvironment {
   private pointerOverUi = false;
   private inApplianceZone = false;
   private reducedMotion = false;
+  private environment: Readonly<SeasonEnvironmentState> = SEASON_PROFILES.spring.day;
   private readonly raycaster = new THREE.Raycaster();
   private readonly lanternPlane = new THREE.Plane();
   private readonly lanternWorld = new THREE.Vector3();
@@ -87,6 +71,12 @@ export class NightEnvironment {
     this.applyEnvironmentLighting();
   }
 
+  setSeasonEnvironment(environment: Readonly<SeasonEnvironmentState>): void {
+    this.environment = environment;
+    this.applyEnvironmentLighting();
+    this.sky.setSeasonEnvironment(environment);
+  }
+
   setExplorationProgress(progress: number): void {
     this.explorationProgress = THREE.MathUtils.clamp(progress, 0, 1);
     this.applyEnvironmentLighting();
@@ -96,21 +86,21 @@ export class NightEnvironment {
   private applyEnvironmentLighting(): void {
     const fog = this.scene.fog instanceof THREE.Fog ? this.scene.fog : null;
     if (fog) {
-      fog.color.copy(DAY.fog).lerp(NIGHT.fog, this.progress);
+      fog.color.copy(this.environment.fog);
       fog.color.lerp(EXPLORATION_FOG, this.explorationProgress * this.progress);
-      fog.near = THREE.MathUtils.lerp(this.baseFogNear, this.baseFogNear * 0.88, this.progress);
-      fog.far = THREE.MathUtils.lerp(this.baseFogFar, this.baseFogFar * 0.88, this.progress);
+      fog.near = this.baseFogNear * this.environment.fogNearScale;
+      fog.far = this.baseFogFar * this.environment.fogFarScale;
     }
-    this.lights.sun.color.copy(DAY.sun).lerp(NIGHT.sun, this.progress);
-    this.lights.fill.color.copy(DAY.fill).lerp(NIGHT.fill, this.progress);
-    this.lights.bounce.color.copy(DAY.bounce).lerp(NIGHT.bounce, this.progress);
-    this.lights.hemi.color.copy(DAY.hemiSky).lerp(NIGHT.hemiSky, this.progress);
-    this.lights.hemi.groundColor.copy(DAY.hemiGround).lerp(NIGHT.hemiGround, this.progress);
+    this.lights.sun.color.copy(this.environment.sun);
+    this.lights.fill.color.copy(this.environment.fill);
+    this.lights.bounce.color.copy(this.environment.bounce);
+    this.lights.hemi.color.copy(this.environment.hemiSky);
+    this.lights.hemi.groundColor.copy(this.environment.hemiGround);
     const ambientScale = THREE.MathUtils.lerp(1, EXPLORATION_AMBIENT, this.explorationProgress * this.progress);
-    this.lights.sun.intensity = THREE.MathUtils.lerp(2.25, 0.82, this.progress) * ambientScale;
-    this.lights.fill.intensity = THREE.MathUtils.lerp(1.08, 0.62, this.progress) * ambientScale;
-    this.lights.bounce.intensity = THREE.MathUtils.lerp(0.34, 0.28, this.progress) * ambientScale;
-    this.lights.hemi.intensity = THREE.MathUtils.lerp(1.12, 0.68, this.progress) * ambientScale;
+    this.lights.sun.intensity = this.environment.sunIntensity * ambientScale;
+    this.lights.fill.intensity = this.environment.fillIntensity * ambientScale;
+    this.lights.bounce.intensity = this.environment.bounceIntensity * ambientScale;
+    this.lights.hemi.intensity = this.environment.hemiIntensity * ambientScale;
     this.sky.setThemeProgress(this.progress);
   }
 

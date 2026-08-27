@@ -48,10 +48,27 @@ interface ThreeGameDiagnostics {
   activeAnimations: number;
   queuedConnections: number;
   activeConnections: number;
+  activeFlingMotions: Array<{
+    id: string;
+    progress: number;
+    worldPosition: number[];
+    worldDistanceFromLaunch: number;
+    distanceFromBundleCenter: number;
+    angularVelocity: number[];
+    direction: number[];
+    screenX: number;
+    screenY: number;
+    detachedFromCableRoot: boolean;
+  }>;
+  completedFlingMotions: Array<{
+    id: string;
+    maxScreenRadius: number;
+    distanceMonotonic: boolean;
+  }>;
   activeMotion: {
     id: string;
     end: 'head' | 'tail';
-    kind: 'exit' | 'bump';
+    kind: 'exit' | 'bump' | 'skill-fling';
     color: number;
     targetId: string | null;
     targetAccent: number | null;
@@ -69,6 +86,17 @@ interface ThreeGameDiagnostics {
   hoveredCableEnd: 'head' | 'tail' | null;
   activeBurstPetals: number;
   theme: {
+    season: import('./theme/SeasonController').SeasonSnapshot;
+    seasonParticles: {
+      weights: Record<import('./theme/SeasonProfiles').SeasonMode, number>;
+      springOpacity: number;
+      summerOpacity: number;
+      autumnOpacity: number;
+      winterOpacity: number;
+      fireflyOpacity: number;
+      refrigeratorSnowVisible: boolean;
+      refrigeratorColdProgress: number;
+    };
     mode: import('./theme/ThemeController').ThemeMode;
     targetMode: import('./theme/ThemeController').ThemeMode;
     progress: number;
@@ -76,6 +104,10 @@ interface ThreeGameDiagnostics {
     reducedMotion: boolean;
     source: 'query' | 'saved' | 'default' | 'manual';
     stars: number;
+    explorationEyes: {
+      pairs: number;
+      progress: number;
+    };
     lantern: import('./theme/NightEnvironment').LanternSnapshot;
     quality: {
       tier: import('./theme/ThemeController').NightQualityTier;
@@ -140,6 +172,9 @@ interface ThreeGameDiagnostics {
     trailLength: number;
     petalMotion: number;
     impactCount: number;
+    seasonWeights: Record<import('./theme/SeasonProfiles').SeasonMode, number>;
+    visibleSeasonLayers: import('./theme/SeasonProfiles').SeasonMode[];
+    summerFirefliesVisible: boolean;
     jellyScale: [number, number, number];
   };
   locale: 'zh' | 'en';
@@ -154,22 +189,83 @@ interface ThreeGameDiagnostics {
     lives: number;
     maxLives: number;
     buff: import('./skill/SkillChallengeEngine').SkillStatusId | null;
+    buffTurnsRemaining: number | null;
     debuff: import('./skill/SkillChallengeEngine').SkillStatusId | null;
+    debuffTurnsRemaining: number | null;
+    remainingCableIds: string[];
     lampHintCableId: string | null;
+    popcornHintCableId: string | null;
     cableEffects: Array<{
       id: string;
       baseColor: number;
       cableColor: number;
       tailColor: number;
       glowStrength: number;
+      skillTintStrength: number;
+      skillTintEmissionScale: number;
+      recycleSelectionState: 'none' | 'hover' | 'selected';
+      recycleHighlightStrength: number;
+      recyclePulse: number;
+      recycleScale: number;
+      bundleSpacingOffset: number[];
+      bundleSpacingOffsetLength: number;
+      overheatAmount: number;
+      overheatReveal: number;
+      overheatTurns: number;
+      inductionRevealActive: boolean;
+      inductionHeatAmount: number;
+      inductionRingCount: number;
+      inductionRingProgresses: [number, number];
+      inductionRingTangentAlignments: [number, number];
+      inductionRingMotion: string;
+      plugOverheatAmount: number;
+      plugOverheatReveal: number;
+      plugOverheatMaterialCount: number;
+      plugOverheatPathScale: number;
+      coffeeStainAmount: number;
+      coffeeStainReveal: number;
+      coffeeStainDirection: number;
       freezeAmount: number;
       freezeProgress: number;
       iceShellVisible: boolean;
       iceShellOpacity: number;
       plugIceShellCount: number;
+      visualThicknessScale: number;
+      geometryThicknessScale: number;
+      plugJointThicknessScale: number;
+      fakeTailPlugVisible: boolean;
       lampGuideEnd: 'head' | 'tail' | null;
     }>;
     effectAssets: string[];
+    popcornTransientCount: number;
+    microwaveMarkers: Array<{
+      cableId: string;
+      quaternion: [number, number, number, number];
+      rings: Array<{ type: string; depthTest: boolean }>;
+    }>;
+    popcornMarkers: Array<{
+      cableId: string;
+      position: [number, number, number];
+      kernelCount: number;
+      ringSegmentCount: number;
+      rayCount: number;
+      ringTubeRadius: number;
+      directionAlignment: number;
+      orientationMode: string;
+      kernelAngularGaps: number[];
+    }>;
+    bubbleShield: import('./skill/BubbleShieldPresentation').BubbleShieldDiagnostics;
+    soundWaveShield: import('./skill/SoundWaveShieldPresentation').SoundWaveShieldDiagnostics;
+    dehumidifierDryShield: import('./skill/DehumidifierDryShieldPresentation').DehumidifierDryShieldDiagnostics;
+    portableSpeakerSpacing: import('./skill/PortableSpeakerSpacingPresentation').PortableSpeakerSpacingDiagnostics;
+    dehumidifierCanopyPetals: {
+      active: boolean;
+      particleCount: number;
+      radius: number;
+      direction: readonly [number, number, number];
+      path: 'open-canopy-outer-arc';
+      seasonalProps: true;
+    };
     steamReveal: {
       active: boolean;
       progress: number;
@@ -188,6 +284,8 @@ interface ThreeGameDiagnostics {
     televisionReconstruction: import('./skill/TelevisionReconstructionTransition').TelevisionReconstructionDiagnostics;
     toasterHeatSwap: import('./skill/ToasterHeatSwapTransition').ToasterHeatSwapDiagnostics;
     refrigeratorFreeze: import('./skill/RefrigeratorFreezePresentation').RefrigeratorFreezeDiagnostics;
+    kettleThaw: import('./skill/KettleThawPresentation').KettleThawDiagnostics;
+    washerSpin: import('./skill/WasherSpinPresentation').WasherSpinDiagnostics;
     refrigeratorScreenIce: import('./skill/RefrigeratorScreenIceOverlay').RefrigeratorScreenIceDiagnostics;
     coldParticles: {
       progress: number;
@@ -196,6 +294,8 @@ interface ThreeGameDiagnostics {
     screenEffect: {
       mode: import('./style/post').SkillScreenEffect;
       progress: number;
+      splashActive: boolean;
+      splashProgress: number;
     };
   } | null;
   rush: {
@@ -309,8 +409,13 @@ interface Window {
     geometries: number;
     textures: number;
   };
+  __FINISH_OPENING_FOR_EVIDENCE__?: () => boolean;
+  __SETTLE_APPLIANCE_FOR_EVIDENCE__?: () => boolean;
   __ACTIVATE_APPLIANCE_FOR_EVIDENCE__?: (kind: string) => boolean;
     __ACTIVATE_RUSH_CABLE_FOR_EVIDENCE__?: (id: string) => boolean;
+  __PULL_CABLE_FOR_EVIDENCE__?: (id?: string, end?: 'head' | 'tail') => boolean;
+  __COFFEE_SPLASH_PROGRESS_OVERRIDE__?: number;
+  __COFFEE_STAIN_PROGRESS_OVERRIDE__?: number;
     __SHOW_SKILL_EFFECT_FOR_EVIDENCE__?: (asset: string, yaw?: number) => boolean;
   __SHOW_SKILL_PRESENTATION_FOR_EVIDENCE__?: (
     skill: 'radio' | 'robot-vacuum' | 'rice-cooker',

@@ -21,6 +21,10 @@ const controller = new SkillPresentationController(scene, camera, {
   commitAutoRemoval: () => true,
   setCableVisualScale: (scale) => { cableScale = scale; },
   getRiceCableVisualScale: () => cableScale,
+  getCableBaseColor: () => null,
+  setCableSkillSweep: () => {},
+  setCableSkillTint: () => {},
+  commitCableColors: () => {},
 });
 
 const params = new URLSearchParams(location.search);

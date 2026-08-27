@@ -36,15 +36,15 @@
 | 16 | 搅拌机 / `color-shuffle` 全线色彩搅拌 | 保持颜色总量不变，重新随机分配所有剩余线颜色；重建家电路由但不改路径。 | `blender-energy-shards` 瞬时碎片；线缆颜色整体切换。无全屏。 | 无持久图标。 | cue；受影响线高亮；结算后新颜色立即生效。 | 缺少“全线搅拌过程”动画；颜色变化期间输入已锁定，需保持因果清楚。 |
 | 17 | 打印机 / `printer-copy` 抽线动作复印 | 设置一次性 pending；下一次正确抽线事务消耗旧 pending，并按新局面自动抽出一根，不消费本次新获得机会。 | 无专属 3D 技能资产；打印机通电动画独立；pending 图标出现在 HUD 右侧。 | 非状态槽 pending 打印机图标，带数量标记。 | cue；HUD 图标 tooltip；下一次自动抽线后目标高亮/消失。 | 自动抽线需要更明显的“复制对象”和时序提示，避免玩家以为误操作。 |
 | 18 | 扭蛋机 / `sakura-gacha` 樱花三选一 | 生成 2 张收益卡 + 1 张风险卡；玩家仅一次翻牌选择，选后立即结算。 | `gacha-card-frame` 瞬时卡框；CSS 三卡翻转、未选卡淡出。 | 不占 BUFF/DEBUFF 槽；选中卡内容临时展示。 | cue“扭蛋技能选定”；全屏卡牌面板；卡牌正面显示家电/技能/说明。 | 卡牌信息层级和风险识别可增强；当前 `presentation.assetIds` 未使用。 |
-| 19 | 唱片机 / `soothing-record` 安心旋律 | 立即恢复 1 格生命并生成永久 BUFF；抵挡一次受阻点击后消耗。 | `record-note-orb-ring` 持久音符环。无全屏。 | BUFF `soothing-record`，计数 1。 | cue；生命 HUD 变化；受阻时保护 toast。 | “恢复生命”和“抵挡一次”是双效果，需要分两段反馈。 |
-| 20 | 闹钟 / `time-fast-forward` 时间快进 | 将所有仍存在的限回合 BUFF/DEBUFF 额外推进 1 回合。 | `alarm-time-ring` 瞬时时间环。无全屏。 | 不占槽；现有状态数字立即减少。 | cue；状态计数同时变化。 | 可能导致多个状态同时过期，需增加到期顺序/结果提示。 |
-| 21 | 爆米花机 / `popcorn-meal` 爆米花加餐与出口提示 | 最大生命 +1（上限 6），并从当前可用出口随机标记 1 根。 | `popcorn-heart-crown` 瞬时爱心王冠；目标线高亮。无全屏。 | 不占槽；生命 HUD 上限变化。 | cue；生命上限变化；目标出口高亮。 | “加餐”和“出口提示”是双目标，需拆成连续两个视觉节拍。 |
+| 19 | 唱片机 / `soothing-record` 安心旋律 | 立即恢复 1 格生命并生成无回合期限 BUFF；抵挡一次受阻点击后消耗。 | 旧 `record-note-orb-ring` 已废弃；首次音波盾与唱片机动画同步约 `5.2s` 并播放约 4 轮球面扩散环，等待期间约每 `8.5s` 播放一次约 `3.45s`、完整包含 3 轮扩散环的更淡提醒，其余时间隐藏。 | BUFF `soothing-record`，计数 1。 | cue；生命 HUD 变化；常驻 BUFF 图标；低频球面环提醒；受阻时定向音波冲击与保护 toast。 | “恢复生命”和“抵挡一次”分段反馈，但无期限保护不得常驻遮挡线组。 |
+| 20 | 闹钟 / `time-fast-forward` 时间快进 | 将所有仍存在的限回合 BUFF/DEBUFF 额外推进 1 回合。 | 只播放闹钟本体的铃铛、锤击和指针快转；不再生成蓝色 `alarm-time-ring` 模型。无全屏。 | 不占槽；现有状态图标保持可见，数字立即减少。 | cue；状态计数同时变化。 | 可能导致多个状态同时过期，需增加到期顺序/结果提示。 |
+| 21 | 爆米花机 / `popcorn-meal` 爆米花加餐与出口提示 | 最大生命 +1（上限 6），并从当前可用出口随机标记 1 根。 | `popcorn-target-marker` 在可抽插头附近显示三颗爆米花、断续目标环和短射线；触发时局部爆裂，不再高亮整根线。 | 不占槽；生命 HUD 上限变化并播放爆米花颗粒与新增生命格弹入。 | cue；生命上限变化；目标插头局部标记。 | 已拆成“爆裂加餐”与“局部出口提示”两个连续视觉节拍，旧桃心王冠方案废弃。 |
 | 22 | 厨师机 / `normalize-statuses` 搅拌均匀 | 将仍存在的限回合状态统一设为 2 回合；可能缩短 BUFF 或延长 DEBUFF。 | `stand-mixer-status-token` 瞬时状态 token。无全屏。 | 不占槽；现有状态数字统一为 2。 | cue；状态数字统一变化。 | 风险/收益取决于当前状态，需要在 cue 中显示“延长/缩短”结果。 |
 | 23 | 游戏机 / `continue-game` 继续游戏 | 获取一次复活 BUFF；重复触发提升恢复量，复活后 BUFF 消耗。 | `controller-continue-token` 持久 token；`controller-impact-star` 资产存在但当前未接入家电映射。 | BUFF `continue`，显示 `1/恢复量`。 | cue；状态 tooltip；失败时 HUD toast“CONTINUE 已复活”。 | 需要补“获得复活”和“实际复活”两种不同反馈，避免只看到一个状态图标。 |
 | 24 | 微波炉 / `timed-meal` 限时取餐 | 无 DEBUFF 时随机标记 1 根真实出口，生成 2 回合 DEBUFF；抽错/非目标会推进倒计时，过期扣 1 生命。 | `microwave-double-heat-ring` 持久附着目标线；瞬时环；无全屏常驻。 | DEBUFF `overheated-plug`，2 回合。 | cue；目标线高亮；状态倒计时；过期/扣血 toast。 | 目标线、剩余次数和“抽错会扣血”必须同时可读。 |
 | 25 | 台式电脑 / `blue-screen` 蓝屏崩溃 | 有 BUFF 时移除 BUFF；无 BUFF 时扣 1 格生命。 | 无 `ASSET_BY_APPLIANCE` 技能资产；瞬时全屏 `television-glitch` 目前只对电视设置，电脑技能没有专属蓝屏后处理。 | 不占槽；被移除 BUFF 消失或生命减少。 | cue；生命/状态变化由 HUD 和 toast 表示。 | 这是明显表现缺口：技能名是蓝屏，但当前没有电脑专属屏幕故障效果。 |
 | 26 | 电磁炉 / `induction-reveal` 感应显线 | 生成 3 回合 BUFF，持续标记全部真实可抽出口。 | `induction-heat-ring` 持久附着每个可抽出口；目标线高亮。无全屏。 | BUFF `induction-reveal`，3 回合。 | cue；所有真实出口同时高亮；tooltip。 | 全部出口高亮可能压过普通 hover，需要区分“技能显线”和“鼠标选中”。 |
-| 27 | 便携音箱 / `bass-expand` 低音扩圈 | 随机最多 3 根受阻线改变出口方向到外圈；必须做全局可解校验。 | `speaker-bass-wave-arcs` 瞬时声波；目标线拓扑重建。无全屏。 | 无持久图标。 | cue；目标线高亮；结算延迟 900ms。 | 缺少“移动到外圈”的路径预览，需在重建前/后给出方向变化。 |
+| 27 | 便携音箱 / `bass-spacing` 节拍扩距 | 全部剩余线逐拍拉开并保持 `2×` 视觉间距 3 回合；真实拓扑和可抽规则不变。 | 线组整体位置偏移跟随音箱低音节拍，不生成额外技能模型或全屏效果。 | `buff-bass-spacing`，显示剩余 3～1 回合。 | cue；逐拍压缩／膨胀；最终保持扩距；状态结束平滑回落。 | 纯视觉趣味 BUFF，描述必须明确不改变可抽判定，避免玩家误解为解阻。 |
 | 28 | 智能垃圾桶 / `recycle-cable` 指定回收 | 触发后进入一次 `select-recycle-target`；玩家点任意剩余线，立即永久回收。 | 无专属 3D 技能资产；选中线 burst/petal 后隐藏。 | 不占槽；无状态图标。 | cue；底部 `#skill-recycle-prompt` 提示“选择一根线回收”；输入锁定但允许旋转/点击。 | 这是第二个明确选取例外，需保持目标可选范围、确认文案和回收动画清楚。 |
 | 29 | 智能手机 / `fake-double-plug` 双头伪装 | 无 DEBUFF 时随机最多 3 根普通尾端生成永久假插头；真实假插头可导致错误点击扣血；目标线全部移除后 DEBUFF 清除。 | 无专属 3D 技能资产；`setFakeTailPlug(true)` 显示尾端假插头；目标线高亮。无全屏。 | DEBUFF `fake-double-plug`，计数为受影响线数，永久到目标耗尽。 | cue；假尾插头直接可见；错误点击走生命损失/保护反馈。 | 假插头与真实插头的视觉差异、错误点击原因和永久状态说明必须加强。 |
 
@@ -82,5 +82,5 @@
 
 1. 先改表现缺口最大、会改变玩家判断的技能：`blue-screen`、`spin-remove`、`snapshot-sweep`、`swap-ends`、`fake-double-plug`。
 2. 再改分支和倒计时的提醒：`hair-dryer-branch`、`dehumidify`、`normalize-statuses`、`timed-meal`、`continue-game`。
-3. 再改纯提示/拓扑可读性：`lamp-hint`、`route-broadcast`、`induction-reveal`、`bass-expand`、`printer-copy`。
+3. 再改纯提示/拓扑可读性：`lamp-hint`、`route-broadcast`、`induction-reveal`、`bass-spacing`、`printer-copy`。
 4. 最后统一资产契约、atlas 图标来源、cue 文案和测试覆盖。

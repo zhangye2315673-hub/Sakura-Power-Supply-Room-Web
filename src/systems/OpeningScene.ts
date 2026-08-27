@@ -6,7 +6,15 @@ import { PlugCableModel } from '../render/PlugCableModel';
 import { addHullOutline } from '../style/outline';
 import { PAL } from '../style/palette';
 import { cel } from '../style/toon';
+import { SEASON_MODES, type SeasonMode } from '../theme/SeasonProfiles';
 import { createSakuraPetalGeometry, createSakuraPetalMaterial } from './PetalVisual';
+import {
+  createAutumnLeafGeometry,
+  createFireflyGeometry,
+  createSeasonParticleMaterial,
+  createSummerLeafGeometry,
+  createWinterSnowGeometry,
+} from './SeasonParticleVisual';
 
 const TRANSITION_DURATION = 0.9;
 const UP = new THREE.Vector3(0, 1, 0);
@@ -27,7 +35,9 @@ type OpeningCable = {
 };
 
 type IntroPetal = {
-  mesh: THREE.Mesh;
+  mesh: THREE.Group;
+  visuals: Record<SeasonMode, THREE.Mesh>;
+  firefly: THREE.Mesh;
   anchor: THREE.Vector3;
   velocity: THREE.Vector3;
   phase: number;
@@ -81,6 +91,15 @@ export class OpeningScene {
   private readonly socket = new THREE.Group();
   private readonly cables: OpeningCable[] = [];
   private readonly petals: IntroPetal[] = [];
+  private readonly springPetalMaterials = [
+    createSakuraPetalMaterial(PAL.petal, 0.82),
+    createSakuraPetalMaterial(PAL.petalDeep, 0.76),
+  ];
+  private readonly summerLeafMaterial = createSeasonParticleMaterial(0x84ad91, 0);
+  private readonly autumnLeafMaterial = createSeasonParticleMaterial(0xffffff, 0, false, true);
+  private readonly winterSnowMaterial = createSeasonParticleMaterial(0xe5eff5, 0);
+  private readonly fireflyMaterial = createSeasonParticleMaterial(0xffd86a, 0, true);
+  private seasonWeights: Record<SeasonMode, number> = { spring: 1, summer: 0, autumn: 0, winter: 0 };
   private readonly heroPlug: PlugHead;
   private readonly socketNormal = new THREE.Vector3();
   private readonly plugStart = new THREE.Vector3();
@@ -169,6 +188,9 @@ export class OpeningScene {
     trailLength: number;
     petalMotion: number;
     impactCount: number;
+    seasonWeights: Record<SeasonMode, number>;
+    visibleSeasonLayers: SeasonMode[];
+    summerFirefliesVisible: boolean;
     jellyScale: [number, number, number];
   } {
     return {
@@ -177,6 +199,9 @@ export class OpeningScene {
       trailLength: this.petals.length,
       petalMotion: this.petalMotion,
       impactCount: this.impactCount,
+      seasonWeights: { ...this.seasonWeights },
+      visibleSeasonLayers: SEASON_MODES.filter((mode) => this.seasonWeights[mode] > 0.002),
+      summerFirefliesVisible: this.fireflyMaterial.opacity > 0.002,
       jellyScale: [
         this.bundleJelly.scale.x,
         this.bundleJelly.scale.y,
@@ -187,6 +212,21 @@ export class OpeningScene {
 
   setProgress(progress: number): void {
     this.targetProgress = Math.max(this.targetProgress, Math.min(1, progress));
+  }
+
+  setSeasonState(weights: Readonly<Record<SeasonMode, number>>, themeProgress: number): void {
+    for (const mode of SEASON_MODES) this.seasonWeights[mode] = weights[mode];
+    const night = THREE.MathUtils.clamp(themeProgress, 0, 1);
+    this.springPetalMaterials[0].opacity = 0.82 * weights.spring;
+    this.springPetalMaterials[1].opacity = 0.76 * weights.spring;
+    this.summerLeafMaterial.opacity = 0.78 * weights.summer * THREE.MathUtils.lerp(1, 0.35, night);
+    this.autumnLeafMaterial.opacity = 0.84 * weights.autumn;
+    this.winterSnowMaterial.opacity = 0.92 * weights.winter;
+    this.fireflyMaterial.opacity = 0;
+    this.petals.forEach((petal) => {
+      for (const mode of SEASON_MODES) petal.visuals[mode].visible = weights[mode] > 0.002;
+      petal.firefly.visible = false;
+    });
   }
 
   beginTransition(): void {
@@ -218,7 +258,12 @@ export class OpeningScene {
     });
   }
 
-  update(delta: number, elapsed: number, camera: THREE.PerspectiveCamera): void {
+  update(
+    delta: number,
+    elapsed: number,
+    camera: THREE.PerspectiveCamera,
+    transitionDelta = delta,
+  ): void {
     this.progress = THREE.MathUtils.damp(this.progress, this.targetProgress, 5.5, delta);
     this.updateBundleMotion(delta, camera);
     this.updateBundleJelly(delta);
@@ -238,7 +283,10 @@ export class OpeningScene {
       return;
     }
 
-    this.transitionElapsed += delta;
+    // Keep the authored transition duration in wall-clock time when software
+    // WebGL renders at very low frame rates. The normal motion simulation still
+    // uses the bounded frame delta so cable and petal physics cannot jump.
+    this.transitionElapsed += transitionDelta;
     const transition = Math.min(1, this.transitionElapsed / TRANSITION_DURATION);
     const insert = 1 - (1 - transition) ** 3;
     const inverse = 1 - insert;
@@ -251,7 +299,6 @@ export class OpeningScene {
       this.plugContactQuaternion,
       THREE.MathUtils.smoothstep(insert, 0.18, 0.88),
     );
-
     if (transition > 0.56 && !this.burstTriggered) {
       this.burstTriggered = true;
       const burstOrigin = this.socket.position.clone().addScaledVector(this.socketNormal, 0.22);
@@ -380,6 +427,7 @@ export class OpeningScene {
         this.bundleScreenVelocity.y *= 0.92;
         this.triggerBundleImpact(bouncedX, bouncedY);
       }
+
       // Let the bundle breathe back to its normal drift after the impact. A
       // damped recovery reads as inertia instead of a scripted snap.
       const cruiseX = Math.sign(this.bundleScreenVelocity.x || 1) * 0.044;
@@ -477,11 +525,13 @@ export class OpeningScene {
   }
 
   private buildPetals(): void {
-    const geometry = createSakuraPetalGeometry(1.22);
-    const materials = [
-      createSakuraPetalMaterial(PAL.petal, 0.82),
-      createSakuraPetalMaterial(PAL.petalDeep, 0.76),
-    ];
+    const geometries = {
+      spring: createSakuraPetalGeometry(1.22),
+      summer: createSummerLeafGeometry(1.18),
+      autumn: createAutumnLeafGeometry(1.16),
+      winter: createWinterSnowGeometry(1.15),
+      firefly: createFireflyGeometry(1.18),
+    };
     for (let index = 0; index < OPENING_PETAL_COUNT; index += 1) {
       const progress = index / OPENING_PETAL_COUNT;
       const angle = progress * Math.PI * 2 + Math.sin(index * 2.17) * 0.19;
@@ -492,12 +542,35 @@ export class OpeningScene {
         Math.sin(angle * 2 + 0.45) * 0.78 + Math.sin(index * 0.91) * 0.32,
         Math.sin(angle) * (1.7 + Math.cos(index * 1.37) * 0.22),
       );
-      const mesh = new THREE.Mesh(geometry, materials[index % materials.length]);
+      const mesh = new THREE.Group();
+      mesh.name = 'opening-season-particle';
+      const visuals: Record<SeasonMode, THREE.Mesh> = {
+        spring: new THREE.Mesh(geometries.spring, this.springPetalMaterials[index % this.springPetalMaterials.length]),
+        summer: new THREE.Mesh(geometries.summer, this.summerLeafMaterial),
+        autumn: new THREE.Mesh(geometries.autumn, this.autumnLeafMaterial),
+        winter: new THREE.Mesh(geometries.winter, this.winterSnowMaterial),
+      };
+      const firefly = new THREE.Mesh(geometries.firefly, this.fireflyMaterial);
+      firefly.position.set(0.08, 0.06, 0.015);
+      firefly.scale.setScalar(0.8 + (index % 4) * 0.1);
+      for (const mode of SEASON_MODES) {
+        visuals[mode].name = `opening-${mode}-particle`;
+        visuals[mode].visible = this.seasonWeights[mode] > 0.002;
+        mesh.add(visuals[mode]);
+      }
+      visuals.summer.scale.set(0.72 + (index % 3) * 0.055, 0.9 + (index % 4) * 0.025, 1);
+      visuals.autumn.scale.set(0.76 + (index % 4) * 0.045, 0.75 + (index % 5) * 0.035, 1);
+      visuals.winter.scale.set(0.74 + (index % 4) * 0.05, 0.74 + (index % 3) * 0.045, 1);
+      firefly.name = 'opening-summer-night-firefly';
+      firefly.visible = false;
+      mesh.add(firefly);
       mesh.position.copy(anchor);
       mesh.rotation.set(phase * 0.4, phase * 0.7, phase);
       this.root.add(mesh);
       this.petals.push({
         mesh,
+        visuals,
+        firefly,
         anchor,
         velocity: new THREE.Vector3(),
         phase,

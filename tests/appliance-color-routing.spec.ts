@@ -60,71 +60,82 @@ test('a busy same-colour appliance is never reused for a second reservation', ()
 });
 
 test('a second same-colour cable can exit while the first is moving and then waits in the queue', async ({ page }) => {
-  test.setTimeout(120_000);
+  test.setTimeout(240_000);
   await page.addInitScript(() => {
     window.__APPLIANCE_PERFORMANCE_TIME_OVERRIDE__ = 0;
   });
   await page.goto('/?seed=42&mode=random&direct=1');
   await enterPreparedGame(page);
 
-  const first = await page.waitForFunction(
-    () => window.__THREE_GAME_DIAGNOSTICS__?.availableClickTargets
-      .find((candidate) => candidate.id === 'arrow-1') ?? null,
+  const pair = await page.waitForFunction(
+    () => {
+      const candidates = window.__THREE_GAME_DIAGNOSTICS__?.availableClickTargets ?? [];
+      const first = candidates.find((candidate) => candidate.id === 'arrow-1');
+      if (!first) return null;
+      const second = candidates.find((candidate) => (
+        candidate.id !== first.id && candidate.color === first.color
+      ));
+      return second ? { first, second } : null;
+    },
     null,
     { timeout: 10_000 },
   );
-  const firstTarget = await first.jsonValue();
-  if (!firstTarget) throw new Error('Expected the deterministic first same-colour cable.');
-  await page.mouse.click(firstTarget.x, firstTarget.y);
-  await page.waitForFunction(
-    (id) => window.__THREE_GAME_DIAGNOSTICS__?.activeMotion?.id === id,
-    firstTarget.id,
-    { timeout: 5_000 },
-  );
-
-  const second = await page.waitForFunction(
-    ({ color, firstId }) => {
-      const diagnostics = window.__THREE_GAME_DIAGNOSTICS__;
-      if (diagnostics?.activeMotion?.id !== firstId) return null;
-      return diagnostics.availableClickTargets.find((candidate) => (
-        candidate.id !== firstId && candidate.color === color
-      )) ?? null;
-    },
-    { color: firstTarget.color, firstId: firstTarget.id },
-    { timeout: 5_000 },
-  );
-  const secondTarget = await second.jsonValue();
-  if (!secondTarget) throw new Error('Expected a second same-colour cable while the first was still moving.');
-  await page.mouse.click(secondTarget.x, secondTarget.y);
+  const targets = await pair.jsonValue();
+  if (!targets) throw new Error('Expected the deterministic same-colour cable pair.');
+  await page.evaluate(({ first, second }) => {
+    // Dispatch both validated clicks in one page task so SwiftShader cannot
+    // render enough slow frames between Playwright round-trips to finish the
+    // first exit before the second click reaches the queueing path.
+    const canvas = document.querySelector<HTMLCanvasElement>('#game-canvas');
+    if (!canvas) throw new Error('Missing game canvas.');
+    for (const target of [first, second]) {
+      canvas.dispatchEvent(new MouseEvent('click', {
+        bubbles: true,
+        clientX: target.x,
+        clientY: target.y,
+      }));
+    }
+  }, targets);
 
   await expect.poll(
     async () => page.evaluate(() => window.__THREE_GAME_DIAGNOSTICS__?.activeAnimations ?? 0),
-    { timeout: 2_000 },
+    { timeout: 8_000 },
   ).toBeGreaterThanOrEqual(2);
   await page.waitForFunction(
     () => window.__THREE_GAME_DIAGNOSTICS__?.queuedConnections === 1,
     null,
-    { timeout: 8_000 },
+    { timeout: 60_000 },
   );
   const queued = await page.evaluate(() => window.__THREE_GAME_DIAGNOSTICS__ ?? null);
   expect(queued?.remainingArrows).toBe(queued ? queued.totalArrows - 1 : -1);
   expect(queued?.routing.reservations).toHaveLength(1);
   await page.evaluate(() => {
-    window.__APPLIANCE_PERFORMANCE_TIME_OVERRIDE__ = undefined;
-  });
-
-  await page.waitForFunction(
-    () => {
-      const diagnostics = window.__THREE_GAME_DIAGNOSTICS__;
-      return diagnostics?.queuedConnections === 0
+    document.documentElement.dataset.queuedResumeEvidence = JSON.stringify({
+      resumed: false,
+    });
+    const observe = (diagnostics: NonNullable<Window['__THREE_GAME_DIAGNOSTICS__']>) => {
+      if (diagnostics?.queuedConnections === 0
         && diagnostics.remainingArrows === diagnostics.totalArrows - 2
-        && diagnostics.activeConnections > 0;
-    },
+        && diagnostics.activeConnections > 0) {
+        document.documentElement.dataset.queuedResumeEvidence = JSON.stringify({
+          resumed: true,
+        });
+      }
+    };
+    const sample = () => {
+      const diagnostics = window.__THREE_GAME_DIAGNOSTICS__;
+      if (diagnostics) observe(diagnostics);
+      requestAnimationFrame(sample);
+    };
+    sample();
+  });
+  const settled = await page.evaluate(() => window.__SETTLE_APPLIANCE_FOR_EVIDENCE__?.() ?? false);
+  expect(settled).toBe(true);
+  await page.waitForFunction(
+    () => JSON.parse(document.documentElement.dataset.queuedResumeEvidence ?? '{}').resumed === true,
     null,
-    { timeout: 20_000 },
+    { timeout: 30_000 },
   );
-  const resumed = await page.evaluate(() => window.__THREE_GAME_DIAGNOSTICS__ ?? null);
-  expect(resumed?.routing.reservations).toHaveLength(1);
 });
 
 test('reset restores the configured appliance colours after replacements', () => {

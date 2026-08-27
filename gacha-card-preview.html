@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>扭蛋技能卡全集预览</title>
+  </head>
+  <body>
+    <main id="gacha-card-preview">
+      <header class="preview-heading">
+        <span>GUMBALL MACHINE · COMPLETE CARD SET</span>
+        <h1>扭蛋技能卡全集预览</h1>
+        <p>展示所有满足条件时可能进入扭蛋卡池的技能。卡面只使用技能符号，不出现家电模型。</p>
+      </header>
+
+      <section class="preview-overview" aria-label="技能卡预览说明">
+        <div class="preview-stat">
+          <strong id="skill-card-total">28</strong>
+          <span>张技能卡面</span>
+        </div>
+        <div class="preview-legend" aria-label="技能类型图例">
+          <span class="preview-legend__item preview-legend__item--positive">正向技能</span>
+          <span class="preview-legend__item preview-legend__item--negative">负向技能</span>
+          <span class="preview-legend__item preview-legend__item--mixed">混合技能</span>
+        </div>
+        <p>扭蛋机自身的“樱花三选一”不会进入自己的随机卡池。点击任意卡片可查看统一卡背。</p>
+      </section>
+
+      <section id="skill-card-gallery" class="skill-card-gallery" aria-label="全部扭蛋技能卡面"></section>
+
+      <footer class="preview-note">
+        <span>预览规格</span>
+        <strong>统一单层红色卡体、技能符号卡面；正式接入前用于整体风格检查。</strong>
+      </footer>
+    </main>
+    <script type="module" src="/src/review/gachaCardPreview.ts"></script>
+  </body>
+</html>

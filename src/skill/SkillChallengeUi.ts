@@ -1,8 +1,17 @@
 import type { GachaCard, SkillChallengeState, SkillStatusId, StatusInstance } from './SkillChallengeEngine';
+import {
+  GACHA_TIER_LABELS,
+  getApplianceCardLabel,
+  getSkillCardStyle,
+  renderSkillCardSymbol,
+} from './SkillCardPresentation';
+import './SkillCardPresentation.css';
 
 type SkillChallengeUiOptions = {
   onCardSelected: (index: number) => void;
 };
+
+const GACHA_CARD_REVEAL_MS = 4200;
 
 const STATUS_LABELS: Record<SkillStatusId, { name: string; description: string }> = {
   'dry-shield': { name: '干燥护罩', description: '抵挡下一次新增的负面状态。' },
@@ -10,11 +19,12 @@ const STATUS_LABELS: Record<SkillStatusId, { name: string; description: string }
   'soothing-record': { name: '安心旋律', description: '抵挡一次受阻点击。' },
   continue: { name: '继续游戏', description: '生命归零时复活并恢复生命。' },
   'induction-reveal': { name: '感应显线', description: '持续标记全部真实出口。' },
+  'bass-spacing': { name: '节拍扩距', description: '线组保持 2 倍视觉间距，不改变可抽判定。' },
   'bathroom-steam': { name: '浴室蒸汽', description: '蒸汽遮挡画面，正确抽线后逐回合消退。' },
   'frozen-plug': { name: '急冻封头', description: '部分真实出口暂时无法抽取。' },
-  'coffee-lock': { name: '咖啡封技', description: '遮蔽线色并封锁后续家电技能。' },
+  'coffee-lock': { name: '咖啡封技', description: '咖啡遮蔽线色；家电照常连接和播放动画，但技能暂时被封锁。' },
   'rice-thick-cable': { name: '米饭粗线', description: '线缆暂时视觉膨胀，不改变碰撞。' },
-  'overheated-plug': { name: '限时取餐', description: '在倒计时结束前处理被标记的真实出口。' },
+  'overheated-plug': { name: '限时取餐', description: '必须在接下来两次成功拔线内拔出被加热标记的线，否则失去一格生命。' },
   'fake-double-plug': { name: '双头伪装', description: '普通尾端生成永久假插头。' },
 };
 
@@ -90,22 +100,47 @@ export class SkillChallengeUi {
     cards.forEach((card, index) => {
       const button = document.createElement('button');
       button.type = 'button';
-      button.className = 'skill-card';
+      const tierKind = card.tier.endsWith('benefit') ? 'benefit' : 'risk';
+      const tierStrength = card.tier.startsWith('strong') ? 'strong' : 'normal';
+      const longTitle = card.label.length >= 8 ? ' is-long-title' : '';
+      const longCopy = card.description.length >= 30 ? ' is-long-copy' : '';
+      const applianceLabel = getApplianceCardLabel(card.appliance);
+      button.className = `skill-card skill-card--${tierKind} skill-card--${tierStrength}`;
       button.setAttribute('aria-label', `选择第 ${index + 1} 张扭蛋卡`);
-      button.innerHTML = '<span class="skill-card-back"><i>SAKURA</i><b>?</b></span><span class="skill-card-front"></span>';
+      button.dataset.skillId = card.skillId;
+      button.dataset.appliance = card.appliance;
+      button.dataset.tier = card.tier;
+      button.style.cssText = getSkillCardStyle(card.skillId);
+      button.innerHTML = `
+        <span class="skill-card-face skill-card-back">
+          <span class="skill-card-frame">
+            <span class="skill-card-inset skill-card-back-inset">
+              <span class="skill-card-random">随机</span>
+              <strong class="skill-card-question">?</strong>
+            </span>
+          </span>
+        </span>
+        <span class="skill-card-face skill-card-front">
+          <span class="skill-card-frame">
+            <span class="skill-card-inset skill-card-front-inset">
+              <i>${applianceLabel}</i>
+              <b class="${longTitle.trim()}" title="${card.label}">${card.label}</b>
+              <span class="skill-card-symbol-stage" role="img" aria-label="${card.label}技能符号">${renderSkillCardSymbol(card.skillId)}</span>
+              <span class="skill-card-tier">${GACHA_TIER_LABELS[card.tier]}</span>
+              <small class="${longCopy.trim()}">${card.description}</small>
+            </span>
+          </span>
+        </span>`;
       button.addEventListener('click', () => {
         if (this.cardLocked) return;
         this.cardLocked = true;
-        const front = button.querySelector<HTMLElement>('.skill-card-front');
-        if (front) {
-          front.innerHTML = `<i>${card.appliance}</i><b>${card.label}</b><small>${card.description}</small>`;
-        }
+        button.setAttribute('aria-label', `已选择${applianceLabel}：${card.label}`);
         button.classList.add('selected');
         [...this.cardList.querySelectorAll<HTMLButtonElement>('.skill-card')].forEach((candidate) => {
           candidate.disabled = true;
           if (candidate !== button) candidate.classList.add('dismissed');
         });
-        window.setTimeout(() => this.options.onCardSelected(index), 520);
+        window.setTimeout(() => this.options.onCardSelected(index), GACHA_CARD_REVEAL_MS);
       }, { once: true });
       this.cardList.append(button);
     });

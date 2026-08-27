@@ -6,3 +6,4 @@ artifacts/
 manual-*.png
 *.log
 .DS_Store
+.gstack/

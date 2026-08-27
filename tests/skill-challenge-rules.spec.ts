@@ -10,6 +10,7 @@ import {
   gachaPoolIncludesSmartBin,
   type SkillContext,
 } from '../src/skill/SkillChallengeEngine';
+import { resolveBlenderColorCycle } from '../src/skill/SkillPresentationController';
 
 function context(engine: SkillChallengeEngine, ids: readonly string[]): SkillContext {
   return {
@@ -34,13 +35,16 @@ function pull(
   isLastCable = false,
 ) {
   expect(engine.beginManualPull(cableId, appliance)).toBe(true);
-  engine.commitManualRemoval(cableId);
+  engine.commitManualRemoval(cableId, remaining.length > 0);
   return engine.resolveConnected(context(engine, remaining), isLastCable);
 }
 
 test('技能注册表覆盖 29 台家电，扭蛋收益池保留智能垃圾桶', () => {
   const engine = new SkillChallengeEngine(20260812);
   expect(APPLIANCE_SKILL_REGISTRY.size).toBe(29);
+  expect(APPLIANCE_SKILL_REGISTRY.get('microwave')?.description).toBe(
+    '随机高亮一根当前可拔的线；必须在接下来两次成功拔线内拔出它，否则失去一格生命。',
+  );
   const skillContext = context(engine, ['a', 'b', 'c', 'd']);
   expect(gachaPoolIncludesSmartBin(skillContext)).toBe(true);
   const cards = buildGachaCards(skillContext, new DeterministicRng(8));
@@ -81,6 +85,7 @@ test('干燥护罩抵挡电饭煲时不返回错误的粗线表现', () => {
 
 test('咖啡第 4 次正确抽线仍封锁该次家电技能', () => {
   const engine = new SkillChallengeEngine(17);
+  expect(APPLIANCE_SKILL_REGISTRY.get('coffee-maker')?.polarity).toBe('negative');
   pull(engine, 'coffee', 'coffee-maker', ['a', 'b', 'c', 'd', 'e']);
   expect(engine.state.debuff?.id).toBe('coffee-lock');
   expect(engine.state.debuff?.turnsRemaining).toBe(4);
@@ -93,6 +98,9 @@ test('咖啡第 4 次正确抽线仍封锁该次家电技能', () => {
     expect(engine.state.printerCopyReady).toBe(false);
     if (index < 3) engine.settle();
   }
+  expect(engine.state.debuff?.id).toBe('coffee-lock');
+  expect(engine.state.debuff?.turnsRemaining).toBe(0);
+  engine.clearExhaustedCoffeeLock();
   expect(engine.state.debuff).toBeNull();
 });
 
@@ -111,6 +119,31 @@ test('微波炉非目标线先结算厨师机再提交基础递减', () => {
   expect(engine.state.debuff?.turnsRemaining).toBe(1);
 });
 
+test('厨师机线先推进旧状态一回合再统一设为两回合', () => {
+  const engine = new SkillChallengeEngine(20260826);
+  engine.primeForSkillTest([{
+    type: 'set-status',
+    slot: 'debuff',
+    status: {
+      id: 'rice-thick-cable',
+      sourceAppliance: 'rice-cooker',
+      iconId: 'debuff-rice-thick-cable',
+      turnsRemaining: 5,
+      targetCableIds: ['stand-mixer', 'remaining'],
+      payload: {},
+      createdBySkillEventIndex: 0,
+    },
+  }]);
+
+  expect(engine.beginManualPull('stand-mixer', 'stand-mixer')).toBe(true);
+  engine.commitManualRemoval('stand-mixer', true);
+  expect(engine.state.debuff?.turnsRemaining).toBe(4);
+  const result = engine.resolveConnected(context(engine, ['remaining']), false);
+  expect(result.resolution?.skillId).toBe('normalize-statuses');
+  expect(engine.state.debuff?.turnsRemaining).toBe(2);
+  expect(engine.state.buff).toBeNull();
+});
+
 test('打印机只消费事务开始前已有的复印机会', () => {
   const engine = new SkillChallengeEngine(33);
   const created = pull(engine, 'printer', 'printer', ['a', 'b']);
@@ -118,9 +151,35 @@ test('打印机只消费事务开始前已有的复印机会', () => {
   expect(engine.state.printerCopyReady).toBe(true);
   engine.settle();
 
-  const consumed = pull(engine, 'a', 'lamp', ['b']);
-  expect(consumed.consumePrinterCopy).toBe(true);
+  expect(engine.beginManualPull('a', 'printer')).toBe(true);
+  expect(engine.commitManualRemoval('a', true)).toBe(true);
   expect(engine.state.printerCopyReady).toBe(false);
+  const consumed = engine.resolveConnected(context(engine, ['b']), false);
+  expect(consumed.consumePrinterCopy).toBe(true);
+  expect(consumed.resolution).toBeNull();
+  expect(engine.state.printerCopyReady).toBe(false);
+});
+
+test('便携音箱只生成三回合视觉扩距 BUFF，不修改拓扑或可抽规则', () => {
+  const engine = new SkillChallengeEngine(20260827);
+  const triggered = pull(engine, 'speaker', 'portable-speaker', ['a', 'b', 'c', 'd']);
+
+  expect(triggered.resolution?.skillId).toBe('bass-spacing');
+  expect(triggered.resolution?.topologyChanged).toBe(false);
+  expect(triggered.resolution?.targetCableIds).toEqual([]);
+  expect(triggered.resolution?.commands.some((command) => command.type === 'expand')).toBe(false);
+  expect(engine.state.buff?.id).toBe('bass-spacing');
+  expect(engine.state.buff?.turnsRemaining).toBe(3);
+
+  engine.settle();
+  pull(engine, 'a', 'lamp', ['b', 'c', 'd']);
+  expect(engine.state.buff?.turnsRemaining).toBe(2);
+  engine.settle();
+  pull(engine, 'b', 'lamp', ['c', 'd']);
+  expect(engine.state.buff?.turnsRemaining).toBe(1);
+  engine.settle();
+  pull(engine, 'c', 'lamp', ['d']);
+  expect(engine.state.buff).toBeNull();
 });
 
 test('最后一根线不提交家电技能或伤害', () => {
@@ -167,6 +226,69 @@ test('收音机冻结三步顺序，扫地机器人冻结触发快照', () => {
   expect(vacuum.commands).toEqual([
     { type: 'auto-remove', cableIds: ['a', 'c'], source: 'robot-vacuum' },
   ]);
+});
+
+test('搅拌机在 40 根多色线中保持颜色总量并覆盖全部剩余线', () => {
+  const engine = new SkillChallengeEngine(20260827);
+  const palette = [0xff6688, 0x56a8ff, 0xffc14d, 0x45c9b0] as const;
+  const remainingCables = Array.from({ length: 40 }, (_, index) => ({
+    id: `blender-${index + 1}`,
+    color: palette[index % palette.length],
+    available: true,
+    fakePlug: false,
+  }));
+  const definition = APPLIANCE_SKILL_REGISTRY.get('blender')!;
+  const result = definition.resolve({
+    remainingCables,
+    availableCableIds: remainingCables.map(({ id }) => id),
+    removalSequence: remainingCables.map(({ id }) => id),
+    routeColors: [...palette],
+    state: engine.state,
+  }, new DeterministicRng(20260827));
+  const recolor = result.commands.find((command) => command.type === 'recolor');
+  expect(recolor?.type).toBe('recolor');
+  if (!recolor || recolor.type !== 'recolor') throw new Error('搅拌机没有生成换色命令');
+
+  const countColors = (colors: readonly number[]): Record<string, number> => colors.reduce(
+    (counts, color) => ({ ...counts, [color]: (counts[color] ?? 0) + 1 }),
+    {} as Record<string, number>,
+  );
+  expect(recolor.changes).toHaveLength(40);
+  expect(new Set(recolor.changes.map(({ cableId }) => cableId))).toEqual(
+    new Set(remainingCables.map(({ id }) => id)),
+  );
+  expect(countColors(recolor.changes.map(({ color }) => color))).toEqual(
+    countColors(remainingCables.map(({ color }) => color)),
+  );
+  expect(recolor.changes.filter(({ cableId, color }) => (
+    remainingCables.find(({ id }) => id === cableId)?.color !== color
+  )).length).toBeGreaterThanOrEqual(2);
+
+  const slowCycle = resolveBlenderColorCycle(0.2);
+  const fastCycle = resolveBlenderColorCycle(0.8);
+  expect(fastCycle.position).toBeGreaterThan(slowCycle.position);
+  expect(fastCycle.speed).toBeGreaterThan(slowCycle.speed * 3);
+  expect(resolveBlenderColorCycle(1).position).toBe(22);
+});
+
+test('手机假插头扣血，并在三个目标线移除后自动解除', () => {
+  const engine = new SkillChallengeEngine(20260824);
+  pull(engine, 'phone', 'phone', ['a', 'b', 'c', 'control']);
+  expect(engine.state.debuff?.id).toBe('fake-double-plug');
+  expect(engine.state.debuff?.targetCableIds).toHaveLength(3);
+  expect(engine.handleBlockedAttempt(true)).toMatchObject({ protected: false, lives: 2, failed: false });
+  engine.settle();
+
+  const targets = [...(engine.state.debuff?.targetCableIds ?? [])];
+  const control = ['a', 'b', 'c', 'control'].find((id) => !targets.includes(id));
+  expect(control).toBeTruthy();
+  engine.notifyAutoRemoved(control!);
+  expect(engine.state.debuff?.targetCableIds).toEqual(targets);
+  for (const [index, cableId] of targets.entries()) {
+    engine.notifyAutoRemoved(cableId);
+    expect(engine.state.debuff?.targetCableIds.length ?? 0).toBe(Math.max(0, 2 - index));
+  }
+  expect(engine.state.debuff).toBeNull();
 });
 
 test('电饭煲粗线维持三个正确抽线回合，自动清线不扣回合', () => {

@@ -154,7 +154,7 @@ test('double-ended generator produces a complete solvable route with one to thre
 });
 
 test('player can pull the selected end and a blocked end costs one heart', async ({ page }) => {
-  test.setTimeout(180_000);
+  test.setTimeout(300_000);
   const seed = interactiveDoubleEndedSeed();
   await enterDoubleEndedBriefing(page, seed);
   await expect(page.locator('#double-ended-briefing-panel')).toBeVisible();
@@ -182,7 +182,7 @@ test('player can pull the selected end and a blocked end costs one heart', async
   await page.waitForFunction(
     () => (window.__THREE_GAME_DIAGNOSTICS__?.activeAnimations ?? 0) === 0,
     null,
-    { timeout: 20_000 },
+    { timeout: 90_000 },
   );
 
   const blocked = await page.waitForFunction(

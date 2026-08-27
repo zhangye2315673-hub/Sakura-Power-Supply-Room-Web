@@ -6,13 +6,10 @@ import {
   type ApplianceModelOptions,
 } from '../ApplianceModelKit';
 import { setHullOutlineStyle } from '../../style/outline';
+import { PORTABLE_SPEAKER_ACTIVE_DURATION } from '../performance/PortableSpeakerPerformance';
 
 const REFERENCE_PATH = 'references/intake-v2/portable-speaker/views/front.png';
 const LEGACY_REFERENCE_PATH = 'references/intake/portable-speaker/front.png';
-// Slightly longer tail keeps the denser climax audible/visible before the
-// cabinet settles back to its idle pose.
-const ACTIVE_DURATION = 5.45;
-
 function rounded(width: number, height: number, depth: number, radius: number): RoundedBoxGeometry {
   return new RoundedBoxGeometry(width, height, depth, 5, radius);
 }
@@ -499,7 +496,7 @@ export function createPortableSpeakerModel(options: ApplianceModelOptions): Appl
     hingeAxisHeight: 2.72,
     grilleInstanceCount: grillePerforations.count,
   };
-  build.root.userData.activeDuration = ACTIVE_DURATION;
+  build.root.userData.activeDuration = PORTABLE_SPEAKER_ACTIVE_DURATION;
   build.root.userData.previewLightingProfile = 'sakura-appliance-v2';
   build.root.userData.previewFramingScale = 0.86;
   build.root.userData.legacyReferencePath = LEGACY_REFERENCE_PATH;

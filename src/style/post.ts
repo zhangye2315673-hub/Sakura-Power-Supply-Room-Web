@@ -17,6 +17,7 @@ export type SkillScreenEffect =
   | 'coffee-lock'
   | 'television-glitch'
   | 'toaster-heat'
+  | 'kettle-thaw-heat'
   | 'printer-scan'
   | 'iridescent-bubble';
 
@@ -927,6 +928,7 @@ const skillEffectShader: ShaderDefinition = {
     uTime: { value: 0 },
     uEffect: { value: 0 },
     uEffectProgress: { value: 0 },
+    uCoffeeSplashProgress: { value: 1 },
     uThemeProgress: { value: 0 },
     uSteamClearProgress: { value: 0 },
     uSteamClearOrigin: { value: 0.1 },
@@ -945,6 +947,7 @@ const skillEffectShader: ShaderDefinition = {
     uniform float uTime;
     uniform float uThemeProgress;
     uniform float uEffectProgress;
+    uniform float uCoffeeSplashProgress;
     uniform float uSteamClearProgress;
     uniform float uSteamClearOrigin;
     uniform float uSteamClearDirection;
@@ -971,6 +974,341 @@ const skillEffectShader: ShaderDefinition = {
 
     float fbm(vec2 point) {
       return noise(point) * 0.58 + noise(point * 2.03 + 13.7) * 0.28 + noise(point * 4.11 - 7.2) * 0.14;
+    }
+
+
+    vec2 coffeeAspectPoint(vec2 sampleUv, vec2 center) {
+      vec2 point = sampleUv - center;
+      point.x *= uTexel.y / max(uTexel.x, 0.000001);
+      return point;
+    }
+
+    float coffeeSmoothMerge(float a, float b, float softness) {
+      float safeSoftness = max(softness, 0.0001);
+      float blend = clamp(0.5 + 0.5 * (a - b) / safeSoftness, 0.0, 1.0);
+      return clamp(mix(b, a, blend) + safeSoftness * blend * (1.0 - blend), 0.0, 1.0);
+    }
+
+    float coffeeEllipseMask(
+      vec2 point,
+      vec2 offset,
+      vec2 radius,
+      float rotation,
+      float seed
+    ) {
+      vec2 local = point - offset;
+      float cosine = cos(rotation);
+      float sine = sin(rotation);
+      local = vec2(
+        local.x * cosine + local.y * sine,
+        -local.x * sine + local.y * cosine
+      );
+      vec2 normalized = local / max(radius, vec2(0.0001));
+      float squaredDistance = dot(normalized, normalized);
+      return 1.0 - smoothstep(0.79, 1.14, squaredDistance);
+    }
+
+    float coffeeSplat(vec2 sampleUv, vec2 center, float radius, float seed) {
+      vec2 point = coffeeAspectPoint(sampleUv, center);
+      float orientation = seed * 0.83;
+      vec2 direction = vec2(cos(orientation), sin(orientation));
+      vec2 tangent = vec2(-direction.y, direction.x);
+      float body = coffeeEllipseMask(
+        point,
+        vec2(0.0),
+        radius * vec2(1.06, 0.88),
+        orientation * 0.18,
+        seed
+      );
+      body = coffeeSmoothMerge(body, coffeeEllipseMask(
+        point,
+        direction * radius * 0.61,
+        radius * vec2(0.49, 0.38),
+        orientation + 0.18,
+        seed + 1.7
+      ), 0.055);
+      body = coffeeSmoothMerge(body, coffeeEllipseMask(
+        point,
+        -direction * radius * 0.53,
+        radius * vec2(0.43, 0.51),
+        orientation - 0.44,
+        seed + 3.1
+      ), 0.05);
+      body = coffeeSmoothMerge(body, coffeeEllipseMask(
+        point,
+        tangent * radius * 0.58,
+        radius * vec2(0.4, 0.52),
+        orientation + 0.86,
+        seed + 4.8
+      ), 0.048);
+      body = coffeeSmoothMerge(body, coffeeEllipseMask(
+        point,
+        -tangent * radius * 0.55,
+        radius * vec2(0.47, 0.36),
+        orientation - 0.72,
+        seed + 6.2
+      ), 0.045);
+      body = coffeeSmoothMerge(body, coffeeEllipseMask(
+        point,
+        (direction + tangent) * radius * 0.43,
+        radius * vec2(0.34, 0.3),
+        orientation + 1.16,
+        seed + 8.3
+      ), 0.04);
+      return body;
+    }
+
+    float coffeeCrownFinger(
+      vec2 sampleUv,
+      vec2 center,
+      float angle,
+      float start,
+      float extent,
+      float width,
+      float curve
+    ) {
+      vec2 point = coffeeAspectPoint(sampleUv, center);
+      vec2 direction = vec2(cos(angle), sin(angle));
+      vec2 tangent = vec2(-direction.y, direction.x);
+      float along = dot(point, direction);
+      float across = dot(point, tangent);
+      float progress = clamp((along - start) / max(extent - start, 0.0001), 0.0, 1.0);
+      across -= sin(progress * 3.14159265) * curve;
+      float taper = pow(max(0.0, 1.0 - progress), 0.62);
+      float unevenness = 0.92 + sin(progress * 7.0 + angle * 2.7) * 0.08;
+      float activeWidth = width * max(0.018, taper) * unevenness;
+      float shaft = 1.0 - smoothstep(activeWidth, activeWidth + 0.0048, abs(across));
+      shaft *= smoothstep(start - width * 0.9, start + width * 0.28, along);
+      shaft *= 1.0 - smoothstep(extent - width * 0.18, extent + width * 0.12, along);
+      return shaft;
+    }
+
+    float coffeeDrop(vec2 sampleUv, vec2 center, vec2 radius) {
+      vec2 point = coffeeAspectPoint(sampleUv, center);
+      float seed = hash(center * vec2(193.7, 317.3) + radius * vec2(971.0, 613.0));
+      float rotation = (seed - 0.5) * 2.8;
+      float shape = coffeeEllipseMask(point, vec2(0.0), radius, rotation, seed * 7.0);
+      if (seed < 0.34) {
+        vec2 offset = vec2(cos(rotation), sin(rotation)) * radius.x * 0.48;
+        shape = coffeeSmoothMerge(shape, coffeeEllipseMask(
+          point,
+          offset,
+          radius * vec2(0.58, 0.72),
+          rotation + 0.18,
+          seed * 11.0
+        ), 0.09);
+      } else if (seed < 0.67) {
+        vec2 direction = vec2(cos(rotation), sin(rotation));
+        vec2 tangent = vec2(-direction.y, direction.x);
+        shape = coffeeSmoothMerge(shape, coffeeEllipseMask(
+          point,
+          tangent * radius.y * 0.46,
+          radius * vec2(0.64, 0.58),
+          rotation - 0.52,
+          seed * 13.0
+        ), 0.085);
+        float notch = coffeeEllipseMask(
+          point,
+          -tangent * radius.y * 0.88,
+          radius * vec2(0.31, 0.36),
+          rotation,
+          seed * 17.0
+        );
+        shape *= 1.0 - notch * 0.36;
+      } else {
+        vec2 direction = vec2(cos(rotation), sin(rotation));
+        vec2 tangent = vec2(-direction.y, direction.x);
+        shape = coffeeSmoothMerge(shape, coffeeEllipseMask(
+          point,
+          direction * radius.x * 0.34 + tangent * radius.y * 0.25,
+          radius * vec2(0.52, 0.49),
+          rotation + 0.64,
+          seed * 19.0
+        ), 0.075);
+        shape = coffeeSmoothMerge(shape, coffeeEllipseMask(
+          point,
+          -direction * radius.x * 0.28 - tangent * radius.y * 0.31,
+          radius * vec2(0.43, 0.38),
+          rotation - 0.78,
+          seed * 23.0
+        ), 0.07);
+      }
+      return shape;
+    }
+
+    float coffeeGlint(vec2 sampleUv, vec2 center, vec2 radius) {
+      vec2 point = coffeeAspectPoint(sampleUv, center) / max(radius, vec2(0.0001));
+      return 1.0 - smoothstep(0.82, 1.08, length(point));
+    }
+
+    float coffeeFlyingDrop(
+      vec2 sampleUv,
+      vec2 center,
+      vec2 velocity,
+      vec2 radius,
+      float seed,
+      float age
+    ) {
+      float aspect = uTexel.y / max(uTexel.x, 0.000001);
+      vec2 point = coffeeAspectPoint(sampleUv, center);
+      vec2 aspectVelocity = vec2(velocity.x * aspect, velocity.y);
+      float speed = length(aspectVelocity);
+      vec2 direction = aspectVelocity / max(speed, 0.0001);
+      vec2 tangent = vec2(-direction.y, direction.x);
+      float rotation = atan(direction.y, direction.x);
+      float stretch = 1.0 + clamp(speed * 1.15, 0.0, 0.72);
+      float flutter = sin(age * 8.0 + seed * 9.0) * radius.y * 0.34;
+      float body = coffeeEllipseMask(
+        point,
+        tangent * flutter,
+        vec2(radius.x * stretch, radius.y * 1.18),
+        rotation,
+        seed * 11.0
+      );
+      body = coffeeSmoothMerge(body, coffeeEllipseMask(
+        point,
+        direction * radius.x * stretch * 0.42 + tangent * flutter * 0.45,
+        vec2(radius.x * 0.62, radius.y * 0.86),
+        rotation + 0.14,
+        seed * 17.0
+      ), 0.09);
+      body = coffeeSmoothMerge(body, coffeeEllipseMask(
+        point,
+        -direction * radius.x * stretch * 0.52 - tangent * flutter * 0.24,
+        vec2(radius.x * 0.5, radius.y * 0.72),
+        rotation - 0.18,
+        seed * 23.0
+      ), 0.08);
+
+      vec2 directionUv = vec2(direction.x / aspect, direction.y);
+      vec2 tangentUv = vec2(tangent.x / aspect, tangent.y);
+      vec2 fragmentCenterA = center - directionUv * radius.x * stretch * 1.48;
+      fragmentCenterA += tangentUv * radius.y * mix(-0.72, 0.62, seed);
+      vec2 fragmentCenterB = center - directionUv * radius.x * stretch * 2.05;
+      fragmentCenterB -= tangentUv * radius.y * mix(0.35, 0.9, seed);
+      float fragments = coffeeDrop(sampleUv, fragmentCenterA, radius * vec2(0.32, 0.45));
+      fragments = max(fragments, coffeeDrop(sampleUv, fragmentCenterB, radius * vec2(0.2, 0.3)));
+      float fragmentReveal = smoothstep(0.1, 0.34, age) * (1.0 - smoothstep(0.78, 1.0, age));
+      return max(body, fragments * fragmentReveal * 0.9);
+    }
+
+    float coffeeDrip(vec2 sampleUv, vec2 anchor, float width, float extent, float progress) {
+      vec2 point = coffeeAspectPoint(sampleUv, anchor);
+      float downward = -point.y;
+      float head = extent * smoothstep(0.02, 0.94, progress);
+      float waviness = sin(downward * 31.0 + anchor.x * 47.0) * width * 0.42;
+      waviness += sin(downward * 67.0 - anchor.y * 39.0) * width * 0.15;
+      float trailWidth = width * mix(0.72, 0.36, smoothstep(0.0, max(extent, 0.0001), downward));
+      float shaft = 1.0 - smoothstep(trailWidth, trailWidth + 0.0045, abs(point.x - waviness));
+      shaft *= smoothstep(-width * 0.7, width * 0.35, downward);
+      shaft *= 1.0 - smoothstep(head - width * 0.45, head + width * 0.18, downward);
+      float beadPulse = pow(max(0.0, sin(downward * 82.0 + anchor.x * 53.0)), 10.0);
+      float beads = 1.0 - smoothstep(
+        trailWidth * (0.9 + beadPulse * 0.5),
+        trailWidth * (1.2 + beadPulse * 0.65),
+        abs(point.x - waviness)
+      );
+      beads *= beadPulse * smoothstep(0.04, 0.24, downward) * (1.0 - smoothstep(head - 0.04, head, downward));
+      vec2 bulbPoint = vec2(point.x - waviness, downward - head + width * 0.06);
+      bulbPoint.x += bulbPoint.y * sin(anchor.x * 47.0) * 0.18;
+      float bulbY = bulbPoint.y / max(width * 2.15, 0.0001);
+      float pearWidth = mix(0.28, 1.1, smoothstep(-0.76, 0.2, bulbY));
+      pearWidth *= 1.0 - smoothstep(0.38, 1.0, bulbY) * 0.48;
+      vec2 bulbShape = vec2(
+        bulbPoint.x / max(width * pearWidth, 0.0001),
+        bulbY
+      );
+      vec2 bulbLobe = (bulbShape - vec2(sin(anchor.x * 61.0) * 0.2, 0.24)) / vec2(0.84, 0.7);
+      float bulbField = length(bulbShape) - 0.86;
+      bulbField = min(bulbField, length(bulbLobe) - 0.72);
+      bulbField += clamp(bulbShape.x * bulbShape.y, -1.2, 1.2) * sin(anchor.y * 43.0) * 0.055;
+      float bulb = 1.0 - smoothstep(-0.075, 0.1, bulbField);
+      return max(shaft * 0.84, max(beads * 0.72, bulb));
+    }
+
+    float coffeeCluster(
+      vec2 sampleUv,
+      vec2 center,
+      float radius,
+      float seed,
+      float growth,
+      float gravity
+    ) {
+      float easedGrowth = 1.0 - pow(1.0 - growth, 3.0);
+      float activeRadius = radius * max(0.02, easedGrowth);
+      float body = coffeeSplat(sampleUv, center, activeRadius, seed);
+      float crownReveal = smoothstep(0.22, 0.68, growth);
+      if (radius > 0.125) {
+        float crownStart = activeRadius * 0.62;
+        float crowns = coffeeCrownFinger(
+          sampleUv,
+          center,
+          seed * 1.73,
+          crownStart,
+          activeRadius * 1.46,
+          radius * 0.145 * easedGrowth,
+          sin(seed * 2.1) * radius * 0.045
+        );
+        crowns = max(crowns, coffeeCrownFinger(
+          sampleUv,
+          center,
+          seed * 2.37 + 1.8,
+          crownStart,
+          activeRadius * 1.38,
+          radius * 0.12 * easedGrowth,
+          cos(seed * 1.8) * radius * 0.038
+        ));
+        if (radius > 0.175) {
+          crowns = max(crowns, coffeeCrownFinger(
+            sampleUv,
+            center,
+            seed * 3.19 - 2.2,
+            crownStart,
+            activeRadius * 1.31,
+            radius * 0.105 * easedGrowth,
+            sin(seed * 4.2) * radius * 0.032
+          ));
+        }
+        body = coffeeSmoothMerge(body, crowns * crownReveal, 0.09);
+      }
+
+      vec2 satelliteDirection = vec2(cos(seed * 5.1), sin(seed * 5.1));
+      vec2 satelliteTangent = vec2(-satelliteDirection.y, satelliteDirection.x);
+      float satellites = coffeeDrop(
+        sampleUv,
+        center + satelliteDirection * radius * 1.56,
+        vec2(radius * 0.11, radius * 0.085)
+      );
+      satellites = max(satellites, coffeeDrop(
+        sampleUv,
+        center + satelliteTangent * radius * 1.31,
+        vec2(radius * 0.075, radius * 0.061)
+      ));
+      satellites = max(satellites, coffeeDrop(
+        sampleUv,
+        center - satelliteDirection * radius * 1.42 - satelliteTangent * radius * 0.22,
+        vec2(radius * 0.052, radius * 0.044)
+      ));
+      satellites *= smoothstep(0.18, 0.62, growth);
+
+      float drips = 0.0;
+      if (radius > 0.105) {
+        drips = coffeeDrip(
+          sampleUv,
+          center + vec2(-radius * 0.18, -activeRadius * 0.66),
+          radius * 0.06,
+          radius * 2.4,
+          gravity
+        );
+        drips = max(drips, coffeeDrip(
+          sampleUv,
+          center + vec2(radius * 0.25, -activeRadius * 0.54),
+          radius * 0.044,
+          radius * 1.68,
+          max(0.0, gravity - 0.08)
+        ));
+      }
+      return max(body, max(satellites, drips));
     }
 
     void main() {
@@ -1093,11 +1431,101 @@ const skillEffectShader: ShaderDefinition = {
           color = mix(clearScene, color, steamRemaining);
         }
       } else if (uEffect == 2) {
-        float dripNoise = hash(vec2(floor(uv.x * 13.0), 3.0));
-        float drip = smoothstep(0.78 - dripNoise * 0.34, 0.72 - dripNoise * 0.34, uv.y);
-        float rivulet = smoothstep(0.09, 0.0, abs(fract(uv.x * 13.0) - 0.5));
-        float liquid = clamp(drip * (0.48 + rivulet * 0.32), 0.0, 0.78);
-        color = mix(color, color * vec3(0.48, 0.29, 0.2) + vec3(0.08, 0.025, 0.01), liquid);
+        float progress = clamp(uCoffeeSplashProgress, 0.0, 1.0);
+        if (progress < 0.999) {
+          float fade = 1.0 - smoothstep(0.74, 1.0, progress);
+          float gravity = smoothstep(0.055, 0.7, progress);
+          float growthA = smoothstep(0.0, 0.12, progress);
+          float growthB = smoothstep(0.025, 0.16, progress);
+          float growthC = smoothstep(0.055, 0.2, progress);
+          float growthD = smoothstep(0.085, 0.24, progress);
+          float growthE = smoothstep(0.115, 0.27, progress);
+          float growthF = smoothstep(0.15, 0.31, progress);
+          float rawLiquid = coffeeCluster(uv, vec2(0.39, 0.6), 0.205, 1.7, growthA, gravity);
+          rawLiquid = max(rawLiquid, coffeeCluster(uv, vec2(0.8, 0.77), 0.13, 4.6, growthB, gravity * 0.86));
+          rawLiquid = max(rawLiquid, coffeeCluster(uv, vec2(-0.045, 0.35), 0.175, 7.9, growthC, gravity * 0.94));
+          rawLiquid = max(rawLiquid, coffeeCluster(uv, vec2(1.055, 0.23), 0.205, 11.2, growthD, gravity));
+          rawLiquid = max(rawLiquid, coffeeCluster(uv, vec2(0.18, 0.975), 0.09, 14.4, growthE, gravity * 0.72));
+          rawLiquid = max(rawLiquid, coffeeDrop(uv, vec2(0.69, 0.31), vec2(0.074, 0.061) * growthF));
+
+          float smallGrowth = smoothstep(0.07, 0.28, progress);
+          float tinyGrowth = smoothstep(0.12, 0.36, progress);
+          rawLiquid = max(rawLiquid, coffeeDrop(uv, vec2(0.115, 0.73), vec2(0.05, 0.034) * smallGrowth));
+          rawLiquid = max(rawLiquid, coffeeDrop(uv, vec2(0.935, 0.565), vec2(0.038, 0.045) * smallGrowth));
+          rawLiquid = max(rawLiquid, coffeeDrop(uv, vec2(0.555, 1.018), vec2(0.064, 0.041) * smallGrowth));
+          rawLiquid = max(rawLiquid, coffeeDrop(uv, vec2(0.575, -0.038), vec2(0.071, 0.047) * tinyGrowth));
+          rawLiquid = max(rawLiquid, coffeeDrop(uv, vec2(0.855, 0.095), vec2(0.031, 0.02) * tinyGrowth));
+          rawLiquid = max(rawLiquid, coffeeDrop(uv, vec2(0.305, 0.175), vec2(0.023, 0.028) * tinyGrowth));
+
+          float settledSpecks = smoothstep(0.1, 0.34, progress);
+          float screenSpecks = coffeeDrop(uv, vec2(0.045, 0.875), vec2(0.011, 0.015));
+          screenSpecks = max(screenSpecks, coffeeDrop(uv, vec2(0.16, 0.5), vec2(0.006, 0.008)));
+          screenSpecks = max(screenSpecks, coffeeDrop(uv, vec2(0.245, 0.84), vec2(0.014, 0.009)));
+          screenSpecks = max(screenSpecks, coffeeDrop(uv, vec2(0.47, 0.91), vec2(0.007, 0.011)));
+          screenSpecks = max(screenSpecks, coffeeDrop(uv, vec2(0.635, 0.18), vec2(0.009, 0.007)));
+          screenSpecks = max(screenSpecks, coffeeDrop(uv, vec2(0.745, 0.915), vec2(0.006, 0.008)));
+          screenSpecks = max(screenSpecks, coffeeDrop(uv, vec2(0.855, 0.45), vec2(0.013, 0.017)));
+          screenSpecks = max(screenSpecks, coffeeDrop(uv, vec2(0.975, 0.69), vec2(0.007, 0.01)));
+          screenSpecks = max(screenSpecks, coffeeDrop(uv, vec2(1.012, 0.735), vec2(0.013, 0.008)));
+          rawLiquid = max(rawLiquid, screenSpecks * settledSpecks);
+
+          float flight = smoothstep(0.04, 0.42, progress);
+          float flightFade = 1.0 - smoothstep(0.58, 0.86, progress);
+          vec2 flyingA = vec2(0.52, 0.68) + vec2(0.27, 0.2) * flight + vec2(0.0, -0.38) * flight * flight;
+          vec2 flyingB = vec2(0.31, 0.57) + vec2(-0.24, 0.12) * flight + vec2(0.0, -0.28) * flight * flight;
+          vec2 flyingC = vec2(0.77, 0.48) + vec2(0.18, 0.08) * flight + vec2(0.0, -0.32) * flight * flight;
+          vec2 flyingVelocityA = vec2(0.27, 0.2) + vec2(0.0, -0.76) * flight;
+          vec2 flyingVelocityB = vec2(-0.24, 0.12) + vec2(0.0, -0.56) * flight;
+          vec2 flyingVelocityC = vec2(0.18, 0.08) + vec2(0.0, -0.64) * flight;
+          float flyingDrops = coffeeFlyingDrop(uv, flyingA, flyingVelocityA, vec2(0.02, 0.0115), 0.27, flight);
+          flyingDrops = max(flyingDrops, coffeeFlyingDrop(uv, flyingB, flyingVelocityB, vec2(0.016, 0.0095), 0.63, flight));
+          flyingDrops = max(flyingDrops, coffeeFlyingDrop(uv, flyingC, flyingVelocityC, vec2(0.0125, 0.008), 0.86, flight));
+          rawLiquid = max(rawLiquid, flyingDrops * flightFade);
+          float paperGrain = fbm(uv * vec2(48.0, 32.0) + vec2(3.7, -9.2));
+          float liquid = smoothstep(0.12, 0.72, rawLiquid + (paperGrain - 0.5) * 0.22) * fade;
+          float dense = smoothstep(0.48, 0.92, rawLiquid + (paperGrain - 0.5) * 0.11) * fade;
+          float soaked = smoothstep(0.025, 0.42, rawLiquid + (paperGrain - 0.5) * 0.34) * fade;
+          float wetRim = clamp(soaked - dense, 0.0, 1.0);
+
+          vec2 point = coffeeAspectPoint(uv, vec2(0.5, 0.52));
+          vec2 radial = normalize(point + vec2(0.0001));
+          vec2 swirl = vec2(-radial.y, radial.x);
+          vec2 flow = radial * (noise(uv * 13.0 + 2.3) - 0.5) + swirl * (noise(uv * 17.0 - 5.1) - 0.5);
+          vec2 refractedUv = uv + flow * uTexel * mix(4.0, 18.0, dense);
+          vec3 wetScene = texture2D(tDiffuse, refractedUv).rgb * 0.46;
+          wetScene += texture2D(tDiffuse, refractedUv + vec2(uTexel.x * 2.5, 0.0)).rgb * 0.135;
+          wetScene += texture2D(tDiffuse, refractedUv - vec2(uTexel.x * 2.5, 0.0)).rgb * 0.135;
+          wetScene += texture2D(tDiffuse, refractedUv + vec2(0.0, uTexel.y * 2.5)).rgb * 0.135;
+          wetScene += texture2D(tDiffuse, refractedUv - vec2(0.0, uTexel.y * 2.5)).rgb * 0.135;
+          float coffeeVariation = fbm(uv * 9.0 + vec2(6.1, -2.4));
+          vec3 coffeeColor = mix(vec3(0.105, 0.027, 0.011), vec3(0.46, 0.17, 0.047), coffeeVariation);
+          vec3 paperCoffee = mix(vec3(0.54, 0.31, 0.19), coffeeColor, dense * 0.82);
+          vec3 stained = wetScene * mix(vec3(0.9, 0.73, 0.62), vec3(0.52, 0.245, 0.125), dense);
+          stained = mix(stained, paperCoffee, 0.24 + dense * 0.34);
+          float translucentFilm = liquid * (0.39 + dense * 0.24 + (1.0 - coffeeVariation) * 0.075);
+          color = mix(color, stained, translucentFilm);
+          color = mix(color, coffeeColor, dense * (0.11 + coffeeVariation * 0.105));
+          color += vec3(1.0, 0.72, 0.48) * wetRim * fade * (0.025 + (1.0 - coffeeVariation) * 0.024);
+
+          float impactRadius = mix(0.018, 0.21, smoothstep(0.01, 0.18, progress));
+          vec2 impactPointA = coffeeAspectPoint(uv, vec2(0.42, 0.58));
+          vec2 impactPointB = coffeeAspectPoint(uv, vec2(0.79, 0.75));
+          float impactRing = 1.0 - smoothstep(0.01, 0.023, abs(length(impactPointA) - impactRadius));
+          impactRing = max(impactRing, 1.0 - smoothstep(0.008, 0.019, abs(length(impactPointB) - impactRadius * 0.62)));
+          impactRing *= (1.0 - smoothstep(0.16, 0.34, progress)) * fade;
+          float warmHighlight = wetRim * (0.35 + paperGrain * 0.65);
+          float glassGlint = coffeeGlint(uv, vec2(0.37, 0.66), vec2(0.065, 0.008));
+          glassGlint += coffeeGlint(uv, vec2(0.755, 0.8), vec2(0.032, 0.005)) * 0.7;
+          glassGlint += coffeeGlint(uv, vec2(0.04, 0.45), vec2(0.04, 0.006)) * 0.54;
+          glassGlint *= rawLiquid * fade;
+          float wetSparkle = pow(noise(uv * 74.0 + vec2(7.3, -4.1)), 13.0) * dense;
+          color += impactRing * vec3(0.42, 0.17, 0.09) * 0.12;
+          color -= wetRim * vec3(0.11, 0.035, 0.018) * 0.15;
+          color += warmHighlight * vec3(0.54, 0.18, 0.2) * 0.055;
+          color += glassGlint * vec3(0.82, 0.46, 0.42) * 0.1;
+          color += wetSparkle * vec3(0.86, 0.58, 0.48) * 0.085;
+        }
+      } else if (uEffect == 3) {
       } else if (uEffect == 3) {
         float band = step(0.72, hash(vec2(floor(uv.y * 42.0 + uTime * 18.0), floor(uTime * 8.0))));
         float shift = (hash(vec2(floor(uv.y * 31.0), floor(uTime * 12.0))) - 0.5) * 0.035 * band;
@@ -1105,8 +1533,12 @@ const skillEffectShader: ShaderDefinition = {
         color.b = texture2D(tDiffuse, uv - vec2(shift + uTexel.x * 2.0, 0.0)).b;
         color += band * vec3(0.05, 0.0, 0.08);
       } else if (uEffect == 4) {
-        float scan = smoothstep(0.035, 0.0, abs(fract(uv.y * 1.4 - uTime * 0.9) - 0.5));
-        color = mix(color, vec3(1.0, 0.91, 0.78), scan * 0.62);
+        float scanA = 1.0 - smoothstep(0.0, 0.055, abs(fract(uv.y * 4.8 - uTime * 1.12) - 0.5));
+        float scanB = 1.0 - smoothstep(0.0, 0.026, abs(fract(uv.y * 9.5 - uTime * 1.65 + 0.23) - 0.5));
+        float scanFine = 1.0 - smoothstep(0.0, 0.012, abs(fract(uv.y * 22.0 - uTime * 2.4) - 0.5));
+        float scanExposure = clamp(scanA * 0.72 + scanB * 0.5 + scanFine * 0.28, 0.0, 1.0);
+        color = mix(color, vec3(0.82, 0.96, 1.0), scanExposure * 0.78);
+        color += scanFine * vec3(0.08, 0.16, 0.19);
       } else if (uEffect == 5) {
         vec2 centered = uv - 0.5;
         float radius = length(centered);
@@ -1172,6 +1604,68 @@ const skillEffectShader: ShaderDefinition = {
         float warmAmount = heatField * heat * (0.15 + swapPulse * 0.09);
         heatedScene = mix(heatedScene, warmGrade, warmAmount);
         color = mix(color, heatedScene, heat * (0.72 + heatField * 0.28));
+      } else if (uEffect == 7) {
+        float progress = clamp(uEffectProgress, 0.0, 1.0);
+        float heatIn = smoothstep(0.015, 0.2, progress);
+        float heatOut = 1.0 - smoothstep(0.72, 1.0, progress);
+        float heat = heatIn * heatOut;
+        float meltPulse = exp(-pow((progress - 0.5) / 0.22, 2.0));
+
+        // A screen-space field of warm rising air communicates the skill as a
+        // foreground heat front, not as steam emitted from the kettle model.
+        vec2 broadDomain = vec2(
+          uv.x * 4.7 + noise(vec2(uv.y * 2.2, uTime * 0.075)) * 1.05,
+          uv.y * 3.8 - uTime * 0.28
+        );
+        float broad = noise(broadDomain);
+        vec2 rollingDomain = vec2(
+          uv.x * 11.4 + broad * 2.0 - uTime * 0.055,
+          uv.y * 8.2 - uTime * 0.64
+        );
+        float rolling = noise(rollingDomain);
+        float filament = noise(vec2(
+          uv.x * 25.0 + rolling * 2.8 + uTime * 0.1,
+          uv.y * 18.0 - uTime * 1.18
+        ));
+        float convection = broad * 0.58 + rolling * 0.3 + filament * 0.12;
+        float plumeBody = smoothstep(0.3, 0.72, convection);
+        float plumeEdges = smoothstep(0.42, 0.72, rolling * 0.7 + filament * 0.3);
+        float heatField = clamp(plumeBody * 0.78 + plumeEdges * 0.44, 0.0, 1.0);
+        float strength = heat * (0.76 + meltPulse * 0.42);
+
+        vec2 displacementPixels = vec2(
+          (rolling - 0.5) * 18.0 + (filament - 0.5) * 4.5,
+          (broad - 0.5) * 5.2 - heatField * 1.4
+        );
+        vec2 heatedUv = clamp(
+          uv + displacementPixels * uTexel * heatField * strength,
+          vec2(0.002),
+          vec2(0.998)
+        );
+        vec3 refracted = texture2D(tDiffuse, heatedUv).rgb;
+        vec3 upperSoft = texture2D(
+          tDiffuse,
+          clamp(heatedUv + vec2(0.0, uTexel.y * 3.0), vec2(0.002), vec2(0.998))
+        ).rgb;
+        vec3 lowerSoft = texture2D(
+          tDiffuse,
+          clamp(heatedUv - vec2(0.0, uTexel.y * 1.8), vec2(0.002), vec2(0.998))
+        ).rgb;
+        float soften = heatField * strength * (0.12 + meltPulse * 0.08);
+        vec3 heatedScene = mix(refracted, (upperSoft + lowerSoft) * 0.5, soften);
+
+        float luma = dot(heatedScene, vec3(0.2126, 0.7152, 0.0722));
+        vec3 warmWhite = vec3(1.0, 0.965, 0.84);
+        vec3 paleGold = vec3(1.0, 0.79, 0.37);
+        float vapor = smoothstep(0.48, 0.78, convection)
+          * heat
+          * (0.035 + meltPulse * 0.055);
+        vec3 warmed = heatedScene * vec3(1.035, 1.012, 0.955);
+        warmed += mix(warmWhite, paleGold, heatField * 0.55)
+          * vapor
+          * (0.58 + luma * 0.42);
+        heatedScene = mix(heatedScene, warmed, heat * (0.26 + heatField * 0.18));
+        color = mix(color, heatedScene, heat * (0.68 + heatField * 0.24));
       }
       gl_FragColor = vec4(color, 1.0);
     }
@@ -1225,6 +1719,10 @@ export class SakuraPipeline {
   private steamRevealOrigin = 0.1;
   private steamRevealDirection: -1 | 1 = 1;
   private steamRevealDuration = 5.2;
+  private coffeeSplashActive = false;
+  private coffeeSplashStartedAt = 0;
+  private coffeeSplashProgress = 1;
+  private readonly coffeeSplashDuration = 8.4;
   private renderWidth = 2;
   private renderHeight = 2;
   private steamWidth = 2;
@@ -1371,6 +1869,21 @@ export class SakuraPipeline {
       this.skillEffect.material.uniforms.uSteamClearProgress.value = this.steamClearProgress;
       finishSteamClearAfterRender = this.steamClearProgress >= 1;
     }
+    if (this.coffeeSplashActive) {
+      const evidenceProgress = window.__COFFEE_SPLASH_PROGRESS_OVERRIDE__;
+      this.coffeeSplashProgress = Number.isFinite(evidenceProgress)
+        ? THREE.MathUtils.clamp(evidenceProgress!, 0, 1)
+        : THREE.MathUtils.clamp(
+            (effectTime - this.coffeeSplashStartedAt) / this.coffeeSplashDuration,
+            0,
+            1,
+          );
+      this.skillEffect.material.uniforms.uCoffeeSplashProgress.value = this.coffeeSplashProgress;
+      if (!Number.isFinite(evidenceProgress) && this.coffeeSplashProgress >= 1) {
+        this.coffeeSplashActive = false;
+        this.skillEffect.material.uniforms.uEffect.value = 0;
+      }
+    }
     if (this.skillEffectMode === 'bathroom-steam') {
       this.steamCondensation.update(effectTime);
       this.steamBlur.material.uniforms.tDiffuse.value = fxaaTarget.texture;
@@ -1402,6 +1915,7 @@ export class SakuraPipeline {
       'printer-scan': 4,
       'iridescent-bubble': 5,
       'toaster-heat': 6,
+      'kettle-thaw-heat': 7,
     };
     if (!immediate && effect === 'none' && this.steamClearActive && this.skillEffectMode === 'bathroom-steam') {
       return;
@@ -1409,12 +1923,15 @@ export class SakuraPipeline {
     if (effect !== this.skillEffectMode || immediate) {
       this.cancelSteamClear();
       this.cancelSteamReveal(effect === 'bathroom-steam' ? 1 : 0);
+      if (effect !== 'coffee-lock') this.cancelCoffeeSplash();
       if (effect === 'bathroom-steam') this.steamCondensation.activate();
       else this.steamCondensation.deactivate();
     }
     this.skillEffectMode = effect;
-    this.skillEffect.material.uniforms.uEffect.value = modes[effect];
-    if (effect !== 'toaster-heat') {
+    this.skillEffect.material.uniforms.uEffect.value = effect === 'coffee-lock' && !this.coffeeSplashActive
+      ? 0
+      : modes[effect];
+    if (effect !== 'toaster-heat' && effect !== 'kettle-thaw-heat') {
       this.skillEffect.material.uniforms.uEffectProgress.value = 0;
     }
   }
@@ -1423,11 +1940,27 @@ export class SakuraPipeline {
     this.skillEffect.material.uniforms.uEffectProgress.value = THREE.MathUtils.clamp(progress, 0, 1);
   }
 
-  get skillEffectState(): Readonly<{ mode: SkillScreenEffect; progress: number }> {
+  get skillEffectState(): Readonly<{
+    mode: SkillScreenEffect;
+    progress: number;
+    splashActive: boolean;
+    splashProgress: number;
+  }> {
     return {
       mode: this.skillEffectMode,
       progress: Number(this.skillEffect.material.uniforms.uEffectProgress.value),
+      splashActive: this.coffeeSplashActive,
+      splashProgress: this.coffeeSplashProgress,
     };
+  }
+
+  beginCoffeeSplash(): void {
+    this.setSkillEffect('coffee-lock', true);
+    this.coffeeSplashStartedAt = performance.now() * 0.001;
+    this.coffeeSplashProgress = 0.0001;
+    this.coffeeSplashActive = true;
+    this.skillEffect.material.uniforms.uEffect.value = 2;
+    this.skillEffect.material.uniforms.uCoffeeSplashProgress.value = this.coffeeSplashProgress;
   }
 
   beginSteamReveal(originX: number, duration = 5.2): void {
@@ -1558,6 +2091,12 @@ export class SakuraPipeline {
     this.steamRevealActive = false;
     this.steamRevealProgress = THREE.MathUtils.clamp(progress, 0, 1);
     this.skillEffect.material.uniforms.uSteamRevealProgress.value = this.steamRevealProgress;
+  }
+
+  private cancelCoffeeSplash(): void {
+    this.coffeeSplashActive = false;
+    this.coffeeSplashProgress = 1;
+    this.skillEffect.material.uniforms.uCoffeeSplashProgress.value = 1;
   }
 
   private finishSteamClear(): void {

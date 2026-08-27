@@ -129,7 +129,12 @@ export class OrbitController {
     this.velocityY = 0;
     window.clearTimeout(this.viewSettleTimer);
     this.canvas.classList.add('dragging');
-    this.canvas.setPointerCapture(event.pointerId);
+      try {
+        this.canvas.setPointerCapture(event.pointerId);
+      } catch {
+        // Synthetic and accessibility-generated pointer events may not own an
+        // active browser pointer. Dragging still works through window events.
+      }
   };
 
   private readonly onPointerMove = (event: PointerEvent) => {

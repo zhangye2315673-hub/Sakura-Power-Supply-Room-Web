@@ -83,11 +83,15 @@ test('robot vacuum uses one snapshot, starts removals about 100ms apart, and cle
   const remainingBefore = await page.evaluate(() => window.__THREE_GAME_DIAGNOSTICS__!.remainingArrows);
   const initial = await show(page, 'robot-vacuum');
   expect(initial.targetCount).toBe(snapshotCount);
+  expect(initial.meshCount).toBe(0);
+  expect(initial.lineCount).toBe(0);
+  expect(initial.labelCount).toBe(0);
   let impacted = await presentation(page);
   // SwiftShader can stall the main thread while compiling the first skill
   // frames. The recursive scheduler intentionally preserves the 100 ms gap,
-  // so allow the observation window to scale with the frozen snapshot.
-  const deadline = Date.now() + Math.max(8_000, snapshotCount * 1_200);
+  // so allow the observation window to scale with the frozen snapshot even
+  // when each callback is delayed by several software-rendered frames.
+  const deadline = Date.now() + Math.max(8_000, snapshotCount * 3_000);
   while (impacted.autoRemovalOrder.length < snapshotCount && Date.now() < deadline) {
     await page.waitForTimeout(40);
     const sample = await presentation(page);
@@ -104,9 +108,9 @@ test('robot vacuum uses one snapshot, starts removals about 100ms apart, and cle
 
   await expect.poll(
     () => page.evaluate(() => window.__THREE_GAME_DIAGNOSTICS__!.remainingArrows),
-    { timeout: 8_000 },
+    { timeout: Math.max(8_000, snapshotCount * 3_000) },
   ).toBe(remainingBefore - snapshotCount);
-  await expect.poll(async () => (await presentation(page)).skillId, { timeout: 15_000 }).toBeNull();
+  await expect.poll(async () => (await presentation(page)).skillId, { timeout: 30_000 }).toBeNull();
   const cleaned = await presentation(page);
   expect(cleaned.labelCount).toBe(0);
   expect(cleaned.lineCount).toBe(0);

@@ -62,6 +62,62 @@ function beanCreaseGeometry(): THREE.TubeGeometry {
   ]), 8, 0.006, 5, false);
 }
 
+type BeanPilePose = {
+  position: THREE.Vector3;
+  rotation: THREE.Euler;
+};
+
+function stableUnit(value: number): number {
+  const wave = Math.sin(value * 12.9898 + 78.233) * 43758.5453;
+  return ((wave % 1) + 1) % 1;
+}
+
+function looseBeanPile(count: number): BeanPilePose[] {
+  const poses: BeanPilePose[] = [];
+  const halfWidth = 0.44;
+  const halfDepth = 0.21;
+  const supportRadius = 0.165;
+
+  for (let index = 0; index < count; index += 1) {
+    let bestPosition = new THREE.Vector3();
+    let bestScore = Number.POSITIVE_INFINITY;
+
+    for (let attempt = 0; attempt < 8; attempt += 1) {
+      const key = index * 8 + attempt + 1;
+      const x = -halfWidth + stableUnit(key * 0.83) * halfWidth * 2;
+      const z = -halfDepth + stableUnit(key * 1.37 + 4.7) * halfDepth * 2;
+      let y = 0.16 + stableUnit(key * 2.11 + 9.2) * 0.018;
+
+      poses.forEach(({ position }) => {
+        const deltaX = x - position.x;
+        const deltaZ = z - position.z;
+        const horizontalDistanceSquared = deltaX * deltaX + deltaZ * deltaZ;
+        if (horizontalDistanceSquared >= supportRadius * supportRadius) return;
+        y = Math.max(
+          y,
+          position.y + Math.sqrt(supportRadius * supportRadius - horizontalDistanceSquared) * 0.76,
+        );
+      });
+
+      const score = y + Math.abs(x) * 0.004 + Math.abs(z) * 0.003;
+      if (score >= bestScore) continue;
+      bestScore = score;
+      bestPosition = new THREE.Vector3(x, y, z);
+    }
+
+    poses.push({
+      position: bestPosition,
+      rotation: new THREE.Euler(
+        (stableUnit(index * 2.31 + 1.2) - 0.5) * 1.35,
+        stableUnit(index * 3.17 + 2.8) * Math.PI * 2,
+        (stableUnit(index * 4.13 + 5.4) - 0.5) * 1.5,
+      ),
+    });
+  }
+
+  return poses;
+}
+
 function irregularSteamGeometry(radius: number, seed: number): THREE.IcosahedronGeometry {
   const geometry = new THREE.IcosahedronGeometry(radius, 1);
   const position = geometry.getAttribute('position') as THREE.BufferAttribute;
@@ -78,10 +134,10 @@ function aromaCurlGeometry(index: number): THREE.TubeGeometry {
   const side = index % 2 === 0 ? -1 : 1;
   return new THREE.TubeGeometry(new THREE.CatmullRomCurve3([
     new THREE.Vector3(side * 0.04, 0, 0),
-    new THREE.Vector3(side * 0.13, 0.22, 0.015),
-    new THREE.Vector3(-side * 0.08, 0.46, -0.01),
-    new THREE.Vector3(side * 0.16, 0.7, 0.025),
-    new THREE.Vector3(-side * 0.05, 0.94, 0),
+    new THREE.Vector3(side * 0.13, 0.22, 0.32),
+    new THREE.Vector3(-side * 0.08, 0.46, 0.52),
+    new THREE.Vector3(side * 0.16, 0.7, 0.57),
+    new THREE.Vector3(-side * 0.05, 0.94, 0.61),
   ], false, 'centripetal'), 24, 0.014 + (index % 3) * 0.003, 6, false);
 }
 
@@ -206,18 +262,13 @@ export function createCoffeeMakerModel(options: ApplianceModelOptions): Applianc
   hopperLid.position.y = 0.68;
   const beanBodyGeometry = new THREE.SphereGeometry(1, 10, 7);
   const creaseGeometry = beanCreaseGeometry();
+  const beanPile = looseBeanPile(30);
   for (let index = 0; index < 30; index += 1) {
     const pivot = kit.pivot(`coffee-maker-hopper-bean-pivot-${index + 1}`, hopperPivot);
-    const column = index % 6;
-    const depthLane = Math.floor(index / 6) % 3;
-    const layer = Math.floor(index / 18);
-    pivot.position.set(
-      (column - 2.5) * 0.19,
-      0.19 + layer * 0.18 + (index % 2) * 0.015,
-      (depthLane - 1) * 0.19,
-    );
-    pivot.rotation.set((index % 5) * 0.24, index * 0.53, (index % 7) * 0.31);
+    pivot.position.copy(beanPile[index].position);
+    pivot.rotation.copy(beanPile[index].rotation);
     pivot.userData.phaseOffset = index / 30;
+    pivot.userData.restingPattern = 'deterministic-loose-pile';
     const bean = kit.mesh(`coffee-maker-sculpted-bean-${index + 1}`, beanBodyGeometry, beanMaterial, pivot, false);
     bean.scale.set(0.085, 0.055, 0.045);
     bean.userData.beanProfile = 'oval-seed-with-longitudinal-crease';
@@ -447,9 +498,9 @@ export function createCoffeeMakerModel(options: ApplianceModelOptions): Applianc
   }
 
   const steamRig = kit.pivot('coffee-maker-volumetric-steam-rig', steamSocket);
-  steamRig.position.z = 0.42;
   steamRig.userData.performanceEffect = true;
-  steamRig.userData.clearance = 'forward-of-upper-white-shell';
+  steamRig.userData.origin = 'cup-rim-center';
+  steamRig.userData.clearance = 'rises-from-cup-then-drifts-forward';
   for (let index = 0; index < 12; index += 1) {
     const puff = kit.pivot(`coffee-maker-steam-volume-pivot-${index + 1}`, steamRig);
     puff.visible = false;
@@ -475,7 +526,7 @@ export function createCoffeeMakerModel(options: ApplianceModelOptions): Applianc
       false,
     );
     aroma.visible = false;
-    aroma.position.set((index - 2) * 0.08, 0, (index % 2) * 0.035);
+    aroma.position.set((index - 2) * 0.08, 0, 0);
     aroma.userData.phaseOffset = index / 5;
   }
   for (let index = 0; index < 16; index += 1) {

@@ -12,9 +12,12 @@ export class Hud {
   private readonly gameOverPanel = this.getElement('#game-over-panel');
   private readonly randomLives = this.getElement('#random-lives');
   private readonly lifeIcons = [...this.randomLives.querySelectorAll<HTMLElement>('i')];
+  private readonly lifeBurst = this.createLifeBurst();
   private readonly hintIcons = [...document.querySelectorAll<HTMLElement>('#hint-button .hint-icons i')];
   private toastTimer = 0;
   private hintPulseTimer = 0;
+  private lifeBurstTimer = 0;
+  private renderedMaxLives = this.lifeIcons.length;
   private hintUsesRemaining = 3;
   private statusKey: TranslationKey = 'status.find';
   private statusParams: Record<string, string | number> = {};
@@ -119,11 +122,14 @@ export class Hud {
     this.randomLives.classList.toggle('visible', visible);
     this.randomLives.setAttribute('aria-hidden', String(!visible));
     const container = this.randomLives.querySelector<HTMLElement>('div');
+    const previousMaxLives = this.renderedMaxLives;
+    const addedIcons: HTMLElement[] = [];
     while (container && this.lifeIcons.length < maxLives) {
       const icon = document.createElement('i');
       icon.textContent = '♥';
       container.append(icon);
       this.lifeIcons.push(icon);
+      addedIcons.push(icon);
     }
     while (container && this.lifeIcons.length > maxLives) {
       this.lifeIcons.pop()?.remove();
@@ -133,6 +139,22 @@ export class Hud {
       icon.classList.toggle('lost', !active);
       icon.setAttribute('aria-hidden', String(!active));
     });
+    this.renderedMaxLives = maxLives;
+    if (visible && maxLives > previousMaxLives) {
+      window.clearTimeout(this.lifeBurstTimer);
+      this.randomLives.classList.remove('popcorn-burst');
+      this.lifeBurst.classList.remove('active');
+      addedIcons.forEach((icon) => icon.classList.remove('life-added'));
+      void this.randomLives.offsetWidth;
+      this.randomLives.classList.add('popcorn-burst');
+      this.lifeBurst.classList.add('active');
+      addedIcons.forEach((icon) => icon.classList.add('life-added'));
+      this.lifeBurstTimer = window.setTimeout(() => {
+        this.randomLives.classList.remove('popcorn-burst');
+        this.lifeBurst.classList.remove('active');
+        addedIcons.forEach((icon) => icon.classList.remove('life-added'));
+      }, 900);
+    }
   }
 
   showLifeLost(lives: number): void {
@@ -204,6 +226,7 @@ export class Hud {
 
   dispose(): void {
     window.clearTimeout(this.hintPulseTimer);
+    window.clearTimeout(this.lifeBurstTimer);
     this.loadingOverlay.dispose();
   }
 
@@ -234,6 +257,15 @@ export class Hud {
     const element = document.querySelector<HTMLElement>(selector);
     if (!element) throw new Error(`Missing UI element: ${selector}`);
     return element;
+  }
+
+  private createLifeBurst(): HTMLElement {
+    const burst = document.createElement('span');
+    burst.className = 'life-popcorn-burst';
+    burst.setAttribute('aria-hidden', 'true');
+    for (let index = 0; index < 7; index += 1) burst.append(document.createElement('b'));
+    this.randomLives.append(burst);
+    return burst;
   }
 
   private getButton(selector: string): HTMLButtonElement {

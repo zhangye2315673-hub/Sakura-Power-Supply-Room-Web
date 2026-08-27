@@ -34,12 +34,23 @@ export type SkillPresentationDiagnostics = Readonly<{
   radioGuideCurrentId: string | null;
   radioGuideVisibleCount: number;
   cleanupCount: number;
+  sweepPassCount: number;
+  sweepActiveCableCount: number;
+  colorCycleCount: number;
+  colorCycleSpeed: number;
+  colorPreviewStrength: number;
+  colorPreviewActiveCableCount: number;
+  colorCommitCount: number;
 }>;
 
 export type SkillPresentationHooks = Readonly<{
   commitAutoRemoval: (cableId: string) => boolean;
   setCableVisualScale: (scale: number) => void;
   getRiceCableVisualScale: () => number;
+  getCableBaseColor: (cableId: string) => number | null;
+  setCableSkillSweep: (cableId: string, progress: number, strength: number, color: number) => void;
+  setCableSkillTint: (cableId: string, color: number | null, strength: number, emissionScale: number) => void;
+  commitCableColors: (changes: readonly { cableId: string; color: number }[]) => void;
 }>;
 
 const emptyDiagnostics = (): SkillPresentationDiagnostics => ({
@@ -60,7 +71,25 @@ const emptyDiagnostics = (): SkillPresentationDiagnostics => ({
   radioGuideCurrentId: null,
   radioGuideVisibleCount: 0,
   cleanupCount: 0,
+  sweepPassCount: 0,
+  sweepActiveCableCount: 0,
+  colorCycleCount: 0,
+  colorCycleSpeed: 0,
+  colorPreviewStrength: 0,
+  colorPreviewActiveCableCount: 0,
+  colorCommitCount: 0,
 });
+
+export function resolveBlenderColorCycle(progress: number): Readonly<{
+  position: number;
+  speed: number;
+}> {
+  const normalized = THREE.MathUtils.clamp(progress, 0, 1);
+  return {
+    position: normalized * 5 + normalized * normalized * normalized * 17,
+    speed: (5 + 51 * normalized * normalized) / 4.4,
+  };
+}
 
 const makeMaterial = (color: number): THREE.MeshToonMaterial => {
   const material = cel({
@@ -170,6 +199,8 @@ export class SkillPresentationController {
   private generation = 0;
   private diagnosticsValue = emptyDiagnostics();
   private riceVisualScale = 1;
+  private sweepCableIds = new Set<string>();
+  private colorShuffleCableIds = new Set<string>();
 
   constructor(
     private readonly scene: THREE.Scene,
@@ -234,6 +265,8 @@ export class SkillPresentationController {
       const duration = this.playRiceCooker(resolution, normalizedTargets, token);
       return duration;
     }
+    if (resolution.appliance === 'stand-mixer') return this.playStandMixer(normalizedTargets, token);
+    if (resolution.appliance === 'blender') return this.playBlender(resolution, normalizedTargets, token);
     this.diagnosticsValue = { ...this.diagnosticsValue, phase: 'settle', activeTimelines: 0 };
     return resolution.topologyChanged ? 900 : 650;
   }
@@ -361,13 +394,6 @@ export class SkillPresentationController {
       this.transient.children
         .filter((child) => child.name.startsWith('skill-target-beacon-'))
         .forEach((child) => child.scale.setScalar(0.52));
-    } else if (this.diagnosticsValue.skillId === 'snapshot-sweep') {
-      this.transient.children
-        .filter((child) => child.name.startsWith('skill-target-beacon-'))
-        .forEach((child) => child.scale.setScalar(0.58));
-      const scan = this.transient.getObjectByName('robot-vacuum-lidar-scan');
-      scan?.scale.setScalar(1.35);
-      if (scan instanceof THREE.Mesh && 'opacity' in scan.material) scan.material.opacity = 0.46;
     } else if (this.diagnosticsValue.skillId === 'rice-thick-cable') {
       const position = new THREE.Vector3();
       const tangent = new THREE.Vector3();
@@ -503,96 +529,158 @@ export class SkillPresentationController {
     return 1380;
   }
 
-  private playRobotVacuum(resolution: SkillResolution, targets: readonly SkillPresentationTarget[], token: number): number {
-    const points = targets.map((target) => target.position.clone());
-    const beacons = points.map((point, index) => this.createRobotVacuumBeacon(point, index));
-    const scanCenter = points.length > 0
-      ? points.reduce((sum, point) => sum.add(point), new THREE.Vector3()).multiplyScalar(1 / points.length)
-      : new THREE.Vector3();
-    const scanMaterial = makeMaterial(0x75d8ca);
-    scanMaterial.transparent = true;
-    scanMaterial.opacity = 0;
-    scanMaterial.depthWrite = false;
-    this.materials.add(scanMaterial);
-    const scan = new THREE.Mesh(new THREE.TorusGeometry(0.25, 0.035, 5, 20), scanMaterial);
-    scan.name = 'robot-vacuum-lidar-scan';
-    scan.renderOrder = 89;
-    scan.position.copy(scanCenter);
-    scan.userData.skillBillboard = true;
-    scan.scale.setScalar(0.1);
-    this.transient.add(scan);
+  private playStandMixer(targets: readonly SkillPresentationTarget[], token: number): number {
+    const selected = targets.filter((target) => target.path && target.path.length > 1);
+    this.sweepCableIds = new Set(selected.map(({ cableId }) => cableId));
+    const sweep = { progress: -0.16, strength: 0, pass: 1 };
+    const applySweep = (): void => {
+      const color = sweep.pass === 1 ? PAL.purple : 0x76d4cc;
+      selected.forEach(({ cableId }) => this.hooks.setCableSkillSweep(
+        cableId,
+        sweep.progress,
+        sweep.strength,
+        color,
+      ));
+    };
+    const timeline = this.makeTimeline(token);
+    timeline.call(() => this.setPhase('target-lock', token), 100);
+    timeline.add(sweep, {
+      progress: 1.16,
+      strength: 1,
+      duration: 680,
+      ease: 'inOut(2)',
+      onUpdate: applySweep,
+    }, 120);
+    timeline.call(() => {
+      sweep.pass = 2;
+      this.setPhase('commit', token);
+    }, 820);
+    timeline.add(sweep, {
+      progress: -0.16,
+      strength: 0.86,
+      duration: 680,
+      ease: 'inOut(2)',
+      onUpdate: applySweep,
+    }, 840);
+    timeline.call(() => this.setPhase('impact', token), 1_540);
+    timeline.add(sweep, {
+      strength: 0,
+      duration: 180,
+      ease: 'out(3)',
+      onUpdate: applySweep,
+    }, 1_540);
+    timeline.call(() => this.setPhase('result', token), 1_740);
+    timeline.call(() => this.finishTimeline(token), 1_860);
+    this.diagnosticsValue = {
+      ...this.diagnosticsValue,
+      lineCount: selected.length,
+      meshCount: 0,
+      sweepPassCount: 2,
+      sweepActiveCableCount: selected.length,
+    };
+    return 1_920;
+  }
 
-    const scanState = { scale: 0.1, opacity: 0 };
+  private playBlender(
+    resolution: SkillResolution,
+    targets: readonly SkillPresentationTarget[],
+    token: number,
+  ): number {
+    const changes = resolution.commands.flatMap((command) => (
+      command.type === 'recolor' ? command.changes : []
+    ));
+    const palette = [...new Set(changes.map(({ color }) => color))];
+    this.colorShuffleCableIds = new Set(changes.map(({ cableId }) => cableId));
+    const offsets = new Map(changes.map(({ cableId }, index) => {
+      let hash = 2166136261;
+      for (let character = 0; character < cableId.length; character += 1) {
+        hash = Math.imul(hash ^ cableId.charCodeAt(character), 16777619) >>> 0;
+      }
+      return [cableId, ((hash % 997) / 997) * Math.max(1, palette.length) + index * 0.37] as const;
+    }));
+    const state = { progress: 0 };
+    const previewColor = new THREE.Color();
+    const applyPreview = (): void => {
+      if (token !== this.generation || palette.length === 0) return;
+      const progress = THREE.MathUtils.clamp(state.progress, 0, 1);
+      const colorCycle = resolveBlenderColorCycle(progress);
+      const cyclePosition = colorCycle.position;
+      let peakStrength = 0;
+      changes.forEach((change, index) => {
+        const phase = cyclePosition + (offsets.get(change.cableId) ?? index);
+        let paletteIndex = Math.floor(phase) % palette.length;
+        const baseColor = this.hooks.getCableBaseColor(change.cableId);
+        if (palette.length > 1 && palette[paletteIndex] === baseColor) {
+          paletteIndex = (paletteIndex + 1) % palette.length;
+        }
+        const paletteColor = palette[paletteIndex] ?? change.color;
+        previewColor.set(paletteColor);
+        const strength = 1;
+        peakStrength = Math.max(peakStrength, strength);
+        this.hooks.setCableSkillTint(change.cableId, previewColor.getHex(), strength, 0);
+      });
+      this.diagnosticsValue = {
+        ...this.diagnosticsValue,
+        colorCycleCount: Math.floor(cyclePosition),
+        colorCycleSpeed: colorCycle.speed,
+        colorPreviewStrength: peakStrength,
+        colorPreviewActiveCableCount: changes.length,
+      };
+    };
+    const clearPreview = (): void => {
+      this.colorShuffleCableIds.forEach((cableId) => (
+        this.hooks.setCableSkillTint(cableId, null, 0, 0)
+      ));
+    };
+    const timeline = this.makeTimeline(token);
+    timeline.call(() => this.setPhase('target-lock', token), 120);
+    timeline.add(state, {
+      progress: 1,
+      duration: 4_400,
+      ease: 'linear',
+      onUpdate: applyPreview,
+    }, 180);
+    timeline.call(() => {
+      if (token !== this.generation) return;
+      clearPreview();
+      this.hooks.commitCableColors(changes);
+      this.setPhase('commit', token);
+      this.diagnosticsValue = {
+        ...this.diagnosticsValue,
+        colorCommitCount: changes.length,
+        colorPreviewActiveCableCount: 0,
+      };
+    }, 4_680);
+    timeline.call(() => this.setPhase('result', token), 4_840);
+    timeline.call(() => this.finishTimeline(token), 5_120);
+    this.diagnosticsValue = {
+      ...this.diagnosticsValue,
+      lineCount: targets.length,
+      meshCount: 0,
+      colorPreviewActiveCableCount: changes.length,
+    };
+    return 5_200;
+  }
+
+  private playRobotVacuum(resolution: SkillResolution, targets: readonly SkillPresentationTarget[], token: number): number {
     const timeline = this.makeTimeline(token);
     timeline.call(() => this.setPhase('target-lock', token), 0);
-    timeline.add(scanState, {
-      scale: 3.2,
-      opacity: 0.75,
-      duration: 520,
-      ease: 'out(3)',
-      onUpdate: () => {
-        scan.scale.setScalar(scanState.scale);
-        scanMaterial.opacity = scanState.opacity;
-        scan.rotation.z += 0.025;
-      },
-    }, 0);
-    beacons.forEach((beacon, index) => {
-      const state = { scale: 0.08, turn: 0 };
-      beacon.scale.setScalar(0.08);
-      timeline.add(state, {
-        scale: 0.58,
-        turn: Math.PI * 0.45,
-        duration: 250,
-        ease: 'outBack(1.5)',
-        onUpdate: () => { beacon.scale.setScalar(state.scale); beacon.rotation.z = state.turn; },
-      }, 180 + index * 70);
-    });
     const commitAt = 520;
     timeline.call(() => this.setPhase('commit', token), commitAt);
     this.scheduleAutoRemovals(resolution.targetCableIds, token, commitAt);
     const lastCommitAt = commitAt + Math.max(0, resolution.targetCableIds.length - 1) * 100;
     const resultAt = lastCommitAt + 520;
     timeline.call(() => this.setPhase('result', token), resultAt);
-    timeline.add(scanState, {
-      opacity: 0,
-      scale: 3.8,
-      duration: 260,
-      onUpdate: () => { scan.scale.setScalar(scanState.scale); scanMaterial.opacity = scanState.opacity; },
-    }, resultAt);
     timeline.call(() => this.finishTimeline(token), resultAt + 320);
 
     this.diagnosticsValue = {
       ...this.diagnosticsValue,
-      meshCount: beacons.length + 1,
+      meshCount: 0,
       autoRemovalOrder: [],
       autoRemovalStartsMs: [],
     };
+    void targets;
     return resultAt + 380;
-  }
-
-  private createShieldFrame(position: THREE.Vector3, index: number, accent: number): THREE.Group {
-    const group = new THREE.Group();
-    group.name = `skill-target-beacon-${index + 1}`;
-    group.position.copy(position).add(new THREE.Vector3(0, 0.2, 0));
-    group.userData.skillBillboard = true;
-    const material = makeMaterial(accent);
-    this.materials.add(material);
-    const points = [
-      new THREE.Vector2(0, 0.35), new THREE.Vector2(0.3, 0.22),
-      new THREE.Vector2(0.25, -0.13), new THREE.Vector2(0, -0.35),
-      new THREE.Vector2(-0.25, -0.13), new THREE.Vector2(-0.3, 0.22),
-    ];
-    points.forEach((start, pointIndex) => {
-      const end = points[(pointIndex + 1) % points.length];
-      const delta = end.clone().sub(start);
-      const bar = new THREE.Mesh(new THREE.BoxGeometry(delta.length(), 0.055, 0.055), material);
-      bar.position.set((start.x + end.x) * 0.5, (start.y + end.y) * 0.5, 0);
-      bar.rotation.z = Math.atan2(delta.y, delta.x);
-      bar.renderOrder = 90;
-      group.add(bar);
-    });
-    this.transient.add(group);
-    return group;
   }
 
   private createPersistentRadioGuide(index: number): THREE.Group {
@@ -710,36 +798,6 @@ export class SkillPresentationController {
     return root;
   }
 
-  private createRobotVacuumBeacon(position: THREE.Vector3, index: number): THREE.Group {
-    const group = this.createShieldFrame(position, index, index % 2 === 0 ? PAL.blossomDeep : PAL.yellow);
-    const bodyMaterial = makeMaterial(0x75d8ca);
-    const dark = makeMaterial(0x453b58);
-    const brushMaterial = makeMaterial(0xf09a75);
-    this.materials.add(bodyMaterial);
-    this.materials.add(dark);
-    this.materials.add(brushMaterial);
-    const chassis = new THREE.Mesh(new THREE.CylinderGeometry(0.17, 0.17, 0.075, 8), bodyMaterial);
-    chassis.rotation.x = Math.PI * 0.5;
-    chassis.position.y = -0.025;
-    chassis.renderOrder = 91;
-    const lidar = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.055, 0.055, 8), dark);
-    lidar.rotation.x = Math.PI * 0.5;
-    lidar.position.set(0.03, 0.045, 0.055);
-    lidar.renderOrder = 92;
-    const bumper = new THREE.Mesh(new THREE.BoxGeometry(0.19, 0.035, 0.055), dark);
-    bumper.position.set(0, 0.115, 0.04);
-    bumper.renderOrder = 92;
-    group.add(chassis, lidar, bumper);
-    [-1, 1].forEach((side) => {
-      const brush = new THREE.Mesh(new THREE.ConeGeometry(0.055, 0.13, 3), brushMaterial);
-      brush.position.set(side * 0.18, -0.12, 0.025);
-      brush.rotation.z = side * 0.55;
-      brush.renderOrder = 91;
-      group.add(brush);
-    });
-    return group;
-  }
-
   private clearRadioGuide(): void {
     this.clearGroup(this.radioGuide);
     this.radioGuideEntries = [];
@@ -810,6 +868,10 @@ export class SkillPresentationController {
     this.timeline = null;
     this.transientTimers.forEach((timer) => window.clearTimeout(timer));
     this.transientTimers.clear();
+    this.sweepCableIds.forEach((cableId) => this.hooks.setCableSkillSweep(cableId, 0, 0, PAL.purple));
+    this.sweepCableIds.clear();
+    this.colorShuffleCableIds.forEach((cableId) => this.hooks.setCableSkillTint(cableId, null, 0, 0));
+    this.colorShuffleCableIds.clear();
     this.clearGroup(this.transient);
     this.diagnosticsValue = {
       ...emptyDiagnostics(),
@@ -819,6 +881,8 @@ export class SkillPresentationController {
       autoRemovalStartsMs: lastAutoRemovalStartsMs,
       radioPulseOrder: lastRadioPulseOrder,
       phaseHistory,
+      sweepPassCount: this.diagnosticsValue.sweepPassCount,
+      sweepActiveCableCount: this.diagnosticsValue.sweepActiveCableCount,
     };
   }
 

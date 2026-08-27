@@ -13,6 +13,7 @@ export const REFRIGERATOR_FREEZE_COLOR = 0x6fc2d0;
 export const REFRIGERATOR_ICE_COLOR = 0x7dced8;
 export const REFRIGERATOR_ICE_OPACITY = 0.86;
 export const REFRIGERATOR_SPIKE_OPACITY = 0.96;
+export const COFFEE_STAIN_COLOR = 0x4f2b23;
 
 const EPSILON = 1e-6;
 const zAxis = new THREE.Vector3(0, 0, 1);
@@ -54,12 +55,38 @@ export function createCableToonMaterial(
   const freezeAmount = { value: 0 };
   const freezeProgress = { value: 0 };
   const freezeSeed = { value: 0 };
+  const overheatAmount = { value: 0 };
+  const overheatTurns = { value: 2 };
+  const overheatTime = { value: 0 };
+  const overheatReveal = { value: 0 };
+  const coffeeAmount = { value: 0 };
+  const coffeeReveal = { value: 0 };
+  const coffeeSeed = { value: 0 };
+  const coffeeTime = { value: 0 };
+  const coffeeDirection = { value: 0 };
+  const coffeeColor = { value: new THREE.Color(COFFEE_STAIN_COLOR) };
+  const skillSweepProgress = { value: 0 };
+  const skillSweepStrength = { value: 0 };
+  const skillSweepColor = { value: new THREE.Color(0x9b7bc8) };
   const previousOnBeforeCompile = material.onBeforeCompile.bind(material);
   const previousProgramCacheKey = material.customProgramCacheKey.bind(material);
   material.userData.visualInflation = visualInflation;
   material.userData.freezeAmount = freezeAmount;
   material.userData.freezeProgress = freezeProgress;
   material.userData.freezeSeed = freezeSeed;
+  material.userData.overheatAmount = overheatAmount;
+  material.userData.overheatTurns = overheatTurns;
+  material.userData.overheatTime = overheatTime;
+  material.userData.overheatReveal = overheatReveal;
+  material.userData.coffeeAmount = coffeeAmount;
+  material.userData.coffeeReveal = coffeeReveal;
+  material.userData.coffeeSeed = coffeeSeed;
+  material.userData.coffeeTime = coffeeTime;
+  material.userData.coffeeDirection = coffeeDirection;
+  material.userData.coffeeColor = coffeeColor;
+  material.userData.skillSweepProgress = skillSweepProgress;
+  material.userData.skillSweepStrength = skillSweepStrength;
+  material.userData.skillSweepColor = skillSweepColor;
   material.userData.progressiveFreeze = true;
   material.onBeforeCompile = (shader, renderer) => {
     previousOnBeforeCompile(shader, renderer);
@@ -67,18 +94,33 @@ export function createCableToonMaterial(
     shader.uniforms.uCableFreezeAmount = freezeAmount;
     shader.uniforms.uCableFreezeProgress = freezeProgress;
     shader.uniforms.uCableFreezeSeed = freezeSeed;
+    shader.uniforms.uCableOverheatAmount = overheatAmount;
+    shader.uniforms.uCableOverheatTurns = overheatTurns;
+    shader.uniforms.uCableOverheatTime = overheatTime;
+    shader.uniforms.uCableOverheatReveal = overheatReveal;
+    shader.uniforms.uCableCoffeeAmount = coffeeAmount;
+    shader.uniforms.uCableCoffeeReveal = coffeeReveal;
+    shader.uniforms.uCableCoffeeSeed = coffeeSeed;
+    shader.uniforms.uCableCoffeeTime = coffeeTime;
+    shader.uniforms.uCableCoffeeDirection = coffeeDirection;
+    shader.uniforms.uCableCoffeeColor = coffeeColor;
+    shader.uniforms.uCableSkillSweepProgress = skillSweepProgress;
+    shader.uniforms.uCableSkillSweepStrength = skillSweepStrength;
+    shader.uniforms.uCableSkillSweepColor = skillSweepColor;
     shader.vertexShader = shader.vertexShader
       .replace(
         '#include <common>',
         `#include <common>
 uniform float uCableVisualInflation;
 attribute float aCableProgress;
-varying float vCableFreezeProgress;`,
+varying float vCableFreezeProgress;
+varying vec3 vCableViewNormal;`,
       )
       .replace(
         '#include <begin_vertex>',
         `#include <begin_vertex>
 vCableFreezeProgress = aCableProgress;
+vCableViewNormal = normalize(normalMatrix * objectNormal);
 transformed += objectNormal * uCableVisualInflation;`,
       );
     shader.fragmentShader = shader.fragmentShader
@@ -88,7 +130,21 @@ transformed += objectNormal * uCableVisualInflation;`,
 uniform float uCableFreezeAmount;
 uniform float uCableFreezeProgress;
 uniform float uCableFreezeSeed;
-varying float vCableFreezeProgress;`,
+uniform float uCableOverheatAmount;
+uniform float uCableOverheatTurns;
+uniform float uCableOverheatTime;
+uniform float uCableOverheatReveal;
+uniform float uCableCoffeeAmount;
+uniform float uCableCoffeeReveal;
+uniform float uCableCoffeeSeed;
+uniform float uCableCoffeeTime;
+uniform float uCableCoffeeDirection;
+uniform vec3 uCableCoffeeColor;
+uniform float uCableSkillSweepProgress;
+uniform float uCableSkillSweepStrength;
+uniform vec3 uCableSkillSweepColor;
+varying float vCableFreezeProgress;
+varying vec3 vCableViewNormal;`,
       )
       .replace(
         'vec4 diffuseColor = vec4( diffuse, opacity );',
@@ -102,11 +158,141 @@ float cableFreezeFront = 1.0 - smoothstep(
 if (uCableFreezeProgress > 0.985) cableFreezeFront = 1.0;
 float cableFreezeCoverage = clamp(cableFreezeFront * uCableFreezeAmount, 0.0, 1.0);
 vec3 cableFrozenColor = vec3(0.49, 0.81, 0.85);
-diffuseColor.rgb = mix(diffuseColor.rgb, cableFrozenColor, cableFreezeCoverage * 0.9);`,
+diffuseColor.rgb = mix(diffuseColor.rgb, cableFrozenColor, cableFreezeCoverage * 0.9);
+
+vec3 cableCoffeeEmission = vec3(0.0);
+if (uCableCoffeeAmount > 0.001) {
+  float cableCoffeeAlong = mix(
+    vCableFreezeProgress,
+    1.0 - vCableFreezeProgress,
+    step(0.5, uCableCoffeeDirection)
+  );
+  float cableCoffeeWave = sin(cableCoffeeAlong * 23.0 + uCableCoffeeSeed * 17.0) * 0.032;
+  cableCoffeeWave += sin(cableCoffeeAlong * 51.0 - uCableCoffeeTime * 0.68 + uCableCoffeeSeed * 31.0) * 0.018;
+  cableCoffeeWave += sin(cableCoffeeAlong * 91.0 + uCableCoffeeSeed * 47.0) * 0.008;
+  float cableCoffeeSignedFront = uCableCoffeeReveal * 1.12 - cableCoffeeAlong + cableCoffeeWave;
+  float cableCoffeeHalo = smoothstep(-0.16, 0.075, cableCoffeeSignedFront);
+  float cableCoffeeCore = smoothstep(-0.045, 0.065, cableCoffeeSignedFront);
+  float cableCoffeeEdgeCoverage = cableCoffeeHalo * (1.0 - cableCoffeeCore) * uCableCoffeeAmount;
+  float cableCoffeeCoverage = cableCoffeeCore * uCableCoffeeAmount;
+  vec3 cableCoffeeWetEdge = clamp(uCableCoffeeColor * 1.34 + vec3(0.018, 0.009, 0.006), 0.0, 1.0);
+  diffuseColor.rgb = mix(diffuseColor.rgb, cableCoffeeWetEdge, cableCoffeeEdgeCoverage * 0.58);
+  diffuseColor.rgb = mix(diffuseColor.rgb, uCableCoffeeColor, cableCoffeeCoverage);
+  cableCoffeeEmission = uCableCoffeeColor * cableCoffeeCoverage * 0.22;
+}
+
+vec3 cableSkillSweepEmission = vec3(0.0);
+if (uCableSkillSweepStrength > 0.001) {
+  float sweepDistance = abs(vCableFreezeProgress - uCableSkillSweepProgress);
+  float sweepHalo = 1.0 - smoothstep(0.035, 0.18, sweepDistance);
+  float sweepCore = 1.0 - smoothstep(0.008, 0.058, sweepDistance);
+  float sweepRim = pow(clamp(1.0 - abs(vCableViewNormal.z), 0.0, 1.0), 1.8);
+  float sweepCoverage = clamp(
+    sweepHalo * 0.42 + sweepCore * 0.62 + sweepRim * 0.08,
+    0.0,
+    1.0
+  ) * uCableSkillSweepStrength;
+  diffuseColor.rgb = mix(diffuseColor.rgb, uCableSkillSweepColor, sweepCoverage * 0.76);
+  cableSkillSweepEmission = uCableSkillSweepColor * uCableSkillSweepStrength
+    * (sweepCore * 0.78 + sweepHalo * 0.2 + sweepRim * 0.06);
+}
+
+vec3 cableHeatEmission = vec3(0.0);
+if (uCableOverheatAmount > 0.001) {
+  float cableHeatDistanceFromPlug = 1.0 - vCableFreezeProgress;
+  float cableHeatReveal = 1.0 - smoothstep(
+    uCableOverheatReveal - 0.08,
+    uCableOverheatReveal + 0.035,
+    cableHeatDistanceFromPlug
+  );
+  float cableHeatUrgency = 1.0 - step(1.5, uCableOverheatTurns);
+  float cableHeatSpeed = mix(0.72, 0.92, cableHeatUrgency);
+  float cableHeatPhase = fract(vCableFreezeProgress * 2.65 - uCableOverheatTime * cableHeatSpeed);
+  float cableHeatBandA = 1.0 - smoothstep(0.055, 0.16, abs(cableHeatPhase - 0.18));
+  float cableHeatBandB = 1.0 - smoothstep(0.045, 0.135, abs(cableHeatPhase - 0.62));
+  float cableHeatBand = max(cableHeatBandA, cableHeatBandB);
+  float cableHeatCoreA = 1.0 - smoothstep(0.018, 0.052, abs(cableHeatPhase - 0.18));
+  float cableHeatCoreB = 1.0 - smoothstep(0.016, 0.046, abs(cableHeatPhase - 0.62));
+  float cableHeatCore = max(cableHeatCoreA, cableHeatCoreB);
+  float cableHeatRim = pow(clamp(1.0 - abs(vCableViewNormal.z), 0.0, 1.0), 2.2);
+  float cableHeatBreath = 0.82 + sin(uCableOverheatTime * mix(3.4, 5.1, cableHeatUrgency)) * 0.18;
+  float cableHeatCoverage = uCableOverheatAmount * cableHeatReveal * clamp(
+    0.1 + cableHeatBand * 0.9 + cableHeatRim * 0.12,
+    0.0,
+    1.0
+  );
+  vec3 cableHeatColor = mix(vec3(1.0, 0.42, 0.055), vec3(1.0, 0.08, 0.025), cableHeatUrgency);
+  vec3 cableHeatCoreColor = mix(vec3(1.0, 0.91, 0.48), vec3(1.0, 0.48, 0.16), cableHeatUrgency);
+  diffuseColor.rgb = mix(
+    diffuseColor.rgb,
+    cableHeatColor,
+    cableHeatCoverage * (0.38 + cableHeatBreath * 0.22)
+  );
+  cableHeatEmission = cableHeatColor * uCableOverheatAmount * cableHeatReveal * cableHeatBreath
+    * (cableHeatBand * 0.82 + cableHeatRim * 0.08);
+  cableHeatEmission += cableHeatCoreColor * uCableOverheatAmount * cableHeatReveal
+    * cableHeatCore * 0.82;
+}`,
       );
+    shader.fragmentShader = shader.fragmentShader.replace(
+      'vec3 outgoingLight = reflectedLight.directDiffuse + reflectedLight.indirectDiffuse + totalEmissiveRadiance;',
+      `vec3 outgoingLight = reflectedLight.directDiffuse + reflectedLight.indirectDiffuse + totalEmissiveRadiance;
+outgoingLight += cableHeatEmission + cableCoffeeEmission + cableSkillSweepEmission;`,
+    );
   };
-  material.customProgramCacheKey = () => `${previousProgramCacheKey()}-cable-base-v5-progressive-freeze`;
+  material.customProgramCacheKey = () => `${previousProgramCacheKey()}-cable-base-v11-skill-sweep`;
   return material;
+}
+
+export function setCableSkillSweep(
+  material: THREE.MeshToonMaterial,
+  progress: number,
+  strength: number,
+  color: THREE.ColorRepresentation,
+): void {
+  const progressUniform = material.userData.skillSweepProgress as { value: number } | undefined;
+  const strengthUniform = material.userData.skillSweepStrength as { value: number } | undefined;
+  const colorUniform = material.userData.skillSweepColor as { value: THREE.Color } | undefined;
+  if (progressUniform) progressUniform.value = progress;
+  if (strengthUniform) strengthUniform.value = THREE.MathUtils.clamp(strength, 0, 1);
+  if (colorUniform) colorUniform.value.set(color);
+}
+
+export function setCableCoffeeStain(
+  material: THREE.MeshToonMaterial,
+  amount: number,
+  reveal: number,
+  seed: number,
+  elapsed: number,
+  direction: number,
+): void {
+  const amountUniform = material.userData.coffeeAmount as { value: number } | undefined;
+  const revealUniform = material.userData.coffeeReveal as { value: number } | undefined;
+  const seedUniform = material.userData.coffeeSeed as { value: number } | undefined;
+  const timeUniform = material.userData.coffeeTime as { value: number } | undefined;
+  const directionUniform = material.userData.coffeeDirection as { value: number } | undefined;
+  if (amountUniform) amountUniform.value = THREE.MathUtils.clamp(amount, 0, 1);
+  if (revealUniform) revealUniform.value = THREE.MathUtils.clamp(reveal, 0, 1);
+  if (seedUniform) seedUniform.value = seed;
+  if (timeUniform) timeUniform.value = elapsed;
+  if (directionUniform) directionUniform.value = direction >= 0.5 ? 1 : 0;
+}
+
+export function setCableOverheat(
+  material: THREE.MeshToonMaterial,
+  amount: number,
+  turnsRemaining: number,
+  elapsed: number,
+  reveal = 1,
+): void {
+  const heatAmount = material.userData.overheatAmount as { value: number } | undefined;
+  const heatTurns = material.userData.overheatTurns as { value: number } | undefined;
+  const heatTime = material.userData.overheatTime as { value: number } | undefined;
+  const heatReveal = material.userData.overheatReveal as { value: number } | undefined;
+  if (heatAmount) heatAmount.value = THREE.MathUtils.clamp(amount, 0, 1);
+  if (heatTurns) heatTurns.value = Math.max(1, turnsRemaining);
+  if (heatTime) heatTime.value = Math.max(0, elapsed);
+  if (heatReveal) heatReveal.value = THREE.MathUtils.clamp(reveal, 0, 1);
 }
 
 export type CableIceShellMaterial = THREE.MeshPhysicalMaterial & {
