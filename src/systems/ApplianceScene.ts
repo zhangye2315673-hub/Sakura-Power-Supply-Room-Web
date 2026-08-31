@@ -799,15 +799,13 @@ export class ApplianceScene {
           : previous;
         nextProjectedRandomStates[index] = created.nextRandomState;
         if (created.replacement.kind !== previous.kind) {
-          const queued: PreparedReplacement = {
-            replacement: created.replacement,
-            targetIndex: index,
-            previousResources: previous.collectDisposalResources(),
+          const queued = this.createPreparedReplacement(
+            previous,
+            created.replacement,
+            index,
             randomState,
-            nextRandomState: created.nextRandomState,
-            warmupReady: this.replacementWarmupHandler === null,
-            warmupPromise: Promise.resolve(),
-          };
+            created.nextRandomState,
+          );
           queued.replacement.root.visible = false;
           const queue = this.queuedReplacements.get(index) ?? [];
           queue.push(queued);
@@ -1705,15 +1703,14 @@ export class ApplianceScene {
           this.replacementDiagnostics.maxFallbackBuildMs,
           fallbackBuildMs,
         );
-        const fallback: PreparedReplacement = {
-          replacement: created.replacement,
+        const fallback = this.createPreparedReplacement(
+          previous,
+          created.replacement,
           targetIndex,
-          previousResources: prepared?.previousResources ?? previous.collectDisposalResources(),
-          randomState: this.replacementStateFor(targetIndex),
-          nextRandomState: created.nextRandomState,
-          warmupReady: this.replacementWarmupHandler === null,
-          warmupPromise: Promise.resolve(),
-        };
+          this.replacementStateFor(targetIndex),
+          created.nextRandomState,
+          prepared?.previousResources,
+        );
         this.warmPreparedReplacement(fallback);
         return fallback;
       })();
@@ -1766,18 +1763,35 @@ export class ApplianceScene {
     const candidate = this.createReplacement(previous, targetIndex, otherTargets);
     const replacement = candidate.replacement;
     replacement.root.visible = false;
-    const prepared: PreparedReplacement = {
+    const prepared = this.createPreparedReplacement(
+      previous,
       replacement,
       targetIndex,
-      previousResources: previous.collectDisposalResources(),
-      randomState: this.replacementStateFor(targetIndex),
-      nextRandomState: candidate.nextRandomState,
-      warmupReady: this.replacementWarmupHandler === null,
-      warmupPromise: Promise.resolve(),
-    };
+      this.replacementStateFor(targetIndex),
+      candidate.nextRandomState,
+    );
     this.recordPreparedReplacement(previous, replacement, performance.now() - prepareStartedAt);
     this.preparedReplacements.set(previous, prepared);
     this.warmPreparedReplacement(prepared);
+  }
+
+  private createPreparedReplacement(
+    previous: ApplianceTarget,
+    replacement: ApplianceTarget,
+    targetIndex: number,
+    randomState: number,
+    nextRandomState: number,
+    previousResources = previous.collectDisposalResources(),
+  ): PreparedReplacement {
+    return {
+      replacement,
+      targetIndex,
+      previousResources,
+      randomState,
+      nextRandomState,
+      warmupReady: this.replacementWarmupHandler === null,
+      warmupPromise: Promise.resolve(),
+    };
   }
 
   private recordPreparedReplacement(
