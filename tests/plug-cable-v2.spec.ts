@@ -132,6 +132,60 @@ test('every plug publishes stable named parts and sockets inside the rotated env
   }
 });
 
+test('plug terminals batch same-material contacts without losing picking or frozen geometry', () => {
+  const expectedMeshCounts: Readonly<Record<(typeof PLUG_STYLE_IDS)[number], number>> = {
+    'round-two-pin': 1,
+    'usb-c': 2,
+    'flat-two-blade': 1,
+    'three-pin': 1,
+    'grounded-round': 1,
+    'dc-barrel': 2,
+    'magnetic-pogo': 2,
+  };
+
+  for (const styleId of PLUG_STYLE_IDS) {
+    const head = createPlugHead(0xe86b82, 1, false, styleId);
+    const terminal = head.root.getObjectByName('plug-terminal-assembly') as THREE.Group;
+    const terminalMeshes = terminal.children.filter(
+      (child): child is THREE.Mesh => child instanceof THREE.Mesh,
+    );
+
+    expect(terminalMeshes).toHaveLength(expectedMeshCounts[styleId]);
+    expect(new Set(terminalMeshes.map((mesh) => mesh.material)).size).toBe(terminalMeshes.length);
+    expect(terminalMeshes.every((mesh) => head.pickMeshes.includes(mesh))).toBe(true);
+    expect(terminalMeshes.every((mesh) => mesh.userData.partId === 'terminal-assembly')).toBe(true);
+    expect(terminalMeshes.every((mesh) => mesh.userData.plugStyleId === styleId)).toBe(true);
+
+    head.setFrozenGeometryEnabled(true);
+    head.setFrozen(1);
+    const frozenTerminal = head.frozenShell.getObjectByName('ice-terminal-assembly') as THREE.Group;
+    const frozenTerminalMeshes = frozenTerminal.children.filter(
+      (child): child is THREE.Mesh => child instanceof THREE.Mesh,
+    );
+    expect(frozenTerminalMeshes).toHaveLength(expectedMeshCounts[styleId]);
+    expect(frozenTerminalMeshes.every((mesh) => mesh.userData.iceShell === true)).toBe(true);
+    expect(frozenTerminalMeshes.every((mesh) => (
+      mesh.children.some((child) => child.userData.iceShellOutline === true)
+    ))).toBe(true);
+    head.dispose();
+  }
+});
+
+test('plug faceplate batches the fixed status recess without removing its semantic node', () => {
+  const head = createPlugHead(0xe86b82, 1, false, 'round-two-pin');
+  const face = head.root.getObjectByName('plug-interface-faceplate') as THREE.Mesh;
+  const recess = head.root.getObjectByName('plug-status-recess') as THREE.Mesh;
+  expect(recess).toBeDefined();
+  expect(recess.visible).toBe(false);
+  expect(face.geometry.getAttribute('position').count).toBeGreaterThan(30);
+  expect((face.material as THREE.MeshToonMaterial).userData.materialRole).toBe('interface-cavity');
+  head.setFrozenGeometryEnabled(true);
+  const frozenFace = head.frozenShell.getObjectByName('ice-plug-interface-faceplate') as THREE.Mesh;
+  expect(frozenFace).toBeDefined();
+  expect(frozenFace.geometry.getAttribute('position').count).toBeLessThan(face.geometry.getAttribute('position').count);
+  head.dispose();
+});
+
 test('plug interface cavity and electrical contacts keep fixed colors during skill tint', () => {
   for (const styleId of PLUG_STYLE_IDS) {
     const head = createPlugHead(0xe86b82, 1, false, styleId);

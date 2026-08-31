@@ -44,6 +44,7 @@ const DROP_CONTACT_SWAY = [0, -0.105, 0.074, -0.047, 0.025, 0] as const;
 const EDGE_PADDING = 0.035;
 const REPLACEMENT_KIND_HISTORY_SIZE = 6;
 const REPLACEMENT_PRELOAD_GENERATIONS = 3;
+const REPLACEMENT_WARMUP_CONCURRENCY = 2;
 const INFLATE_CYCLE_DURATION = 0.58;
 const INFLATE_AMPLITUDES = [0.18] as const;
 const REPLACEMENT_DELAY = 0.18;
@@ -666,6 +667,8 @@ export class ApplianceScene {
   private routingStateSignature = '';
   private replacementFilter: ((definition: ApplianceDefinition) => boolean) | null = null;
   private replacementWarmupHandler: ((root: THREE.Object3D) => Promise<unknown> | void) | null = null;
+  private replacementWarmupActive = 0;
+  private readonly replacementWarmupQueue: Array<() => Promise<void>> = [];
   private interactionEnabled = true;
   private readonly pendingSpawns: Array<{
     target: ApplianceTarget;
@@ -1802,24 +1805,49 @@ export class ApplianceScene {
       return;
     }
     const diagnosticsGeneration = this.replacementDiagnosticsGeneration;
-    const warmupStartedAt = performance.now();
-    prepared.warmupPromise = Promise.resolve(
-      this.replacementWarmupHandler(prepared.replacement.root),
-    )
-      .catch(() => undefined)
-      .then(() => {
+    let resolveWarmup!: () => void;
+    prepared.warmupPromise = new Promise<void>((resolve) => {
+      resolveWarmup = resolve;
+    });
+    this.replacementWarmupQueue.push(async () => {
+      const warmupStartedAt = performance.now();
+      if (diagnosticsGeneration !== this.replacementDiagnosticsGeneration) {
         prepared.warmupReady = true;
-        if (diagnosticsGeneration !== this.replacementDiagnosticsGeneration) return;
+        resolveWarmup();
+        return;
+      }
+      try {
+        await this.replacementWarmupHandler?.(prepared.replacement.root);
+      } catch {
+        // A failed warmup must not block the replacement queue forever. The
+        // normal replacement path remains valid and can render the model.
+      }
+      prepared.warmupReady = true;
+      if (diagnosticsGeneration === this.replacementDiagnosticsGeneration) {
         const warmupMs = performance.now() - warmupStartedAt;
         this.replacementDiagnostics.lastWarmupMs = warmupMs;
         this.replacementDiagnostics.maxWarmupMs = Math.max(
           this.replacementDiagnostics.maxWarmupMs,
           warmupMs,
         );
+      }
+      resolveWarmup();
+    });
+    this.drainReplacementWarmups();
+  }
+
+  private drainReplacementWarmups(): void {
+    while (
+      this.replacementWarmupActive < REPLACEMENT_WARMUP_CONCURRENCY
+      && this.replacementWarmupQueue.length > 0
+    ) {
+      const warmup = this.replacementWarmupQueue.shift()!;
+      this.replacementWarmupActive += 1;
+      void warmup().finally(() => {
+        this.replacementWarmupActive = Math.max(0, this.replacementWarmupActive - 1);
+        this.drainReplacementWarmups();
       });
-    window.setTimeout(() => {
-      prepared.warmupReady = true;
-    }, 1_500);
+    }
   }
 
   private createReplacement(

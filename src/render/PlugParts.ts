@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { addHullOutline } from '../style/outline';
 import {
   PLUG_HEAD_MAX_LENGTH,
@@ -231,13 +232,20 @@ function terminalMesh(
   terminal.userData.partId = 'terminal-assembly';
   terminal.userData.plugStyleId = styleId;
 
-  const add = (geometry: THREE.BufferGeometry, material = pinMaterial, name = 'contact') => {
-    const mesh = new THREE.Mesh(geometry, material);
-    mesh.name = `${styleId}-${name}`;
-    mesh.castShadow = true;
-    mesh.userData.partId = 'terminal-assembly';
-    mesh.userData.plugStyleId = styleId;
-    terminal.add(mesh);
+  type TerminalPart = {
+    geometry: THREE.BufferGeometry;
+    material: THREE.Material;
+    name: string;
+    castShadow: boolean;
+  };
+  const parts: TerminalPart[] = [];
+  const add = (
+    geometry: THREE.BufferGeometry,
+    material = pinMaterial,
+    name = 'contact',
+    castShadow = true,
+  ) => {
+    parts.push({ geometry, material, name, castShadow });
   };
 
   if (styleId === 'round-two-pin') {
@@ -293,11 +301,12 @@ function terminalMesh(
       pinMaterial,
       'barrel',
     );
-    const socket = new THREE.Mesh(new THREE.CylinderGeometry(0.047, 0.047, 0.012, 12), darkMaterial);
-    socket.name = 'dc-barrel-hole';
-    socket.position.y = 0.623;
-    socket.userData.partId = 'terminal-assembly';
-    terminal.add(socket);
+    add(
+      new THREE.CylinderGeometry(0.047, 0.047, 0.012, 12).translate(0, 0.623, 0),
+      darkMaterial,
+      'hole',
+      false,
+    );
   } else {
     add(
       new THREE.CylinderGeometry(0.155, 0.16, 0.07, 12).translate(0, 0.515, 0),
@@ -312,6 +321,36 @@ function terminalMesh(
       );
     }
   }
+
+  const partsByMaterial = new Map<THREE.Material, TerminalPart[]>();
+  parts.forEach((part) => {
+    const materialParts = partsByMaterial.get(part.material);
+    if (materialParts) materialParts.push(part);
+    else partsByMaterial.set(part.material, [part]);
+  });
+  partsByMaterial.forEach((materialParts, material) => {
+    let geometry: THREE.BufferGeometry;
+    if (materialParts.length === 1) {
+      geometry = materialParts[0].geometry;
+    } else {
+      const sourceGeometries = materialParts.map((part) => part.geometry);
+      const mergedGeometry = mergeGeometries(sourceGeometries, false);
+      sourceGeometries.forEach((source) => source.dispose());
+      if (!mergedGeometry) throw new Error(`Unable to merge terminal geometry for ${styleId}`);
+      geometry = mergedGeometry;
+    }
+    geometry.computeBoundingBox();
+    geometry.computeBoundingSphere();
+
+    const mesh = new THREE.Mesh(geometry, material);
+    mesh.name = materialParts.length === 1
+      ? `${styleId}-${materialParts[0].name}`
+      : `${styleId}-${materialParts.map((part) => part.name).join('-')}-batch`;
+    mesh.castShadow = materialParts.some((part) => part.castShadow);
+    mesh.userData.partId = 'terminal-assembly';
+    mesh.userData.plugStyleId = styleId;
+    terminal.add(mesh);
+  });
 
   return terminal;
 }
@@ -505,10 +544,13 @@ export function createPlugHead(
   tagPart(frontShoulder, 'front-shoulder', styleId);
   addHullOutline(frontShoulder, 0.0023);
 
-  const face = new THREE.Mesh(
-    new THREE.CylinderGeometry(faceRadius * 0.94, faceRadius, 0.026, 12).translate(0, 0.477, 0),
-    darkMaterial,
-  );
+  const faceBaseGeometry: THREE.BufferGeometry = new THREE.CylinderGeometry(
+    faceRadius * 0.94,
+    faceRadius,
+    0.026,
+    12,
+  ).translate(0, 0.477, 0);
+  const face = new THREE.Mesh(faceBaseGeometry, darkMaterial);
   face.name = 'plug-interface-faceplate';
   face.castShadow = true;
   tagPart(face, 'interface-faceplate', styleId);
@@ -567,6 +609,18 @@ export function createPlugHead(
   indicatorRecess.rotation.y = Math.PI * 0.5;
   indicatorRecess.position.set(indicatorFacetRadius + 0.0003, 0.34, 0);
   tagPart(indicatorRecess, 'status-indicator', styleId);
+
+  const faceIceGeometry = faceBaseGeometry.clone();
+  indicatorRecess.updateMatrix();
+  const recessGeometry = indicatorRecess.geometry.clone().applyMatrix4(indicatorRecess.matrix);
+  const mergedFaceGeometry = mergeGeometries([face.geometry, recessGeometry], false);
+  recessGeometry.dispose();
+  face.geometry.dispose();
+  if (!mergedFaceGeometry) throw new Error(`Unable to merge plug faceplate geometry for ${styleId}`);
+  mergedFaceGeometry.computeBoundingBox();
+  mergedFaceGeometry.computeBoundingSphere();
+  face.geometry = mergedFaceGeometry;
+  indicatorRecess.visible = false;
 
   const indicator = new THREE.Mesh(new THREE.CircleGeometry(0.015, 8), indicatorMaterial);
   indicator.name = 'plug-status-indicator';
@@ -677,7 +731,8 @@ export function createPlugHead(
     frozenShellMaterial.userData.materialRole = 'plug-refrigerator-ice-shell';
 
     [sleeve, rearNeck, shell, frontShoulder, face].forEach((source) => {
-      const icePart = new THREE.Mesh(source.geometry, frozenShellMaterial!);
+      const sourceGeometry = source === face ? faceIceGeometry : source.geometry;
+      const icePart = new THREE.Mesh(sourceGeometry, frozenShellMaterial!);
       icePart.name = `ice-${source.name}`;
       icePart.position.copy(source.position);
       icePart.quaternion.copy(source.quaternion);
@@ -889,6 +944,7 @@ export function createPlugHead(
         const entries = Array.isArray(object.material) ? object.material : [object.material];
         entries.forEach((material) => materials.add(material));
       });
+      geometries.add(faceIceGeometry);
       geometries.forEach((geometry) => geometry.dispose());
       materials.forEach((material) => material.dispose());
     },

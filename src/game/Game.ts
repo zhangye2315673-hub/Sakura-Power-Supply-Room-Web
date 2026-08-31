@@ -553,6 +553,13 @@ export class Game {
     this.adaptiveQuality = new AdaptiveNightQuality((tier) => {
       this.pipeline.setQualityTier(tier);
       this.nightEnvironment.setQualityTier(tier);
+    }, {
+      // The live game spends a noticeable amount of time in night mode during
+      // scene transitions. Leave the default two-second rule for the shared
+      // quality class/tests, but react faster here so expensive bloom and sky
+      // work step down before a transition can visibly freeze.
+      degradeAfterSeconds: 1.25,
+      restoreAfterSeconds: 8,
     });
     this.globalToolbar = new GlobalToolbar(this.theme, this.season, this.audio, this.hud.languageButton);
     const initialTheme = this.theme.snapshot;
