@@ -559,7 +559,6 @@ export class Game {
       // quality class/tests, but react faster here so expensive bloom and sky
       // work step down before a transition can visibly freeze.
       degradeAfterSeconds: 1.25,
-      restoreAfterSeconds: 8,
     });
     this.globalToolbar = new GlobalToolbar(this.theme, this.season, this.audio, this.hud.languageButton);
     const initialTheme = this.theme.snapshot;

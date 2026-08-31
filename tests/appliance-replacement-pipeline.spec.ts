@@ -114,6 +114,38 @@ test('deep-cycle replacement commits a prepared model instead of building during
   }
 });
 
+test('invalidating prepared replacements cancels queued warmups without disposing active jobs early', async () => {
+  const scene = new ApplianceScene();
+  scene.configure(1, APPLIANCE_CATALOG.slice(0, 1), [0xffc857]);
+  const pendingResolvers: Array<() => void> = [];
+  scene.setReplacementWarmupHandler(() => new Promise<void>((resolve) => {
+    pendingResolvers.push(resolve);
+  }));
+  const originalRequestAnimationFrame = globalThis.requestAnimationFrame;
+  globalThis.requestAnimationFrame = (callback: FrameRequestCallback): number => {
+    queueMicrotask(() => callback(performance.now()));
+    return 1;
+  };
+  try {
+    await scene.prepareInitialReplacementsAsync();
+    expect(scene.getReplacementDiagnostics().warmupPendingCount).toBe(3);
+    expect(pendingResolvers).toHaveLength(2);
+
+    scene.setReplacementFilter(() => false);
+    const invalidated = scene.getReplacementDiagnostics();
+    expect(invalidated.preparedCount).toBe(0);
+    expect(invalidated.queuedPreparedCount).toBe(0);
+    expect(invalidated.warmupPendingCount).toBe(0);
+
+    pendingResolvers.splice(0).forEach((resolve) => resolve());
+    await Promise.resolve();
+    expect(pendingResolvers).toHaveLength(0);
+  } finally {
+    globalThis.requestAnimationFrame = originalRequestAnimationFrame;
+    scene.dispose();
+  }
+});
+
 test('production appliance replacement reports prebuild, warmup, and prepared commit separately', async ({ page }) => {
   test.setTimeout(300_000);
   await page.addInitScript(() => {

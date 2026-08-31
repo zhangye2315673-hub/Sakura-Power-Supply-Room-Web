@@ -72,6 +72,12 @@ type PreparedReplacement = {
   nextRandomState: number;
   warmupReady: boolean;
   warmupPromise: Promise<void>;
+  cancelWarmup?: () => void;
+};
+
+type ReplacementWarmupJob = {
+  run: () => Promise<void>;
+  cancel: () => void;
 };
 
 type DeferredDisposal = {
@@ -668,7 +674,7 @@ export class ApplianceScene {
   private replacementFilter: ((definition: ApplianceDefinition) => boolean) | null = null;
   private replacementWarmupHandler: ((root: THREE.Object3D) => Promise<unknown> | void) | null = null;
   private replacementWarmupActive = 0;
-  private readonly replacementWarmupQueue: Array<() => Promise<void>> = [];
+  private readonly replacementWarmupQueue: ReplacementWarmupJob[] = [];
   private interactionEnabled = true;
   private readonly pendingSpawns: Array<{
     target: ApplianceTarget;
@@ -846,7 +852,6 @@ export class ApplianceScene {
   }
 
   private clearTargets(seed: number): void {
-    this.replacementDiagnosticsGeneration += 1;
     this.clearPreparedReplacements();
     this.flushDeferredDisposals();
     this.assignments.clear();
@@ -1197,7 +1202,6 @@ export class ApplianceScene {
 
   reset(): void {
     this.resetInteractionState();
-    this.clearPreparedReplacements();
     if (this.configuredDefinitions.length > 0) {
       const restoreVisibility = this.root.visible;
       this.clearTargets(this.configuredSeed);
@@ -1207,6 +1211,7 @@ export class ApplianceScene {
       this.commitInitialLayout(this.configuredSeed, restoreVisibility);
       return;
     }
+    this.clearPreparedReplacements();
     this.assignments.clear();
     this.pendingSpawns.length = 0;
     this.targets.forEach((target) => target.reset());
@@ -1806,33 +1811,50 @@ export class ApplianceScene {
     }
     const diagnosticsGeneration = this.replacementDiagnosticsGeneration;
     let resolveWarmup!: () => void;
+    let settled = false;
+    let started = false;
+    let cancelled = false;
+    const settle = (): void => {
+      if (settled) return;
+      settled = true;
+      prepared.warmupReady = true;
+      resolveWarmup();
+    };
     prepared.warmupPromise = new Promise<void>((resolve) => {
       resolveWarmup = resolve;
     });
-    this.replacementWarmupQueue.push(async () => {
-      const warmupStartedAt = performance.now();
-      if (diagnosticsGeneration !== this.replacementDiagnosticsGeneration) {
-        prepared.warmupReady = true;
-        resolveWarmup();
-        return;
-      }
-      try {
-        await this.replacementWarmupHandler?.(prepared.replacement.root);
-      } catch {
-        // A failed warmup must not block the replacement queue forever. The
-        // normal replacement path remains valid and can render the model.
-      }
-      prepared.warmupReady = true;
-      if (diagnosticsGeneration === this.replacementDiagnosticsGeneration) {
-        const warmupMs = performance.now() - warmupStartedAt;
-        this.replacementDiagnostics.lastWarmupMs = warmupMs;
-        this.replacementDiagnostics.maxWarmupMs = Math.max(
-          this.replacementDiagnostics.maxWarmupMs,
-          warmupMs,
-        );
-      }
-      resolveWarmup();
-    });
+    const job: ReplacementWarmupJob = {
+      run: async () => {
+        if (cancelled) return;
+        started = true;
+        const warmupStartedAt = performance.now();
+        if (diagnosticsGeneration !== this.replacementDiagnosticsGeneration) {
+          settle();
+          return;
+        }
+        try {
+          await this.replacementWarmupHandler?.(prepared.replacement.root);
+        } catch {
+          // A failed warmup must not block the replacement queue forever. The
+          // normal replacement path remains valid and can render the model.
+        }
+        if (diagnosticsGeneration === this.replacementDiagnosticsGeneration) {
+          const warmupMs = performance.now() - warmupStartedAt;
+          this.replacementDiagnostics.lastWarmupMs = warmupMs;
+          this.replacementDiagnostics.maxWarmupMs = Math.max(
+            this.replacementDiagnostics.maxWarmupMs,
+            warmupMs,
+          );
+        }
+        settle();
+      },
+      cancel: () => {
+        cancelled = true;
+        if (!started) settle();
+      },
+    };
+    prepared.cancelWarmup = job.cancel;
+    this.replacementWarmupQueue.push(job);
     this.drainReplacementWarmups();
   }
 
@@ -1841,9 +1863,10 @@ export class ApplianceScene {
       this.replacementWarmupActive < REPLACEMENT_WARMUP_CONCURRENCY
       && this.replacementWarmupQueue.length > 0
     ) {
-      const warmup = this.replacementWarmupQueue.shift()!;
+      const warmup = this.replacementWarmupQueue.shift();
+      if (!warmup) break;
       this.replacementWarmupActive += 1;
-      void warmup().finally(() => {
+      void warmup.run().finally(() => {
         this.replacementWarmupActive = Math.max(0, this.replacementWarmupActive - 1);
         this.drainReplacementWarmups();
       });
@@ -1924,12 +1947,14 @@ export class ApplianceScene {
   }
 
   private clearPreparedReplacements(): void {
+    this.replacementDiagnosticsGeneration += 1;
     this.preparedReplacements.forEach((prepared) => this.disposePreparedReplacement(prepared));
     this.preparedReplacements.clear();
     this.queuedReplacements.forEach((queue) => {
       queue.forEach((prepared) => this.disposePreparedReplacement(prepared));
     });
     this.queuedReplacements.clear();
+    this.replacementWarmupQueue.splice(0).forEach((job) => job.cancel());
   }
 
   private pruneInvalidPreparedReplacements(): void {
@@ -1975,6 +2000,7 @@ export class ApplianceScene {
   }
 
   private disposePreparedReplacement(prepared: PreparedReplacement): void {
+    prepared.cancelWarmup?.();
     void prepared.warmupPromise.finally(() => prepared.replacement.dispose());
   }
 
