@@ -68,6 +68,14 @@ export type SkillContext = Readonly<{
   state: Readonly<SkillChallengeState>;
 }>;
 
+export type SkillDamageEvent = Readonly<{
+  source: 'microwave';
+  amount: number;
+  lives: number;
+  failed: boolean;
+  revived: boolean;
+}>;
+
 export type GachaCardTier =
   | 'normal-benefit'
   | 'strong-benefit'
@@ -138,6 +146,7 @@ type ManualTransaction = {
   preexistingPrinterCopy: boolean;
   printerCopyConsumedOnExit: boolean;
   microwavePendingDecrement: boolean;
+  wasLastCableAtPullStart: boolean;
 };
 
 export class DeterministicRng {
@@ -215,6 +224,13 @@ const available = (context: SkillContext): SkillCableSnapshot[] =>
 const remainingIds = (context: SkillContext): string[] =>
   context.remainingCables.map((cable) => cable.id);
 
+export function pickPrinterCopyCableId(context: SkillContext): string | null {
+  const availableIds = new Set(context.availableCableIds);
+  return context.removalSequence.find((id) => availableIds.has(id))
+    ?? context.availableCableIds[0]
+    ?? null;
+}
+
 const timed = (instance: StatusInstance | null): boolean =>
   instance?.turnsRemaining !== null && instance !== null;
 
@@ -223,6 +239,31 @@ const hasDebuff = (context: SkillContext, id?: SkillStatusId): boolean =>
 
 const noDebuff = (context: SkillContext): boolean => !context.state.debuff;
 const noBuff = (context: SkillContext): boolean => !context.state.buff;
+const hairDryerRecolorCandidates = (context: SkillContext): SkillCableSnapshot[] => {
+  const routeColors = context.routeColors.slice(0, 2);
+  return routeColors.length > 0
+    ? context.remainingCables.filter((cable) => !routeColors.includes(cable.color))
+    : [];
+};
+
+const topologyLockedCableIds = (context: SkillContext): ReadonlySet<string> => {
+  const status = context.state.debuff;
+  if (!status || (status.id !== 'frozen-plug' && status.id !== 'overheated-plug')) return new Set();
+  return new Set(status.targetCableIds);
+};
+
+const toasterCandidates = (context: SkillContext): SkillCableSnapshot[] => {
+  const locked = topologyLockedCableIds(context);
+  return context.remainingCables.filter((cable) => !cable.fakePlug && !locked.has(cable.id));
+};
+
+const televisionReconstructionCandidates = (context: SkillContext): SkillCableSnapshot[] => {
+  const topologyLockedIds = context.state.debuff?.id === 'frozen-plug'
+    || context.state.debuff?.id === 'overheated-plug'
+    ? new Set(context.state.debuff.targetCableIds)
+    : new Set<string>();
+  return context.remainingCables.filter((cable) => !topologyLockedIds.has(cable.id));
+};
 
 function basicDefinition(
   appliance: ApplianceKind,
@@ -280,8 +321,8 @@ const APPLIANCE_SKILL_DEFINITIONS: readonly ApplianceSkillDefinition[] = [
         { type: 'set-status', slot: 'debuff', status: status('frozen-plug', 'refrigerator', 3, targets, ctx.state.skillEventIndex) },
       ], targets);
     }, (ctx) => noDebuff(ctx) && available(ctx).length > 1 ? 'strong-risk' : null),
-  basicDefinition('hair-dryer', 'hair-dryer-branch', '解冻或热风改色', '优先解冻，否则把一根线改为有效橙红路由。', 'mixed', null,
-    (ctx) => hasDebuff(ctx, 'frozen-plug') || (ctx.routeColors.length > 0 && ctx.remainingCables.length > 0),
+  basicDefinition('hair-dryer', 'hair-dryer-branch', '解冻或热风改色', '优先解冻，否则把一根线改为当前前两种有效路线色之一。', 'mixed', null,
+    (ctx) => hasDebuff(ctx, 'frozen-plug') || hairDryerRecolorCandidates(ctx).length > 0,
     (ctx, rng) => {
       if (hasDebuff(ctx, 'frozen-plug')) {
         return resolution({ id: 'hair-dryer-branch', appliance: 'hair-dryer', label: '解冻或热风改色' }, [
@@ -289,7 +330,7 @@ const APPLIANCE_SKILL_DEFINITIONS: readonly ApplianceSkillDefinition[] = [
         ]);
       }
       const routeColors = ctx.routeColors.slice(0, 2);
-      const candidates = ctx.remainingCables.filter((cable) => !routeColors.includes(cable.color));
+      const candidates = hairDryerRecolorCandidates(ctx);
       const target = rng.pick(candidates);
       const color = rng.pick(routeColors);
       return target && color !== null
@@ -297,7 +338,11 @@ const APPLIANCE_SKILL_DEFINITIONS: readonly ApplianceSkillDefinition[] = [
             { type: 'recolor', changes: [{ cableId: target.id, color }] },
           ], [target.id])
         : resolution({ id: 'hair-dryer-branch', appliance: 'hair-dryer', label: '解冻或热风改色' }, []);
-    }, (ctx) => hasDebuff(ctx, 'frozen-plug') ? 'normal-benefit' : ctx.routeColors.length > 0 ? 'normal-risk' : null),
+    }, (ctx) => hasDebuff(ctx, 'frozen-plug')
+      ? 'normal-benefit'
+      : hairDryerRecolorCandidates(ctx).length > 0
+        ? 'normal-risk'
+        : null),
   basicDefinition('washer', 'spin-remove', '脱水甩线', '从全部剩余线中甩出最多两根。', 'positive', null,
     (ctx) => ctx.remainingCables.length > 0,
     (ctx, rng) => {
@@ -313,27 +358,29 @@ const APPLIANCE_SKILL_DEFINITIONS: readonly ApplianceSkillDefinition[] = [
     }]),
     (ctx) => noBuff(ctx) ? 'strong-benefit' : null),
   basicDefinition('television', 'glitch-reconstruct', '故障重构', '重构最多三根线的空间路径。', 'mixed', null,
-    (ctx) => ctx.remainingCables.length > 1,
+    (ctx) => televisionReconstructionCandidates(ctx).length > 1,
     (ctx, rng) => {
-      const targets = rng.shuffle(remainingIds(ctx)).slice(0, 3);
+      const targets = rng.shuffle(televisionReconstructionCandidates(ctx).map((cable) => cable.id)).slice(0, 3);
       return resolution({ id: 'glitch-reconstruct', appliance: 'television', label: '故障重构' }, [
         { type: 'reconstruct', cableIds: targets },
       ], targets, { topologyChanged: true });
-    }, (ctx) => ctx.remainingCables.length > 1 ? 'normal-risk' : null),
+    }, (ctx) => televisionReconstructionCandidates(ctx).length > 1 ? 'normal-risk' : null),
   basicDefinition('radio', 'route-broadcast', '三步路线广播', '持续标记接下来三根可抽线路，当前目标会脉冲提示。', 'positive', null,
-    (ctx) => ctx.removalSequence.length > 0,
+    (ctx) => ctx.removalSequence.some((id) => ctx.availableCableIds.includes(id)),
     (ctx) => {
-      const targets = ctx.removalSequence.slice(0, 3);
+      const targets = ctx.removalSequence
+        .filter((id) => ctx.availableCableIds.includes(id))
+        .slice(0, 3);
       return resolution({ id: 'route-broadcast', appliance: 'radio', label: '三步路线广播' }, [], targets);
-    }, (ctx) => ctx.removalSequence.length > 0 ? 'normal-benefit' : null),
+    }, (ctx) => ctx.removalSequence.some((id) => ctx.availableCableIds.includes(id)) ? 'normal-benefit' : null),
   basicDefinition('toaster', 'swap-ends', '双面翻烤', '交换最多两根线的插头端与尾端。', 'mixed', null,
-    (ctx) => ctx.remainingCables.some((cable) => !cable.fakePlug),
+    (ctx) => toasterCandidates(ctx).length > 0,
     (ctx, rng) => {
-      const targets = rng.shuffle(ctx.remainingCables.filter((cable) => !cable.fakePlug).map((cable) => cable.id)).slice(0, 2);
+      const targets = rng.shuffle(toasterCandidates(ctx).map((cable) => cable.id)).slice(0, 2);
       return resolution({ id: 'swap-ends', appliance: 'toaster', label: '双面翻烤' }, [
         { type: 'swap-ends', cableIds: targets },
       ], targets, { topologyChanged: true });
-    }, (ctx) => ctx.remainingCables.some((cable) => !cable.fakePlug) ? 'normal-risk' : null),
+    }, (ctx) => toasterCandidates(ctx).length > 0 ? 'normal-risk' : null),
   basicDefinition('kettle', 'steam-thaw', '高温蒸汽解冻', '立即融化全部急冻冰壳。', 'positive', null,
     (ctx) => hasDebuff(ctx, 'frozen-plug'),
     () => resolution({ id: 'steam-thaw', appliance: 'kettle', label: '高温蒸汽解冻' }, [
@@ -446,8 +493,8 @@ const APPLIANCE_SKILL_DEFINITIONS: readonly ApplianceSkillDefinition[] = [
       type: 'set-status', slot: 'buff', status: status('induction-reveal', 'induction-cooktop', 3, [], ctx.state.skillEventIndex),
     }]),
     (ctx) => noBuff(ctx) && ctx.remainingCables.length > 0 ? 'normal-benefit' : null),
-  basicDefinition('portable-speaker', 'bass-spacing', '节拍扩距', '线组随音乐逐拍压缩、膨胀，最终保持 2 倍线间距 3 回合；只改变视觉间距，不改变可抽判定。', 'positive', 'buff',
-    (ctx) => noBuff(ctx) && ctx.remainingCables.length > 1,
+  basicDefinition('portable-speaker', 'bass-spacing', '节拍扩距', '线组随音乐逐拍压缩、膨胀，最终让线与线外轮廓之间的净空约为原来的 2 倍，持续 3 回合；不改变可抽判定。', 'positive', 'buff',
+    (ctx) => ctx.remainingCables.length > 1,
     (ctx) => resolution({ id: 'bass-spacing', appliance: 'portable-speaker', label: '节拍扩距' }, [{
       type: 'set-status', slot: 'buff', status: status('bass-spacing', 'portable-speaker', 3, [], ctx.state.skillEventIndex),
     }]),
@@ -530,6 +577,7 @@ export class SkillChallengeEngine {
   private stateValue: SkillChallengeState;
   private transaction: ManualTransaction | null = null;
   private pendingCards: GachaCard[] = [];
+  private pendingDryShieldBlock = false;
 
   constructor(seed: number) {
     this.stateValue = this.createInitialState(seed);
@@ -547,6 +595,7 @@ export class SkillChallengeEngine {
     this.stateValue = this.createInitialState(seed);
     this.transaction = null;
     this.pendingCards = [];
+    this.pendingDryShieldBlock = false;
   }
 
   primeForSkillTest(commands: readonly SkillCommand[]): void {
@@ -556,7 +605,11 @@ export class SkillChallengeEngine {
     this.applyCommands(commands);
   }
 
-  beginManualPull(cableId: string, appliance: ApplianceKind): boolean {
+  beginManualPull(
+    cableId: string,
+    appliance: ApplianceKind,
+    wasLastCableAtPullStart = false,
+  ): boolean {
     if (this.stateValue.phase !== 'idle') return false;
     this.transaction = {
       cableId,
@@ -565,6 +618,7 @@ export class SkillChallengeEngine {
       preexistingPrinterCopy: this.stateValue.printerCopyReady,
       printerCopyConsumedOnExit: false,
       microwavePendingDecrement: false,
+      wasLastCableAtPullStart,
     };
     this.stateValue.phase = 'manual-exit';
     return true;
@@ -594,29 +648,39 @@ export class SkillChallengeEngine {
     resolution: SkillResolution | null;
     consumePrinterCopy: boolean;
     coffeeBlocked: boolean;
+    blockedByDryShield: boolean;
+    damage: SkillDamageEvent | null;
   } {
-    if (!this.transaction) return { resolution: null, consumePrinterCopy: false, coffeeBlocked: false };
+    if (!this.transaction) {
+      return {
+        resolution: null,
+        consumePrinterCopy: false,
+        coffeeBlocked: false,
+        blockedByDryShield: false,
+        damage: null,
+      };
+    }
     const transaction = this.transaction;
     this.stateValue.phase = 'skill-cue';
     let resolved: SkillResolution | null = null;
     const printerAlreadyCopiedThisPull = transaction.appliance === 'printer'
       && transaction.preexistingPrinterCopy;
-    if (!isLastCable && !transaction.coffeeBlocked && !printerAlreadyCopiedThisPull) {
+    let blockedByDryShield = false;
+    if (!transaction.wasLastCableAtPullStart && !transaction.coffeeBlocked && !printerAlreadyCopiedThisPull) {
       const definition = APPLIANCE_SKILL_REGISTRY.get(transaction.appliance);
       if (definition?.canTrigger(context)) {
         const rng = new DeterministicRng(this.derivedSeed(this.stateValue.skillEventIndex));
         resolved = definition.resolve(context, rng);
         this.stateValue.phase = 'skill-commit';
-        this.applyCommands(resolved.commands);
-        if (
-          resolved.appliance === 'rice-cooker'
-          && this.stateValue.debuff?.id !== 'rice-thick-cable'
-        ) resolved = null;
+        const commandOutcome = this.applyCommands(resolved.commands);
+        blockedByDryShield = commandOutcome.blockedByDryShield;
+        if (blockedByDryShield) resolved = null;
         this.stateValue.skillEventIndex += 1;
       }
     }
+    let damage: SkillDamageEvent | null = null;
     if (transaction.microwavePendingDecrement && this.stateValue.debuff?.id === 'overheated-plug') {
-      this.advanceMicrowave(1);
+      damage = this.advanceMicrowave(1);
     }
     const consumePrinterCopy = transaction.printerCopyConsumedOnExit;
     if (this.stateValue.currentLives === 0) {
@@ -626,7 +690,13 @@ export class SkillChallengeEngine {
     else if (resolved?.requiresSelection === 'recycle-cable') this.stateValue.phase = 'select-recycle-target';
     else this.stateValue.phase = isLastCable ? 'complete' : 'settling';
     this.transaction = null;
-    return { resolution: resolved, consumePrinterCopy, coffeeBlocked: transaction.coffeeBlocked };
+    return {
+      resolution: resolved,
+      consumePrinterCopy,
+      coffeeBlocked: transaction.coffeeBlocked,
+      blockedByDryShield,
+      damage,
+    };
   }
 
   selectCard(index: number, context: SkillContext): SkillResolution | null {
@@ -637,9 +707,13 @@ export class SkillChallengeEngine {
     const rng = new DeterministicRng(this.derivedSeed(this.stateValue.skillEventIndex + index + 1));
     const resolved = definition.resolve(context, rng);
     this.stateValue.phase = 'skill-commit';
-    this.applyCommands(resolved.commands);
+    const commandOutcome = this.applyCommands(resolved.commands);
     this.stateValue.skillEventIndex += 1;
     this.pendingCards = [];
+    if (commandOutcome.blockedByDryShield) {
+      this.stateValue.phase = 'settling';
+      return null;
+    }
     this.stateValue.phase = resolved.requiresSelection === 'recycle-cable'
       ? 'select-recycle-target'
       : 'settling';
@@ -663,12 +737,44 @@ export class SkillChallengeEngine {
     }
   }
 
-  notifyAutoRemoved(cableId: string): void {
+  notifyAutoRemoved(cableId: string, hasRemainingCables = true): void {
+    const removedMicrowaveTarget = this.stateValue.debuff?.id === 'overheated-plug'
+      && this.stateValue.debuff.targetCableIds.includes(cableId);
     this.removeCableReferences(cableId);
-    if (this.stateValue.debuff?.id === 'overheated-plug'
-      && this.stateValue.debuff.targetCableIds.includes(cableId)) {
-      this.stateValue.debuff = null;
-    }
+    if (removedMicrowaveTarget) this.stateValue.debuff = null;
+    if (!hasRemainingCables) this.stateValue.phase = 'complete';
+  }
+
+  reselectInvalidHints(context: SkillContext): void {
+    const physicallyAvailable = available(context);
+    const remainingIds = new Set(context.remainingCables.map((cable) => cable.id));
+    const visibleCandidates = physicallyAvailable.filter((cable) => {
+      const status = context.state.debuff;
+      return !(status?.id === 'overheated-plug' && status.targetCableIds.includes(cable.id));
+    });
+    const candidates = visibleCandidates.length > 0 ? visibleCandidates : physicallyAvailable;
+    const pickHint = (current: string | null, offset: number): string | null => {
+      if (current && candidates.some((cable) => cable.id === current)) return current;
+      // A removed cable must not silently move its persistent hint to another cable.
+      // Re-select only when the original target still exists but is temporarily unavailable.
+      if (!current || !remainingIds.has(current)) return null;
+      if (candidates.length === 0) return null;
+      return new DeterministicRng(this.derivedSeed(this.stateValue.skillEventIndex + offset)).pick(candidates)?.id ?? null;
+    };
+    this.stateValue.lampHintCableId = pickHint(this.stateValue.lampHintCableId, 17);
+    this.stateValue.popcornHintCableId = pickHint(this.stateValue.popcornHintCableId, 19);
+  }
+
+  clearFrozenDeadlock(): boolean {
+    if (this.stateValue.debuff?.id !== 'frozen-plug') return false;
+    this.stateValue.debuff = null;
+    return true;
+  }
+
+  consumeDryShieldBlock(): boolean {
+    const blocked = this.pendingDryShieldBlock;
+    this.pendingDryShieldBlock = false;
+    return blocked;
   }
 
   handleBlockedAttempt(fakePlug = false): { protected: boolean; lives: number; failed: boolean; revived: boolean } {
@@ -714,11 +820,12 @@ export class SkillChallengeEngine {
     return Math.imul((this.stateValue.seed + index + 1) >>> 0, 0x9e3779b1) >>> 0;
   }
 
-  private applyCommands(commands: readonly SkillCommand[]): void {
+  private applyCommands(commands: readonly SkillCommand[]): { blockedByDryShield: boolean } {
+    let blockedByDryShield = false;
     for (const command of commands) {
       switch (command.type) {
         case 'set-status':
-          this.setStatus(command.slot, command.status);
+          blockedByDryShield = this.setStatus(command.slot, command.status) || blockedByDryShield;
           break;
         case 'clear-status':
           this.stateValue[command.slot] = null;
@@ -763,24 +870,27 @@ export class SkillChallengeEngine {
           break;
       }
     }
+    if (blockedByDryShield) this.pendingDryShieldBlock = true;
+    return { blockedByDryShield };
   }
 
-  private setStatus(slot: SkillStatusSlot, next: StatusInstance): void {
+  private setStatus(slot: SkillStatusSlot, next: StatusInstance): boolean {
     if (slot === 'debuff') {
-      if (this.stateValue.debuff) return;
+      if (this.stateValue.debuff) return false;
       if (this.stateValue.buff?.id === 'dry-shield') {
         this.stateValue.buff = null;
-        return;
+        return true;
       }
       this.stateValue.debuff = { ...next, targetCableIds: [...next.targetCableIds], payload: { ...next.payload } };
-      return;
+      return false;
     }
     if (next.id === 'continue' && this.stateValue.buff?.id === 'continue') {
       const current = Number(this.stateValue.buff.payload.restoreLives ?? 1);
       this.stateValue.buff.payload.restoreLives = Math.min(this.stateValue.maxLives, current + 1);
-      return;
+      return false;
     }
     this.stateValue.buff = { ...next, targetCableIds: [...next.targetCableIds], payload: { ...next.payload } };
+    return false;
   }
 
   private grantContinue(): void {
@@ -814,16 +924,16 @@ export class SkillChallengeEngine {
     return nextTurns === 0 ? null : { ...instance, turnsRemaining: nextTurns };
   }
 
-  private advanceMicrowave(amount: number): void {
+  private advanceMicrowave(amount: number): SkillDamageEvent | null {
     const microwave = this.stateValue.debuff;
-    if (microwave?.id !== 'overheated-plug' || microwave.turnsRemaining === null) return;
+    if (microwave?.id !== 'overheated-plug' || microwave.turnsRemaining === null) return null;
     const remaining = microwave.turnsRemaining - amount;
     if (remaining > 0) {
       microwave.turnsRemaining = remaining;
-      return;
+      return null;
     }
     this.stateValue.debuff = null;
-    this.damage(1);
+    return { source: 'microwave', amount: 1, ...this.damage(1) };
   }
 
   private damage(amount: number): { lives: number; failed: boolean; revived: boolean } {
@@ -847,7 +957,10 @@ export class SkillChallengeEngine {
     if (this.stateValue.popcornHintCableId === cableId) this.stateValue.popcornHintCableId = null;
     if (!this.stateValue.debuff?.targetCableIds.includes(cableId)) return;
     const targets = this.stateValue.debuff.targetCableIds.filter((id) => id !== cableId);
-    if (this.stateValue.debuff.id === 'fake-double-plug' && targets.length === 0) {
+    if ((this.stateValue.debuff.id === 'fake-double-plug'
+      || this.stateValue.debuff.id === 'frozen-plug'
+      || this.stateValue.debuff.id === 'overheated-plug')
+      && targets.length === 0) {
       this.stateValue.debuff = null;
       return;
     }

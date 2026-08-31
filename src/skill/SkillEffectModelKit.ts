@@ -7,17 +7,15 @@ import type { SkillChallengeState } from './SkillChallengeEngine';
 
 export type SkillEffectAssetId =
   | 'humidifier-glass-wiper' | 'fan-airflow-ribbon'
-  | 'hair-dryer-heat-ribbon'
   | 'bubble-shell-wave-membrane' | 'radio-sequence-markers' | 'kettle-steam-ribbon'
   | 'blender-energy-shards' | 'gacha-card-frame'
   | 'alarm-time-ring' | 'popcorn-target-marker'
-  | 'controller-continue-token' | 'controller-impact-star' | 'microwave-double-heat-ring'
+  | 'controller-impact-star' | 'microwave-double-heat-ring'
   | 'induction-heat-ring' | 'speaker-bass-wave-arcs';
 
 export const SKILL_EFFECT_ASSET_REFERENCES: Readonly<Record<SkillEffectAssetId, string>> = {
   'humidifier-glass-wiper': 'references/skill-effects/intake/humidifier-glass-wiper/reference.png',
   'fan-airflow-ribbon': 'references/skill-effects/intake/fan-airflow-ribbon/reference.png',
-  'hair-dryer-heat-ribbon': 'references/skill-effects/intake/hair-dryer-heat-ribbon/reference.png',
   'bubble-shell-wave-membrane': 'references/skill-effects/intake/bubble-shell-wave-membrane/reference.png',
   'radio-sequence-markers': 'references/skill-effects/intake/radio-sequence-markers/reference.png',
   'kettle-steam-ribbon': 'references/skill-effects/intake/kettle-steam-ribbon/reference.png',
@@ -25,7 +23,6 @@ export const SKILL_EFFECT_ASSET_REFERENCES: Readonly<Record<SkillEffectAssetId, 
   'gacha-card-frame': 'references/skill-effects/intake/gacha-card-frame/reference.png',
   'alarm-time-ring': 'references/skill-effects/intake/alarm-time-ring/reference.png',
   'popcorn-target-marker': 'references/skill-effects/intake/popcorn-target-marker/reference.png',
-  'controller-continue-token': 'references/skill-effects/intake/controller-continue-token/reference.png',
   'controller-impact-star': 'references/skill-effects/intake/controller-impact-star/reference.png',
   'microwave-double-heat-ring': 'references/skill-effects/intake/microwave-double-heat-ring/reference.png',
   'induction-heat-ring': 'references/skill-effects/intake/induction-heat-ring/reference.png',
@@ -33,6 +30,13 @@ export const SKILL_EFFECT_ASSET_REFERENCES: Readonly<Record<SkillEffectAssetId, 
 };
 
 type EffectInstance = { root: THREE.Group; age: number; duration: number; seed: number };
+
+export function visiblePopcornHintCableId(state: Readonly<SkillChallengeState>): string | null {
+  if (!state.popcornHintCableId) return null;
+  const hiddenByMicrowave = state.debuff?.id === 'overheated-plug'
+    && state.debuff.targetCableIds.includes(state.popcornHintCableId);
+  return hiddenByMicrowave ? null : state.popcornHintCableId;
+}
 
 const POPCORN_PLANE_TO_PLUG_DIRECTION = new THREE.Quaternion()
   .setFromAxisAngle(new THREE.Vector3(1, 0, 0), -Math.PI / 2);
@@ -42,12 +46,10 @@ function popcornMarkerQuaternion(plugQuaternion: THREE.Quaternion): THREE.Quater
 }
 
 const ASSET_BY_APPLIANCE: Partial<Record<ApplianceKind, SkillEffectAssetId>> = {
-  'hair-dryer': 'hair-dryer-heat-ribbon',
   radio: 'radio-sequence-markers',
   kettle: 'kettle-steam-ribbon',
   'gumball-machine': 'gacha-card-frame',
   'popcorn-machine': 'popcorn-target-marker',
-  'game-controller': 'controller-continue-token',
   microwave: 'microwave-double-heat-ring',
   'portable-speaker': 'speaker-bass-wave-arcs',
 };
@@ -236,8 +238,9 @@ export class SkillEffectModelKit {
   ): void {
     if (this.evidenceAsset) return;
     this.syncPersistentMarkerTransforms(cablePositions, cableOrientations, hintPositions, hintOrientations);
-    const popcornTargetPosition = state.popcornHintCableId
-      ? hintPositions.get(state.popcornHintCableId)
+    const visiblePopcornTarget = visiblePopcornHintCableId(state);
+    const popcornTargetPosition = visiblePopcornTarget
+      ? hintPositions.get(visiblePopcornTarget)
       : null;
     const signature = JSON.stringify({
       buff: state.buff?.id ?? null,
@@ -245,7 +248,7 @@ export class SkillEffectModelKit {
       targets: state.debuff?.targetCableIds ?? [],
       turns: state.debuff?.id === 'overheated-plug' ? state.debuff.turnsRemaining : null,
       cablePositions: [...cablePositions].map(([id, position]) => [id, position.toArray().map((value) => value.toFixed(2))]),
-      popcornTarget: state.popcornHintCableId,
+      popcornTarget: visiblePopcornTarget,
       popcornPosition: popcornTargetPosition?.toArray().map((value) => value.toFixed(2)) ?? null,
     });
     if (signature === this.persistentSignature) return;
@@ -263,21 +266,18 @@ export class SkillEffectModelKit {
         }
       });
     }
-    if (state.popcornHintCableId) {
-      const marker = this.attach('popcorn-target-marker', hintPositions.get(state.popcornHintCableId), 0.86);
+    if (visiblePopcornTarget) {
+      const marker = this.attach('popcorn-target-marker', hintPositions.get(visiblePopcornTarget), 0.86);
       if (marker) {
-        marker.userData.cableId = state.popcornHintCableId;
+        marker.userData.cableId = visiblePopcornTarget;
         marker.userData.anchorPosition = marker.position.clone();
         marker.userData.orientationMode = 'plug-end';
-        const orientation = hintOrientations.get(state.popcornHintCableId);
+        const orientation = hintOrientations.get(visiblePopcornTarget);
         if (orientation) {
           marker.quaternion.copy(popcornMarkerQuaternion(orientation));
           marker.userData.hintDirection = new THREE.Vector3(0, 1, 0).applyQuaternion(orientation).normalize();
         }
       }
-    }
-    if (state.buff?.id === 'continue') {
-      this.attach('controller-continue-token', new THREE.Vector3(0, -0.15, 1.9), 1.6);
     }
   }
 
@@ -660,8 +660,8 @@ export class SkillEffectModelKit {
         this.mesh(pivot, 'wiper-glass-edge', new THREE.BoxGeometry(1.5, 0.22, 0.16, 3, 1, 1), this.ice, [0, 0.18, 0]);
         this.mesh(pivot, 'wiper-arm', new THREE.CapsuleGeometry(0.11, 0.48, 4, 8), this.coral, [0, -0.2, 0], [0, 0, Math.PI / 2]);
         break;
-      case 'fan-airflow-ribbon': case 'hair-dryer-heat-ribbon': case 'kettle-steam-ribbon': {
-        const material = asset === 'fan-airflow-ribbon' ? this.ice : asset === 'hair-dryer-heat-ribbon' ? this.yellow : this.cream;
+      case 'fan-airflow-ribbon': case 'kettle-steam-ribbon': {
+        const material = asset === 'fan-airflow-ribbon' ? this.ice : this.cream;
         this.tube(pivot, 'flow-ribbon', [new THREE.Vector3(-0.8, -0.12, 0), new THREE.Vector3(-0.3, 0.28, 0), new THREE.Vector3(0.25, -0.15, 0), new THREE.Vector3(0.85, 0.18, 0)], 0.1, material);
         this.ring(pivot, 'nozzle-socket-ring', 0.18, 0.06, this.coral).position.x = -0.82;
         break;
@@ -763,11 +763,6 @@ export class SkillEffectModelKit {
         }
         break;
       }
-      case 'controller-continue-token':
-        this.ring(pivot, 'token-ring', 0.58, 0.13, this.coral);
-        this.mesh(pivot, 'token-core', new THREE.CylinderGeometry(0.42, 0.42, 0.14, 20), this.cream, [0, 0, 0], [Math.PI / 2, 0, 0]);
-        this.mesh(pivot, 'token-mark', new THREE.ExtrudeGeometry(heartShape(), { depth: 0.08, bevelEnabled: false }), this.teal, [0, 0, 0.1], [0, 0, 0], [0.7, 0.7, 0.7]);
-        break;
       case 'controller-impact-star':
         this.mesh(pivot, 'impact-star', new THREE.ExtrudeGeometry(starShape(9), { depth: 0.12, bevelEnabled: true, bevelSize: 0.035, bevelThickness: 0.035 }), this.coral, [0, 0, -0.06]);
         break;

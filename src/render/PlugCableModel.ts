@@ -10,9 +10,11 @@ import { PAL } from '../style/palette';
 import { cel } from '../style/toon';
 import {
   ARROW_RADIUS,
+  CABLE_TAIL_TERMINAL_LENGTH,
   DIRECTION_VECTORS,
   PLUG_HEAD_MAX_LENGTH,
   PLUG_HEAD_MAX_RADIUS,
+  PLUG_HEAD_PIN_RADIUS,
   cableSocketPointsToWorld,
   type ArrowDefinition,
   type CableEnd,
@@ -47,6 +49,7 @@ import {
   setCableFreeze,
   setCableIceShell,
   setCableOverheat,
+  setCableSkillRecolor,
   setCableSkillSweep,
 } from './CableGeometry';
 
@@ -274,6 +277,8 @@ export class PlugCableModel {
   private skillTintStrength = 0;
   private skillTintEmissionScale = 1;
   private skillGlowStrength = 0;
+  private skillRecolorColor: THREE.Color | null = null;
+  private skillRecolorProgress = 0;
   private coffeeStainAmount = 0;
   private coffeeStainReveal = 0;
   private coffeeStainDirection = 0;
@@ -319,6 +324,11 @@ export class PlugCableModel {
   private recycleSelectionStartedAt: number | null = null;
   private readonly recycleSelectionCenter = new THREE.Vector3();
   private readonly bundleSpacingOffset = new THREE.Vector3();
+  private bundleClearanceSegmentsCache: Array<{
+    start: THREE.Vector3;
+    end: THREE.Vector3;
+    radius: number;
+  }> | null = null;
   private bodyMesh: THREE.Mesh | null = null;
   private iceShellMesh: THREE.Mesh | null = null;
   private iceShellOutlineMesh: THREE.Mesh | null = null;
@@ -470,6 +480,16 @@ export class PlugCableModel {
 
   setSkillSweep(progress: number, strength = 0, color = 0x9b7bc8): void {
     setCableSkillSweep(this.material, progress, strength, color);
+  }
+
+  setSkillRecolor(color: number | null, progress = 0): void {
+    this.skillRecolorColor = color === null ? null : new THREE.Color(color);
+    this.skillRecolorProgress = color === null ? 0 : THREE.MathUtils.clamp(progress, 0, 1);
+    setCableSkillRecolor(this.material, this.skillRecolorProgress, color ?? this.baseColor);
+    const endpointProgress = THREE.MathUtils.smoothstep(this.skillRecolorProgress, 0.82, 1);
+    this.head.setSkillTint(color, endpointProgress, 0);
+    this.tailHead?.setSkillTint(color, endpointProgress, 0);
+    this.refreshCableVisual();
   }
 
   setCoffeeStain(amount: number, reveal: number, elapsed: number, direction: number): void {
@@ -656,6 +676,7 @@ export class PlugCableModel {
       this.tailHead.setFrozen(this.freezeAmount);
       this.tailRoot.visible = false;
       this.root.add(this.tailHead.root);
+      this.bundleClearanceSegmentsCache = null;
       this.build(this.basePoints, true);
       return;
     }
@@ -666,6 +687,7 @@ export class PlugCableModel {
       this.tailAvailableHint = null;
       this.tailLampGuide = null;
       this.tailRoot.visible = true;
+      this.bundleClearanceSegmentsCache = null;
       this.build(this.basePoints, true);
     }
   }
@@ -732,6 +754,9 @@ export class PlugCableModel {
     this.skillTintEmissionScale = 1;
     this.skillGlowStrength = 0;
     this.setSkillSweep(0, 0);
+    this.skillRecolorColor = null;
+    this.skillRecolorProgress = 0;
+    setCableSkillRecolor(this.material, 0, this.baseColor);
     this.coffeeStainAmount = 0;
     this.coffeeStainReveal = 0;
     this.coffeeStainDirection = 0;
@@ -779,6 +804,7 @@ export class PlugCableModel {
 
   setVisualThickness(scale: number): void {
     this.visualThickness = THREE.MathUtils.clamp(scale, 1, 2.4);
+    this.bundleClearanceSegmentsCache = null;
     applyGeometryThickness(this.bodyThicknessState, this.visualThickness);
     applyGeometryThickness(this.outlineThicknessState, this.visualThickness);
     this.head.setCableJointThickness(this.visualThickness);
@@ -792,6 +818,50 @@ export class PlugCableModel {
 
   getBundleBaseCenter(target = new THREE.Vector3()): THREE.Vector3 {
     return target.copy(this.recycleSelectionCenter);
+  }
+
+  getBundleBaseCenterRef(): Readonly<THREE.Vector3> {
+    return this.recycleSelectionCenter;
+  }
+
+  getBundleClearanceSegments(): readonly {
+    start: THREE.Vector3;
+    end: THREE.Vector3;
+    radius: number;
+  }[] {
+    if (this.bundleClearanceSegmentsCache) return this.bundleClearanceSegmentsCache;
+    const segments: Array<{ start: THREE.Vector3; end: THREE.Vector3; radius: number }> = [];
+    for (let index = 0; index < this.basePoints.length - 1; index += 1) {
+      segments.push({
+        start: this.basePoints[index].clone(),
+        end: this.basePoints[index + 1].clone(),
+        radius: CABLE_RADIUS * this.visualThickness,
+      });
+    }
+    const addPlug = (anchor: THREE.Vector3, direction: THREE.Vector3): void => {
+      segments.push({
+        start: anchor.clone().addScaledVector(direction, PLUG_HEAD_ENVELOPE.bodyRange[0]),
+        end: anchor.clone().addScaledVector(direction, PLUG_HEAD_ENVELOPE.bodyRange[1]),
+        radius: PLUG_HEAD_MAX_RADIUS,
+      });
+      segments.push({
+        start: anchor.clone().addScaledVector(direction, PLUG_HEAD_ENVELOPE.pinRange[0]),
+        end: anchor.clone().addScaledVector(direction, PLUG_HEAD_MAX_LENGTH),
+        radius: PLUG_HEAD_PIN_RADIUS,
+      });
+    };
+    addPlug(this.basePoints[this.basePoints.length - 1], this.exitDirection);
+    const tailDirection = this.basePoints[0].clone().sub(this.basePoints[1]).normalize();
+    if (this.tailHead) addPlug(this.basePoints[0], tailDirection);
+    else {
+      segments.push({
+        start: this.basePoints[0].clone(),
+        end: this.basePoints[0].clone().addScaledVector(tailDirection, CABLE_TAIL_TERMINAL_LENGTH),
+        radius: ARROW_RADIUS * this.visualThickness,
+      });
+    }
+    this.bundleClearanceSegmentsCache = segments;
+    return segments;
   }
 
   setBundleSpacingOffset(offset: THREE.Vector3 | null): void {
@@ -809,6 +879,8 @@ export class PlugCableModel {
     skillTintEmissionScale: number;
     skillSweepProgress: number;
     skillSweepStrength: number;
+    skillRecolorProgress: number;
+    skillRecolorColor: number | null;
     recycleSelectionState: 'none' | 'hover' | 'selected';
     recycleHighlightStrength: number;
     recyclePulse: number;
@@ -851,6 +923,8 @@ export class PlugCableModel {
       skillTintEmissionScale: this.skillTintEmissionScale,
       skillSweepProgress: (this.material.userData.skillSweepProgress as { value: number } | undefined)?.value ?? 0,
       skillSweepStrength: (this.material.userData.skillSweepStrength as { value: number } | undefined)?.value ?? 0,
+      skillRecolorProgress: this.skillRecolorProgress,
+      skillRecolorColor: this.skillRecolorColor?.getHex() ?? null,
       recycleSelectionState: this.recycleSelectionState,
       recycleHighlightStrength: this.recycleSelectionState === 'selected'
         ? 1
@@ -1215,6 +1289,12 @@ export class PlugCableModel {
 
     const tailColor = this.tailBaseColor.clone();
     if (this.skillTintColor) tailColor.lerp(this.skillTintColor, this.skillTintStrength);
+    if (this.skillRecolorColor) {
+      tailColor.lerp(
+        this.skillRecolorColor,
+        THREE.MathUtils.smoothstep(this.skillRecolorProgress, 0.82, 1),
+      );
+    }
     const tailFreeze = THREE.MathUtils.smoothstep(this.freezeProgress, 0.76, 1) * this.freezeAmount;
     if (tailFreeze > 0) tailColor.lerp(new THREE.Color(REFRIGERATOR_FREEZE_COLOR), tailFreeze * 0.9);
     if (recycleColor) {

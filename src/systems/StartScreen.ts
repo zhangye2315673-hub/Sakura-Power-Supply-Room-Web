@@ -7,7 +7,6 @@ type StartScreenOptions = {
   onRush: () => void;
   onDoubleEnded: () => void;
   onSkill: () => void;
-  onSkillTest: () => void;
   onProgress?: (progress: number) => void;
 };
 
@@ -21,7 +20,6 @@ export class StartScreen {
   private readonly rushButton = this.getElement<HTMLButtonElement>('#start-rush-button');
   private readonly doubleEndedButton = this.getElement<HTMLButtonElement>('#start-double-ended-button');
   private readonly skillButton = this.getElement<HTMLButtonElement>('#start-skill-button');
-  private readonly skillTestButton = this.getElement<HTMLButtonElement>('#start-skill-test-button');
   private readonly status = this.getElement<HTMLElement>('#start-loading-status');
   private readonly percent = this.getElement<HTMLElement>('#start-loading-percent');
   private readonly progressBar = this.getElement<HTMLElement>('.start-progress');
@@ -32,7 +30,6 @@ export class StartScreen {
   private readonly onRush: () => void;
   private readonly onDoubleEnded: () => void;
   private readonly onSkill: () => void;
-  private readonly onSkillTest: () => void;
   private readonly onProgress?: (progress: number) => void;
   private animationFrame = 0;
   private lastFrameAt = 0;
@@ -54,7 +51,6 @@ export class StartScreen {
     this.onRush = options.onRush;
     this.onDoubleEnded = options.onDoubleEnded;
     this.onSkill = options.onSkill;
-    this.onSkillTest = options.onSkillTest;
     this.onProgress = options.onProgress;
     this.startButton.addEventListener('click', this.handleStart);
     this.challengeButton.addEventListener('click', this.toggleChallengeMenu);
@@ -63,7 +59,6 @@ export class StartScreen {
     this.rushButton.addEventListener('click', this.handleRush);
     this.doubleEndedButton.addEventListener('click', this.handleDoubleEnded);
     this.skillButton.addEventListener('click', this.handleSkill);
-    this.skillTestButton.addEventListener('click', this.handleSkillTest);
     document.addEventListener('pointerdown', this.handleOutsidePointer);
     document.addEventListener('keydown', this.handleKeyDown);
     document.documentElement.classList.add('opening-active');
@@ -123,7 +118,6 @@ export class StartScreen {
     this.rushButton.disabled = false;
     this.doubleEndedButton.disabled = false;
     this.skillButton.disabled = false;
-    this.skillTestButton.disabled = false;
     this.startButton.textContent = t('start.enter');
     this.startButton.classList.add('ready');
     this.element.classList.add('ready');
@@ -149,7 +143,6 @@ export class StartScreen {
     this.rushButton.disabled = true;
     this.doubleEndedButton.disabled = true;
     this.skillButton.disabled = true;
-    this.skillTestButton.disabled = true;
     this.closeChallengeMenu();
     this.startButton.textContent = t('start.connecting');
     this.element.classList.add('connecting');
@@ -181,7 +174,6 @@ export class StartScreen {
     this.rushButton.disabled = !this.ready;
     this.doubleEndedButton.disabled = !this.ready;
     this.skillButton.disabled = !this.ready;
-    this.skillTestButton.disabled = !this.ready;
     this.closeChallengeMenu();
     document.documentElement.classList.add('opening-active');
     this.refreshLocale();
@@ -205,7 +197,6 @@ export class StartScreen {
     this.rushButton.removeEventListener('click', this.handleRush);
     this.doubleEndedButton.removeEventListener('click', this.handleDoubleEnded);
     this.skillButton.removeEventListener('click', this.handleSkill);
-    this.skillTestButton.removeEventListener('click', this.handleSkillTest);
     document.removeEventListener('pointerdown', this.handleOutsidePointer);
     document.removeEventListener('keydown', this.handleKeyDown);
     cancelAnimationFrame(this.animationFrame);
@@ -255,11 +246,6 @@ export class StartScreen {
     this.onSkill();
   };
 
-  private readonly handleSkillTest = () => {
-    if (!this.ready || this.leaving) return;
-    this.closeChallengeMenu();
-    this.onSkillTest();
-  };
 
   private readonly toggleChallengeMenu = () => {
     if (!this.ready || this.leaving) return;

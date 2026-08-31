@@ -3,7 +3,7 @@ import { PAL } from '../style/palette';
 import type { ArrowDefinition, LevelDefinition, PuzzleDefinition } from '../puzzle/types';
 import type { SkillCommand } from './SkillChallengeEngine';
 
-export type SkillTestId = 'lamp' | 'fan' | 'humidifier' | 'radio' | 'television' | 'toaster' | 'refrigerator' | 'washer' | 'microwave' | 'kettle' | 'coffee-maker' | 'rice-cooker' | 'phone' | 'robot-vacuum' | 'bubble-machine' | 'gumball-machine' | 'popcorn-machine' | 'alarm-clock' | 'smart-bin' | 'record-player' | 'stand-mixer' | 'printer' | 'induction-cooktop' | 'blender' | 'dehumidifier' | 'portable-speaker';
+export type SkillTestId = 'lamp' | 'fan' | 'humidifier' | 'radio' | 'television' | 'toaster' | 'refrigerator' | 'washer' | 'microwave' | 'kettle' | 'coffee-maker' | 'rice-cooker' | 'phone' | 'robot-vacuum' | 'bubble-machine' | 'gumball-machine' | 'popcorn-machine' | 'alarm-clock' | 'smart-bin' | 'record-player' | 'stand-mixer' | 'printer' | 'induction-cooktop' | 'blender' | 'dehumidifier' | 'portable-speaker' | 'hair-dryer' | 'desktop-computer' | 'game-controller';
 
 export type SkillTestDefinition = Readonly<{
   id: SkillTestId;
@@ -66,6 +66,12 @@ const DEHUMIDIFIER_TEST_SEED = 0xfb6f2026;
 const DEHUMIDIFIER_TEST_ACCENT = PAL.blue;
 const PORTABLE_SPEAKER_TEST_SEED = 0x0c6f2026;
 const PORTABLE_SPEAKER_TEST_ACCENT = PAL.teal;
+const HAIR_DRYER_TEST_SEED = 0x1c6f2026;
+const HAIR_DRYER_TEST_ACCENT = PAL.orange;
+const DESKTOP_COMPUTER_TEST_SEED = 0x2c6f2026;
+const DESKTOP_COMPUTER_TEST_ACCENT = PAL.blossomDeep;
+const GAME_CONTROLLER_TEST_SEED = 0x3c6f2026;
+const GAME_CONTROLLER_TEST_ACCENT = PAL.blue;
 
 const LAMP_TEST_LEVEL: LevelDefinition = {
   id: 0,
@@ -586,6 +592,51 @@ const PORTABLE_SPEAKER_TEST_ARROWS: readonly ArrowDefinition[] = LAMP_TEST_ARROW
   color: PORTABLE_SPEAKER_TEST_ACCENT,
 }));
 
+const HAIR_DRYER_TEST_LEVEL: LevelDefinition = {
+  ...LAMP_TEST_LEVEL,
+  seed: HAIR_DRYER_TEST_SEED,
+  label: '吹风机技能测试',
+};
+
+const HAIR_DRYER_TEST_COLORS = [
+  HAIR_DRYER_TEST_ACCENT,
+  PAL.blue,
+  HAIR_DRYER_TEST_ACCENT,
+  PAL.teal,
+] as const;
+const HAIR_DRYER_TEST_ARROWS: readonly ArrowDefinition[] = LAMP_TEST_ARROWS.map((arrow, index) => ({
+  ...arrow,
+  id: arrow.id.replace('lamp-test-', 'hair-dryer-test-'),
+  path: arrow.path.map((point) => [...point] as typeof point),
+  color: HAIR_DRYER_TEST_COLORS[index] ?? HAIR_DRYER_TEST_ACCENT,
+}));
+
+const DESKTOP_COMPUTER_TEST_LEVEL: LevelDefinition = {
+  ...LAMP_TEST_LEVEL,
+  seed: DESKTOP_COMPUTER_TEST_SEED,
+  label: '台式电脑技能测试',
+};
+
+const DESKTOP_COMPUTER_TEST_ARROWS: readonly ArrowDefinition[] = LAMP_TEST_ARROWS.map((arrow) => ({
+  ...arrow,
+  id: arrow.id.replace('lamp-test-', 'desktop-computer-test-'),
+  path: arrow.path.map((point) => [...point] as typeof point),
+  color: DESKTOP_COMPUTER_TEST_ACCENT,
+}));
+
+const GAME_CONTROLLER_TEST_LEVEL: LevelDefinition = {
+  ...LAMP_TEST_LEVEL,
+  seed: GAME_CONTROLLER_TEST_SEED,
+  label: '游戏手柄技能测试',
+};
+
+const GAME_CONTROLLER_TEST_ARROWS: readonly ArrowDefinition[] = LAMP_TEST_ARROWS.map((arrow) => ({
+  ...arrow,
+  id: arrow.id.replace('lamp-test-', 'game-controller-test-'),
+  path: arrow.path.map((point) => [...point] as typeof point),
+  color: GAME_CONTROLLER_TEST_ACCENT,
+}));
+
 const lampDefinition = APPLIANCE_CATALOG.find((definition) => definition.id === 'lamp');
 if (!lampDefinition) throw new Error('Lamp appliance definition is missing.');
 const fanDefinition = APPLIANCE_CATALOG.find((definition) => definition.id === 'fan');
@@ -638,6 +689,12 @@ const dehumidifierDefinition = APPLIANCE_CATALOG.find((definition) => definition
 if (!dehumidifierDefinition) throw new Error('Dehumidifier appliance definition is missing.');
 const portableSpeakerDefinition = APPLIANCE_CATALOG.find((definition) => definition.id === 'portable-speaker');
 if (!portableSpeakerDefinition) throw new Error('Portable speaker appliance definition is missing.');
+const hairDryerDefinition = APPLIANCE_CATALOG.find((definition) => definition.id === 'hair-dryer');
+if (!hairDryerDefinition) throw new Error('Hair dryer appliance definition is missing.');
+const desktopComputerDefinition = APPLIANCE_CATALOG.find((definition) => definition.id === 'desktop-computer');
+if (!desktopComputerDefinition) throw new Error('Desktop computer appliance definition is missing.');
+const gameControllerDefinition = APPLIANCE_CATALOG.find((definition) => definition.id === 'game-controller');
+if (!gameControllerDefinition) throw new Error('Game controller appliance definition is missing.');
 
 const FAN_INITIAL_COMMANDS = [{
   type: 'set-status',
@@ -671,6 +728,24 @@ const KETTLE_INITIAL_COMMANDS = [{
   },
 }] satisfies readonly SkillCommand[];
 
+const HAIR_DRYER_INITIAL_COMMANDS = [{
+  type: 'set-status',
+  slot: 'debuff',
+  status: {
+    id: 'frozen-plug',
+    sourceAppliance: 'refrigerator',
+    iconId: 'debuff-frozen-plug',
+    turnsRemaining: 3,
+    targetCableIds: [
+      'hair-dryer-test-blocked',
+      'hair-dryer-test-key',
+      'hair-dryer-test-depth',
+    ],
+    payload: {},
+    createdBySkillEventIndex: 0,
+  },
+}] satisfies readonly SkillCommand[];
+
 const STAND_MIXER_INITIAL_COMMANDS = [{
   type: 'set-status',
   slot: 'debuff',
@@ -683,6 +758,10 @@ const STAND_MIXER_INITIAL_COMMANDS = [{
     payload: {},
     createdBySkillEventIndex: 0,
   },
+}] satisfies readonly SkillCommand[];
+
+const DESKTOP_COMPUTER_INITIAL_COMMANDS = [{
+  type: 'grant-continue',
 }] satisfies readonly SkillCommand[];
 
 export const LAMP_SKILL_TEST: SkillTestDefinition = Object.freeze({
@@ -919,7 +998,34 @@ export const PORTABLE_SPEAKER_SKILL_TEST: SkillTestDefinition = Object.freeze({
   initialCommands: [],
 });
 
-export const DEFAULT_SKILL_TEST = PORTABLE_SPEAKER_SKILL_TEST;
+export const HAIR_DRYER_SKILL_TEST: SkillTestDefinition = Object.freeze({
+  id: 'hair-dryer',
+  appliance: 'hair-dryer',
+  accent: HAIR_DRYER_TEST_ACCENT,
+  level: HAIR_DRYER_TEST_LEVEL,
+  applianceDefinition: hairDryerDefinition,
+  initialCommands: HAIR_DRYER_INITIAL_COMMANDS,
+});
+
+export const DESKTOP_COMPUTER_SKILL_TEST: SkillTestDefinition = Object.freeze({
+  id: 'desktop-computer',
+  appliance: 'desktop-computer',
+  accent: DESKTOP_COMPUTER_TEST_ACCENT,
+  level: DESKTOP_COMPUTER_TEST_LEVEL,
+  applianceDefinition: desktopComputerDefinition,
+  initialCommands: DESKTOP_COMPUTER_INITIAL_COMMANDS,
+});
+
+export const GAME_CONTROLLER_SKILL_TEST: SkillTestDefinition = Object.freeze({
+  id: 'game-controller',
+  appliance: 'game-controller',
+  accent: GAME_CONTROLLER_TEST_ACCENT,
+  level: GAME_CONTROLLER_TEST_LEVEL,
+  applianceDefinition: gameControllerDefinition,
+  initialCommands: [],
+});
+
+export const DEFAULT_SKILL_TEST = GAME_CONTROLLER_SKILL_TEST;
 
 export function getSkillTestDefinition(id: string | null): SkillTestDefinition | null {
   if (id === 'lamp') return LAMP_SKILL_TEST;
@@ -948,6 +1054,9 @@ export function getSkillTestDefinition(id: string | null): SkillTestDefinition |
   if (id === 'blender') return BLENDER_SKILL_TEST;
   if (id === 'dehumidifier') return DEHUMIDIFIER_SKILL_TEST;
   if (id === 'portable-speaker') return PORTABLE_SPEAKER_SKILL_TEST;
+  if (id === 'hair-dryer') return HAIR_DRYER_SKILL_TEST;
+  if (id === 'desktop-computer') return DESKTOP_COMPUTER_SKILL_TEST;
+  if (id === 'game-controller') return GAME_CONTROLLER_SKILL_TEST;
   return null;
 }
 
@@ -982,6 +1091,9 @@ export function buildSkillTestPuzzle(
     blender: BLENDER_TEST_ARROWS,
     dehumidifier: DEHUMIDIFIER_TEST_ARROWS,
     'portable-speaker': PORTABLE_SPEAKER_TEST_ARROWS,
+    'hair-dryer': HAIR_DRYER_TEST_ARROWS,
+    'desktop-computer': DESKTOP_COMPUTER_TEST_ARROWS,
+    'game-controller': GAME_CONTROLLER_TEST_ARROWS,
   };
   const arrows = arrowsByTest[test.id];
   const prefix = `${test.id}-test-`;

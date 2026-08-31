@@ -13,10 +13,14 @@ export class Hud {
   private readonly randomLives = this.getElement('#random-lives');
   private readonly lifeIcons = [...this.randomLives.querySelectorAll<HTMLElement>('i')];
   private readonly lifeBurst = this.createLifeBurst();
+  private readonly continueIndicator = this.createContinueIndicator();
   private readonly hintIcons = [...document.querySelectorAll<HTMLElement>('#hint-button .hint-icons i')];
   private toastTimer = 0;
   private hintPulseTimer = 0;
   private lifeBurstTimer = 0;
+  private continueReadyTimer = 0;
+  private computerLifeLossTimer = 0;
+  private computerLifeLossElements: HTMLElement[] = [];
   private renderedMaxLives = this.lifeIcons.length;
   private hintUsesRemaining = 3;
   private statusKey: TranslationKey = 'status.find';
@@ -162,6 +166,76 @@ export class Hud {
     this.flash(t('flash.lifeLost'), true);
   }
 
+  setContinueReady(ready: boolean, restoreLives = 1): void {
+    const restore = Math.max(1, restoreLives);
+    this.randomLives.classList.toggle('continue-ready', ready);
+    this.continueIndicator.setAttribute('aria-hidden', String(!ready));
+    this.continueIndicator.querySelector<HTMLElement>('strong')!.textContent = t('lives.continueReadyTitle');
+    const restoreValue = this.continueIndicator.querySelector<HTMLElement>('[data-continue-restore]')!;
+    restoreValue.textContent = String(restore);
+    this.continueIndicator.querySelector<HTMLElement>('small')!.replaceChildren(
+      document.createTextNode(t('lives.continueRestorePrefix')),
+      restoreValue,
+      document.createTextNode(t('lives.continueRestoreSuffix')),
+    );
+    this.randomLives.dataset.continueRestore = String(restore);
+    this.randomLives.setAttribute(
+      'aria-label',
+      ready ? t('lives.continueReady', { restore }) : t('lives.label'),
+    );
+  }
+
+  showContinueGranted(restoreLives: number): void {
+    this.setContinueReady(true, restoreLives);
+    window.clearTimeout(this.continueReadyTimer);
+    this.randomLives.classList.remove('continue-acquired');
+    void this.randomLives.offsetWidth;
+    this.randomLives.classList.add('continue-acquired');
+    this.continueReadyTimer = window.setTimeout(
+      () => this.randomLives.classList.remove('continue-acquired'),
+      1_650,
+    );
+  }
+
+  showComputerLifeLost(livesAfter: number): void {
+    this.clearComputerLifeLoss();
+    const icon = this.lifeIcons[Math.max(0, Math.min(this.lifeIcons.length - 1, livesAfter))];
+    if (!icon) {
+      this.showLifeLost(livesAfter);
+      return;
+    }
+    const rect = icon.getBoundingClientRect();
+    const ghost = document.createElement('i');
+    ghost.className = 'computer-life-loss-ghost';
+    ghost.style.left = `${rect.left}px`;
+    ghost.style.top = `${rect.top}px`;
+    ghost.style.width = `${rect.width}px`;
+    ghost.style.height = `${rect.height}px`;
+    document.body.append(ghost);
+    this.computerLifeLossElements.push(ghost);
+
+    for (let index = 0; index < 7; index += 1) {
+      const shard = document.createElement('b');
+      shard.className = 'computer-life-loss-shard';
+      shard.style.left = `${rect.left + rect.width * 0.5}px`;
+      shard.style.top = `${rect.top + rect.height * 0.5}px`;
+      shard.style.setProperty('--life-shard-index', String(index));
+      document.body.append(shard);
+      this.computerLifeLossElements.push(shard);
+    }
+
+    const readout = document.createElement('strong');
+    readout.className = 'computer-life-loss-readout';
+    readout.textContent = '-1';
+    readout.style.left = `${rect.left + rect.width * 0.5}px`;
+    readout.style.top = `${rect.top + rect.height * 0.5}px`;
+    document.body.append(readout);
+    this.computerLifeLossElements.push(readout);
+    this.randomLives.classList.add('computer-life-hit');
+    this.showLifeLost(livesAfter);
+    this.computerLifeLossTimer = window.setTimeout(() => this.clearComputerLifeLoss(), 1_150);
+  }
+
   setHintEnabled(enabled: boolean): void {
     this.hintButton.disabled = !enabled;
     this.hintButton.setAttribute('aria-disabled', String(!enabled));
@@ -213,6 +287,10 @@ export class Hud {
   refreshLocale(): void {
     applyStaticTranslations();
     this.setHintUses(this.hintUsesRemaining);
+    this.setContinueReady(
+      this.randomLives.classList.contains('continue-ready'),
+      Number(this.randomLives.dataset.continueRestore ?? 1),
+    );
     this.status.textContent = t(this.statusKey, this.statusParams);
     this.writePuzzleMeta();
     if (this.loadingOverlay.active) this.loadingOverlay.setLabel(t(this.loadingKey, this.loadingParams));
@@ -227,6 +305,8 @@ export class Hud {
   dispose(): void {
     window.clearTimeout(this.hintPulseTimer);
     window.clearTimeout(this.lifeBurstTimer);
+    window.clearTimeout(this.continueReadyTimer);
+    this.clearComputerLifeLoss();
     this.loadingOverlay.dispose();
   }
 
@@ -266,6 +346,38 @@ export class Hud {
     for (let index = 0; index < 7; index += 1) burst.append(document.createElement('b'));
     this.randomLives.append(burst);
     return burst;
+  }
+
+  private createContinueIndicator(): HTMLElement {
+    const indicator = document.createElement('span');
+    indicator.className = 'life-continue-indicator';
+    indicator.setAttribute('aria-hidden', 'true');
+
+    const loop = document.createElement('span');
+    loop.className = 'life-continue-loop';
+    loop.setAttribute('aria-hidden', 'true');
+
+    const title = document.createElement('strong');
+    title.textContent = t('lives.continueReadyTitle');
+
+    const detail = document.createElement('small');
+    detail.append(t('lives.continueRestorePrefix'));
+    const restore = document.createElement('b');
+    restore.dataset.continueRestore = '';
+    restore.textContent = '1';
+    detail.append(restore, t('lives.continueRestoreSuffix'));
+
+    indicator.append(loop, title, detail);
+    this.randomLives.append(indicator);
+    return indicator;
+  }
+
+  private clearComputerLifeLoss(): void {
+    window.clearTimeout(this.computerLifeLossTimer);
+    this.computerLifeLossTimer = 0;
+    this.randomLives.classList.remove('computer-life-hit');
+    this.computerLifeLossElements.forEach((element) => element.remove());
+    this.computerLifeLossElements = [];
   }
 
   private getButton(selector: string): HTMLButtonElement {

@@ -8,8 +8,10 @@ import {
   SkillChallengeEngine,
   buildGachaCards,
   gachaPoolIncludesSmartBin,
+  pickPrinterCopyCableId,
   type SkillContext,
 } from '../src/skill/SkillChallengeEngine';
+import { frozenStatusBlocksEveryAvailableCable } from '../src/skill/skillTopology';
 import { resolveBlenderColorCycle } from '../src/skill/SkillPresentationController';
 
 function context(engine: SkillChallengeEngine, ids: readonly string[]): SkillContext {
@@ -34,7 +36,7 @@ function pull(
   remaining: readonly string[],
   isLastCable = false,
 ) {
-  expect(engine.beginManualPull(cableId, appliance)).toBe(true);
+  expect(engine.beginManualPull(cableId, appliance, isLastCable)).toBe(true);
   engine.commitManualRemoval(cableId, remaining.length > 0);
   return engine.resolveConnected(context(engine, remaining), isLastCable);
 }
@@ -81,6 +83,18 @@ test('干燥护罩抵挡电饭煲时不返回错误的粗线表现', () => {
   expect(engine.state.buff).toBeNull();
   expect(engine.state.debuff).toBeNull();
   expect(blocked.resolution).toBeNull();
+  expect(blocked.blockedByDryShield).toBe(true);
+});
+
+test('微波炉目标被自动移除时立即清除过热状态', () => {
+  const engine = new SkillChallengeEngine(20260828);
+  pull(engine, 'microwave', 'microwave', ['a', 'b', 'c']);
+  const target = engine.state.debuff?.targetCableIds[0];
+  expect(target).toBeTruthy();
+
+  engine.settle();
+  engine.notifyAutoRemoved(target!);
+  expect(engine.state.debuff).toBeNull();
 });
 
 test('咖啡第 4 次正确抽线仍封锁该次家电技能', () => {
@@ -160,6 +174,32 @@ test('打印机只消费事务开始前已有的复印机会', () => {
   expect(engine.state.printerCopyReady).toBe(false);
 });
 
+test('打印机自动抽走末线后仍按玩家起手快照结算家电技能', () => {
+  const engine = new SkillChallengeEngine(20260828);
+  pull(engine, 'printer', 'printer', ['manual', 'copied']);
+  engine.settle();
+
+  expect(engine.beginManualPull('manual', 'game-controller', false)).toBe(true);
+  expect(engine.commitManualRemoval('manual', true)).toBe(true);
+  engine.notifyAutoRemoved('copied');
+  const connected = engine.resolveConnected(context(engine, []), true);
+
+  expect(connected.consumePrinterCopy).toBe(true);
+  expect(connected.resolution?.skillId).toBe('continue-game');
+  expect(engine.state.phase).toBe('complete');
+});
+
+test('打印机复印只选择当前未冻结的真实出口', () => {
+  const engine = new SkillChallengeEngine(20260828);
+  const skillContext = {
+    ...context(engine, ['frozen', 'safe']),
+    availableCableIds: ['safe'],
+    removalSequence: ['frozen', 'safe'],
+  };
+
+  expect(pickPrinterCopyCableId(skillContext)).toBe('safe');
+});
+
 test('便携音箱只生成三回合视觉扩距 BUFF，不修改拓扑或可抽规则', () => {
   const engine = new SkillChallengeEngine(20260827);
   const triggered = pull(engine, 'speaker', 'portable-speaker', ['a', 'b', 'c', 'd']);
@@ -226,6 +266,99 @@ test('收音机冻结三步顺序，扫地机器人冻结触发快照', () => {
   expect(vacuum.commands).toEqual([
     { type: 'auto-remove', cableIds: ['a', 'c'], source: 'robot-vacuum' },
   ]);
+});
+
+test('收音机路线广播排除被冻结的出口', () => {
+  const engine = new SkillChallengeEngine(20260828);
+  engine.primeForSkillTest([{
+    type: 'set-status',
+    slot: 'debuff',
+    status: {
+      id: 'frozen-plug',
+      sourceAppliance: 'refrigerator',
+      iconId: 'debuff-frozen-plug',
+      turnsRemaining: 3,
+      targetCableIds: ['a'],
+      payload: {},
+      createdBySkillEventIndex: 0,
+    },
+  }]);
+  const definition = APPLIANCE_SKILL_REGISTRY.get('radio')!;
+  const radio = definition.resolve({
+    ...context(engine, ['a', 'b', 'c']),
+    availableCableIds: ['b', 'c'],
+    removalSequence: ['a', 'b', 'c'],
+  }, new DeterministicRng(1));
+
+  expect(radio.targetCableIds).toEqual(['b', 'c']);
+});
+
+test('电视重构排除微波过热线和急冻身份', () => {
+  for (const debuffId of ['overheated-plug', 'frozen-plug'] as const) {
+    const engine = new SkillChallengeEngine(20260828);
+    engine.primeForSkillTest([{
+      type: 'set-status',
+      slot: 'debuff',
+      status: {
+        id: debuffId,
+        sourceAppliance: debuffId === 'overheated-plug' ? 'microwave' : 'refrigerator',
+        iconId: debuffId === 'overheated-plug' ? 'debuff-overheated-plug' : 'debuff-frozen-plug',
+        turnsRemaining: 3,
+        targetCableIds: ['locked'],
+        payload: {},
+        createdBySkillEventIndex: 0,
+      },
+    }]);
+    const definition = APPLIANCE_SKILL_REGISTRY.get('television')!;
+    const television = definition.resolve(context(engine, ['locked', 'a', 'b']), new DeterministicRng(1));
+
+    expect(definition.canTrigger(context(engine, ['locked', 'a', 'b']))).toBe(true);
+    expect(television.targetCableIds).toEqual(expect.arrayContaining(['a', 'b']));
+    expect(television.targetCableIds).not.toContain('locked');
+  }
+});
+
+test('冻结覆盖全部物理出口时触发安全解冻判定', () => {
+  expect(frozenStatusBlocksEveryAvailableCable(['a', 'b'], new Set(['a', 'b']))).toBe(true);
+  expect(frozenStatusBlocksEveryAvailableCable(['a', 'b'], new Set(['a']))).toBe(false);
+  expect(frozenStatusBlocksEveryAvailableCable([], new Set(['a']))).toBe(false);
+});
+
+test('吹风机没有冰冻或可改色目标时不能进入风险池', () => {
+  const engine = new SkillChallengeEngine(20260828);
+  const definition = APPLIANCE_SKILL_REGISTRY.get('hair-dryer')!;
+  const skillContext: SkillContext = {
+    remainingCables: [{ id: 'a', color: 0xff6688, available: true, fakePlug: false }],
+    availableCableIds: ['a'],
+    removalSequence: ['a'],
+    routeColors: [0xff6688, 0x56a8ff],
+    state: engine.state,
+  };
+
+  expect(definition.canTrigger(skillContext)).toBe(false);
+  expect(definition.gachaTier(skillContext)).toBeNull();
+});
+
+test('微波炉超时返回可供前端消费的伤害结果', () => {
+  const engine = new SkillChallengeEngine(20260828);
+  pull(engine, 'microwave', 'microwave', ['hot', 'safe-a', 'safe-b', 'safe-c']);
+  const target = engine.state.debuff?.targetCableIds[0];
+  expect(target).toBeTruthy();
+  engine.settle();
+
+  const safeIds = ['hot', 'safe-a', 'safe-b', 'safe-c'].filter((id) => id !== target);
+  const first = pull(engine, safeIds[0], 'lamp', safeIds.slice(1));
+  expect(first.damage).toBeNull();
+  engine.settle();
+  const second = pull(engine, safeIds[1], 'lamp', safeIds.slice(2));
+
+  expect(second.damage).toMatchObject({
+    source: 'microwave',
+    amount: 1,
+    lives: 2,
+    failed: false,
+    revived: false,
+  });
 });
 
 test('搅拌机在 40 根多色线中保持颜色总量并覆盖全部剩余线', () => {
@@ -304,4 +437,95 @@ test('电饭煲粗线维持三个正确抽线回合，自动清线不扣回合',
     expect(engine.state.debuff?.turnsRemaining ?? null).toBe(index < 2 ? 2 - index : null);
     if (index < 2) engine.settle();
   }
+});
+
+test('便携音箱允许按通用规则替换已有 BUFF', () => {
+  const engine = new SkillChallengeEngine(76);
+  engine.primeForSkillTest([{
+    type: 'set-status',
+    slot: 'buff',
+    status: {
+      id: 'dry-shield',
+      sourceAppliance: 'dehumidifier',
+      iconId: 'buff-dry-shield',
+      turnsRemaining: 2,
+      targetCableIds: [],
+      payload: {},
+      createdBySkillEventIndex: 0,
+    },
+  }]);
+  const speaker = APPLIANCE_SKILL_REGISTRY.get('portable-speaker')!;
+  const result = speaker.resolve(context(engine, ['a', 'b']), new DeterministicRng(1));
+  expect(speaker.canTrigger(context(engine, ['a', 'b']))).toBe(true);
+  expect(result.commands).toEqual(expect.arrayContaining([
+    expect.objectContaining({ type: 'set-status', slot: 'buff' }),
+  ]));
+});
+
+test('烤面包机换头永远排除微波炉过热线', () => {
+  const engine = new SkillChallengeEngine(77);
+  engine.primeForSkillTest([{
+    type: 'set-status',
+    slot: 'debuff',
+    status: {
+      id: 'overheated-plug',
+      sourceAppliance: 'microwave',
+      iconId: 'debuff-overheated-plug',
+      turnsRemaining: 2,
+      targetCableIds: ['hot'],
+      payload: {},
+      createdBySkillEventIndex: 0,
+    },
+  }]);
+  const cables = ['hot', 'safe'].map((id, index) => ({
+    id,
+    color: index,
+    available: true,
+    fakePlug: false,
+  }));
+  const skill = APPLIANCE_SKILL_REGISTRY.get('toaster')!;
+  for (let seed = 1; seed < 40; seed += 1) {
+    const resolved = skill.resolve({
+      ...context(engine, cables.map((cable) => cable.id)),
+      remainingCables: cables,
+      availableCableIds: cables.map((cable) => cable.id),
+    }, new DeterministicRng(seed));
+    expect(resolved.targetCableIds).not.toContain('hot');
+  }
+});
+
+test('自动清线移除最后一根线后进入 complete，不回到 idle', () => {
+  const engine = new SkillChallengeEngine(78);
+  engine.notifyAutoRemoved('last', false);
+  expect(engine.state.phase).toBe('complete');
+  engine.settle();
+  expect(engine.state.phase).toBe('complete');
+});
+
+test('提示目标仍存在但暂不可抽时可在 settle 前重选真实可抽线', () => {
+  const engine = new SkillChallengeEngine(79);
+  engine.primeForSkillTest([
+    { type: 'set-hint', source: 'lamp', cableId: 'blocked' },
+    { type: 'set-hint', source: 'popcorn', cableId: 'blocked' },
+  ]);
+  engine.reselectInvalidHints({
+    ...context(engine, ['blocked', 'safe']),
+    availableCableIds: ['safe'],
+  });
+  expect(engine.state.lampHintCableId).toBe('safe');
+  expect(engine.state.popcornHintCableId).toBe('safe');
+});
+
+test('提示目标被真实移除后不会在结算时续到另一根线', () => {
+  const engine = new SkillChallengeEngine(80);
+  engine.primeForSkillTest([
+    { type: 'set-hint', source: 'lamp', cableId: 'target' },
+    { type: 'set-hint', source: 'popcorn', cableId: 'target' },
+  ]);
+  expect(engine.beginManualPull('target', 'lamp')).toBe(true);
+  engine.commitManualRemoval('target', true);
+  engine.settle();
+  engine.reselectInvalidHints(context(engine, ['safe']));
+  expect(engine.state.lampHintCableId).toBeNull();
+  expect(engine.state.popcornHintCableId).toBeNull();
 });

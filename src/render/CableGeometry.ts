@@ -68,6 +68,8 @@ export function createCableToonMaterial(
   const skillSweepProgress = { value: 0 };
   const skillSweepStrength = { value: 0 };
   const skillSweepColor = { value: new THREE.Color(0x9b7bc8) };
+  const skillRecolorProgress = { value: 0 };
+  const skillRecolorColor = { value: new THREE.Color(0xf18a55) };
   const previousOnBeforeCompile = material.onBeforeCompile.bind(material);
   const previousProgramCacheKey = material.customProgramCacheKey.bind(material);
   material.userData.visualInflation = visualInflation;
@@ -87,6 +89,8 @@ export function createCableToonMaterial(
   material.userData.skillSweepProgress = skillSweepProgress;
   material.userData.skillSweepStrength = skillSweepStrength;
   material.userData.skillSweepColor = skillSweepColor;
+  material.userData.skillRecolorProgress = skillRecolorProgress;
+  material.userData.skillRecolorColor = skillRecolorColor;
   material.userData.progressiveFreeze = true;
   material.onBeforeCompile = (shader, renderer) => {
     previousOnBeforeCompile(shader, renderer);
@@ -107,6 +111,8 @@ export function createCableToonMaterial(
     shader.uniforms.uCableSkillSweepProgress = skillSweepProgress;
     shader.uniforms.uCableSkillSweepStrength = skillSweepStrength;
     shader.uniforms.uCableSkillSweepColor = skillSweepColor;
+    shader.uniforms.uCableSkillRecolorProgress = skillRecolorProgress;
+    shader.uniforms.uCableSkillRecolorColor = skillRecolorColor;
     shader.vertexShader = shader.vertexShader
       .replace(
         '#include <common>',
@@ -143,6 +149,8 @@ uniform vec3 uCableCoffeeColor;
 uniform float uCableSkillSweepProgress;
 uniform float uCableSkillSweepStrength;
 uniform vec3 uCableSkillSweepColor;
+uniform float uCableSkillRecolorProgress;
+uniform vec3 uCableSkillRecolorColor;
 varying float vCableFreezeProgress;
 varying vec3 vCableViewNormal;`,
       )
@@ -159,6 +167,17 @@ if (uCableFreezeProgress > 0.985) cableFreezeFront = 1.0;
 float cableFreezeCoverage = clamp(cableFreezeFront * uCableFreezeAmount, 0.0, 1.0);
 vec3 cableFrozenColor = vec3(0.49, 0.81, 0.85);
 diffuseColor.rgb = mix(diffuseColor.rgb, cableFrozenColor, cableFreezeCoverage * 0.9);
+
+if (uCableSkillRecolorProgress > 0.001) {
+  float cableRecolorDistanceFromCenter = abs(vCableFreezeProgress - 0.5) * 2.0;
+  float cableRecolorCoverage = 1.0 - smoothstep(
+    uCableSkillRecolorProgress - 0.085,
+    uCableSkillRecolorProgress + 0.025,
+    cableRecolorDistanceFromCenter
+  );
+  if (uCableSkillRecolorProgress > 0.995) cableRecolorCoverage = 1.0;
+  diffuseColor.rgb = mix(diffuseColor.rgb, uCableSkillRecolorColor, cableRecolorCoverage);
+}
 
 vec3 cableCoffeeEmission = vec3(0.0);
 if (uCableCoffeeAmount > 0.001) {
@@ -240,7 +259,7 @@ if (uCableOverheatAmount > 0.001) {
 outgoingLight += cableHeatEmission + cableCoffeeEmission + cableSkillSweepEmission;`,
     );
   };
-  material.customProgramCacheKey = () => `${previousProgramCacheKey()}-cable-base-v11-skill-sweep`;
+  material.customProgramCacheKey = () => `${previousProgramCacheKey()}-cable-base-v12-skill-recolor`;
   return material;
 }
 
@@ -255,6 +274,17 @@ export function setCableSkillSweep(
   const colorUniform = material.userData.skillSweepColor as { value: THREE.Color } | undefined;
   if (progressUniform) progressUniform.value = progress;
   if (strengthUniform) strengthUniform.value = THREE.MathUtils.clamp(strength, 0, 1);
+  if (colorUniform) colorUniform.value.set(color);
+}
+
+export function setCableSkillRecolor(
+  material: THREE.MeshToonMaterial,
+  progress: number,
+  color: THREE.ColorRepresentation,
+): void {
+  const progressUniform = material.userData.skillRecolorProgress as { value: number } | undefined;
+  const colorUniform = material.userData.skillRecolorColor as { value: THREE.Color } | undefined;
+  if (progressUniform) progressUniform.value = THREE.MathUtils.clamp(progress, 0, 1);
   if (colorUniform) colorUniform.value.set(color);
 }
 

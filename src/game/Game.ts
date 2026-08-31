@@ -58,8 +58,10 @@ import { RushRound } from './RushRound';
 import {
   APPLIANCE_SKILL_REGISTRY,
   SkillChallengeEngine,
+  pickPrinterCopyCableId,
   type SkillCommand,
   type SkillContext,
+  type SkillDamageEvent,
   type SkillResolution,
 } from '../skill/SkillChallengeEngine';
 import { SkillChallengeUi } from '../skill/SkillChallengeUi';
@@ -68,7 +70,9 @@ import {
   type SkillPresentationTarget,
 } from '../skill/SkillPresentationController';
 import {
+  buildTelevisionSpatialReplacements,
   reverseCableKeepingExternalEndpoints,
+  frozenStatusBlocksEveryAvailableCable,
   skillTopologyDefinitionsAreCommitSafe,
 } from '../skill/skillTopology';
 import {
@@ -97,12 +101,6 @@ import { KETTLE_THAW_DURATION, KettleThawPresentation } from '../skill/KettleTha
 import { RefrigeratorScreenIceOverlay } from '../skill/RefrigeratorScreenIceOverlay';
 import { WasherSpinPresentation } from '../skill/WasherSpinPresentation';
 import { BubbleShieldPresentation } from '../skill/BubbleShieldPresentation';
-import {
-  DEFAULT_SKILL_TEST,
-  buildSkillTestPuzzle,
-  getSkillTestDefinition,
-  type SkillTestDefinition,
-} from '../skill/SkillTestMode';
 
 type GameMode = 'campaign' | 'random' | 'skill' | 'rush';
 type RushFlow = 'sequence' | 'random-pool';
@@ -157,11 +155,55 @@ type PuzzleWorkerResponse = {
 const easeOutCubic = (value: number): number => 1 - (1 - value) ** 3;
 const MAX_HINT_USES = 3;
 const SKILL_RECYCLE_SELECTION_COMMIT_DELAY_MS = 850;
+const SKILL_BUFF_SWAP_VISUAL_DURATION_MS = 720;
+
+type RenderCostProfileEntry = {
+  name: string;
+  type: string;
+  visible: boolean;
+  objects: number;
+  renderables: number;
+  visibleRenderables: number;
+  meshes: number;
+  lines: number;
+  points: number;
+  lights: number;
+  materials: number;
+  geometries: number;
+  triangles: number;
+  potentialTriangles: number;
+  calls: number;
+};
+
+type RenderCostProfile = {
+  capturedAt: string;
+  liveRenderer: {
+    calls: number;
+    triangles: number;
+    geometries: number;
+    textures: number;
+  };
+  sceneRenderer: {
+    calls: number;
+    triangles: number;
+    geometries: number;
+    textures: number;
+  };
+  estimatedPostProcessCalls: number;
+  entries: RenderCostProfileEntry[];
+};
 
 export class Game {
   private readonly renderer: THREE.WebGLRenderer;
   private readonly scene = new THREE.Scene();
   private readonly camera = new THREE.PerspectiveCamera(26, 1, 0.1, 140);
+  private readonly applianceGeometryWarmupScene = new THREE.Scene();
+  private readonly applianceGeometryWarmupCamera = new THREE.PerspectiveCamera(26, 1, 0.1, 100);
+  private readonly applianceGeometryWarmupTarget = new THREE.WebGLRenderTarget(1, 1, {
+    depthBuffer: false,
+    stencilBuffer: false,
+  });
+  private readonly applianceGeometryWarmupMaterial = new THREE.MeshBasicMaterial();
   private pipeline: SakuraPipeline;
   private readonly sky: SkyRig;
   private readonly hud = new Hud();
@@ -195,7 +237,6 @@ export class Game {
     onRush: () => this.startRushFromOpening(),
     onDoubleEnded: () => this.startDoubleEndedFromOpening(),
     onSkill: () => this.startSkillFromOpening(),
-    onSkillTest: () => this.startSkillTestFromOpening(),
     onProgress: (progress) => this.openingScene.setProgress(progress),
   });
   private readonly rushUi = new RushModeUi({
@@ -275,21 +316,30 @@ export class Game {
   private skillSettleTimer = 0;
   private skillEvidenceCleanupTimer = 0;
   private skillRecycleSelectionTimer = 0;
+  private skillBuffSwapTimer = 0;
+  private skillBuffVisualReleaseAt = 0;
+  private lastSkillBuffId: string | null = null;
   private skillEvidenceVisible = false;
-  private activeSkillTest: SkillTestDefinition | null = null;
   private coffeeLockExitTarget: ApplianceTarget | null = null;
   private coffeeStainElapsed = 0;
   private coffeeStainStrength = 0;
   private readonly coffeeStainDuration = 4.8;
   private readonly coffeeStainProfiles = new Map<string, { delay: number; direction: number }>();
-  private skillTestRandomLayout = false;
   private readonly skillTransientHighlights = new Set<string>();
   private readonly skillColorShufflePreview = new Map<string, {
     color: number;
     strength: number;
     emissionScale: number;
   }>();
+  private portableSpeakerSpacingTargetsCache: PortableSpeakerSpacingTarget[] = [];
   private skillTransientScreenEffect: SkillScreenEffect = 'none';
+  private desktopComputerFeedback: {
+    startedAt: number;
+    hadBuff: boolean;
+    livesAfter: number;
+    committed: boolean;
+  } | null = null;
+  private pendingDryShieldAbsorb = false;
   private readonly skillAutoRemovalEnds = new Map<string, CableEnd>();
   private pendingWasherFlingRemovals: ArrowRuntime[] = [];
   private washerFlingHistory: Array<{
@@ -324,6 +374,7 @@ export class Game {
   private generationMs = 0;
   private modelBuildMs = 0;
   private preloadMaxSliceMs = 0;
+  private performanceEffectsWarmed = false;
   private contextLossAtMs: number | null = null;
   private contextLosses = 0;
   private contextRestores = 0;
@@ -369,12 +420,6 @@ export class Game {
   };
   private readonly onPuzzleGenerated = (event: MessageEvent<PuzzleWorkerResponse>) => {
     const result = event.data;
-    if (result.puzzle && this.activeSkillTest && this.skillTestRandomLayout) {
-      result.puzzle.arrows = result.puzzle.arrows.map((arrow) => ({
-        ...arrow,
-        color: this.activeSkillTest!.accent,
-      }));
-    }
     if (result.requestId !== this.puzzleRequestId) return;
     if (!result.puzzle) {
       this.hud.showLoadError(result.error ?? '线路生成失败');
@@ -452,13 +497,20 @@ export class Game {
     this.arrowRoot.visible = false;
     this.appliances.root.visible = false;
     this.connections.root.visible = false;
+    window.__PROFILE_RENDER_BREAKDOWN__ = () => this.profileRenderBreakdown();
     this.appliances.setBurstHandler((origin, direction, count) => {
       this.petals.burst(origin, direction, count);
     });
     this.sky = buildSky(this.scene);
     this.createLighting();
+    this.applianceGeometryWarmupCamera.position.set(0, 0, 13.6);
+    this.applianceGeometryWarmupCamera.lookAt(0, 0, 0);
+    this.applianceGeometryWarmupCamera.updateMatrixWorld(true);
+    this.applianceGeometryWarmupScene.overrideMaterial = this.applianceGeometryWarmupMaterial;
     this.appliances.setReplacementWarmupHandler(async (root) => {
+      this.performances.primeRoot(root);
       await this.renderer.compileAsync(root, this.camera, this.scene);
+      this.uploadApplianceGeometry(root);
     });
 
     this.pipeline = new SakuraPipeline(this.renderer, this.scene, this.camera);
@@ -482,6 +534,9 @@ export class Game {
         if (color === null) this.skillColorShufflePreview.delete(cableId);
         else this.skillColorShufflePreview.set(cableId, { color, strength, emissionScale });
         this.models.get(cableId)?.setSkillTint(color, strength, emissionScale);
+      },
+      setCableSkillRecolor: (cableId, color, progress) => {
+        this.models.get(cableId)?.setSkillRecolor(color, progress);
       },
       commitCableColors: (changes) => {
         this.applySkillRecolors(changes);
@@ -582,21 +637,7 @@ export class Game {
     const exploreRequested = params.get('mode') === 'explore' && params.get('direct') === '1';
     const doubleRequested = params.get('mode') === 'double' && params.get('direct') === '1';
     const skillRequested = params.get('mode') === 'skill' && params.get('direct') === '1';
-    const washerRandomShortcut = params.get('washer-random') === '1';
-    const requestedSkillTest = washerRandomShortcut
-      ? getSkillTestDefinition('washer')
-      : params.get('mode') === 'skill-test' && params.get('direct') === '1'
-        ? getSkillTestDefinition(params.get('skill') ?? DEFAULT_SKILL_TEST.id)
-        : null;
-    const skillTestRequested = requestedSkillTest !== null;
-    const randomSkillTestLayout = skillTestRequested
-      && (requestedSkillTest.id === 'washer'
-        || requestedSkillTest.id === 'microwave'
-        || washerRandomShortcut
-        || params.get('layout') === 'random');
     const rushRequested = params.get('mode') === 'rush' && params.get('direct') === '1';
-    this.skillTestRandomLayout = randomSkillTestLayout;
-    this.setActiveSkillTest(requestedSkillTest);
     this.setExplorationMode(exploreRequested);
     if (rushRequested) {
       this.currentRushChallenge = this.rushSelectionHint ?? RUSH_CHALLENGES[0];
@@ -605,12 +646,8 @@ export class Game {
       this.rushFlow = 'sequence';
     }
     const staleRandomUrl = params.get('mode') === 'random' && !randomRequested;
-    const directChallengeRequested = randomRequested || exploreRequested || doubleRequested || skillRequested || skillTestRequested;
-    const initialSeed = skillTestRequested
-      ? randomSkillTestLayout
-        ? (hasExplicitSeed ? parsedSeed >>> 0 : createRandomSeed())
-        : requestedSkillTest.level.seed
-      : rushRequested && this.currentRushChallenge
+    const directChallengeRequested = randomRequested || exploreRequested || doubleRequested || skillRequested;
+    const initialSeed = rushRequested && this.currentRushChallenge
       ? this.currentRushChallenge.level.seed
       : directChallengeRequested
       ? (hasExplicitSeed ? parsedSeed >>> 0 : createRandomSeed())
@@ -621,10 +658,6 @@ export class Game {
       ? this.currentRushChallenge.level
       : doubleRequested
         ? getDoubleEndedLevel(initialSeed)
-        : skillTestRequested
-          ? randomSkillTestLayout
-            ? getSkillChallengeLevel(initialSeed)
-            : requestedSkillTest.level
         : skillRequested
           ? getSkillChallengeLevel(initialSeed)
           : exploreRequested
@@ -634,12 +667,12 @@ export class Game {
       : getCampaignLevel(hasCampaignLevel ? parsedLevel : 1);
     const initialMode: GameMode = rushRequested
       ? 'rush'
-      : skillRequested || skillTestRequested
+      : skillRequested
         ? 'skill'
         : randomRequested || exploreRequested || doubleRequested
           ? 'random'
           : 'campaign';
-    if (skillRequested || skillTestRequested) {
+    if (skillRequested) {
       this.skillEngine = this.createSkillEngine(initialSeed);
       this.skillUi.setVisible(true);
       this.skillUi.render(this.skillEngine.state);
@@ -651,7 +684,7 @@ export class Game {
       void this.prepareOpeningAndLoadPuzzle(initialSeed, initialLevel, initialMode);
     }, 80);
     this.hud.beginPuzzleLoad(
-      rushRequested ? 'loading.rush' : skillRequested || skillTestRequested ? 'loading.skill' : 'loading.first',
+      rushRequested ? 'loading.rush' : skillRequested ? 'loading.skill' : 'loading.first',
     );
     this.publishDiagnostics();
   }
@@ -661,7 +694,6 @@ export class Game {
   }
 
   dispose(): void {
-    this.setActiveSkillTest(null);
     this.loop.stop();
     window.clearTimeout(this.startupTimer);
     this.puzzleWorker.removeEventListener('message', this.onPuzzleGenerated);
@@ -698,7 +730,10 @@ export class Game {
     this.doubleEndedUi.dispose();
     this.skillUi.dispose();
     this.hud.dispose();
+    this.applianceGeometryWarmupTarget.dispose();
+    this.applianceGeometryWarmupMaterial.dispose();
     this.renderer.dispose();
+    if (window.__PROFILE_RENDER_BREAKDOWN__) window.__PROFILE_RENDER_BREAKDOWN__ = undefined;
     this.canvas.removeEventListener('webglcontextlost', this.onContextLost);
     this.canvas.removeEventListener('webglcontextrestored', this.onContextRestored);
     window.removeEventListener('resize', this.onResize);
@@ -722,7 +757,88 @@ export class Game {
     window.clearTimeout(this.skillCommitTimer);
     window.clearTimeout(this.skillSettleCueTimer);
     window.clearTimeout(this.skillEvidenceCleanupTimer);
+    window.clearTimeout(this.skillBuffSwapTimer);
+    this.skillBuffSwapTimer = 0;
+    this.skillBuffVisualReleaseAt = 0;
+    this.lastSkillBuffId = null;
     window.clearTimeout(this.skillRecycleSelectionTimer);
+  }
+
+  private uploadApplianceGeometry(root: THREE.Object3D): void {
+    const originalParent = root.parent;
+    const originalIndex = originalParent?.children.indexOf(root) ?? -1;
+    const rootVisible = root.visible;
+    const culling: Array<{ object: THREE.Object3D; frustumCulled: boolean }> = [];
+    root.traverse((object) => {
+      culling.push({ object, frustumCulled: object.frustumCulled });
+      object.frustumCulled = false;
+    });
+    root.visible = true;
+    const previousTarget = this.renderer.getRenderTarget();
+    root.removeFromParent();
+    this.applianceGeometryWarmupScene.add(root);
+    try {
+      this.renderer.setRenderTarget(this.applianceGeometryWarmupTarget);
+      this.renderer.clear();
+      this.renderer.render(this.applianceGeometryWarmupScene, this.applianceGeometryWarmupCamera);
+    } finally {
+      root.removeFromParent();
+      if (originalParent) {
+        originalParent.add(root);
+        if (originalIndex >= 0 && originalIndex < originalParent.children.length - 1) {
+          originalParent.children.splice(originalParent.children.indexOf(root), 1);
+          originalParent.children.splice(originalIndex, 0, root);
+        }
+      }
+      root.visible = rootVisible;
+      culling.forEach(({ object, frustumCulled }) => {
+        object.frustumCulled = frustumCulled;
+      });
+      this.renderer.setRenderTarget(previousTarget);
+    }
+  }
+
+  private async warmPerformanceEffectsAsync(): Promise<void> {
+    if (this.performanceEffectsWarmed) return;
+    this.performanceEffectsWarmed = true;
+    const root = this.performances.root;
+    const previousTarget = this.renderer.getRenderTarget();
+    const poweredApplianceLight = new THREE.PointLight(0xffffff, 1, 12, 1.65);
+    poweredApplianceLight.position.set(0, 1, 0);
+    poweredApplianceLight.castShadow = false;
+    const states: Array<{
+      object: THREE.Object3D;
+      visible: boolean;
+      frustumCulled: boolean;
+    }> = [];
+    root.traverse((object) => {
+      states.push({
+        object,
+        visible: object.visible,
+        frustumCulled: object.frustumCulled,
+      });
+      object.frustumCulled = false;
+      object.visible = !(object instanceof THREE.Light);
+    });
+    this.scene.add(poweredApplianceLight);
+    try {
+      await this.renderer.compileAsync(root, this.camera, this.scene);
+      this.renderer.setRenderTarget(this.applianceGeometryWarmupTarget);
+      this.renderer.clear();
+      // Render through the exact live scene once. Physical splash materials
+      // depend on its real directional-light, fog, tone and shadow defines;
+      // compiling them in a simplified warmup scene creates a different GPU
+      // program and still stalls when the animation reveals them later.
+      this.renderer.render(this.scene, this.camera);
+    } finally {
+      states.forEach(({ object, visible, frustumCulled }) => {
+        object.visible = visible;
+        object.frustumCulled = frustumCulled;
+      });
+      poweredApplianceLight.removeFromParent();
+      poweredApplianceLight.dispose();
+      this.renderer.setRenderTarget(previousTarget);
+    }
   }
 
   private readonly resetCurrentPuzzle = () => {
@@ -768,8 +884,11 @@ export class Game {
     exploration = false,
   ): void {
     this.setExplorationMode(exploration);
-    this.setActiveSkillTest(null);
     this.skillEngine = null;
+    this.lastSkillBuffId = null;
+    this.skillBuffVisualReleaseAt = 0;
+    window.clearTimeout(this.skillBuffSwapTimer);
+    this.skillBuffSwapTimer = 0;
     this.setSkillInputLocked(false);
     this.skillTransientScreenEffect = 'none';
     this.pipeline.setSkillEffect('none', true);
@@ -807,42 +926,8 @@ export class Game {
     this.loadSkillChallenge(createRandomSeed());
   };
 
-  private readonly startSkillTestFromOpening = () => {
-    if (!this.leaveOpeningForModeSelection()) return;
-    const test = this.activeSkillTest ?? DEFAULT_SKILL_TEST;
-    const seed = this.activeSkillTest ? (this.puzzle?.seed ?? createRandomSeed()) : createRandomSeed();
-    this.loadSkillTest(test, seed);
-  };
-
-  private loadSkillTest(test: SkillTestDefinition, seed = createRandomSeed()): void {
-    this.setExplorationMode(false);
-    this.cancelPrefetch();
-    this.setActiveSkillTest(test);
-    this.skillTestRandomLayout = test.id === 'washer'
-      || test.id === 'microwave';
-    this.currentRushChallenge = null;
-    this.rushRound = null;
-    this.rushFlow = null;
-    this.rushUi.hide();
-    this.doubleEndedUi.hide();
-    this.petals.mesh.visible = true;
-    const level = this.skillTestRandomLayout ? getSkillChallengeLevel(seed) : test.level;
-    this.skillEngine = this.createSkillEngine(seed);
-    this.setSkillInputLocked(false);
-    this.skillUi.setVisible(true);
-    this.appliances.setReplacementFilter((definition) => {
-      if (test.id === 'rice-cooker' && this.skillEngine?.state.debuff?.id === 'rice-thick-cable') {
-        return definition.id === 'blender';
-      }
-      return definition.id === test.appliance;
-    });
-    this.loadPuzzle(seed, level, 'skill');
-  }
-
   private loadSkillChallenge(seed: number): void {
     this.setExplorationMode(false);
-    this.setActiveSkillTest(null);
-    this.skillTestRandomLayout = false;
     this.currentRushChallenge = null;
     this.rushRound = null;
     this.rushFlow = null;
@@ -850,6 +935,7 @@ export class Game {
     this.doubleEndedUi.hide();
     this.petals.mesh.visible = true;
     this.skillEngine = this.createSkillEngine(seed);
+    this.lastSkillBuffId = null;
     this.setSkillInputLocked(false);
     this.skillUi.setVisible(true);
     this.skillUi.render(this.skillEngine.state);
@@ -878,19 +964,6 @@ export class Game {
     return true;
   }
 
-  private setActiveSkillTest(test: SkillTestDefinition | null): void {
-    this.activeSkillTest = test;
-    if (!test) this.skillTestRandomLayout = false;
-    document.documentElement.classList.toggle('skill-test-active', test !== null);
-    document.documentElement.classList.toggle('skill-test-popcorn', test?.id === 'popcorn-machine');
-    document.documentElement.classList.toggle('skill-test-alarm', test?.id === 'alarm-clock');
-    document.documentElement.classList.toggle('skill-test-stand-mixer', test?.id === 'stand-mixer');
-    document.documentElement.classList.toggle('skill-test-printer', test?.id === 'printer');
-    document.documentElement.classList.toggle('skill-test-induction-cooktop', test?.id === 'induction-cooktop');
-    document.documentElement.classList.toggle('skill-test-dehumidifier', test?.id === 'dehumidifier');
-    document.documentElement.classList.toggle('skill-test-portable-speaker', test?.id === 'portable-speaker');
-  }
-
   private setExplorationMode(active: boolean): void {
     if (this.explorationMode === active) return;
     this.explorationMode = active;
@@ -908,21 +981,7 @@ export class Game {
   }
 
   private createSkillEngine(seed: number): SkillChallengeEngine {
-    const engine = new SkillChallengeEngine(seed);
-    if (this.activeSkillTest) engine.primeForSkillTest(this.activeSkillTest.initialCommands);
-    return engine;
-  }
-
-  private showActiveSkillTestCue(): void {
-    const test = this.activeSkillTest;
-    if (!test) return;
-    const definition = APPLIANCE_SKILL_REGISTRY.get(test.appliance);
-    this.skillUi.showCue(
-      definition?.label ?? test.applianceDefinition.label,
-      'cue',
-      definition?.description ?? '',
-      test.applianceDefinition.label,
-    );
+    return new SkillChallengeEngine(seed);
   }
 
   private readonly startRushFromOpening = () => {
@@ -952,7 +1011,6 @@ export class Game {
 
   private loadRushChallenge(challenge: RushChallenge): void {
     this.setExplorationMode(false);
-    this.setActiveSkillTest(null);
     this.cancelPrefetch();
     this.skillEngine = null;
     this.setSkillInputLocked(false);
@@ -1017,12 +1075,17 @@ export class Game {
     this.connections.clear();
     this.performances.reset();
     window.clearTimeout(this.skillEvidenceCleanupTimer);
+    window.clearTimeout(this.skillBuffSwapTimer);
+    this.skillBuffSwapTimer = 0;
+    this.skillBuffVisualReleaseAt = 0;
+    this.lastSkillBuffId = null;
     this.skillPresentation.reset();
     this.skillEffects.reset();
     this.bubbleShield.reset();
     this.soundWaveShield.reset();
     this.dehumidifierDryShield.reset();
     this.portableSpeakerSpacing.reset(this.getPortableSpeakerSpacingTargets());
+    this.portableSpeakerSpacingTargetsCache = [];
     this.televisionReconstruction.reset();
     this.toasterHeatSwap.reset();
     this.washerSpin.reset();
@@ -1042,6 +1105,9 @@ export class Game {
     window.clearTimeout(this.skillCommitTimer);
     window.clearTimeout(this.skillSettleCueTimer);
     this.skillTransientHighlights.clear();
+    this.desktopComputerFeedback = null;
+    this.pendingDryShieldAbsorb = false;
+    delete document.documentElement.dataset.desktopComputerFeedback;
     this.pendingWasherFlingRemovals = [];
     this.coffeeLockExitTarget = null;
     this.coffeeStainElapsed = 0;
@@ -1052,7 +1118,6 @@ export class Game {
     if (this.currentMode === 'skill') {
       this.skillEngine ??= this.createSkillEngine(this.puzzle.seed);
       this.skillEngine.reset(this.puzzle.seed);
-      if (this.activeSkillTest) this.skillEngine.primeForSkillTest(this.activeSkillTest.initialCommands);
       this.randomLives = this.skillEngine.state.currentLives;
       this.skillUi.setVisible(true);
       this.skillUi.render(this.skillEngine.state);
@@ -1070,8 +1135,7 @@ export class Game {
       this.hintUsesRemaining = MAX_HINT_USES;
     }
     this.hud.setRandomLives(
-      this.currentMode === 'random'
-        || (this.currentMode === 'skill' && (!this.activeSkillTest || this.activeSkillTest.id === 'popcorn-machine')),
+      this.currentMode === 'random' || this.currentMode === 'skill',
       this.randomLives,
       this.currentMode === 'skill' ? this.skillEngine?.state.maxLives ?? 3 : 3,
     );
@@ -1093,7 +1157,7 @@ export class Game {
         : this.currentMode === 'rush'
           ? 'mode.rush'
           : this.currentMode === 'skill'
-            ? this.activeSkillTest ? 'mode.skillTest' : 'mode.skill'
+            ? 'mode.skill'
           : this.explorationMode
             ? 'mode.explore'
           : 'mode.random',
@@ -1110,7 +1174,6 @@ export class Game {
     );
     this.hud.flash(t('flash.summary', { count: this.arrows.length, free: this.puzzle.initiallyFree }));
     this.refreshAvailability(true);
-    this.showActiveSkillTestCue();
     if (this.isDoubleEndedChallenge()) this.doubleEndedUi.showBriefing();
     this.publishDiagnostics();
   }
@@ -1164,7 +1227,6 @@ export class Game {
     this.currentRushChallenge = null;
     this.rushFlow = null;
     this.setExplorationMode(false);
-    this.setActiveSkillTest(null);
     this.setSkillInputLocked(false);
     this.skillEngine = null;
     this.skillTransientScreenEffect = 'none';
@@ -1195,7 +1257,6 @@ export class Game {
 
   private readonly loadNextPuzzle = () => {
     this.setExplorationMode(false);
-    this.setActiveSkillTest(null);
     const nextId = this.currentMode === 'campaign' && this.currentLevel
       ? this.currentLevel.id + 1
       : 1;
@@ -1260,21 +1321,6 @@ export class Game {
     if (this.openingActive && this.puzzle === null) {
       this.startScreen.setStage('start.loading.first', 0.24, 0.56);
     }
-    if (mode === 'skill' && this.activeSkillTest && !this.skillTestRandomLayout) {
-      const testPuzzle = buildSkillTestPuzzle(this.activeSkillTest, seed);
-      this.generationMs = 0;
-      if (this.openingActive && this.puzzle === null && !this.initialPuzzlePreparing) {
-        this.initialPuzzlePreparing = true;
-        void this.applyPuzzle(testPuzzle, true).catch((error) => {
-          this.initialPuzzlePreparing = false;
-          this.startScreen.showError(error instanceof Error ? error.message : String(error));
-          this.hud.showLoadError(error instanceof Error ? error.message : String(error));
-        });
-      } else {
-        this.hud.completePuzzleLoad(() => this.applyPuzzle(testPuzzle));
-      }
-      return;
-    }
     this.puzzleWorker.postMessage({
       requestId: this.puzzleRequestId,
       seed,
@@ -1303,17 +1349,12 @@ export class Game {
       this.skillTransientScreenEffect = 'none';
       this.skillUi.setVisible(true);
       this.skillUi.render(this.skillEngine.state);
-      this.appliances.setReplacementFilter(this.activeSkillTest
-        ? (definition) => this.activeSkillTest?.id === 'rice-cooker'
-          && this.skillEngine?.state.debuff?.id === 'rice-thick-cable'
-          ? definition.id === 'blender'
-          : definition.id === this.activeSkillTest?.appliance
-        : (definition) => {
-            const debuffActive = this.skillEngine?.state.debuff !== null;
-            return !debuffActive || ![
-              'humidifier', 'refrigerator', 'coffee-maker', 'rice-cooker', 'microwave', 'phone',
-            ].includes(definition.id);
-          });
+      this.appliances.setReplacementFilter((definition) => {
+        const debuffActive = this.skillEngine?.state.debuff !== null;
+        return !debuffActive || ![
+          'humidifier', 'refrigerator', 'coffee-maker', 'rice-cooker', 'microwave', 'phone',
+        ].includes(definition.id);
+      });
       this.randomLives = this.skillEngine.state.currentLives;
     } else {
       this.skillEngine = null;
@@ -1327,8 +1368,7 @@ export class Game {
       this.hintUsesRemaining = MAX_HINT_USES;
     }
     this.hud.setRandomLives(
-      this.currentMode === 'random'
-        || (this.currentMode === 'skill' && (!this.activeSkillTest || this.activeSkillTest.id === 'popcorn-machine')),
+      this.currentMode === 'random' || this.currentMode === 'skill',
       this.randomLives,
       this.currentMode === 'skill' ? this.skillEngine?.state.maxLives ?? 3 : 3,
     );
@@ -1338,11 +1378,9 @@ export class Game {
       this.currentMode === 'campaign' && this.currentLevel ? this.currentLevel.id : 0,
     );
     const activeColors = [...new Set(puzzle.arrows.map((arrow) => arrow.color))];
-    const configuredDefinitions = this.activeSkillTest
-      ? [this.activeSkillTest.applianceDefinition]
-      : this.currentMode === 'campaign' && this.currentLevel?.id === 1
-        ? selectTutorialAppliances(activeColors.length)
-        : undefined;
+    const configuredDefinitions = this.currentMode === 'campaign' && this.currentLevel?.id === 1
+      ? selectTutorialAppliances(activeColors.length)
+      : undefined;
     if (!staged) this.preloadMaxSliceMs = 0;
     if (this.currentMode === 'rush') {
       this.appliances.clear();
@@ -1352,19 +1390,30 @@ export class Game {
       this.startScreen.setStage('start.loading.appliances', 0.58, 0.82);
       await this.appliances.configureAsync(applianceSeed, (progress, buildMs) => {
         this.preloadMaxSliceMs = Math.max(this.preloadMaxSliceMs, buildMs);
-        this.startScreen.setExactProgress('start.loading.appliances', 0.58 + progress * 0.24);
+        this.startScreen.setExactProgress('start.loading.appliances', 0.58 + progress * 0.18);
       }, configuredDefinitions, activeColors);
     } else {
       await this.appliances.configureAsync(applianceSeed, (_progress, buildMs) => {
         this.preloadMaxSliceMs = Math.max(this.preloadMaxSliceMs, buildMs);
       }, configuredDefinitions, activeColors);
     }
-    this.appliances.setSingleTargetColorAliases(
-      this.activeSkillTest?.id === 'blender' ? activeColors : [],
-    );
+    this.appliances.setSingleTargetColorAliases([]);
     this.appliances.setRequiredColors(
       this.currentMode === 'rush' ? [] : this.arrows.map((arrow) => arrow.definition.color),
     );
+    if (this.currentMode !== 'rush') {
+      await this.warmPerformanceEffectsAsync();
+      for (const target of this.appliances.targets) {
+        this.performances.prime(target);
+        await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+      }
+      await this.appliances.prepareInitialReplacementsAsync((progress, buildMs) => {
+        this.preloadMaxSliceMs = Math.max(this.preloadMaxSliceMs, buildMs);
+        if (staged) {
+          this.startScreen.setExactProgress('start.loading.appliances', 0.76 + progress * 0.06);
+        }
+      });
+    }
     this.applianceRoutingRevision = this.appliances.routingRevision;
 
     for (let index = 0; index < this.arrows.length; index += 1) {
@@ -1376,7 +1425,6 @@ export class Game {
           ? undefined
           : this.appliances.getPlugStyleForColor(arrow.definition.color),
       );
-      model.setRefrigeratorIceGeometryEnabled(this.activeSkillTest?.id === 'refrigerator');
       this.models.set(arrow.definition.id, model);
       this.arrowRoot.add(model.root);
       this.preloadMaxSliceMs = Math.max(
@@ -1407,7 +1455,7 @@ export class Game {
         : this.currentMode === 'rush'
           ? 'mode.rush'
           : this.currentMode === 'skill'
-            ? this.activeSkillTest ? 'mode.skillTest' : 'mode.skill'
+            ? 'mode.skill'
           : this.explorationMode
             ? 'mode.explore'
           : 'mode.random',
@@ -1433,7 +1481,6 @@ export class Game {
       this.orbit.setRadius(this.currentLevel.cameraRadius);
     }
     this.refreshAvailability(true);
-    if (!this.openingActive) this.showActiveSkillTestCue();
     const url = new URL(window.location.href);
     url.searchParams.set('seed', String(this.puzzle.seed));
     if (this.currentMode === 'campaign' && this.currentLevel) {
@@ -1448,15 +1495,6 @@ export class Game {
       url.searchParams.set('rush', this.currentRushChallenge.id);
       url.searchParams.set('direct', '1');
       url.searchParams.delete('skill');
-    } else if (this.currentMode === 'skill' && this.activeSkillTest) {
-      url.searchParams.delete('level');
-      url.searchParams.delete('layout');
-      url.searchParams.set('mode', 'skill-test');
-      url.searchParams.set('skill', this.activeSkillTest.id);
-      url.searchParams.set('direct', '1');
-      if (this.skillTestRandomLayout) url.searchParams.set('layout', 'random');
-      else url.searchParams.delete('layout');
-      url.searchParams.delete('rush');
     } else if (this.currentMode === 'skill') {
       url.searchParams.delete('level');
       url.searchParams.set('mode', 'skill');
@@ -1527,6 +1565,14 @@ export class Game {
   private clearPuzzle(): void {
     window.clearTimeout(this.skillEvidenceCleanupTimer);
     window.clearTimeout(this.skillRecycleSelectionTimer);
+    window.clearTimeout(this.skillBuffSwapTimer);
+    this.skillBuffSwapTimer = 0;
+    this.skillBuffVisualReleaseAt = 0;
+    this.lastSkillBuffId = null;
+    this.desktopComputerFeedback = null;
+    this.pendingDryShieldAbsorb = false;
+    this.hud.setContinueReady(false);
+    delete document.documentElement.dataset.desktopComputerFeedback;
     this.setHovered(null);
     this.animations.length = 0;
     this.pendingApplianceConnections.length = 0;
@@ -1546,6 +1592,7 @@ export class Game {
     this.soundWaveShield.reset();
     this.dehumidifierDryShield.reset();
     this.portableSpeakerSpacing.reset(this.getPortableSpeakerSpacingTargets());
+    this.portableSpeakerSpacingTargetsCache = [];
     this.televisionReconstruction.reset();
     this.toasterHeatSwap.reset();
     this.washerSpin.reset();
@@ -1736,7 +1783,6 @@ export class Game {
       // once the final orbit framing is restored so the first cable click
       // lands on the visible arrow rather than its transition-era coordinate.
       this.refreshAvailability(true);
-      this.showActiveSkillTestCue();
       if (this.currentMode === 'rush' && this.currentRushChallenge) {
         this.rushUi.showBriefing(this.currentRushChallenge);
       } else if (this.isDoubleEndedChallenge()) {
@@ -1789,7 +1835,6 @@ export class Game {
     this.orbit.setAngles(0.76, this.currentLevel?.shape === 'sphere' ? 0.66 : 0.56);
     this.orbit.setRadius(this.currentLevel?.cameraRadius ?? 19.2);
     this.refreshAvailability(true);
-    this.showActiveSkillTestCue();
     this.publishDiagnostics();
     return true;
   }
@@ -2034,7 +2079,12 @@ export class Game {
         && this.appliances.canQueueColor(arrow.definition.color);
       if (this.currentMode !== 'rush' && !target && !queueAfterExit) return;
       if (this.currentMode === 'skill') {
-        if (!target || !this.skillEngine?.beginManualPull(arrow.definition.id, target.kind)) return;
+        const wasLastCableAtPullStart = this.arrows.length - this.removedCount === 1;
+        if (!target || !this.skillEngine?.beginManualPull(
+          arrow.definition.id,
+          target.kind,
+          wasLastCableAtPullStart,
+        )) return;
         this.setSkillInputLocked(true);
       }
       arrow.state = 'moving';
@@ -2076,7 +2126,7 @@ export class Game {
         end: picked.end,
       });
       if (result.contact) this.petals.burst(result.contact, direction.clone().negate());
-      if (!this.activeSkillTest) this.hud.showBlocked();
+      this.hud.showBlocked();
       this.audio.playInteraction('blocked');
       if (this.currentMode === 'random') this.loseRandomLife();
       if (this.currentMode === 'skill') {
@@ -2111,14 +2161,6 @@ export class Game {
 
   private handleSkillBlockedAttempt(fakePlug: boolean, impactPosition: THREE.Vector3): void {
     const wasSoundWaveProtected = this.skillEngine?.state.buff?.id === 'soothing-record';
-    if (this.activeSkillTest) {
-      const activeBuff = this.skillEngine?.state.buff?.id;
-      const testingMatchingProtection = (this.activeSkillTest.id === 'bubble-machine'
-          && activeBuff === 'iridescent-bubble')
-        || (this.activeSkillTest.id === 'record-player'
-          && activeBuff === 'soothing-record');
-      if (!testingMatchingProtection) return;
-    }
     const result = this.skillEngine?.handleBlockedAttempt(fakePlug);
     if (!result || !this.skillEngine) return;
     this.randomLives = result.lives;
@@ -2141,8 +2183,22 @@ export class Game {
     this.audio.playInteraction('failed');
   }
 
+  private showSkillDamageFeedback(event: SkillDamageEvent): void {
+    this.randomLives = event.lives;
+    this.hud.setRandomLives(true, event.lives, this.skillEngine?.state.maxLives ?? 3);
+    if (event.revived) {
+      this.hud.flash('微波炉超时：CONTINUE 已恢复生命', true);
+      return;
+    }
+    this.hud.showLifeLost(event.lives);
+    this.skillUi.setCuePhase('commit', '超时：生命 -1');
+  }
+
   private createSkillContext(): SkillContext {
-    const remaining = this.arrows.filter((arrow) => arrow.state !== 'removed');
+    // A line already committed to an automatic exit remains in the logical
+    // array until its flight finishes, but must not be selected by another
+    // skill during that window.
+    const remaining = this.arrows.filter((arrow) => arrow.state !== 'removed' && arrow.state !== 'moving');
     const physicallyAvailable = new Set(
       availableCableEnds(remaining).map(({ id }) => id),
     );
@@ -2166,8 +2222,11 @@ export class Game {
   private resolveSkillConnection(_target: ApplianceTarget, arrow: ArrowRuntime): void {
     const engine = this.skillEngine;
     if (!engine) return;
+    const desktopComputerHadBuff = _target.kind === 'desktop-computer' && engine.state.buff !== null;
     const remaining = this.arrows.length - this.removedCount;
     const outcome = engine.resolveConnected(this.createSkillContext(), remaining === 0);
+    engine.consumeDryShieldBlock();
+    this.pendingDryShieldAbsorb = outcome.blockedByDryShield;
     const resolution = outcome.resolution;
     let presentationDuration: number | undefined;
 
@@ -2175,6 +2234,8 @@ export class Game {
       && engine.state.debuff.turnsRemaining === 0) {
       this.coffeeLockExitTarget = _target;
     }
+
+    if (outcome.damage) this.showSkillDamageFeedback(outcome.damage);
 
     if (resolution) {
       if (resolution.appliance === 'radio') {
@@ -2192,10 +2253,15 @@ export class Game {
           ? 'kettle-thaw-heat'
         : resolution.appliance === 'printer'
           ? 'printer-scan'
+        : resolution.appliance === 'desktop-computer'
+          ? 'blue-screen'
           : 'none';
       if (resolution.appliance === 'printer') {
         this.pipeline.setSkillEffect('printer-scan');
         this.publishDiagnostics();
+      }
+      if (resolution.appliance === 'desktop-computer') {
+        this.beginDesktopComputerFeedback(desktopComputerHadBuff, engine.state.currentLives);
       }
       this.skillTransientHighlights.clear();
       if (!this.isDedicatedSkillPresentation(resolution) && resolution.appliance !== 'popcorn-machine') {
@@ -2207,7 +2273,18 @@ export class Game {
       this.beginHumidifierSteamReveal(resolution, _target);
       this.beginCoffeeSplash(resolution);
       this.applySkillCommands(resolution.commands, resolution.appliance, _target);
-      this.queueSkillCommitCue('效果生效', resolution.appliance === 'blender' ? 4_680 : 220);
+      const commitCueDelay = resolution.appliance === 'blender'
+        ? 4_680
+        : resolution.appliance === 'desktop-computer'
+          ? 3_720
+        : resolution.appliance === 'hair-dryer'
+          && resolution.commands.some((command) => command.type === 'recolor')
+          ? 2_040
+          : 220;
+      this.queueSkillCommitCue('效果生效', commitCueDelay);
+    } else if (outcome.blockedByDryShield) {
+      this.skillUi.showCue('干燥护罩吸收', 'cue', '本次负面技能已被护罩抵挡。', _target.label);
+      this.queueSkillCommitCue('已吸收');
     } else if (outcome.coffeeBlocked) {
       this.skillUi.showCue('技能被封锁', 'cue', '咖啡封技生效中，本次家电技能不会发动。', _target.label);
       this.queueSkillCommitCue('已阻止');
@@ -2223,7 +2300,7 @@ export class Game {
       this.queueSkillCommitCue(isLastCable ? '挑战收尾' : '无效果');
     }
 
-    this.syncSkillState();
+    if (resolution?.appliance !== 'desktop-computer') this.syncSkillState();
 
     if (engine.state.phase === 'select-card') {
       this.skillUi.showCards(engine.cards);
@@ -2248,7 +2325,8 @@ export class Game {
       || resolution.appliance === 'refrigerator'
       || resolution.appliance === 'kettle'
       || resolution.appliance === 'washer'
-      || resolution.appliance === 'portable-speaker';
+      || resolution.appliance === 'portable-speaker'
+      || resolution.appliance === 'hair-dryer';
   }
 
   private beginFanSteamClear(resolution: SkillResolution, sourceTarget?: ApplianceTarget): void {
@@ -2362,6 +2440,14 @@ export class Game {
         getTimelineElapsed,
       });
     }
+    if (
+      resolution.appliance === 'hair-dryer'
+      && resolution.commands.some((command) => command.type === 'clear-status'
+        && command.slot === 'debuff'
+        && command.reason === 'hair-dryer')
+    ) {
+      this.refrigeratorFreeze.beginThaw(2.4);
+    }
     const targetIds = resolution.appliance === 'rice-cooker' || resolution.appliance === 'stand-mixer'
       ? this.arrows.filter((candidate) => candidate.state !== 'removed').map((candidate) => candidate.definition.id)
       : resolution.appliance === 'blender'
@@ -2418,6 +2504,7 @@ export class Game {
     return resolution.appliance === 'television'
       || resolution.appliance === 'toaster'
       || resolution.appliance === 'refrigerator'
+      || resolution.appliance === 'desktop-computer'
       ? POWERED_ACTIVE_DURATION * 1_000
       : resolution.appliance === 'printer'
         ? 1_400
@@ -2442,7 +2529,7 @@ export class Game {
           }
           break;
         case 'recolor':
-          if (source !== 'blender') this.applySkillRecolors(command.changes);
+          if (source !== 'blender' && source !== 'hair-dryer') this.applySkillRecolors(command.changes);
           break;
         case 'reconstruct':
           if (source === 'television') this.beginTelevisionReconstruction(command.cableIds, sourceTarget);
@@ -2466,6 +2553,12 @@ export class Game {
           break;
         default:
           break;
+      }
+    }
+    if (source === 'game-controller' && commands.some((command) => command.type === 'grant-continue')) {
+      const continueBuff = this.skillEngine?.state.buff;
+      if (continueBuff?.id === 'continue') {
+        this.hud.showContinueGranted(Number(continueBuff.payload.restoreLives ?? 1));
       }
     }
     this.appliances.setRequiredColors(
@@ -2496,12 +2589,18 @@ export class Game {
     kind: 'reconstruct' | 'swap-ends' | 'expand',
   ): Map<string, ArrowDefinition> {
     const remaining = this.arrows.filter((arrow) => arrow.state !== 'removed');
+    if (kind === 'reconstruct') {
+      return buildTelevisionSpatialReplacements(
+        remaining.map((arrow) => arrow.definition),
+        cableIds,
+      );
+    }
     const replacements = new Map<string, ArrowDefinition>();
     for (const id of cableIds) {
       const arrow = remaining.find((candidate) => candidate.definition.id === id && candidate.state === 'idle');
       if (!arrow) continue;
       const definition = arrow.definition;
-      if (kind === 'swap-ends' || kind === 'reconstruct') {
+      if (kind === 'swap-ends') {
         const candidate = reverseCableKeepingExternalEndpoints(definition);
         const trial = remaining.map((entry) => (
           entry === arrow ? candidate : replacements.get(entry.definition.id) ?? entry.definition
@@ -2602,7 +2701,6 @@ export class Game {
       const previousModel = this.models.get(next.id);
       previousModel?.dispose();
       const model = new PlugCableModel(next, this.appliances.getPlugStyleForColor(next.color));
-      model.setRefrigeratorIceGeometryEnabled(this.activeSkillTest?.id === 'refrigerator');
       model.setVisualThickness(this.skillEngine?.state.debuff?.id === 'rice-thick-cable' ? 1.5 : 1);
       this.models.set(next.id, model);
       this.arrowRoot.add(model.root);
@@ -2618,7 +2716,7 @@ export class Game {
     this.petals.burst(origin, new THREE.Vector3(0, 0.8, 0.2), 20);
     model.root.visible = false;
     this.completeRemoval(arrow);
-    this.skillEngine?.notifyAutoRemoved(cableId);
+    this.skillEngine?.notifyAutoRemoved(cableId, this.arrows.length - this.removedCount > 0);
     return true;
   }
 
@@ -2680,7 +2778,7 @@ export class Game {
 
   private triggerPrinterCopyAutoRemoval(): void {
     const context = this.createSkillContext();
-    const cableId = context.removalSequence[0] ?? context.availableCableIds[0];
+    const cableId = pickPrinterCopyCableId(context);
     if (!cableId) return;
     const availableEnd = availableCableEnds(this.arrows).find((candidate) => candidate.id === cableId);
     if (availableEnd) this.skillAutoRemovalEnds.set(cableId, availableEnd.end);
@@ -2711,9 +2809,16 @@ export class Game {
 
   private handleSkillCardSelected(index: number): void {
     if (this.currentMode !== 'skill' || !this.skillEngine) return;
+    const desktopComputerHadBuff = this.skillEngine.state.buff !== null;
     const resolution = this.skillEngine.selectCard(index, this.createSkillContext());
+    const blockedByDryShield = this.skillEngine.consumeDryShieldBlock();
     this.skillUi.hideCards();
     if (!resolution) {
+      this.pendingDryShieldAbsorb = blockedByDryShield;
+      if (blockedByDryShield) {
+        this.skillUi.showCue('干燥护罩吸收', 'cue', '选中的负面技能已被护罩抵挡。', '扭蛋技能选定');
+        this.queueSkillCommitCue('已吸收');
+      }
       this.finishSkillResolution(false);
       return;
     }
@@ -2733,18 +2838,30 @@ export class Game {
         ? 'kettle-thaw-heat'
       : resolution.appliance === 'printer'
         ? 'printer-scan'
+      : resolution.appliance === 'desktop-computer'
+        ? 'blue-screen'
         : 'none';
+    if (resolution.appliance === 'desktop-computer') {
+      this.beginDesktopComputerFeedback(desktopComputerHadBuff, this.skillEngine.state.currentLives);
+    }
     if (!this.isDedicatedSkillPresentation(resolution) && resolution.appliance !== 'popcorn-machine') {
       resolution.targetCableIds.forEach((id) => this.skillTransientHighlights.add(id));
     }
     const definition = APPLIANCE_SKILL_REGISTRY.get(resolution.appliance);
     this.skillUi.showCue(resolution.label, 'cue', definition?.description ?? '', '扭蛋技能选定');
-    this.queueSkillCommitCue('效果生效', resolution.appliance === 'blender' ? 4_680 : 220);
+    this.queueSkillCommitCue(
+      '效果生效',
+      resolution.appliance === 'blender'
+        ? 4_680
+        : resolution.appliance === 'desktop-computer'
+          ? 3_720
+          : 220,
+    );
     this.beginFanSteamClear(resolution);
     this.beginHumidifierSteamReveal(resolution);
     this.beginCoffeeSplash(resolution);
     this.applySkillCommands(resolution.commands, resolution.appliance);
-    this.syncSkillState();
+    if (resolution.appliance !== 'desktop-computer') this.syncSkillState();
     if (this.skillEngine.state.phase === 'select-recycle-target') {
       this.beginSkillRecycleSelection();
       return;
@@ -2807,10 +2924,11 @@ export class Game {
       const washerPending = this.washerSpin.diagnostics.active
         || this.animations.some((animation) => animation.autoCommitted);
       const kettlePending = this.kettleThaw.diagnostics.active;
+      const toasterPending = this.toasterHeatSwap.diagnostics.active;
       const coffeePending = this.skillEngine.state.debuff?.id === 'coffee-lock'
         && this.skillEngine.state.debuff.turnsRemaining === 0
         && (this.coffeeLockExitTarget?.activeTimeRemaining ?? 0) > 0;
-      if (sequencePending || exitsPending || washerPending || kettlePending || coffeePending) {
+      if (sequencePending || exitsPending || washerPending || kettlePending || toasterPending || coffeePending) {
         this.skillSettleTimer = window.setTimeout(settleWhenReady, 100);
         return;
       }
@@ -2819,10 +2937,12 @@ export class Game {
       this.skillTransientHighlights.clear();
       this.kettleThaw.reset();
       this.skillTransientScreenEffect = 'none';
+      this.desktopComputerFeedback = null;
       this.skillPresentation.complete();
       this.skillEngine.clearExhaustedCoffeeLock();
       this.coffeeLockExitTarget = null;
       this.skillEngine.settle();
+      this.skillEngine.reselectInvalidHints(this.createSkillContext());
       this.syncSkillState();
       this.setSkillInputLocked(false);
       this.syncRequiredColors();
@@ -2845,7 +2965,7 @@ export class Game {
     if (!this.skillEngine) return;
     this.randomLives = this.skillEngine.state.currentLives;
     this.hud.setRandomLives(
-      !this.activeSkillTest || this.activeSkillTest.id === 'popcorn-machine',
+      true,
       this.randomLives,
       this.skillEngine.state.maxLives,
     );
@@ -2854,23 +2974,66 @@ export class Game {
   }
 
   private getPortableSpeakerSpacingTargets(): PortableSpeakerSpacingTarget[] {
-    return this.arrows
-      .filter((arrow) => arrow.state === 'idle' || arrow.state === 'bumping')
-      .map((arrow): PortableSpeakerSpacingTarget | null => {
-        const model = this.models.get(arrow.definition.id);
-        if (!model?.root.visible) return null;
-        return {
-          id: arrow.definition.id,
-          center: model.getBundleBaseCenter(),
-          setOffset: (offset) => model.setBundleSpacingOffset(offset),
-        };
-      })
-      .filter((target): target is PortableSpeakerSpacingTarget => target !== null);
+    let targetIndex = 0;
+    let cacheMatches = true;
+    for (const arrow of this.arrows) {
+      if (arrow.state !== 'idle' && arrow.state !== 'bumping') continue;
+      const model = this.models.get(arrow.definition.id);
+      if (!model?.root.visible) continue;
+      const cached = this.portableSpeakerSpacingTargetsCache[targetIndex];
+      if (!cached
+        || cached.id !== arrow.definition.id
+        || cached.center !== model.getBundleBaseCenterRef()
+        || cached.clearanceSegments !== model.getBundleClearanceSegments()) {
+        cacheMatches = false;
+        break;
+      }
+      targetIndex += 1;
+    }
+    if (cacheMatches && targetIndex === this.portableSpeakerSpacingTargetsCache.length) {
+      return this.portableSpeakerSpacingTargetsCache;
+    }
+
+    const targets: PortableSpeakerSpacingTarget[] = [];
+    for (const arrow of this.arrows) {
+      if (arrow.state !== 'idle' && arrow.state !== 'bumping') continue;
+      const model = this.models.get(arrow.definition.id);
+      if (!model?.root.visible) continue;
+      targets.push({
+        id: arrow.definition.id,
+        center: model.getBundleBaseCenterRef(),
+        clearanceSegments: model.getBundleClearanceSegments(),
+        setOffset: (offset) => model.setBundleSpacingOffset(offset),
+      });
+    }
+    this.portableSpeakerSpacingTargetsCache = targets;
+    return targets;
   }
 
   private syncSkillPresentation(): void {
     if (!this.skillEngine) return;
     const state = this.skillEngine.state;
+    const nextBuffId = state.buff?.id ?? null;
+    const buffChanged = nextBuffId !== this.lastSkillBuffId;
+    if (buffChanged) {
+      const replacingBuff = this.lastSkillBuffId !== null && nextBuffId !== null;
+      this.lastSkillBuffId = nextBuffId;
+      if (replacingBuff) {
+        this.clearSkillBuffVisuals();
+        this.skillBuffVisualReleaseAt = performance.now() + SKILL_BUFF_SWAP_VISUAL_DURATION_MS;
+        window.clearTimeout(this.skillBuffSwapTimer);
+        this.skillBuffSwapTimer = window.setTimeout(() => {
+          this.skillBuffSwapTimer = 0;
+          this.skillBuffVisualReleaseAt = 0;
+          this.syncSkillPresentation();
+        }, SKILL_BUFF_SWAP_VISUAL_DURATION_MS);
+      }
+    }
+    const buffVisualsBlocked = performance.now() < this.skillBuffVisualReleaseAt;
+    this.hud.setContinueReady(
+      state.buff?.id === 'continue',
+      state.buff?.id === 'continue' ? Number(state.buff.payload.restoreLives ?? 1) : 1,
+    );
     const frozenCableIds = state.debuff?.id === 'frozen-plug' ? state.debuff.targetCableIds : [];
     this.refrigeratorFreeze.syncStatus(frozenCableIds);
     const fakeIds = new Set(this.skillEngine.getFakePlugCableIds());
@@ -2885,7 +3048,7 @@ export class Game {
     );
     const screenEffect: SkillScreenEffect = this.skillTransientScreenEffect !== 'none'
       ? this.skillTransientScreenEffect
-      : state.debuff?.id === 'bathroom-steam' && this.activeSkillTest?.id !== 'alarm-clock'
+      : state.debuff?.id === 'bathroom-steam'
         ? 'bathroom-steam'
         : state.debuff?.id === 'coffee-lock'
           ? 'coffee-lock'
@@ -2929,12 +3092,14 @@ export class Game {
     this.bubbleShield.sync(
       this.currentMode === 'skill'
         && !this.openingActive
+        && !buffVisualsBlocked
         && state.buff?.id === 'iridescent-bubble',
       bubbleShieldTargets,
     );
     this.soundWaveShield.sync(
       this.currentMode === 'skill'
         && !this.openingActive
+        && !buffVisualsBlocked
         && state.buff?.id === 'soothing-record',
       bubbleShieldTargets,
     );
@@ -2944,14 +3109,18 @@ export class Game {
     this.dehumidifierDryShield.sync(
       this.currentMode === 'skill'
         && !this.openingActive
+        && !buffVisualsBlocked
         && state.buff?.id === 'dry-shield',
       state.buff?.id === 'dry-shield' ? state.buff.turnsRemaining : null,
       bubbleShieldTargets,
       dehumidifier?.root.getWorldPosition(new THREE.Vector3()),
+      this.pendingDryShieldAbsorb,
     );
+    this.pendingDryShieldAbsorb = false;
     this.portableSpeakerSpacing.sync(
       this.currentMode === 'skill'
         && !this.openingActive
+        && !buffVisualsBlocked
         && state.buff?.id === 'bass-spacing',
       this.getPortableSpeakerSpacingTargets(),
     );
@@ -2966,7 +3135,7 @@ export class Game {
     for (const [id, model] of this.models) {
       model.setFakeTailPlug(fakeIds.has(id));
       model.setOverheated(overheatedCableIds.has(id), microwaveTurns);
-      model.setInductionReveal(inductionCableIds.has(id));
+      model.setInductionReveal(!buffVisualsBlocked && inductionCableIds.has(id) && !overheatedCableIds.has(id));
       if (state.debuff?.id === 'coffee-lock') {
         model.setSkillTint(null);
       }
@@ -2995,6 +3164,8 @@ export class Game {
             : 0,
       );
       const lampGuideEnd = state.lampHintCableId === id
+        && state.popcornHintCableId !== id
+        && !overheatedCableIds.has(id)
         ? this.availableChoices.find(({ arrow }) => arrow.definition.id === id)?.end ?? 'head'
         : null;
       model.setLampGuide(lampGuideEnd);
@@ -3002,12 +3173,70 @@ export class Game {
     this.syncRadioRouteGuide();
   }
 
+  private clearSkillBuffVisuals(): void {
+    const visibleTargets: THREE.Object3D[] = [];
+    this.bubbleShield.sync(false, visibleTargets);
+    this.soundWaveShield.sync(false, visibleTargets);
+    this.dehumidifierDryShield.sync(false, null, visibleTargets, undefined, false);
+    this.portableSpeakerSpacing.sync(false, []);
+    for (const model of this.models.values()) model.setInductionReveal(false);
+  }
+
+  private beginDesktopComputerFeedback(hadBuff: boolean, livesAfter: number): void {
+    this.desktopComputerFeedback = {
+      startedAt: performance.now(),
+      hadBuff,
+      livesAfter,
+      committed: false,
+    };
+    this.skillTransientScreenEffect = 'blue-screen';
+    document.documentElement.dataset.desktopComputerFeedback = 'pending';
+    this.pipeline.setSkillEffect('blue-screen', true);
+    this.pipeline.setSkillEffectProgress(0);
+    this.publishDiagnostics();
+  }
+
+  private updateDesktopComputerFeedback(): void {
+    const feedback = this.desktopComputerFeedback;
+    if (!feedback) return;
+    const evidenceTime = window.__APPLIANCE_PERFORMANCE_TIME_OVERRIDE__;
+    const timelineTime = Number.isFinite(evidenceTime) && evidenceTime! > 0
+      ? evidenceTime!
+      : Math.max(0, (performance.now() - feedback.startedAt) / 1_000);
+    this.pipeline.setSkillEffect('blue-screen');
+    this.pipeline.setSkillEffectProgress(timelineTime / POWERED_ACTIVE_DURATION);
+    if (feedback.committed || timelineTime < 3.72) return;
+    feedback.committed = true;
+    if (feedback.hadBuff) {
+      document.documentElement.dataset.desktopComputerFeedback = 'buff-deleted';
+      this.skillUi.showComputerBuffDeleted();
+      this.skillUi.setCuePhase('commit', 'BUFF 已删除');
+      this.hud.flash('蓝屏崩溃：BUFF 已删除', true);
+    } else {
+      document.documentElement.dataset.desktopComputerFeedback = 'life-lost';
+      this.hud.showComputerLifeLost(feedback.livesAfter);
+      this.skillUi.setCuePhase('commit', '生命 -1');
+    }
+    this.syncSkillState();
+    this.publishDiagnostics();
+  }
+
   private syncRadioRouteGuide(): void {
+    const availableIds = new Set(this.availableChoices.map(({ arrow }) => arrow.definition.id));
+    const state = this.skillEngine?.state;
+    const higherPriorityHintIds = new Set<string>([
+      ...(state?.lampHintCableId ? [state.lampHintCableId] : []),
+      ...(state?.popcornHintCableId ? [state.popcornHintCableId] : []),
+      ...(state?.debuff?.id === 'overheated-plug' ? state.debuff.targetCableIds : []),
+    ]);
     this.radioRouteCableIds = this.radioRouteCableIds.filter((id) => {
       const arrow = this.arrows.find((candidate) => candidate.definition.id === id);
-      return arrow?.state === 'idle' && this.models.get(id)?.root.visible === true;
+      return arrow?.state === 'idle'
+        && availableIds.has(id)
+        && this.models.get(id)?.root.visible === true;
     });
     const targets = this.radioRouteCableIds
+      .filter((id) => !higherPriorityHintIds.has(id))
       .map((id): SkillPresentationTarget | null => {
         const model = this.models.get(id);
         const arrow = this.arrows.find((candidate) => candidate.definition.id === id);
@@ -3142,7 +3371,11 @@ export class Game {
     this.bubbleShield.update(delta, elapsed, this.orbit.getState());
     this.soundWaveShield.update(delta, elapsed);
     this.dehumidifierDryShield.update(delta, elapsed);
-    this.portableSpeakerSpacing.update(delta, this.getPortableSpeakerSpacingTargets());
+    if (this.portableSpeakerSpacing.phase === 'idle') {
+      this.portableSpeakerSpacing.update(delta);
+    } else {
+      this.portableSpeakerSpacing.update(delta, this.getPortableSpeakerSpacingTargets());
+    }
     this.petals.setCanopyFlow(this.dehumidifierDryShield.petalFlow);
     this.petals.update(delta);
     this.televisionReconstruction.update(this.camera);
@@ -3166,14 +3399,13 @@ export class Game {
         ? this.refrigeratorFreeze.environmentAmount
         : 0,
     );
-    const refrigeratorTestPreview = this.activeSkillTest?.id === 'refrigerator';
     for (const [id, model] of this.models) {
       model.updateRecycleSelection(elapsed);
       model.updateOverheat(delta, elapsed);
       const frozen = this.refrigeratorFreeze.hasTarget(id);
-      // The formal skill can run on large boards. Build the heavier ice shell
-      // only for its actual targets; the dedicated test keeps all cables warm.
-      model.setRefrigeratorIceGeometryEnabled(refrigeratorTestPreview || frozen);
+      // The formal skill can run on large boards, so build the heavier ice
+      // shell only for its actual targets.
+      model.setRefrigeratorIceGeometryEnabled(frozen);
       model.setFrozen(
         frozen ? this.refrigeratorFreeze.cableAmount : 0,
         frozen ? this.refrigeratorFreeze.cableProgress : 0,
@@ -3213,6 +3445,7 @@ export class Game {
     }
     this.sensory.register(this.appliances.targets);
     this.performances.update(delta, elapsed, this.camera, this.appliances.targets, this.petals);
+    this.updateDesktopComputerFeedback();
     this.sensory.update(
       this.appliances.targets,
       themeSnapshot.progress,
@@ -3321,7 +3554,10 @@ export class Game {
             continue;
           }
           this.completeRemoval(animation.arrow, false);
-          this.skillEngine?.notifyAutoRemoved(animation.arrow.definition.id);
+           this.skillEngine?.notifyAutoRemoved(
+             animation.arrow.definition.id,
+             this.arrows.length - this.removedCount > 0,
+           );
           this.skillAutoRemovalEnds.delete(animation.arrow.definition.id);
           continue;
         }
@@ -3402,7 +3638,10 @@ export class Game {
       arrow.state = 'removed';
       this.removedCount += 1;
       committed += 1;
-      this.skillEngine?.notifyAutoRemoved(arrow.definition.id);
+      this.skillEngine?.notifyAutoRemoved(
+        arrow.definition.id,
+        this.arrows.length - this.removedCount > 0,
+      );
     }
     if (committed === 0) return;
     const remaining = this.arrows.length - this.removedCount;
@@ -3510,6 +3749,152 @@ export class Game {
     }
   }
 
+  private profileRenderBreakdown(): RenderCostProfile {
+    const directChildren = [...this.scene.children];
+    const originalVisibility = directChildren.map((object) => ({ object, visible: object.visible }));
+    const originalVisibilityByObject = new Map(originalVisibility.map(({ object, visible }) => [object, visible]));
+    const previousTarget = this.renderer.getRenderTarget();
+    const profileEntries: RenderCostProfileEntry[] = [];
+    const liveRenderer = {
+      calls: this.renderer.info.render.calls,
+      triangles: this.renderer.info.render.triangles,
+      geometries: this.renderer.info.memory.geometries,
+      textures: this.renderer.info.memory.textures,
+    };
+    const labels = new Map<THREE.Object3D, string>([
+      [this.arrowRoot, 'arrows'],
+      [this.appliances.root, 'appliances'],
+      [this.connections.root, 'connections'],
+      [this.petals.mesh, 'season-petals'],
+      [this.openingScene.root, 'opening-scene'],
+      [this.performances.root, 'appliance-performance-effects'],
+      [this.sensory.root, 'appliance-sensory'],
+      [this.skillEffects.root, 'skill-effect-models'],
+      [this.bubbleShield.root, 'bubble-shield'],
+      [this.soundWaveShield.root, 'sound-wave-shield'],
+      [this.dehumidifierDryShield.root, 'dehumidifier-dry-shield'],
+      [this.sky.dome, 'sky-dome'],
+      [this.sky.stars, 'sky-stars'],
+      [this.sky.explorationEyes, 'sky-exploration-eyes'],
+      [this.sky.clouds, 'sky-clouds'],
+    ]);
+    const geometryTriangles = (object: THREE.Mesh): number => {
+      const geometry = object.geometry;
+      const sourceCount = geometry.index?.count ?? geometry.getAttribute('position')?.count ?? 0;
+      const drawStart = geometry.drawRange.start ?? 0;
+      const drawCount = geometry.drawRange.count === Infinity
+        ? sourceCount - drawStart
+        : Math.min(geometry.drawRange.count, sourceCount - drawStart);
+      const instanceCount = object instanceof THREE.InstancedMesh ? object.count : 1;
+      return Math.max(0, Math.floor(drawCount / 3)) * instanceCount;
+    };
+    const describe = (object: THREE.Object3D): Omit<RenderCostProfileEntry, 'calls'> => {
+      const geometries = new Set<THREE.BufferGeometry>();
+      const materials = new Set<THREE.Material>();
+      let objects = 0;
+      let renderables = 0;
+      let visibleRenderables = 0;
+      let meshes = 0;
+      let lines = 0;
+      let points = 0;
+      let lights = 0;
+      let triangles = 0;
+      let potentialTriangles = 0;
+      object.traverse((child) => {
+        objects += 1;
+        if (child instanceof THREE.Light) lights += 1;
+        if (
+          child instanceof THREE.Mesh
+          || child instanceof THREE.Line
+          || child instanceof THREE.LineLoop
+          || child instanceof THREE.LineSegments
+          || child instanceof THREE.Points
+        ) {
+          renderables += 1;
+          const renderable = child as THREE.Mesh;
+          let effectivelyVisible = true;
+          let cursor: THREE.Object3D | null = child;
+          while (cursor) {
+            if (!cursor.visible) {
+              effectivelyVisible = false;
+              break;
+            }
+            if (cursor === object) break;
+            cursor = cursor.parent;
+          }
+          if (effectivelyVisible) visibleRenderables += 1;
+          if (child instanceof THREE.Mesh) meshes += 1;
+          else if (child instanceof THREE.Points) points += 1;
+          else lines += 1;
+          if (renderable.geometry) {
+            geometries.add(renderable.geometry);
+            if (child instanceof THREE.Mesh) {
+              const meshTriangles = geometryTriangles(child);
+              potentialTriangles += meshTriangles;
+              if (effectivelyVisible) triangles += meshTriangles;
+            }
+          }
+          const material = renderable.material;
+          if (Array.isArray(material)) material.forEach((entry) => materials.add(entry));
+          else if (material) materials.add(material);
+        }
+      });
+      return {
+        name: labels.get(object) ?? (object.name || object.type),
+        type: object.type,
+        visible: object.visible,
+        objects,
+        renderables,
+        visibleRenderables,
+        meshes,
+        lines,
+        points,
+        lights,
+        materials: materials.size,
+        geometries: geometries.size,
+        triangles,
+        potentialTriangles,
+      };
+    };
+    const renderEntry = (object: THREE.Object3D): number => {
+      directChildren.forEach((child) => {
+        child.visible = child instanceof THREE.Light
+          || (child === object && originalVisibilityByObject.get(child) === true);
+      });
+      this.renderer.info.reset();
+      this.renderer.setRenderTarget(this.applianceGeometryWarmupTarget);
+      this.renderer.clear();
+      this.renderer.render(this.scene, this.camera);
+      return this.renderer.info.render.calls;
+    };
+    try {
+      directChildren.forEach((child) => { child.visible = child instanceof THREE.Light || child.visible; });
+      this.renderer.info.reset();
+      this.renderer.setRenderTarget(this.applianceGeometryWarmupTarget);
+      this.renderer.clear();
+      this.renderer.render(this.scene, this.camera);
+      const sceneRenderer = {
+        calls: this.renderer.info.render.calls,
+        triangles: this.renderer.info.render.triangles,
+        geometries: this.renderer.info.memory.geometries,
+        textures: this.renderer.info.memory.textures,
+      };
+      for (const object of directChildren) {
+        profileEntries.push({ ...describe(object), calls: renderEntry(object) });
+      }
+      return {
+        capturedAt: new Date().toISOString(),
+        liveRenderer,
+        sceneRenderer,
+        estimatedPostProcessCalls: Math.max(0, liveRenderer.calls - sceneRenderer.calls),
+        entries: profileEntries,
+      };
+    } finally {
+      originalVisibility.forEach(({ object, visible }) => { object.visible = visible; });
+      this.renderer.setRenderTarget(previousTarget);
+    }
+  }
+
   private resize(): void {
     const width = Math.max(1, this.canvas.clientWidth);
     const height = Math.max(1, this.canvas.clientHeight);
@@ -3529,14 +3914,29 @@ export class Game {
         : [],
     );
     const availableKeys = new Set(availableCableEnds(this.arrows).map(({ id, end }) => `${id}:${end}`));
-    const frozenIds = new Set(this.currentMode === 'skill' ? this.skillEngine?.getFrozenCableIds() ?? [] : []);
+    let frozenIds = new Set(this.currentMode === 'skill' ? this.skillEngine?.getFrozenCableIds() ?? [] : []);
     const fakeIds = new Set(this.currentMode === 'skill' ? this.skillEngine?.getFakePlugCableIds() ?? [] : []);
-    const available = allChoices.filter(({ arrow, end }) =>
+    const baseAvailable = allChoices.filter(({ arrow, end }) =>
       runtimeById.has(arrow.definition.id)
-      && !frozenIds.has(arrow.definition.id)
       && !(end === 'tail' && fakeIds.has(arrow.definition.id))
       && availableKeys.has(`${arrow.definition.id}:${end}`),
     );
+    if (
+      this.currentMode === 'skill'
+      && baseAvailable.length > 0
+      && frozenStatusBlocksEveryAvailableCable(
+        [...new Set(baseAvailable.map(({ arrow }) => arrow.definition.id))],
+        frozenIds,
+      )
+      && this.skillEngine?.clearFrozenDeadlock()
+    ) {
+      frozenIds = new Set();
+      this.skillUi.render(this.skillEngine.state);
+      this.refrigeratorFreeze.beginThaw(0.9);
+      this.hud.flash('所有出口被冻结，已自动解除急冻', true);
+      this.skillUi.showCue('急冻自动解除', 'commit', '避免出现无可抽线路。', '安全兜底');
+    }
+    const available = baseAvailable.filter(({ arrow }) => !frozenIds.has(arrow.definition.id));
     this.availableChoices = available;
     if (
       this.activeHint
@@ -3734,8 +4134,8 @@ export class Game {
       randomGameOver: this.randomGameOver,
       skill: this.skillEngine
         ? {
-            testId: this.activeSkillTest?.id ?? null,
-            invulnerable: this.activeSkillTest !== null,
+            testId: null,
+            invulnerable: false,
             registrySize: APPLIANCE_SKILL_REGISTRY.size,
             phase: this.skillEngine.state.phase,
             inputLocked: this.skillInputLocked,
@@ -3872,6 +4272,7 @@ export class Game {
         opening: this.openingScene.root.visible,
       },
       appliances: this.appliances.getStateSummary(),
+      applianceReplacement: this.appliances.getReplacementDiagnostics(),
       routing: this.appliances.getRoutingSummary(),
       context: {
         losses: this.contextLosses,

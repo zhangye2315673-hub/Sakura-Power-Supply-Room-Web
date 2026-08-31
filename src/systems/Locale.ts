@@ -22,7 +22,6 @@ const zh = {
   'start.rush': 'RUSH挑战',
   'start.double': '双头挑战',
   'start.skill': '技能挑战',
-  'start.skillTest': '便携音箱技能测试',
   'start.waiting': '线路准备中…',
   'start.preparing': '正在准备第一关…',
   'start.connecting': '正在接通…',
@@ -60,7 +59,6 @@ const zh = {
   'mode.explore': '探索模式',
   'mode.rush': 'RUSH 速度挑战',
   'mode.skill': '技能挑战',
-  'mode.skillTest': '便携音箱技能测试',
   'mode.level': '第 {level} 关 · {shape}',
   'continue.next': '进入下一关 →',
   'continue.random': '进入随机挑战 →',
@@ -81,6 +79,10 @@ const zh = {
   'gameOver.retry': '重新挑战',
   'gameOver.new': '生成新线路',
   'lives.label': '生命',
+  'lives.continueReady': '随机挑战生命值，复活待命，生命归零时恢复 {restore} 格',
+  'lives.continueReadyTitle': '复活待命',
+  'lives.continueRestorePrefix': '归零恢复 ',
+  'lives.continueRestoreSuffix': ' 格',
   'hint.label': '提示',
   'hint.aria': '提示一个可拔出的插头',
   'hint.remaining': '提示一个可拔出的插头，剩余 {count} 次',
@@ -138,7 +140,6 @@ const en: Record<keyof typeof zh, string> = {
   'start.rush': 'RUSH CHALLENGE',
   'start.double': 'DOUBLE-PLUG',
   'start.skill': 'SKILL CHALLENGE',
-  'start.skillTest': 'PORTABLE SPEAKER SKILL TEST',
   'start.waiting': 'PREPARING CABLES…',
   'start.preparing': 'Preparing Level 1…',
   'start.connecting': 'Connecting…',
@@ -176,7 +177,6 @@ const en: Record<keyof typeof zh, string> = {
   'mode.explore': 'EXPLORATION MODE',
   'mode.rush': 'RUSH SPEED TRIAL',
   'mode.skill': 'SKILL CHALLENGE',
-  'mode.skillTest': 'PORTABLE SPEAKER SKILL TEST',
   'mode.level': 'LEVEL {level} · {shape}',
   'continue.next': 'NEXT LEVEL →',
   'continue.random': 'RANDOM CHALLENGE →',
@@ -197,6 +197,10 @@ const en: Record<keyof typeof zh, string> = {
   'gameOver.retry': 'RETRY',
   'gameOver.new': 'NEW CIRCUIT',
   'lives.label': 'LIVES',
+  'lives.continueReady': 'Random challenge lives, continue ready; restore {restore} lives at zero',
+  'lives.continueReadyTitle': 'CONTINUE READY',
+  'lives.continueRestorePrefix': 'Restore ',
+  'lives.continueRestoreSuffix': ' lives',
   'hint.label': 'HINT',
   'hint.aria': 'Reveal one removable plug',
   'hint.remaining': 'Reveal one removable plug, {count} hints remaining',
@@ -288,7 +292,6 @@ export function applyStaticTranslations(): void {
   setText('#start-rush-button', t('start.rush'));
   setText('#start-double-ended-button', t('start.double'));
   setText('#start-skill-button', t('start.skill'));
-  setText('#start-skill-test-button', t('start.skillTest'));
   setText('#appliance-gallery-button', t('actions.gallery'));
   setText('#reset-button', t('actions.reset'));
   setText('#new-button', t('actions.random'));

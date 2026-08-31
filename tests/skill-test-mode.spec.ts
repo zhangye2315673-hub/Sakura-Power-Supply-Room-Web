@@ -26,6 +26,9 @@ import {
   BLENDER_SKILL_TEST,
   DEHUMIDIFIER_SKILL_TEST,
   PORTABLE_SPEAKER_SKILL_TEST,
+  HAIR_DRYER_SKILL_TEST,
+  DESKTOP_COMPUTER_SKILL_TEST,
+  GAME_CONTROLLER_SKILL_TEST,
   RADIO_SKILL_TEST,
   REFRIGERATOR_SKILL_TEST,
   TELEVISION_SKILL_TEST,
@@ -35,6 +38,8 @@ import {
 } from '../src/skill/SkillTestMode';
 import { SoundWaveShieldPresentation } from '../src/skill/SoundWaveShieldPresentation';
 import { DehumidifierDryShieldPresentation } from '../src/skill/DehumidifierDryShieldPresentation';
+import { visiblePopcornHintCableId } from '../src/skill/SkillEffectModelKit';
+import { SkillChallengeEngine } from '../src/skill/SkillChallengeEngine';
 import {
   PORTABLE_SPEAKER_SPACING_MULTIPLIER,
   PORTABLE_SPEAKER_SPACING_RELEASE_DURATION,
@@ -540,25 +545,98 @@ test('portable speaker spacing pulses on the shared beat timeline and doubles on
 
   const presentation = new PortableSpeakerSpacingPresentation();
   const applied = new Map<string, THREE.Vector3>();
-  const targets = [-1, 0, 1].map((x, index) => ({
+  const targets = [-0.8, 0.8].map((x, index) => ({
     id: `speaker-spacing-${index + 1}`,
     center: new THREE.Vector3(x, 0, 0),
+    clearanceSegments: [{
+      start: new THREE.Vector3(x - 0.5, 0, 0),
+      end: new THREE.Vector3(x + 0.5, 0, 0),
+      radius: 0.1,
+    }],
     setOffset: (offset: THREE.Vector3) => applied.set(`speaker-spacing-${index + 1}`, offset.clone()),
   }));
+  const originalCenterDistance = targets[0].center.distanceTo(targets[1].center);
+  const originalSurfaceGap = originalCenterDistance - 1 - 0.2;
   presentation.start(targets);
   presentation.update(presentation.durationMs / 1_000, targets);
 
   expect(presentation.diagnostics.phase).toBe('holding');
   expect(presentation.diagnostics.multiplier).toBe(PORTABLE_SPEAKER_SPACING_MULTIPLIER);
+  expect(presentation.diagnostics.referenceSurfaceGap).toBeCloseTo(originalSurfaceGap, 5);
   const left = targets[0].center.clone().add(applied.get(targets[0].id)!);
-  const right = targets[2].center.clone().add(applied.get(targets[2].id)!);
-  expect(left.distanceTo(right)).toBeCloseTo(4, 5);
-  expect(targets[0].center.distanceTo(targets[2].center)).toBeCloseTo(2, 5);
+  const right = targets[1].center.clone().add(applied.get(targets[1].id)!);
+  const finalCenterDistance = left.distanceTo(right);
+  const finalSurfaceGap = finalCenterDistance - 1 - 0.2;
+  expect(finalSurfaceGap).toBeCloseTo(originalSurfaceGap * 2, 5);
+  expect(finalCenterDistance).toBeCloseTo(originalCenterDistance + originalSurfaceGap, 5);
+  expect(finalCenterDistance).toBeLessThan(originalCenterDistance * 2);
 
-  presentation.sync(false, targets);
-  presentation.update(PORTABLE_SPEAKER_SPACING_RELEASE_DURATION, targets);
+  const thickTargets = targets.map((target) => ({
+    ...target,
+    clearanceSegments: target.clearanceSegments.map((segment) => ({ ...segment, radius: 0.15 })),
+  }));
+  presentation.sync(true, thickTargets);
+  expect(presentation.diagnostics.referenceSurfaceGap).toBeCloseTo(originalCenterDistance - 1 - 0.3, 5);
+
+  presentation.sync(false, thickTargets);
+  presentation.update(PORTABLE_SPEAKER_SPACING_RELEASE_DURATION, thickTargets);
   expect(presentation.diagnostics.phase).toBe('idle');
   expect([...applied.values()].every((offset) => offset.length() < 0.00001)).toBe(true);
+});
+
+test('hair dryer skill test primes three frozen cables before the recolor branch', () => {
+  const puzzle = buildSkillTestPuzzle(HAIR_DRYER_SKILL_TEST);
+  const availableIds = new Set(availableCableEnds(puzzle.arrows.map(makeRuntime)).map(({ id }) => id));
+  const primed = HAIR_DRYER_SKILL_TEST.initialCommands[0];
+
+  expect(puzzle.arrows).toHaveLength(4);
+  expect(puzzle.initiallyFree).toBe(3);
+  expect(availableIds).toEqual(new Set([
+    'hair-dryer-test-key',
+    'hair-dryer-test-side',
+    'hair-dryer-test-depth',
+  ]));
+  expect(puzzle.arrows.find(({ id }) => id === 'hair-dryer-test-side')?.color).toBe(HAIR_DRYER_SKILL_TEST.accent);
+  expect(puzzle.arrows.filter(({ color }) => color !== HAIR_DRYER_SKILL_TEST.accent)).toHaveLength(2);
+  expect(HAIR_DRYER_SKILL_TEST.applianceDefinition.id).toBe('hair-dryer');
+  expect(primed?.type).toBe('set-status');
+  if (primed?.type !== 'set-status') throw new Error('Hair dryer skill test must prime frozen-plug.');
+  expect(primed.status.id).toBe('frozen-plug');
+  expect(primed.status.targetCableIds).toEqual([
+    'hair-dryer-test-blocked',
+    'hair-dryer-test-key',
+    'hair-dryer-test-depth',
+  ]);
+});
+
+test('desktop computer skill test primes a removable buff before the damage branch', () => {
+  const puzzle = buildSkillTestPuzzle(DESKTOP_COMPUTER_SKILL_TEST);
+  const availableIds = new Set(availableCableEnds(puzzle.arrows.map(makeRuntime)).map(({ id }) => id));
+
+  expect(puzzle.arrows).toHaveLength(4);
+  expect(puzzle.initiallyFree).toBe(3);
+  expect(availableIds).toEqual(new Set([
+    'desktop-computer-test-key',
+    'desktop-computer-test-side',
+    'desktop-computer-test-depth',
+  ]));
+  expect(DESKTOP_COMPUTER_SKILL_TEST.applianceDefinition.id).toBe('desktop-computer');
+  expect(DESKTOP_COMPUTER_SKILL_TEST.initialCommands).toEqual([{ type: 'grant-continue' }]);
+});
+
+test('game controller skill test starts empty with three readable exits', () => {
+  const puzzle = buildSkillTestPuzzle(GAME_CONTROLLER_SKILL_TEST);
+  const availableIds = new Set(availableCableEnds(puzzle.arrows.map(makeRuntime)).map(({ id }) => id));
+
+  expect(puzzle.arrows).toHaveLength(4);
+  expect(puzzle.initiallyFree).toBe(3);
+  expect(availableIds).toEqual(new Set([
+    'game-controller-test-key',
+    'game-controller-test-side',
+    'game-controller-test-depth',
+  ]));
+  expect(GAME_CONTROLLER_SKILL_TEST.applianceDefinition.id).toBe('game-controller');
+  expect(GAME_CONTROLLER_SKILL_TEST.initialCommands).toEqual([]);
 });
 
 test('dehumidifier dry shield uses transient extraction sweeps for turns and absorption', () => {
@@ -588,13 +666,43 @@ test('dehumidifier dry shield uses transient extraction sweeps for turns and abs
   expect(presentation.diagnostics.sweepCycles).toBe(1);
 
   presentation.update(0, 17);
-  presentation.sync(false, null, [], source);
+  presentation.sync(false, null, [], source, true);
   expect(presentation.diagnostics.phase).toBe('absorb');
   expect(presentation.diagnostics.absorbCount).toBe(1);
+
+  presentation.reset();
+  presentation.update(0, 20);
+  presentation.sync(true, 3, [target], source);
+  presentation.sync(false, null, [], source);
+  expect(presentation.diagnostics.phase).toBe('idle');
+  expect(presentation.diagnostics.absorbCount).toBe(0);
 
   presentation.dispose();
   geometry.dispose();
   material.dispose();
+});
+
+test('microwave marker temporarily suppresses a popcorn marker on the same plug', () => {
+  const engine = new SkillChallengeEngine(20260828);
+  engine.primeForSkillTest([
+    { type: 'set-hint', source: 'popcorn', cableId: 'target' },
+    {
+      type: 'set-status',
+      slot: 'debuff',
+      status: {
+        id: 'overheated-plug',
+        sourceAppliance: 'microwave',
+        iconId: 'debuff-overheated-plug',
+        turnsRemaining: 2,
+        targetCableIds: ['target'],
+        payload: {},
+        createdBySkillEventIndex: 0,
+      },
+    },
+  ]);
+  expect(visiblePopcornHintCableId(engine.state)).toBeNull();
+
+  expect(visiblePopcornHintCableId({ ...engine.state, debuff: null })).toBe('target');
 });
 
 test('seasonal petals follow the dehumidifier canopy outer arc only while visible', () => {
@@ -1102,26 +1210,22 @@ test('direct dehumidifier test preserves the finalized dry-shield skill', async 
     && url.searchParams.get('layout') === null);
 });
 
-test('main menu starts the portable speaker three-turn rhythm spacing skill test', async ({ page }) => {
+test('direct portable speaker skill test preserves the finalized rhythm spacing effect', async ({ page }) => {
   test.setTimeout(180_000);
   await page.addInitScript(() => {
     window.__APPLIANCE_PERFORMANCE_TIME_OVERRIDE__ = 0;
   });
-  await page.goto('/?theme=day');
+  await page.goto('/?theme=day&mode=skill-test&direct=1&skill=portable-speaker&seed=20260828');
   await page.waitForFunction(
     () => window.__THREE_GAME_DIAGNOSTICS__?.opening.ready === true,
     null,
     { timeout: 90_000 },
   );
-  const startingRevision = await page.evaluate(() => window.__THREE_GAME_DIAGNOSTICS__?.puzzleRevision ?? 0);
-  await page.click('#challenge-mode-button');
-  await expect(page.locator('#start-skill-test-button')).toHaveText('便携音箱技能测试');
-  await page.click('#start-skill-test-button');
+  expect(await page.evaluate(() => window.__FINISH_OPENING_FOR_EVIDENCE__?.() ?? false)).toBe(true);
   await page.waitForFunction(
-    (revision) => {
+    () => {
       const diagnostics = window.__THREE_GAME_DIAGNOSTICS__;
       return diagnostics?.opening.active === false
-        && diagnostics.puzzleRevision > revision
         && diagnostics.skill?.testId === 'portable-speaker'
         && diagnostics.skill.inputLocked === false
         && diagnostics.totalArrows === 4
@@ -1129,7 +1233,7 @@ test('main menu starts the portable speaker three-turn rhythm spacing skill test
         && diagnostics.blockedClickTarget !== null
         && diagnostics.appliances.some(({ kind }) => kind === 'portable-speaker');
     },
-    startingRevision,
+    null,
     { timeout: 90_000 },
   );
   expect(await page.evaluate(
@@ -1147,7 +1251,7 @@ test('main menu starts the portable speaker three-turn rhythm spacing skill test
   }, null, { timeout: 60_000 });
   await expect(page.locator('#skill-cue-title')).toHaveText('节拍扩距');
   await expect(page.locator('#skill-cue-detail')).toHaveText(
-    '线组随音乐逐拍压缩、膨胀，最终保持 2 倍线间距 3 回合；只改变视觉间距，不改变可抽判定。',
+    '线组随音乐逐拍压缩、膨胀，最终让线与线外轮廓之间的净空约为原来的 2 倍，持续 3 回合；不改变可抽判定。',
   );
   await expect(page.locator('#skill-buff-slot')).toBeVisible();
   await expect(page.locator('#skill-buff-slot')).toHaveAttribute('data-status', 'bass-spacing');
@@ -1156,6 +1260,7 @@ test('main menu starts the portable speaker three-turn rhythm spacing skill test
     const skill = window.__THREE_GAME_DIAGNOSTICS__!.skill!;
     return {
       effectAssets: skill.effectAssets,
+      spacing: skill.portableSpeakerSpacing,
       shiftedCableCount: skill.cableEffects.filter(({ bundleSpacingOffsetLength }) => (
         bundleSpacingOffsetLength > 0.01
       )).length,
@@ -1164,11 +1269,323 @@ test('main menu starts the portable speaker three-turn rhythm spacing skill test
     };
   });
   expect(visualState.effectAssets).not.toContain('speaker-bass-wave-arcs');
+  expect(visualState.spacing.referenceSurfaceGap).toBeGreaterThan(0.08);
+  expect(visualState.spacing.maxOffset).toBeLessThanOrEqual(0.26);
   expect(visualState.shiftedCableCount).toBeGreaterThanOrEqual(2);
   expect(visualState.thicknesses.every((scale) => scale === 1)).toBe(true);
   expect(visualState.recycleScales.every((scale) => scale === 1)).toBe(true);
   await page.waitForURL((url) => url.searchParams.get('skill') === 'portable-speaker'
     && url.searchParams.get('layout') === null);
+});
+
+test('direct hair dryer test preserves the finalized thaw and progressive recolor effect', async ({ page }) => {
+  test.setTimeout(180_000);
+  await page.addInitScript(() => {
+    window.__APPLIANCE_PERFORMANCE_TIME_OVERRIDE__ = 0;
+  });
+  await page.goto('/?theme=day&mode=skill-test&direct=1&skill=hair-dryer&seed=20260828');
+  await page.waitForFunction(
+    () => window.__THREE_GAME_DIAGNOSTICS__?.opening.ready === true,
+    null,
+    { timeout: 90_000 },
+  );
+  expect(await page.evaluate(() => window.__FINISH_OPENING_FOR_EVIDENCE__?.() ?? false)).toBe(true);
+  await page.waitForFunction(
+    () => {
+      const diagnostics = window.__THREE_GAME_DIAGNOSTICS__;
+      return diagnostics?.opening.active === false
+        && diagnostics.skill?.testId === 'hair-dryer'
+        && diagnostics.skill.inputLocked === false
+        && diagnostics.totalArrows === 4
+        && diagnostics.skill.debuff === 'frozen-plug'
+        && diagnostics.skill.cableEffects.filter(({ freezeAmount }) => freezeAmount > 0.99).length === 3
+        && diagnostics.clickTarget !== null
+        && diagnostics.blockedClickTarget !== null
+        && diagnostics.appliances.length === 1
+        && diagnostics.appliances[0]?.kind === 'hair-dryer';
+    },
+    null,
+    { timeout: 90_000 },
+  );
+  await expect(page.locator('#skill-cue-title')).toHaveText('解冻或热风改色');
+  await expect(page.locator('#skill-cue-detail')).toHaveText('优先解冻，否则把一根线改为当前前两种有效路线色之一。');
+  expect(await page.evaluate(
+    () => window.__THREE_GAME_DIAGNOSTICS__!.skill!.effectAssets.includes('hair-dryer-heat-ribbon'),
+  )).toBe(false);
+  expect(await page.evaluate(
+    () => window.__PULL_CABLE_FOR_EVIDENCE__?.('hair-dryer-test-side') ?? false,
+  )).toBe(true);
+  await page.waitForFunction(() => {
+    const diagnostics = window.__THREE_GAME_DIAGNOSTICS__;
+    const thaw = diagnostics?.skill?.refrigeratorFreeze;
+    return diagnostics?.skill?.debuff === null
+      && thaw?.phase === 'thawing'
+      && thaw.cableAmount > 0.08
+      && thaw.cableAmount < 0.92
+      && diagnostics.skill.cableEffects.filter(({ freezeAmount }) => freezeAmount > 0).length === 3;
+  }, null, { timeout: 30_000 });
+  await page.waitForFunction(() => {
+    const diagnostics = window.__THREE_GAME_DIAGNOSTICS__;
+    return diagnostics?.skill?.phase === 'idle'
+      && diagnostics.skill.inputLocked === false
+      && diagnostics.remainingArrows === 3
+      && diagnostics.skill.buff === null
+      && diagnostics.skill.debuff === null
+      && diagnostics.skill.refrigeratorFreeze.phase === 'idle'
+      && diagnostics.skill.cableEffects.every(({ freezeAmount }) => freezeAmount === 0)
+      && !diagnostics.skill.effectAssets.includes('hair-dryer-heat-ribbon');
+  }, null, { timeout: 60_000 });
+
+  const beforeRecolor = await page.evaluate(() => Object.fromEntries(
+    window.__THREE_GAME_DIAGNOSTICS__!.skill!.cableEffects.map(({ id, baseColor }) => [id, baseColor]),
+  ));
+  await page.evaluate(() => { window.__APPLIANCE_PERFORMANCE_TIME_OVERRIDE__ = 6; });
+  await page.waitForFunction(() => {
+    const diagnostics = window.__THREE_GAME_DIAGNOSTICS__;
+    return diagnostics?.activeAnimations === 0 && diagnostics.activeConnections === 0;
+  }, null, { timeout: 45_000 });
+  expect(await page.evaluate(() => window.__SETTLE_APPLIANCE_FOR_EVIDENCE__?.() ?? false)).toBe(true);
+  await page.evaluate(() => { window.__APPLIANCE_PERFORMANCE_TIME_OVERRIDE__ = 0; });
+  expect(await page.evaluate(() => window.__PULL_CABLE_FOR_EVIDENCE__?.() ?? false)).toBe(true);
+  await page.waitForFunction(() => {
+    const presentation = window.__THREE_GAME_DIAGNOSTICS__?.skill?.presentation;
+    if (presentation?.skillId !== 'hair-dryer-branch'
+      || presentation.activeTimelines !== 1
+      || presentation.recolorActiveCableCount !== 1
+      || !(window.__FREEZE_SKILL_PRESENTATION_FOR_EVIDENCE__?.(1_000) ?? false)) return false;
+    const skill = window.__THREE_GAME_DIAGNOSTICS__!.skill!;
+    const midpoint = {
+      presentation: { ...skill.presentation },
+      effects: skill.cableEffects
+        .filter(({ skillRecolorColor }) => skillRecolorColor !== null)
+        .map((effect) => ({ ...effect })),
+      effectAssets: [...skill.effectAssets],
+    };
+    const committed = window.__FREEZE_SKILL_PRESENTATION_FOR_EVIDENCE__?.(2_100) ?? false;
+    document.documentElement.dataset.hairDryerRecolorEvidence = JSON.stringify({ midpoint, committed });
+    return committed;
+  }, null, { timeout: 30_000 });
+  const snapshots = await page.evaluate(() => JSON.parse(
+    document.documentElement.dataset.hairDryerRecolorEvidence ?? '{}',
+  ));
+  const { midpoint } = snapshots;
+  expect(midpoint.presentation.recolorProgress).toBeGreaterThan(0.1);
+  expect(midpoint.presentation.recolorProgress).toBeLessThan(0.9);
+  expect(midpoint.effects).toHaveLength(1);
+  expect(midpoint.effects[0].skillRecolorProgress).toBeCloseTo(midpoint.presentation.recolorProgress, 2);
+  expect(midpoint.effects[0].skillRecolorColor).not.toBe(midpoint.effects[0].baseColor);
+  expect(midpoint.effects[0].glowStrength).toBe(0);
+  expect(midpoint.effectAssets).not.toContain('hair-dryer-heat-ribbon');
+  expect(snapshots.committed).toBe(true);
+  await page.waitForFunction(() => {
+    const diagnostics = window.__THREE_GAME_DIAGNOSTICS__;
+    return diagnostics?.skill?.phase === 'idle'
+      && diagnostics.skill.inputLocked === false
+      && diagnostics.remainingArrows === 2;
+  }, null, { timeout: 60_000 });
+  const afterRecolor = await page.evaluate(() => Object.fromEntries(
+    window.__THREE_GAME_DIAGNOSTICS__!.skill!.cableEffects.map(({ id, baseColor }) => [id, baseColor]),
+  ));
+  expect(Object.entries(afterRecolor).some(([id, color]) => beforeRecolor[id] !== color)).toBe(true);
+  await expect(page.locator('#skill-status-rack')).toBeHidden();
+  await page.waitForURL((url) => url.searchParams.get('skill') === 'hair-dryer'
+    && url.searchParams.get('layout') === null);
+});
+
+test('direct desktop computer test preserves finalized buff deletion and blue-screen life loss', async ({ page }) => {
+  test.setTimeout(180_000);
+  await page.addInitScript(() => {
+    window.__APPLIANCE_PERFORMANCE_TIME_OVERRIDE__ = 0;
+  });
+  await page.goto('/?theme=day&mode=skill-test&direct=1&skill=desktop-computer&seed=20260828');
+  await page.waitForFunction(
+    () => window.__THREE_GAME_DIAGNOSTICS__?.opening.ready === true,
+    null,
+    { timeout: 90_000 },
+  );
+  expect(await page.evaluate(() => window.__FINISH_OPENING_FOR_EVIDENCE__?.() ?? false)).toBe(true);
+  await page.waitForFunction(() => {
+    const diagnostics = window.__THREE_GAME_DIAGNOSTICS__;
+    return diagnostics?.opening.active === false
+      && diagnostics.skill?.testId === 'desktop-computer'
+      && diagnostics.skill.inputLocked === false
+      && diagnostics.skill.lives === 3
+      && diagnostics.skill.buff === 'continue'
+      && !diagnostics.skill.effectAssets.includes('controller-continue-token')
+      && diagnostics.totalArrows === 4
+      && diagnostics.clickTarget !== null
+      && diagnostics.appliances.length === 1
+      && diagnostics.appliances[0]?.kind === 'desktop-computer';
+  }, null, { timeout: 90_000 });
+  await expect(page.locator('#skill-cue-title')).toHaveText('蓝屏崩溃');
+  await expect(page.locator('#skill-cue-detail')).toHaveText('删除当前 BUFF；没有 BUFF 时扣除一格生命。');
+  await expect(page.locator('#skill-status-rack')).toBeVisible();
+  await expect(page.locator('#skill-buff-slot')).toHaveAttribute('data-status', 'continue');
+  await expect(page.locator('#random-lives')).toBeVisible();
+  expect(await page.evaluate(
+    () => window.__PULL_CABLE_FOR_EVIDENCE__?.('desktop-computer-test-side') ?? false,
+  )).toBe(true);
+  await page.evaluate(() => {
+    window.__APPLIANCE_PERFORMANCE_TIME_OVERRIDE__ = 3.8;
+  });
+  await page.waitForFunction(() => (
+    window.__THREE_GAME_DIAGNOSTICS__?.skill?.screenEffect.mode === 'blue-screen'
+  ), null, { timeout: 30_000 });
+  await expect(page.locator('html')).toHaveAttribute('data-desktop-computer-feedback', 'buff-deleted');
+  await page.waitForFunction(() => {
+    const diagnostics = window.__THREE_GAME_DIAGNOSTICS__;
+    return diagnostics?.skill?.phase === 'idle'
+      && diagnostics.skill.inputLocked === false
+      && diagnostics.skill.lives === 3
+      && diagnostics.skill.buff === null
+      && diagnostics.remainingArrows === 3;
+  }, null, { timeout: 60_000 });
+  expect(await page.evaluate(
+    () => window.__SETTLE_APPLIANCE_FOR_EVIDENCE__?.() ?? false,
+  )).toBe(true);
+  await page.waitForFunction(() => {
+    const diagnostics = window.__THREE_GAME_DIAGNOSTICS__;
+    return diagnostics?.skill?.phase === 'idle'
+      && diagnostics.clickTarget !== null
+      && diagnostics.activeAnimations === 0
+      && diagnostics.appliances[0]?.state === 'idle';
+  }, null, { timeout: 60_000 });
+  await page.evaluate(() => {
+    window.__APPLIANCE_PERFORMANCE_TIME_OVERRIDE__ = 0;
+  });
+  expect(await page.evaluate(() => {
+    const target = window.__THREE_GAME_DIAGNOSTICS__?.clickTarget;
+    return target
+      ? window.__PULL_CABLE_FOR_EVIDENCE__?.(target.id, target.end) ?? false
+      : false;
+  })).toBe(true);
+  await page.evaluate(() => {
+    window.__APPLIANCE_PERFORMANCE_TIME_OVERRIDE__ = 3.8;
+  });
+  await expect(page.locator('html')).toHaveAttribute('data-desktop-computer-feedback', 'life-lost');
+  await page.waitForFunction(() => {
+    const diagnostics = window.__THREE_GAME_DIAGNOSTICS__;
+    return diagnostics?.skill?.phase === 'idle'
+      && diagnostics.skill.inputLocked === false
+      && diagnostics.skill.lives === 2
+      && diagnostics.skill.buff === null
+      && diagnostics.remainingArrows === 2;
+  }, null, { timeout: 60_000 });
+  await expect(page.locator('#random-lives i.lost')).toHaveCount(1);
+  await expect(page.locator('#random-lives')).toBeVisible();
+  await page.waitForURL((url) => url.searchParams.get('skill') === 'desktop-computer'
+    && url.searchParams.get('layout') === null);
+});
+
+test('main menu starts the game controller continue buff skill test', async ({ page }) => {
+  test.setTimeout(180_000);
+  await page.addInitScript(() => {
+    window.__APPLIANCE_PERFORMANCE_TIME_OVERRIDE__ = 0;
+  });
+  await page.goto('/?theme=day');
+  await page.waitForFunction(
+    () => window.__THREE_GAME_DIAGNOSTICS__?.opening.ready === true,
+    null,
+    { timeout: 90_000 },
+  );
+  const startingRevision = await page.evaluate(() => window.__THREE_GAME_DIAGNOSTICS__?.puzzleRevision ?? 0);
+  await page.click('#challenge-mode-button');
+  await expect(page.locator('#start-skill-test-button')).toHaveText('游戏手柄技能测试');
+  await page.click('#start-skill-test-button');
+  await page.waitForFunction((revision) => {
+    const diagnostics = window.__THREE_GAME_DIAGNOSTICS__;
+    return diagnostics?.opening.active === false
+      && diagnostics.puzzleRevision > revision
+      && diagnostics.skill?.testId === 'game-controller'
+      && diagnostics.skill.inputLocked === false
+      && diagnostics.skill.lives === 3
+      && diagnostics.skill.buff === null
+      && diagnostics.totalArrows === 4
+      && diagnostics.clickTarget !== null
+      && diagnostics.appliances.length === 1
+      && diagnostics.appliances[0]?.kind === 'game-controller';
+  }, startingRevision, { timeout: 90_000 });
+  await expect(page.locator('#skill-cue-title')).toHaveText('继续游戏');
+  await expect(page.locator('#skill-cue-detail')).toHaveText('获得一次复活，重复触发升级恢复量。');
+  await expect(page.locator('#random-lives')).toBeVisible();
+  expect(await page.evaluate(
+    () => window.__PULL_CABLE_FOR_EVIDENCE__?.('game-controller-test-side') ?? false,
+  )).toBe(true);
+  await page.waitForFunction(() => {
+    const diagnostics = window.__THREE_GAME_DIAGNOSTICS__;
+    return diagnostics?.skill?.phase === 'idle'
+      && diagnostics.skill.inputLocked === false
+      && diagnostics.skill.buff === 'continue'
+      && !diagnostics.skill.effectAssets.includes('controller-continue-token')
+      && diagnostics.remainingArrows === 3;
+  }, null, { timeout: 60_000 });
+  await expect(page.locator('#skill-status-rack')).toBeVisible();
+  await expect(page.locator('#skill-buff-slot')).toHaveAttribute('data-status', 'continue');
+  await expect(page.locator('#skill-buff-slot .skill-status-count')).toHaveText('1/1');
+  await expect(page.locator('#random-lives')).toBeVisible();
+  await expect(page.locator('#random-lives')).toHaveClass(/continue-ready/);
+  await expect(page.locator('.life-continue-indicator strong')).toHaveText('复活待命');
+  await expect(page.locator('.life-continue-indicator small')).toHaveText('归零恢复 1 格');
+  await page.setViewportSize({ width: 390, height: 844 });
+  const mobileLifeBounds = await page.evaluate(() => {
+    const lives = document.querySelector<HTMLElement>('#random-lives')!.getBoundingClientRect();
+    const indicator = document.querySelector<HTMLElement>('.life-continue-indicator')!.getBoundingClientRect();
+    return {
+      lives: { left: lives.left, right: lives.right },
+      indicator: { left: indicator.left, right: indicator.right },
+    };
+  });
+  expect(mobileLifeBounds.lives.left).toBeGreaterThanOrEqual(0);
+  expect(mobileLifeBounds.lives.right).toBeLessThanOrEqual(390);
+  expect(mobileLifeBounds.indicator.left).toBeGreaterThanOrEqual(0);
+  expect(mobileLifeBounds.indicator.right).toBeLessThanOrEqual(390);
+  await page.waitForURL((url) => url.searchParams.get('skill') === 'game-controller'
+    && url.searchParams.get('layout') === null);
+});
+
+test('toaster keeps skill input locked until the heat swap commits', async ({ page }) => {
+  test.setTimeout(180_000);
+  await page.addInitScript(() => {
+    window.__APPLIANCE_PERFORMANCE_TIME_OVERRIDE__ = 0;
+  });
+  await page.goto('/?theme=day&mode=skill-test&direct=1&skill=toaster&seed=20260828');
+  await page.waitForFunction(
+    () => window.__THREE_GAME_DIAGNOSTICS__?.opening.ready === true,
+    null,
+    { timeout: 90_000 },
+  );
+  await page.click('#start-game-button');
+  await page.evaluate(() => window.__FINISH_OPENING_FOR_EVIDENCE__?.());
+  await page.waitForFunction(() => {
+    const diagnostics = window.__THREE_GAME_DIAGNOSTICS__;
+    return diagnostics?.opening.active === false
+      && diagnostics.skill?.phase === 'idle'
+      && diagnostics.clickTarget !== null;
+  }, null, { timeout: 60_000 });
+  expect(await page.evaluate(
+    () => window.__PULL_CABLE_FOR_EVIDENCE__?.('toaster-test-key') ?? false,
+  )).toBe(true);
+  await page.waitForFunction(() => {
+    return window.__THREE_GAME_DIAGNOSTICS__?.skill?.toasterHeatSwap.active === true;
+  }, null, { timeout: 60_000 });
+  await page.evaluate(() => {
+    window.__APPLIANCE_PERFORMANCE_TIME_OVERRIDE__ = 3.8;
+  });
+  await page.waitForFunction(() => {
+    const diagnostics = window.__THREE_GAME_DIAGNOSTICS__;
+    const swap = diagnostics?.skill?.toasterHeatSwap;
+    return swap?.active === true && swap.elapsed >= 3.7 && swap.committed === false;
+  }, null, { timeout: 60_000 });
+  expect(await page.evaluate(() => window.__THREE_GAME_DIAGNOSTICS__?.skill?.inputLocked)).toBe(true);
+  await page.evaluate(() => {
+    window.__APPLIANCE_PERFORMANCE_TIME_OVERRIDE__ = 5.2;
+  });
+  await page.waitForFunction(() => {
+    const diagnostics = window.__THREE_GAME_DIAGNOSTICS__;
+    return diagnostics?.skill?.toasterHeatSwap.active === false
+      && diagnostics.skill.inputLocked === false
+      && diagnostics.skill.phase === 'idle';
+  }, null, { timeout: 60_000 });
 });
 
 test('direct blender skill test preserves the finalized multicolor shuffle', async ({ page }) => {

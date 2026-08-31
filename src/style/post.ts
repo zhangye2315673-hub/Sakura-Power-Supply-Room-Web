@@ -19,6 +19,7 @@ export type SkillScreenEffect =
   | 'toaster-heat'
   | 'kettle-thaw-heat'
   | 'printer-scan'
+  | 'blue-screen'
   | 'iridescent-bubble';
 
 const vertexShader = /* glsl */ `
@@ -1666,6 +1667,50 @@ const skillEffectShader: ShaderDefinition = {
           * (0.58 + luma * 0.42);
         heatedScene = mix(heatedScene, warmed, heat * (0.26 + heatField * 0.18));
         color = mix(color, heatedScene, heat * (0.68 + heatField * 0.24));
+      } else if (uEffect == 8) {
+        float progress = clamp(uEffectProgress, 0.0, 1.0);
+        float preCrash = smoothstep(0.16, 0.7, progress);
+        float crashIn = smoothstep(0.7, 0.735, progress);
+        float crashOut = 1.0 - smoothstep(0.91, 1.0, progress);
+        float crash = crashIn * crashOut;
+        float impact = exp(-pow((progress - 0.72) / 0.026, 2.0));
+
+        float bandSeed = hash(vec2(floor(uv.y * 58.0), floor(uTime * 11.0)));
+        float faultBand = step(0.78, bandSeed) * preCrash;
+        float horizontalShift = (bandSeed - 0.5) * 0.055 * faultBand;
+        vec2 faultUv = clamp(uv + vec2(horizontalShift, 0.0), vec2(0.002), vec2(0.998));
+        vec3 faulted = texture2D(tDiffuse, faultUv).rgb;
+        faulted.r = texture2D(tDiffuse, faultUv + vec2(uTexel.x * 3.0, 0.0)).r;
+        faulted.b = texture2D(tDiffuse, faultUv - vec2(uTexel.x * 4.0, 0.0)).b;
+        float scanline = 0.5 + 0.5 * sin(uv.y / max(uTexel.y, 0.000001) * 1.7);
+        vec3 coldFault = faulted * vec3(0.78, 0.91, 1.08) + vec3(0.0, 0.025, 0.075) * preCrash;
+        coldFault *= 1.0 - scanline * preCrash * 0.055;
+        color = mix(color, coldFault, preCrash * (0.2 + faultBand * 0.52));
+
+        vec3 blue = vec3(0.018, 0.16, 0.55);
+        float vignette = smoothstep(0.9, 0.24, length((uv - 0.5) * vec2(1.25, 1.0)));
+        blue *= 0.82 + vignette * 0.18;
+        float blueScan = 0.5 + 0.5 * sin(uv.y / max(uTexel.y, 0.000001) * 2.15 + uTime * 10.0);
+        blue *= 0.94 + blueScan * 0.06;
+
+        vec2 textUv = vec2(uv.x, 1.0 - uv.y);
+        float row = floor((textUv.y - 0.22) * 34.0);
+        float rowMask = step(0.0, row) * step(row, 12.0);
+        float rowLine = 1.0 - smoothstep(0.08, 0.22, abs(fract((textUv.y - 0.22) * 34.0) - 0.5));
+        float rowWidth = mix(0.26, 0.76, hash(vec2(row, 4.7)));
+        float wordBreaks = step(0.22, hash(vec2(floor((textUv.x - 0.12) * 52.0), row)));
+        float textRows = rowMask * rowLine
+          * step(0.11, textUv.x) * step(textUv.x, 0.11 + rowWidth)
+          * wordBreaks;
+        float titleBar = step(0.12, textUv.x) * step(textUv.x, 0.53)
+          * step(0.1, textUv.y) * step(textUv.y, 0.145);
+        float errorCode = step(0.12, textUv.x) * step(textUv.x, 0.42)
+          * step(0.72, textUv.y) * step(textUv.y, 0.755);
+        float errorCopy = clamp(textRows * 0.78 + titleBar + errorCode, 0.0, 1.0);
+        blue = mix(blue, vec3(0.78, 0.92, 1.0), errorCopy * 0.88);
+        blue += vec3(0.2, 0.42, 0.75) * faultBand * crash * 0.12;
+        color = mix(color, blue, crash);
+        color = mix(color, vec3(0.84, 0.95, 1.0), impact * 0.36);
       }
       gl_FragColor = vec4(color, 1.0);
     }
@@ -1916,6 +1961,7 @@ export class SakuraPipeline {
       'iridescent-bubble': 5,
       'toaster-heat': 6,
       'kettle-thaw-heat': 7,
+      'blue-screen': 8,
     };
     if (!immediate && effect === 'none' && this.steamClearActive && this.skillEffectMode === 'bathroom-steam') {
       return;

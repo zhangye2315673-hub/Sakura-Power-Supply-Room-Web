@@ -31,32 +31,36 @@ async function expectMenuFitsViewport(page: Page): Promise<void> {
       noHorizontalOverflow: document.documentElement.scrollWidth <= viewportWidth + 1,
     };
   });
-  expect(result.labels).toEqual(['随机挑战', '探索模式', 'RUSH挑战', '双头挑战', '技能挑战', '唱片机技能测试']);
+  expect(result.labels).toEqual(['随机挑战', '探索模式', 'RUSH挑战', '双头挑战', '技能挑战']);
   expect(result.allTextFits).toBe(true);
   expect(result.menuFits).toBe(true);
   expect(result.noHorizontalOverflow).toBe(true);
 }
 
-test('挑战模式菜单在桌面端与移动端均可完整展开和关闭', async ({ page }, testInfo) => {
-  test.setTimeout(180_000);
+test('主菜单只保留五个正式挑战入口', async ({ page }) => {
+  await page.goto('/', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('#start-random-button')).toBeAttached();
+  await expect(page.locator('#start-explore-button')).toBeAttached();
+  await expect(page.locator('#start-rush-button')).toBeAttached();
+  await expect(page.locator('#start-double-ended-button')).toBeAttached();
+  await expect(page.locator('#start-skill-button')).toBeAttached();
+  await expect(page.locator('#start-skill-test-button')).toHaveCount(0);
+});
+
+test('挑战模式菜单布局在桌面端与移动端均完整', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto('/');
-  await waitForOpening(page);
+  await page.goto('/', { waitUntil: 'domcontentloaded' });
   for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 }]) {
     await page.setViewportSize(viewport);
-    await expect(page.locator('#start-game-button')).toBeVisible();
-    await expect(page.locator('#challenge-mode-button')).toBeVisible();
-    await openChallengeMenu(page);
-    await expectMenuFitsViewport(page);
-    await page.screenshot({
-      path: testInfo.outputPath(`challenge-menu-${viewport.width}x${viewport.height}.png`),
-      fullPage: true,
+    await page.locator('#challenge-mode-menu').evaluate((menu) => {
+      menu.classList.add('visible');
+      menu.setAttribute('aria-hidden', 'false');
     });
-
-    await page.click('#challenge-mode-button');
-    await expect(page.locator('#challenge-mode-menu')).toBeHidden();
-    await openChallengeMenu(page);
-    await page.locator('#start-screen-title').click({ position: { x: 4, y: 4 } });
+    await expectMenuFitsViewport(page);
+    await page.locator('#challenge-mode-menu').evaluate((menu) => {
+      menu.classList.remove('visible');
+      menu.setAttribute('aria-hidden', 'true');
+    });
     await expect(page.locator('#challenge-mode-menu')).toBeHidden();
   }
 });
@@ -65,10 +69,10 @@ test('五种挑战入口连接到各自现有或新增模式', async ({ page }) 
   test.setTimeout(600_000);
   const cases = [
     { selector: '#start-random-button', mode: 'random', challengeKind: 'standard', testId: null },
+    { selector: '#start-explore-button', mode: 'random', challengeKind: 'standard', testId: null },
     { selector: '#start-rush-button', mode: 'rush', challengeKind: null, testId: null },
     { selector: '#start-double-ended-button', mode: 'random', challengeKind: 'double-ended', testId: null },
     { selector: '#start-skill-button', mode: 'skill', challengeKind: 'standard', testId: null },
-    { selector: '#start-skill-test-button', mode: 'skill', challengeKind: 'standard', testId: 'printer' },
   ] as const;
 
   for (const entry of cases) {

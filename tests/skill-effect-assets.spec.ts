@@ -4,11 +4,10 @@ import { PNG } from 'pngjs';
 
 const ASSETS = [
   'humidifier-glass-wiper', 'fan-airflow-ribbon',
-  'hair-dryer-heat-ribbon',
   'bubble-shell-wave-membrane', 'radio-sequence-markers', 'kettle-steam-ribbon',
   'blender-energy-shards', 'gacha-card-frame',
   'alarm-time-ring', 'popcorn-target-marker',
-  'controller-continue-token', 'controller-impact-star', 'microwave-double-heat-ring',
+  'controller-impact-star', 'microwave-double-heat-ring',
   'induction-heat-ring', 'speaker-bass-wave-arcs',
 ] as const;
 
@@ -31,6 +30,9 @@ test('all generated skill effect assets instantiate with runtime sockets', async
 
   expect(await page.evaluate(() => (
     window.__SHOW_SKILL_EFFECT_FOR_EVIDENCE__?.('record-note-orb-ring') ?? false
+  ))).toBe(false);
+  expect(await page.evaluate(() => (
+    window.__SHOW_SKILL_EFFECT_FOR_EVIDENCE__?.('hair-dryer-heat-ribbon') ?? false
   ))).toBe(false);
   expect(await page.evaluate(() => window.__SHOW_SKILL_EFFECT_FOR_EVIDENCE__?.('missing-asset'))).toBe(false);
   const screenshot = await page.locator('#game-canvas').screenshot();

@@ -41,6 +41,8 @@ export type SkillPresentationDiagnostics = Readonly<{
   colorPreviewStrength: number;
   colorPreviewActiveCableCount: number;
   colorCommitCount: number;
+  recolorProgress: number;
+  recolorActiveCableCount: number;
 }>;
 
 export type SkillPresentationHooks = Readonly<{
@@ -50,6 +52,7 @@ export type SkillPresentationHooks = Readonly<{
   getCableBaseColor: (cableId: string) => number | null;
   setCableSkillSweep: (cableId: string, progress: number, strength: number, color: number) => void;
   setCableSkillTint: (cableId: string, color: number | null, strength: number, emissionScale: number) => void;
+  setCableSkillRecolor: (cableId: string, color: number | null, progress: number) => void;
   commitCableColors: (changes: readonly { cableId: string; color: number }[]) => void;
 }>;
 
@@ -78,6 +81,8 @@ const emptyDiagnostics = (): SkillPresentationDiagnostics => ({
   colorPreviewStrength: 0,
   colorPreviewActiveCableCount: 0,
   colorCommitCount: 0,
+  recolorProgress: 0,
+  recolorActiveCableCount: 0,
 });
 
 export function resolveBlenderColorCycle(progress: number): Readonly<{
@@ -201,6 +206,7 @@ export class SkillPresentationController {
   private riceVisualScale = 1;
   private sweepCableIds = new Set<string>();
   private colorShuffleCableIds = new Set<string>();
+  private hairDryerRecolorCableIds = new Set<string>();
 
   constructor(
     private readonly scene: THREE.Scene,
@@ -267,6 +273,7 @@ export class SkillPresentationController {
     }
     if (resolution.appliance === 'stand-mixer') return this.playStandMixer(normalizedTargets, token);
     if (resolution.appliance === 'blender') return this.playBlender(resolution, normalizedTargets, token);
+    if (resolution.appliance === 'hair-dryer') return this.playHairDryer(resolution, token);
     this.diagnosticsValue = { ...this.diagnosticsValue, phase: 'settle', activeTimelines: 0 };
     return resolution.topologyChanged ? 900 : 650;
   }
@@ -379,7 +386,7 @@ export class SkillPresentationController {
   freezeForEvidence(timeMs: number): boolean {
     if (!this.timeline || this.diagnosticsValue.skillId === null) return false;
     this.timeline.pause();
-    this.timeline.seek(Math.max(0, Math.min(timeMs, this.timeline.duration)), false, true);
+    this.timeline.seek(Math.max(0, Math.min(timeMs, this.timeline.duration)), false);
     this.transient.traverse((object) => {
       if (object instanceof THREE.Mesh || object instanceof Line2) {
         object.visible = true;
@@ -662,6 +669,60 @@ export class SkillPresentationController {
     return 5_200;
   }
 
+  private playHairDryer(resolution: SkillResolution, token: number): number {
+    const changes = resolution.commands.flatMap((command) => (
+      command.type === 'recolor' ? command.changes : []
+    ));
+    const timeline = this.makeTimeline(token);
+    timeline.call(() => this.setPhase('target-lock', token), 80);
+    if (changes.length === 0) {
+      timeline.call(() => this.setPhase('commit', token), 180);
+      timeline.call(() => this.setPhase('result', token), 2_180);
+      timeline.call(() => this.finishTimeline(token), 2_340);
+      return 2_400;
+    }
+
+    this.hairDryerRecolorCableIds = new Set(changes.map(({ cableId }) => cableId));
+    const state = { progress: 0 };
+    const applyRecolor = (): void => {
+      if (token !== this.generation) return;
+      const progress = THREE.MathUtils.clamp(state.progress, 0, 1);
+      changes.forEach(({ cableId, color }) => this.hooks.setCableSkillRecolor(cableId, color, progress));
+      this.diagnosticsValue = {
+        ...this.diagnosticsValue,
+        recolorProgress: progress,
+        recolorActiveCableCount: changes.length,
+      };
+    };
+    timeline.add(state, {
+      progress: 1,
+      duration: 1_820,
+      ease: 'inOut(2)',
+      onUpdate: applyRecolor,
+    }, 180);
+    timeline.call(() => {
+      if (token !== this.generation) return;
+      changes.forEach(({ cableId }) => this.hooks.setCableSkillRecolor(cableId, null, 0));
+      this.hooks.commitCableColors(changes);
+      this.setPhase('commit', token);
+      this.diagnosticsValue = {
+        ...this.diagnosticsValue,
+        colorCommitCount: changes.length,
+        recolorProgress: 1,
+        recolorActiveCableCount: 0,
+      };
+    }, 2_040);
+    timeline.call(() => this.setPhase('result', token), 2_180);
+    timeline.call(() => this.finishTimeline(token), 2_340);
+    this.diagnosticsValue = {
+      ...this.diagnosticsValue,
+      lineCount: changes.length,
+      meshCount: 0,
+      recolorActiveCableCount: changes.length,
+    };
+    return 2_400;
+  }
+
   private playRobotVacuum(resolution: SkillResolution, targets: readonly SkillPresentationTarget[], token: number): number {
     const timeline = this.makeTimeline(token);
     timeline.call(() => this.setPhase('target-lock', token), 0);
@@ -872,6 +933,8 @@ export class SkillPresentationController {
     this.sweepCableIds.clear();
     this.colorShuffleCableIds.forEach((cableId) => this.hooks.setCableSkillTint(cableId, null, 0, 0));
     this.colorShuffleCableIds.clear();
+    this.hairDryerRecolorCableIds.forEach((cableId) => this.hooks.setCableSkillRecolor(cableId, null, 0));
+    this.hairDryerRecolorCableIds.clear();
     this.clearGroup(this.transient);
     this.diagnosticsValue = {
       ...emptyDiagnostics(),

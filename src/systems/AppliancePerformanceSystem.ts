@@ -31,6 +31,7 @@ export class AppliancePerformanceSystem {
   readonly root = new THREE.Group();
   private readonly effects = new ApplianceSpectacleSystem();
   private readonly sessions = new Map<AppliancePerformanceTarget, PerformanceSession>();
+  private readonly preparedAnimations = new WeakMap<THREE.Object3D, PerformanceSession['animation']>();
 
   constructor() {
     this.root.name = 'appliance-performance-system';
@@ -43,9 +44,27 @@ export class AppliancePerformanceSystem {
     const rigRoot = modelRoot instanceof THREE.Group ? modelRoot : target.root;
     this.sessions.set(target, {
       target,
-      animation: createApplianceMechanicalAnimation(target.kind, rigRoot),
+      animation: this.preparedAnimations.get(target.root)
+        ?? createApplianceMechanicalAnimation(target.kind, rigRoot),
       elapsed: 0,
     });
+  }
+
+  /** Build the mechanical driver before the appliance becomes interactive. */
+  prime(target: AppliancePerformanceTarget): void {
+    if (this.preparedAnimations.has(target.root)) return;
+    const modelRoot = target.root.getObjectByName(`appliance-model-${target.kind}`);
+    const rigRoot = modelRoot instanceof THREE.Group ? modelRoot : target.root;
+    this.preparedAnimations.set(target.root, createApplianceMechanicalAnimation(target.kind, rigRoot));
+  }
+
+  /** Prime a replacement while its renderer warmup is running. */
+  primeRoot(root: THREE.Object3D): void {
+    const kind = root.userData.applianceKind as ApplianceKind | undefined;
+    if (!kind || this.preparedAnimations.has(root)) return;
+    const modelRoot = root.getObjectByName(`appliance-model-${kind}`);
+    const rigRoot = modelRoot instanceof THREE.Group ? modelRoot : root;
+    this.preparedAnimations.set(root, createApplianceMechanicalAnimation(kind, rigRoot as THREE.Group));
   }
 
   update(
@@ -81,6 +100,7 @@ export class AppliancePerformanceSystem {
     target.root.userData.appliancePerformanceElapsed = 0;
     this.sessions.delete(target);
     this.effects.stop(target, preserveDetachedToast);
+    this.preparedAnimations.delete(target.root);
   }
 
   reset(): void {

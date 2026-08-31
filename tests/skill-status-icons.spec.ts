@@ -6,6 +6,7 @@ const STATUSES = [
   'soothing-record',
   'continue',
   'induction-reveal',
+  'bass-spacing',
   'bathroom-steam',
   'frozen-plug',
   'coffee-lock',
@@ -128,12 +129,12 @@ test('all eleven status themes use original CSS pictograms and never load an ima
     });
   }, STATUSES);
 
-  expect(results).toHaveLength(11);
+  expect(results).toHaveLength(12);
   for (const result of results) {
     expect(result.mark, result.status).toBe('');
     expect(result.image, result.status).not.toContain('url(');
     expect(result.clipPath, result.status).toMatch(/^polygon\(/);
     expect(result.shellClipPath, result.status).toBe(results[0].shellClipPath);
   }
-  expect(new Set(results.map(({ pictogram }) => pictogram)).size).toBe(11);
+  expect(new Set(results.map(({ pictogram }) => pictogram)).size).toBe(12);
 });

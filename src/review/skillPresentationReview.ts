@@ -24,6 +24,7 @@ const controller = new SkillPresentationController(scene, camera, {
   getCableBaseColor: () => null,
   setCableSkillSweep: () => {},
   setCableSkillTint: () => {},
+  setCableSkillRecolor: () => {},
   commitCableColors: () => {},
 });
 

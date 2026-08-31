@@ -181,7 +181,7 @@ interface ThreeGameDiagnostics {
   randomLives: number;
   randomGameOver: boolean;
   skill: {
-    testId: import('./skill/SkillTestMode').SkillTestId | null;
+    testId: string | null;
     invulnerable: boolean;
     registrySize: number;
     phase: import('./skill/SkillChallengeEngine').SkillChallengePhase;
@@ -203,6 +203,8 @@ interface ThreeGameDiagnostics {
       glowStrength: number;
       skillTintStrength: number;
       skillTintEmissionScale: number;
+      skillRecolorProgress: number;
+      skillRecolorColor: number | null;
       recycleSelectionState: 'none' | 'hover' | 'selected';
       recycleHighlightStrength: number;
       recyclePulse: number;
@@ -366,6 +368,30 @@ interface ThreeGameDiagnostics {
     facingSide: -1 | 1;
     outwardEdge: 'left' | 'right' | 'top' | 'bottom';
   }>;
+  applianceReplacement: {
+    prepareCount: number;
+    preparedHitCount: number;
+    preparedMissCount: number;
+    warmupPendingCount: number;
+    preparedCount: number;
+    queuedPreparedCount: number;
+    deferredDisposalCount: number;
+    lastFromKind: string | null;
+    lastToKind: string | null;
+    lastPrepareBuildMs: number;
+    maxPrepareBuildMs: number;
+    lastModelFactoryMs: number;
+    lastTargetSetupMs: number;
+    lastSoftDeformMs: number;
+    lastWarmupMs: number;
+    maxWarmupMs: number;
+    lastFallbackBuildMs: number;
+    maxFallbackBuildMs: number;
+    lastCommitMs: number;
+    maxCommitMs: number;
+    lastDisposalSliceMs: number;
+    maxDisposalSliceMs: number;
+  };
   context: {
     losses: number;
     restores: number;
@@ -432,6 +458,39 @@ interface Window {
   /** Fixed humidifier steam-reveal progress used only by visual evidence. */
   __STEAM_REVEAL_PROGRESS_OVERRIDE__?: number;
   __THREE_GAME_DIAGNOSTICS__?: ThreeGameDiagnostics;
+  __PROFILE_RENDER_BREAKDOWN__?: () => {
+    capturedAt: string;
+    liveRenderer: {
+      calls: number;
+      triangles: number;
+      geometries: number;
+      textures: number;
+    };
+    sceneRenderer: {
+      calls: number;
+      triangles: number;
+      geometries: number;
+      textures: number;
+    };
+    estimatedPostProcessCalls: number;
+    entries: Array<{
+      name: string;
+      type: string;
+      visible: boolean;
+      objects: number;
+      renderables: number;
+      visibleRenderables: number;
+      meshes: number;
+      lines: number;
+      points: number;
+      lights: number;
+      materials: number;
+      geometries: number;
+      triangles: number;
+      potentialTriangles: number;
+      calls: number;
+    }>;
+  };
   __APPLIANCE_GALLERY_DIAGNOSTICS__?: {
     open: boolean;
     selected: string;

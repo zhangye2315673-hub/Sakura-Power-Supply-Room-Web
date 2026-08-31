@@ -215,6 +215,7 @@ export class DehumidifierDryShieldPresentation {
     turnsRemaining: number | null,
     targets: readonly THREE.Object3D[],
     sourcePosition?: THREE.Vector3,
+    absorbed = false,
   ): void {
     const nextProtected = active && targets.length > 0;
     if (nextProtected) {
@@ -233,9 +234,13 @@ export class DehumidifierDryShieldPresentation {
       this.turnsRemaining = turnsRemaining;
       this.startPulse('turn-pulse');
     } else if (!nextProtected && this.protectedState) {
-      this.absorbCount += 1;
       this.turnsRemaining = null;
-      this.startPulse('absorb');
+      if (absorbed) {
+        this.absorbCount += 1;
+        this.startPulse('absorb');
+      } else {
+        this.stopPulse();
+      }
     } else if (nextProtected) {
       this.turnsRemaining = turnsRemaining;
     }

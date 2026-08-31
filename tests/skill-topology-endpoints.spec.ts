@@ -6,7 +6,11 @@ import {
   cableSocketPointsToWorld,
   type ArrowDefinition,
 } from '../src/puzzle/types';
-import { reverseCableKeepingExternalEndpoints } from '../src/skill/skillTopology';
+import {
+  buildTelevisionSpatialReplacements,
+  reverseCableKeepingExternalEndpoints,
+  skillTopologyDefinitionsAreCommitSafe,
+} from '../src/skill/skillTopology';
 
 const definition: ArrowDefinition = {
   id: 'endpoint-swap-proof',
@@ -57,4 +61,42 @@ test('a second reversal restores the original external terminal identities', () 
   expect(restored.exitDirection).toBe(definition.exitDirection);
   expectSamePosition(after.head, before.head);
   expectSamePosition(after.tail, before.tail);
+});
+
+test('television reassigns complete spatial routes without reversing cable identities', () => {
+  const definitions: ArrowDefinition[] = [
+    definition,
+    {
+      ...definition,
+      id: 'television-route-b',
+      path: [[6, 2, 2], [6, 3, 2], [6, 4, 2]],
+      exitDirection: '+Y',
+      color: 0x56a8ff,
+    },
+    {
+      ...definition,
+      id: 'television-route-c',
+      path: [[8, 8, 8], [8, 8, 7], [8, 8, 6]],
+      exitDirection: '-Z',
+      color: 0xffc14d,
+    },
+  ];
+  const replacements = buildTelevisionSpatialReplacements(
+    definitions,
+    definitions.map(({ id }) => id),
+  );
+  const reconstructed = definitions.map((entry) => replacements.get(entry.id) ?? entry);
+
+  expect(replacements.size).toBe(3);
+  expect(skillTopologyDefinitionsAreCommitSafe(reconstructed)).toBe(true);
+  reconstructed.forEach((entry, index) => {
+    const original = definitions[index];
+    expect(entry.id).toBe(original.id);
+    expect(entry.color).toBe(original.color);
+    expect(entry.path).not.toEqual(original.path);
+    expect(entry.path).not.toEqual([...original.path].reverse());
+    expect(definitions.some((candidate) => candidate.path.every(
+      (point, pointIndex) => point.every((value, axis) => value === entry.path[pointIndex]?.[axis]),
+    ))).toBe(true);
+  });
 });

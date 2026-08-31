@@ -37,6 +37,7 @@ test('television skill test shows the fault reconstruction effect and keeps the 
   const initialCanvas = await page.locator('#game-canvas').screenshot();
   await writeFile(path.join(ARTIFACT_DIR, 'television-skill-test-before.png'), await page.screenshot({ fullPage: true }));
 
+  await page.evaluate(() => { window.__APPLIANCE_PERFORMANCE_TIME_OVERRIDE__ = 0.8; });
   const target = await page.evaluate(() => window.__THREE_GAME_DIAGNOSTICS__!.clickTarget!);
   await page.mouse.click(target.x, target.y);
   await page.waitForFunction(

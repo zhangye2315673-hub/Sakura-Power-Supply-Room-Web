@@ -19,7 +19,7 @@ const STATUS_LABELS: Record<SkillStatusId, { name: string; description: string }
   'soothing-record': { name: '安心旋律', description: '抵挡一次受阻点击。' },
   continue: { name: '继续游戏', description: '生命归零时复活并恢复生命。' },
   'induction-reveal': { name: '感应显线', description: '持续标记全部真实出口。' },
-  'bass-spacing': { name: '节拍扩距', description: '线组保持 2 倍视觉间距，不改变可抽判定。' },
+  'bass-spacing': { name: '节拍扩距', description: '线与线外轮廓之间的净空约为原来的 2 倍，不改变可抽判定。' },
   'bathroom-steam': { name: '浴室蒸汽', description: '蒸汽遮挡画面，正确抽线后逐回合消退。' },
   'frozen-plug': { name: '急冻封头', description: '部分真实出口暂时无法抽取。' },
   'coffee-lock': { name: '咖啡封技', description: '咖啡遮蔽线色；家电照常连接和播放动画，但技能暂时被封锁。' },
@@ -47,6 +47,9 @@ export class SkillChallengeUi {
   private cuePointerInside = false;
   private cueFocusInside = false;
   private cardLocked = false;
+  private cardRevealTimer = 0;
+  private buffDeletionTimer = 0;
+  private buffDeletionElements: HTMLElement[] = [];
 
   constructor(private readonly options: SkillChallengeUiOptions) {
     this.cue.addEventListener('pointerenter', this.onCuePointerEnter);
@@ -71,6 +74,42 @@ export class SkillChallengeUi {
     const effect = state.debuff?.id ?? state.buff?.id ?? 'none';
     this.screenEffect.dataset.effect = effect;
     this.screenEffect.classList.remove('active');
+  }
+
+  showComputerBuffDeleted(): void {
+    this.clearBuffDeletion();
+    if (!this.buffSlot.classList.contains('occupied')) return;
+    const rect = this.buffSlot.getBoundingClientRect();
+    const ghost = this.buffSlot.cloneNode(true) as HTMLElement;
+    ghost.id = '';
+    ghost.classList.add('skill-status-delete-ghost');
+    ghost.querySelector('.skill-status-tooltip')?.remove();
+    ghost.style.left = `${rect.left}px`;
+    ghost.style.top = `${rect.top}px`;
+    ghost.style.width = `${rect.width}px`;
+    ghost.style.height = `${rect.height}px`;
+    document.body.append(ghost);
+    this.buffDeletionElements.push(ghost);
+
+    for (let index = 0; index < 8; index += 1) {
+      const pixel = document.createElement('i');
+      pixel.className = 'skill-status-delete-pixel';
+      pixel.style.left = `${rect.left + rect.width * 0.5}px`;
+      pixel.style.top = `${rect.top + rect.height * 0.5}px`;
+      pixel.style.setProperty('--delete-pixel-index', String(index));
+      document.body.append(pixel);
+      this.buffDeletionElements.push(pixel);
+    }
+
+    const label = document.createElement('strong');
+    label.className = 'skill-status-delete-label';
+    label.textContent = 'BUFF DELETED';
+    label.style.left = `${rect.left + rect.width * 0.5}px`;
+    label.style.top = `${rect.bottom + 7}px`;
+    document.body.append(label);
+    this.buffDeletionElements.push(label);
+    document.documentElement.classList.add('desktop-buff-deleting');
+    this.buffDeletionTimer = window.setTimeout(() => this.clearBuffDeletion(), 1_150);
   }
 
   showCue(label: string, phase: 'cue' | 'commit' | 'settle' = 'cue', detail = '', source = '家电连接完成'): void {
@@ -140,7 +179,11 @@ export class SkillChallengeUi {
           candidate.disabled = true;
           if (candidate !== button) candidate.classList.add('dismissed');
         });
-        window.setTimeout(() => this.options.onCardSelected(index), GACHA_CARD_REVEAL_MS);
+         window.clearTimeout(this.cardRevealTimer);
+         this.cardRevealTimer = window.setTimeout(() => {
+           this.cardRevealTimer = 0;
+           this.options.onCardSelected(index);
+         }, GACHA_CARD_REVEAL_MS);
       }, { once: true });
       this.cardList.append(button);
     });
@@ -149,6 +192,8 @@ export class SkillChallengeUi {
   }
 
   hideCards(): void {
+    window.clearTimeout(this.cardRevealTimer);
+    this.cardRevealTimer = 0;
     this.cardPanel.classList.remove('visible');
     this.cardPanel.setAttribute('aria-hidden', 'true');
     this.cardLocked = false;
@@ -167,6 +212,8 @@ export class SkillChallengeUi {
   resetTransient(): void {
     window.clearTimeout(this.cueTimer);
     this.cueTimer = 0;
+    window.clearTimeout(this.cardRevealTimer);
+    this.cardRevealTimer = 0;
     this.cuePointerInside = false;
     this.cueFocusInside = false;
     this.cue.classList.remove('visible');
@@ -177,15 +224,26 @@ export class SkillChallengeUi {
     this.setInputLocked(false);
     this.screenEffect.dataset.effect = 'none';
     this.screenEffect.classList.remove('active');
+    this.clearBuffDeletion();
   }
 
   dispose(): void {
     window.clearTimeout(this.cueTimer);
+    window.clearTimeout(this.cardRevealTimer);
+    this.clearBuffDeletion();
     this.cue.removeEventListener('pointerenter', this.onCuePointerEnter);
     this.cue.removeEventListener('pointerleave', this.onCuePointerLeave);
     this.cue.removeEventListener('focusin', this.onCueFocusIn);
     this.cue.removeEventListener('focusout', this.onCueFocusOut);
     this.resetTransient();
+  }
+
+  private clearBuffDeletion(): void {
+    window.clearTimeout(this.buffDeletionTimer);
+    this.buffDeletionTimer = 0;
+    document.documentElement.classList.remove('desktop-buff-deleting');
+    this.buffDeletionElements.forEach((element) => element.remove());
+    this.buffDeletionElements = [];
   }
 
   private readonly onCuePointerEnter = (): void => {

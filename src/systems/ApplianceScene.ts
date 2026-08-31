@@ -43,11 +43,13 @@ const DROP_CONTACT_TILT_DECAY = 0.75;
 const DROP_CONTACT_SWAY = [0, -0.105, 0.074, -0.047, 0.025, 0] as const;
 const EDGE_PADDING = 0.035;
 const REPLACEMENT_KIND_HISTORY_SIZE = 6;
+const REPLACEMENT_PRELOAD_GENERATIONS = 3;
 const INFLATE_CYCLE_DURATION = 0.58;
 const INFLATE_AMPLITUDES = [0.18] as const;
 const REPLACEMENT_DELAY = 0.18;
 const SPAWN_DROP_MIN_HEIGHT = 0.46;
 const SPAWN_DROP_PREPARE_AFTER = 0.75;
+const RUNTIME_REPLACEMENT_PREPARE_GAP = 0.32;
 const SPAWN_DROP_TOP_MARGIN_MIN_PX = 88;
 const SPAWN_DROP_TOP_MARGIN_MAX_PX = 120;
 const CENTRAL_SAFE_MIN = 0.25;
@@ -75,6 +77,31 @@ type DeferredDisposal = {
   resources: Array<THREE.BufferGeometry | THREE.Material>;
   nextIndex: number;
   readyAt: number;
+};
+
+export type ApplianceReplacementDiagnostics = {
+  prepareCount: number;
+  preparedHitCount: number;
+  preparedMissCount: number;
+  warmupPendingCount: number;
+  preparedCount: number;
+  queuedPreparedCount: number;
+  deferredDisposalCount: number;
+  lastFromKind: ApplianceKind | null;
+  lastToKind: ApplianceKind | null;
+  lastPrepareBuildMs: number;
+  maxPrepareBuildMs: number;
+  lastModelFactoryMs: number;
+  lastTargetSetupMs: number;
+  lastSoftDeformMs: number;
+  lastWarmupMs: number;
+  maxWarmupMs: number;
+  lastFallbackBuildMs: number;
+  maxFallbackBuildMs: number;
+  lastCommitMs: number;
+  maxCommitMs: number;
+  lastDisposalSliceMs: number;
+  maxDisposalSliceMs: number;
 };
 
 function dropReboundSpeed(index: number): number {
@@ -152,13 +179,17 @@ export class ApplianceTarget {
     this.sizeTier = definition.sizeTier;
     this.plugStyleId = definition.plugStyleId;
     this.root.name = `appliance-${this.id}`;
+    this.root.userData.applianceKind = this.kind;
     this.screenPosition = new THREE.Vector2(...screenPosition);
 
+    const modelFactoryStartedAt = performance.now();
     const model = createApplianceModel(definition.id, {
       id: definition.id,
       accent,
       referencePath: definition.referencePath,
     });
+    const modelFactoryMs = performance.now() - modelFactoryStartedAt;
+    const targetSetupStartedAt = performance.now();
     this.indicatorMaterial = model.indicatorMaterial;
     model.materials.forEach((material) => this.materials.add(material));
     this.interactiveMeshes.push(...model.interactiveMeshes);
@@ -183,7 +214,15 @@ export class ApplianceTarget {
     this.actualScreenHeight = definition.targetScreenHeight * widthFit;
     this.baseScale = (this.actualScreenHeight * referenceVerticalSpan) / modelHeight;
     this.root.scale.setScalar(this.baseScale);
+    const targetSetupMs = performance.now() - targetSetupStartedAt;
+    const softDeformStartedAt = performance.now();
     this.softDeform = new SoftDeformController(this.root, model.root);
+    const softDeformMs = performance.now() - softDeformStartedAt;
+    this.root.userData.applianceConstructionTimings = {
+      modelFactoryMs,
+      targetSetupMs,
+      softDeformMs,
+    };
     this.buildConnectionAnchor();
   }
 
@@ -617,7 +656,8 @@ export class ApplianceScene {
   private draggedTarget: ApplianceTarget | null = null;
   private suppressClick = false;
   private burstHandler: ((origin: THREE.Vector3, direction: THREE.Vector3, count: number) => void) | null = null;
-  private replacementState = 0;
+  private assignmentState = 0;
+  private readonly replacementStates = new Map<number, number>();
   private configuredSeed = 0;
   private configuredDefinitions: ApplianceDefinition[] = [];
   private configuredColors: number[] = [];
@@ -633,7 +673,34 @@ export class ApplianceScene {
     warmup: PreparedReplacement;
   }> = [];
   private readonly preparedReplacements = new Map<ApplianceTarget, PreparedReplacement>();
+  private readonly queuedReplacements = new Map<number, PreparedReplacement[]>();
   private readonly deferredDisposals: DeferredDisposal[] = [];
+  private nextRuntimeReplacementPrepareAt = 0;
+  private replacementDiagnosticsGeneration = 0;
+  private readonly replacementDiagnostics: ApplianceReplacementDiagnostics = {
+    prepareCount: 0,
+    preparedHitCount: 0,
+    preparedMissCount: 0,
+    warmupPendingCount: 0,
+    preparedCount: 0,
+    queuedPreparedCount: 0,
+    deferredDisposalCount: 0,
+    lastFromKind: null,
+    lastToKind: null,
+    lastPrepareBuildMs: 0,
+    maxPrepareBuildMs: 0,
+    lastModelFactoryMs: 0,
+    lastTargetSetupMs: 0,
+    lastSoftDeformMs: 0,
+    lastWarmupMs: 0,
+    maxWarmupMs: 0,
+    lastFallbackBuildMs: 0,
+    maxFallbackBuildMs: 0,
+    lastCommitMs: 0,
+    maxCommitMs: 0,
+    lastDisposalSliceMs: 0,
+    maxDisposalSliceMs: 0,
+  };
 
   constructor() {
     this.root.name = 'appliance-scene';
@@ -675,6 +742,81 @@ export class ApplianceScene {
     this.commitInitialLayout(seed, restoreVisibility);
   }
 
+  /** Build three bounded replacement generations per slot while the loading UI is still active. */
+  async prepareInitialReplacementsAsync(
+    onProgress?: (progress: number, buildMs: number) => void,
+  ): Promise<void> {
+    const initialTargets = [...this.targets];
+    const totalBuilds = initialTargets.length * REPLACEMENT_PRELOAD_GENERATIONS;
+    let completedBuilds = 0;
+    for (let index = 0; index < initialTargets.length; index += 1) {
+      const startedAt = performance.now();
+      this.prepareReplacement(initialTargets[index]);
+      completedBuilds += 1;
+      onProgress?.(completedBuilds / Math.max(1, totalBuilds), performance.now() - startedAt);
+      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+    }
+
+    let projectedTargets = initialTargets.map(
+      (target) => this.preparedReplacements.get(target)?.replacement ?? target,
+    );
+    let projectedRandomStates = initialTargets.map(
+      (target, index) => this.preparedReplacements.get(target)?.nextRandomState
+        ?? this.replacementStateFor(index),
+    );
+    for (let generation = 1; generation < REPLACEMENT_PRELOAD_GENERATIONS; generation += 1) {
+      const nextProjectedTargets: ApplianceTarget[] = [];
+      const nextProjectedRandomStates: number[] = [];
+      for (let index = 0; index < projectedTargets.length; index += 1) {
+        const previous = projectedTargets[index];
+        const startedAt = performance.now();
+        const otherTargets = projectedTargets.filter((_, otherIndex) => otherIndex !== index);
+        const recentKinds = [
+          previous.kind,
+          initialTargets[index].kind,
+          ...(this.replacementKindHistory.get(index) ?? []),
+        ];
+        const randomState = projectedRandomStates[index] ?? this.replacementStateFor(index);
+        const created = this.createReplacement(
+          previous,
+          index,
+          otherTargets,
+          randomState,
+          recentKinds,
+          initialTargets.map((target) => target.kind),
+        );
+        nextProjectedTargets[index] = created.replacement.kind !== previous.kind
+          ? created.replacement
+          : previous;
+        nextProjectedRandomStates[index] = created.nextRandomState;
+        if (created.replacement.kind !== previous.kind) {
+          const queued: PreparedReplacement = {
+            replacement: created.replacement,
+            targetIndex: index,
+            previousResources: previous.collectDisposalResources(),
+            randomState,
+            nextRandomState: created.nextRandomState,
+            warmupReady: this.replacementWarmupHandler === null,
+            warmupPromise: Promise.resolve(),
+          };
+          queued.replacement.root.visible = false;
+          const queue = this.queuedReplacements.get(index) ?? [];
+          queue.push(queued);
+          this.queuedReplacements.set(index, queue);
+          this.recordPreparedReplacement(previous, queued.replacement, performance.now() - startedAt);
+          this.warmPreparedReplacement(queued);
+        } else {
+          created.replacement.dispose();
+        }
+        completedBuilds += 1;
+        onProgress?.(completedBuilds / Math.max(1, totalBuilds), performance.now() - startedAt);
+        await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+      }
+      projectedTargets = nextProjectedTargets;
+      projectedRandomStates = nextProjectedRandomStates;
+    }
+  }
+
   private rememberConfiguration(
     seed: number,
     definitions: readonly ApplianceDefinition[],
@@ -701,6 +843,7 @@ export class ApplianceScene {
   }
 
   private clearTargets(seed: number): void {
+    this.replacementDiagnosticsGeneration += 1;
     this.clearPreparedReplacements();
     this.flushDeferredDisposals();
     this.assignments.clear();
@@ -711,7 +854,33 @@ export class ApplianceScene {
     this.targets.length = 0;
     this.pendingSpawns.length = 0;
     this.replacementKindHistory.clear();
-    this.replacementState = (seed ^ 0x7f4a7c15) >>> 0;
+    this.nextRuntimeReplacementPrepareAt = 0;
+    this.assignmentState = (seed ^ 0x7f4a7c15) >>> 0;
+    this.replacementStates.clear();
+    Object.assign(this.replacementDiagnostics, {
+      prepareCount: 0,
+      preparedHitCount: 0,
+      preparedMissCount: 0,
+      warmupPendingCount: 0,
+      preparedCount: 0,
+      queuedPreparedCount: 0,
+      deferredDisposalCount: 0,
+      lastFromKind: null,
+      lastToKind: null,
+      lastPrepareBuildMs: 0,
+      maxPrepareBuildMs: 0,
+      lastModelFactoryMs: 0,
+      lastTargetSetupMs: 0,
+      lastSoftDeformMs: 0,
+      lastWarmupMs: 0,
+      maxWarmupMs: 0,
+      lastFallbackBuildMs: 0,
+      maxFallbackBuildMs: 0,
+      lastCommitMs: 0,
+      maxCommitMs: 0,
+      lastDisposalSliceMs: 0,
+      maxDisposalSliceMs: 0,
+    });
     this.syncRoutingRevision();
   }
 
@@ -758,9 +927,14 @@ export class ApplianceScene {
   }
 
   setRequiredColors(colors: readonly number[]): void {
-    this.clearPreparedReplacements();
+    const nextColors = new Set(colors);
+    if (
+      nextColors.size === this.requiredColors.size
+      && [...nextColors].every((color) => this.requiredColors.has(color))
+    ) return;
     this.requiredColors.clear();
-    colors.forEach((color) => this.requiredColors.add(color));
+    nextColors.forEach((color) => this.requiredColors.add(color));
+    this.pruneInvalidPreparedReplacements();
     this.syncRoutingRevision();
   }
 
@@ -801,7 +975,7 @@ export class ApplianceScene {
     if (existing) return existing;
     const candidates = this.assignmentCandidates(color);
     if (candidates.length === 0) return null;
-    const target = candidates[Math.floor(this.nextReplacementRandom() * candidates.length)] ?? null;
+    const target = candidates[Math.floor(this.nextAssignmentRandom() * candidates.length)] ?? null;
     if (!target) return null;
     this.assignments.set(cableId, target);
     target.reserve(color);
@@ -927,8 +1101,14 @@ export class ApplianceScene {
           (target.state === 'active' && target.getActiveElapsed() >= SPAWN_DROP_PREPARE_AFTER)
           || target.state === 'inflating'
         );
-      if (shouldPrepareReplacement && !preparedReplacementThisFrame) {
+      if (
+        shouldPrepareReplacement
+        && !preparedReplacementThisFrame
+        && now >= this.nextRuntimeReplacementPrepareAt
+      ) {
         this.prepareReplacement(target);
+        this.nextRuntimeReplacementPrepareAt = performance.now() * 0.001
+          + RUNTIME_REPLACEMENT_PREPARE_GAP;
         preparedReplacementThisFrame = true;
       }
       this.updateDrop(target, delta);
@@ -1140,6 +1320,28 @@ export class ApplianceScene {
       outwardEdge: target.outwardEdge,
     };
     });
+  }
+
+  getReplacementDiagnostics(): ApplianceReplacementDiagnostics {
+    let warmupPendingCount = 0;
+    this.preparedReplacements.forEach((prepared) => {
+      if (!prepared.warmupReady) warmupPendingCount += 1;
+    });
+    this.queuedReplacements.forEach((queue) => {
+      queue.forEach((prepared) => {
+        if (!prepared.warmupReady) warmupPendingCount += 1;
+      });
+    });
+    return {
+      ...this.replacementDiagnostics,
+      warmupPendingCount,
+      preparedCount: this.preparedReplacements.size,
+      queuedPreparedCount: [...this.queuedReplacements.values()].reduce(
+        (count, queue) => count + queue.length,
+        0,
+      ),
+      deferredDisposalCount: this.deferredDisposals.length,
+    };
   }
 
   private unbind(): void {
@@ -1462,6 +1664,7 @@ export class ApplianceScene {
     screenDepth: number,
     now: number,
   ): void {
+    const commitStartedAt = performance.now();
     const targetIndex = this.targets.indexOf(previous);
     if (targetIndex < 0) return;
     previous.root.updateWorldMatrix(true, true);
@@ -1476,17 +1679,29 @@ export class ApplianceScene {
     this.preparedReplacements.delete(previous);
     const usePrepared = prepared
       && prepared.targetIndex === targetIndex
-      && prepared.randomState === this.replacementState
+      && prepared.randomState === this.replacementStateFor(targetIndex)
       && this.isPreparedReplacementValid(previous, prepared.replacement, otherTargets);
+    if (usePrepared) this.replacementDiagnostics.preparedHitCount += 1;
+    else {
+      this.replacementDiagnostics.preparedMissCount += 1;
+      this.disposeQueuedReplacements(targetIndex);
+    }
     const candidate: PreparedReplacement = usePrepared
       ? prepared
       : (() => {
+        const fallbackStartedAt = performance.now();
         const created = this.createReplacement(previous, targetIndex, otherTargets);
+        const fallbackBuildMs = performance.now() - fallbackStartedAt;
+        this.replacementDiagnostics.lastFallbackBuildMs = fallbackBuildMs;
+        this.replacementDiagnostics.maxFallbackBuildMs = Math.max(
+          this.replacementDiagnostics.maxFallbackBuildMs,
+          fallbackBuildMs,
+        );
         const fallback: PreparedReplacement = {
           replacement: created.replacement,
           targetIndex,
           previousResources: prepared?.previousResources ?? previous.collectDisposalResources(),
-          randomState: this.replacementState,
+          randomState: this.replacementStateFor(targetIndex),
           nextRandomState: created.nextRandomState,
           warmupReady: this.replacementWarmupHandler === null,
           warmupPromise: Promise.resolve(),
@@ -1495,7 +1710,7 @@ export class ApplianceScene {
         return fallback;
       })();
     const replacement = candidate.replacement;
-    this.replacementState = candidate.nextRandomState;
+    this.replacementStates.set(targetIndex, candidate.nextRandomState);
     if (prepared && prepared.replacement !== replacement) this.disposePreparedReplacement(prepared);
     const recentKinds = this.replacementKindHistory.get(targetIndex) ?? [];
     this.replacementKindHistory.set(
@@ -1503,6 +1718,7 @@ export class ApplianceScene {
       [...new Set<ApplianceKind>([replacement.kind, previous.kind, ...recentKinds])]
         .slice(0, REPLACEMENT_KIND_HISTORY_SIZE),
     );
+    this.promoteQueuedReplacement(replacement, targetIndex, otherTargets);
     replacement.root.visible = false;
     replacement.depthScale = screenDepth / REFERENCE_SCREEN_DEPTH;
 
@@ -1523,12 +1739,21 @@ export class ApplianceScene {
       readyAt: now + REPLACEMENT_DELAY,
       warmup: candidate,
     });
+    const commitMs = performance.now() - commitStartedAt;
+    this.replacementDiagnostics.lastFromKind = previous.kind;
+    this.replacementDiagnostics.lastToKind = replacement.kind;
+    this.replacementDiagnostics.lastCommitMs = commitMs;
+    this.replacementDiagnostics.maxCommitMs = Math.max(
+      this.replacementDiagnostics.maxCommitMs,
+      commitMs,
+    );
   }
 
   private prepareReplacement(previous: ApplianceTarget): void {
     if (this.preparedReplacements.has(previous)) return;
     const targetIndex = this.targets.indexOf(previous);
     if (targetIndex < 0) return;
+    const prepareStartedAt = performance.now();
     const otherTargets = this.targets.filter((target) => target !== previous);
     const candidate = this.createReplacement(previous, targetIndex, otherTargets);
     const replacement = candidate.replacement;
@@ -1537,13 +1762,37 @@ export class ApplianceScene {
       replacement,
       targetIndex,
       previousResources: previous.collectDisposalResources(),
-      randomState: this.replacementState,
+      randomState: this.replacementStateFor(targetIndex),
       nextRandomState: candidate.nextRandomState,
       warmupReady: this.replacementWarmupHandler === null,
       warmupPromise: Promise.resolve(),
     };
+    this.recordPreparedReplacement(previous, replacement, performance.now() - prepareStartedAt);
     this.preparedReplacements.set(previous, prepared);
     this.warmPreparedReplacement(prepared);
+  }
+
+  private recordPreparedReplacement(
+    previous: ApplianceTarget,
+    replacement: ApplianceTarget,
+    prepareBuildMs: number,
+  ): void {
+    const constructionTimings = replacement.root.userData.applianceConstructionTimings as {
+      modelFactoryMs?: number;
+      targetSetupMs?: number;
+      softDeformMs?: number;
+    } | undefined;
+    this.replacementDiagnostics.prepareCount += 1;
+    this.replacementDiagnostics.lastFromKind = previous.kind;
+    this.replacementDiagnostics.lastToKind = replacement.kind;
+    this.replacementDiagnostics.lastPrepareBuildMs = prepareBuildMs;
+    this.replacementDiagnostics.lastModelFactoryMs = constructionTimings?.modelFactoryMs ?? 0;
+    this.replacementDiagnostics.lastTargetSetupMs = constructionTimings?.targetSetupMs ?? 0;
+    this.replacementDiagnostics.lastSoftDeformMs = constructionTimings?.softDeformMs ?? 0;
+    this.replacementDiagnostics.maxPrepareBuildMs = Math.max(
+      this.replacementDiagnostics.maxPrepareBuildMs,
+      prepareBuildMs,
+    );
   }
 
   private warmPreparedReplacement(prepared: PreparedReplacement): void {
@@ -1552,12 +1801,21 @@ export class ApplianceScene {
       prepared.warmupPromise = Promise.resolve();
       return;
     }
+    const diagnosticsGeneration = this.replacementDiagnosticsGeneration;
+    const warmupStartedAt = performance.now();
     prepared.warmupPromise = Promise.resolve(
       this.replacementWarmupHandler(prepared.replacement.root),
     )
       .catch(() => undefined)
       .then(() => {
         prepared.warmupReady = true;
+        if (diagnosticsGeneration !== this.replacementDiagnosticsGeneration) return;
+        const warmupMs = performance.now() - warmupStartedAt;
+        this.replacementDiagnostics.lastWarmupMs = warmupMs;
+        this.replacementDiagnostics.maxWarmupMs = Math.max(
+          this.replacementDiagnostics.maxWarmupMs,
+          warmupMs,
+        );
       });
     window.setTimeout(() => {
       prepared.warmupReady = true;
@@ -1568,19 +1826,31 @@ export class ApplianceScene {
     previous: ApplianceTarget,
     targetIndex: number,
     otherTargets: readonly ApplianceTarget[],
+    initialRandomState = this.replacementStateFor(targetIndex),
+    recentKinds = this.replacementKindHistory.get(targetIndex) ?? [],
+    additionalOccupiedKinds: readonly ApplianceKind[] = [],
   ): { replacement: ApplianceTarget; nextRandomState: number } {
-    let randomState = this.replacementState;
+    let randomState = initialRandomState;
     const random = (): number => {
       randomState = (Math.imul(randomState, 1664525) + 1013904223) >>> 0;
       return randomState / 4294967296;
     };
     const occupiedKinds = new Set(otherTargets.map((target) => target.kind));
+    additionalOccupiedKinds.forEach((kind) => occupiedKinds.add(kind));
+    this.preparedReplacements.forEach((prepared, preparedFor) => {
+      if (preparedFor !== previous && prepared.targetIndex !== targetIndex) {
+        occupiedKinds.add(prepared.replacement.kind);
+      }
+    });
+    this.queuedReplacements.forEach((queue, queuedTargetIndex) => {
+      if (queuedTargetIndex === targetIndex) return;
+      queue.forEach((prepared) => occupiedKinds.add(prepared.replacement.kind));
+    });
     const available = APPLIANCE_CATALOG.filter(
       (definition) => definition.id !== previous.kind
         && !occupiedKinds.has(definition.id)
         && (this.replacementFilter?.(definition) ?? true),
     );
-    const recentKinds = this.replacementKindHistory.get(targetIndex) ?? [];
     const excludedRecentKinds = new Set<ApplianceKind>([previous.kind, ...recentKinds]);
     const diversePool = available.filter((definition) => !excludedRecentKinds.has(definition.id));
     const pool = diversePool.length > 0 ? diversePool : available;
@@ -1628,27 +1898,91 @@ export class ApplianceScene {
   private clearPreparedReplacements(): void {
     this.preparedReplacements.forEach((prepared) => this.disposePreparedReplacement(prepared));
     this.preparedReplacements.clear();
+    this.queuedReplacements.forEach((queue) => {
+      queue.forEach((prepared) => this.disposePreparedReplacement(prepared));
+    });
+    this.queuedReplacements.clear();
+  }
+
+  private pruneInvalidPreparedReplacements(): void {
+    for (const [previous, prepared] of this.preparedReplacements) {
+      const targetIndex = this.targets.indexOf(previous);
+      const otherTargets = this.targets.filter((target) => target !== previous);
+      const valid = targetIndex >= 0
+        && prepared.targetIndex === targetIndex
+        && prepared.randomState === this.replacementStateFor(targetIndex)
+        && this.isPreparedReplacementValid(previous, prepared.replacement, otherTargets);
+      if (valid) continue;
+      this.preparedReplacements.delete(previous);
+      this.disposePreparedReplacement(prepared);
+      this.disposeQueuedReplacements(targetIndex);
+    }
+  }
+
+  private promoteQueuedReplacement(
+    previous: ApplianceTarget,
+    targetIndex: number,
+    otherTargets: readonly ApplianceTarget[],
+  ): void {
+    const queue = this.queuedReplacements.get(targetIndex);
+    if (!queue) return;
+    while (queue.length > 0) {
+      const prepared = queue.shift()!;
+      const valid = prepared.randomState === this.replacementStateFor(targetIndex)
+        && this.isPreparedReplacementValid(previous, prepared.replacement, otherTargets);
+      if (valid) {
+        this.preparedReplacements.set(previous, prepared);
+        break;
+      }
+      this.disposePreparedReplacement(prepared);
+    }
+    if (queue.length === 0) this.queuedReplacements.delete(targetIndex);
+  }
+
+  private disposeQueuedReplacements(targetIndex: number): void {
+    const queue = this.queuedReplacements.get(targetIndex);
+    if (!queue) return;
+    queue.forEach((prepared) => this.disposePreparedReplacement(prepared));
+    this.queuedReplacements.delete(targetIndex);
   }
 
   private disposePreparedReplacement(prepared: PreparedReplacement): void {
     void prepared.warmupPromise.finally(() => prepared.replacement.dispose());
   }
 
-  private nextReplacementRandom(): number {
-    this.replacementState = (Math.imul(this.replacementState, 1664525) + 1013904223) >>> 0;
-    return this.replacementState / 4294967296;
+  private replacementStateFor(targetIndex: number): number {
+    const existing = this.replacementStates.get(targetIndex);
+    if (existing !== undefined) return existing;
+    const baseState = (this.configuredSeed ^ 0x7f4a7c15) >>> 0;
+    const state = targetIndex === 0
+      ? baseState
+      : (baseState ^ Math.imul(targetIndex, 0x9e3779b9)) >>> 0;
+    this.replacementStates.set(targetIndex, state);
+    return state;
+  }
+
+  private nextAssignmentRandom(): number {
+    this.assignmentState = (Math.imul(this.assignmentState, 1664525) + 1013904223) >>> 0;
+    return this.assignmentState / 4294967296;
   }
 
   private processDeferredDisposals(now: number): void {
-    const deadline = performance.now() + 1.25;
+    const disposalStartedAt = performance.now();
+    const deadline = disposalStartedAt + 1.25;
     while (this.deferredDisposals.length > 0) {
       const batch = this.deferredDisposals[0];
       if (now < batch.readyAt) return;
       batch.resources[batch.nextIndex]?.dispose();
       batch.nextIndex += 1;
       if (batch.nextIndex >= batch.resources.length) this.deferredDisposals.shift();
-      if (performance.now() >= deadline) return;
+      if (performance.now() >= deadline) break;
     }
+    const disposalSliceMs = performance.now() - disposalStartedAt;
+    this.replacementDiagnostics.lastDisposalSliceMs = disposalSliceMs;
+    this.replacementDiagnostics.maxDisposalSliceMs = Math.max(
+      this.replacementDiagnostics.maxDisposalSliceMs,
+      disposalSliceMs,
+    );
   }
 
   private flushDeferredDisposals(): void {
