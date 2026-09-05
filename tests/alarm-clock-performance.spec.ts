@@ -26,6 +26,31 @@ function pose(root: THREE.Group): string {
   }));
 }
 
+function materialColor(root: THREE.Group, name: string): number {
+  const mesh = root.getObjectByName(name) as THREE.Mesh<THREE.BufferGeometry, THREE.MeshToonMaterial>;
+  return mesh.material.color.getHex();
+}
+
+test('alarm clock routes its complete painted shell and bell palette through the appliance accent', () => {
+  const pink = createAlarmClockModel({ id: 'alarm-clock', accent: 0xe58da8 });
+  const blue = createAlarmClockModel({ id: 'alarm-clock', accent: 0x56a8ff });
+  const routedParts = [
+    'alarm-clock-circular-shell',
+    'alarm-clock-shell-front-band',
+    'alarm-clock-bell-1-dome',
+    'alarm-clock-bell-1-lower-lip',
+    'alarm-clock-arched-carry-handle',
+    'alarm-clock-top-alarm-lever-bar',
+  ];
+
+  routedParts.forEach((name) => {
+    expect(materialColor(pink.root, name), `${name} should use pink route color`)
+      .not.toBe(materialColor(blue.root, name));
+  });
+  expect(materialColor(pink.root, 'alarm-clock-ivory-dial'))
+    .toBe(materialColor(blue.root, 'alarm-clock-ivory-dial'));
+});
+
 test('alarm clock is one rigid hierarchy with clearly enlarged twin bells', () => {
   const model = build();
   const body = model.root.getObjectByName('alarm-clock-body-pivot');

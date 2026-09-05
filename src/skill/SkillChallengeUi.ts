@@ -50,6 +50,8 @@ export class SkillChallengeUi {
   private cardRevealTimer = 0;
   private buffDeletionTimer = 0;
   private buffDeletionElements: HTMLElement[] = [];
+  private normalizationTimer = 0;
+  private normalizationBadge: HTMLElement | null = null;
 
   constructor(private readonly options: SkillChallengeUiOptions) {
     this.cue.addEventListener('pointerenter', this.onCuePointerEnter);
@@ -110,6 +112,31 @@ export class SkillChallengeUi {
     this.buffDeletionElements.push(label);
     document.documentElement.classList.add('desktop-buff-deleting');
     this.buffDeletionTimer = window.setTimeout(() => this.clearBuffDeletion(), 1_150);
+  }
+
+  showStatusNormalized(turns: number): void {
+    this.clearStatusNormalization();
+    const slots = [this.buffSlot, this.debuffSlot].filter((slot) => (
+      slot.classList.contains('occupied')
+      && slot.querySelector<HTMLElement>('.skill-status-count')?.textContent === String(turns)
+    ));
+    if (slots.length === 0) return;
+    slots.forEach((slot) => {
+      slot.classList.remove('skill-status-normalized');
+      void slot.offsetWidth;
+      slot.classList.add('skill-status-normalized');
+    });
+    const rects = slots.map((slot) => slot.getBoundingClientRect());
+    const centerX = rects.reduce((sum, rect) => sum + rect.left + rect.width * 0.5, 0) / rects.length;
+    const bottom = Math.max(...rects.map((rect) => rect.bottom));
+    const badge = document.createElement('strong');
+    badge.className = 'skill-status-normalized-badge';
+    badge.textContent = `限回合状态 → ${turns}`;
+    badge.style.left = `${centerX}px`;
+    badge.style.top = `${bottom + 8}px`;
+    document.body.append(badge);
+    this.normalizationBadge = badge;
+    this.normalizationTimer = window.setTimeout(() => this.clearStatusNormalization(), 1_550);
   }
 
   showCue(label: string, phase: 'cue' | 'commit' | 'settle' = 'cue', detail = '', source = '家电连接完成'): void {
@@ -225,6 +252,7 @@ export class SkillChallengeUi {
     this.screenEffect.dataset.effect = 'none';
     this.screenEffect.classList.remove('active');
     this.clearBuffDeletion();
+    this.clearStatusNormalization();
   }
 
   dispose(): void {
@@ -244,6 +272,15 @@ export class SkillChallengeUi {
     document.documentElement.classList.remove('desktop-buff-deleting');
     this.buffDeletionElements.forEach((element) => element.remove());
     this.buffDeletionElements = [];
+  }
+
+  private clearStatusNormalization(): void {
+    window.clearTimeout(this.normalizationTimer);
+    this.normalizationTimer = 0;
+    this.buffSlot.classList.remove('skill-status-normalized');
+    this.debuffSlot.classList.remove('skill-status-normalized');
+    this.normalizationBadge?.remove();
+    this.normalizationBadge = null;
   }
 
   private readonly onCuePointerEnter = (): void => {

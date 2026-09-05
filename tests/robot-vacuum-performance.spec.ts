@@ -93,12 +93,16 @@ test('robot vacuum plug head stays visible until it reaches the side socket', ()
       phaseStartedAt: number;
       duration: number;
       head: { root: THREE.Group };
+      cable: THREE.InstancedMesh;
     }>;
   }).flights[0];
+  const connectionGeometry = flight.cable.geometry;
+  expect(flight.cable.count).toBe(9);
   flight.phase = 'enter';
   flight.duration = 1;
   flight.phaseStartedAt = performance.now() * 0.001 - 0.95;
   connections.update(0, camera);
+  expect(flight.cable.geometry).toBe(connectionGeometry);
   expect(flight.head.root.visible).toBe(true);
   expect(flight.head.root.position.distanceTo(target.getConnectionWorldPosition())).toBeLessThan(0.03);
   connections.dispose();

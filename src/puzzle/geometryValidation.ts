@@ -24,6 +24,28 @@ export type GeometryIssue = {
   distance?: number;
 };
 
+function gridSegmentDirection(start: GridPoint, end: GridPoint): GridPoint {
+  return [
+    Math.sign(end[0] - start[0]),
+    Math.sign(end[1] - start[1]),
+    Math.sign(end[2] - start[2]),
+  ];
+}
+
+export function plugEndpointDirectionIsValid(definition: ArrowDefinition): boolean {
+  if (definition.path.length < 2) return false;
+  const head = definition.path[definition.path.length - 1];
+  const previous = definition.path[definition.path.length - 2];
+  const outward = gridSegmentDirection(previous, head);
+  return directionKeyFromDelta(outward) === definition.exitDirection;
+}
+
+export function allPlugEndpointDirectionsAreValid(
+  definitions: readonly ArrowDefinition[],
+): boolean {
+  return definitions.every(plugEndpointDirectionIsValid);
+}
+
 type Segment = {
   start: THREE.Vector3;
   end: THREE.Vector3;
@@ -141,6 +163,12 @@ type PlugEnvelope = {
 
 const PLUG_BODY_RADIUS = PLUG_HEAD_MAX_RADIUS;
 const PLUG_CONTACT_RADIUS = PLUG_HEAD_PIN_RADIUS + PLUG_HEAD_PIN_CLEARANCE;
+// Generation needs a little more room than the static collision envelope:
+// rounded cable fillets and the first frame of a plug pull occupy a visible
+// halo around the socket. Without this margin, a head placed immediately
+// before a turn can be technically clear yet visually interleave another
+// cable's body.
+const PLUG_HEAD_GENERATION_CLEARANCE = PLUG_BODY_RADIUS + ARROW_RADIUS + 0.07;
 
 function plugEnvelope(definition: ArrowDefinition, end: CableEnd = 'head'): PlugEnvelope {
   const endpointIndex = end === 'head' ? definition.path.length - 1 : 0;
@@ -333,6 +361,7 @@ export function candidateGeometryIsClear(
   candidate: ArrowDefinition,
   existing: readonly ArrowDefinition[],
 ): boolean {
+  if (!plugEndpointDirectionIsValid(candidate)) return false;
   if (validatePuzzleGeometry([candidate]).length > 0) return false;
 
   const bodyClearanceSq = STATIC_BODY_CLEARANCE ** 2;
@@ -344,6 +373,13 @@ export function candidateGeometryIsClear(
     if (expandUnitEdges(other).some((edge) => candidateEdges.has(edge))) return false;
 
     const otherSegments = segmentsFor(other);
+    // The visible plug is a capsule extending away from the head socket. A
+    // socket-point-only test misses the common case where the first cable run
+    // turns immediately and the plug body itself sweeps through a neighbour.
+    // Apply the larger generation halo to the complete candidate plug body.
+    if (candidatePlugs.some((plug) => otherSegments.some((segment) => (
+      segmentDistanceSq(plug.body, segment) < PLUG_HEAD_GENERATION_CLEARANCE ** 2
+    )))) return false;
     for (const candidateSegment of candidateSegments) {
       for (const otherSegment of otherSegments) {
         if (segmentDistanceSq(candidateSegment, otherSegment) < bodyClearanceSq) return false;

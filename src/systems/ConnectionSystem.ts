@@ -9,7 +9,6 @@ import {
   CABLE_RADIAL_SEGMENTS,
   CABLE_RADIUS,
   createCableToonMaterial,
-  createCappedTubeGeometry,
 } from '../render/CableGeometry';
 import type { ApplianceTarget } from './ApplianceScene';
 
@@ -20,7 +19,7 @@ type ConnectionFlight = {
   start: THREE.Vector3;
   exitDirection: THREE.Vector3;
   head: PlugHead;
-  cable: THREE.Mesh<THREE.BufferGeometry, THREE.MeshToonMaterial>;
+  cable: THREE.InstancedMesh<THREE.CylinderGeometry, THREE.MeshToonMaterial>;
   material: THREE.MeshToonMaterial;
   target: ApplianceTarget;
   color: number;
@@ -35,6 +34,15 @@ const OFFSCREEN_NDC = 1.16;
 const INNER_EDGE_NDC = 0.86;
 const EXIT_DURATION = 0.58;
 const ENTER_DURATION = 0.96;
+const TRAIL_SEGMENT_COUNT = 9;
+const hiddenTrailMatrix = new THREE.Matrix4().makeScale(0, 0, 0);
+const trailPointA = new THREE.Vector3();
+const trailPointB = new THREE.Vector3();
+const trailMidpoint = new THREE.Vector3();
+const trailDirection = new THREE.Vector3();
+const trailQuaternion = new THREE.Quaternion();
+const trailScale = new THREE.Vector3();
+const trailMatrix = new THREE.Matrix4();
 
 function worldPointAtNdc(
   ndc: THREE.Vector2,
@@ -161,15 +169,26 @@ export class ConnectionSystem {
     target.reserve(color);
     const material = createCableToonMaterial(color);
     const head = createPlugHead(color, PLUG_HEAD_SCALE, true, plugStyleId);
-    const initialCurve = new THREE.LineCurve3(
-      start.clone(),
-      start.clone().add(new THREE.Vector3(0, 0.01, 0)),
-    );
-    const cable = new THREE.Mesh(
-      createCappedTubeGeometry(initialCurve, CABLE_RADIUS, CABLE_RADIAL_SEGMENTS, 2),
+    const cable = new THREE.InstancedMesh(
+      new THREE.CylinderGeometry(
+        CABLE_RADIUS,
+        CABLE_RADIUS,
+        1,
+        CABLE_RADIAL_SEGMENTS,
+        1,
+        false,
+      ),
       material,
+      TRAIL_SEGMENT_COUNT,
     );
-    cable.castShadow = true;
+    cable.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+    for (let index = 0; index < TRAIL_SEGMENT_COUNT; index += 1) {
+      cable.setMatrixAt(index, hiddenTrailMatrix);
+    }
+    cable.instanceMatrix.needsUpdate = true;
+    cable.castShadow = false;
+    cable.receiveShadow = false;
+    cable.frustumCulled = false;
     cable.visible = false;
     const root = new THREE.Group();
     root.add(cable, head.root);
@@ -209,20 +228,25 @@ export class ConnectionSystem {
 
       const trailStart = Math.max(0, progress - (flight.phase === 'exit' ? 0.34 : 0.24));
       if (progress > 0.012) {
-        const points: THREE.Vector3[] = [];
-        const samples = 9;
-        for (let sample = 0; sample <= samples; sample += 1) {
-          points.push(flight.curve.getPointAt(THREE.MathUtils.lerp(trailStart, progress, sample / samples)));
+        flight.curve.getPointAt(trailStart, trailPointA);
+        for (let segment = 0; segment < TRAIL_SEGMENT_COUNT; segment += 1) {
+          const sampleProgress = THREE.MathUtils.lerp(
+            trailStart,
+            progress,
+            (segment + 1) / TRAIL_SEGMENT_COUNT,
+          );
+          flight.curve.getPointAt(sampleProgress, trailPointB);
+          trailDirection.subVectors(trailPointB, trailPointA);
+          const length = Math.max(0.0001, trailDirection.length());
+          trailDirection.multiplyScalar(1 / length);
+          trailMidpoint.addVectors(trailPointA, trailPointB).multiplyScalar(0.5);
+          trailQuaternion.setFromUnitVectors(up, trailDirection);
+          trailScale.set(1, length, 1);
+          trailMatrix.compose(trailMidpoint, trailQuaternion, trailScale);
+          flight.cable.setMatrixAt(segment, trailMatrix);
+          trailPointA.copy(trailPointB);
         }
-        const trailCurve = new THREE.CatmullRomCurve3(points, false, 'centripetal', 0.45);
-        const nextGeometry = createCappedTubeGeometry(
-          trailCurve,
-          CABLE_RADIUS,
-          CABLE_RADIAL_SEGMENTS,
-          12,
-        );
-        flight.cable.geometry.dispose();
-        flight.cable.geometry = nextGeometry;
+        flight.cable.instanceMatrix.needsUpdate = true;
         flight.cable.visible = true;
       }
 

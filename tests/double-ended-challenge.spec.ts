@@ -49,28 +49,32 @@ async function rotateUntilVisibleExit(page: Page) {
   throw new Error('No visible exit found after a full manual orbit');
 }
 
-test('double-ended and RUSH modes have equal twenty-percent random-pool weights', () => {
-  const doubleEndedWeight = RANDOM_CHALLENGE_MODE_WEIGHTS.find(
-    ({ mode }) => mode === 'double-ended',
-  )?.weight;
-  const rushWeight = RANDOM_CHALLENGE_MODE_WEIGHTS.find(({ mode }) => mode === 'rush')?.weight;
-  expect(doubleEndedWeight).toBe(20);
-  expect(rushWeight).toBe(doubleEndedWeight);
+test('total random pool contains all five challenge modes at equal twenty-percent weights', () => {
+  expect(RANDOM_CHALLENGE_MODE_WEIGHTS).toEqual([
+    { mode: 'standard', weight: 20 },
+    { mode: 'exploration', weight: 20 },
+    { mode: 'skill', weight: 20 },
+    { mode: 'double-ended', weight: 20 },
+    { mode: 'rush', weight: 20 },
+  ]);
+
+  const sampledModes = Array.from(
+    { length: 10_000 },
+    (_, seed) => selectRandomChallengeMode(seed),
+  );
+  for (const { mode } of RANDOM_CHALLENGE_MODE_WEIGHTS) {
+    const count = sampledModes.filter((sampledMode) => sampledMode === mode).length;
+    expect(count, `${mode} should occupy one fifth of the total random pool`).toBeGreaterThanOrEqual(1_800);
+    expect(count, `${mode} should occupy one fifth of the total random pool`).toBeLessThanOrEqual(2_200);
+  }
 
   const doubleEnded = Array.from({ length: 10_000 }, (_, seed) => ({
     mode: selectRandomChallengeMode(seed),
     level: getRandomLevel(seed),
   })).filter(({ mode, level }) => mode === 'double-ended' && level.challengeKind === 'double-ended');
-  const rushCount = Array.from(
-    { length: 10_000 },
-    (_, seed) => selectRandomChallengeMode(seed),
-  ).filter((mode) => mode === 'rush').length;
 
   expect(doubleEnded.length).toBeGreaterThanOrEqual(1_800);
   expect(doubleEnded.length).toBeLessThanOrEqual(2_200);
-  expect(rushCount).toBeGreaterThanOrEqual(1_800);
-  expect(rushCount).toBeLessThanOrEqual(2_200);
-  expect(Math.abs(doubleEnded.length - rushCount)).toBeLessThanOrEqual(200);
   expect(doubleEnded.every(({ level }) =>
     level.referenceTargetCount !== undefined &&
     level.targetCount === Math.round(level.referenceTargetCount * 0.8)

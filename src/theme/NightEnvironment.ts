@@ -31,8 +31,12 @@ export class NightEnvironment {
   private readonly lanternNdc = new THREE.Vector2(0, 0);
   private readonly lanternTarget = new THREE.Vector2(0, 0);
   private readonly lanternCenter = new THREE.Vector2(0, 0);
-  private lanternIntensity = 0.65;
-  private lanternTargetIntensity = 0.65;
+  // Start dark and let the first real frame ease the cursor lantern in. The
+  // previous 0.65 default combined with the centered NDC origin on refresh
+  // and rendered a one-frame oval flash in the middle of the homepage.
+  private lanternIntensity = 0;
+  private lanternTargetIntensity = 0;
+  private lastElapsed = 0;
   private pointerActive = false;
   private pointerOverUi = false;
   private inApplianceZone = false;
@@ -119,15 +123,30 @@ export class NightEnvironment {
     galleryOpen: boolean;
     openingFocus?: THREE.Vector3;
   }): void {
+    // The main loop deliberately clamps simulation delta to 50 ms. Cursor
+    // lighting is presentation state, though: on a slow WebGL frame it should
+    // still catch up to the real pointer instead of needing several seconds.
+    // Cap the wall-clock step so tab resumes cannot create a hard snap.
+    const wallDelta = this.lastElapsed > 0 ? elapsed - this.lastElapsed : delta;
+    this.lastElapsed = elapsed;
+    const presentationDelta = THREE.MathUtils.clamp(
+      Number.isFinite(wallDelta) ? wallDelta : delta,
+      0,
+      0.25,
+    );
     const forceCenter = options.galleryOpen || this.pointerOverUi || !this.pointerActive;
     const desired = forceCenter ? this.lanternCenter : this.lanternTarget;
-    const response = this.reducedMotion ? 1 : 1 - Math.exp(-delta / 0.105);
+    const response = this.reducedMotion ? 1 : 1 - Math.exp(-presentationDelta / 0.105);
     this.lanternNdc.lerp(desired, response);
+    // No cursor interaction means there is no authored lantern source yet.
+    // Keeping the old centered fallback here made refreshes paint a very
+    // obvious oval in the middle of the homepage after the first dark frame.
+    // The light should only exist once the pointer has supplied a real target.
     const desiredIntensity = options.galleryOpen
       ? 0
-      : forceCenter ? 0.68 : options.opening ? 1.04 : 1;
+      : forceCenter ? 0 : options.opening ? 1.04 : 1;
     this.lanternTargetIntensity = desiredIntensity;
-    const intensityResponse = 1 - Math.exp(-delta / (forceCenter ? 0.4 : 0.12));
+    const intensityResponse = 1 - Math.exp(-presentationDelta / (forceCenter ? 0.4 : 0.12));
     this.lanternIntensity = THREE.MathUtils.lerp(
       this.lanternIntensity,
       this.lanternTargetIntensity,

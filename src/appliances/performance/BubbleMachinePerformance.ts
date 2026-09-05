@@ -79,6 +79,14 @@ type BurstFragmentRig = {
   miniBubble: boolean;
 };
 
+type OrdinaryBubbleBatch = {
+  mesh: THREE.InstancedMesh;
+  bindings: Array<{
+    pivot: THREE.Group;
+    source: THREE.Mesh;
+  }>;
+};
+
 function suffixIndex(name: string): number {
   return Number(name.match(/(\d+)$/)?.[1] ?? 0);
 }
@@ -135,6 +143,7 @@ export function createBubbleMachinePerformance(
   const giant = root.getObjectByName('bubble-machine-giant-bubble') as THREE.Group | undefined;
   const burstRig = root.getObjectByName('bubble-machine-giant-bubble-burst-rig') as THREE.Group | undefined;
   const ordinary: OrdinaryBubbleRig[] = [];
+  const ordinaryBatches: OrdinaryBubbleBatch[] = [];
   const burstFragments: BurstFragmentRig[] = [];
   root.traverse((object) => {
     if (object instanceof THREE.Group && /^bubble-machine-performance-bubble-\d+$/.test(object.name)) {
@@ -162,6 +171,20 @@ export function createBubbleMachinePerformance(
         miniBubble: object.name.includes('mini-bubble'),
       });
     }
+    if (object instanceof THREE.InstancedMesh && Array.isArray(object.userData.bubbleBatchBindings)) {
+      const bindings = object.userData.bubbleBatchBindings.flatMap((binding: unknown) => {
+        if (!binding || typeof binding !== 'object') return [];
+        const bubbleName = Reflect.get(binding, 'bubbleName');
+        const sourceMeshName = Reflect.get(binding, 'sourceMeshName');
+        if (typeof bubbleName !== 'string' || typeof sourceMeshName !== 'string') return [];
+        const pivot = root.getObjectByName(bubbleName);
+        const source = root.getObjectByName(sourceMeshName);
+        return pivot instanceof THREE.Group && source instanceof THREE.Mesh
+          ? [{ pivot, source }]
+          : [];
+      });
+      ordinaryBatches.push({ mesh: object, bindings });
+    }
   });
   ordinary.sort((first, second) => first.index - second.index);
   burstFragments.sort((first, second) => first.index - second.index);
@@ -175,7 +198,28 @@ export function createBubbleMachinePerformance(
   const emitterLocal = new THREE.Vector3(-0.76, 1.53, 1.015);
   const sample = new THREE.Vector3();
   const giantBurstOrigin = new THREE.Vector3();
+  const instanceMatrix = new THREE.Matrix4();
+  const hiddenInstanceMatrix = new THREE.Matrix4().makeScale(0, 0, 0);
   let signalValue = 0;
+
+  const syncOrdinaryBatches = (): void => {
+    ordinaryBatches.forEach(({ mesh, bindings }) => {
+      let visibleInstances = 0;
+      bindings.forEach(({ pivot, source }, index) => {
+        if (pivot.visible) {
+          pivot.updateMatrix();
+          source.updateMatrix();
+          instanceMatrix.multiplyMatrices(pivot.matrix, source.matrix);
+          mesh.setMatrixAt(index, instanceMatrix);
+          visibleInstances += 1;
+        } else {
+          mesh.setMatrixAt(index, hiddenInstanceMatrix);
+        }
+      });
+      mesh.visible = visibleInstances > 0;
+      mesh.instanceMatrix.needsUpdate = true;
+    });
+  };
 
   const diagnostics: BubbleMachinePerformanceDiagnostics = {
     time: 0,
@@ -242,6 +286,7 @@ export function createBubbleMachinePerformance(
       mesh.rotation.set(0, 0, 0);
       mesh.scale.set(1, 1, 1);
     });
+    syncOrdinaryBatches();
     signalValue = 0;
     Object.assign(diagnostics, {
       time: 0,
@@ -327,6 +372,7 @@ export function createBubbleMachinePerformance(
       maximumY = Math.max(maximumY, bubble.pivot.position.y);
       visibleOrdinaryBubbles += 1;
     });
+    syncOrdinaryBatches();
 
     let giantBubbleTopY = 0;
     const giantLaunch = giant ? numberData(giant, 'launchTime', BUBBLE_MACHINE_TIMELINE.giantLaunch) : 0;

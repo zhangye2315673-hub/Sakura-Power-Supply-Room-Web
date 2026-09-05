@@ -97,20 +97,20 @@ test('微波炉目标被自动移除时立即清除过热状态', () => {
   expect(engine.state.debuff).toBeNull();
 });
 
-test('咖啡第 4 次正确抽线仍封锁该次家电技能', () => {
+test('咖啡第 3 次正确抽线仍封锁该次家电技能，第 4 次恢复', () => {
   const engine = new SkillChallengeEngine(17);
   expect(APPLIANCE_SKILL_REGISTRY.get('coffee-maker')?.polarity).toBe('negative');
-  pull(engine, 'coffee', 'coffee-maker', ['a', 'b', 'c', 'd', 'e']);
+  pull(engine, 'coffee', 'coffee-maker', ['a', 'b', 'c', 'd']);
   expect(engine.state.debuff?.id).toBe('coffee-lock');
-  expect(engine.state.debuff?.turnsRemaining).toBe(4);
+  expect(engine.state.debuff?.turnsRemaining).toBe(3);
   engine.settle();
 
-  for (const [index, cableId] of ['a', 'b', 'c', 'd'].entries()) {
-    const result = pull(engine, cableId, 'printer', ['e']);
+  for (const [index, cableId] of ['a', 'b', 'c'].entries()) {
+    const result = pull(engine, cableId, 'printer', ['d']);
     expect(result.coffeeBlocked).toBe(true);
     expect(result.resolution).toBeNull();
     expect(engine.state.printerCopyReady).toBe(false);
-    if (index < 3) engine.settle();
+    if (index < 2) engine.settle();
   }
   expect(engine.state.debuff?.id).toBe('coffee-lock');
   expect(engine.state.debuff?.turnsRemaining).toBe(0);
@@ -233,10 +233,10 @@ test('最后一根线不提交家电技能或伤害', () => {
 test('自动清线只清理附着状态，不推进咖啡回合', () => {
   const engine = new SkillChallengeEngine(72);
   pull(engine, 'coffee', 'coffee-maker', ['a', 'b', 'c']);
-  expect(engine.state.debuff?.turnsRemaining).toBe(4);
+  expect(engine.state.debuff?.turnsRemaining).toBe(3);
   engine.settle();
   engine.notifyAutoRemoved('a');
-  expect(engine.state.debuff?.turnsRemaining).toBe(4);
+  expect(engine.state.debuff?.turnsRemaining).toBe(3);
 });
 
 test('泡泡保护抵挡一次受阻点击且不扣生命', () => {
@@ -248,6 +248,22 @@ test('泡泡保护抵挡一次受阻点击且不扣生命', () => {
   expect(result.protected).toBe(true);
   expect(result.lives).toBe(3);
   expect(engine.state.buff).toBeNull();
+});
+
+test('同一局第二次泡泡机技能保留护盾并产生可重播的技能结算', () => {
+  const engine = new SkillChallengeEngine(85);
+  const first = pull(engine, 'bubble-a', 'bubble-machine', ['a', 'b', 'c']);
+  expect(first.resolution?.appliance).toBe('bubble-machine');
+  expect(engine.state.buff?.id).toBe('iridescent-bubble');
+  expect(engine.state.buff?.turnsRemaining).toBe(5);
+  engine.settle();
+
+  const second = pull(engine, 'bubble-b', 'bubble-machine', ['a', 'b']);
+  expect(second.resolution?.appliance).toBe('bubble-machine');
+  expect(second.buffPreserved).toBe(true);
+  expect(second.buffFallback).toEqual({ type: 'extend-buff', amount: 1 });
+  expect(engine.state.buff?.id).toBe('iridescent-bubble');
+  expect(engine.state.buff?.turnsRemaining).toBe(5);
 });
 
 test('收音机冻结三步顺序，扫地机器人冻结触发快照', () => {
@@ -439,7 +455,7 @@ test('电饭煲粗线维持三个正确抽线回合，自动清线不扣回合',
   }
 });
 
-test('便携音箱允许按通用规则替换已有 BUFF', () => {
+test('已有持续 BUFF 时新 BUFF 不覆盖，并把新技能转换为旧 BUFF 延长一回合', () => {
   const engine = new SkillChallengeEngine(76);
   engine.primeForSkillTest([{
     type: 'set-status',
@@ -454,12 +470,87 @@ test('便携音箱允许按通用规则替换已有 BUFF', () => {
       createdBySkillEventIndex: 0,
     },
   }]);
-  const speaker = APPLIANCE_SKILL_REGISTRY.get('portable-speaker')!;
-  const result = speaker.resolve(context(engine, ['a', 'b']), new DeterministicRng(1));
-  expect(speaker.canTrigger(context(engine, ['a', 'b']))).toBe(true);
-  expect(result.commands).toEqual(expect.arrayContaining([
-    expect.objectContaining({ type: 'set-status', slot: 'buff' }),
-  ]));
+  const result = pull(engine, 'speaker', 'portable-speaker', ['a', 'b']);
+  expect(result.resolution?.skillId).toBe('bass-spacing');
+  expect(result.buffPreserved).toBe(true);
+  expect(result.buffFallback).toEqual({ type: 'extend-buff', amount: 1 });
+  expect(engine.state.buff?.id).toBe('dry-shield');
+  expect(engine.state.buff?.turnsRemaining).toBe(2);
+});
+
+test('已有 DEBUFF 时新 DEBUFF 不覆盖，并明确返回本次干扰被抵消', () => {
+  const engine = new SkillChallengeEngine(81);
+  engine.primeForSkillTest([{
+    type: 'set-status',
+    slot: 'debuff',
+    status: {
+      id: 'rice-thick-cable',
+      sourceAppliance: 'rice-cooker',
+      iconId: 'debuff-rice-thick-cable',
+      turnsRemaining: 3,
+      targetCableIds: [],
+      payload: {},
+      createdBySkillEventIndex: 0,
+    },
+  }]);
+
+  const result = pull(engine, 'coffee', 'coffee-maker', ['a', 'b']);
+  expect(result.resolution).toBeNull();
+  expect(result.debuffSuppressed).toBe(true);
+  expect(engine.state.debuff?.id).toBe('rice-thick-cable');
+  expect(engine.state.debuff?.turnsRemaining).toBe(2);
+});
+
+test('已有永久 BUFF 时唱片机保留旧状态且只结算原本的一次回血', () => {
+  const engine = new SkillChallengeEngine(82);
+  engine.primeForSkillTest([
+    { type: 'damage-or-remove-buff', amount: 1, source: 'desktop-computer' },
+    { type: 'damage-or-remove-buff', amount: 1, source: 'desktop-computer' },
+    {
+      type: 'set-status',
+      slot: 'buff',
+      status: {
+        id: 'soothing-record',
+        sourceAppliance: 'record-player',
+        iconId: 'buff-soothing-record',
+        turnsRemaining: null,
+        targetCableIds: [],
+        payload: {},
+        createdBySkillEventIndex: 0,
+      },
+    },
+  ]);
+  expect(engine.state.currentLives).toBe(1);
+
+  const result = pull(engine, 'record', 'record-player', ['a', 'b']);
+  expect(result.buffPreserved).toBe(true);
+  expect(result.buffFallback).toEqual({ type: 'heal', amount: 0 });
+  expect(engine.state.currentLives).toBe(2);
+  expect(engine.state.buff?.id).toBe('soothing-record');
+});
+
+test('已有永久护盾且新 BUFF没有即时收益时增加一次额外抵挡', () => {
+  const engine = new SkillChallengeEngine(83);
+  engine.primeForSkillTest([{
+    type: 'set-status',
+    slot: 'buff',
+    status: {
+      id: 'soothing-record',
+      sourceAppliance: 'record-player',
+      iconId: 'buff-soothing-record',
+      turnsRemaining: null,
+      targetCableIds: [],
+      payload: {},
+      createdBySkillEventIndex: 0,
+    },
+  }]);
+
+  const result = pull(engine, 'bubble', 'bubble-machine', ['a', 'b']);
+  expect(result.buffFallback).toEqual({ type: 'add-shield-charge', amount: 1 });
+  expect(engine.handleBlockedAttempt()).toMatchObject({ protected: true, lives: 3 });
+  expect(engine.state.buff?.id).toBe('soothing-record');
+  expect(engine.handleBlockedAttempt()).toMatchObject({ protected: true, lives: 3 });
+  expect(engine.state.buff).toBeNull();
 });
 
 test('烤面包机换头永远排除微波炉过热线', () => {

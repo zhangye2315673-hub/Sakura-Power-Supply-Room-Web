@@ -38,6 +38,11 @@ interface ThreeGameDiagnostics {
     x: number;
     y: number;
   }>;
+  availableCableChoices: Array<{
+    id: string;
+    end: 'head' | 'tail';
+    color: number;
+  }>;
   blockedClickTarget: {
     id: string;
     end: 'head' | 'tail';
@@ -296,6 +301,8 @@ interface ThreeGameDiagnostics {
     screenEffect: {
       mode: import('./style/post').SkillScreenEffect;
       progress: number;
+      age: number;
+      activationCount: number;
       splashActive: boolean;
       splashProgress: number;
     };
@@ -443,6 +450,14 @@ interface Window {
   __COFFEE_SPLASH_PROGRESS_OVERRIDE__?: number;
   __COFFEE_STAIN_PROGRESS_OVERRIDE__?: number;
     __SHOW_SKILL_EFFECT_FOR_EVIDENCE__?: (asset: string, yaw?: number) => boolean;
+    __TRIGGER_TELEVISION_GLITCH_FOR_EVIDENCE__?: (restart?: boolean) => {
+      mode: import('./style/post').SkillScreenEffect;
+      progress: number;
+      age: number;
+      activationCount: number;
+      splashActive: boolean;
+      splashProgress: number;
+    };
   __SHOW_SKILL_PRESENTATION_FOR_EVIDENCE__?: (
     skill: 'radio' | 'robot-vacuum' | 'rice-cooker',
   ) => boolean;
@@ -451,10 +466,13 @@ interface Window {
   __CONTEXT_RECOVERY_EXTENSION__?: WEBGL_lose_context;
   /** Deterministic visual-regression clock for the shared appliance timeline. */
   __APPLIANCE_PERFORMANCE_TIME_OVERRIDE__?: number;
+  __COLLECT_ALL_CLICK_TARGETS_FOR_EVIDENCE__?: boolean;
   /** Exact ballistic age used by fixed-time appliance visual evidence. */
   __APPLIANCE_PERFORMANCE_FLIGHT_TIME_OVERRIDE__?: number;
   /** Fixed fan steam-clear progress used only by visual evidence. */
   __STEAM_CLEAR_PROGRESS_OVERRIDE__?: number;
+  /** Fixed television glitch burst age used only by deterministic visual evidence. */
+  __TELEVISION_GLITCH_AGE_OVERRIDE__?: number;
   /** Fixed humidifier steam-reveal progress used only by visual evidence. */
   __STEAM_REVEAL_PROGRESS_OVERRIDE__?: number;
   __THREE_GAME_DIAGNOSTICS__?: ThreeGameDiagnostics;

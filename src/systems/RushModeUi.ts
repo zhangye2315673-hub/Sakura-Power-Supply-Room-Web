@@ -2,7 +2,6 @@ import type { RushChallenge } from '../puzzle/rushChallenges';
 import { getLocale, t, type TranslationKey } from './Locale';
 
 type RushResult = 'success' | 'failure';
-type RushNextAction = 'next-level' | 'random-pool';
 
 export type RushVisualPressure = {
   pressure: number;
@@ -80,7 +79,6 @@ export class RushModeUi {
   private readonly resultHomeButton = this.getButton('#rush-result-home-button');
   private challenge: RushChallenge | null = null;
   private result: RushResult | null = null;
-  private nextAction: RushNextAction = 'random-pool';
   private lastDisplayedSeconds: number | null = null;
   private timerScaleCap = 2;
 
@@ -159,9 +157,8 @@ export class RushModeUi {
     this.lastDisplayedSeconds = seconds;
   }
 
-  showResult(result: RushResult, nextAction: RushNextAction = 'random-pool'): void {
+  showResult(result: RushResult): void {
     this.result = result;
-    this.nextAction = nextAction;
     this.briefingPanel.classList.remove('visible');
     this.briefingPanel.setAttribute('aria-hidden', 'true');
     this.timer.classList.remove('visible', 'waiting', 'tick', 'warning', 'urgent', 'critical');
@@ -179,7 +176,6 @@ export class RushModeUi {
   hide(): void {
     this.challenge = null;
     this.result = null;
-    this.nextAction = 'random-pool';
     document.documentElement.classList.remove('rush-active', 'rush-running');
     this.timer.classList.remove('visible', 'waiting', 'tick', 'warning', 'urgent', 'critical');
     this.timer.setAttribute('aria-hidden', 'true');
@@ -214,9 +210,7 @@ export class RushModeUi {
       : t('rush.timer.running');
     this.startButton.textContent = t('rush.briefing.start');
     this.briefingHomeButton.textContent = t('actions.home');
-    this.nextButton.textContent = t(
-      this.nextAction === 'next-level' ? 'rush.result.nextLevel' : 'rush.result.next',
-    );
+    this.nextButton.textContent = t('complete.retry');
     this.retryButton.textContent = t('rush.result.retry');
     this.resultHomeButton.textContent = t('actions.home');
     if (!this.result) return;

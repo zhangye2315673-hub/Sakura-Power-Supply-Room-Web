@@ -233,6 +233,15 @@ test('main screen exposes the total random challenge pool as a direct entry', as
   test.setTimeout(240_000);
   const pageErrors: string[] = [];
   page.on('pageerror', (error) => pageErrors.push(error.message));
+  await page.addInitScript(() => {
+    Object.defineProperty(globalThis.crypto, 'getRandomValues', {
+      configurable: true,
+      value(values: Uint32Array) {
+        values.fill(4);
+        return values;
+      },
+    });
+  });
   await page.goto('/');
   await expect(page.locator('#start-random-button')).toBeDisabled();
   await page.waitForFunction(
@@ -252,19 +261,21 @@ test('main screen exposes the total random challenge pool as a direct entry', as
       const diagnostics = window.__THREE_GAME_DIAGNOSTICS__;
       return diagnostics?.opening.active === false
         && diagnostics.puzzleRevision > revision
-        && ['random', 'rush'].includes(diagnostics.mode);
+        && diagnostics.mode === 'random'
+        && diagnostics.exploration.active;
     },
     initialRevision,
     { timeout: 35_000 },
   );
   await expect(page.locator('#start-screen')).not.toBeVisible();
   await page.waitForURL(
-    (url) => ['random', 'rush'].includes(url.searchParams.get('mode') ?? '') && !url.searchParams.has('level'),
+    (url) => url.searchParams.get('mode') === 'explore' && !url.searchParams.has('level'),
     { timeout: 90_000 },
   );
   const mode = await page.evaluate(() => window.__THREE_GAME_DIAGNOSTICS__?.mode ?? null);
-  expect(['random', 'rush']).toContain(mode);
-  expect(['random', 'rush']).toContain(new URL(page.url()).searchParams.get('mode'));
+  expect(mode).toBe('random');
+  expect(await page.evaluate(() => window.__THREE_GAME_DIAGNOSTICS__?.exploration.active)).toBe(true);
+  expect(new URL(page.url()).searchParams.get('mode')).toBe('explore');
   expect(new URL(page.url()).searchParams.has('level')).toBe(false);
   expect(pageErrors).toEqual([]);
 });
@@ -627,6 +638,15 @@ test('random challenge has three hearts and each blocked cable costs one life', 
       (lives) => window.__THREE_GAME_DIAGNOSTICS__?.randomLives === lives,
       expectedLives,
       { timeout: 5_000 },
+    );
+    await expect(page.locator('#toast.life-loss')).toBeVisible();
+    await expect(page.locator('.life-loss-ghost')).toHaveCount(1);
+    await expect(page.locator('.life-loss-readout')).toHaveCount(1);
+    await expect(page.locator('.life-loss-vignette')).toHaveCount(1);
+    await expect(page.locator('#random-lives i.life-lost-now')).toHaveCount(1);
+    await expect(page.locator('#random-lives')).toHaveAttribute(
+      'data-life-loss-activation',
+      String(3 - expectedLives),
     );
     if (expectedLives > 0) {
       await page.waitForFunction(

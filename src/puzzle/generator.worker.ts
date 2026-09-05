@@ -8,10 +8,11 @@ type GenerateRequest = {
   targetCount: number;
   level?: LevelDefinition;
   mode?: 'campaign' | 'random' | 'skill' | 'rush';
+  templateMode?: 'random' | 'exploration' | 'skill';
 };
 
 self.onmessage = (event: MessageEvent<GenerateRequest>) => {
-  const { requestId, seed, targetCount, level, mode } = event.data;
+  const { requestId, seed, targetCount, level, mode, templateMode } = event.data;
   const startedAt = performance.now();
   try {
     const rushChallenge = mode === 'rush' && level
@@ -31,6 +32,7 @@ self.onmessage = (event: MessageEvent<GenerateRequest>) => {
             maxInitiallyFree: level?.maxInitiallyFree,
             level,
             mode,
+            templateMode,
           }),
       generationMs: performance.now() - startedAt,
     });

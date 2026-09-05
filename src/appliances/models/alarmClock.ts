@@ -51,10 +51,12 @@ export function createAlarmClockModel(options: ApplianceModelOptions): Appliance
   const kit = new ApplianceModelKit(options);
   const accent = new THREE.Color(options.accent);
   const pink = accent.clone().offsetHSL(0, -0.03, 0.07).getHex();
+  const pinkLight = accent.clone().offsetHSL(0, -0.075, 0.17).getHex();
+  const pinkPale = accent.clone().offsetHSL(0, -0.12, 0.25).getHex();
   const pinkDark = accent.clone().offsetHSL(0, 0, -0.13).getHex();
 
-  const shellMaterial = kit.material(0xf6b9b8, { tint: 0x8a6776 });
-  const shellHighlightMaterial = kit.material(0xffd8cb, { tint: 0xa58383 });
+  const shellMaterial = kit.material(pink, { tint: 0x8a6776 });
+  const shellHighlightMaterial = kit.material(pinkLight, { tint: 0xa58383 });
   const dialMaterial = kit.material(0xfff2dc, { tint: 0x9d8790 });
   const dialGlassMaterial = kit.material(0xfff7e9, {
     tint: 0xb9a2a6,
@@ -64,11 +66,11 @@ export function createAlarmClockModel(options: ApplianceModelOptions): Appliance
   dialGlassMaterial.depthWrite = false;
   const handMaterial = kit.material(0x7b5863, { tint: 0x514452 });
   const hardwareMaterial = kit.material(0x6d5962, { tint: 0x49414d });
-  const bellMaterial = kit.material(0xffecd9, { tint: 0xa58a84 });
+  const bellMaterial = kit.material(pinkPale, { tint: 0xa58a84 });
   const cavityMaterial = kit.material(0x644d55, { tint: 0x423844 });
-  const glowMaterial = kit.material(0xffb5c8, {
+  const glowMaterial = kit.material(pinkLight, {
     tint: 0xb77893,
-    emissive: 0xff94b8,
+    emissive: pink,
     transparent: true,
     opacity: 0.08,
   });

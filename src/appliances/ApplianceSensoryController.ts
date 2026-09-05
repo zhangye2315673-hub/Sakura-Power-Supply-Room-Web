@@ -29,8 +29,6 @@ type TargetState = {
   neonMaterialCount: number;
   neonIntensity: number;
   poweredReveal: number;
-  poweredLight: THREE.PointLight | null;
-  poweredLightColor: THREE.Color;
 };
 
 const NIGHT_NEON_DEFAULT = { intensity: 0.36, pulseRate: 1.45 } as const;
@@ -50,8 +48,7 @@ const EXPLORATION_POWERED_REVEAL_START = 0.06;
 const EXPLORATION_POWERED_REVEAL_FULL = 0.92;
 const EXPLORATION_POWERED_BODY_INTENSITY = 0.88;
 const EXPLORATION_POWERED_ACCENT_MIX = 0.52;
-const EXPLORATION_POWERED_LIGHT_INTENSITY = 1.25;
-const EXPLORATION_POWERED_LIGHT_DISTANCE = 9.5;
+const POWERED_BODY_WHITE = new THREE.Color(0xffffff);
 
 function hueDistance(first: number, second: number): number {
   const distance = Math.abs(first - second);
@@ -139,7 +136,10 @@ export class ApplianceSensoryController {
         state: target.state,
         matchedNodes: state.matchedNodes,
         missingFunctionalNode: state.matchedNodes.length === 0,
-        lightIntensity: state.poweredLight?.intensity ?? 0,
+        // This is a diagnostic brightness score, not a scene light. Exploration
+        // brightens the appliance materials themselves so it cannot wash out
+        // neighbouring cables with an invisible point light.
+        lightIntensity: state.poweredReveal * EXPLORATION_POWERED_BODY_INTENSITY,
         neonMaterialCount: state.neonMaterialCount,
         neonIntensity: state.neonIntensity,
         poweredReveal: state.poweredReveal,
@@ -156,7 +156,9 @@ export class ApplianceSensoryController {
     const state = this.ensureTarget(target);
     const neonProfile = NIGHT_NEON_OVERRIDES[target.kind] ?? NIGHT_NEON_DEFAULT;
     const nightNeon = THREE.MathUtils.smoothstep(themeProgress, NIGHT_NEON_START, NIGHT_NEON_FULL);
-    const exploration = THREE.MathUtils.clamp(explorationProgress, 0, 1) * nightNeon;
+    // Exploration is an independent visibility mode. Appliance body reveal
+    // must not wait for the night-neon theme transition to finish.
+    const exploration = THREE.MathUtils.clamp(explorationProgress, 0, 1);
     const explorationBoost = THREE.MathUtils.lerp(1, EXPLORATION_NEON_BOOST, exploration);
     const neonPulse = 0.94 + Math.sin(
       elapsed * neonProfile.pulseRate + neonPhase(target.kind) + state.neonMaterialCount * 0.37,
@@ -171,8 +173,6 @@ export class ApplianceSensoryController {
           EXPLORATION_POWERED_REVEAL_FULL,
         ) * exploration
       : 0;
-    this.updatePoweredLight(target, state, elapsed);
-
     state.materials.forEach((entry) => {
       const {
         material,
@@ -185,6 +185,14 @@ export class ApplianceSensoryController {
       } = entry;
       const toon = material as THREE.MeshToonMaterial;
       const bodyRevealActive = poweredReveal && state.poweredReveal > 0.001;
+      if (baseline.color && 'color' in toon && toon.color instanceof THREE.Color) {
+        toon.color.copy(baseline.color);
+        if (bodyRevealActive) {
+          const boost = state.poweredReveal;
+          toon.color.lerp(POWERED_BODY_WHITE, boost * 0.22);
+          toon.color.multiplyScalar(1 + boost * 0.28);
+        }
+      }
       if (
         (neonAccent || bodyRevealActive || entry.poweredRevealApplied)
         && baseline.emissive
@@ -220,7 +228,9 @@ export class ApplianceSensoryController {
     const accentValue = Number(modelRoot.userData.applianceAccent);
     const accent = Number.isFinite(accentValue) ? new THREE.Color(accentValue) : null;
     target.root.traverse((object) => {
-      if (!(object instanceof THREE.Mesh) || object.userData.isOutline) return;
+      // Use the stable Three.js object type instead of instanceof so sensory
+      // registration also works across bundled/runtime Three.js realms.
+      if (object.type !== 'Mesh' || object.userData.isOutline) return;
       const objectName = object.name;
       const lowerName = objectName.toLowerCase();
       const hinted = profile.nodeHints.some((hint) => lowerName.includes(hint));
@@ -228,7 +238,8 @@ export class ApplianceSensoryController {
       if (hinted) {
         matchedNodes.push(objectName);
       }
-      const entries = Array.isArray(object.material) ? object.material : [object.material];
+      const mesh = object as THREE.Mesh;
+      const entries: THREE.Material[] = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
       entries.forEach((material) => {
         const baseline = this.getBaseline(material);
         const toon = material as THREE.MeshToonMaterial;
@@ -251,7 +262,6 @@ export class ApplianceSensoryController {
           && material.opacity >= 0.72
           && 'emissive' in toon
           && toon.emissive instanceof THREE.Color
-          && !hinted
           && !status,
         );
         const poweredRevealColor = poweredReveal && baseline.color && accent
@@ -294,8 +304,6 @@ export class ApplianceSensoryController {
       ).size,
       neonIntensity: 0,
       poweredReveal: 0,
-      poweredLight: null,
-      poweredLightColor: (accent ?? new THREE.Color(0xd8b5a6)).clone().lerp(new THREE.Color(0xfff0df), 0.68),
     };
     this.targets.set(target, state);
     return state;
@@ -315,43 +323,7 @@ export class ApplianceSensoryController {
     return baseline;
   }
 
-  private updatePoweredLight(
-    target: AppliancePerformanceTarget,
-    state: TargetState,
-    elapsed: number,
-  ): void {
-    if (state.poweredReveal <= 0.001) {
-      this.removePoweredLight(state);
-      return;
-    }
-    if (!state.poweredLight) {
-      state.poweredLight = new THREE.PointLight(
-        state.poweredLightColor,
-        0,
-        EXPLORATION_POWERED_LIGHT_DISTANCE,
-        1.65,
-      );
-      state.poweredLight.name = `exploration-powered-fill-${target.kind}`;
-      state.poweredLight.castShadow = false;
-      this.root.add(state.poweredLight);
-    }
-    target.root.getWorldPosition(state.poweredLight.position);
-    state.poweredLight.position.y += 0.45;
-    state.poweredLight.intensity = EXPLORATION_POWERED_LIGHT_INTENSITY
-      * state.poweredReveal
-      * (0.97 + Math.sin(elapsed * 2.1 + neonPhase(target.kind)) * 0.03);
-  }
-
-  private removePoweredLight(state: TargetState): void {
-    if (!state.poweredLight) return;
-    state.poweredLight.removeFromParent();
-    state.poweredLight.dispose();
-    state.poweredLight = null;
-  }
-
   private removeTarget(target: AppliancePerformanceTarget): void {
-    const state = this.targets.get(target);
-    if (state) this.removePoweredLight(state);
     this.targets.delete(target);
   }
 }

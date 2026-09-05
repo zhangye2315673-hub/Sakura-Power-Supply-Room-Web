@@ -2386,7 +2386,7 @@ test('electric kettle skill test melts frozen-plug through staged foreground hea
       && diagnostics.skill.kettleThaw.phase === 'idle';
   }, null, { timeout: 20_000 });
 });
-test('coffee maker skill test locks all remaining cables for four successful pulls', async ({ page }, testInfo) => {
+test('coffee maker skill test locks all remaining cables for three successful pulls', async ({ page }, testInfo) => {
   test.setTimeout(600_000);
   await page.addInitScript(() => {
     window.__APPLIANCE_PERFORMANCE_TIME_OVERRIDE__ = 0;
@@ -2431,7 +2431,7 @@ test('coffee maker skill test locks all remaining cables for four successful pul
 
   await clickAvailableCable(6);
   await page.waitForFunction(() => window.__THREE_GAME_DIAGNOSTICS__?.skill?.debuff === 'coffee-lock'
-    && window.__THREE_GAME_DIAGNOSTICS__?.skill?.debuffTurnsRemaining === 4, null, { timeout: 45_000 });
+    && window.__THREE_GAME_DIAGNOSTICS__?.skill?.debuffTurnsRemaining === 3, null, { timeout: 45_000 });
   await page.waitForFunction(() => {
     const diagnostics = window.__THREE_GAME_DIAGNOSTICS__;
     const remaining = diagnostics?.skill?.remainingCableIds ?? [];
@@ -2457,7 +2457,7 @@ test('coffee maker skill test locks all remaining cables for four successful pul
   await page.screenshot({ path: testInfo.outputPath('coffee-splash.png') });
   await page.evaluate(() => { window.__COFFEE_SPLASH_PROGRESS_OVERRIDE__ = undefined; });
 
-  for (const turns of [3, 2, 1, 0]) {
+  for (const turns of [2, 1, 0]) {
     await clickAvailableCable(turns === 0 ? 2.4 : 6);
     await page.waitForFunction((expected) => window.__THREE_GAME_DIAGNOSTICS__?.skill?.debuff === 'coffee-lock'
       && window.__THREE_GAME_DIAGNOSTICS__?.skill?.debuffTurnsRemaining === expected, turns, { timeout: 45_000 });
@@ -2466,7 +2466,7 @@ test('coffee maker skill test locks all remaining cables for four successful pul
       const effect = state.skill?.cableEffects.find((entry) => entry.id === id);
       return effect !== undefined;
     })).toBe(true);
-    expect(state.skill?.screenEffect.progress).toBeCloseTo(turns / 4, 1);
+    expect(state.skill?.screenEffect.progress).toBeCloseTo(turns / 3, 1);
     if (turns === 0) {
       expect(state.skill?.debuff).toBe('coffee-lock');
       await expect(page.locator('#skill-cue-title')).toHaveText('技能被封锁');

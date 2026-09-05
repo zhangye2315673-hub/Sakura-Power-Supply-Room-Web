@@ -12,6 +12,8 @@ export type BubbleShieldDiagnostics = Readonly<{
   active: boolean;
   visible: boolean;
   opacity: number;
+  activationCount: number;
+  activationPulse: number;
   center: readonly [number, number, number];
   radius: number;
   targetCount: number;
@@ -34,6 +36,7 @@ type BubbleUniforms = {
   time: { value: number };
   visibility: { value: number };
   exitPulse: { value: number };
+  activationPulse: { value: number };
   inertia: { value: THREE.Vector2 };
 };
 
@@ -93,6 +96,7 @@ function createMaterial(uniforms: BubbleUniforms, thicknessTexture: THREE.DataTe
     shader.uniforms.uBubbleTime = uniforms.time;
     shader.uniforms.uBubbleVisibility = uniforms.visibility;
     shader.uniforms.uBubbleExitPulse = uniforms.exitPulse;
+    shader.uniforms.uBubbleActivationPulse = uniforms.activationPulse;
     shader.uniforms.uBubbleInertia = uniforms.inertia;
     shader.vertexShader = shader.vertexShader
       .replace(
@@ -146,6 +150,7 @@ function createMaterial(uniforms: BubbleUniforms, thicknessTexture: THREE.DataTe
         uniform float uBubbleTime;
         uniform float uBubbleVisibility;
         uniform float uBubbleExitPulse;
+        uniform float uBubbleActivationPulse;
         uniform vec2 uBubbleInertia;
         varying vec3 vBubbleWorldPosition;
         varying vec3 vBubbleWorldNormal;
@@ -210,23 +215,28 @@ function createMaterial(uniforms: BubbleUniforms, thicknessTexture: THREE.DataTe
           + uBubbleTime * 0.012;
         vec3 bubbleIridescence = sakuraBubblePalette(bubbleHuePhase);
         float bubbleEdge = smoothstep(0.04, 0.96, bubbleFresnel);
-        float bubbleFilmAlpha = pow(bubbleFilmInterior, 1.7) * 0.3;
-        float bubbleAlpha = 0.006 + pow(bubbleEdge, 0.8) * 0.28 + bubbleFilmAlpha;
+        float bubbleFilmAlpha = pow(bubbleFilmInterior, 1.55) * 0.4;
+        // Keep a faint body across the sphere and a decisive coloured rim.
+        // The old near-zero body alpha disappeared against the ivory day sky
+        // even though diagnostics correctly reported the shield as visible.
+        float bubbleAlpha = 0.024 + pow(bubbleEdge, 0.72) * 0.43 + bubbleFilmAlpha;
         bubbleAlpha *= mix(0.9, 1.1, sin(vBubbleObjectPosition.y * 4.2 + uBubbleTime * 0.14) * 0.5 + 0.5);
         bubbleAlpha += uBubbleExitPulse * (1.0 - abs(bubbleFresnel - 0.58) * 1.7) * 0.055;
-        float bubbleColorStrength = clamp(0.12 + bubbleEdge * 0.54 + bubbleFilmInterior * 1.18, 0.0, 1.0);
+        bubbleAlpha += uBubbleActivationPulse * (0.08 + pow(bubbleEdge, 0.55) * 0.28);
+        float bubbleColorStrength = clamp(0.2 + bubbleEdge * 0.62 + bubbleFilmInterior * 1.22, 0.0, 1.0);
         diffuseColor.rgb = mix(diffuseColor.rgb, bubbleIridescence, bubbleColorStrength);
-        diffuseColor.a *= clamp(bubbleAlpha * uBubbleVisibility, 0.0, 0.48);`,
+        diffuseColor.a *= clamp(bubbleAlpha * uBubbleVisibility, 0.0, 0.62);`,
       )
       .replace(
         '#include <emissivemap_fragment>',
         `#include <emissivemap_fragment>
         totalEmissiveRadiance += bubbleIridescence
           * (pow(bubbleEdge, 0.72) * 0.78 + bubbleFilmInterior * 0.56)
-          * uBubbleVisibility;`,
+          * uBubbleVisibility
+          + bubbleIridescence * uBubbleActivationPulse * uBubbleVisibility * 0.46;`,
       );
   };
-  material.customProgramCacheKey = () => 'sakura-bubble-shield-v2';
+  material.customProgramCacheKey = () => 'sakura-bubble-shield-v3-retrigger';
   return material;
 }
 
@@ -238,6 +248,7 @@ export class BubbleShieldPresentation {
     time: { value: 0 },
     visibility: { value: 0 },
     exitPulse: { value: 0 },
+    activationPulse: { value: 0 },
     inertia: { value: new THREE.Vector2() },
   };
   private readonly material = createMaterial(this.uniforms, this.thicknessTexture);
@@ -247,6 +258,9 @@ export class BubbleShieldPresentation {
   private targetActive = false;
   private visibility = 0;
   private exitPulse = 0;
+  private activationPulse = 0;
+  private activationHold = 0;
+  private activationCount = 0;
   private targetCount = 0;
   private radius = 0;
   private readonly wobble = new THREE.Vector2();
@@ -259,24 +273,37 @@ export class BubbleShieldPresentation {
     this.root.name = 'bubble-shield-presentation';
     this.mesh.name = 'bubble-shield-thin-film';
     this.mesh.renderOrder = 18;
-    this.mesh.visible = false;
+    this.mesh.visible = true;
+    this.mesh.frustumCulled = false;
+    this.mesh.userData.performanceEffect = true;
     this.root.add(this.mesh);
   }
 
   sync(active: boolean, targets: readonly THREE.Object3D[]): void {
     this.targetActive = active && targets.length > 0;
-    this.targetCount = this.targetActive ? targets.length : 0;
+    this.targetCount = this.targetActive || this.activationHold > 0 ? targets.length : 0;
     if (!this.targetActive) {
-      if (this.visibility > 0.02) this.exitPulse = 1;
+      if (this.activationHold <= 0 && this.visibility > 0.02) this.exitPulse = 1;
       return;
     }
+    // Keep the presentation root explicitly live. It is also used by the
+    // performance warmup path, which temporarily toggles effect visibility;
+    // relying on the scene default can leave the shield hidden after warmup.
+    this.root.visible = true;
+    this.updateBounds(targets);
+  }
+
+  private updateBounds(targets: readonly THREE.Object3D[]): void {
     this.bounds.makeEmpty();
     targets.forEach((target) => {
       target.updateWorldMatrix(true, true);
-      this.bounds.expandByObject(target, true);
+      // Cable meshes already maintain geometry bounds. Re-transforming those
+      // boxes is enough for the padded enclosing shield; the precise path
+      // scans every vertex in every remaining cable and caused a multi-second
+      // one-frame stall when a full skill-challenge bundle was protected.
+      this.bounds.expandByObject(target, false);
     });
     if (this.bounds.isEmpty()) {
-      this.targetActive = false;
       this.targetCount = 0;
       return;
     }
@@ -287,24 +314,49 @@ export class BubbleShieldPresentation {
     this.mesh.visible = true;
   }
 
+  retrigger(targets: readonly THREE.Object3D[] = []): void {
+    if (targets.length > 0) {
+      this.targetCount = targets.length;
+      this.updateBounds(targets);
+    }
+    this.activationCount += 1;
+    this.activationPulse = 1;
+    this.activationHold = 1.05;
+    // A repeated bubble-machine activation can keep the same BUFF id, so the
+    // persistent sync alone has no false -> true edge to replay. Restart the
+    // thin-film reveal explicitly while keeping the current target bounds.
+    this.visibility = Math.min(this.visibility, 0.24);
+    this.uniforms.visibility.value = this.visibility;
+    this.uniforms.activationPulse.value = this.activationPulse;
+    this.root.visible = true;
+    this.mesh.visible = true;
+    this.mesh.scale.setScalar(0.82);
+  }
+
   update(delta: number, elapsed: number, orbit?: BubbleOrbitState): void {
     this.updateWobble(delta, orbit);
-    const speed = this.targetActive ? ENTER_SPEED : EXIT_SPEED;
+    this.activationHold = Math.max(0, this.activationHold - Math.max(0, delta));
+    const visuallyActive = this.targetActive || this.activationHold > 0;
+    const speed = visuallyActive ? ENTER_SPEED : EXIT_SPEED;
     const blend = 1 - Math.exp(-Math.max(0, delta) * speed);
-    this.visibility = THREE.MathUtils.lerp(this.visibility, this.targetActive ? 1 : 0, blend);
+    this.visibility = THREE.MathUtils.lerp(this.visibility, visuallyActive ? 1 : 0, blend);
     this.exitPulse = Math.max(0, this.exitPulse - Math.max(0, delta) * 1.8);
+    this.activationPulse = Math.max(0, this.activationPulse - Math.max(0, delta) * 2.35);
     this.uniforms.time.value = elapsed;
     this.uniforms.visibility.value = this.visibility;
     this.uniforms.exitPulse.value = this.exitPulse;
+    this.uniforms.activationPulse.value = this.activationPulse;
     this.uniforms.inertia.value.copy(this.wobble);
     this.thicknessTexture.offset.set(elapsed * 0.0038, -elapsed * 0.0024);
     const reveal = THREE.MathUtils.smoothstep(this.visibility, 0, 1);
     this.mesh.scale.setScalar(THREE.MathUtils.lerp(0.86, 1, reveal));
     this.mesh.rotation.y = Math.sin(elapsed * 0.08) * 0.025 + this.wobble.x * 0.18;
     this.mesh.rotation.z = Math.sin(elapsed * 0.065 + 1.2) * 0.018 - this.wobble.y * 0.16;
-    if (!this.targetActive && this.visibility < 0.002) {
+    if (!visuallyActive && this.visibility < 0.002) {
       this.visibility = 0;
+      this.targetCount = 0;
       this.mesh.visible = false;
+      this.root.visible = false;
     }
   }
 
@@ -341,6 +393,9 @@ export class BubbleShieldPresentation {
     this.targetActive = false;
     this.visibility = 0;
     this.exitPulse = 0;
+    this.activationPulse = 0;
+    this.activationHold = 0;
+    this.activationCount = 0;
     this.targetCount = 0;
     this.radius = 0;
     this.wobble.set(0, 0);
@@ -350,6 +405,7 @@ export class BubbleShieldPresentation {
     this.previousOrbitPitch = null;
     this.uniforms.visibility.value = 0;
     this.uniforms.exitPulse.value = 0;
+    this.uniforms.activationPulse.value = 0;
     this.uniforms.inertia.value.set(0, 0);
     this.mesh.visible = false;
   }
@@ -366,6 +422,8 @@ export class BubbleShieldPresentation {
       active: this.targetActive,
       visible: this.mesh.visible,
       opacity: this.visibility,
+      activationCount: this.activationCount,
+      activationPulse: this.activationPulse,
       center: this.root.position.toArray(),
       radius: this.radius,
       targetCount: this.targetCount,

@@ -34,7 +34,7 @@ function pose(root: THREE.Group): string {
   return JSON.stringify(values);
 }
 
-test('bubble machine owns 48 visible-ready volumetric iridescent bubbles with four clear sizes', () => {
+test('bubble machine owns 48 lightweight layered bubbles with four clear sizes', () => {
   const model = createBubbleMachineModel({ id: 'bubble-machine', accent: 0xe8aec4, referencePath: null });
   const rig = model.root.getObjectByName('bubble-machine-performance-rig') as THREE.Group;
   const bubbles = bubbleGroups(model.root);
@@ -52,6 +52,10 @@ test('bubble machine owns 48 visible-ready volumetric iridescent bubbles with fo
   expect(BUBBLE_MACHINE_TIMELINE.ordinaryBubbleCount)
     .toBeGreaterThan(BUBBLE_MACHINE_TIMELINE.previousGenericPoolCapacity);
   expect(forbidden).toEqual([]);
+  const instanceBatches = rig.children.filter((object) => object instanceof THREE.InstancedMesh);
+  expect(instanceBatches).toHaveLength(1);
+  expect(model.root.userData.bubbleMachinePerformanceRig.ordinarySourceMeshCount).toBe(48);
+  expect(model.root.userData.bubbleMachinePerformanceRig.ordinaryRuntimeDrawMeshes).toBe(1);
 
   const sizeClasses = new Set(bubbles.map((bubble) => bubble.userData.sizeClass as string));
   const radii = bubbles.map((bubble) => Number(bubble.userData.baseRadius));
@@ -62,18 +66,19 @@ test('bubble machine owns 48 visible-ready volumetric iridescent bubbles with fo
 
   for (const bubble of bubbles) {
     const shell = bubble.getObjectByName(`${bubble.name}-film-shell`) as THREE.Mesh;
-    const warmArc = bubble.getObjectByName(`${bubble.name}-rainbow-arc-warm`) as THREE.Mesh;
-    const coolArc = bubble.getObjectByName(`${bubble.name}-rainbow-arc-cool`) as THREE.Mesh;
-    const highlight = bubble.getObjectByName(`${bubble.name}-soft-highlight`) as THREE.Mesh;
-    const filmMaterial = shell.material as THREE.MeshPhysicalMaterial;
+    const filmMaterial = shell.material as THREE.ShaderMaterial;
+    const shellGeometry = shell.geometry as THREE.SphereGeometry;
     expect(shell.geometry.type).toBe('SphereGeometry');
-    expect(filmMaterial.type).toBe('MeshPhysicalMaterial');
+    expect(shellGeometry.parameters.widthSegments).toBeLessThanOrEqual(12);
+    expect(shellGeometry.parameters.heightSegments).toBeLessThanOrEqual(8);
+    expect(filmMaterial.type).toBe('ShaderMaterial');
     expect(filmMaterial.transparent).toBe(true);
-    expect(filmMaterial.opacity).toBeGreaterThanOrEqual(0.35);
-    expect(filmMaterial.iridescence).toBe(1);
-    expect(warmArc.geometry.type).toBe('TorusGeometry');
-    expect(coolArc.geometry.type).toBe('TorusGeometry');
-    expect(highlight.geometry.type).toBe('SphereGeometry');
+    expect(filmMaterial.depthWrite).toBe(false);
+    expect(filmMaterial.fragmentShader).toContain('fresnel');
+    expect(filmMaterial.fragmentShader).toContain('rainbow');
+    expect(filmMaterial.fragmentShader).toContain('highlight');
+    expect(bubble.children).toHaveLength(1);
+    expect(bubble.children.every((child) => child.visible === false)).toBe(true);
   }
 
   const giant = model.root.getObjectByName('bubble-machine-giant-bubble') as THREE.Group;

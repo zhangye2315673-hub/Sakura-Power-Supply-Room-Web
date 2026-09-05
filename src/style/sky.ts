@@ -266,23 +266,26 @@ function createCloudTexture(): THREE.CanvasTexture {
   if (!context) throw new Error('Unable to create cloud texture.');
 
   context.clearRect(0, 0, canvas.width, canvas.height);
-  const gradient = context.createRadialGradient(128, 66, 10, 128, 66, 110);
-  gradient.addColorStop(0, 'rgba(255,255,255,0.98)');
-  gradient.addColorStop(0.6, 'rgba(255,255,255,0.82)');
-  gradient.addColorStop(1, 'rgba(255,255,255,0)');
-  context.fillStyle = gradient;
-  context.beginPath();
-  context.ellipse(128, 72, 104, 38, 0, 0, Math.PI * 2);
-  context.fill();
-  for (const [x, y, radius] of [
-    [62, 63, 31],
-    [96, 46, 40],
-    [140, 39, 46],
-    [184, 58, 35],
-  ] as const) {
-    context.beginPath();
-    context.arc(x, y, radius, 0, Math.PI * 2);
-    context.fill();
+  // Use a small field of independently feathered volume segments. This keeps
+  // the inexpensive billboard setup, but follows the same visual principle as
+  // particle/instanced cloud systems: many overlapping soft volumes form one
+  // irregular silhouette instead of several hard-edged circles.
+  const puffs = [
+    [28, 72, 20, 0.26], [47, 65, 27, 0.32], [69, 56, 32, 0.34],
+    [91, 48, 35, 0.32], [116, 39, 38, 0.34], [143, 44, 42, 0.34],
+    [169, 52, 36, 0.32], [195, 61, 31, 0.3], [219, 70, 23, 0.26],
+    [78, 72, 30, 0.22], [111, 67, 35, 0.24], [148, 69, 38, 0.24],
+    [180, 73, 29, 0.22],
+  ] as const;
+  for (const [x, y, radius, opacity] of puffs) {
+    const gradient = context.createRadialGradient(x, y, radius * 0.08, x, y, radius);
+    gradient.addColorStop(0, `rgba(255,255,255,${opacity})`);
+    gradient.addColorStop(0.42, `rgba(255,255,255,${opacity * 0.92})`);
+    gradient.addColorStop(0.72, `rgba(255,255,255,${opacity * 0.48})`);
+    gradient.addColorStop(0.9, `rgba(255,255,255,${opacity * 0.12})`);
+    gradient.addColorStop(1, 'rgba(255,255,255,0)');
+    context.fillStyle = gradient;
+    context.fillRect(x - radius, y - radius, radius * 2, radius * 2);
   }
 
   const texture = new THREE.CanvasTexture(canvas);
@@ -295,7 +298,7 @@ export type SkyRig = {
   clouds: THREE.Group;
   stars: THREE.Points;
   explorationEyes: THREE.Points;
-  update: (cameraPosition: THREE.Vector3, cameraQuaternion: THREE.Quaternion, elapsed: number) => void;
+  update: (cameraPosition: THREE.Vector3, cameraQuaternion: THREE.Quaternion, elapsed: number, delta?: number) => void;
   updateTheme: (elapsed: number) => void;
   setThemeProgress: (progress: number) => void;
   setSeasonEnvironment: (environment: Readonly<SeasonEnvironmentState>) => void;
@@ -381,9 +384,10 @@ export function buildSky(scene: THREE.Scene, radius = 112): SkyRig {
   const clouds = new THREE.Group();
   const cloudDayPositions: THREE.Vector3[] = [];
   const cloudDriftSpeeds: number[] = [];
+  const cloudDriftOffsets: number[] = [];
   for (let index = 0; index < 11; index += 1) {
-    const width = 16 + (index % 4) * 4;
-    const height = width * 0.34;
+    const width = THREE.MathUtils.lerp(16, 28, seededRandom(index * 7 + 29));
+    const height = width * THREE.MathUtils.lerp(0.28, 0.4, seededRandom(index * 7 + 30));
     const cloud = new THREE.Group();
     cloud.renderOrder = -8;
     const shade = new THREE.Mesh(new THREE.PlaneGeometry(width, height), shadeMaterial);
@@ -391,6 +395,10 @@ export function buildSky(scene: THREE.Scene, radius = 112): SkyRig {
     shade.position.set(0.3, -0.35, -0.15);
     const front = new THREE.Mesh(new THREE.PlaneGeometry(width, height), cloudMaterial);
     front.renderOrder = -8;
+    if (seededRandom(index * 7 + 31) > 0.5) {
+      front.scale.x = -1;
+      shade.scale.x = -1;
+    }
     cloud.add(shade, front);
     cloud.position.set(
       THREE.MathUtils.lerp(-42, 42, seededRandom(index * 7 + 32)),
@@ -399,6 +407,7 @@ export function buildSky(scene: THREE.Scene, radius = 112): SkyRig {
     );
     cloudDayPositions.push(cloud.position.clone());
     cloudDriftSpeeds.push(THREE.MathUtils.lerp(0.24, 0.72, seededRandom(index * 7 + 40)));
+    cloudDriftOffsets.push(seededRandom(index * 7 + 41) * 104);
     cloud.lookAt(0, 5, 0);
     clouds.add(cloud);
   }
@@ -414,6 +423,7 @@ export function buildSky(scene: THREE.Scene, radius = 112): SkyRig {
   let seasonCloudVerticalScale = 1;
   let seasonCloudSpeed = 1;
   let seasonStarVisibility = 1;
+  let cloudClock: number | null = null;
   let seasonEnvironment: Readonly<SeasonEnvironmentState> = SEASON_PROFILES.spring.day;
   const applyCloudEnvironment = () => {
     cloudMaterial.color.copy(seasonEnvironment.cloud).lerp(explorationCloudColor, explorationProgress);
@@ -433,7 +443,7 @@ export function buildSky(scene: THREE.Scene, radius = 112): SkyRig {
     clouds,
     stars: stars.points,
     explorationEyes: explorationEyes.points,
-    update(cameraPosition, cameraQuaternion, elapsed) {
+    update(cameraPosition, cameraQuaternion, elapsed, delta = 0) {
       dome.position.copy(cameraPosition);
       stars.points.position.copy(cameraPosition);
       stars.points.quaternion.copy(cameraQuaternion);
@@ -441,10 +451,34 @@ export function buildSky(scene: THREE.Scene, radius = 112): SkyRig {
       explorationEyes.points.quaternion.copy(cameraQuaternion);
       clouds.position.copy(cameraPosition);
       clouds.quaternion.copy(cameraQuaternion);
+      const elapsedStep = cloudClock === null
+        ? 0
+        : Math.max(0, Math.min(0.25, Number.isFinite(delta) && delta > 0 ? delta : elapsed - cloudClock));
+      if (cloudClock === null) {
+        // Seed the integrator at the first sampled time so gallery/evidence
+        // renders remain deterministic while later season speed changes keep
+        // the already-travelled distance instead of reinterpreting elapsed
+        // time with a new speed.
+        cloudDriftOffsets.forEach((_, index) => {
+          cloudDriftOffsets[index] += elapsed * cloudDriftSpeeds[index] * seasonCloudSpeed;
+        });
+      } else if (elapsed < cloudClock - 0.001) {
+        // Evidence controls may scrub time backwards. Re-seed explicitly for
+        // that debug-only case rather than carrying a negative drift.
+        cloudDriftOffsets.forEach((_, index) => {
+          cloudDriftOffsets[index] = seededRandom(index * 7 + 41) * 104
+            + elapsed * cloudDriftSpeeds[index] * seasonCloudSpeed;
+        });
+      } else {
+        cloudDriftOffsets.forEach((_, index) => {
+          cloudDriftOffsets[index] += elapsedStep * cloudDriftSpeeds[index] * seasonCloudSpeed;
+        });
+      }
+      cloudClock = elapsed;
       clouds.children.forEach((cloud, index) => {
         const base = cloudDayPositions[index];
         const travelWidth = 104;
-        const drift = elapsed * cloudDriftSpeeds[index] * seasonCloudSpeed + seededRandom(index * 7 + 41) * travelWidth;
+        const drift = cloudDriftOffsets[index];
         cloud.position.copy(base);
         cloud.position.x = -52 + ((base.x + 52 + drift) % travelWidth);
         cloud.position.y = base.y + Math.sin(elapsed * 0.055 + index * 1.7) * 0.38;

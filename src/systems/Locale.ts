@@ -73,6 +73,8 @@ const zh = {
   'complete.eyebrow': 'HOME CIRCUIT RESTORED',
   'complete.title': '全屋通电',
   'complete.description': '所有插头精灵都找到了自己的家电。',
+  'complete.retry': '重新挑战',
+  'complete.home': '返回主界面',
   'gameOver.eyebrow': 'CIRCUIT OVERLOAD',
   'gameOver.title': '线路断电',
   'gameOver.description': '三次错误已经用完，重新观察遮挡关系再挑战一次。',
@@ -191,6 +193,8 @@ const en: Record<keyof typeof zh, string> = {
   'complete.eyebrow': 'HOME CIRCUIT RESTORED',
   'complete.title': 'POWER RESTORED',
   'complete.description': 'Every plug spirit has found an appliance.',
+  'complete.retry': 'RETRY CHALLENGE',
+  'complete.home': 'RETURN HOME',
   'gameOver.eyebrow': 'CIRCUIT OVERLOAD',
   'gameOver.title': 'POWER LOST',
   'gameOver.description': 'Three wrong choices used all your hearts. Read the overlaps and try again.',
@@ -301,6 +305,7 @@ export function applyStaticTranslations(): void {
   setText('#complete-panel .complete-card > span', t('complete.eyebrow'));
   setText('#complete-panel h1', t('complete.title'));
   setText('#complete-panel p', t('complete.description'));
+  setText('#complete-home-button', t('complete.home'));
   setText('#game-over-panel .complete-card > span', t('gameOver.eyebrow'));
   setText('#game-over-panel h1', t('gameOver.title'));
   setText('#game-over-panel p', t('gameOver.description'));

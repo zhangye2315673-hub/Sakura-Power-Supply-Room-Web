@@ -25,7 +25,7 @@ test.describe('RUSH challenge cards', () => {
     expect(RUSH_CHALLENGES.map((challenge) => challenge.level.targetCount))
       .toEqual([20, 22, 34, 34, 37, 37, 37, 37, 40, 44]);
     expect(RUSH_CHALLENGES.map((challenge) => challenge.timeLimitSeconds))
-      .toEqual([48, 52, 72, 76, 82, 88, 94, 100, 110, 120]);
+      .toEqual([43, 47, 67, 69, 74, 78, 81, 84, 90, 96]);
 
     for (const [index, challenge] of RUSH_CHALLENGES.entries()) {
       const first = buildRushPuzzle(challenge);
@@ -68,11 +68,11 @@ test.describe('RUSH challenge cards', () => {
     }
   });
 
-  test('randomizes only the selected fixed card and includes RUSH in the total challenge pool', () => {
+  test('randomizes only the selected fixed card and includes all challenge types in the total pool', () => {
     const selected = Array.from({ length: 40 }, (_, seed) => pickRushChallenge(seed).id);
     expect(new Set(selected).size).toBeGreaterThan(1);
     expect(new Set(Array.from({ length: 100 }, (_, seed) => selectRandomChallengeMode(seed))))
-      .toEqual(new Set(['standard', 'double-ended', 'rush', 'skill']));
+      .toEqual(new Set(['standard', 'exploration', 'double-ended', 'rush', 'skill']));
     expect(getNextRushChallenge(RUSH_CHALLENGES[0])?.id).toBe('rush-02');
     expect(getNextRushChallenge(RUSH_CHALLENGES.at(-1)!)).toBeNull();
   });
@@ -277,7 +277,7 @@ test('RUSH failure retries the exact same fixed card', async ({ page }) => {
   expect(retry.challengeId).toBe(original.challengeId);
   expect(retry.signature).toBe(original.signature);
   expect(retry.phase).toBe('briefing');
-  expect(retry.remaining).toBe(48);
+  expect(retry.remaining).toBe(43);
 });
 
 test('RUSH success advances from the first warm-up to the second', async ({ page }) => {
@@ -310,7 +310,7 @@ test('RUSH success advances from the first warm-up to the second', async ({ page
   );
   await expect(page.locator('#rush-result-title')).toHaveText('挑战成功');
   await expect(page.locator('#rush-next-button')).toBeVisible();
-  await expect(page.locator('#rush-next-button')).toHaveText('下一关');
+  await expect(page.locator('#rush-next-button')).toHaveText('重新挑战');
   await expect(page.locator('#rush-retry-button')).not.toBeVisible();
 
   const revision = await page.evaluate(() => window.__THREE_GAME_DIAGNOSTICS__?.puzzleRevision ?? 0);

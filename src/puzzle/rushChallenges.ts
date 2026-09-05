@@ -100,24 +100,24 @@ function card(
 }
 
 export const RUSH_CHALLENGES: readonly RushChallenge[] = Object.freeze([
-  card(1, { zh: '樱核热身', en: 'SAKURA CORE WARM-UP' }, { zh: '快速清空 20 条短线束', en: 'Quick-clear 20 short cables' }, 48, rushLevel(1, 0x13a5c7e1, 'cube', 'easy', 42, {
+  card(1, { zh: '樱核热身', en: 'SAKURA CORE WARM-UP' }, { zh: '快速清空 20 条短线束', en: 'Quick-clear 20 short cables' }, 43, rushLevel(1, 0x13a5c7e1, 'cube', 'easy', 42, {
     targetCount: 20,
     lengthQuota: { short: 0.8, medium: 0.2, long: 0 },
     warmup: true,
   })),
-  card(2, { zh: '花筒起速', en: 'BLOOM CYLINDER START' }, { zh: '快速清空 22 条少转角线束', en: 'Quick-clear 22 low-turn cables' }, 52, rushLevel(2, 0x2c7f91b3, 'cylinder', 'easy', 42, {
+  card(2, { zh: '花筒起速', en: 'BLOOM CYLINDER START' }, { zh: '快速清空 22 条少转角线束', en: 'Quick-clear 22 low-turn cables' }, 47, rushLevel(2, 0x2c7f91b3, 'cylinder', 'easy', 42, {
     targetCount: 22,
     lengthQuota: { short: 0.7, medium: 0.3, long: 0 },
     warmup: true,
   })),
-  card(3, { zh: '球心追线', en: 'SPHERE CORE CHASE' }, { zh: '清空 34 条球形线束', en: 'Clear all 34 sphere cables' }, 72, rushLevel(3, 0x37d4a269, 'sphere', 'normal', 42)),
-  card(4, { zh: '八面突围', en: 'OCTA BREAKOUT' }, { zh: '清空 34 条八面体线束', en: 'Clear all 34 octahedron cables' }, 76, rushLevel(4, 0x48b2e5d7, 'octahedron', 'normal', 42)),
-  card(5, { zh: '樱核加速', en: 'SAKURA CORE ACCEL' }, { zh: '清空 37 条方体线束', en: 'Clear all 37 cube cables' }, 82, rushLevel(5, 0x5e19c483, 'cube', 'normal', 46)),
-  card(6, { zh: '环柱穿梭', en: 'CYLINDER SHUTTLE' }, { zh: '清空 37 条圆柱线束', en: 'Clear all 37 cylinder cables' }, 88, rushLevel(6, 0x69f3b1a5, 'cylinder', 'hard', 46)),
-  card(7, { zh: '球阵冲刺', en: 'SPHERE GRID SPRINT' }, { zh: '清空 37 条球形线束', en: 'Clear all 37 sphere cables' }, 94, rushLevel(7, 0x7ad582cf, 'sphere', 'hard', 46)),
-  card(8, { zh: '八面折返', en: 'OCTA TURNBACK' }, { zh: '清空 37 条八面体线束', en: 'Clear all 37 octahedron cables' }, 100, rushLevel(8, 0x84c16b39, 'octahedron', 'hard', 46)),
-  card(9, { zh: '樱核密阵', en: 'SAKURA CORE GRID' }, { zh: '清空 40 条高密方体线束', en: 'Clear all 40 dense cube cables' }, 110, rushLevel(9, 0x95e2d741, 'cube', 'expert', 50)),
-  card(10, { zh: '终极速接', en: 'FINAL SPEED LINK' }, { zh: '清空 44 条高密圆柱线束', en: 'Clear all 44 dense cylinder cables' }, 120, rushLevel(10, 0xa7b439ed, 'cylinder', 'expert', 54)),
+  card(3, { zh: '球心追线', en: 'SPHERE CORE CHASE' }, { zh: '清空 34 条球形线束', en: 'Clear all 34 sphere cables' }, 67, rushLevel(3, 0x37d4a269, 'sphere', 'normal', 42)),
+  card(4, { zh: '八面突围', en: 'OCTA BREAKOUT' }, { zh: '清空 34 条八面体线束', en: 'Clear all 34 octahedron cables' }, 69, rushLevel(4, 0x48b2e5d7, 'octahedron', 'normal', 42)),
+  card(5, { zh: '樱核加速', en: 'SAKURA CORE ACCEL' }, { zh: '清空 37 条方体线束', en: 'Clear all 37 cube cables' }, 74, rushLevel(5, 0x5e19c483, 'cube', 'normal', 46)),
+  card(6, { zh: '环柱穿梭', en: 'CYLINDER SHUTTLE' }, { zh: '清空 37 条圆柱线束', en: 'Clear all 37 cylinder cables' }, 78, rushLevel(6, 0x69f3b1a5, 'cylinder', 'hard', 46)),
+  card(7, { zh: '球阵冲刺', en: 'SPHERE GRID SPRINT' }, { zh: '清空 37 条球形线束', en: 'Clear all 37 sphere cables' }, 81, rushLevel(7, 0x7ad582cf, 'sphere', 'hard', 46)),
+  card(8, { zh: '八面折返', en: 'OCTA TURNBACK' }, { zh: '清空 37 条八面体线束', en: 'Clear all 37 octahedron cables' }, 84, rushLevel(8, 0x84c16b39, 'octahedron', 'hard', 46)),
+  card(9, { zh: '樱核密阵', en: 'SAKURA CORE GRID' }, { zh: '清空 40 条高密方体线束', en: 'Clear all 40 dense cube cables' }, 90, rushLevel(9, 0x95e2d741, 'cube', 'expert', 50)),
+  card(10, { zh: '终极速接', en: 'FINAL SPEED LINK' }, { zh: '清空 44 条高密圆柱线束', en: 'Clear all 44 dense cylinder cables' }, 96, rushLevel(10, 0xa7b439ed, 'cylinder', 'expert', 54)),
 ]);
 
 function mixSeed(seed: number): number {

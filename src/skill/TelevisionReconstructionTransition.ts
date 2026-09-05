@@ -28,6 +28,7 @@ export type TelevisionReconstructionDiagnostics = Readonly<{
   switchCount: number;
   rgbGhostCount: number;
   committed: boolean;
+  spatiallyChangedCount: number;
 }>;
 
 type TransitionEntry = {
@@ -36,6 +37,9 @@ type TransitionEntry = {
   nextModel: PlugCableModel;
   redGhost: PlugCableModel;
   cyanGhost: PlugCableModel;
+  basePosition: THREE.Vector3;
+  baseQuaternion: THREE.Quaternion;
+  baseScale: THREE.Vector3;
   nextMaterials: PreviewMaterial[];
   redGhostMaterials: PreviewMaterial[];
   cyanGhostMaterials: PreviewMaterial[];
@@ -52,6 +56,7 @@ type StartOptions = Readonly<{
   getPlugStyle: (color: number) => PlugStyleId;
   getTimelineElapsed?: () => number;
   commit: () => boolean;
+  televisionRoot?: THREE.Group | null;
 }>;
 
 type SwitchWindow = Readonly<{ start: number; end: number }>;
@@ -79,7 +84,12 @@ const EMPTY_DIAGNOSTICS = (): TelevisionReconstructionDiagnostics => ({
   switchCount: 0,
   rgbGhostCount: 0,
   committed: false,
+  spatiallyChangedCount: 0,
 });
+
+function spatialSignature(definition: ArrowDefinition): string {
+  return `${definition.exitDirection}:${definition.path.map((point) => point.join(',')).join(';')}`;
+}
 
 function preparePreviewMaterials(model: PlugCableModel, opacityScale: number): PreviewMaterial[] {
   const materials: PreviewMaterial[] = [];
@@ -127,6 +137,14 @@ export class TelevisionReconstructionTransition {
   private getTimelineElapsed: (() => number) | null = null;
   private commit: (() => boolean) | null = null;
   private diagnosticsValue = EMPTY_DIAGNOSTICS();
+  private televisionRoot: THREE.Group | null = null;
+  private televisionFlashBaseline: {
+    staticVisible: boolean;
+    scanlineVisible: boolean;
+    staticPosition: THREE.Vector3;
+    scanlinePosition: THREE.Vector3;
+    screenEmissives: Array<{ material: THREE.Material; color: THREE.Color; intensity: number }>;
+  } | null = null;
 
   constructor() {
     this.root.name = 'television-reconstruction-transition';
@@ -144,6 +162,8 @@ export class TelevisionReconstructionTransition {
     this.startedAt = performance.now() * 0.001;
     this.getTimelineElapsed = options.getTimelineElapsed ?? null;
     this.commit = options.commit;
+    this.televisionRoot = options.televisionRoot ?? null;
+    this.televisionFlashBaseline = this.captureTelevisionFlashBaseline(this.televisionRoot);
 
     options.replacements.forEach((definition, cableId) => {
       const oldModel = options.existingModels.get(cableId);
@@ -159,6 +179,18 @@ export class TelevisionReconstructionTransition {
       const nextMaterials = preparePreviewMaterials(nextModel, 1);
       const redGhostMaterials = configureGhost(redGhost, 0xff365f);
       const cyanGhostMaterials = configureGhost(cyanGhost, 0x35d7ff);
+      const basePosition = oldModel.root.position.clone();
+      const baseQuaternion = oldModel.root.quaternion.clone();
+      const baseScale = oldModel.root.scale.clone();
+      nextModel.root.position.copy(basePosition);
+      nextModel.root.quaternion.copy(baseQuaternion);
+      nextModel.root.scale.copy(baseScale);
+      redGhost.root.position.copy(basePosition);
+      redGhost.root.quaternion.copy(baseQuaternion);
+      redGhost.root.scale.copy(baseScale);
+      cyanGhost.root.position.copy(basePosition);
+      cyanGhost.root.quaternion.copy(baseQuaternion);
+      cyanGhost.root.scale.copy(baseScale);
       this.root.add(redGhost.root, cyanGhost.root, nextModel.root);
       this.entries.push({
         cableId,
@@ -166,12 +198,18 @@ export class TelevisionReconstructionTransition {
         nextModel,
         redGhost,
         cyanGhost,
+        basePosition,
+        baseQuaternion,
+        baseScale,
         nextMaterials,
         redGhostMaterials,
         cyanGhostMaterials,
       });
     });
 
+    const spatiallyChangedCount = this.entries.filter((entry) => (
+      spatialSignature(entry.oldModel.definition) !== spatialSignature(entry.nextModel.definition)
+    )).length;
     this.diagnosticsValue = {
       active: this.entries.length > 0,
       elapsed: 0,
@@ -182,6 +220,7 @@ export class TelevisionReconstructionTransition {
       switchCount: 0,
       rgbGhostCount: 0,
       committed: false,
+      spatiallyChangedCount,
     };
     return POWERED_ACTIVE_DURATION * 1_000;
   }
@@ -212,24 +251,32 @@ export class TelevisionReconstructionTransition {
 
     this.entries.forEach((entry, index) => {
       entry.oldModel.root.visible = oldVisible;
-      entry.oldModel.root.scale.setScalar(1 + (sample.phase === 'old-flicker' ? Math.abs(Math.sin(elapsed * 72)) * 0.018 : 0));
+      entry.oldModel.root.scale.copy(entry.baseScale).multiplyScalar(
+        1 + (sample.phase === 'old-flicker' ? Math.abs(Math.sin(elapsed * 72)) * 0.018 : 0),
+      );
       entry.oldModel.setSkillGlow(sample.phase === 'old-flicker' ? 0.95 : 0.58);
 
       setPreviewOpacity(entry.nextMaterials, newVisible ? 1 : 0);
       entry.nextModel.root.position
-        .copy(cameraRight).multiplyScalar(jitter * (index % 2 === 0 ? 1 : -1))
+        .copy(entry.basePosition)
+        .addScaledVector(cameraRight, jitter * (index % 2 === 0 ? 1 : -1))
         .addScaledVector(cameraUp, Math.cos(elapsed * 83 + index) * 0.006);
-      entry.nextModel.root.scale.setScalar(1 + (sample.phase === 'new-glitch' ? Math.sin(elapsed * 64 + index) * 0.012 : 0));
+      entry.nextModel.root.scale.copy(entry.baseScale).multiplyScalar(
+        1 + (sample.phase === 'new-glitch' ? Math.sin(elapsed * 64 + index) * 0.012 : 0),
+      );
 
       setPreviewOpacity(entry.redGhostMaterials, ghostsVisible ? 1 : 0);
       setPreviewOpacity(entry.cyanGhostMaterials, ghostsVisible ? 1 : 0);
       entry.redGhost.root.position
-        .copy(cameraRight).multiplyScalar(-ghostOffset)
+        .copy(entry.basePosition)
+        .addScaledVector(cameraRight, -ghostOffset)
         .addScaledVector(cameraUp, jitter);
       entry.cyanGhost.root.position
-        .copy(cameraRight).multiplyScalar(ghostOffset)
+        .copy(entry.basePosition)
+        .addScaledVector(cameraRight, ghostOffset)
         .addScaledVector(cameraUp, -jitter);
     });
+    this.updateTelevisionFlash(sample.phase, elapsed);
 
     this.diagnosticsValue = {
       ...this.diagnosticsValue,
@@ -244,22 +291,123 @@ export class TelevisionReconstructionTransition {
   reset(): void {
     this.entries.forEach((entry) => {
       entry.oldModel.root.visible = true;
-      entry.oldModel.root.position.set(0, 0, 0);
-      entry.oldModel.root.scale.setScalar(1);
+      entry.oldModel.root.position.copy(entry.basePosition);
+      entry.oldModel.root.quaternion.copy(entry.baseQuaternion);
+      entry.oldModel.root.scale.copy(entry.baseScale);
       entry.oldModel.setSkillGlow(0);
       entry.nextModel.dispose();
       entry.redGhost.dispose();
       entry.cyanGhost.dispose();
     });
+    this.restoreTelevisionFlashBaseline();
     this.entries = [];
     this.getTimelineElapsed = null;
     this.commit = null;
+    this.televisionRoot = null;
+    this.televisionFlashBaseline = null;
     this.diagnosticsValue = EMPTY_DIAGNOSTICS();
   }
 
   dispose(): void {
     this.reset();
     this.root.removeFromParent();
+  }
+
+
+  private captureTelevisionFlashBaseline(root: THREE.Group | null): NonNullable<TelevisionReconstructionTransition['televisionFlashBaseline']> | null {
+    if (!root) return null;
+    const staticGroup = root.getObjectByName('television-static-snow-group');
+    const scanline = root.getObjectByName('television-scanline-pivot');
+    const screen = root.getObjectByName('television-crt-bulged-screen');
+    const screenEmissives: Array<{ material: THREE.Material; color: THREE.Color; intensity: number }> = [];
+    if (screen && screen.type === 'Mesh') {
+      const rawMaterials = (screen as THREE.Mesh).material as THREE.Material | THREE.Material[];
+      const materials: THREE.Material[] = Array.isArray(rawMaterials) ? rawMaterials : [rawMaterials];
+      materials.forEach((material: THREE.Material) => {
+        const toon = material as THREE.MeshToonMaterial;
+        if ('emissive' in toon && toon.emissive instanceof THREE.Color) {
+          screenEmissives.push({ material, color: toon.emissive.clone(), intensity: toon.emissiveIntensity });
+        }
+      });
+    }
+    return {
+      staticVisible: staticGroup?.visible ?? false,
+      scanlineVisible: scanline?.visible ?? false,
+      staticPosition: staticGroup?.position.clone() ?? new THREE.Vector3(),
+      scanlinePosition: scanline?.position.clone() ?? new THREE.Vector3(),
+      screenEmissives,
+    };
+  }
+
+  private updateTelevisionFlash(phase: Exclude<TelevisionReconstructionPhase, 'idle' | 'complete'>, elapsed: number): void {
+    const root = this.televisionRoot;
+    if (!root) return;
+    const staticGroup = root.getObjectByName('television-static-snow-group');
+    const scanline = root.getObjectByName('television-scanline-pivot');
+    const screen = root.getObjectByName('television-crt-bulged-screen');
+    const active = phase === 'old-flicker' || phase === 'new-glitch';
+    if (staticGroup) {
+      staticGroup.visible = active;
+      // Sample from the authored baseline every frame. Accumulating the
+      // jitter on the previous position made the TV static drift away from
+      // the screen and could leave it off-screen by the end of the effect.
+      const baseline = this.televisionFlashBaseline;
+      if (baseline) {
+        staticGroup.position.copy(baseline.staticPosition);
+        staticGroup.position.x += Math.sin(elapsed * 91) * 0.028 * Number(active);
+        staticGroup.position.y += Math.cos(elapsed * 67) * 0.018 * Number(active);
+      }
+    }
+    if (scanline) {
+      scanline.visible = active;
+      const baseline = this.televisionFlashBaseline;
+      if (baseline) scanline.position.copy(baseline.scanlinePosition);
+      scanline.position.y += ((elapsed * 1.2) % 1.08) - 0.54;
+    }
+    let intensity = 0;
+    if (screen && screen.type === 'Mesh') {
+      const rawMaterials = (screen as THREE.Mesh).material as THREE.Material | THREE.Material[];
+      const materials: THREE.Material[] = Array.isArray(rawMaterials) ? rawMaterials : [rawMaterials];
+      intensity = active ? 0.72 + Math.abs(Math.sin(elapsed * 47)) * 0.24 : 0;
+      materials.forEach((material: THREE.Material) => {
+        const toon = material as THREE.MeshToonMaterial;
+        if (!('emissive' in toon) || !(toon.emissive instanceof THREE.Color)) return;
+        if (active) {
+          toon.emissive.setHex(0xdfeaff);
+          toon.emissiveIntensity = intensity;
+        }
+      });
+    }
+    root.userData.televisionReconstructionFlash = {
+      active,
+      phase,
+      staticVisible: staticGroup?.visible ?? false,
+      intensity,
+    };
+  }
+
+  private restoreTelevisionFlashBaseline(): void {
+    const root = this.televisionRoot;
+    const baseline = this.televisionFlashBaseline;
+    if (!root || !baseline) return;
+    const staticGroup = root.getObjectByName('television-static-snow-group');
+    const scanline = root.getObjectByName('television-scanline-pivot');
+    if (staticGroup) {
+      staticGroup.visible = baseline.staticVisible;
+      staticGroup.position.copy(baseline.staticPosition);
+    }
+    if (scanline) {
+      scanline.visible = baseline.scanlineVisible;
+      scanline.position.copy(baseline.scanlinePosition);
+    }
+    baseline.screenEmissives.forEach(({ material, color, intensity }) => {
+      const toon = material as THREE.MeshToonMaterial;
+      if ('emissive' in toon && toon.emissive instanceof THREE.Color) {
+        toon.emissive.copy(color);
+        toon.emissiveIntensity = intensity;
+      }
+    });
+    delete root.userData.televisionReconstructionFlash;
   }
 
   private sample(elapsed: number): {
@@ -295,7 +443,9 @@ export class TelevisionReconstructionTransition {
     this.entries.forEach((entry) => {
       if (!committed) {
         entry.oldModel.root.visible = true;
-        entry.oldModel.root.scale.setScalar(1);
+        entry.oldModel.root.position.copy(entry.basePosition);
+        entry.oldModel.root.quaternion.copy(entry.baseQuaternion);
+        entry.oldModel.root.scale.copy(entry.baseScale);
         entry.oldModel.setSkillGlow(0);
       }
       entry.nextModel.dispose();
@@ -305,6 +455,7 @@ export class TelevisionReconstructionTransition {
     this.entries = [];
     this.getTimelineElapsed = null;
     this.commit = null;
+    this.restoreTelevisionFlashBaseline();
     this.diagnosticsValue = {
       ...this.diagnosticsValue,
       active: false,
@@ -313,6 +464,7 @@ export class TelevisionReconstructionTransition {
       currentTopology: committed ? 'committed' : 'old',
       rgbGhostCount: 0,
       committed,
+      spatiallyChangedCount: this.diagnosticsValue.spatiallyChangedCount,
     };
   }
 }

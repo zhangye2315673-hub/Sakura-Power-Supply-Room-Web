@@ -39,6 +39,7 @@ export type SoundWaveShieldDiagnostics = Readonly<{
   secondsUntilReminder: number;
   appearanceRingCycles: number;
   surfaceRingProgress: number;
+  activationCount: number;
 }>;
 
 function createMaterial(uniforms: SoundWaveShieldUniforms): THREE.ShaderMaterial {
@@ -143,6 +144,7 @@ export class SoundWaveShieldPresentation {
   private nextReminderAt = 0;
   private reminderCount = 0;
   private impactCount = 0;
+  private activationCount = 0;
   private appearanceRingCycles = 0;
   private surfaceRingProgress = 0;
   private visibility = 0;
@@ -162,15 +164,26 @@ export class SoundWaveShieldPresentation {
     const nextProtected = active && targets.length > 0;
     if (nextProtected) this.updateBounds(targets);
     if (nextProtected && !this.protectedState) {
+      this.activationCount += 1;
       this.nextReminderAt = 0;
       this.reminderCount = 0;
       this.startPulse('arming');
-    } else if (!nextProtected && this.protectedState) {
+    } else if (!nextProtected && this.protectedState && this.phase !== 'impact') {
       this.nextReminderAt = 0;
       this.stopPulse();
     }
     this.protectedState = nextProtected;
     this.targetCount = nextProtected ? targets.length : 0;
+  }
+
+  retrigger(targets: readonly THREE.Object3D[], protectedState = true): void {
+    if (targets.length === 0) return;
+    this.updateBounds(targets);
+    this.protectedState = protectedState;
+    this.targetCount = targets.length;
+    this.nextReminderAt = 0;
+    this.activationCount += 1;
+    this.startPulse('arming');
   }
 
   playImpact(worldPosition: THREE.Vector3): void {
@@ -238,6 +251,7 @@ export class SoundWaveShieldPresentation {
     this.nextReminderAt = 0;
     this.reminderCount = 0;
     this.impactCount = 0;
+    this.activationCount = 0;
     this.appearanceRingCycles = 0;
     this.surfaceRingProgress = 0;
     this.visibility = 0;
@@ -279,6 +293,7 @@ export class SoundWaveShieldPresentation {
         : 0,
       appearanceRingCycles: this.appearanceRingCycles,
       surfaceRingProgress: this.surfaceRingProgress,
+      activationCount: this.activationCount,
     };
   }
 

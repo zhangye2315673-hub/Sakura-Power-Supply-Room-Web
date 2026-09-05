@@ -6,6 +6,8 @@ import {
   PortableSpeakerSpacingPresentation,
   portableSpeakerSpacingMultiplierAt,
 } from '../src/skill/PortableSpeakerSpacingPresentation';
+import type { ArrowDefinition } from '../src/puzzle/types';
+import { PlugCableModel } from '../src/render/PlugCableModel';
 
 test('便携音箱按共享节拍扩距且只把线缆表面净空加倍', () => {
   expect(portableSpeakerSpacingMultiplierAt(0.38)).toBeLessThan(1);
@@ -50,4 +52,50 @@ test('便携音箱按共享节拍扩距且只把线缆表面净空加倍', () =>
   presentation.update(PORTABLE_SPEAKER_SPACING_RELEASE_DURATION, thickTargets);
   expect(presentation.phase).toBe('idle');
   expect([...applied.values()].every((offset) => offset.length() < 0.00001)).toBe(true);
+});
+
+test('技能状态先到达时仍从压缩膨胀节拍开始，而不是直接跳到 holding', () => {
+  const presentation = new PortableSpeakerSpacingPresentation();
+  const offsets = new Map<string, THREE.Vector3>();
+  const targets = [-0.7, 0.7].map((x, index) => ({
+    id: `sync-before-start-${index}`,
+    center: new THREE.Vector3(x, 0, 0),
+    clearanceSegments: [{
+      start: new THREE.Vector3(x - 0.35, 0, 0),
+      end: new THREE.Vector3(x + 0.35, 0, 0),
+      radius: 0.1,
+    }],
+    setOffset: (offset: THREE.Vector3) => offsets.set(`sync-before-start-${index}`, offset.clone()),
+  }));
+
+  presentation.sync(true, targets);
+  expect(presentation.phase).toBe('pulsing');
+  expect(presentation.diagnostics.timeline).toBe(0);
+  presentation.update(0.49, targets);
+  expect(presentation.phase).toBe('pulsing');
+  expect(presentation.diagnostics.multiplier).toBeLessThan(PORTABLE_SPEAKER_SPACING_MULTIPLIER);
+  expect([...offsets.values()].some((offset) => offset.length() > 0)).toBe(true);
+});
+
+test('便携音箱扩距叠加到线组当前姿态，释放后不把插头传送回原点', () => {
+  const definition: ArrowDefinition = {
+    id: 'speaker-preserve-live-root',
+    path: [[3, 3, 3], [4, 3, 3], [5, 3, 3]],
+    exitDirection: '+X',
+    color: 0x56a8ff,
+    lengthClass: 'short',
+  };
+  const model = new PlugCableModel(definition, 'round-two-pin');
+  const liveRootPosition = new THREE.Vector3(1.35, -0.42, 0.76);
+  const spacingOffset = new THREE.Vector3(0.24, 0.08, -0.12);
+  model.root.position.copy(liveRootPosition);
+
+  model.setBundleSpacingOffset(spacingOffset);
+  expect(model.root.position.toArray()).toEqual(
+    liveRootPosition.clone().add(spacingOffset).toArray(),
+  );
+
+  model.setBundleSpacingOffset(null);
+  expect(model.root.position.toArray()).toEqual(liveRootPosition.toArray());
+  model.dispose();
 });

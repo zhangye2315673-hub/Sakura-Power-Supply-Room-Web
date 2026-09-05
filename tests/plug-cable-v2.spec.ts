@@ -444,7 +444,9 @@ test('lamp glow preserves line colors and lights the complete cable group with a
   expect(model.skillVisualState.glowStrength).toBeCloseTo(0.86, 8);
   expect(model.skillVisualState.cableColor).toBe(definition.color);
 
-  expect(model.root.getObjectByName('lamp-cable-guide')).toBeUndefined();
+  const preparedGuide = model.root.getObjectByName('lamp-cable-guide');
+  expect(preparedGuide).toBeDefined();
+  expect(preparedGuide?.visible).toBe(false);
   model.setLampGuide('head');
   const guides: THREE.Group[] = [];
   model.root.traverse((object) => {

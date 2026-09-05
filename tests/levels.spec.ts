@@ -67,13 +67,14 @@ test('reset reproduces the layout and total random challenge leaves campaign mod
     { timeout: 60_000 },
   );
   await page.waitForURL(
-    (url) => ['random', 'rush', 'skill'].includes(url.searchParams.get('mode') ?? '') && !url.searchParams.has('level'),
+    (url) => ['random', 'explore', 'rush', 'skill'].includes(url.searchParams.get('mode') ?? '')
+      && !url.searchParams.has('level'),
     { timeout: 60_000 },
   );
   const random = await page.evaluate(() => window.__THREE_GAME_DIAGNOSTICS__ ?? null);
   expect(['random', 'rush', 'skill']).toContain(random?.mode);
   if (random?.mode === 'random') expect(random.levelId).toBe(0);
   else if (random?.mode === 'rush') expect(random.rush?.challengeId).toMatch(/^rush-/);
-  expect(['random', 'rush', 'skill']).toContain(new URL(page.url()).searchParams.get('mode'));
+  expect(['random', 'explore', 'rush', 'skill']).toContain(new URL(page.url()).searchParams.get('mode'));
   expect(new URL(page.url()).searchParams.has('level')).toBe(false);
 });

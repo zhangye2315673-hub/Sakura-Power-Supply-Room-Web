@@ -105,7 +105,7 @@ export const SEASON_PROFILES: Record<SeasonMode, SeasonProfile> = {
     label: '夏',
     day: state({
       sky: [0x8db9b4, 0xc3dccf, 0xdfece4],
-      clouds: [0xdce9e1, 0xcdded5, 0.14, 0.05],
+      clouds: [0xf0f6ef, 0xbfd4ca, 0.62, 0.22],
       fog: [0xdce8e1, 1.02, 1.06],
       sun: [0xfff1d2, 2.25], fill: [0xaab4ec, 1.05], bounce: [0xd8cbe8, 0.32],
       hemi: [0xd4e8fa, 0x9d89aa, 1.08], page: 0xd7e5df, startWash: 0xdde2ca,
@@ -127,7 +127,7 @@ export const SEASON_PROFILES: Record<SeasonMode, SeasonProfile> = {
     label: '秋',
     day: state({
       sky: [0xa5b6c4, 0xd5d3c7, 0xf0e3d5],
-      clouds: [0xe8e1d9, 0xd8cec4, 0.14, 0.05],
+      clouds: [0xf6ecdf, 0xd1bcaa, 0.58, 0.2],
       fog: [0xe5ded4, 0.98, 0.98],
       sun: [0xfff1d2, 2.18], fill: [0xaab4ec, 1.0], bounce: [0xd8cbe8, 0.32],
       hemi: [0xd4e8fa, 0x9d89aa, 1.05], page: 0xe4ddd3, startWash: 0xf0d9bb,
@@ -149,7 +149,7 @@ export const SEASON_PROFILES: Record<SeasonMode, SeasonProfile> = {
     label: '冬',
     day: state({
       sky: [0xa4bfd1, 0xd1e1e8, 0xdde9ef],
-      clouds: [0xdbe7ed, 0xcbdce4, 0.15, 0.06],
+      clouds: [0xf6fbfd, 0xb9cfda, 0.65, 0.24],
       fog: [0xdce6eb, 0.88, 0.84],
       sun: [0xe8f2ff, 2.08], fill: [0xb4c5dc, 1.0], bounce: [0xd2cfdb, 0.3],
       hemi: [0xcbdde8, 0x9295a2, 1.02], page: 0xe1eaed, startWash: 0xdbdfd5,

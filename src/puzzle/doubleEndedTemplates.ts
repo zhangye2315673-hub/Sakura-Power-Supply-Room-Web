@@ -6,3 +6,5 @@ export type DoubleEndedPuzzleTemplate = Readonly<{
   solutionEnds: CableEnd[];
   initiallyFree: number;
 }>;
+
+export type DoubleEndedPuzzleTemplatePool = readonly DoubleEndedPuzzleTemplate[];

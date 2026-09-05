@@ -93,6 +93,9 @@ test('lamp shares one socket-driven physical spotlight, widening volume and grou
   const beam = performances.root.getObjectByName('lamp-volumetric-light-cone') as THREE.Mesh;
   const pool = performances.root.getObjectByName('lamp-ground-light-pool-volume') as THREE.Mesh;
   const spot = performances.root.getObjectByName('lamp-physical-spotlight') as THREE.SpotLight;
+  expect(beam.userData.performanceEffect).toBe(true);
+  expect(pool.userData.performanceEffect).toBe(true);
+  expect(spot.userData.performanceEffect).toBe(true);
   expect(beam.visible).toBe(true);
   expect(beam.material).toBeInstanceOf(THREE.ShaderMaterial);
   expect(beam.geometry).toBeInstanceOf(THREE.CylinderGeometry);
@@ -119,7 +122,124 @@ test('lamp shares one socket-driven physical spotlight, widening volume and grou
   performances.stop(target);
   expect(beam.visible).toBe(false);
   expect(pool.visible).toBe(false);
-  expect(spot.visible).toBe(false);
+  expect(spot.visible).toBe(true);
+  expect(spot.intensity).toBe(0);
   performances.dispose();
   petals.dispose();
+});
+
+test('正式技能入口第一次点亮台灯时不产生独立的整画面长帧', async ({ page }) => {
+  test.setTimeout(180_000);
+  await page.addInitScript(() => {
+    window.__APPLIANCE_PERFORMANCE_TIME_OVERRIDE__ = 3.3;
+    window.__COLLECT_ALL_CLICK_TARGETS_FOR_EVIDENCE__ = false;
+  });
+  await page.goto('/?theme=day&mode=skill&direct=1&seed=20260829');
+  await page.waitForFunction(
+    () => window.__THREE_GAME_DIAGNOSTICS__?.opening.ready === true,
+    null,
+    { timeout: 90_000 },
+  );
+  expect(await page.evaluate(() => window.__FINISH_OPENING_FOR_EVIDENCE__?.() ?? false)).toBe(true);
+  await page.waitForFunction(() => {
+    const diagnostics = window.__THREE_GAME_DIAGNOSTICS__;
+    return diagnostics?.opening.active === false
+      && diagnostics.opening.transitioning === false
+      && diagnostics.skill?.inputLocked === false
+      && diagnostics.applianceReplacement.warmupPendingCount === 0
+      && diagnostics.appliances.some(({ kind }) => kind === 'lamp');
+  }, null, { timeout: 45_000 });
+
+  await page.evaluate(() => {
+    const samples: Array<{
+      ms: number;
+      activationRequested: boolean;
+      lampActive: boolean;
+      prepareCount: number;
+      preparedCount: number;
+      warmupPendingCount: number;
+      lastFromKind: string | null;
+      lastToKind: string | null;
+      lastWarmupMs: number;
+    }> = [];
+    let previous = performance.now();
+    let active = true;
+    let activationRequested = false;
+    Reflect.set(window, '__LAMP_FIRST_USE_FRAME_SAMPLES__', samples);
+    Reflect.set(window, '__REQUEST_LAMP_FIRST_USE__', () => { activationRequested = true; });
+    Reflect.set(window, '__STOP_LAMP_FIRST_USE_FRAME_SAMPLES__', () => { active = false; });
+    const measure = (now: number): void => {
+      const lampActive = window.__THREE_GAME_DIAGNOSTICS__?.appliances.some(
+        ({ kind, state }) => kind === 'lamp' && state === 'active',
+      ) === true;
+      const replacement = window.__THREE_GAME_DIAGNOSTICS__?.applianceReplacement;
+      samples.push({
+        ms: now - previous,
+        activationRequested,
+        lampActive,
+        prepareCount: replacement?.prepareCount ?? -1,
+        preparedCount: replacement?.preparedCount ?? -1,
+        warmupPendingCount: replacement?.warmupPendingCount ?? -1,
+        lastFromKind: replacement?.lastFromKind ?? null,
+        lastToKind: replacement?.lastToKind ?? null,
+        lastWarmupMs: replacement?.lastWarmupMs ?? -1,
+      });
+      previous = now;
+      if (active) requestAnimationFrame(measure);
+    };
+    requestAnimationFrame(measure);
+  });
+  await page.waitForFunction(() => (
+    (Reflect.get(window, '__LAMP_FIRST_USE_FRAME_SAMPLES__') as unknown[] | undefined)?.length ?? 0
+  ) >= 12);
+  const activated = await page.evaluate(() => {
+    const mark = Reflect.get(window, '__REQUEST_LAMP_FIRST_USE__') as (() => void) | undefined;
+    mark?.();
+    return window.__ACTIVATE_APPLIANCE_FOR_EVIDENCE__?.('lamp') ?? false;
+  });
+  expect(activated).toBe(true);
+  await page.waitForFunction(() => {
+    const samples = Reflect.get(window, '__LAMP_FIRST_USE_FRAME_SAMPLES__') as Array<{
+      activationRequested: boolean;
+      lampActive: boolean;
+    }> | undefined;
+    return (samples?.filter(({ activationRequested, lampActive }) => activationRequested && lampActive).length ?? 0) >= 8;
+  }, null, { timeout: 45_000 });
+
+  const frameStats = await page.evaluate(() => {
+    const stop = Reflect.get(window, '__STOP_LAMP_FIRST_USE_FRAME_SAMPLES__') as (() => void) | undefined;
+    stop?.();
+    const samples = (Reflect.get(window, '__LAMP_FIRST_USE_FRAME_SAMPLES__') as Array<{
+      ms: number;
+      activationRequested: boolean;
+      lampActive: boolean;
+      prepareCount: number;
+      preparedCount: number;
+      warmupPendingCount: number;
+      lastFromKind: string | null;
+      lastToKind: string | null;
+      lastWarmupMs: number;
+    }> | undefined) ?? [];
+    const baseline = samples.filter(({ activationRequested }) => !activationRequested).slice(-8).map(({ ms }) => ms);
+    const activeSamples = samples
+      .filter(({ activationRequested, lampActive }) => activationRequested && lampActive)
+      .map(({ ms }) => ms);
+    const orderedBaseline = [...baseline].sort((a, b) => a - b);
+    const baselineP75 = orderedBaseline[Math.max(0, Math.ceil(orderedBaseline.length * 0.75) - 1)] ?? 0;
+    const activeMaximum = Math.max(0, ...activeSamples);
+    return {
+      baselineCount: baseline.length,
+      activeCount: activeSamples.length,
+      baselineP75,
+      activeMaximum,
+      activeToBaselineRatio: baselineP75 > 0 ? activeMaximum / baselineP75 : Number.POSITIVE_INFINITY,
+      samples: samples.map(({ ms, ...state }) => ({ ms: Number(ms.toFixed(1)), ...state })),
+    };
+  });
+  console.log(`LAMP_FIRST_USE ${JSON.stringify(frameStats)}`);
+  expect(frameStats.baselineCount).toBe(8);
+  expect(frameStats.activeCount).toBeGreaterThanOrEqual(8);
+  expect(frameStats.baselineP75).toBeGreaterThan(0);
+  expect(frameStats.activeMaximum).toBeLessThan(frameStats.baselineP75 * 3 + 750);
+  expect(frameStats.activeToBaselineRatio).toBeLessThan(4.5);
 });

@@ -22,7 +22,8 @@
     "verify:rush": "esbuild scripts/verify-rush-challenges.ts --bundle --platform=node --format=esm --outfile=node_modules/.cache/arrow-cube/verify-rush-challenges.mjs && node node_modules/.cache/arrow-cube/verify-rush-challenges.mjs",
     "generate:random-templates": "esbuild scripts/generate-random-templates.ts --bundle --platform=node --format=esm --outfile=node_modules/.cache/arrow-cube/generate-random-templates.mjs && node node_modules/.cache/arrow-cube/generate-random-templates.mjs",
     "generate:rush-layouts": "esbuild scripts/generate-rush-layouts.ts --bundle --platform=node --format=esm --outfile=node_modules/.cache/arrow-cube/generate-rush-layouts.mjs && node node_modules/.cache/arrow-cube/generate-rush-layouts.mjs",
-    "generate:double-ended-templates": "esbuild scripts/generate-double-ended-templates.ts --bundle --platform=node --format=esm --outfile=node_modules/.cache/arrow-cube/generate-double-ended-templates.mjs && node node_modules/.cache/arrow-cube/generate-double-ended-templates.mjs",
+    "generate:double-ended-templates": "npm run generate:challenge-layouts -- --double-ended",
+    "generate:challenge-layouts": "rolldown scripts/generate-challenge-layouts.ts --platform=node --format=esm --file=node_modules/.cache/arrow-cube/generate-challenge-layouts.mjs && node node_modules/.cache/arrow-cube/generate-challenge-layouts.mjs",
     "find:level-seed": "esbuild scripts/find-level-seed.ts --bundle --platform=node --format=esm --outfile=node_modules/.cache/arrow-cube/find-level-seed.mjs && node node_modules/.cache/arrow-cube/find-level-seed.mjs"
   },
   "dependencies": {

@@ -76,6 +76,11 @@ export type SkillDamageEvent = Readonly<{
   revived: boolean;
 }>;
 
+export type SkillBuffFallback = Readonly<{
+  type: 'extend-buff' | 'heal' | 'upgrade-continue' | 'add-shield-charge';
+  amount: number;
+}>;
+
 export type GachaCardTier =
   | 'normal-benefit'
   | 'strong-benefit'
@@ -387,10 +392,10 @@ const APPLIANCE_SKILL_DEFINITIONS: readonly ApplianceSkillDefinition[] = [
       { type: 'clear-status', slot: 'debuff', reason: 'kettle' },
     ]),
     (ctx) => hasDebuff(ctx, 'frozen-plug') ? 'normal-benefit' : null),
-  basicDefinition('coffee-maker', 'coffee-lock', '咖啡封技', '咖啡覆盖线色，并封锁后续四次家电技能；连接与普通动画照常。', 'negative', 'debuff',
+  basicDefinition('coffee-maker', 'coffee-lock', '咖啡封技', '咖啡覆盖线色，并封锁后续三次家电技能；连接与普通动画照常。', 'negative', 'debuff',
     (ctx) => noDebuff(ctx) && ctx.remainingCables.length > 0,
     (ctx) => resolution({ id: 'coffee-lock', appliance: 'coffee-maker', label: '咖啡封技' }, [{
-      type: 'set-status', slot: 'debuff', status: status('coffee-lock', 'coffee-maker', 4, [], ctx.state.skillEventIndex),
+      type: 'set-status', slot: 'debuff', status: status('coffee-lock', 'coffee-maker', 3, [], ctx.state.skillEventIndex),
     }]),
     (ctx) => noDebuff(ctx) && ctx.remainingCables.length > 0 ? 'strong-risk' : null),
   basicDefinition('robot-vacuum', 'snapshot-sweep', '快照清线', '清除触发瞬间全部真实可抽线。', 'positive', null,
@@ -649,6 +654,9 @@ export class SkillChallengeEngine {
     consumePrinterCopy: boolean;
     coffeeBlocked: boolean;
     blockedByDryShield: boolean;
+    buffPreserved: boolean;
+    buffFallback: SkillBuffFallback | null;
+    debuffSuppressed: boolean;
     damage: SkillDamageEvent | null;
   } {
     if (!this.transaction) {
@@ -657,6 +665,9 @@ export class SkillChallengeEngine {
         consumePrinterCopy: false,
         coffeeBlocked: false,
         blockedByDryShield: false,
+        buffPreserved: false,
+        buffFallback: null,
+        debuffSuppressed: false,
         damage: null,
       };
     }
@@ -666,14 +677,25 @@ export class SkillChallengeEngine {
     const printerAlreadyCopiedThisPull = transaction.appliance === 'printer'
       && transaction.preexistingPrinterCopy;
     let blockedByDryShield = false;
+    let buffPreserved = false;
+    let buffFallback: SkillBuffFallback | null = null;
+    let debuffSuppressed = false;
     if (!transaction.wasLastCableAtPullStart && !transaction.coffeeBlocked && !printerAlreadyCopiedThisPull) {
       const definition = APPLIANCE_SKILL_REGISTRY.get(transaction.appliance);
-      if (definition?.canTrigger(context)) {
+      if (definition?.slot === 'debuff' && this.stateValue.debuff) {
+        // Slot conflicts are a resolved, readable outcome rather than a
+        // generic "conditions not met" no-op. The existing DEBUFF remains.
+        this.stateValue.phase = 'skill-commit';
+        debuffSuppressed = true;
+        this.stateValue.skillEventIndex += 1;
+      } else if (definition?.canTrigger(context)) {
         const rng = new DeterministicRng(this.derivedSeed(this.stateValue.skillEventIndex));
         resolved = definition.resolve(context, rng);
         this.stateValue.phase = 'skill-commit';
         const commandOutcome = this.applyCommands(resolved.commands);
         blockedByDryShield = commandOutcome.blockedByDryShield;
+        buffPreserved = commandOutcome.buffPreserved;
+        buffFallback = commandOutcome.buffFallback;
         if (blockedByDryShield) resolved = null;
         this.stateValue.skillEventIndex += 1;
       }
@@ -695,6 +717,9 @@ export class SkillChallengeEngine {
       consumePrinterCopy,
       coffeeBlocked: transaction.coffeeBlocked,
       blockedByDryShield,
+      buffPreserved,
+      buffFallback,
+      debuffSuppressed,
       damage,
     };
   }
@@ -781,7 +806,9 @@ export class SkillChallengeEngine {
     void fakePlug;
     const buff = this.stateValue.buff;
     if (buff?.id === 'iridescent-bubble' || buff?.id === 'soothing-record') {
-      this.stateValue.buff = null;
+      const extraBlocks = Math.max(0, Number(buff.payload.extraBlocks ?? 0));
+      if (extraBlocks > 0) buff.payload.extraBlocks = extraBlocks - 1;
+      else this.stateValue.buff = null;
       return { protected: true, lives: this.stateValue.currentLives, failed: false, revived: false };
     }
     const result = this.damage(1);
@@ -820,13 +847,24 @@ export class SkillChallengeEngine {
     return Math.imul((this.stateValue.seed + index + 1) >>> 0, 0x9e3779b1) >>> 0;
   }
 
-  private applyCommands(commands: readonly SkillCommand[]): { blockedByDryShield: boolean } {
+  private applyCommands(commands: readonly SkillCommand[]): {
+    blockedByDryShield: boolean;
+    buffPreserved: boolean;
+    buffFallback: SkillBuffFallback | null;
+  } {
     let blockedByDryShield = false;
+    let buffPreserved = false;
+    let buffFallback: SkillBuffFallback | null = null;
+    let immediateBenefitProvided = false;
     for (const command of commands) {
       switch (command.type) {
-        case 'set-status':
-          blockedByDryShield = this.setStatus(command.slot, command.status) || blockedByDryShield;
+        case 'set-status': {
+          const outcome = this.setStatus(command.slot, command.status, immediateBenefitProvided);
+          blockedByDryShield = outcome.blockedByDryShield || blockedByDryShield;
+          buffPreserved = outcome.buffPreserved || buffPreserved;
+          buffFallback = outcome.buffFallback ?? buffFallback;
           break;
+        }
         case 'clear-status':
           this.stateValue[command.slot] = null;
           break;
@@ -836,6 +874,7 @@ export class SkillChallengeEngine {
           break;
         case 'heal':
           this.stateValue.currentLives = Math.min(this.stateValue.maxLives, this.stateValue.currentLives + command.amount);
+          immediateBenefitProvided = true;
           break;
         case 'increase-max-lives': {
           const previous = this.stateValue.maxLives;
@@ -844,6 +883,7 @@ export class SkillChallengeEngine {
             this.stateValue.maxLives,
             this.stateValue.currentLives + Math.max(1, this.stateValue.maxLives - previous),
           );
+          immediateBenefitProvided = true;
           break;
         }
         case 'set-printer-copy':
@@ -861,7 +901,11 @@ export class SkillChallengeEngine {
           else this.damage(command.amount);
           break;
         case 'grant-continue':
-          this.grantContinue();
+          {
+            const outcome = this.grantContinue();
+            buffPreserved = outcome.buffPreserved || buffPreserved;
+            buffFallback = outcome.buffFallback ?? buffFallback;
+          }
           break;
         case 'request-card-selection':
           this.pendingCards = [...command.cards];
@@ -871,41 +915,78 @@ export class SkillChallengeEngine {
       }
     }
     if (blockedByDryShield) this.pendingDryShieldBlock = true;
-    return { blockedByDryShield };
+    return { blockedByDryShield, buffPreserved, buffFallback };
   }
 
-  private setStatus(slot: SkillStatusSlot, next: StatusInstance): boolean {
+  private setStatus(slot: SkillStatusSlot, next: StatusInstance, immediateBenefitProvided = false): {
+    blockedByDryShield: boolean;
+    buffPreserved: boolean;
+    buffFallback: SkillBuffFallback | null;
+  } {
     if (slot === 'debuff') {
-      if (this.stateValue.debuff) return false;
+      if (this.stateValue.debuff) {
+        return { blockedByDryShield: false, buffPreserved: false, buffFallback: null };
+      }
       if (this.stateValue.buff?.id === 'dry-shield') {
         this.stateValue.buff = null;
-        return true;
+        return { blockedByDryShield: true, buffPreserved: false, buffFallback: null };
       }
       this.stateValue.debuff = { ...next, targetCableIds: [...next.targetCableIds], payload: { ...next.payload } };
-      return false;
+      return { blockedByDryShield: false, buffPreserved: false, buffFallback: null };
     }
     if (next.id === 'continue' && this.stateValue.buff?.id === 'continue') {
       const current = Number(this.stateValue.buff.payload.restoreLives ?? 1);
       this.stateValue.buff.payload.restoreLives = Math.min(this.stateValue.maxLives, current + 1);
-      return false;
+      return { blockedByDryShield: false, buffPreserved: false, buffFallback: null };
+    }
+    if (this.stateValue.buff) {
+      return {
+        blockedByDryShield: false,
+        buffPreserved: true,
+        buffFallback: this.rewardPreservedBuff(!immediateBenefitProvided),
+      };
     }
     this.stateValue.buff = { ...next, targetCableIds: [...next.targetCableIds], payload: { ...next.payload } };
-    return false;
+    return { blockedByDryShield: false, buffPreserved: false, buffFallback: null };
   }
 
-  private grantContinue(): void {
+  private grantContinue(): {
+    buffPreserved: boolean;
+    buffFallback: SkillBuffFallback | null;
+  } {
     if (this.stateValue.reviveUsedThisChallenge) {
       this.stateValue.currentLives = Math.min(this.stateValue.maxLives, this.stateValue.currentLives + 1);
-      return;
+      return { buffPreserved: false, buffFallback: null };
     }
     if (this.stateValue.buff?.id === 'continue') {
       const restoreLives = Number(this.stateValue.buff.payload.restoreLives ?? 1);
       this.stateValue.buff.payload.restoreLives = Math.min(this.stateValue.maxLives, restoreLives + 1);
-      return;
+      return { buffPreserved: false, buffFallback: null };
+    }
+    if (this.stateValue.buff) {
+      return { buffPreserved: true, buffFallback: this.rewardPreservedBuff(true) };
     }
     this.stateValue.buff = status('continue', 'game-controller', null, [], this.stateValue.skillEventIndex, {
       restoreLives: 1,
     });
+    return { buffPreserved: false, buffFallback: null };
+  }
+
+  private rewardPreservedBuff(allowHeal: boolean): SkillBuffFallback {
+    const current = this.stateValue.buff!;
+    if (current.turnsRemaining !== null) {
+      current.turnsRemaining += 1;
+      return { type: 'extend-buff', amount: 1 };
+    }
+    if (current.id === 'continue') {
+      const restoreLives = Number(current.payload.restoreLives ?? 1);
+      current.payload.restoreLives = Math.min(this.stateValue.maxLives, restoreLives + 1);
+      return { type: 'upgrade-continue', amount: 1 };
+    }
+    if (!allowHeal) return { type: 'heal', amount: 0 };
+    const extraBlocks = Math.max(0, Number(current.payload.extraBlocks ?? 0));
+    current.payload.extraBlocks = extraBlocks + 1;
+    return { type: 'add-shield-charge', amount: 1 };
   }
 
   private advanceExistingTurnStates(amount: number, deferMicrowave: boolean): void {

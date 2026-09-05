@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { CooperativeYieldBudget } from '../core/CooperativeYield';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import type { ArrowDefinition } from '../puzzle/types';
 import { createPlugHead, type PlugHead } from '../render/PlugParts';
@@ -38,11 +39,13 @@ type IntroPetal = {
   mesh: THREE.Group;
   visuals: Record<SeasonMode, THREE.Mesh>;
   firefly: THREE.Mesh;
+  season: SeasonMode;
   anchor: THREE.Vector3;
   velocity: THREE.Vector3;
   phase: number;
   size: number;
   burstVelocity: THREE.Vector3;
+  fallCycle: number;
 };
 
 export const OPENING_CABLES: readonly ArrowDefinition[] = [
@@ -97,9 +100,11 @@ export class OpeningScene {
   ];
   private readonly summerLeafMaterial = createSeasonParticleMaterial(0x84ad91, 0);
   private readonly autumnLeafMaterial = createSeasonParticleMaterial(0xffffff, 0, false, true);
-  private readonly winterSnowMaterial = createSeasonParticleMaterial(0xe5eff5, 0);
+  private readonly winterSnowMaterial = createSeasonParticleMaterial(0xffffff, 0);
   private readonly fireflyMaterial = createSeasonParticleMaterial(0xffd86a, 0, true);
   private seasonWeights: Record<SeasonMode, number> = { spring: 1, summer: 0, autumn: 0, winter: 0 };
+  private activeSeason: SeasonMode = 'spring';
+  private seasonInitialized = false;
   private readonly heroPlug: PlugHead;
   private readonly socketNormal = new THREE.Vector3();
   private readonly plugStart = new THREE.Vector3();
@@ -157,12 +162,13 @@ export class OpeningScene {
   prepareAsync(onProgress?: (progress: number, buildMs: number) => void): Promise<void> {
     if (this.preparePromise) return this.preparePromise;
     this.preparePromise = (async () => {
+      const buildBudget = new CooperativeYieldBudget();
       for (let index = 0; index < OPENING_CABLES.length; index += 1) {
         if (this.disposed) return;
         const startedAt = performance.now();
         this.buildCable(index);
         onProgress?.((index + 1) / OPENING_CABLES.length, performance.now() - startedAt);
-        await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+        await buildBudget.afterItem();
       }
     })();
     return this.preparePromise;
@@ -200,7 +206,7 @@ export class OpeningScene {
       petalMotion: this.petalMotion,
       impactCount: this.impactCount,
       seasonWeights: { ...this.seasonWeights },
-      visibleSeasonLayers: SEASON_MODES.filter((mode) => this.seasonWeights[mode] > 0.002),
+      visibleSeasonLayers: SEASON_MODES.filter((mode) => this.petals.some((petal) => petal.season === mode)),
       summerFirefliesVisible: this.fireflyMaterial.opacity > 0.002,
       jellyScale: [
         this.bundleJelly.scale.x,
@@ -216,15 +222,22 @@ export class OpeningScene {
 
   setSeasonState(weights: Readonly<Record<SeasonMode, number>>, themeProgress: number): void {
     for (const mode of SEASON_MODES) this.seasonWeights[mode] = weights[mode];
+    this.activeSeason = SEASON_MODES.reduce((best, mode) => (
+      weights[mode] > weights[best] ? mode : best
+    ), SEASON_MODES[0]);
+    if (!this.seasonInitialized) {
+      this.petals.forEach((petal) => { petal.season = this.activeSeason; });
+      this.seasonInitialized = true;
+    }
     const night = THREE.MathUtils.clamp(themeProgress, 0, 1);
-    this.springPetalMaterials[0].opacity = 0.82 * weights.spring;
-    this.springPetalMaterials[1].opacity = 0.76 * weights.spring;
-    this.summerLeafMaterial.opacity = 0.78 * weights.summer * THREE.MathUtils.lerp(1, 0.35, night);
-    this.autumnLeafMaterial.opacity = 0.84 * weights.autumn;
-    this.winterSnowMaterial.opacity = 0.92 * weights.winter;
+    this.springPetalMaterials[0].opacity = 0.82;
+    this.springPetalMaterials[1].opacity = 0.76;
+    this.summerLeafMaterial.opacity = 0.78 * THREE.MathUtils.lerp(1, 0.35, night);
+    this.autumnLeafMaterial.opacity = 0.84;
+    this.winterSnowMaterial.opacity = 1;
     this.fireflyMaterial.opacity = 0;
     this.petals.forEach((petal) => {
-      for (const mode of SEASON_MODES) petal.visuals[mode].visible = weights[mode] > 0.002;
+      for (const mode of SEASON_MODES) petal.visuals[mode].visible = petal.season === mode;
       petal.firefly.visible = false;
     });
   }
@@ -255,6 +268,10 @@ export class OpeningScene {
       petal.mesh.position.copy(petal.anchor);
       petal.velocity.set(0, 0, 0);
       petal.burstVelocity.set(0, 0, 0);
+      petal.season = this.activeSeason;
+      petal.fallCycle = Number.NaN;
+      for (const mode of SEASON_MODES) petal.visuals[mode].visible = mode === petal.season;
+      petal.firefly.visible = false;
     });
   }
 
@@ -560,7 +577,7 @@ export class OpeningScene {
       }
       visuals.summer.scale.set(0.72 + (index % 3) * 0.055, 0.9 + (index % 4) * 0.025, 1);
       visuals.autumn.scale.set(0.76 + (index % 4) * 0.045, 0.75 + (index % 5) * 0.035, 1);
-      visuals.winter.scale.set(0.74 + (index % 4) * 0.05, 0.74 + (index % 3) * 0.045, 1);
+      visuals.winter.scale.set(0.94 + (index % 4) * 0.06, 0.94 + (index % 3) * 0.055, 1);
       firefly.name = 'opening-summer-night-firefly';
       firefly.visible = false;
       mesh.add(firefly);
@@ -571,11 +588,13 @@ export class OpeningScene {
         mesh,
         visuals,
         firefly,
+        season: this.activeSeason,
         anchor,
         velocity: new THREE.Vector3(),
         phase,
         size: 0.78 + (index % 7) * 0.055,
         burstVelocity: new THREE.Vector3(),
+        fallCycle: Number.NaN,
       });
     }
   }
@@ -607,6 +626,19 @@ export class OpeningScene {
         .add(this.bundleMotion.position)
         .addScaledVector(UP, fallCycle * 0.62)
         .addScaledVector(this.petalRadial.set(Math.cos(petal.phase), 0, Math.sin(petal.phase)), lateralSway);
+      const fallRate = 0.09 + (index % 5) * 0.011;
+      const fallCycleIndex = Math.floor(elapsed * fallRate + petal.phase);
+      if (!Number.isFinite(petal.fallCycle)) {
+        petal.fallCycle = fallCycleIndex;
+      } else if (fallCycleIndex !== petal.fallCycle) {
+        // Existing particles keep their birth appearance until they complete
+        // their own fall cycle. Only the respawn point adopts the new season,
+        // making the turnover staggered and natural instead of a global morph.
+        petal.fallCycle = fallCycleIndex;
+        petal.season = this.activeSeason;
+        for (const mode of SEASON_MODES) petal.visuals[mode].visible = mode === petal.season;
+        petal.firefly.visible = false;
+      }
       if (!this.petalsInitialized) {
         petal.mesh.position.copy(this.petalTarget);
         petal.velocity.copy(this.bundleLocalVelocity);

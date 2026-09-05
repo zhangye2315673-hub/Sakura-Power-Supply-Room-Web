@@ -102,12 +102,12 @@ function fanBladeGeometry(): THREE.ExtrudeGeometry {
 
 type BubbleVisualResources = {
   sphereGeometry: THREE.SphereGeometry;
-  rainbowArcGeometry: THREE.TorusGeometry;
-  highlightGeometry: THREE.SphereGeometry;
-  filmMaterial: THREE.MeshPhysicalMaterial;
-  rimMaterial: THREE.MeshPhysicalMaterial;
-  rainbowMaterials: readonly THREE.MeshPhysicalMaterial[];
-  highlightMaterial: THREE.MeshBasicMaterial;
+  filmMaterial: THREE.ShaderMaterial;
+};
+
+type BubbleBatchEntry = {
+  bubble: THREE.Group;
+  source: THREE.Mesh;
 };
 
 function performanceMesh(
@@ -148,51 +148,63 @@ function createBubbleVisual(
     bubble,
     'semi-transparent-spherical-film',
   );
+  film.rotation.set(
+    rainbowIndex * 0.37,
+    rainbowIndex * 0.61,
+    rainbowIndex * 0.23,
+  );
   film.renderOrder = 21;
-
-  const rim = performanceMesh(
-    `${name}-rainbow-rim`,
-    resources.sphereGeometry,
-    resources.rimMaterial,
-    bubble,
-    'iridescent-spherical-rim',
-  );
-  rim.scale.setScalar(1.035);
-  rim.renderOrder = 20;
-
-  const warmArc = performanceMesh(
-    `${name}-rainbow-arc-warm`,
-    resources.rainbowArcGeometry,
-    resources.rainbowMaterials[rainbowIndex % resources.rainbowMaterials.length],
-    bubble,
-    'volumetric-rainbow-film-arc',
-  );
-  warmArc.rotation.set(0.58 + rainbowIndex * 0.19, -0.42, 0.25 + rainbowIndex * 0.23);
-  warmArc.renderOrder = 22;
-
-  const coolArc = performanceMesh(
-    `${name}-rainbow-arc-cool`,
-    resources.rainbowArcGeometry,
-    resources.rainbowMaterials[(rainbowIndex + 2) % resources.rainbowMaterials.length],
-    bubble,
-    'volumetric-rainbow-film-arc',
-  );
-  coolArc.rotation.set(-0.36, 0.72 + rainbowIndex * 0.13, Math.PI + 0.38);
-  coolArc.scale.setScalar(0.94);
-  coolArc.renderOrder = 22;
-
-  const highlight = performanceMesh(
-    `${name}-soft-highlight`,
-    resources.highlightGeometry,
-    resources.highlightMaterial,
-    bubble,
-    'volumetric-bubble-highlight',
-  );
-  highlight.position.set(-0.43, 0.48, 0.75);
-  highlight.scale.set(0.58, 1.42, 0.38);
-  highlight.rotation.z = 0.48;
-  highlight.renderOrder = 23;
   return bubble;
+}
+
+function addOrdinaryBubbleInstanceBatches(
+  performanceRig: THREE.Group,
+  bubbles: readonly THREE.Group[],
+): number {
+  const batches = new Map<string, BubbleBatchEntry[]>();
+  bubbles.forEach((bubble) => {
+    bubble.children.forEach((object) => {
+      if (!(object instanceof THREE.Mesh) || Array.isArray(object.material)) return;
+      const key = `${object.geometry.uuid}:${object.material.uuid}:${object.renderOrder}`;
+      const entries = batches.get(key) ?? [];
+      entries.push({ bubble, source: object });
+      batches.set(key, entries);
+      object.visible = false;
+      object.userData.performanceWarmupProxy = true;
+    });
+    bubble.userData.performanceWarmupProxy = true;
+  });
+
+  const hiddenMatrix = new THREE.Matrix4().makeScale(0, 0, 0);
+  let batchIndex = 0;
+  batches.forEach((entries) => {
+    const first = entries[0].source;
+    const batch = new THREE.InstancedMesh(
+      first.geometry,
+      first.material as THREE.Material,
+      entries.length,
+    );
+    batchIndex += 1;
+    batch.name = `bubble-machine-performance-instance-batch-${batchIndex}`;
+    batch.visible = false;
+    batch.castShadow = false;
+    batch.receiveShadow = false;
+    batch.frustumCulled = false;
+    batch.renderOrder = first.renderOrder;
+    batch.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+    batch.userData.performanceEffect = true;
+    batch.userData.effectKind = `instanced-${String(first.userData.effectKind ?? 'bubble-layer')}`;
+    batch.userData.bubbleBatchBindings = entries.map(({ bubble, source }) => ({
+      bubbleName: bubble.name,
+      sourceMeshName: source.name,
+    }));
+    for (let index = 0; index < entries.length; index += 1) {
+      batch.setMatrixAt(index, hiddenMatrix);
+    }
+    batch.instanceMatrix.needsUpdate = true;
+    performanceRig.add(batch);
+  });
+  return batchIndex;
 }
 
 function addBubblePerformanceRig(
@@ -204,84 +216,69 @@ function addBubblePerformanceRig(
   performanceRig.userData.sharedSpectacleEffects = 'disabled';
   performanceRig.userData.forbiddenPrimitives = ['PlaneGeometry', 'Sprite', 'Line'];
 
-  const sphereGeometry = new THREE.SphereGeometry(1, 20, 14);
-  const rainbowArcGeometry = new THREE.TorusGeometry(0.78, 0.052, 7, 28, Math.PI * 1.22);
-  const highlightGeometry = new THREE.SphereGeometry(0.17, 10, 8);
-  const filmMaterial = new THREE.MeshPhysicalMaterial({
+  // These bubbles occupy a large portion of the screen and overlap heavily.
+  // MeshPhysicalMaterial made their first visible frame compile and shade
+  // hundreds of transparent surfaces at once, producing a 0.4-1s GPU stall.
+  // Preserve the transparent film, rainbow edge and highlight in one small
+  // shader instead of drawing five overlapping transparent meshes per bubble.
+  // The appliance and giant-bubble motion remain unchanged.
+  const sphereGeometry = new THREE.SphereGeometry(1, 12, 8);
+  const filmMaterial = new THREE.ShaderMaterial({
     name: 'bubble-machine-iridescent-film-material',
-    color: 0xcffaff,
-    emissive: 0x739fb7,
-    emissiveIntensity: 0.18,
-    roughness: 0.06,
-    metalness: 0,
-    clearcoat: 1,
-    clearcoatRoughness: 0.04,
-    transmission: 0.58,
-    thickness: 0.035,
-    ior: 1.33,
-    iridescence: 1,
-    iridescenceIOR: 1.3,
-    iridescenceThicknessRange: [120, 460],
     transparent: true,
-    opacity: 0.38,
     depthWrite: false,
     side: THREE.DoubleSide,
-  });
-  const rimMaterial = new THREE.MeshPhysicalMaterial({
-    name: 'bubble-machine-rainbow-rim-material',
-    color: 0xffb9dc,
-    emissive: 0xa94382,
-    emissiveIntensity: 0.28,
-    roughness: 0.08,
-    metalness: 0,
-    clearcoat: 1,
-    transmission: 0.22,
-    ior: 1.33,
-    iridescence: 1,
-    iridescenceIOR: 1.32,
-    iridescenceThicknessRange: [180, 520],
-    transparent: true,
-    opacity: 0.2,
-    depthWrite: false,
-    side: THREE.BackSide,
-  });
-  const rainbowMaterials = [0xff8fc9, 0xffd474, 0x7ef5dd, 0x8cc8ff, 0xd49bff].map((color, index) => (
-    new THREE.MeshPhysicalMaterial({
-      name: `bubble-machine-rainbow-band-material-${index + 1}`,
-      color,
-      emissive: color,
-      emissiveIntensity: 0.34,
-      roughness: 0.1,
-      metalness: 0,
-      clearcoat: 1,
-      transmission: 0.16,
-      transparent: true,
-      opacity: 0.44,
-      depthWrite: false,
-    })
-  ));
-  const highlightMaterial = new THREE.MeshBasicMaterial({
-    name: 'bubble-machine-soft-highlight-material',
-    color: 0xffffff,
-    transparent: true,
-    opacity: 0.74,
-    depthWrite: false,
     toneMapped: false,
+    vertexShader: `
+      varying vec3 vBubbleNormal;
+      varying vec3 vViewPosition;
+      void main() {
+        vec3 objectNormal = normal;
+        vec4 localPosition = vec4(position, 1.0);
+        #ifdef USE_INSTANCING
+          objectNormal = mat3(instanceMatrix) * objectNormal;
+          localPosition = instanceMatrix * localPosition;
+        #endif
+        vec4 mvPosition = modelViewMatrix * localPosition;
+        vBubbleNormal = normalize(normalMatrix * objectNormal);
+        vViewPosition = mvPosition.xyz;
+        gl_Position = projectionMatrix * mvPosition;
+      }
+    `,
+    fragmentShader: `
+      varying vec3 vBubbleNormal;
+      varying vec3 vViewPosition;
+      void main() {
+        vec3 normalDirection = normalize(vBubbleNormal);
+        vec3 viewDirection = normalize(-vViewPosition);
+        float fresnel = pow(1.0 - abs(dot(normalDirection, viewDirection)), 2.25);
+        float hue = fract(
+          normalDirection.x * 0.21
+          + normalDirection.y * 0.34
+          + normalDirection.z * 0.13
+          + 0.58
+        );
+        vec3 rainbow = 0.58 + 0.42 * cos(
+          6.2831853 * (vec3(0.0, 0.34, 0.68) + hue)
+        );
+        float band = smoothstep(0.18, 0.82, fresnel);
+        vec3 film = mix(vec3(0.72, 0.96, 1.0), rainbow, band * 0.86);
+        vec3 highlightDirection = normalize(vec3(-0.48, 0.62, 0.62));
+        float highlight = pow(max(dot(normalDirection, highlightDirection), 0.0), 18.0);
+        film += vec3(1.0, 0.96, 0.92) * highlight * 0.72;
+        float alpha = 0.055 + fresnel * 0.34 + highlight * 0.24;
+        gl_FragColor = vec4(film, clamp(alpha, 0.04, 0.56));
+      }
+    `,
   });
   const resources: BubbleVisualResources = {
     sphereGeometry,
-    rainbowArcGeometry,
-    highlightGeometry,
     filmMaterial,
-    rimMaterial,
-    rainbowMaterials,
-    highlightMaterial,
   };
-  [filmMaterial, rimMaterial, ...rainbowMaterials, highlightMaterial].forEach((material) => {
-    kit.materials.add(material);
-  });
+  kit.materials.add(filmMaterial);
 
   const baseSizes = [0.12, 0.17, 0.24, 0.32] as const;
+  const ordinaryBubbles: THREE.Group[] = [];
   for (let index = 0; index < ORDINARY_BUBBLE_COUNT; index += 1) {
     const bubble = createBubbleVisual(
       `bubble-machine-performance-bubble-${index + 1}`,
@@ -308,7 +305,12 @@ function addBubblePerformanceRig(
       driftRate: 0.86 + index % 7 * 0.13,
       driftPhase: index * 1.61803398875,
     });
+    ordinaryBubbles.push(bubble);
   }
+  const ordinaryInstanceBatchCount = addOrdinaryBubbleInstanceBatches(
+    performanceRig,
+    ordinaryBubbles,
+  );
 
   const giantBubble = createBubbleVisual(
     'bubble-machine-giant-bubble',
@@ -364,8 +366,11 @@ function addBubblePerformanceRig(
 
   kit.root.userData.bubbleMachinePerformanceRig = {
     ordinaryBubbleCount: ORDINARY_BUBBLE_COUNT,
+    ordinaryInstanceBatchCount,
+    ordinarySourceMeshCount: ORDINARY_BUBBLE_COUNT,
+    ordinaryRuntimeDrawMeshes: ordinaryInstanceBatchCount,
     sizeClasses: ['small', 'medium', 'large', 'hero-large'],
-    materialLanguage: 'layered MeshPhysicalMaterial film, spherical rim, volumetric rainbow arcs and soft sphere glint',
+    materialLanguage: 'single-pass transparent film with shader rainbow rim and soft highlight',
     minimumConfiguredTravelDistance: Math.min(...performanceRig.children
       .filter((child) => child.userData.bubbleRole === 'ordinary')
       .map((child) => Number(child.userData.configuredTravelDistance))),

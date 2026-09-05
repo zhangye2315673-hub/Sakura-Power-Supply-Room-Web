@@ -296,6 +296,24 @@ test('refrigerator keeps food inside while opening, holding cold, and closing', 
     prop.phase === 'home' && prop.distanceFromHome < 1e-7
   ))).toBe(true);
 
+  // The launch-to-dance handoff must be spatially continuous. A regression in
+  // the split path sampler used to snap every prop back to the first waypoint
+  // at 1.55s, which was visible as a hard teleport before the dance motion.
+  animation.update(1.5499, 1);
+  const beforeDance = model.root.userData.refrigeratorPerformanceDiagnostics.props
+    .map((prop: { position: [number, number, number] }) => prop.position);
+  animation.update(1.5501, 1);
+  const afterDance = model.root.userData.refrigeratorPerformanceDiagnostics.props
+    .map((prop: { position: [number, number, number] }) => prop.position);
+  beforeDance.forEach((position: [number, number, number], index: number) => {
+    const next = afterDance[index];
+    expect(Math.hypot(
+      next[0] - position[0],
+      next[1] - position[1],
+      next[2] - position[2],
+    )).toBeLessThan(0.03);
+  });
+
   animation.update(2.32, 1);
   const orbit = model.root.userData.refrigeratorPerformanceDiagnostics;
   expect(orbit.pathClearancePass).toBe(true);

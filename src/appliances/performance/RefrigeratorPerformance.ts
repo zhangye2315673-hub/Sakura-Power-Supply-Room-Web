@@ -24,7 +24,7 @@ export type RefrigeratorPropDiagnostics = {
   category: string;
   homeZone: string;
   homeSocket: string;
-  phase: 'home';
+  phase: 'home' | 'launch' | 'dance' | 'return';
   position: [number, number, number];
   currentHome: [number, number, number];
   distanceFromHome: number;
@@ -103,6 +103,28 @@ function partyWaypoints(meta: RefrigeratorPropMeta, home: THREE.Vector3): THREE.
   ];
 }
 
+function samplePolyline(target: THREE.Vector3, points: readonly THREE.Vector3[], progress: number): void {
+  if (points.length === 0) return;
+  if (points.length === 1) {
+    target.copy(points[0]);
+    return;
+  }
+  const clamped = THREE.MathUtils.clamp(progress, 0, 1);
+  const scaled = clamped * (points.length - 1);
+  const index = Math.min(points.length - 2, Math.floor(scaled));
+  target.copy(points[index]).lerp(points[index + 1], scaled - index);
+}
+
+function danceOffset(target: THREE.Vector3, time: number, index: number): THREE.Vector3 {
+  const phase = index * 1.73;
+  target.set(
+    Math.sin(time * 7.2 + phase) * 0.11,
+    Math.sin(time * 9.1 + phase * 0.7) * 0.08,
+    Math.cos(time * 6.4 + phase) * 0.06,
+  );
+  return target;
+}
+
 /**
  * Refrigerator-only choreography. Food stays inside the cabinet; the skill's
  * cold front is presented by the screen, snow and cable frost systems instead
@@ -136,21 +158,59 @@ export function applyRefrigeratorPerformance(root: THREE.Group, time: number, po
   const home = new THREE.Vector3();
   const position = new THREE.Vector3();
 
-  props.forEach((prop) => {
+  let launchedProps = 0;
+  let gatheredProps = 0;
+  let returnedProps = 0;
+  props.forEach((prop, index) => {
     const meta = prop.userData.refrigeratorProp as RefrigeratorPropMeta;
     currentHome(root, meta, home);
     const waypoints = partyWaypoints(meta, home);
+    const fullPath = [home, ...waypoints];
     position.copy(home);
+    const launch = THREE.MathUtils.smoothstep(time, 0.98, 1.55);
+    const gather = THREE.MathUtils.smoothstep(time, 1.55, 2.05);
+    const returnProgress = THREE.MathUtils.smoothstep(time, 2.62, 3.08);
+    let propPhase: RefrigeratorPropDiagnostics['phase'] = 'home';
+    if (interiorVisible && time >= 0.98 && time < 1.55) {
+      // Keep the launch and gather segments on one continuous polyline. The
+      // previous split sampled the gather path from progress 0, snapping a prop
+      // back to its first waypoint exactly when the dance phase began.
+      samplePolyline(position, fullPath, launch * 0.65);
+      propPhase = 'launch';
+      launchedProps += 1;
+    } else if (interiorVisible && time >= 1.55 && time < 2.62) {
+      samplePolyline(position, fullPath, THREE.MathUtils.lerp(0.65, 1, gather));
+      const offset = new THREE.Vector3();
+      danceOffset(offset, time, index).multiplyScalar(
+        THREE.MathUtils.smoothstep(time, 1.55, 1.68),
+      );
+      position.add(offset);
+      propPhase = 'dance';
+      gatheredProps += 1;
+    } else if (interiorVisible && time >= 2.62 && time < 3.08) {
+      const danced = new THREE.Vector3();
+      samplePolyline(danced, waypoints, 1);
+      const offset = new THREE.Vector3();
+      danceOffset(offset, time, index);
+      danced.add(offset);
+      position.copy(danced).lerp(home, returnProgress);
+      propPhase = 'return';
+      returnedProps += 1;
+    }
     prop.position.copy(position);
-    prop.rotation.set(0, 0, 0);
-    prop.scale.setScalar(1);
+    prop.rotation.set(
+      propPhase === 'home' ? 0 : Math.sin(time * 5.8 + index) * 0.16,
+      propPhase === 'home' ? 0 : Math.cos(time * 4.9 + index * 0.7) * 0.2,
+      propPhase === 'home' ? 0 : Math.sin(time * 7.1 + index * 0.4) * 0.18,
+    );
+    prop.scale.setScalar(propPhase === 'home' ? 1 : 1 + Math.sin(time * 8 + index) * 0.035);
 
     diagnostics.push({
       id: meta.id,
       category: meta.category,
       homeZone: meta.homeZone,
       homeSocket: meta.homeSocket,
-      phase: 'home',
+      phase: propPhase,
       position: [position.x, position.y, position.z],
       currentHome: [home.x, home.y, home.z],
       distanceFromHome: position.distanceTo(home),
@@ -176,9 +236,9 @@ export function applyRefrigeratorPerformance(root: THREE.Group, time: number, po
     upperDoorAngle,
     lowerDoorAngle,
     visibleProps: foodVisible ? props.length : 0,
-    launchedProps: 0,
-    gatheredProps: 0,
-    returnedProps: 0,
+    launchedProps,
+    gatheredProps,
+    returnedProps,
     pathClearancePass: diagnostics.every((prop) => prop.minimumSideClearance >= 0.48 && prop.rearToFrontViaSide),
     cabinetHalfWidth: CABINET_HALF_X,
     sideRouteX: SIDE_ROUTE_X,

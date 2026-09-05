@@ -16,6 +16,10 @@ test('microwave overheat marker is readable across the full cable in a multi-lin
   });
   page.on('pageerror', (error) => consoleErrors.push(String(error)));
   await page.setViewportSize({ width: 1440, height: 900 });
+  await page.addInitScript(() => {
+    window.__APPLIANCE_PERFORMANCE_TIME_OVERRIDE__ = 1.25;
+    window.__COLLECT_ALL_CLICK_TARGETS_FOR_EVIDENCE__ = false;
+  });
   const measureFps = async (): Promise<number> => page.evaluate(async () => {
     const start = performance.now();
     let frames = 0;
@@ -29,20 +33,22 @@ test('microwave overheat marker is readable across the full cable in a multi-lin
     });
     return frames / ((performance.now() - start) / 1_000);
   });
-  await page.goto('/?theme=day&mode=skill-test&direct=1&skill=microwave&seed=20260820');
+  await page.goto('/?theme=day&mode=skill&direct=1&seed=20260825');
   await page.waitForFunction(
     () => window.__THREE_GAME_DIAGNOSTICS__?.opening.ready === true,
     null,
     { timeout: 90_000 },
   );
-  await page.click('#start-game-button');
+  expect(await page.evaluate(() => window.__FINISH_OPENING_FOR_EVIDENCE__?.() ?? false)).toBe(true);
   await page.waitForFunction(
     () => {
       const diagnostics = window.__THREE_GAME_DIAGNOSTICS__;
       return diagnostics?.opening.active === false
-        && diagnostics.skill?.testId === 'microwave'
+        && diagnostics.mode === 'skill'
+        && diagnostics.skill?.inputLocked === false
+        && diagnostics.appliances.some(({ kind }) => kind === 'microwave')
         && diagnostics.totalArrows > 4
-        && diagnostics.clickTarget !== null;
+        && diagnostics.opening.transitioning === false;
     },
     null,
     { timeout: 90_000 },
@@ -51,13 +57,16 @@ test('microwave overheat marker is readable across the full cable in a multi-lin
   const baselineFps = await measureFps();
 
   const initial = await page.evaluate(() => window.__THREE_GAME_DIAGNOSTICS__!);
-  const trigger = initial.clickTarget!;
-  await page.mouse.click(trigger.x, trigger.y);
+  expect(await page.evaluate(() => (
+    window.__ACTIVATE_APPLIANCE_FOR_EVIDENCE__?.('microwave') ?? false
+  ))).toBe(true);
   await page.waitForFunction(
     (initialTotal) => {
       const diagnostics = window.__THREE_GAME_DIAGNOSTICS__;
       return diagnostics?.remainingArrows === initialTotal - 1
         && diagnostics.skill?.debuff === 'overheated-plug'
+        && diagnostics.skill.screenEffect.mode === 'microwave-heat'
+        && diagnostics.skill.screenEffect.progress > 0
         && diagnostics.skill.effectAssets.includes('microwave-double-heat-ring');
     },
     initial.totalArrows,
@@ -75,6 +84,9 @@ test('microwave overheat marker is readable across the full cable in a multi-lin
   });
 
   const markerDiagnostics = await page.evaluate(() => window.__THREE_GAME_DIAGNOSTICS__!.skill!.microwaveMarkers);
+  const screenEffect = await page.evaluate(() => window.__THREE_GAME_DIAGNOSTICS__!.skill!.screenEffect);
+  expect(screenEffect.mode).toBe('microwave-heat');
+  expect(screenEffect.progress).toBeGreaterThan(0);
   expect(markerDiagnostics).toHaveLength(1);
   expect(markerDiagnostics[0].cableId).toBe(heatedCableId(await page.evaluate(
     () => window.__THREE_GAME_DIAGNOSTICS__!.skill!.cableEffects,

@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { Loop } from '../core/Loop';
+import { CooperativeYieldBudget } from '../core/CooperativeYield';
 import {
   availableCableEnds,
   cableEndDirection,
@@ -55,6 +56,8 @@ import { DoubleEndedModeUi } from '../systems/DoubleEndedModeUi';
 import { selectTutorialAppliances } from '../systems/ApplianceCatalog';
 import { getLocale, t, toggleLocale } from '../systems/Locale';
 import { RushRound } from './RushRound';
+import { preferAvailableCablePick } from './CablePickPreference';
+import { resolveCompletionContinuation } from './ChallengeCompletion';
 import {
   APPLIANCE_SKILL_REGISTRY,
   SkillChallengeEngine,
@@ -62,6 +65,7 @@ import {
   type SkillCommand,
   type SkillContext,
   type SkillDamageEvent,
+  type SkillBuffFallback,
   type SkillResolution,
 } from '../skill/SkillChallengeEngine';
 import { SkillChallengeUi } from '../skill/SkillChallengeUi';
@@ -101,9 +105,19 @@ import { KETTLE_THAW_DURATION, KettleThawPresentation } from '../skill/KettleTha
 import { RefrigeratorScreenIceOverlay } from '../skill/RefrigeratorScreenIceOverlay';
 import { WasherSpinPresentation } from '../skill/WasherSpinPresentation';
 import { BubbleShieldPresentation } from '../skill/BubbleShieldPresentation';
+import { skillConnectionVisualPolicy } from '../skill/SkillConnectionVisualPolicy';
+import {
+  printerSkillLockDurationMs,
+  skillPresentationStillActive,
+} from '../skill/skillPresentationTiming';
 
 type GameMode = 'campaign' | 'random' | 'skill' | 'rush';
 type RushFlow = 'sequence' | 'random-pool';
+
+// Performance-effect warmup uses a camera-only layer so the async shader
+// compile can reveal hidden meshes without leaking them into the live frame.
+// The main camera remains on layer 0 throughout the warmup.
+const PERFORMANCE_WARMUP_LAYER = 31;
 
 const DIAGNOSTICS_PUBLISH_INTERVAL_FRAMES = 6;
 
@@ -241,7 +255,7 @@ export class Game {
   });
   private readonly rushUi = new RushModeUi({
     onStart: () => this.startRushRound(),
-    onNext: () => this.advanceRushOrLoadRandomChallenge(),
+    onNext: () => this.continueRushChallenge(),
     onRetry: () => this.retryRushPuzzle(),
     onHome: () => this.returnToOpening(),
   });
@@ -290,6 +304,7 @@ export class Game {
   private activeHint: Readonly<{ id: string; end: CableEnd }> | null = null;
   private hintUsesRemaining = MAX_HINT_USES;
   private puzzleRequestId = 0;
+  private puzzleApplyToken = 0;
   private prefetchRequestId = 0;
   private prefetchedLevel: {
     levelId: number;
@@ -333,10 +348,12 @@ export class Game {
   }>();
   private portableSpeakerSpacingTargetsCache: PortableSpeakerSpacingTarget[] = [];
   private skillTransientScreenEffect: SkillScreenEffect = 'none';
+  private microwaveHeatStartedAt = 0;
   private desktopComputerFeedback: {
     startedAt: number;
     hadBuff: boolean;
     livesAfter: number;
+    commitOutcome: boolean;
     committed: boolean;
   } | null = null;
   private pendingDryShieldAbsorb = false;
@@ -426,16 +443,20 @@ export class Game {
       return;
     }
     this.generationMs = result.generationMs ?? 0;
+    const applyToken = this.puzzleApplyToken;
     if (this.openingActive && this.puzzle === null && !this.initialPuzzlePreparing) {
       this.initialPuzzlePreparing = true;
-      void this.applyPuzzle(result.puzzle, true).catch((error) => {
+      void this.applyPuzzle(result.puzzle, true, false, applyToken).catch((error) => {
         this.initialPuzzlePreparing = false;
         this.startScreen.showError(error instanceof Error ? error.message : String(error));
         this.hud.showLoadError(error instanceof Error ? error.message : String(error));
       });
       return;
     }
-    this.hud.completePuzzleLoad(() => this.applyPuzzle(result.puzzle!));
+    this.hud.completePuzzleLoad(
+      () => this.applyPuzzle(result.puzzle!, false, false, applyToken),
+      this.revealCommittedScene,
+    );
   };
   private readonly onPuzzlePrefetched = (event: MessageEvent<PuzzleWorkerResponse>) => {
     const result = event.data;
@@ -459,7 +480,11 @@ export class Game {
     this.waitingForPrefetchLevelId = null;
     this.generationMs = this.prefetchedLevel.generationMs;
     const puzzle = this.prefetchedLevel.puzzle;
-    this.hud.completePuzzleLoad(() => this.applyPuzzle(puzzle));
+    const applyToken = ++this.puzzleApplyToken;
+    this.hud.completePuzzleLoad(
+      () => this.applyPuzzle(puzzle, false, false, applyToken),
+      this.revealCommittedScene,
+    );
   };
 
   constructor(private readonly canvas: HTMLCanvasElement) {
@@ -509,8 +534,13 @@ export class Game {
     this.applianceGeometryWarmupScene.overrideMaterial = this.applianceGeometryWarmupMaterial;
     this.appliances.setReplacementWarmupHandler(async (root) => {
       this.performances.primeRoot(root);
-      await this.renderer.compileAsync(root, this.camera, this.scene);
-      this.uploadApplianceGeometry(root);
+      const restorePerformanceVisibility = this.revealPerformanceEffectsForWarmup(root);
+      try {
+        await this.renderer.compileAsync(root, this.camera, this.scene);
+        this.uploadApplianceGeometry(root);
+      } finally {
+        restorePerformanceVisibility();
+      }
     });
 
     this.pipeline = new SakuraPipeline(this.renderer, this.scene, this.camera);
@@ -595,7 +625,8 @@ export class Game {
 
     this.hud.resetButton.addEventListener('click', this.resetCurrentPuzzle);
     this.hud.newButton.addEventListener('click', this.loadNewPuzzle);
-    this.hud.continueButton.addEventListener('click', this.loadNextPuzzle);
+    this.hud.continueButton.addEventListener('click', this.continueAfterComplete);
+    this.hud.completeHomeButton.addEventListener('click', this.returnToOpening);
     this.hud.applianceGalleryButton.addEventListener('click', this.onOpenApplianceGallery);
     this.hud.homeButton.addEventListener('click', this.returnToOpening);
     this.hud.languageButton.addEventListener('click', this.toggleLanguage);
@@ -615,6 +646,10 @@ export class Game {
       window.__ACTIVATE_APPLIANCE_FOR_EVIDENCE__ = (kind) => this.activateApplianceForEvidence(kind);
       window.__ACTIVATE_RUSH_CABLE_FOR_EVIDENCE__ = (id) => this.activateRushCableForEvidence(id);
       window.__PULL_CABLE_FOR_EVIDENCE__ = (id, end = 'head') => this.pullCableForEvidence(id, end);
+      window.__TRIGGER_TELEVISION_GLITCH_FOR_EVIDENCE__ = (restart = true) => {
+        if (restart) this.pipeline.setSkillEffect('television-glitch', true);
+        return this.pipeline.skillEffectState;
+      };
       window.__SHOW_SKILL_EFFECT_FOR_EVIDENCE__ = (asset, yaw = 0) => {
         if (!(asset in SKILL_EFFECT_ASSET_REFERENCES)) return false;
         this.arrowRoot.visible = false;
@@ -745,7 +780,8 @@ export class Game {
     window.removeEventListener('resize', this.onResize);
     this.hud.resetButton.removeEventListener('click', this.resetCurrentPuzzle);
     this.hud.newButton.removeEventListener('click', this.loadNewPuzzle);
-    this.hud.continueButton.removeEventListener('click', this.loadNextPuzzle);
+    this.hud.continueButton.removeEventListener('click', this.continueAfterComplete);
+    this.hud.completeHomeButton.removeEventListener('click', this.returnToOpening);
     this.hud.applianceGalleryButton.removeEventListener('click', this.onOpenApplianceGallery);
     this.hud.homeButton.removeEventListener('click', this.returnToOpening);
     this.hud.languageButton.removeEventListener('click', this.toggleLanguage);
@@ -757,6 +793,7 @@ export class Game {
     window.__ACTIVATE_APPLIANCE_FOR_EVIDENCE__ = undefined;
     window.__ACTIVATE_RUSH_CABLE_FOR_EVIDENCE__ = undefined;
     window.__SHOW_SKILL_EFFECT_FOR_EVIDENCE__ = undefined;
+    window.__TRIGGER_TELEVISION_GLITCH_FOR_EVIDENCE__ = undefined;
     window.__SHOW_SKILL_PRESENTATION_FOR_EVIDENCE__ = undefined;
     window.__FREEZE_SKILL_PRESENTATION_FOR_EVIDENCE__ = undefined;
     window.clearTimeout(this.skillSettleTimer);
@@ -804,45 +841,82 @@ export class Game {
     }
   }
 
-  private async warmPerformanceEffectsAsync(): Promise<void> {
-    if (this.performanceEffectsWarmed) return;
-    this.performanceEffectsWarmed = true;
-    const root = this.performances.root;
-    const previousTarget = this.renderer.getRenderTarget();
-    const poweredApplianceLight = new THREE.PointLight(0xffffff, 1, 12, 1.65);
-    poweredApplianceLight.position.set(0, 1, 0);
-    poweredApplianceLight.castShadow = false;
+  private revealPerformanceEffectsForWarmup(root: THREE.Object3D): () => void {
     const states: Array<{
       object: THREE.Object3D;
       visible: boolean;
       frustumCulled: boolean;
+      layersMask: number;
     }> = [];
+    const reveal = new Set<THREE.Object3D>();
     root.traverse((object) => {
       states.push({
         object,
         visible: object.visible,
         frustumCulled: object.frustumCulled,
+        layersMask: object.layers.mask,
       });
-      object.frustumCulled = false;
-      object.visible = !(object instanceof THREE.Light);
+      if (
+        !object.userData.performanceEffect
+        || object.userData.performanceWarmupProxy === true
+      ) return;
+      object.traverse((descendant) => reveal.add(descendant));
+      let ancestor: THREE.Object3D | null = object;
+      while (ancestor) {
+        reveal.add(ancestor);
+        if (ancestor === root) break;
+        ancestor = ancestor.parent;
+      }
     });
-    this.scene.add(poweredApplianceLight);
+    states.forEach(({ object }) => {
+      object.frustumCulled = false;
+      if (object instanceof THREE.Light || reveal.has(object)) {
+        object.visible = true;
+        object.layers.set(PERFORMANCE_WARMUP_LAYER);
+      }
+    });
+    return () => {
+      states.forEach(({ object, visible, frustumCulled, layersMask }) => {
+        object.visible = visible;
+        object.frustumCulled = frustumCulled;
+        object.layers.mask = layersMask;
+      });
+    };
+  }
+
+  private async warmPerformanceEffectsAsync(): Promise<void> {
+    if (this.performanceEffectsWarmed) return;
+    this.performanceEffectsWarmed = true;
+    const roots = [
+      this.performances.root,
+      this.bubbleShield.root,
+      this.soundWaveShield.root,
+      this.dehumidifierDryShield.root,
+    ];
+    const previousTarget = this.renderer.getRenderTarget();
+    const restorers = roots.map((root) => this.revealPerformanceEffectsForWarmup(root));
+    const warmupCamera = this.camera.clone();
+    warmupCamera.layers.enable(0);
+    warmupCamera.layers.enable(PERFORMANCE_WARMUP_LAYER);
+    warmupCamera.updateMatrixWorld(true);
     try {
-      await this.renderer.compileAsync(root, this.camera, this.scene);
+      for (const root of roots) {
+        await this.renderer.compileAsync(root, warmupCamera, this.scene);
+      }
       this.renderer.setRenderTarget(this.applianceGeometryWarmupTarget);
       this.renderer.clear();
       // Render through the exact live scene once. Physical splash materials
       // depend on its real directional-light, fog, tone and shadow defines;
       // compiling them in a simplified warmup scene creates a different GPU
       // program and still stalls when the animation reveals them later.
-      this.renderer.render(this.scene, this.camera);
+      this.renderer.render(this.scene, warmupCamera);
+      // Do not run the complete post-processing chain from inside the async
+      // loader. On software WebGL this nested full-resolution render blocks
+      // the RAF loop long enough to keep the formal skill entry stuck at the
+      // loading curtain. The normal frame loop will compile the pass lazily
+      // after the scene is visible.
     } finally {
-      states.forEach(({ object, visible, frustumCulled }) => {
-        object.visible = visible;
-        object.frustumCulled = frustumCulled;
-      });
-      poweredApplianceLight.removeFromParent();
-      poweredApplianceLight.dispose();
+      restorers.reverse().forEach((restore) => restore());
       this.renderer.setRenderTarget(previousTarget);
     }
   }
@@ -863,11 +937,10 @@ export class Game {
     this.cancelPrefetch();
     this.randomGameOver = false;
     this.hud.hideGameOver();
-    const seed = createRandomSeed();
-    if (this.explorationMode) {
-      this.loadClassicRandomPuzzle(seed, getStandardRandomLevel(seed), true);
-      return;
-    }
+    this.loadRandomChallengeFromPool(createRandomSeed());
+  };
+
+  private loadRandomChallengeFromPool(seed: number): void {
     const challengeMode = selectRandomChallengeMode(seed);
     if (challengeMode === 'rush') {
       this.rushFlow = 'random-pool';
@@ -876,6 +949,10 @@ export class Game {
     }
     if (challengeMode === 'skill') {
       this.loadSkillChallenge(seed);
+      return;
+    }
+    if (challengeMode === 'exploration') {
+      this.loadClassicRandomPuzzle(seed, getStandardRandomLevel(seed), true);
       return;
     }
     this.loadClassicRandomPuzzle(
@@ -906,13 +983,12 @@ export class Game {
     this.rushUi.hide();
     this.doubleEndedUi.hide();
     this.petals.mesh.visible = true;
-    this.loadPuzzle(seed, level, 'random');
+    this.loadPuzzle(seed, level, 'random', exploration ? 'exploration' : 'random');
   }
 
   private readonly startRandomFromOpening = () => {
     if (!this.leaveOpeningForModeSelection()) return;
-    const seed = createRandomSeed();
-    this.loadClassicRandomPuzzle(seed, getStandardRandomLevel(seed));
+    this.loadRandomChallengeFromPool(createRandomSeed());
   };
 
   private readonly startExploreFromOpening = () => {
@@ -1031,7 +1107,7 @@ export class Game {
     this.loadPuzzle(challenge.level.seed, challenge.level, 'rush');
   }
 
-  private advanceRushOrLoadRandomChallenge(): void {
+  private continueRushChallenge(): void {
     if (this.rushFlow === 'sequence' && this.currentRushChallenge) {
       const nextChallenge = getNextRushChallenge(this.currentRushChallenge);
       if (nextChallenge) {
@@ -1039,7 +1115,8 @@ export class Game {
         return;
       }
     }
-    this.loadNewPuzzle();
+    this.rushFlow = this.rushFlow ?? 'random-pool';
+    this.loadRushChallenge(pickRushChallenge(createRandomSeed()));
   }
 
   private startRushRound(): void {
@@ -1167,13 +1244,7 @@ export class Game {
           : this.explorationMode
             ? 'mode.explore'
           : 'mode.random',
-      this.currentMode === 'campaign' && this.currentLevel
-        ? this.currentLevel.id < CAMPAIGN_LEVELS.length
-          ? 'continue.next'
-          : 'continue.random'
-        : this.currentMode === 'rush'
-          ? 'continue.random'
-          : 'continue.first',
+      this.getCompletionContinuation().labelKey,
       this.currentMode === 'campaign' && this.currentLevel
         ? { level: this.currentLevel.id.toString().padStart(2, '0'), shapeId: this.currentLevel.shape }
         : {},
@@ -1278,7 +1349,11 @@ export class Game {
       const prefetched = this.prefetchedLevel;
       this.prefetchedLevel = null;
       this.generationMs = prefetched.generationMs;
-      this.hud.completePuzzleLoad(() => this.applyPuzzle(prefetched.puzzle));
+      const applyToken = ++this.puzzleApplyToken;
+      this.hud.completePuzzleLoad(
+        () => this.applyPuzzle(prefetched.puzzle, false, false, applyToken),
+        this.revealCommittedScene,
+      );
       return;
     }
     if (this.prefetchingLevelId === level.id) {
@@ -1287,6 +1362,41 @@ export class Game {
     }
     this.loadPuzzle(seedForCampaignLevel(level.id), level, 'campaign');
   };
+
+  private readonly continueAfterComplete = () => {
+    const continuation = this.getCompletionContinuation();
+    const seed = createRandomSeed();
+    switch (continuation.action) {
+      case 'next-campaign-level':
+        this.loadNextPuzzle();
+        return;
+      case 'new-skill':
+        this.loadSkillChallenge(seed);
+        return;
+      case 'new-exploration':
+        this.loadClassicRandomPuzzle(seed, getStandardRandomLevel(seed), true);
+        return;
+      case 'new-double-ended':
+        this.loadClassicRandomPuzzle(seed, getDoubleEndedLevel(seed));
+        return;
+      case 'new-rush':
+        this.continueRushChallenge();
+        return;
+      case 'new-random':
+        if (this.currentMode === 'campaign') this.loadNewPuzzle();
+        else this.loadClassicRandomPuzzle(seed, getStandardRandomLevel(seed));
+    }
+  };
+
+  private getCompletionContinuation() {
+    return resolveCompletionContinuation({
+      mode: this.currentMode,
+      exploration: this.explorationMode,
+      challengeKind: this.puzzle?.challengeKind ?? this.currentLevel?.challengeKind ?? null,
+      levelId: this.currentLevel?.id ?? null,
+      campaignLevelCount: CAMPAIGN_LEVELS.length,
+    });
+  }
 
   private async prepareOpeningAndLoadPuzzle(
     seed: number,
@@ -1307,10 +1417,21 @@ export class Game {
     }
   }
 
-  private loadPuzzle(seed: number, level?: LevelDefinition, mode: GameMode = 'random'): void {
+  private loadPuzzle(
+    seed: number,
+    level?: LevelDefinition,
+    mode: GameMode = 'random',
+    templateMode?: 'random' | 'exploration' | 'skill',
+  ): void {
     this.puzzleRequestId += 1;
+    this.puzzleApplyToken += 1;
     this.currentLevel = level ?? null;
     this.currentMode = mode;
+    // Keep the previous scene from leaking through while appliance models for
+    // the next puzzle are being configured asynchronously.
+    this.arrowRoot.visible = false;
+    this.appliances.root.visible = false;
+    this.connections.root.visible = false;
     this.doubleEndedUi.hide();
     this.hud.beginPuzzleLoad(
       mode === 'campaign' && level
@@ -1333,6 +1454,7 @@ export class Game {
       targetCount: level?.targetCount ?? 30,
       level,
       mode,
+      templateMode,
     });
   }
 
@@ -1340,11 +1462,13 @@ export class Game {
     puzzle: PuzzleDefinition,
     staged = false,
     preserveRandomLives = false,
+    applyToken = this.puzzleApplyToken,
   ): Promise<void> {
+    const isCurrentApply = (): boolean => applyToken === this.puzzleApplyToken;
+    if (!isCurrentApply()) return;
     const modelBuildStartedAt = performance.now();
     this.clearPuzzle();
     this.puzzle = puzzle;
-    this.puzzleRevision += 1;
     this.arrows = this.puzzle.arrows.map(makeRuntime);
     this.removedCount = 0;
     this.randomGameOver = false;
@@ -1403,25 +1527,31 @@ export class Game {
         this.preloadMaxSliceMs = Math.max(this.preloadMaxSliceMs, buildMs);
       }, configuredDefinitions, activeColors);
     }
+    if (!isCurrentApply()) return;
     this.appliances.setSingleTargetColorAliases([]);
     this.appliances.setRequiredColors(
       this.currentMode === 'rush' ? [] : this.arrows.map((arrow) => arrow.definition.color),
     );
     if (this.currentMode !== 'rush') {
       await this.warmPerformanceEffectsAsync();
+      if (!isCurrentApply()) return;
+      const performanceBudget = new CooperativeYieldBudget();
       for (const target of this.appliances.targets) {
         this.performances.prime(target);
-        await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+        await performanceBudget.afterItem();
+        if (!isCurrentApply()) return;
       }
       await this.appliances.prepareInitialReplacementsAsync((progress, buildMs) => {
         this.preloadMaxSliceMs = Math.max(this.preloadMaxSliceMs, buildMs);
         if (staged) {
           this.startScreen.setExactProgress('start.loading.appliances', 0.76 + progress * 0.06);
         }
-      });
+      }, this.currentMode === 'skill' ? 1 : undefined, true);
+      if (!isCurrentApply()) return;
     }
     this.applianceRoutingRevision = this.appliances.routingRevision;
 
+    const cableBuildBudget = new CooperativeYieldBudget();
     for (let index = 0; index < this.arrows.length; index += 1) {
       const arrow = this.arrows[index];
       const cableBuildStartedAt = performance.now();
@@ -1443,12 +1573,14 @@ export class Game {
           0.82 + ((index + 1) / this.arrows.length) * 0.11,
         );
       }
-      const shouldYieldModelBuild = !staged
-        || (index + 1) % 5 === 0
-        || index === this.arrows.length - 1;
-      if (shouldYieldModelBuild) {
-        await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+      if (staged) {
+        if ((index + 1) % 5 === 0 || index === this.arrows.length - 1) {
+          await cableBuildBudget.afterItem();
+        }
+      } else {
+        await cableBuildBudget.afterItem();
       }
+      if (!isCurrentApply()) return;
     }
     this.modelBuildMs = performance.now() - modelBuildStartedAt;
 
@@ -1465,13 +1597,7 @@ export class Game {
           : this.explorationMode
             ? 'mode.explore'
           : 'mode.random',
-      this.currentMode === 'campaign' && this.currentLevel
-        ? this.currentLevel.id < CAMPAIGN_LEVELS.length
-          ? 'continue.next'
-          : 'continue.random'
-        : this.currentMode === 'rush'
-          ? 'continue.random'
-          : 'continue.first',
+      this.getCompletionContinuation().labelKey,
       this.currentMode === 'campaign' && this.currentLevel
         ? { level: this.currentLevel.id.toString().padStart(2, '0'), shapeId: this.currentLevel.shape }
         : {},
@@ -1519,17 +1645,12 @@ export class Game {
       ? null
       : this.prefetchedLevel;
     this.prefetchNextCampaignLevel();
-    if (!this.openingActive) {
-      this.arrowRoot.visible = true;
-      this.appliances.root.visible = this.currentMode !== 'rush';
-      this.connections.root.visible = this.currentMode !== 'rush';
-      this.petals.mesh.visible = this.currentMode !== 'rush';
-    }
-    this.publishDiagnostics();
     if (staged) {
       this.startScreen.setStage('start.loading.scene', 0.94, 0.985);
       await this.warmInitialSceneInSlices();
+      if (!isCurrentApply()) return;
       await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
+      if (!isCurrentApply()) return;
       this.initialPuzzlePreparing = false;
       this.startScreen.markReady();
       this.publishDiagnostics();
@@ -1538,7 +1659,21 @@ export class Game {
     } else if (this.isDoubleEndedChallenge()) {
       this.doubleEndedUi.showBriefing();
     }
+    // A puzzle revision represents a fully committed scene. Publish it only
+    // after asynchronous appliance/model setup and mode panels are complete,
+    // so consumers cannot observe a half-built challenge as ready.
+    this.puzzleRevision += 1;
+    this.publishDiagnostics();
   }
+
+  private readonly revealCommittedScene = (): void => {
+    if (this.openingActive || !this.puzzle) return;
+    this.arrowRoot.visible = true;
+    this.appliances.root.visible = this.currentMode !== 'rush';
+    this.connections.root.visible = this.currentMode !== 'rush';
+    this.petals.mesh.visible = this.currentMode !== 'rush';
+    this.publishDiagnostics();
+  };
 
   private prefetchNextCampaignLevel(): void {
     if (
@@ -1650,6 +1785,7 @@ export class Game {
         const object = batches[index];
         const cableModel = index < cableModels.length ? cableModels[index] : null;
         cableModel?.setIceShellWarmupVisible(true);
+        cableModel?.setLampGuideWarmupVisible(true);
         object.visible = true;
         object.updateWorldMatrix(true, true);
 
@@ -1662,6 +1798,7 @@ export class Game {
 
         object.visible = false;
         cableModel?.setIceShellWarmupVisible(false);
+        cableModel?.setLampGuideWarmupVisible(false);
         this.startScreen.setExactProgress(
           index < cableRoots.length ? 'start.loading.materials' : 'start.loading.applianceMaterials',
           0.94 + ((index + 1) / batches.length) * 0.045,
@@ -1671,7 +1808,10 @@ export class Game {
         }
       }
     } finally {
-      cableModels.forEach((model) => model.setIceShellWarmupVisible(false));
+      cableModels.forEach((model) => {
+        model.setIceShellWarmupVisible(false);
+        model.setLampGuideWarmupVisible(false);
+      });
       batches.forEach((object, index) => {
         object.visible = batchVisibility[index];
       });
@@ -2200,6 +2340,16 @@ export class Game {
     this.skillUi.setCuePhase('commit', '超时：生命 -1');
   }
 
+  private describeBuffFallback(fallback: SkillBuffFallback | null): string {
+    if (!fallback) return '现有 BUFF 继续生效，本次技能不会覆盖或打断它。';
+    if (fallback.type === 'extend-buff') return '现有 BUFF 保留，本次技能转换为延长 1 回合。';
+    if (fallback.type === 'upgrade-continue') return '现有 CONTINUE 保留，本次技能转换为复活恢复量 +1。';
+    if (fallback.type === 'add-shield-charge') return '现有护盾保留，本次技能转换为额外抵挡 1 次误点。';
+    return fallback.amount > 0
+      ? '现有 BUFF 保留，本次技能转换为恢复 1 格生命。'
+      : '生命已满，现有 BUFF 继续保留。';
+  }
+
   private createSkillContext(): SkillContext {
     // A line already committed to an automatic exit remains in the logical
     // array until its flight finishes, but must not be selected by another
@@ -2211,6 +2361,7 @@ export class Game {
     const frozen = new Set(this.skillEngine?.getFrozenCableIds() ?? []);
     const fake = new Set(this.skillEngine?.getFakePlugCableIds() ?? []);
     const definitions = remaining.map((arrow) => arrow.definition);
+    const removalSequence = findRemovalSequence(definitions) ?? [];
     return {
       remainingCables: remaining.map((arrow) => ({
         id: arrow.definition.id,
@@ -2219,7 +2370,7 @@ export class Game {
         fakePlug: fake.has(arrow.definition.id),
       })),
       availableCableIds: [...physicallyAvailable].filter((id) => !frozen.has(id)),
-      removalSequence: findRemovalSequence(definitions) ?? [],
+      removalSequence,
       routeColors: [...new Set(this.appliances.targets.map((target) => target.accent))],
       state: this.skillEngine!.state,
     };
@@ -2230,7 +2381,8 @@ export class Game {
     if (!engine) return;
     const desktopComputerHadBuff = _target.kind === 'desktop-computer' && engine.state.buff !== null;
     const remaining = this.arrows.length - this.removedCount;
-    const outcome = engine.resolveConnected(this.createSkillContext(), remaining === 0);
+    const context = this.createSkillContext();
+    const outcome = engine.resolveConnected(context, remaining === 0);
     engine.consumeDryShieldBlock();
     this.pendingDryShieldAbsorb = outcome.blockedByDryShield;
     const resolution = outcome.resolution;
@@ -2243,54 +2395,59 @@ export class Game {
 
     if (outcome.damage) this.showSkillDamageFeedback(outcome.damage);
 
+    presentationDuration = this.playApplianceConnectionVisual(
+      _target,
+      resolution,
+      desktopComputerHadBuff,
+      engine.state.currentLives,
+    );
+
     if (resolution) {
       if (resolution.appliance === 'radio') {
         this.radioRouteCableIds = [...resolution.targetCableIds];
       }
-      presentationDuration = this.playSkillPresentation(resolution, _target);
+      presentationDuration = Math.max(
+        presentationDuration ?? 0,
+        this.playSkillPresentation(resolution, _target) ?? 0,
+      );
       if (resolution.appliance === 'refrigerator') {
         this.refrigeratorFreeze.activate(resolution.targetCableIds);
-      }
-      this.skillTransientScreenEffect = resolution.appliance === 'television'
-        ? 'television-glitch'
-        : resolution.appliance === 'toaster'
-          ? 'toaster-heat'
-        : resolution.appliance === 'kettle'
-          ? 'kettle-thaw-heat'
-        : resolution.appliance === 'printer'
-          ? 'printer-scan'
-        : resolution.appliance === 'desktop-computer'
-          ? 'blue-screen'
-          : 'none';
-      if (resolution.appliance === 'printer') {
-        this.pipeline.setSkillEffect('printer-scan');
-        this.publishDiagnostics();
-      }
-      if (resolution.appliance === 'desktop-computer') {
-        this.beginDesktopComputerFeedback(desktopComputerHadBuff, engine.state.currentLives);
       }
       this.skillTransientHighlights.clear();
       if (!this.isDedicatedSkillPresentation(resolution) && resolution.appliance !== 'popcorn-machine') {
         resolution.targetCableIds.forEach((id) => this.skillTransientHighlights.add(id));
       }
       const definition = APPLIANCE_SKILL_REGISTRY.get(resolution.appliance);
-      this.skillUi.showCue(resolution.label, 'cue', definition?.description ?? '', _target.label);
+      this.skillUi.showCue(
+        resolution.label,
+        'cue',
+        outcome.buffPreserved
+          ? this.describeBuffFallback(outcome.buffFallback)
+          : definition?.description ?? '',
+        _target.label,
+      );
       this.beginFanSteamClear(resolution, _target);
-      this.beginHumidifierSteamReveal(resolution, _target);
-      this.beginCoffeeSplash(resolution);
       this.applySkillCommands(resolution.commands, resolution.appliance, _target);
       const commitCueDelay = resolution.appliance === 'blender'
         ? 4_680
         : resolution.appliance === 'desktop-computer'
           ? 3_720
+        : resolution.appliance === 'stand-mixer'
+          ? 820
         : resolution.appliance === 'hair-dryer'
           && resolution.commands.some((command) => command.type === 'recolor')
           ? 2_040
           : 220;
-      this.queueSkillCommitCue('效果生效', commitCueDelay);
+      this.queueSkillCommitCue(
+        resolution.appliance === 'stand-mixer' ? '限回合状态统一为 2' : '效果生效',
+        commitCueDelay,
+      );
     } else if (outcome.blockedByDryShield) {
       this.skillUi.showCue('干燥护罩吸收', 'cue', '本次负面技能已被护罩抵挡。', _target.label);
       this.queueSkillCommitCue('已吸收');
+    } else if (outcome.debuffSuppressed) {
+      this.skillUi.showCue('干扰相互抵消', 'cue', '已有 DEBUFF 继续生效，本次新干扰不会覆盖或叠加。', _target.label);
+      this.queueSkillCommitCue('本次干扰失效');
     } else if (outcome.coffeeBlocked) {
       this.skillUi.showCue('技能被封锁', 'cue', '咖啡封技生效中，本次家电技能不会发动。', _target.label);
       this.queueSkillCommitCue('已阻止');
@@ -2307,6 +2464,7 @@ export class Game {
     }
 
     if (resolution?.appliance !== 'desktop-computer') this.syncSkillState();
+    if (resolution?.appliance === 'stand-mixer') this.skillUi.showStatusNormalized(2);
 
     if (engine.state.phase === 'select-card') {
       this.skillUi.showCards(engine.cards);
@@ -2317,7 +2475,11 @@ export class Game {
       this.beginSkillRecycleSelection();
       return;
     }
-    this.finishSkillResolution(resolution?.topologyChanged ?? false, presentationDuration);
+    this.finishSkillResolution(
+      resolution?.topologyChanged ?? false,
+      presentationDuration,
+      resolution?.appliance !== 'desktop-computer',
+    );
     void arrow;
   }
 
@@ -2335,6 +2497,78 @@ export class Game {
       || resolution.appliance === 'hair-dryer';
   }
 
+  private playApplianceConnectionVisual(
+    target: ApplianceTarget,
+    resolution: SkillResolution | null,
+    desktopComputerHadBuff: boolean,
+    desktopComputerLivesAfter: number,
+  ): number | undefined {
+    const visibleCableRoots = this.arrows
+      .filter((arrow) => arrow.state !== 'removed')
+      .map((arrow) => this.models.get(arrow.definition.id)?.root)
+      .filter((root): root is THREE.Group => Boolean(root?.visible));
+    const buff = this.skillEngine?.state.buff;
+    const policy = skillConnectionVisualPolicy(target.kind);
+    switch (policy.shield) {
+      case 'bubble':
+        this.bubbleShield.retrigger(visibleCableRoots);
+        return 1_050;
+      case 'sound-wave':
+        this.soundWaveShield.retrigger(visibleCableRoots, buff?.id === 'soothing-record');
+        return POWERED_ACTIVE_DURATION * 1_000;
+      case 'dry-air':
+        this.dehumidifierDryShield.retrigger(
+          buff?.id === 'dry-shield' ? buff.turnsRemaining : null,
+          visibleCableRoots,
+          target.root.getWorldPosition(new THREE.Vector3()),
+          buff?.id === 'dry-shield',
+        );
+        return POWERED_ACTIVE_DURATION * 1_000;
+      default:
+        break;
+    }
+    switch (policy.screenEffect) {
+      case 'blue-screen':
+        this.beginDesktopComputerFeedback(
+          desktopComputerHadBuff,
+          desktopComputerLivesAfter,
+          resolution?.appliance === 'desktop-computer',
+        );
+        return POWERED_ACTIVE_DURATION * 1_000;
+      case 'coffee-lock':
+        this.skillTransientScreenEffect = 'coffee-lock';
+        this.beginCoffeeSplash();
+        return POWERED_ACTIVE_DURATION * 1_000;
+      case 'bathroom-steam':
+        this.skillTransientScreenEffect = 'bathroom-steam';
+        this.beginHumidifierSteamReveal(target);
+        return POWERED_ACTIVE_DURATION * 1_000;
+      case 'microwave-heat':
+        this.beginMicrowaveHeatFeedback();
+        return POWERED_ACTIVE_DURATION * 1_000;
+      case 'printer-scan':
+        this.skillTransientScreenEffect = 'printer-scan';
+        this.pipeline.setSkillEffect('printer-scan', true);
+        return printerSkillLockDurationMs(window.__APPLIANCE_PERFORMANCE_TIME_OVERRIDE__);
+      case 'toaster-heat':
+        this.skillTransientScreenEffect = 'toaster-heat';
+        this.pipeline.setSkillEffect('toaster-heat', true);
+        this.pipeline.setSkillEffectProgress(0);
+        return POWERED_ACTIVE_DURATION * 1_000;
+      case 'kettle-thaw-heat':
+        this.skillTransientScreenEffect = 'kettle-thaw-heat';
+        this.pipeline.setSkillEffect('kettle-thaw-heat', true);
+        this.pipeline.setSkillEffectProgress(0);
+        return POWERED_ACTIVE_DURATION * 1_000;
+      case 'television-glitch':
+        this.skillTransientScreenEffect = 'television-glitch';
+        this.pipeline.setSkillEffect('television-glitch', true);
+        return POWERED_ACTIVE_DURATION * 1_000;
+      default:
+        return undefined;
+    }
+  }
+
   private beginFanSteamClear(resolution: SkillResolution, sourceTarget?: ApplianceTarget): void {
     const clearsSteam = resolution.appliance === 'fan' && resolution.commands.some((command) =>
       command.type === 'clear-status' && command.slot === 'debuff' && command.reason === 'fan');
@@ -2345,24 +2579,14 @@ export class Game {
     this.pipeline.beginSteamClear(fan?.screenPosition.x ?? 0.1);
   }
 
-  private beginHumidifierSteamReveal(resolution: SkillResolution, sourceTarget?: ApplianceTarget): void {
-    const createsSteam = resolution.appliance === 'humidifier' && resolution.commands.some((command) =>
-      command.type === 'set-status'
-      && command.slot === 'debuff'
-      && command.status.id === 'bathroom-steam');
-    if (!createsSteam) return;
+  private beginHumidifierSteamReveal(sourceTarget?: ApplianceTarget): void {
     const humidifier = sourceTarget?.kind === 'humidifier'
       ? sourceTarget
       : this.appliances.targets.find((target) => target.kind === 'humidifier' && target.root.visible);
     this.pipeline.beginSteamReveal(humidifier?.screenPosition.x ?? 0.1, POWERED_ACTIVE_DURATION);
   }
 
-  private beginCoffeeSplash(resolution: SkillResolution): void {
-    const createsCoffeeLock = resolution.appliance === 'coffee-maker' && resolution.commands.some((command) =>
-      command.type === 'set-status'
-      && command.slot === 'debuff'
-      && command.status.id === 'coffee-lock');
-    if (!createsCoffeeLock) return;
+  private beginCoffeeSplash(): void {
     this.coffeeStainElapsed = 0;
     this.coffeeStainStrength = 0;
     this.prepareCoffeeStainProfiles();
@@ -2410,7 +2634,7 @@ export class Game {
     const progress = Number.isFinite(evidenceProgress)
       ? THREE.MathUtils.clamp(evidenceProgress!, 0, 1)
       : THREE.MathUtils.clamp(this.coffeeStainElapsed / this.coffeeStainDuration, 0, 1);
-    const targetStrength = (coffeeLock.turnsRemaining ?? 0) / 4;
+    const targetStrength = (coffeeLock.turnsRemaining ?? 0) / 3;
     const blend = 1 - Math.exp(-delta * 2.8);
     this.coffeeStainStrength = THREE.MathUtils.lerp(this.coffeeStainStrength, targetStrength, blend);
     for (const [id, model] of this.models) {
@@ -2513,7 +2737,7 @@ export class Game {
       || resolution.appliance === 'desktop-computer'
       ? POWERED_ACTIVE_DURATION * 1_000
       : resolution.appliance === 'printer'
-        ? 1_400
+        ? printerSkillLockDurationMs(window.__APPLIANCE_PERFORMANCE_TIME_OVERRIDE__)
       : undefined;
   }
 
@@ -2522,6 +2746,7 @@ export class Game {
     source?: SkillResolution['appliance'],
     sourceTarget?: ApplianceTarget,
   ): void {
+    let availabilityChanged = false;
     for (const command of commands) {
       switch (command.type) {
         case 'auto-remove':
@@ -2532,30 +2757,39 @@ export class Game {
             && command.source !== 'washer'
           ) {
             command.cableIds.forEach((id) => this.commitSkillAutoRemoval(id));
+            availabilityChanged = true;
           }
           break;
         case 'recolor':
-          if (source !== 'blender' && source !== 'hair-dryer') this.applySkillRecolors(command.changes);
+          if (source !== 'blender' && source !== 'hair-dryer') {
+            this.applySkillRecolors(command.changes);
+            availabilityChanged = true;
+          }
           break;
         case 'reconstruct':
           if (source === 'television') this.beginTelevisionReconstruction(command.cableIds, sourceTarget);
           else this.applySkillTopologyMutation(command.cableIds, 'reconstruct');
+          availabilityChanged = true;
           break;
         case 'swap-ends':
           if (source === 'toaster') this.beginToasterEndSwap(command.cableIds, sourceTarget);
           else this.applySkillTopologyMutation(command.cableIds, 'swap-ends');
+          availabilityChanged = true;
           break;
         case 'expand':
           this.applySkillTopologyMutation(command.cableIds, 'expand');
+          availabilityChanged = true;
           break;
         case 'fake-plugs':
           if (this.skillEngine?.state.debuff?.id === 'fake-double-plug') {
             command.cableIds.forEach((id) => this.models.get(id)?.setFakeTailPlug(true));
+            availabilityChanged = true;
           }
           break;
         case 'freeze':
           // Frozen identities are enforced from the committed DEBUFF state in
           // refreshAvailability. The command remains explicit for cue targets.
+          availabilityChanged = true;
           break;
         default:
           break;
@@ -2567,10 +2801,12 @@ export class Game {
         this.hud.showContinueGranted(Number(continueBuff.payload.restoreLives ?? 1));
       }
     }
-    this.appliances.setRequiredColors(
-      this.arrows.filter((arrow) => arrow.state !== 'removed').map((arrow) => arrow.definition.color),
-    );
-    this.refreshAvailability(false);
+    if (availabilityChanged) {
+      this.appliances.setRequiredColors(
+        this.arrows.filter((arrow) => arrow.state !== 'removed').map((arrow) => arrow.definition.color),
+      );
+      this.refreshAvailability(false);
+    }
   }
 
   private applySkillRecolors(changes: readonly { cableId: string; color: number }[]): void {
@@ -2643,6 +2879,9 @@ export class Game {
   ): void {
     const replacements = this.buildSkillTopologyReplacements(cableIds, 'reconstruct');
     if (replacements.size === 0) return;
+    // The TV glitch is a transient render effect, not just a HUD flag. Set it
+    // immediately here so the first frame of the reconstruction cannot be
+    // swallowed by the following availability sync.
     const television = sourceTarget?.kind === 'television'
       ? sourceTarget
       : this.appliances.targets.find((target) => target.kind === 'television' && target.state === 'active');
@@ -2651,6 +2890,7 @@ export class Game {
       existingModels: this.models,
       getPlugStyle: (color) => this.appliances.getPlugStyleForColor(color),
       getTimelineElapsed: television ? () => television.getActiveElapsed() : undefined,
+      televisionRoot: television?.root.getObjectByName('appliance-model-television') as THREE.Group | null ?? null,
       commit: () => {
         const committed = this.commitSkillDefinitions(replacements, true);
         this.refreshAvailability(false);
@@ -2842,11 +3082,14 @@ export class Game {
         ? 'toaster-heat'
       : resolution.appliance === 'kettle'
         ? 'kettle-thaw-heat'
+      : resolution.appliance === 'microwave'
+        ? 'microwave-heat'
       : resolution.appliance === 'printer'
         ? 'printer-scan'
       : resolution.appliance === 'desktop-computer'
         ? 'blue-screen'
         : 'none';
+    if (resolution.appliance === 'microwave') this.beginMicrowaveHeatFeedback();
     if (resolution.appliance === 'desktop-computer') {
       this.beginDesktopComputerFeedback(desktopComputerHadBuff, this.skillEngine.state.currentLives);
     }
@@ -2864,15 +3107,15 @@ export class Game {
           : 220,
     );
     this.beginFanSteamClear(resolution);
-    this.beginHumidifierSteamReveal(resolution);
-    this.beginCoffeeSplash(resolution);
+    if (resolution.appliance === 'humidifier') this.beginHumidifierSteamReveal();
+    if (resolution.appliance === 'coffee-maker') this.beginCoffeeSplash();
     this.applySkillCommands(resolution.commands, resolution.appliance);
     if (resolution.appliance !== 'desktop-computer') this.syncSkillState();
     if (this.skillEngine.state.phase === 'select-recycle-target') {
       this.beginSkillRecycleSelection();
       return;
     }
-    this.finishSkillResolution(resolution.topologyChanged, presentationDuration);
+    this.finishSkillResolution(resolution.topologyChanged, presentationDuration, true);
   }
 
   private beginSkillRecycleSelection(): void {
@@ -2902,9 +3145,13 @@ export class Game {
     }, SKILL_RECYCLE_SELECTION_COMMIT_DELAY_MS);
   }
 
-  private finishSkillResolution(topologyChanged: boolean, presentationDuration?: number): void {
+  private finishSkillResolution(
+    topologyChanged: boolean,
+    presentationDuration?: number,
+    stateAlreadySynced = false,
+  ): void {
     if (!this.skillEngine) return;
-    this.syncSkillState();
+    if (!stateAlreadySynced) this.syncSkillState();
     if (this.skillEngine.state.phase === 'failed') {
       this.randomGameOver = true;
       this.hud.showGameOver();
@@ -2915,6 +3162,8 @@ export class Game {
     window.clearTimeout(this.skillSettleTimer);
     window.clearTimeout(this.skillSettleCueTimer);
     const totalDuration = Math.max(topologyChanged ? 900 : 650, presentationDuration ?? 0);
+    const settleStartedAt = performance.now();
+    const visualSettleDeadlineMs = totalDuration + 2_000;
     const settleDelay = Math.max(280, totalDuration - 320);
     this.skillSettleCueTimer = window.setTimeout(() => {
       const remaining = this.arrows.length - this.removedCount;
@@ -2922,6 +3171,7 @@ export class Game {
     }, settleDelay);
     const settleWhenReady = (): void => {
       if (!this.skillEngine) return;
+      const settleElapsedMs = performance.now() - settleStartedAt;
       const presentation = this.skillPresentation.diagnostics;
       const sequencePending = presentation.skillId === 'snapshot-sweep'
         && presentation.autoRemovalOrder.length < presentation.targetCount;
@@ -2934,7 +3184,23 @@ export class Game {
       const coffeePending = this.skillEngine.state.debuff?.id === 'coffee-lock'
         && this.skillEngine.state.debuff.turnsRemaining === 0
         && (this.coffeeLockExitTarget?.activeTimeRemaining ?? 0) > 0;
-      if (sequencePending || exitsPending || washerPending || kettlePending || toasterPending || coffeePending) {
+      const generalPresentationPending = skillPresentationStillActive({
+        controllerActiveTimelines: presentation.activeTimelines,
+        transientEffectCount: this.skillEffects.activeTransientCount,
+        elapsedMs: settleElapsedMs,
+        maxVisualWaitMs: visualSettleDeadlineMs,
+      });
+      const visualSettleExpired = settleElapsedMs >= visualSettleDeadlineMs
+        && (presentation.activeTimelines > 0 || this.skillEffects.activeTransientCount > 0);
+      if (
+        sequencePending
+        || exitsPending
+        || washerPending
+        || kettlePending
+        || toasterPending
+        || coffeePending
+        || generalPresentationPending
+      ) {
         this.skillSettleTimer = window.setTimeout(settleWhenReady, 100);
         return;
       }
@@ -2942,9 +3208,14 @@ export class Game {
       const remaining = this.arrows.length - this.removedCount;
       this.skillTransientHighlights.clear();
       this.kettleThaw.reset();
-      this.skillTransientScreenEffect = 'none';
+      if (this.skillTransientScreenEffect !== 'microwave-heat') {
+        this.skillTransientScreenEffect = 'none';
+      }
       this.desktopComputerFeedback = null;
       this.skillPresentation.complete();
+      // A leaked particle/timeline must never keep the whole challenge locked.
+      // Persistent status markers are rebuilt by syncSkillState below.
+      if (visualSettleExpired) this.skillEffects.reset();
       this.skillEngine.clearExhaustedCoffeeLock();
       this.coffeeLockExitTarget = null;
       this.skillEngine.settle();
@@ -3062,7 +3333,7 @@ export class Game {
     this.pipeline.setSkillEffect(screenEffect);
     if (screenEffect === 'coffee-lock') {
       const turns = state.debuff?.id === 'coffee-lock' ? state.debuff.turnsRemaining ?? 0 : 0;
-      this.pipeline.setSkillEffectProgress(turns / 4);
+      this.pipeline.setSkillEffectProgress(turns / 3);
     }
     const cablePositions = new Map<string, THREE.Vector3>();
     const cableOrientations = new Map<string, THREE.Quaternion>();
@@ -3188,11 +3459,12 @@ export class Game {
     for (const model of this.models.values()) model.setInductionReveal(false);
   }
 
-  private beginDesktopComputerFeedback(hadBuff: boolean, livesAfter: number): void {
+  private beginDesktopComputerFeedback(hadBuff: boolean, livesAfter: number, commitOutcome = true): void {
     this.desktopComputerFeedback = {
       startedAt: performance.now(),
       hadBuff,
       livesAfter,
+      commitOutcome,
       committed: false,
     };
     this.skillTransientScreenEffect = 'blue-screen';
@@ -3200,6 +3472,28 @@ export class Game {
     this.pipeline.setSkillEffect('blue-screen', true);
     this.pipeline.setSkillEffectProgress(0);
     this.publishDiagnostics();
+  }
+
+  private beginMicrowaveHeatFeedback(): void {
+    this.microwaveHeatStartedAt = performance.now();
+    this.skillTransientScreenEffect = 'microwave-heat';
+    this.pipeline.setSkillEffect('microwave-heat', true);
+    this.pipeline.setSkillEffectProgress(0);
+  }
+
+  private updateMicrowaveHeatFeedback(): void {
+    if (this.skillTransientScreenEffect !== 'microwave-heat') return;
+    const activeMicrowave = this.appliances.targets.find((target) => (
+      target.kind === 'microwave' && target.state === 'active'
+    ));
+    const elapsed = activeMicrowave?.getActiveElapsed()
+      ?? Math.max(0, (performance.now() - this.microwaveHeatStartedAt) / 1_000);
+    this.pipeline.setSkillEffect('microwave-heat');
+    this.pipeline.setSkillEffectProgress(elapsed / POWERED_ACTIVE_DURATION);
+    if (elapsed < POWERED_ACTIVE_DURATION) return;
+    this.microwaveHeatStartedAt = 0;
+    this.skillTransientScreenEffect = 'none';
+    this.syncSkillPresentation();
   }
 
   private updateDesktopComputerFeedback(): void {
@@ -3213,6 +3507,11 @@ export class Game {
     this.pipeline.setSkillEffectProgress(timelineTime / POWERED_ACTIVE_DURATION);
     if (feedback.committed || timelineTime < 3.72) return;
     feedback.committed = true;
+    if (!feedback.commitOutcome) {
+      document.documentElement.dataset.desktopComputerFeedback = 'visual-only';
+      this.publishDiagnostics();
+      return;
+    }
     if (feedback.hadBuff) {
       document.documentElement.dataset.desktopComputerFeedback = 'buff-deleted';
       this.skillUi.showComputerBuffDeleted();
@@ -3275,6 +3574,12 @@ export class Game {
     this.setHovered(this.pickArrow(clientX, clientY));
   }
 
+  private canPullColor(color: number): boolean {
+    return this.currentMode === 'skill'
+      ? this.appliances.canAssignColor(color)
+      : this.appliances.canHandleColor(color);
+  }
+
   private pickArrow(clientX: number, clientY: number): { id: string; end: CableEnd } | null {
     const rect = this.canvas.getBoundingClientRect();
     this.pointer.set(
@@ -3291,18 +3596,25 @@ export class Game {
         arrow.state !== 'idle'
         || (!recycleSelectionActive
           && this.currentMode !== 'rush'
-          && !this.appliances.canHandleColor(arrow.definition.color))
+          && !this.canPullColor(arrow.definition.color))
       ) continue;
       const model = this.models.get(arrow.definition.id);
       if (model) targets.push(...model.pickMeshes);
     }
-    const hit = this.raycaster.intersectObjects(targets, false)[0];
-    return typeof hit?.object.userData.arrowId === 'string'
-      ? {
-          id: hit.object.userData.arrowId,
-          end: hit.object.userData.cableEnd === 'tail' ? 'tail' : 'head',
-        }
-      : null;
+    const hits = this.raycaster.intersectObjects(targets, false)
+      .map(({ object }) => typeof object.userData.arrowId === 'string'
+        ? {
+            id: object.userData.arrowId as string,
+            end: object.userData.cableEnd === 'tail' ? 'tail' as const : 'head' as const,
+          }
+        : null)
+      .filter((candidate): candidate is { id: string; end: CableEnd } => candidate !== null);
+    return preferAvailableCablePick(
+      hits,
+      recycleSelectionActive
+        ? []
+        : this.availableChoices.map(({ arrow, end }) => ({ id: arrow.definition.id, end })),
+    );
   }
 
   private setHovered(picked: { id: string; end: CableEnd } | null, force = false): void {
@@ -3370,7 +3682,7 @@ export class Game {
     this.frame += 1;
     this.orbit.update(delta);
     this.appliances.setOrbitState(this.orbit.getState());
-    this.sky.update(this.camera.position, this.camera.quaternion, elapsed);
+    this.sky.update(this.camera.position, this.camera.quaternion, elapsed, delta);
     this.openingScene.update(delta, elapsed, this.camera, openingWallDelta);
     this.updateOpeningCameraTransition(openingWallDelta);
     this.skillEffects.update(delta, elapsed);
@@ -3384,7 +3696,6 @@ export class Game {
     }
     this.petals.setCanopyFlow(this.dehumidifierDryShield.petalFlow);
     this.petals.update(delta);
-    this.televisionReconstruction.update(this.camera);
     this.toasterHeatSwap.update();
     this.kettleThaw.update();
     this.washerSpin.update(delta);
@@ -3422,12 +3733,21 @@ export class Game {
     if (toasterHeatSwap.active) this.pipeline.setSkillEffect('toaster-heat');
     if (toasterHeatSwap.active) {
       this.pipeline.setSkillEffectProgress(toasterHeatSwap.screenProgress);
+    } else if (this.skillTransientScreenEffect === 'toaster-heat') {
+      const toaster = this.appliances.targets.find((target) => target.kind === 'toaster' && target.state === 'active');
+      this.pipeline.setSkillEffect('toaster-heat');
+      this.pipeline.setSkillEffectProgress((toaster?.getActiveElapsed() ?? 0) / POWERED_ACTIVE_DURATION);
     }
     const kettleThaw = this.kettleThaw.diagnostics;
     if (kettleThaw.phase !== 'idle') {
       this.pipeline.setSkillEffect('kettle-thaw-heat');
       this.pipeline.setSkillEffectProgress(kettleThaw.progress);
+    } else if (this.skillTransientScreenEffect === 'kettle-thaw-heat') {
+      const kettle = this.appliances.targets.find((target) => target.kind === 'kettle' && target.state === 'active');
+      this.pipeline.setSkillEffect('kettle-thaw-heat');
+      this.pipeline.setSkillEffectProgress((kettle?.getActiveElapsed() ?? 0) / POWERED_ACTIVE_DURATION);
     }
+    this.updateMicrowaveHeatFeedback();
     this.syncRadioRouteGuide();
     this.skillPresentation.update(elapsed);
     if (this.openingActive) return;
@@ -3451,6 +3771,9 @@ export class Game {
     }
     this.sensory.register(this.appliances.targets);
     this.performances.update(delta, elapsed, this.camera, this.appliances.targets, this.petals);
+    // Apply the television reconstruction flash after appliance performance
+    // writes its authored frame, so the CRT front effect is not overwritten.
+    this.televisionReconstruction.update(this.camera);
     this.updateDesktopComputerFeedback();
     this.sensory.update(
       this.appliances.targets,
@@ -3670,13 +3993,7 @@ export class Game {
     if (this.currentMode !== 'rush' || this.rushRound?.phase !== 'running') return;
     this.rushRound.succeed();
     this.setHovered(null);
-    this.rushUi.showResult(
-      'success',
-      this.rushFlow === 'sequence' && this.currentRushChallenge
-        && getNextRushChallenge(this.currentRushChallenge)
-        ? 'next-level'
-        : 'random-pool',
-    );
+    this.rushUi.showResult('success');
     this.audio.playInteraction('complete');
     this.publishDiagnostics();
   }
@@ -3915,7 +4232,7 @@ export class Game {
     const runtimeById = new Map(this.arrows.map((arrow) => [arrow.definition.id, arrow]));
     const allChoices: CableChoice[] = this.arrows.flatMap((arrow) =>
       arrow.state === 'idle' &&
-      (this.currentMode === 'rush' || this.appliances.canHandleColor(arrow.definition.color))
+      (this.currentMode === 'rush' || this.canPullColor(arrow.definition.color))
         ? cableEndsFor(arrow.definition).map((end) => ({ arrow, end }))
         : [],
     );
@@ -3952,7 +4269,8 @@ export class Game {
     }
     this.applyActiveHint(false);
     this.availableCount = available.length;
-    const collectVisibleTargets = Number.isFinite(window.__APPLIANCE_PERFORMANCE_TIME_OVERRIDE__);
+    const collectVisibleTargets = Number.isFinite(window.__APPLIANCE_PERFORMANCE_TIME_OVERRIDE__)
+      && window.__COLLECT_ALL_CLICK_TARGETS_FOR_EVIDENCE__ !== false;
     this.availableClickTargets = collectVisibleTargets
       ? this.findVisibleClickTargets(available)
       : [];
@@ -4027,10 +4345,13 @@ export class Game {
     const rect = this.canvas.getBoundingClientRect();
     const results: CableScreenTarget[] = [];
     for (const { arrow, end } of available) {
+      // Double-ended plugs may receive a visual straight-lead compensation;
+      // project the actual rendered plug instead of the logical socket point.
       const samples = arrow.definition.doubleEnded
-        ? [end === 'head' ? arrow.samplePoints[arrow.samplePoints.length - 1] : arrow.samplePoints[0]]
+        ? [this.models.get(arrow.definition.id)?.getHeadWorldPosition(new THREE.Vector3(), end)]
         : arrow.samplePoints;
       for (const sample of samples) {
+        if (!sample) continue;
         const projected = sample.clone().project(this.camera);
         if (Math.abs(projected.x) > 0.96 || Math.abs(projected.y) > 0.96 || projected.z > 1) continue;
         if (this.appliances.isScreenPointBlockedByAppliance(projected.x, projected.y)) continue;
@@ -4125,9 +4446,9 @@ export class Game {
       frame: this.frame,
       seed: this.puzzle?.seed ?? 0,
       puzzleRevision: this.puzzleRevision,
-      layoutSignature: this.puzzle?.arrows.map((arrow) =>
-        `${arrow.path.map((point) => point.join(',')).join(';')}>${arrow.exitDirection}`,
-      ).join('|') ?? '',
+      layoutSignature: this.arrows.map(({ definition }) =>
+        `${definition.path.map((point) => point.join(',')).join(';')}>${definition.exitDirection}`,
+      ).join('|'),
       mode: this.currentMode,
       exploration: {
         active: this.explorationMode,
@@ -4225,6 +4546,11 @@ export class Game {
       availableArrows: this.availableCount,
       clickTarget: this.clickTarget,
       availableClickTargets: this.availableClickTargets,
+      availableCableChoices: this.availableChoices.map(({ arrow, end }) => ({
+        id: arrow.definition.id,
+        end,
+        color: arrow.definition.color,
+      })),
       blockedClickTarget: this.blockedClickTarget,
       activeAnimations: this.animations.length
         + this.pendingApplianceConnections.length

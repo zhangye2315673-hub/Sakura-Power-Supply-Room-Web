@@ -68,11 +68,11 @@ test('挑战模式菜单布局在桌面端与移动端均完整', async ({ page 
 test('五种挑战入口连接到各自现有或新增模式', async ({ page }) => {
   test.setTimeout(600_000);
   const cases = [
-    { selector: '#start-random-button', mode: 'random', challengeKind: 'standard', testId: null },
-    { selector: '#start-explore-button', mode: 'random', challengeKind: 'standard', testId: null },
-    { selector: '#start-rush-button', mode: 'rush', challengeKind: null, testId: null },
-    { selector: '#start-double-ended-button', mode: 'random', challengeKind: 'double-ended', testId: null },
-    { selector: '#start-skill-button', mode: 'skill', challengeKind: 'standard', testId: null },
+    { selector: '#start-random-button', mode: null, challengeKind: null, testId: null, randomPool: true },
+    { selector: '#start-explore-button', mode: 'random', challengeKind: 'standard', testId: null, randomPool: false },
+    { selector: '#start-rush-button', mode: 'rush', challengeKind: null, testId: null, randomPool: false },
+    { selector: '#start-double-ended-button', mode: 'random', challengeKind: 'double-ended', testId: null, randomPool: false },
+    { selector: '#start-skill-button', mode: 'skill', challengeKind: 'standard', testId: null, randomPool: false },
   ] as const;
 
   for (const entry of cases) {
@@ -82,11 +82,20 @@ test('五种挑战入口连接到各自现有或新增模式', async ({ page }) 
     await openChallengeMenu(page);
     await page.click(entry.selector);
     await page.waitForFunction(
-      ({ mode, challengeKind, testId, previousRevision }) => {
+      ({ mode, challengeKind, testId, previousRevision, randomPool }) => {
         const diagnostics = window.__THREE_GAME_DIAGNOSTICS__;
+        const validRandomPoolMode = diagnostics?.mode === 'skill'
+          || diagnostics?.mode === 'rush'
+          || (
+            diagnostics?.mode === 'random'
+            && (
+              diagnostics.exploration.active
+              || ['standard', 'double-ended'].includes(diagnostics.challengeKind ?? '')
+            )
+          );
         return diagnostics?.opening.active === false
           && diagnostics.puzzleRevision > previousRevision
-          && diagnostics.mode === mode
+          && (randomPool ? validRandomPoolMode : diagnostics.mode === mode)
           && (challengeKind === null || diagnostics.challengeKind === challengeKind)
           && (testId === null || diagnostics.skill?.testId === testId)
           && diagnostics.totalArrows > 0;

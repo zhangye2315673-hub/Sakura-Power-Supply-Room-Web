@@ -5,3 +5,5 @@ export type RandomPuzzleTemplate = {
   solution: string[];
   initiallyFree: number;
 };
+
+export type RandomPuzzleTemplatePool = readonly RandomPuzzleTemplate[];

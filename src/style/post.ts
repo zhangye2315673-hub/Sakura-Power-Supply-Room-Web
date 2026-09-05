@@ -18,9 +18,62 @@ export type SkillScreenEffect =
   | 'television-glitch'
   | 'toaster-heat'
   | 'kettle-thaw-heat'
+  | 'microwave-heat'
   | 'printer-scan'
   | 'blue-screen'
   | 'iridescent-bubble';
+
+export const TELEVISION_GLITCH_BURST_WINDOWS = Object.freeze([
+  { start: 0.02, attackEnd: 0.055, releaseStart: 0.14, end: 0.23 },
+  { start: 0.78, attackEnd: 0.82, releaseStart: 0.93, end: 1.04 },
+  { start: 1.65, attackEnd: 1.69, releaseStart: 1.79, end: 1.90 },
+  { start: 2.72, attackEnd: 2.76, releaseStart: 2.87, end: 2.98 },
+  { start: 4.08, attackEnd: 4.12, releaseStart: 4.25, end: 4.38 },
+] as const);
+
+function smoothstep01(value: number): number {
+  const clamped = THREE.MathUtils.clamp(value, 0, 1);
+  return clamped * clamped * (3 - 2 * clamped);
+}
+
+export function sampleTelevisionGlitchBurst(age: number): number {
+  return TELEVISION_GLITCH_BURST_WINDOWS.reduce((strongest, window) => {
+    if (age < window.start || age >= window.end) return strongest;
+    const attack = smoothstep01((age - window.start) / (window.attackEnd - window.start));
+    const release = 1 - smoothstep01((age - window.releaseStart) / (window.end - window.releaseStart));
+    return Math.max(strongest, attack * release);
+  }, 0);
+}
+
+export class SkillEffectActivationTimeline {
+  private televisionStartedAt = 0;
+  private effectActivationCount = 0;
+
+  activate(
+    effect: SkillScreenEffect,
+    previousEffect: SkillScreenEffect,
+    immediate: boolean,
+    nowSeconds = performance.now() * 0.001,
+  ): void {
+    if (effect === 'none' || (effect === previousEffect && !immediate)) return;
+    if (effect === 'television-glitch') this.televisionStartedAt = nowSeconds;
+    this.effectActivationCount += 1;
+  }
+
+  age(effect: SkillScreenEffect, nowSeconds = performance.now() * 0.001): number {
+    return effect === 'television-glitch'
+      ? Math.max(0, nowSeconds - this.televisionStartedAt)
+      : 0;
+  }
+
+  get activationCount(): number {
+    return this.effectActivationCount;
+  }
+}
+
+const televisionGlitchBurstGlsl = TELEVISION_GLITCH_BURST_WINDOWS
+  .map((window) => `glitchEnvelope(age, ${window.start.toFixed(3)}, ${window.attackEnd.toFixed(3)}, ${window.releaseStart.toFixed(3)}, ${window.end.toFixed(3)})`)
+  .reduce((expression, burst) => `max(${expression}, ${burst})`);
 
 const vertexShader = /* glsl */ `
   varying vec2 vUv;
@@ -927,6 +980,7 @@ const skillEffectShader: ShaderDefinition = {
     uTexel: { value: new THREE.Vector2() },
     uCondensationTexel: { value: new THREE.Vector2() },
     uTime: { value: 0 },
+    uEffectAge: { value: 0 },
     uEffect: { value: 0 },
     uEffectProgress: { value: 0 },
     uCoffeeSplashProgress: { value: 1 },
@@ -946,6 +1000,7 @@ const skillEffectShader: ShaderDefinition = {
     uniform vec2 uTexel;
     uniform vec2 uCondensationTexel;
     uniform float uTime;
+    uniform float uEffectAge;
     uniform float uThemeProgress;
     uniform float uEffectProgress;
     uniform float uCoffeeSplashProgress;
@@ -971,6 +1026,16 @@ const skillEffectShader: ShaderDefinition = {
       float c = hash(cell + vec2(0.0, 1.0));
       float d = hash(cell + vec2(1.0, 1.0));
       return mix(mix(a, b, local.x), mix(c, d, local.x), local.y);
+    }
+
+    float glitchEnvelope(float age, float start, float attackEnd, float releaseStart, float end) {
+      float attack = smoothstep(start, attackEnd, age);
+      float release = 1.0 - smoothstep(releaseStart, end, age);
+      return attack * release * step(start, age) * (1.0 - step(end, age));
+    }
+
+    float televisionGlitchBurst(float age) {
+      return clamp(${televisionGlitchBurstGlsl}, 0.0, 1.0);
     }
 
     float fbm(vec2 point) {
@@ -1527,12 +1592,35 @@ const skillEffectShader: ShaderDefinition = {
           color += wetSparkle * vec3(0.86, 0.58, 0.48) * 0.085;
         }
       } else if (uEffect == 3) {
-      } else if (uEffect == 3) {
-        float band = step(0.72, hash(vec2(floor(uv.y * 42.0 + uTime * 18.0), floor(uTime * 8.0))));
-        float shift = (hash(vec2(floor(uv.y * 31.0), floor(uTime * 12.0))) - 0.5) * 0.035 * band;
-        color.r = texture2D(tDiffuse, uv + vec2(shift + uTexel.x * 2.0, 0.0)).r;
-        color.b = texture2D(tDiffuse, uv - vec2(shift + uTexel.x * 2.0, 0.0)).b;
-        color += band * vec3(0.05, 0.0, 0.08);
+        // Cyberpunk digital glitch: each slice is an authored short burst.
+        // Between bursts the scene returns exactly to alignment instead of
+        // continuously shaking for the whole television animation.
+        float burst = televisionGlitchBurst(uEffectAge);
+        float frameSeed = floor(uEffectAge * 72.0);
+        float row = floor(uv.y * 58.0);
+        float slice = step(0.54, hash(vec2(row, frameSeed)));
+        float block = step(0.68, hash(vec2(floor(uv.x * 20.0), row + frameSeed * 0.37)));
+        float fault = max(slice, block * 0.72) * burst;
+        float signedShift = hash(vec2(row * 0.73, frameSeed + 11.0)) - 0.5;
+        vec2 glitchUv = clamp(
+          uv + vec2(signedShift * (0.018 + block * 0.07) * fault, 0.0),
+          vec2(0.002),
+          vec2(0.998)
+        );
+        vec2 pixelUv = (floor(glitchUv * vec2(112.0, 72.0)) + 0.5) / vec2(112.0, 72.0);
+        glitchUv = mix(glitchUv, pixelUv, block * burst * 0.72);
+        vec3 glitch = texture2D(tDiffuse, glitchUv).rgb;
+        float splitPixels = (4.0 + 14.0 * burst) * max(0.28, fault);
+        vec3 redSplit = texture2D(tDiffuse, clamp(glitchUv + vec2(uTexel.x * splitPixels, 0.0), vec2(0.002), vec2(0.998))).rgb;
+        vec3 blueSplit = texture2D(tDiffuse, clamp(glitchUv - vec2(uTexel.x * splitPixels, 0.0), vec2(0.002), vec2(0.998))).rgb;
+        glitch.r = mix(glitch.r, redSplit.r, burst * (0.48 + fault * 0.5));
+        glitch.b = mix(glitch.b, blueSplit.b, burst * (0.48 + fault * 0.5));
+        float snow = step(0.84, hash(vec2(floor(uv.x * 118.0) + frameSeed, floor(uv.y * 82.0) - frameSeed * 0.7)));
+        float signalFlash = step(0.82, hash(vec2(frameSeed, 19.7))) * burst;
+        color = mix(color, glitch, clamp(fault * 0.94 + burst * 0.16, 0.0, 0.96));
+        color += vec3(0.72, 0.9, 1.0) * snow * burst * 0.2;
+        color += vec3(0.98, 0.17, 0.42) * slice * burst * 0.11;
+        color = mix(color, vec3(dot(color, vec3(0.299, 0.587, 0.114))), signalFlash * 0.2);
       } else if (uEffect == 4) {
         float scanA = 1.0 - smoothstep(0.0, 0.055, abs(fract(uv.y * 4.8 - uTime * 1.12) - 0.5));
         float scanB = 1.0 - smoothstep(0.0, 0.026, abs(fract(uv.y * 9.5 - uTime * 1.65 + 0.23) - 0.5));
@@ -1711,6 +1799,60 @@ const skillEffectShader: ShaderDefinition = {
         blue += vec3(0.2, 0.42, 0.75) * faultBand * crash * 0.12;
         color = mix(color, blue, crash);
         color = mix(color, vec3(0.84, 0.95, 1.0), impact * 0.36);
+      } else if (uEffect == 9) {
+        float progress = clamp(uEffectProgress, 0.0, 1.0);
+        float heatIn = smoothstep(0.0, 0.13, progress);
+        float heatOut = 1.0 - smoothstep(0.78, 1.0, progress);
+        float heat = heatIn * heatOut;
+        float powerPulse = 0.78 + 0.22 * sin(uTime * 7.8);
+
+        // Microwave heating reads as rising, uneven hot-air refraction across
+        // the front glass rather than the toaster's topology-swap flash.
+        vec2 broadDomain = vec2(
+          uv.x * 6.2 + noise(vec2(uv.y * 2.8, uTime * 0.12)) * 1.5,
+          uv.y * 5.0 - uTime * 0.86
+        );
+        float broad = noise(broadDomain);
+        float rolling = noise(vec2(
+          uv.x * 15.0 + broad * 2.6 + uTime * 0.1,
+          uv.y * 11.0 - uTime * 1.54
+        ));
+        float filament = noise(vec2(
+          uv.x * 34.0 + rolling * 3.4 - uTime * 0.18,
+          uv.y * 27.0 - uTime * 2.35
+        ));
+        float convection = broad * 0.55 + rolling * 0.32 + filament * 0.13;
+        float cellMask = smoothstep(0.3, 0.72, convection);
+        float edgeMask = smoothstep(0.43, 0.76, rolling * 0.7 + filament * 0.3);
+        float heatField = clamp(cellMask * 0.78 + edgeMask * 0.46, 0.0, 1.0);
+        vec2 displacementPixels = vec2(
+          (rolling - 0.5) * 21.0 + (filament - 0.5) * 5.5,
+          (broad - 0.5) * 7.0 - heatField * 1.8
+        );
+        vec2 heatedUv = clamp(
+          uv + displacementPixels * uTexel * heatField * heat * powerPulse,
+          vec2(0.002),
+          vec2(0.998)
+        );
+        vec3 refracted = texture2D(tDiffuse, heatedUv).rgb;
+        vec3 sideSample = texture2D(
+          tDiffuse,
+          clamp(heatedUv + normalize(displacementPixels + vec2(0.001)) * uTexel * 2.2, vec2(0.002), vec2(0.998))
+        ).rgb;
+        vec3 heatedScene = mix(refracted, sideSample, heatField * heat * 0.18);
+        float luma = dot(heatedScene, vec3(0.2126, 0.7152, 0.0722));
+        vec3 warmScene = heatedScene * vec3(1.09, 0.93, 0.82);
+        warmScene += vec3(0.075, 0.016, 0.002) * (0.35 + luma * 0.65);
+        float warmAmount = heat * (0.24 + heatField * 0.28) * powerPulse;
+        color = mix(color, warmScene, warmAmount);
+
+        // A restrained magnetron pulse gives the restored screen effect a
+        // distinct microwave rhythm without obscuring the cable puzzle.
+        vec2 centered = (uv - 0.5) * vec2(1.35, 1.0);
+        float ringRadius = fract(uTime * 0.34) * 0.72;
+        float pulseRing = 1.0 - smoothstep(0.018, 0.052, abs(length(centered) - ringRadius));
+        pulseRing *= (1.0 - ringRadius / 0.72) * heat;
+        color += vec3(0.18, 0.055, 0.008) * pulseRing * 0.12;
       }
       gl_FragColor = vec4(color, 1.0);
     }
@@ -1747,6 +1889,7 @@ export class SakuraPipeline {
   private readonly fxaa = makeQuad(fxaaShader);
   private readonly steamBlur = makeQuad(steamBlurShader);
   private readonly skillEffect = makeQuad(skillEffectShader);
+  private readonly skillEffectTimeline = new SkillEffectActivationTimeline();
   private readonly steamCondensation = new SteamCondensationField();
   private qualityTier: NightQualityTier = 'high';
   private themeProgress = 0;
@@ -1946,6 +2089,11 @@ export class SakuraPipeline {
     this.skillEffect.material.uniforms.tDiffuse.value = skillEffectSource;
     this.skillEffect.material.uniforms.tScene.value = skillEffectScene;
     this.skillEffect.material.uniforms.uTime.value = effectTime;
+    const televisionAgeOverride = window.__TELEVISION_GLITCH_AGE_OVERRIDE__;
+    this.skillEffect.material.uniforms.uEffectAge.value = this.skillEffectMode === 'television-glitch'
+      && Number.isFinite(televisionAgeOverride)
+      ? Math.max(0, televisionAgeOverride as number)
+      : this.skillEffectTimeline.age(this.skillEffectMode, effectTime);
     this.renderer.setRenderTarget(null);
     this.skillEffect.quad.render(this.renderer);
     if (finishSteamClearAfterRender) this.finishSteamClear();
@@ -1962,10 +2110,12 @@ export class SakuraPipeline {
       'toaster-heat': 6,
       'kettle-thaw-heat': 7,
       'blue-screen': 8,
+      'microwave-heat': 9,
     };
     if (!immediate && effect === 'none' && this.steamClearActive && this.skillEffectMode === 'bathroom-steam') {
       return;
     }
+    this.skillEffectTimeline.activate(effect, this.skillEffectMode, immediate);
     if (effect !== this.skillEffectMode || immediate) {
       this.cancelSteamClear();
       this.cancelSteamReveal(effect === 'bathroom-steam' ? 1 : 0);
@@ -1977,7 +2127,7 @@ export class SakuraPipeline {
     this.skillEffect.material.uniforms.uEffect.value = effect === 'coffee-lock' && !this.coffeeSplashActive
       ? 0
       : modes[effect];
-    if (effect !== 'toaster-heat' && effect !== 'kettle-thaw-heat') {
+    if (effect !== 'toaster-heat' && effect !== 'kettle-thaw-heat' && effect !== 'microwave-heat') {
       this.skillEffect.material.uniforms.uEffectProgress.value = 0;
     }
   }
@@ -1989,12 +2139,16 @@ export class SakuraPipeline {
   get skillEffectState(): Readonly<{
     mode: SkillScreenEffect;
     progress: number;
+    age: number;
+    activationCount: number;
     splashActive: boolean;
     splashProgress: number;
   }> {
     return {
       mode: this.skillEffectMode,
       progress: Number(this.skillEffect.material.uniforms.uEffectProgress.value),
+      age: this.skillEffectTimeline.age(this.skillEffectMode),
+      activationCount: this.skillEffectTimeline.activationCount,
       splashActive: this.coffeeSplashActive,
       splashProgress: this.coffeeSplashProgress,
     };

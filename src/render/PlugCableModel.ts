@@ -132,8 +132,11 @@ function createLampGuide(): THREE.Group {
   const guide = new THREE.Group();
   guide.name = 'lamp-cable-guide';
   guide.visible = false;
+  guide.userData.performanceEffect = true;
+  guide.userData.preparedBeforeSkillTrigger = true;
   const beam = createLampVolumetricBeam('lamp-cable-guide-beam');
   beam.visible = true;
+  beam.userData.performanceEffect = true;
   beam.position.y = LAMP_GUIDE_GEOMETRY_START_Y + LAMP_GUIDE_LENGTH * 0.5;
   beam.scale.set(LAMP_GUIDE_SOURCE_RADIUS, LAMP_GUIDE_LENGTH, LAMP_GUIDE_SOURCE_RADIUS);
   guide.userData.beam = beam;
@@ -260,6 +263,7 @@ export class PlugCableModel {
   private readonly baseColor: THREE.Color;
   private readonly head: PlugHead;
   private tailHead: PlugHead | null;
+  private fakeTailPlug = false;
   private readonly headAvailableHint = createAvailableEndHint();
   private headLampGuide: THREE.Group | null = null;
   private tailAvailableHint: THREE.Group | null;
@@ -324,6 +328,7 @@ export class PlugCableModel {
   private recycleSelectionStartedAt: number | null = null;
   private readonly recycleSelectionCenter = new THREE.Vector3();
   private readonly bundleSpacingOffset = new THREE.Vector3();
+  private readonly bundleBaseRootPosition = new THREE.Vector3();
   private bundleClearanceSegmentsCache: Array<{
     start: THREE.Vector3;
     end: THREE.Vector3;
@@ -351,6 +356,7 @@ export class PlugCableModel {
   ) {
     this.root.name = definition.id;
     this.root.userData.arrowId = definition.id;
+    this.bundleBaseRootPosition.copy(this.root.position);
     this.baseColor = new THREE.Color(definition.color);
     this.material = createCableToonMaterial(definition.color);
     this.freezeSeed = [...this.definition.id].reduce((value, character) => (
@@ -375,11 +381,15 @@ export class PlugCableModel {
     this.tailExitDirection = DIRECTION_VECTORS[cableEndDirection(definition, 'tail')].clone();
     this.head = createPlugHead(definition.color, PLUG_HEAD_SCALE, false, plugStyleId);
     this.tagHeadPickMeshes(this.head, 'head');
+    this.headLampGuide = createLampGuide();
+    this.head.root.add(this.headLampGuide);
     this.tailHead = definition.doubleEnded
       ? createPlugHead(definition.color, PLUG_HEAD_SCALE, false, plugStyleId)
       : null;
     if (this.tailHead) {
       this.tagHeadPickMeshes(this.tailHead, 'tail');
+      this.tailLampGuide = createLampGuide();
+      this.tailHead.root.add(this.tailLampGuide);
     }
     this.tailAvailableHint = this.tailHead ? createAvailableEndHint() : null;
     this.head.root.add(this.headAvailableHint);
@@ -662,9 +672,16 @@ export class PlugCableModel {
     if (this.tailLampGuide) this.tailLampGuide.visible = end === 'tail';
   }
 
+  setLampGuideWarmupVisible(enabled: boolean): void {
+    if (this.headLampGuide) this.headLampGuide.visible = enabled;
+    if (this.tailLampGuide) this.tailLampGuide.visible = enabled;
+  }
+
   setFakeTailPlug(enabled: boolean): void {
     if (this.definition.doubleEnded) return;
+    if (enabled === this.fakeTailPlug && (enabled ? this.tailHead !== null : this.tailHead === null)) return;
     if (enabled && !this.tailHead) {
+      this.fakeTailPlug = true;
       this.tailHead = createPlugHead(this.definition.color, PLUG_HEAD_SCALE, false, this.plugStyleId);
       this.tagHeadPickMeshes(this.tailHead, 'tail');
       this.tailAvailableHint = createAvailableEndHint();
@@ -681,6 +698,7 @@ export class PlugCableModel {
       return;
     }
     if (!enabled && this.tailHead) {
+      this.fakeTailPlug = false;
       this.tailHead.root.removeFromParent();
       this.tailHead.dispose();
       this.tailHead = null;
@@ -865,9 +883,32 @@ export class PlugCableModel {
   }
 
   setBundleSpacingOffset(offset: THREE.Vector3 | null): void {
+    const nextOffset = offset ?? this.bundleSpacingOffset.set(0, 0, 0);
+    if (
+      this.bundleSpacingOffset.lengthSq() < 1e-10
+      && nextOffset.lengthSq() >= 1e-10
+    ) {
+      // Other presentations (notably the washer) can leave each cable root at
+      // a legitimate non-zero pose. Capture that live pose when spacing begins
+      // instead of snapping every plug back to the constructor-time origin.
+      this.bundleBaseRootPosition.copy(this.root.position)
+        .addScaledVector(this.recycleSelectionCenter, this.recycleSelectionScale - 1);
+    }
     if (offset) this.bundleSpacingOffset.copy(offset);
     else this.bundleSpacingOffset.set(0, 0, 0);
     this.applyRootPresentationTransform();
+  }
+
+  /**
+   * Accept the current root position as the new baseline after another
+   * presentation has permanently repositioned the cable. This keeps the
+   * spacing/recycle presentation owner from restoring a stale constructor-time
+   * position on its next update.
+   */
+  commitBundleBaseRootPose(): void {
+    this.bundleBaseRootPosition.copy(this.root.position)
+      .sub(this.bundleSpacingOffset)
+      .addScaledVector(this.recycleSelectionCenter, this.recycleSelectionScale - 1);
   }
 
   get skillVisualState(): Readonly<{
@@ -983,7 +1024,14 @@ export class PlugCableModel {
       : this.cumulativeLengths.map((length) => this.pathLength - length).reverse();
     const points: THREE.Vector3[] = [this.pointAtDistance(start, end)];
 
-    for (let index = 1; index < orientedPoints.length - 1; index += 1) {
+    // Keep every original path vertex that still lies inside the moving cable
+    // window, including the socket endpoint. Older templates and transient
+    // topology replacements can briefly carry an exit direction that differs
+    // from the final authored segment. Skipping the endpoint in that case
+    // joins the previous corner directly to the displaced plug and creates a
+    // long diagonal cable. Retaining it makes extraction follow the original
+    // polyline all the way to the plug before continuing along the exit ray.
+    for (let index = 1; index < orientedPoints.length; index += 1) {
       const length = orientedLengths[index];
       if (length > start && length < finish) points.push(orientedPoints[index].clone());
     }
@@ -1360,7 +1408,8 @@ export class PlugCableModel {
   }
 
   private applyRootPresentationTransform(): void {
-    this.root.position.copy(this.bundleSpacingOffset)
+    this.root.position.copy(this.bundleBaseRootPosition)
+      .add(this.bundleSpacingOffset)
       .addScaledVector(this.recycleSelectionCenter, 1 - this.recycleSelectionScale);
   }
 
@@ -1392,7 +1441,7 @@ export class PlugCableModel {
     renderPoints.push(
       points[points.length - 1].clone().addScaledVector(activeExitDirection, PLUG_CABLE_SOCKET_OVERLAP),
     );
-    if (this.tailHead) {
+    if (this.tailHead && !this.fakeTailPlug) {
       renderPoints.unshift(points[0].clone().addScaledVector(firstDirection, -PLUG_CABLE_SOCKET_OVERLAP));
     }
     const roundedCable = createRoundedCableGeometry(renderPoints);
@@ -1440,12 +1489,27 @@ export class PlugCableModel {
     const activeHead = activeEnd === 'tail' ? this.tailHead : this.head;
     const passiveHead = activeEnd === 'tail' ? this.head : this.tailHead;
     activeHead?.root.position.copy(lastPoint);
+    const activeFakeTailHead = activeHead === this.tailHead && this.fakeTailPlug
+      ? this.tailHead
+      : null;
+    if (activeFakeTailHead) {
+      // During a tail-first extraction the fake plug keeps its contact at the
+      // moving endpoint while its body overlaps the cable behind it.
+      activeFakeTailHead.root.position.addScaledVector(activeExitDirection, -PLUG_HEAD_MAX_LENGTH);
+    }
     activeHead?.root.quaternion.setFromUnitVectors(
       up,
       activeExitDirection,
     );
     if (passiveHead) {
       passiveHead.root.position.copy(points[0]);
+      if (passiveHead === this.tailHead && this.fakeTailPlug) {
+        // The fake tail's contact point is the original logical tail
+        // endpoint. Move the plug body inward so it covers the existing
+        // strain-relief segment instead of appending a second plug beyond the
+        // cable tail.
+        passiveHead.root.position.addScaledVector(firstDirection, PLUG_HEAD_MAX_LENGTH);
+      }
       passiveHead.root.quaternion.setFromUnitVectors(up, firstDirection.clone().negate());
     } else {
       this.tailRoot.position.copy(points[0]);

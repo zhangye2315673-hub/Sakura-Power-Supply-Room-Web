@@ -183,7 +183,15 @@ export class WasherSpinPresentation {
       });
     });
 
-    options.cableRoot.position.copy(this.baseRootPosition).add(center);
+    // `center` is expressed in cableRoot local space. Moving the root pivot to
+    // that point must therefore include the root's captured scale and rotation
+    // before adding it to the parent-space position. Adding the raw local
+    // vector caused the whole bundle to jump whenever the player had rotated
+    // the puzzle (and was especially visible with non-uniform scale).
+    const centerInParent = center.clone()
+      .multiply(this.baseRootScale)
+      .applyQuaternion(this.baseRootQuaternion);
+    options.cableRoot.position.copy(this.baseRootPosition).add(centerInParent);
     this.entries.forEach((entry) => {
       entry.model.root.position.copy(entry.basePosition).sub(center);
     });
@@ -300,6 +308,11 @@ export class WasherSpinPresentation {
         if (entry.launched) return;
         entry.model.root.position.copy(entry.basePosition).sub(this.centerOffset);
         entry.model.root.quaternion.copy(entry.baseQuaternion);
+        // The shared spacing presentation also writes cable root positions on
+        // every frame. Rebase it to the washer's final local pose so the first
+        // post-stop frame cannot restore the old position and shift the whole
+        // bundle by the temporary pivot offset.
+        entry.model.commitBundleBaseRootPose();
       });
       this.diagnosticsValue = {
         ...this.diagnosticsValue,

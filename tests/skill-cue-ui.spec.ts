@@ -3,6 +3,7 @@ import { expect, test } from '@playwright/test';
 type SkillCueTestUi = {
   setVisible: (visible: boolean) => void;
   showCue: (label: string, phase: 'cue' | 'commit' | 'settle', detail: string, source: string) => void;
+  showStatusNormalized: (turns: number) => void;
 };
 
 declare global {
@@ -83,4 +84,18 @@ test('技能提示位于标题下方并遵守悬停停留规则', async ({ page 
   await page.screenshot({ path: testInfo.outputPath('skill-cue-mobile.png'), fullPage: true });
   await page.waitForTimeout(5_200);
   await expect(cue).not.toHaveClass(/visible/);
+});
+
+test('厨师机提交时明确显示限回合状态统一为 2', async ({ page }) => {
+  await mountSkillCue(page);
+  await page.evaluate(() => {
+    const slot = document.querySelector<HTMLElement>('#skill-debuff-slot')!;
+    slot.classList.add('occupied');
+    slot.dataset.status = 'rice-thick-cable';
+    slot.querySelector<HTMLElement>('.skill-status-count')!.textContent = '2';
+    window.__SKILL_CUE_TEST_UI__?.showStatusNormalized(2);
+  });
+  await expect(page.locator('#skill-debuff-slot')).toHaveClass(/skill-status-normalized/);
+  await expect(page.locator('.skill-status-normalized-badge')).toHaveText('限回合状态 → 2');
+  await expect(page.locator('.skill-status-normalized-badge')).toBeVisible();
 });

@@ -17,10 +17,19 @@ import {
   type ShapeId,
 } from './types';
 import { pointInsideShape } from './shapes';
-import { candidateGeometryIsClear, geometryIsClear } from './geometryValidation';
+import {
+  allPlugEndpointDirectionsAreValid,
+  candidateGeometryIsClear,
+  geometryIsClear,
+} from './geometryValidation';
 import { measurePuzzleCompactness } from './gridOccupancy';
 import { RANDOM_PUZZLE_TEMPLATES } from './randomTemplates.generated';
+import { SKILL_PUZZLE_TEMPLATES } from './skillTemplates.generated';
+import { EXPLORATION_PUZZLE_TEMPLATES } from './explorationTemplates.generated';
 import { DOUBLE_ENDED_PUZZLE_TEMPLATES } from './doubleEndedTemplates.generated';
+import { selectTemplateVariant } from './templatePools';
+import type { DoubleEndedPuzzleTemplate } from './doubleEndedTemplates';
+import type { RandomPuzzleTemplate } from './randomTemplates';
 import {
   analyzeRandomDifficulty,
   desiredHardFreeCount,
@@ -180,6 +189,11 @@ function shuffle<T>(random: () => number, source: readonly T[]): T[] {
     [result[index], result[next]] = [result[next], result[index]];
   }
   return result;
+}
+
+function normalizeTemplatePool<T>(value: T | readonly T[] | undefined): readonly T[] | undefined {
+  if (!value) return undefined;
+  return Array.isArray(value) ? value : [value as T];
 }
 
 function pointKey(point: readonly number[]): string {
@@ -928,53 +942,419 @@ export type UnifiedRandomPuzzleDiagnostic = {
   difficulty: ReturnType<typeof analyzeRandomDifficulty> | null;
 };
 
-function constrainSkillInitialExits(
+function terminalRerouteCandidates(
+  definition: ArrowDefinition,
+  exitDirection: DirectionKey,
+  shape: ShapeId,
+  halfExtents: GridExtents,
+): ArrowDefinition[] {
+  const directionKeys = Object.keys(DIRECTION_VECTORS) as DirectionKey[];
+  const desired = DIRECTION_VECTORS[exitDirection];
+  const candidates: ArrowDefinition[] = [];
+  const seen = new Set<string>();
+  const axisAlignedLength = (start: GridPoint, end: GridPoint): number | null => {
+    const deltas = [
+      Math.abs(end[0] - start[0]),
+      Math.abs(end[1] - start[1]),
+      Math.abs(end[2] - start[2]),
+    ];
+    return deltas.filter((delta) => delta > 0).length === 1
+      ? deltas[0] + deltas[1] + deltas[2]
+      : null;
+  };
+  const pushCandidate = (prefix: GridPoint[], points: GridPoint[]) => {
+    if (points.some((point) => !isInside([...point]) || !pointInsideShape(shape, point, halfExtents))) {
+      return;
+    }
+    const path = [...prefix, ...points];
+    const key = path.map((point) => point.join(',')).join('|');
+    if (seen.has(key)) return;
+    seen.add(key);
+    candidates.push({ ...definition, path, exitDirection });
+  };
+
+  for (let segmentCount = 1; segmentCount < definition.path.length; segmentCount += 1) {
+    const anchorIndex = definition.path.length - segmentCount - 1;
+    const anchor = definition.path[anchorIndex];
+    const prefix = definition.path.slice(0, anchorIndex + 1);
+    let totalLength = 0;
+    for (let index = anchorIndex; index < definition.path.length - 1; index += 1) {
+      totalLength += Math.abs(definition.path[index + 1][0] - definition.path[index][0])
+        + Math.abs(definition.path[index + 1][1] - definition.path[index][1])
+        + Math.abs(definition.path[index + 1][2] - definition.path[index][2]);
+    }
+
+    // First keep the plug socket exactly where the template placed it and
+    // rebuild only the cable immediately behind it. This is the preferred
+    // correction for an endpoint/direction mismatch: the last segment becomes
+    // collinear with the plug without moving the plug or lengthening the cable.
+    const fixedHead = definition.path[definition.path.length - 1];
+    if (segmentCount >= 2) {
+      for (let finalLength = 1; finalLength < totalLength; finalLength += 1) {
+        const penultimate: GridPoint = [
+          fixedHead[0] - desired.x * finalLength,
+          fixedHead[1] - desired.y * finalLength,
+          fixedHead[2] - desired.z * finalLength,
+        ];
+        const remainingLength = totalLength - finalLength;
+        const directLength = axisAlignedLength(anchor, penultimate);
+        if (directLength === remainingLength) {
+          pushCandidate(prefix, [penultimate, fixedHead]);
+        }
+
+        if (segmentCount >= 3) {
+          for (const firstKey of directionKeys) {
+            const first = DIRECTION_VECTORS[firstKey];
+            if (Math.abs(first.dot(desired)) > 0.5) continue;
+            for (let firstLength = 1; firstLength < remainingLength; firstLength += 1) {
+              const corner: GridPoint = [
+                anchor[0] + first.x * firstLength,
+                anchor[1] + first.y * firstLength,
+                anchor[2] + first.z * firstLength,
+              ];
+              const secondLength = axisAlignedLength(corner, penultimate);
+              if (secondLength === remainingLength - firstLength) {
+                pushCandidate(prefix, [corner, penultimate, fixedHead]);
+              }
+            }
+          }
+        }
+
+        if (segmentCount >= 4) {
+          for (const firstKey of directionKeys) {
+            const first = DIRECTION_VECTORS[firstKey];
+            for (const secondKey of directionKeys) {
+              const second = DIRECTION_VECTORS[secondKey];
+              if (Math.abs(first.dot(second)) > 0.5 || Math.abs(second.dot(desired)) > 0.5) continue;
+              for (let firstLength = 1; firstLength <= remainingLength - 2; firstLength += 1) {
+                const firstCorner: GridPoint = [
+                  anchor[0] + first.x * firstLength,
+                  anchor[1] + first.y * firstLength,
+                  anchor[2] + first.z * firstLength,
+                ];
+                for (
+                  let secondLength = 1;
+                  secondLength <= remainingLength - firstLength - 1;
+                  secondLength += 1
+                ) {
+                  const secondCorner: GridPoint = [
+                    firstCorner[0] + second.x * secondLength,
+                    firstCorner[1] + second.y * secondLength,
+                    firstCorner[2] + second.z * secondLength,
+                  ];
+                  const thirdLength = axisAlignedLength(secondCorner, penultimate);
+                  if (thirdLength === remainingLength - firstLength - secondLength) {
+                    pushCandidate(prefix, [firstCorner, secondCorner, penultimate, fixedHead]);
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    if (segmentCount === 1) {
+      pushCandidate(prefix, [[
+        anchor[0] + desired.x * totalLength,
+        anchor[1] + desired.y * totalLength,
+        anchor[2] + desired.z * totalLength,
+      ]]);
+      continue;
+    }
+
+    for (const firstKey of directionKeys) {
+      const first = DIRECTION_VECTORS[firstKey];
+      if (Math.abs(first.dot(desired)) > 0.5) continue;
+      if (segmentCount === 2) {
+        for (let finalLength = 1; finalLength < totalLength; finalLength += 1) {
+          const firstLength = totalLength - finalLength;
+          const corner: GridPoint = [
+            anchor[0] + first.x * firstLength,
+            anchor[1] + first.y * firstLength,
+            anchor[2] + first.z * firstLength,
+          ];
+          pushCandidate(prefix, [corner, [
+            corner[0] + desired.x * finalLength,
+            corner[1] + desired.y * finalLength,
+            corner[2] + desired.z * finalLength,
+          ]]);
+        }
+        continue;
+      }
+
+      for (const secondKey of directionKeys) {
+        const second = DIRECTION_VECTORS[secondKey];
+        if (Math.abs(first.dot(second)) > 0.5 || Math.abs(second.dot(desired)) > 0.5) continue;
+        for (let firstLength = 1; firstLength <= totalLength - 2; firstLength += 1) {
+          for (let secondLength = 1; secondLength <= totalLength - firstLength - 1; secondLength += 1) {
+            const finalLength = totalLength - firstLength - secondLength;
+            const firstCorner: GridPoint = [
+              anchor[0] + first.x * firstLength,
+              anchor[1] + first.y * firstLength,
+              anchor[2] + first.z * firstLength,
+            ];
+            const secondCorner: GridPoint = [
+              firstCorner[0] + second.x * secondLength,
+              firstCorner[1] + second.y * secondLength,
+              firstCorner[2] + second.z * secondLength,
+            ];
+            pushCandidate(prefix, [firstCorner, secondCorner, [
+              secondCorner[0] + desired.x * finalLength,
+              secondCorner[1] + desired.y * finalLength,
+              secondCorner[2] + desired.z * finalLength,
+            ]]);
+          }
+        }
+      }
+    }
+  }
+  return candidates;
+}
+
+function alignTemplateEndpointDirections(
   source: readonly ArrowDefinition[],
-  minimum: number,
-  maximum: number,
-): { arrows: ArrowDefinition[]; solution: string[]; initiallyFree: number } | null {
-  let arrows = source.map((arrow) => ({
+  preferredSolution: readonly string[],
+  shape: ShapeId,
+  halfExtents: GridExtents,
+): ArrowDefinition[] | null {
+  const arrows = source.map((arrow) => ({
     ...arrow,
     path: arrow.path.map((point) => [...point] as GridPoint),
   }));
-  let initiallyFree = countInitiallyFree(arrows);
-  const directions = Object.keys(DIRECTION_VECTORS) as DirectionKey[];
-
-  while (initiallyFree > maximum) {
-    const freeIds = arrows
-      .map(makeRuntime)
-      .filter((arrow, _index, runtimes) => checkArrowExit(arrow, runtimes).clear)
-      .map((arrow) => arrow.definition.id);
-    let replacement: ArrowDefinition[] | null = null;
-    let replacementFree = initiallyFree;
-
-    for (const id of freeIds) {
-      const index = arrows.findIndex((arrow) => arrow.id === id);
-      if (index < 0) continue;
-      const original = arrows[index];
-      const orderedDirections = directions.filter((direction) => direction !== original.exitDirection);
-      for (const exitDirection of orderedDirections) {
-        const trial = arrows.map((arrow, arrowIndex) => arrowIndex === index
-          ? { ...arrow, exitDirection }
-          : arrow);
-        const trialFree = countInitiallyFree(trial);
-        if (trialFree >= initiallyFree || trialFree < minimum) continue;
-        if (!findRemovalSequence(trial)) continue;
-        replacement = trial;
-        replacementFree = trialFree;
-        break;
-      }
-      if (replacement) break;
-    }
-    if (!replacement) return null;
-    arrows = replacement;
-    initiallyFree = replacementFree;
+  const pendingIds = arrows
+    .filter((arrow) => !allPlugEndpointDirectionsAreValid([arrow]))
+    .map((arrow) => arrow.id);
+  if (pendingIds.length === 0) {
+    return geometryIsClear(arrows) ? arrows : null;
   }
 
-  const solution = findRemovalSequence(arrows);
-  return solution && initiallyFree >= minimum && initiallyFree <= maximum
-    ? { arrows, solution, initiallyFree }
-    : null;
+  const candidatesById = new Map<string, ArrowDefinition[]>();
+  for (const id of pendingIds) {
+    const original = arrows.find((arrow) => arrow.id === id);
+    if (!original) return null;
+    const head = original.path[original.path.length - 1];
+    const previous = original.path[original.path.length - 2];
+    const pathDirection = directionKeyFromDelta([
+      Math.sign(head[0] - previous[0]),
+      Math.sign(head[1] - previous[1]),
+      Math.sign(head[2] - previous[2]),
+    ]);
+    const directions = Object.keys(DIRECTION_VECTORS) as DirectionKey[];
+    const directionOrder = [
+      original.exitDirection,
+      pathDirection,
+      ...directions.filter((direction) => (
+        direction !== original.exitDirection && direction !== pathDirection
+      )),
+    ];
+    const preferredDirections = directionOrder.slice(0, 2);
+    let candidates = preferredDirections.flatMap((direction) => terminalRerouteCandidates(
+      original,
+      direction,
+      shape,
+      halfExtents,
+    )).filter((candidate) => candidateGeometryIsClear(candidate, []));
+    // The stored direction and the path's actual terminal direction cover the
+    // normal template mismatch. Keep the broader fallback for unusual legacy
+    // templates, but do not pay for all six directions on every cable.
+    if (candidates.length === 0) {
+      candidates = directions.filter((direction) => !preferredDirections.includes(direction)).flatMap((direction) => terminalRerouteCandidates(
+        original,
+        direction,
+        shape,
+        halfExtents,
+      )).filter((candidate) => candidateGeometryIsClear(candidate, []));
+    }
+    candidates = candidates.slice(0, 256);
+    if (candidates.length === 0) return null;
+    candidatesById.set(id, candidates);
+  }
+
+  let visitedStates = 0;
+  const maximumVisitedStates = 24_000;
+  const search = (
+    current: ArrowDefinition[],
+    remainingIds: readonly string[],
+  ): ArrowDefinition[] | null => {
+    if (visitedStates >= maximumVisitedStates) return null;
+    visitedStates += 1;
+    if (remainingIds.length === 0) {
+      if (!allPlugEndpointDirectionsAreValid(current) || !geometryIsClear(current)) return null;
+      return removalSequenceIsValid(current, preferredSolution) || findRemovalSequence(current)
+        ? current
+        : null;
+    }
+
+    // Pick the most constrained endpoint first. Unlike the old sequential
+    // greedy pass, this can backtrack an earlier route when it blocks a later
+    // plug, while still touching only the terminal portion of each cable.
+    let selectedId: string | null = null;
+    let selectedIndex = -1;
+    let selectedCandidates: ArrowDefinition[] = [];
+    for (const id of remainingIds) {
+      const index = current.findIndex((arrow) => arrow.id === id);
+      if (index < 0) return null;
+      const others = current.filter((_, arrowIndex) => arrowIndex !== index);
+      const clearCandidates = (candidatesById.get(id) ?? [])
+        .filter((candidate) => candidateGeometryIsClear(candidate, others));
+      if (clearCandidates.length === 0) return null;
+      if (selectedId === null || clearCandidates.length < selectedCandidates.length) {
+        selectedId = id;
+        selectedIndex = index;
+        selectedCandidates = clearCandidates;
+      }
+    }
+    if (selectedId === null || selectedIndex < 0) return null;
+
+    const nextRemaining = remainingIds.filter((id) => id !== selectedId);
+    for (const candidate of selectedCandidates) {
+      const trial = current.map((arrow, index) => index === selectedIndex ? candidate : arrow);
+      const result = search(trial, nextRemaining);
+      if (result) return result;
+    }
+    return null;
+  };
+
+  return search(arrows, pendingIds);
+}
+
+function constrainSkillInitialExits(
+  source: readonly ArrowDefinition[],
+  preferredSolution: readonly string[],
+  minimum: number,
+  maximum: number,
+  shape: ShapeId,
+  halfExtents: GridExtents,
+): { arrows: ArrowDefinition[]; solution: string[]; initiallyFree: number } | null {
+  const arrows = source.map((arrow) => ({
+    ...arrow,
+    path: arrow.path.map((point) => [...point] as GridPoint),
+  }));
+  const directions = Object.keys(DIRECTION_VECTORS) as DirectionKey[];
+  const seen = new Set<string>();
+  let visitedStates = 0;
+  const maximumVisitedStates = 4_000;
+
+  const search = (
+    current: ArrowDefinition[],
+    solution: readonly string[],
+    changedIds: ReadonlySet<string>,
+  ): { arrows: ArrowDefinition[]; solution: string[]; initiallyFree: number } | null => {
+    if (visitedStates >= maximumVisitedStates) return null;
+    visitedStates += 1;
+    const initiallyFree = countInitiallyFree(current);
+    if (initiallyFree >= minimum && initiallyFree <= maximum) {
+      if (!allPlugEndpointDirectionsAreValid(current) || !geometryIsClear(current)) return null;
+      const validSolution = removalSequenceIsValid(current, solution)
+        ? [...solution]
+        : findRemovalSequence(current);
+      return validSolution ? { arrows: current, solution: validSolution, initiallyFree } : null;
+    }
+    if (initiallyFree < minimum) return null;
+
+    const signature = current.map((arrow) => (
+      `${arrow.id}:${arrow.exitDirection}:${arrow.path.map((point) => point.join(',')).join('|')}`
+    )).join(';');
+    if (seen.has(signature)) return null;
+    seen.add(signature);
+
+    const freeIds = current
+      .map(makeRuntime)
+      .filter((arrow, _index, runtimes) => checkArrowExit(arrow, runtimes).clear)
+      .map((arrow) => arrow.definition.id)
+      .filter((id) => !changedIds.has(id));
+    const directionPlans: Array<{
+      cableId: string;
+      index: number;
+      exitDirection: DirectionKey;
+      projectedFree: number;
+    }> = [];
+    for (const id of freeIds) {
+      const index = current.findIndex((arrow) => arrow.id === id);
+      if (index < 0) continue;
+      const original = current[index];
+      for (const exitDirection of directions) {
+        if (exitDirection === original.exitDirection) continue;
+        const directionOnly = current.map((arrow, arrowIndex) => arrowIndex === index
+          ? { ...arrow, exitDirection }
+          : arrow);
+        const projectedFree = countInitiallyFree(directionOnly);
+        if (projectedFree >= initiallyFree || projectedFree < minimum) continue;
+        directionPlans.push({ cableId: id, index, exitDirection, projectedFree });
+      }
+    }
+    directionPlans.sort((left, right) => (
+      left.projectedFree - right.projectedFree
+      || (Number(right.cableId.split('-').at(-1)) || 0)
+        - (Number(left.cableId.split('-').at(-1)) || 0)
+      || left.cableId.localeCompare(right.cableId)
+    ));
+
+    // Explore the strongest direction plan immediately instead of building a
+    // cartesian list of every route for every free cable. Exact geometry and
+    // exact initial-exit counts are still checked after the path is rerouted.
+    for (const plan of directionPlans) {
+      const original = current[plan.index];
+      const others = current.filter((_, arrowIndex) => arrowIndex !== plan.index);
+      let acceptedForDirection = 0;
+      for (const candidate of terminalRerouteCandidates(
+        original,
+        plan.exitDirection,
+        shape,
+        halfExtents,
+      )) {
+        if (!candidateGeometryIsClear(candidate, others)) continue;
+        const trial = current.map((arrow, arrowIndex) => (
+          arrowIndex === plan.index ? candidate : arrow
+        ));
+        const trialFree = countInitiallyFree(trial);
+        if (trialFree >= initiallyFree || trialFree < minimum) continue;
+        const trialSolution = removalSequenceIsValid(trial, solution)
+          ? [...solution]
+          : findRemovalSequence(trial);
+        if (!trialSolution) continue;
+        acceptedForDirection += 1;
+        const nextChanged = new Set(changedIds);
+        nextChanged.add(plan.cableId);
+        const result = search(trial, trialSolution, nextChanged);
+        if (result) return result;
+        // Keep the fallback finite but preserve alternatives for geometric
+        // conflicts discovered deeper in the search.
+        if (acceptedForDirection >= 16) break;
+      }
+    }
+
+    return null;
+  };
+
+  return search(arrows, preferredSolution, new Set<string>());
+}
+
+export function prepareSkillTemplateCandidate(
+  source: readonly ArrowDefinition[],
+  preferredSolution: readonly string[],
+  level: LevelDefinition,
+): { arrows: ArrowDefinition[]; solution: string[]; initiallyFree: number } | null {
+  const aligned = alignTemplateEndpointDirections(
+    source,
+    preferredSolution,
+    level.shape,
+    level.halfExtents,
+  );
+  if (!aligned) return null;
+  const alignedSolution = removalSequenceIsValid(aligned, preferredSolution)
+    ? [...preferredSolution]
+    : findRemovalSequence(aligned);
+  if (!alignedSolution) return null;
+  return constrainSkillInitialExits(
+    aligned,
+    alignedSolution,
+    level.minInitiallyFree,
+    level.maxInitiallyFree,
+    level.shape,
+    level.halfExtents,
+  );
 }
 
 export function diagnoseUnifiedRandomPuzzle(
@@ -1107,34 +1487,42 @@ function generateDoubleEndedPuzzle(
   level: LevelDefinition,
   useTemplate = true,
 ): PuzzleDefinition {
-  const template = DOUBLE_ENDED_PUZZLE_TEMPLATES[targetCount];
+  const templatePool = useTemplate
+    ? normalizeTemplatePool<DoubleEndedPuzzleTemplate>(DOUBLE_ENDED_PUZZLE_TEMPLATES[targetCount])
+    : undefined;
+  const template = templatePool
+    ? selectTemplateVariant(seed, templatePool, 0x6d2b79f5).value
+    : null;
   if (useTemplate && template) {
     const colorOrder = shuffle(mulberry32((seed ^ 0x7f4a7c15) >>> 0), ARROW_COLORS);
-    const arrows = template.arrows.map((arrow, index) => ({
-      ...arrow,
-      path: arrow.path.map((point) => transformTemplatePoint(point, 'cube', seed)),
-      exitDirection: directionKeyFromDelta(transformTemplateVector(
-        [
-          DIRECTION_VECTORS[arrow.exitDirection].x,
-          DIRECTION_VECTORS[arrow.exitDirection].y,
-          DIRECTION_VECTORS[arrow.exitDirection].z,
-        ],
-        'cube',
-        seed,
-      )),
-      color: colorOrder[index % colorOrder.length],
-      doubleEnded: true,
-    }));
-    return {
-      seed: seed >>> 0,
-      arrows,
-      solution: [...template.solution],
-      solutionEnds: [...template.solutionEnds],
-      initiallyFree: template.initiallyFree,
-      level,
-      mode: 'random',
-      challengeKind: 'double-ended',
-    };
+    const arrows = template.arrows.map((arrow, index) => {
+      const path = arrow.path.map((point) => transformTemplatePoint(point, 'cube', seed));
+      const head = path[path.length - 1];
+      const previous = path[path.length - 2];
+      return {
+        ...arrow,
+        path,
+        exitDirection: directionKeyFromDelta([
+          Math.sign(head[0] - previous[0]),
+          Math.sign(head[1] - previous[1]),
+          Math.sign(head[2] - previous[2]),
+        ]),
+        color: colorOrder[index % colorOrder.length],
+        doubleEnded: true,
+      };
+    });
+    if (allPlugEndpointDirectionsAreValid(arrows) && geometryIsClear(arrows)) {
+      return {
+        seed: seed >>> 0,
+        arrows,
+        solution: [...template.solution],
+        solutionEnds: [...template.solutionEnds],
+        initiallyFree: template.initiallyFree,
+        level,
+        mode: 'random',
+        challengeKind: 'double-ended',
+      };
+    }
   }
 
   let bestCount = 0;
@@ -1194,6 +1582,7 @@ export function generatePuzzle(
     maxInitiallyFree?: number;
     level?: LevelDefinition;
     mode?: 'campaign' | 'random' | 'skill' | 'rush';
+    templateMode?: 'random' | 'exploration' | 'skill';
     maxSearchAttempts?: number;
     forceRegenerateDoubleEnded?: boolean;
   } = {},
@@ -1207,7 +1596,10 @@ export function generatePuzzle(
   const minNeighborRatio = options.level?.minNeighborRatio ?? 0.28;
   const minDensity = options.level?.minDensity ?? 0;
   const maxSearchAttempts = options.maxSearchAttempts ?? (options.mode === 'random' ? 6 : 10);
-  if (options.mode === 'random' && options.level?.challengeKind === 'double-ended') {
+  const templateMode = options.templateMode ?? (
+    options.mode === 'skill' ? 'skill' : options.mode === 'random' ? 'random' : undefined
+  );
+  if (templateMode === 'random' && options.level?.challengeKind === 'double-ended') {
     return generateDoubleEndedPuzzle(
       seed,
       targetCount,
@@ -1215,39 +1607,74 @@ export function generatePuzzle(
       !options.forceRegenerateDoubleEnded,
     );
   }
-  if ((options.mode === 'random' || options.mode === 'skill') && options.level && targetCount >= 40) {
-    const template = RANDOM_PUZZLE_TEMPLATES[`${shape}-${targetCount}`];
+  if (templateMode && options.level && targetCount >= 40) {
+    const templateKey = `${shape}-${targetCount}`;
+    const templatePool = templateMode === 'skill'
+      ? normalizeTemplatePool<RandomPuzzleTemplate>(SKILL_PUZZLE_TEMPLATES[templateKey])
+      : templateMode === 'exploration'
+        ? normalizeTemplatePool<RandomPuzzleTemplate>(EXPLORATION_PUZZLE_TEMPLATES[templateKey])
+        : normalizeTemplatePool<RandomPuzzleTemplate>(RANDOM_PUZZLE_TEMPLATES[templateKey]);
+    const template = templatePool
+      ? selectTemplateVariant(
+          seed,
+          templatePool,
+          templateMode === 'skill' ? 0x1f123bb5 : templateMode === 'exploration' ? 0x73a92f47 : 0x9e3779b9,
+        ).value
+      : undefined;
     if (template) {
       const colorOrder = shuffle(mulberry32((seed ^ 0x9e3779b9) >>> 0), ARROW_COLORS);
-      const arrows = template.arrows.map((arrow, index) => ({
-        ...arrow,
-        path: arrow.path.map((point) => transformTemplatePoint(point, shape, seed)),
-        exitDirection: directionKeyFromDelta(transformTemplateVector(
-          [
-            DIRECTION_VECTORS[arrow.exitDirection].x,
-            DIRECTION_VECTORS[arrow.exitDirection].y,
-            DIRECTION_VECTORS[arrow.exitDirection].z,
-          ],
-          shape,
-          seed,
-        )),
-        color: colorOrder[index % colorOrder.length],
-      }));
+      const transformed = template.arrows.map((arrow, index) => {
+        const path = arrow.path.map((point) => transformTemplatePoint(point, shape, seed));
+        return {
+          ...arrow,
+          path,
+          exitDirection: directionKeyFromDelta(transformTemplateVector(
+            [
+              DIRECTION_VECTORS[arrow.exitDirection].x,
+              DIRECTION_VECTORS[arrow.exitDirection].y,
+              DIRECTION_VECTORS[arrow.exitDirection].z,
+            ],
+            shape,
+            seed,
+          )),
+          color: colorOrder[index % colorOrder.length],
+        };
+      });
+      const arrows = alignTemplateEndpointDirections(
+        transformed,
+        template.solution,
+        shape,
+        halfExtents,
+      );
       // Templates are transformed per seed; reject a transformed variant if
       // its full plug envelopes no longer satisfy the same segment rules used
       // during candidate generation, then fall through to regeneration.
-      if (geometryIsClear(arrows)) {
-        const skillTemplate = options.mode === 'skill'
-          ? constrainSkillInitialExits(arrows, minInitiallyFree, maxInitiallyFree)
+      if (arrows) {
+        const alignedSolution = removalSequenceIsValid(arrows, template.solution)
+          ? [...template.solution]
+          : findRemovalSequence(arrows);
+        if (!alignedSolution) {
+          // Fall through to deterministic regeneration if endpoint alignment
+          // invalidates every complete removal sequence.
+        } else {
+        const skillTemplate = templateMode === 'skill'
+          ? constrainSkillInitialExits(
+              arrows,
+              alignedSolution,
+              minInitiallyFree,
+              maxInitiallyFree,
+              shape,
+              halfExtents,
+            )
           : null;
-        if (options.mode === 'skill' && !skillTemplate) {
+        if (templateMode === 'skill' && !skillTemplate) {
           // Fall through to deterministic regeneration if this transformed
           // template cannot satisfy the stricter 4-8 initial exit window.
         } else {
           const selected = skillTemplate ?? {
             arrows,
-            solution: [...template.solution],
-            initiallyFree: template.initiallyFree,
+            solution: alignedSolution,
+            initiallyFree: countInitiallyFree(arrows),
           };
         return {
           seed: seed >>> 0,
@@ -1257,6 +1684,7 @@ export function generatePuzzle(
           level: options.level,
             mode: options.mode,
         };
+        }
         }
       }
     }

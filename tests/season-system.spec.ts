@@ -1,7 +1,9 @@
 import { expect, test } from '@playwright/test';
+import * as THREE from 'three';
 import { nextSeason, resolveInitialSeason } from '../src/theme/SeasonController';
 import { SEASON_PROFILES } from '../src/theme/SeasonProfiles';
 import { createSakuraPetalGeometry } from '../src/systems/PetalVisual';
+import { PetalField } from '../src/systems/PetalField';
 import {
   createAutumnLeafGeometry,
   createSeasonParticleMaterial,
@@ -113,6 +115,31 @@ test('automatic order and flat rounded seasonal particle contracts remain explic
   const winterHaze = SEASON_PROFILES.winter.day.skyHaze;
   expect(winterHaze.b).toBeGreaterThan(winterHaze.g);
   expect(winterHaze.g).toBeGreaterThan(winterHaze.r);
+});
+
+test('winter snowflakes freely tumble instead of staying parallel to one plane', () => {
+  const field = new PetalField(12);
+  field.setSeasonState({ spring: 0, summer: 0, autumn: 0, winter: 1 }, 0);
+
+  const readNormals = (): THREE.Vector3[] => {
+    const matrix = new THREE.Matrix4();
+    const position = new THREE.Vector3();
+    const quaternion = new THREE.Quaternion();
+    const scale = new THREE.Vector3();
+    return Array.from({ length: 12 }, (_, index) => {
+      field.winterMesh.getMatrixAt(index, matrix);
+      matrix.decompose(position, quaternion, scale);
+      return new THREE.Vector3(0, 0, 1).applyQuaternion(quaternion).normalize();
+    });
+  };
+
+  const before = readNormals();
+  field.update(0.5);
+  const after = readNormals();
+
+  expect(before.some((normal) => Math.abs(normal.z) < 0.9)).toBe(true);
+  expect(after.some((normal, index) => normal.angleTo(before[index]) > 0.15)).toBe(true);
+  field.dispose();
 });
 
 test('automatic season timing advances independently and manual selection resets its clock', async ({ page }) => {

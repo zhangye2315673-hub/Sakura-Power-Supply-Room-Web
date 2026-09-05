@@ -122,6 +122,10 @@ export class SkillEffectModelKit {
     return [...assets];
   }
 
+  get activeTransientCount(): number {
+    return this.instances.length;
+  }
+
   get popcornTransientCount(): number {
     return this.transient.children
       .filter((child) => child.userData.assetId === 'popcorn-target-marker')

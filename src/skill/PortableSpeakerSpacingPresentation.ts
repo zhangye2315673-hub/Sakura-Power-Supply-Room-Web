@@ -192,9 +192,12 @@ export class PortableSpeakerSpacingPresentation {
   sync(active: boolean, targets: readonly PortableSpeakerSpacingTarget[]): void {
     this.setTargets(targets);
     if (active) {
+      // Skill state can arrive before the presentation start callback. Start
+      // the authored beat timeline instead of jumping straight to the final
+      // holding multiplier, otherwise compression/expansion is never seen.
       if (this.phaseValue === 'idle' || this.phaseValue === 'releasing') {
-        this.phaseValue = 'holding';
-        this.multiplier = PORTABLE_SPEAKER_SPACING_MULTIPLIER;
+        this.start(targets);
+        return;
       }
       this.applyOffsets();
       return;
@@ -283,13 +286,20 @@ export class PortableSpeakerSpacingPresentation {
     );
     for (const target of targets) {
       this.targets.set(target.id, target);
-      const direction = target.center.clone().sub(bundleCenter);
-      if (direction.lengthSq() < 1e-8) {
-        const nearest = targets
-          .filter((candidate) => candidate.id !== target.id)
-          .sort((a, b) => a.center.distanceToSquared(target.center) - b.center.distanceToSquared(target.center))[0];
-        if (nearest) direction.copy(target.center).sub(nearest.center);
-      }
+      // Push each cable away from its actual nearby neighbours instead of only
+      // using the global bundle-centre vector. On asymmetric layouts the latter
+      // can move a plug toward a neighbouring body during expansion.
+      const direction = new THREE.Vector3();
+      targets.forEach((other) => {
+        if (other.id === target.id) return;
+        const gap = surfaceGap(target, other);
+        if (!Number.isFinite(gap)) return;
+        const away = target.center.clone().sub(other.center);
+        if (away.lengthSq() < 1e-8) return;
+        direction.addScaledVector(away.normalize(), 1 / Math.max(gap, PORTABLE_SPEAKER_MIN_EXTRA_GAP));
+      });
+      if (direction.lengthSq() < 1e-8) direction.copy(target.center).sub(bundleCenter);
+      if (direction.lengthSq() < 1e-8) direction.set(1, 0, 0);
       this.baseOffsets.set(
         target.id,
         direction.normalize().multiplyScalar(this.referenceSurfaceGap * 0.5),

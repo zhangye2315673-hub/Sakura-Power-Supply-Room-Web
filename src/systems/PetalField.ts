@@ -12,6 +12,9 @@ import {
 } from './SeasonParticleVisual';
 
 type Petal = {
+  active: boolean;
+  extra: boolean;
+  season: SeasonMode;
   position: THREE.Vector3;
   velocity: THREE.Vector3;
   rotation: THREE.Euler;
@@ -27,6 +30,8 @@ type Petal = {
   canopyFlowProgress: number;
   canopyFlowSpeed: number;
   canopyFlowLane: number;
+  ambientAge: number;
+  ambientLifetime: number;
 };
 
 export type CanopyPetalFlow = Readonly<{
@@ -78,10 +83,22 @@ export class PetalField {
   readonly winterMesh: THREE.InstancedMesh;
   readonly fireflyMesh: THREE.InstancedMesh;
   private readonly petals: Petal[] = [];
+  private readonly baseCount: number;
+  private readonly capacity: number;
   private elapsed = 0;
   private coldProgress = 0;
   private seasonWeights: Record<SeasonMode, number> = { spring: 1, summer: 0, autumn: 0, winter: 0 };
   private themeProgress = 0;
+  private activeSeason: SeasonMode = 'spring';
+  private populationFactor = 1;
+  private speedFactor = 1;
+  private populationTarget = 1;
+  private speedTarget = 1;
+  private populationFrom = 1;
+  private speedFrom = 1;
+  private variationSegment = -1;
+  private variationSegmentStartedAt = 0;
+  private seasonInitialized = false;
   private canopyFlowActive = false;
   private readonly canopyCenter = new THREE.Vector3();
   private readonly canopyDirection = new THREE.Vector3(1, 0, 0);
@@ -99,6 +116,33 @@ export class PetalField {
 
   get activeBurstCount(): number {
     return this.petals.filter((petal) => petal.burstLife > 0).length;
+  }
+
+  get ambientDiagnostics(): Readonly<{
+    baseCount: number;
+    capacity: number;
+    activeCount: number;
+    speedScale: number;
+    populationScale: number;
+    seasonCounts: Record<SeasonMode, number>;
+  }> {
+    const seasonCounts: Record<SeasonMode, number> = {
+      spring: 0,
+      summer: 0,
+      autumn: 0,
+      winter: 0,
+    };
+    this.petals.forEach((petal) => {
+      if (petal.active) seasonCounts[petal.season] += 1;
+    });
+    return {
+      baseCount: this.baseCount,
+      capacity: this.capacity,
+      activeCount: this.petals.filter((petal) => petal.active).length,
+      speedScale: this.speedFactor,
+      populationScale: this.populationFactor,
+      seasonCounts,
+    };
   }
 
   get canopyFlowState(): Readonly<{
@@ -120,15 +164,17 @@ export class PetalField {
   }
 
   constructor(count = 28) {
+    this.baseCount = Math.max(1, Math.floor(count));
+    this.capacity = Math.max(this.baseCount, Math.ceil(this.baseCount * 1.75));
     const geometry = createSakuraPetalGeometry(0.92);
     const material = createSakuraPetalMaterial(PAL.petal, 0.72);
-    this.mesh = new THREE.InstancedMesh(geometry, material, count);
+    this.mesh = new THREE.InstancedMesh(geometry, material, this.capacity);
     this.mesh.frustumCulled = false;
     this.mesh.renderOrder = 4;
     this.snowMesh = new THREE.InstancedMesh(
       createLowPolySnowflakeGeometry(0.92),
       createSakuraPetalMaterial(0xb9e1ef, 0.92),
-      count,
+      this.capacity,
     );
     this.snowMesh.name = 'refrigerator-low-poly-snowflakes';
     this.snowMesh.frustumCulled = false;
@@ -136,19 +182,19 @@ export class PetalField {
     this.snowMesh.visible = false;
     this.mesh.add(this.snowMesh);
     this.summerMesh = new THREE.InstancedMesh(
-      createSummerLeafGeometry(0.92), createSeasonParticleMaterial(0x84ad91, 0), count,
+      createSummerLeafGeometry(0.92), createSeasonParticleMaterial(0x84ad91, 0), this.capacity,
     );
     this.summerMesh.name = 'summer-leaf-particles';
     this.autumnMesh = new THREE.InstancedMesh(
-      createAutumnLeafGeometry(0.92), createSeasonParticleMaterial(0xffffff, 0, false, true), count,
+      createAutumnLeafGeometry(0.92), createSeasonParticleMaterial(0xffffff, 0, false, true), this.capacity,
     );
     this.autumnMesh.name = 'autumn-leaf-particles';
     this.winterMesh = new THREE.InstancedMesh(
-      createWinterSnowGeometry(0.92), createSeasonParticleMaterial(0xe5eff5, 0), count,
+      createWinterSnowGeometry(0.98), createSeasonParticleMaterial(0xffffff, 0), this.capacity,
     );
     this.winterMesh.name = 'winter-paper-snow';
     this.fireflyMesh = new THREE.InstancedMesh(
-      createFireflyGeometry(1), createSeasonParticleMaterial(0xffd86a, 0, true), count,
+      createFireflyGeometry(1), createSeasonParticleMaterial(0xffd86a, 0, true), this.capacity,
     );
     this.fireflyMesh.name = 'summer-night-fireflies';
     for (const seasonal of [this.summerMesh, this.autumnMesh, this.winterMesh, this.fireflyMesh]) {
@@ -158,23 +204,41 @@ export class PetalField {
       this.mesh.add(seasonal);
     }
 
-    for (let index = 0; index < count; index += 1) {
-      this.petals.push(this.createAmbientPetal(index / count));
+    for (let index = 0; index < this.capacity; index += 1) {
+      this.petals.push(this.createAmbientPetal(
+        index < this.baseCount ? index / this.baseCount : 0,
+        index < this.baseCount,
+        index >= this.baseCount,
+      ));
     }
     this.sync();
   }
 
   update(delta: number): void {
     this.elapsed += delta;
+    this.updateVariation(delta);
+    this.updatePopulation();
     for (const petal of this.petals) {
+      if (!petal.active) continue;
+      petal.ambientAge += delta;
+      if (petal.extra && petal.ambientAge >= petal.ambientLifetime) {
+        const desiredExtra = Math.max(0, Math.round(this.baseCount * (this.populationFactor - 1)));
+        const activeExtra = this.petals.filter((candidate) => candidate.active && candidate.extra).length;
+        if (activeExtra > desiredExtra) {
+          petal.active = false;
+          continue;
+        }
+        this.resetAmbient(petal, 0);
+      }
       if (petal.canopyFlowActive) {
         this.updateCanopyPetal(petal, delta);
         continue;
       }
-      petal.position.addScaledVector(petal.velocity, delta);
-      petal.rotation.x += petal.spin.x * delta;
-      petal.rotation.y += petal.spin.y * delta;
-      petal.rotation.z += petal.spin.z * delta;
+      const motionDelta = delta * this.speedFactor;
+      petal.position.addScaledVector(petal.velocity, motionDelta);
+      petal.rotation.x += petal.spin.x * motionDelta;
+      petal.rotation.y += petal.spin.y * motionDelta;
+      petal.rotation.z += petal.spin.z * motionDelta;
 
       if (petal.burstLife > 0) {
         petal.burstLife -= delta;
@@ -187,17 +251,23 @@ export class PetalField {
         petal.position.x += sway * petal.swayAmplitude * delta;
         petal.position.z += Math.cos(this.elapsed * petal.swaySpeed * 0.73 + petal.phase) *
           petal.swayAmplitude * 0.35 * delta;
-        const autumn = this.seasonWeights.autumn;
-        const winter = this.seasonWeights.winter;
-        petal.position.x += autumn * (0.34 + Math.max(0, Math.sin(this.elapsed * 1.9 + petal.phase)) * 0.46) * delta;
-        petal.position.z += winter * Math.sin(this.elapsed * 0.8 + petal.phase) * 0.08 * delta;
+        if (petal.season === 'autumn') {
+          const gust = Math.max(0, Math.sin(this.elapsed * 1.45 + petal.phase));
+          petal.position.x -= (0.035 + gust * 0.085) * motionDelta;
+        }
+        if (petal.season === 'winter') {
+          const gust = Math.max(0, Math.sin(this.elapsed * 2.35 + petal.phase));
+          petal.position.x -= (0.12 + gust * 0.28) * motionDelta;
+          petal.position.z += Math.sin(this.elapsed * 2.7 + petal.phase) * 0.22 * motionDelta;
+          petal.rotation.z += (1.1 + petal.coldSeed * 1.6) * motionDelta;
+        }
         if (this.coldProgress > 0.001) {
           const gust = Math.sin(this.elapsed * (1.7 + petal.coldSeed * 2.6) + petal.phase);
           const gustPulse = Math.max(0, gust) ** 2;
-          petal.position.x += this.coldProgress * (0.46 + petal.coldSeed * 0.48 + gustPulse * 0.42) * delta;
-          petal.position.y -= this.coldProgress * (0.54 + petal.coldSeed * 0.58) * delta;
-          petal.position.z += this.coldProgress * Math.sin(this.elapsed * 2.3 + petal.phase) * 0.2 * delta;
-          petal.rotation.z += this.coldProgress * (1.1 + petal.coldSeed * 2.4) * delta;
+          petal.position.x += this.coldProgress * (0.46 + petal.coldSeed * 0.48 + gustPulse * 0.42) * motionDelta;
+          petal.position.y -= this.coldProgress * (0.54 + petal.coldSeed * 0.58) * motionDelta;
+          petal.position.z += this.coldProgress * Math.sin(this.elapsed * 2.3 + petal.phase) * 0.2 * motionDelta;
+          petal.rotation.z += this.coldProgress * (1.1 + petal.coldSeed * 2.4) * motionDelta;
         }
         if (petal.position.y < -4.5 || Math.abs(petal.position.x) > 10 || Math.abs(petal.position.z) > 10) {
           this.resetAmbient(petal, 0);
@@ -234,20 +304,35 @@ export class PetalField {
   setSeasonState(weights: Readonly<Record<SeasonMode, number>>, themeProgress: number): void {
     for (const mode of SEASON_MODES) this.seasonWeights[mode] = weights[mode];
     this.themeProgress = THREE.MathUtils.clamp(themeProgress, 0, 1);
+    this.activeSeason = SEASON_MODES.reduce((best, mode) => (
+      weights[mode] > weights[best] ? mode : best
+    ), SEASON_MODES[0]);
+    // The constructor has to build the pool before Game knows the selected
+    // season. Treat the first assignment as initialization rather than a
+    // transition: otherwise a winter/autumn entry briefly renders the default
+    // spring cohort on top of the requested season. Later assignments are real
+    // transitions and keep existing particles in their birth season.
+    if (!this.seasonInitialized) {
+      this.seasonInitialized = true;
+      this.petals.forEach((petal) => {
+        petal.season = this.activeSeason;
+        if (petal.active) this.resetAmbient(petal, 0);
+      });
+    }
     const springMaterial = this.mesh.material as THREE.MeshBasicMaterial;
     const summerMaterial = this.summerMesh.material as THREE.MeshBasicMaterial;
     const autumnMaterial = this.autumnMesh.material as THREE.MeshBasicMaterial;
     const winterMaterial = this.winterMesh.material as THREE.MeshBasicMaterial;
     const fireflyMaterial = this.fireflyMesh.material as THREE.MeshBasicMaterial;
-    springMaterial.opacity = 0.72 * weights.spring;
-    summerMaterial.opacity = 0.78 * weights.summer * THREE.MathUtils.lerp(1, 0.35, this.themeProgress);
-    autumnMaterial.opacity = 0.84 * weights.autumn;
-    winterMaterial.opacity = 0.92 * weights.winter;
+    // Material opacity is a per-season baseline. Individual instance matrices
+    // decide which cohort is visible, so already-spawned petals do not fade or
+    // morph just because the global season weights moved to another season.
+    springMaterial.opacity = 0.72;
+    summerMaterial.opacity = 0.78 * THREE.MathUtils.lerp(1, 0.35, this.themeProgress);
+    autumnMaterial.opacity = 0.84;
+    winterMaterial.opacity = 1;
     fireflyMaterial.opacity = 0;
-    this.summerMesh.visible = summerMaterial.opacity > 0.002;
-    this.autumnMesh.visible = autumnMaterial.opacity > 0.002;
-    this.winterMesh.visible = winterMaterial.opacity > 0.002;
-    this.fireflyMesh.visible = false;
+    this.sync();
   }
 
   get coldState(): Readonly<{ progress: number; snowflakeCount: number }> {
@@ -282,7 +367,7 @@ export class PetalField {
   }
 
   burst(origin: THREE.Vector3, direction: THREE.Vector3, count = 12): void {
-    const candidates = [...this.petals]
+    const candidates = this.petals.filter((petal) => petal.active)
       .sort((a, b) => a.burstLife - b.burstLife)
       .slice(0, Math.max(1, Math.min(this.petals.length, count)));
     for (const petal of candidates) {
@@ -338,8 +423,11 @@ export class PetalField {
     else material.dispose();
   }
 
-  private createAmbientPetal(progress: number): Petal {
+  private createAmbientPetal(progress: number, active: boolean, extra: boolean): Petal {
     const petal: Petal = {
+      active,
+      extra,
+      season: this.activeSeason,
       position: new THREE.Vector3(),
       velocity: new THREE.Vector3(),
       rotation: new THREE.Euler(),
@@ -355,30 +443,35 @@ export class PetalField {
       canopyFlowProgress: 0,
       canopyFlowSpeed: 0,
       canopyFlowLane: 0,
+      ambientAge: 0,
+      ambientLifetime: 8,
     };
     this.resetAmbient(petal, progress);
+    petal.active = active;
+    if (!active) petal.position.set(0, -20, 0);
     return petal;
   }
 
   private resetAmbient(petal: Petal, progress: number): void {
+    petal.active = true;
+    petal.season = this.activeSeason;
     petal.position.set(
       (this.random() - 0.5) * 17,
       5.5 - progress * 10,
       (this.random() - 0.5) * 13,
     );
-    const summer = this.seasonWeights.summer;
-    const autumn = this.seasonWeights.autumn;
-    const winter = this.seasonWeights.winter;
-    const spring = this.seasonWeights.spring;
+    const summer = this.activeSeason === 'summer';
+    const autumn = this.activeSeason === 'autumn';
+    const spring = this.activeSeason === 'spring';
     petal.velocity.set(
-      spring * (-0.16 - this.random() * 0.22)
-        + summer * (-0.05 - this.random() * 0.12)
-        + autumn * (0.34 + this.random() * 0.4)
-        + winter * (-0.03 - this.random() * 0.1),
-      spring * (-0.42 - this.random() * 0.34)
-        + summer * (-0.18 - this.random() * 0.2)
-        + autumn * (-0.48 - this.random() * 0.42)
-        + winter * (-0.2 - this.random() * 0.2),
+      spring ? -0.16 - this.random() * 0.22
+        : summer ? -0.05 - this.random() * 0.12
+          : autumn ? -0.14 - this.random() * 0.2
+            : -0.48 - this.random() * 0.36,
+      spring ? -0.42 - this.random() * 0.34
+        : summer ? -0.18 - this.random() * 0.2
+          : autumn ? -0.38 - this.random() * 0.28
+            : -0.68 - this.random() * 0.34,
       0.04 + this.random() * 0.14,
     );
     petal.rotation.set(
@@ -402,11 +495,74 @@ export class PetalField {
     petal.canopyFlowProgress = 0;
     petal.canopyFlowSpeed = 0;
     petal.canopyFlowLane = 0;
+    petal.ambientAge = 0;
+    petal.ambientLifetime = 7.5 + this.random() * 4.5;
+  }
+
+  private updateVariation(delta: number): void {
+    const segmentDuration = 6.5;
+    // Keep the ambient field's rhythm change legible as an ease, not a
+    // synchronized snap. The target still changes by segment, but each
+    // segment spends most of its lifetime arriving there gradually.
+    const transitionDuration = 4.2;
+    const segment = Math.floor(this.elapsed / segmentDuration);
+    if (segment !== this.variationSegment) {
+      this.variationSegment = segment;
+      this.variationSegmentStartedAt = segment * segmentDuration;
+      this.populationFrom = this.populationFactor;
+      this.speedFrom = this.speedFactor;
+      const hash = (value: number): number => {
+        const raw = Math.sin(value * 12.9898 + 78.233) * 43758.5453;
+        return raw - Math.floor(raw);
+      };
+      this.populationTarget = 0.82 + hash(segment * 2.17 + 4.1) * 0.9;
+      this.speedTarget = 0.84 + hash(segment * 3.71 + 8.4) * 0.82;
+    }
+    const transition = THREE.MathUtils.smoothstep(
+      (this.elapsed - this.variationSegmentStartedAt) / transitionDuration,
+      0,
+      1,
+    );
+    const nextPopulation = THREE.MathUtils.lerp(this.populationFrom, this.populationTarget, transition);
+    const nextSpeed = THREE.MathUtils.lerp(this.speedFrom, this.speedTarget, transition);
+    // Software WebGL can occasionally produce a very long frame while models
+    // are compiling. Keep variation visually continuous per presented frame;
+    // a stalled frame must not turn a gentle ease into one obvious speed jump.
+    const frameScale = THREE.MathUtils.clamp(delta * 60, 0.25, 1);
+    const maxPopulationStep = 0.012 * frameScale;
+    const maxSpeedStep = 0.012 * frameScale;
+    this.populationFactor += THREE.MathUtils.clamp(
+      nextPopulation - this.populationFactor,
+      -maxPopulationStep,
+      maxPopulationStep,
+    );
+    this.speedFactor += THREE.MathUtils.clamp(
+      nextSpeed - this.speedFactor,
+      -maxSpeedStep,
+      maxSpeedStep,
+    );
+  }
+
+  private updatePopulation(): void {
+    const desiredExtra = Math.max(0, Math.min(
+      this.capacity - this.baseCount,
+      Math.round(this.baseCount * Math.max(0, this.populationFactor - 1)),
+    ));
+    const activeExtra = this.petals.filter((petal) => petal.active && petal.extra).length;
+    if (activeExtra >= desiredExtra) return;
+    let remaining = desiredExtra - activeExtra;
+    for (const petal of this.petals) {
+      if (remaining <= 0) break;
+      if (petal.active || !petal.extra) continue;
+      petal.active = true;
+      this.resetAmbient(petal, 0);
+      remaining -= 1;
+    }
   }
 
   private beginCanopyFlow(): void {
     const count = Math.min(this.petals.length, Math.max(8, Math.round(this.petals.length * 0.38)));
-    const candidates = [...this.petals]
+    const candidates = this.petals.filter((petal) => petal.active)
       .sort((first, second) => first.burstLife - second.burstLife)
       .slice(0, count);
     candidates.forEach((petal, index) => {
@@ -436,7 +592,8 @@ export class PetalField {
   }
 
   private updateCanopyPetal(petal: Petal, delta: number): void {
-    petal.canopyFlowProgress += delta * petal.canopyFlowSpeed * THREE.MathUtils.lerp(0.72, 1.45, this.canopyStrength);
+    petal.canopyFlowProgress += delta * this.speedFactor * petal.canopyFlowSpeed
+      * THREE.MathUtils.lerp(0.72, 1.45, this.canopyStrength);
     if (petal.canopyFlowProgress >= 1) {
       petal.canopyFlowProgress %= 1;
       petal.canopyFlowLane = ((petal.canopyFlowLane + 0.36 + this.random() * 0.16) % 1);
@@ -466,15 +623,23 @@ export class PetalField {
   }
 
   private sync(): void {
+    const seasonCounts: Record<SeasonMode, number> = { spring: 0, summer: 0, autumn: 0, winter: 0 };
     this.petals.forEach((petal, index) => {
+      if (petal.active) seasonCounts[petal.season] += 1;
       const localCold = THREE.MathUtils.smoothstep(
         this.coldProgress,
         petal.coldSeed * 0.5,
         petal.coldSeed * 0.5 + 0.3,
       );
+      const activeScale = petal.active ? 1 : 0;
       dummy.position.copy(petal.position);
       dummy.rotation.copy(petal.rotation);
-      dummy.scale.setScalar(petal.scale * Math.max(0.001, 1 - localCold));
+      dummy.scale.setScalar(
+        petal.scale
+        * activeScale
+        * Number(petal.season === 'spring')
+        * Math.max(0.001, 1 - localCold),
+      );
       dummy.updateMatrix();
       this.mesh.setMatrixAt(index, dummy.matrix);
 
@@ -483,37 +648,51 @@ export class PetalField {
         petal.rotation.y * 0.18,
         petal.rotation.z + petal.phase * 0.12,
       );
-      dummy.scale.setScalar(petal.scale * petal.snowScale * Math.max(0.001, localCold));
+      dummy.scale.setScalar(petal.scale * activeScale * petal.snowScale * Math.max(0.001, localCold));
       dummy.updateMatrix();
       this.snowMesh.setMatrixAt(index, dummy.matrix);
 
       dummy.rotation.set(petal.rotation.x * 0.7, petal.rotation.y * 0.7, petal.rotation.z);
       dummy.scale.set(
-        petal.scale * (0.72 + petal.coldSeed * 0.1),
-        petal.scale * (0.88 + (index % 4) * 0.035),
+        petal.scale * activeScale * Number(petal.season === 'summer') * (0.72 + petal.coldSeed * 0.1),
+        petal.scale * activeScale * Number(petal.season === 'summer') * (0.88 + (index % 4) * 0.035),
         1,
       );
       dummy.updateMatrix();
       this.summerMesh.setMatrixAt(index, dummy.matrix);
       dummy.rotation.set(petal.rotation.x * 0.62, petal.rotation.y * 0.62, petal.rotation.z + petal.phase * 0.04);
       dummy.scale.set(
-        petal.scale * (0.76 + (index % 3) * 0.07),
-        petal.scale * (0.74 + petal.coldSeed * 0.16),
+        petal.scale * activeScale * Number(petal.season === 'autumn') * (0.76 + (index % 3) * 0.07),
+        petal.scale * activeScale * Number(petal.season === 'autumn') * (0.74 + petal.coldSeed * 0.16),
         1,
       );
       dummy.updateMatrix();
       this.autumnMesh.setMatrixAt(index, dummy.matrix);
-      dummy.rotation.set(0, 0, petal.rotation.z * 0.22);
+      // Keep the flat snow silhouette readable without pinning every flake to
+      // the screen plane. The shared petal state already carries independent
+      // three-axis spin, so retain most of its pitch and yaw here and add a
+      // small asynchronous wind flutter. Previously x/y were forced to zero,
+      // which made all winter particles look like one-facing decals.
+      const winterFlutter = Math.sin(
+        this.elapsed * (1.7 + petal.coldSeed * 1.35) + petal.phase,
+      );
+      dummy.rotation.set(
+        petal.rotation.x * 0.92 + winterFlutter * 0.16,
+        petal.rotation.y * 0.82 + Math.cos(this.elapsed * 1.23 + petal.phase) * 0.12,
+        petal.rotation.z * 0.58 + petal.phase * 0.06,
+      );
       dummy.scale.set(
-        petal.scale * (0.72 + (index % 4) * 0.065),
-        petal.scale * (0.72 + petal.coldSeed * 0.18),
+        petal.scale * activeScale * Number(petal.season === 'winter') * (1.04 + (index % 4) * 0.075),
+        petal.scale * activeScale * Number(petal.season === 'winter') * (1.04 + petal.coldSeed * 0.22),
         1,
       );
       dummy.updateMatrix();
       this.winterMesh.setMatrixAt(index, dummy.matrix);
       dummy.position.y += Math.sin(this.elapsed * (0.65 + petal.coldSeed * 0.5) + petal.phase) * 0.42;
       dummy.position.x += Math.cos(this.elapsed * 0.48 + petal.phase) * 0.18;
-      dummy.scale.setScalar((0.55 + petal.coldSeed * 0.42) * (0.8 + Math.sin(this.elapsed * 1.7 + petal.phase) * 0.15));
+      dummy.scale.setScalar(activeScale * Number(petal.season === 'summer')
+        * (0.55 + petal.coldSeed * 0.42)
+        * (0.8 + Math.sin(this.elapsed * 1.7 + petal.phase) * 0.15));
       dummy.updateMatrix();
       this.fireflyMesh.setMatrixAt(index, dummy.matrix);
     });
@@ -523,5 +702,12 @@ export class PetalField {
     this.autumnMesh.instanceMatrix.needsUpdate = true;
     this.winterMesh.instanceMatrix.needsUpdate = true;
     this.fireflyMesh.instanceMatrix.needsUpdate = true;
+    const summerMaterial = this.summerMesh.material as THREE.MeshBasicMaterial;
+    const autumnMaterial = this.autumnMesh.material as THREE.MeshBasicMaterial;
+    const winterMaterial = this.winterMesh.material as THREE.MeshBasicMaterial;
+    this.summerMesh.visible = seasonCounts.summer > 0 && summerMaterial.opacity > 0.002;
+    this.autumnMesh.visible = seasonCounts.autumn > 0 && autumnMaterial.opacity > 0.002;
+    this.winterMesh.visible = seasonCounts.winter > 0 && winterMaterial.opacity > 0.002;
+    this.fireflyMesh.visible = false;
   }
 }

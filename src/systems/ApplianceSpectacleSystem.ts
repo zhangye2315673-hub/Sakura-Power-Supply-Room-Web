@@ -349,6 +349,8 @@ function blenderSplashGeometry(variant: number): THREE.BufferGeometry {
 
 export class ApplianceSpectacleSystem {
   readonly root = new THREE.Group();
+  private readonly lampSpot = new THREE.SpotLight(0xffe9a0, 0, 8, Math.PI * 0.2, 0.6, 1.5);
+  private readonly lampSpotTarget = new THREE.Object3D();
   private readonly pools = new Map<ParticleKind, Particle[]>();
   private readonly sessions = new Map<ApplianceSpectacleTarget, Session>();
   private readonly slots: AccessorySlot[] = [];
@@ -368,6 +370,17 @@ export class ApplianceSpectacleSystem {
 
   constructor() {
     this.root.name = 'appliance-spectacle-system';
+    // Keep one zero-intensity spotlight in the scene from the loading phase.
+    // Toggling a light's visibility changes Three.js' light-count defines and
+    // makes every cable/appliance shader compile again on the first lamp use.
+    this.lampSpot.name = 'lamp-physical-spotlight';
+    this.lampSpot.penumbra = 0.72;
+    this.lampSpot.decay = 1.7;
+    this.lampSpot.visible = true;
+    this.lampSpot.userData.performanceEffect = true;
+    this.lampSpotTarget.name = 'lamp-physical-spotlight-target';
+    this.root.add(this.lampSpot, this.lampSpotTarget);
+    this.lampSpot.target = this.lampSpotTarget;
     (Object.keys(POOL_CAPACITY) as ParticleKind[]).forEach((kind) => this.buildPool(kind));
     for (let index = 0; index < 8; index += 1) this.slots.push(this.buildAccessorySlot());
   }
@@ -519,6 +532,7 @@ export class ApplianceSpectacleSystem {
     this.reset();
     this.geometries.forEach((geometry) => geometry.dispose());
     this.materials.forEach((material) => material.dispose());
+    this.lampSpot.dispose();
     this.root.removeFromParent();
   }
 
@@ -542,7 +556,7 @@ export class ApplianceSpectacleSystem {
     session.slot.owner = null;
     session.slot.beam.visible = false;
     session.slot.lightPool.visible = false;
-    session.slot.spot.visible = false;
+    if (session.target.kind === 'lamp') session.slot.spot.intensity = 0;
     session.slot.cloud.visible = false;
     session.slot.lightning.visible = false;
   }
@@ -640,7 +654,6 @@ export class ApplianceSpectacleSystem {
     slot.lightPool.quaternion.identity();
     slot.lightPool.scale.set(farRadius * 1.08, 1, farRadius * 1.08);
     slot.lightPool.material.uniforms.uOpacity.value = 0.32 + climax * 0.12;
-    slot.spot.visible = true;
     slot.spot.position.copy(socket);
     slot.spotTarget.position.copy(this.beamEnd);
     slot.spot.angle = THREE.MathUtils.clamp(Math.atan2(farRadius, length), 0.18, Math.PI * 0.34);
@@ -669,11 +682,22 @@ export class ApplianceSpectacleSystem {
     const climax = time >= 3.7 && time <= 4.8;
     this.emitEvery(session, 'fan-petals', time, climax ? 0.045 : 0.085, () => {
       const count = climax ? 3 : 2;
+      // Fan bursts use the shared seasonal field so spring petals, summer
+      // leaves, autumn leaves and winter flakes cross-fade with the same
+      // SeasonController weights as the ambient canopy.
+      petals.burst(origin, inward, count);
       for (let index = 0; index < count; index += 1) {
         const velocity = inward.clone().multiplyScalar((5.8 + this.random() * (climax ? 4.5 : 2.8)) * unit)
           .addScaledVector(this.cameraUp, (this.random() - 0.5) * 1.75 * unit)
           .addScaledVector(this.cameraForward, (this.random() - 0.5) * 1.05 * unit);
-        this.spawn('petal', session.target, origin, velocity, 2.35, { drag: 0.08, scale: 0.85 + this.random() * 0.85 });
+        // Keep the pooled slot active for diagnostics/back-pressure accounting,
+        // but do not render a second, always-spring petal on top of the
+        // seasonal PetalField burst.
+        this.spawn('petal', session.target, origin, velocity, 2.35, {
+          drag: 0.08,
+          scale: 0.85 + this.random() * 0.85,
+          visible: false,
+        });
       }
     });
     petals.applyWind(origin, inward, climax ? 0.72 : 0.34, (climax ? 7.5 : 5.4) * unit);
@@ -905,6 +929,7 @@ export class ApplianceSpectacleSystem {
       groundY?: number;
       bounces?: number;
       dark?: boolean;
+      visible?: boolean;
     } = {},
   ): Particle | null {
     const pool = this.pools.get(kind);
@@ -950,7 +975,7 @@ export class ApplianceSpectacleSystem {
       const variant = Number(particle.mesh.userData.geometryVariant ?? 0);
       particle.baseScale.set(scale * (1.1 + variant * 0.12), scale * (0.88 + variant * 0.08), scale);
     }
-    particle.mesh.visible = true;
+    particle.mesh.visible = options.visible !== false;
     particle.mesh.position.copy(origin);
     particle.mesh.rotation.set(0, 0, 0);
     particle.mesh.scale.copy(particle.baseScale);
@@ -1289,6 +1314,7 @@ export class ApplianceSpectacleSystem {
 
   private buildAccessorySlot(): AccessorySlot {
     const beam = createLampVolumetricBeam();
+    beam.userData.performanceEffect = true;
     this.materials.add(beam.material);
     this.geometries.add(beam.geometry);
     this.root.add(beam);
@@ -1323,16 +1349,11 @@ export class ApplianceSpectacleSystem {
     lightPool.visible = false;
     lightPool.renderOrder = 4;
     lightPool.frustumCulled = false;
+    lightPool.userData.performanceEffect = true;
     this.root.add(lightPool);
 
-    const spot = new THREE.SpotLight(0xffe9a0, 0, 8, Math.PI * 0.2, 0.6, 1.5);
-    spot.name = 'lamp-physical-spotlight';
-    spot.penumbra = 0.72;
-    spot.decay = 1.7;
-    const spotTarget = new THREE.Object3D();
-    spot.visible = false;
-    this.root.add(spot, spotTarget);
-    spot.target = spotTarget;
+    const spot = this.lampSpot;
+    const spotTarget = this.lampSpotTarget;
 
     const cloud = new THREE.Group();
     const cloudPuffs: THREE.Mesh[] = [];

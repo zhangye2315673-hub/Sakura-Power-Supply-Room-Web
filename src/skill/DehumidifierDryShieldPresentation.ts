@@ -39,6 +39,7 @@ export type DehumidifierDryShieldDiagnostics = Readonly<{
   sweepProgress: number;
   turnPulseCount: number;
   absorbCount: number;
+  activationCount: number;
   drainDirection: readonly [number, number, number];
 }>;
 
@@ -200,6 +201,7 @@ export class DehumidifierDryShieldPresentation {
   private sweepProgress = 0;
   private turnPulseCount = 0;
   private absorbCount = 0;
+  private activationCount = 0;
 
   constructor() {
     this.root.name = 'dehumidifier-dry-air-shield';
@@ -223,6 +225,7 @@ export class DehumidifierDryShieldPresentation {
       this.updateDrainDirection(sourcePosition);
     }
     if (nextProtected && !this.protectedState) {
+      this.activationCount += 1;
       this.turnsRemaining = turnsRemaining;
       this.startPulse('arming');
     } else if (nextProtected
@@ -246,6 +249,22 @@ export class DehumidifierDryShieldPresentation {
     }
     this.protectedState = nextProtected;
     this.targetCount = nextProtected ? targets.length : 0;
+  }
+
+  retrigger(
+    turnsRemaining: number | null,
+    targets: readonly THREE.Object3D[],
+    sourcePosition?: THREE.Vector3,
+    protectedState = true,
+  ): void {
+    if (targets.length === 0) return;
+    this.updateBounds(targets);
+    this.updateDrainDirection(sourcePosition);
+    this.protectedState = protectedState;
+    this.turnsRemaining = protectedState ? turnsRemaining : null;
+    this.targetCount = targets.length;
+    this.activationCount += 1;
+    this.startPulse('arming');
   }
 
   update(_delta: number, elapsed: number): void {
@@ -289,6 +308,7 @@ export class DehumidifierDryShieldPresentation {
     this.sweepProgress = 0;
     this.turnPulseCount = 0;
     this.absorbCount = 0;
+    this.activationCount = 0;
     this.uniforms.visibility.value = 0;
     this.uniforms.progress.value = 0;
     this.uniforms.mode.value = 0;
@@ -325,6 +345,7 @@ export class DehumidifierDryShieldPresentation {
       sweepProgress: this.sweepProgress,
       turnPulseCount: this.turnPulseCount,
       absorbCount: this.absorbCount,
+      activationCount: this.activationCount,
       drainDirection: this.uniforms.drainDirection.value.toArray(),
     };
   }

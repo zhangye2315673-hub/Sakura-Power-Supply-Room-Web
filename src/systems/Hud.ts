@@ -19,8 +19,9 @@ export class Hud {
   private hintPulseTimer = 0;
   private lifeBurstTimer = 0;
   private continueReadyTimer = 0;
-  private computerLifeLossTimer = 0;
-  private computerLifeLossElements: HTMLElement[] = [];
+  private lifeLossTimer = 0;
+  private lifeLossElements: HTMLElement[] = [];
+  private lifeLossActivation = 0;
   private renderedMaxLives = this.lifeIcons.length;
   private hintUsesRemaining = 3;
   private statusKey: TranslationKey = 'status.find';
@@ -37,6 +38,7 @@ export class Hud {
   readonly resetButton = this.getButton('#reset-button');
   readonly newButton = this.getButton('#new-button');
   readonly continueButton = this.getButton('#continue-button');
+  readonly completeHomeButton = this.getButton('#complete-home-button');
   readonly applianceGalleryButton = this.getButton('#appliance-gallery-button');
   readonly homeButton = this.getButton('#home-button');
   readonly languageButton = this.getButton('#language-button');
@@ -57,6 +59,7 @@ export class Hud {
     this.hideGameOver();
     this.setStatus(messageKey, params);
     this.continueButton.disabled = true;
+    this.completeHomeButton.disabled = true;
     this.resetButton.disabled = true;
     this.newButton.disabled = true;
     this.homeButton.disabled = true;
@@ -66,12 +69,19 @@ export class Hud {
     else this.loadingOverlay.hide();
   }
 
-  completePuzzleLoad(onCovered: () => void | Promise<void>): void {
-    this.loadingOverlay.complete(onCovered, () => this.finishPuzzleLoad());
+  completePuzzleLoad(
+    onCovered: () => void | Promise<void>,
+    onFinished?: () => void,
+  ): void {
+    this.loadingOverlay.complete(onCovered, () => {
+      this.finishPuzzleLoad();
+      onFinished?.();
+    });
   }
 
   finishPuzzleLoad(): void {
     this.continueButton.disabled = false;
+    this.completeHomeButton.disabled = false;
     this.resetButton.disabled = false;
     this.newButton.disabled = false;
     this.homeButton.disabled = false;
@@ -163,7 +173,7 @@ export class Hud {
 
   showLifeLost(lives: number): void {
     this.setStatus(lives > 0 ? 'status.blocked' : 'status.gameOver');
-    this.flash(t('flash.lifeLost'), true);
+    this.playLifeLossFeedback(lives, false);
   }
 
   setContinueReady(ready: boolean, restoreLives = 1): void {
@@ -198,42 +208,64 @@ export class Hud {
   }
 
   showComputerLifeLost(livesAfter: number): void {
-    this.clearComputerLifeLoss();
+    this.setStatus(livesAfter > 0 ? 'status.blocked' : 'status.gameOver');
+    this.playLifeLossFeedback(livesAfter, true);
+  }
+
+  private playLifeLossFeedback(livesAfter: number, computer = false): void {
+    this.clearLifeLossFeedback();
     const icon = this.lifeIcons[Math.max(0, Math.min(this.lifeIcons.length - 1, livesAfter))];
     if (!icon) {
-      this.showLifeLost(livesAfter);
+      this.flash(t('flash.lifeLost'), true, true);
       return;
     }
     const rect = icon.getBoundingClientRect();
     const ghost = document.createElement('i');
-    ghost.className = 'computer-life-loss-ghost';
+    ghost.className = `life-loss-ghost${computer ? ' computer-life-loss-ghost' : ''}`;
     ghost.style.left = `${rect.left}px`;
     ghost.style.top = `${rect.top}px`;
     ghost.style.width = `${rect.width}px`;
     ghost.style.height = `${rect.height}px`;
     document.body.append(ghost);
-    this.computerLifeLossElements.push(ghost);
+    this.lifeLossElements.push(ghost);
 
-    for (let index = 0; index < 7; index += 1) {
+    for (let index = 0; index < 10; index += 1) {
       const shard = document.createElement('b');
-      shard.className = 'computer-life-loss-shard';
+      shard.className = `life-loss-shard${computer ? ' computer-life-loss-shard' : ''}`;
       shard.style.left = `${rect.left + rect.width * 0.5}px`;
       shard.style.top = `${rect.top + rect.height * 0.5}px`;
       shard.style.setProperty('--life-shard-index', String(index));
       document.body.append(shard);
-      this.computerLifeLossElements.push(shard);
+      this.lifeLossElements.push(shard);
     }
 
     const readout = document.createElement('strong');
-    readout.className = 'computer-life-loss-readout';
-    readout.textContent = '-1';
+    readout.className = `life-loss-readout${computer ? ' computer-life-loss-readout' : ''}`;
+    readout.textContent = livesAfter > 0 ? '生命 -1' : '生命归零';
     readout.style.left = `${rect.left + rect.width * 0.5}px`;
     readout.style.top = `${rect.top + rect.height * 0.5}px`;
     document.body.append(readout);
-    this.computerLifeLossElements.push(readout);
-    this.randomLives.classList.add('computer-life-hit');
-    this.showLifeLost(livesAfter);
-    this.computerLifeLossTimer = window.setTimeout(() => this.clearComputerLifeLoss(), 1_150);
+    this.lifeLossElements.push(readout);
+
+    const vignette = document.createElement('span');
+    vignette.className = 'life-loss-vignette';
+    vignette.setAttribute('aria-hidden', 'true');
+    document.body.append(vignette);
+    this.lifeLossElements.push(vignette);
+
+    this.lifeLossActivation += 1;
+    this.randomLives.dataset.lifeLossActivation = String(this.lifeLossActivation);
+    icon.classList.remove('life-lost-now');
+    this.randomLives.classList.remove('life-loss-hit', 'computer-life-hit');
+    void this.randomLives.offsetWidth;
+    icon.classList.add('life-lost-now');
+    this.randomLives.classList.add('life-loss-hit');
+    if (computer) this.randomLives.classList.add('computer-life-hit');
+    this.flash(t('flash.lifeLost'), true, true);
+    // Keep the generated feedback nodes through long software-WebGL frames;
+    // their CSS animations fade them visually, while the next life-loss event
+    // or puzzle reset performs the actual cleanup.
+    this.lifeLossTimer = window.setTimeout(() => this.clearLifeLossFeedback(), 30_000);
   }
 
   setHintEnabled(enabled: boolean): void {
@@ -306,16 +338,20 @@ export class Hud {
     window.clearTimeout(this.hintPulseTimer);
     window.clearTimeout(this.lifeBurstTimer);
     window.clearTimeout(this.continueReadyTimer);
-    this.clearComputerLifeLoss();
+    this.clearLifeLossFeedback();
     this.loadingOverlay.dispose();
   }
 
-  flash(message: string, error = false): void {
+  flash(message: string, error = false, lifeLoss = false): void {
     window.clearTimeout(this.toastTimer);
     this.toast.textContent = message;
     this.toast.classList.toggle('error', error);
+    this.toast.classList.toggle('life-loss', lifeLoss);
     this.toast.classList.add('visible');
-    this.toastTimer = window.setTimeout(() => this.toast.classList.remove('visible'), 1250);
+    this.toastTimer = window.setTimeout(() => {
+      this.toast.classList.remove('visible');
+      this.toast.classList.remove('life-loss');
+    }, lifeLoss ? 8_000 : 1_250);
   }
 
   private setStatus(key: TranslationKey, params: Record<string, string | number> = {}): void {
@@ -372,12 +408,13 @@ export class Hud {
     return indicator;
   }
 
-  private clearComputerLifeLoss(): void {
-    window.clearTimeout(this.computerLifeLossTimer);
-    this.computerLifeLossTimer = 0;
-    this.randomLives.classList.remove('computer-life-hit');
-    this.computerLifeLossElements.forEach((element) => element.remove());
-    this.computerLifeLossElements = [];
+  private clearLifeLossFeedback(): void {
+    window.clearTimeout(this.lifeLossTimer);
+    this.lifeLossTimer = 0;
+    this.randomLives.classList.remove('life-loss-hit', 'computer-life-hit');
+    this.lifeIcons.forEach((icon) => icon.classList.remove('life-lost-now'));
+    this.lifeLossElements.forEach((element) => element.remove());
+    this.lifeLossElements = [];
   }
 
   private getButton(selector: string): HTMLButtonElement {

@@ -1,3 +1,5 @@
+import * as THREE from 'three';
+import { ApplianceSensoryController } from '../src/appliances/ApplianceSensoryController';
 import { expect, test } from '@playwright/test';
 import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
@@ -71,6 +73,31 @@ async function capturePrepared(page: import('@playwright/test').Page, mode: 'ran
     diagnostics,
   };
 }
+
+test('探索模式即使主题尚未切到夜景也会提亮已插电家电本体', () => {
+  const root = new THREE.Group();
+  const model = new THREE.Group();
+  model.name = 'appliance-model-toaster';
+  model.userData.applianceAccent = 0xff8c61;
+  const material = new THREE.MeshToonMaterial({ color: 0x20242a, emissive: 0x000000, emissiveIntensity: 0 });
+  const body = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), material);
+  body.name = 'toaster-body';
+  model.add(body);
+  root.add(model);
+  const target = {
+    root, kind: 'toaster' as const, state: 'active' as const, facingSide: 1 as const,
+    getActiveElapsed: () => 0.72,
+  };
+  const controller = new ApplianceSensoryController();
+  controller.update([target], 0, 1, 1);
+  const diagnostics = controller.getDiagnostics()[0];
+  expect(diagnostics.poweredReveal).toBeGreaterThan(0.7);
+  expect(material.color.getHex()).not.toBe(0x20242a);
+  expect(material.emissiveIntensity).toBeGreaterThan(0.5);
+  controller.dispose();
+  material.dispose();
+  body.geometry.dispose();
+});
 
 test('exploration entry reuses the random challenge contract and locks extreme night', async ({ page }) => {
   test.setTimeout(300_000);

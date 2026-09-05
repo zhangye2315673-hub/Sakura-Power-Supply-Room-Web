@@ -1,7 +1,8 @@
-export type RandomChallengeMode = 'standard' | 'skill' | 'double-ended' | 'rush';
+export type RandomChallengeMode = 'standard' | 'exploration' | 'skill' | 'double-ended' | 'rush';
 
 export const RANDOM_CHALLENGE_MODE_WEIGHTS = Object.freeze([
-  { mode: 'standard', weight: 40 },
+  { mode: 'standard', weight: 20 },
+  { mode: 'exploration', weight: 20 },
   { mode: 'skill', weight: 20 },
   { mode: 'double-ended', weight: 20 },
   { mode: 'rush', weight: 20 },

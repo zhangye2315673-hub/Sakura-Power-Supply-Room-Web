@@ -638,6 +638,52 @@ html.opening-active #game-canvas {
   animation: skill-slot-enter 0.32s cubic-bezier(0.18, 0.9, 0.3, 1.2);
 }
 
+.skill-status-slot.skill-status-normalized {
+  animation: skill-status-normalized 0.92s cubic-bezier(0.16, 0.88, 0.24, 1) both;
+}
+
+.skill-status-slot.skill-status-normalized .skill-status-count {
+  animation: skill-status-normalized-count 0.92s cubic-bezier(0.16, 0.88, 0.24, 1) both;
+}
+
+.skill-status-normalized-badge {
+  position: fixed;
+  z-index: 92;
+  padding: 5px 9px;
+  border: 2px solid #39324f;
+  border-radius: 999px;
+  color: #39324f;
+  background: linear-gradient(105deg, #f3c9ff, #8fe2dc);
+  box-shadow: 0 5px 0 rgb(57 50 79 / 20%);
+  font-size: 11px;
+  font-weight: 1000;
+  letter-spacing: 0.04em;
+  pointer-events: none;
+  transform: translate(-50%, 0);
+  animation: skill-status-normalized-badge 1.45s cubic-bezier(0.16, 0.88, 0.24, 1) both;
+}
+
+@keyframes skill-status-normalized {
+  0% { filter: saturate(1); transform: scale(1); }
+  30% { filter: saturate(1.45) brightness(1.12); transform: scale(1.16) rotate(-3deg); }
+  58% { transform: scale(0.96) rotate(2deg); }
+  100% { filter: saturate(1); transform: scale(1); }
+}
+
+@keyframes skill-status-normalized-count {
+  0% { background: #cf5c62; transform: scale(1); }
+  28% { background: #6b55bc; transform: scale(1.45); }
+  62% { background: #49aaa8; transform: scale(1.12); }
+  100% { background: #cf5c62; transform: scale(1); }
+}
+
+@keyframes skill-status-normalized-badge {
+  0% { opacity: 0; transform: translate(-50%, 8px) scale(0.72); }
+  18% { opacity: 1; transform: translate(-50%, 0) scale(1.06); }
+  72% { opacity: 1; transform: translate(-50%, -4px) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -14px) scale(0.94); }
+}
+
 .skill-status-delete-ghost.skill-status-slot {
   position: fixed;
   z-index: 90;
@@ -1840,6 +1886,141 @@ html.skill-recycle-selecting #game-canvas {
   background: #aaa3b1;
 }
 
+#random-lives.life-loss-hit {
+  animation: life-loss-rack-impact 0.72s cubic-bezier(0.16, 0.82, 0.24, 1) both;
+}
+
+#random-lives i.lost.life-lost-now {
+  animation: life-loss-heart-collapse 0.92s cubic-bezier(0.16, 0.76, 0.26, 1) both;
+}
+
+.life-loss-ghost {
+  position: fixed;
+  z-index: 96;
+  display: block;
+  margin: 0;
+  color: transparent;
+  font-size: 0;
+  font-style: normal;
+  animation: life-loss-ghost-break 1.02s cubic-bezier(0.12, 0.72, 0.2, 1) both;
+  pointer-events: none;
+}
+
+.life-loss-ghost::before,
+.life-loss-ghost::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  clip-path: polygon(
+    50% 100%, 7% 58%, 7% 31%, 20% 14%, 37% 14%,
+    50% 28%, 63% 14%, 80% 14%, 93% 31%, 93% 58%
+  );
+}
+
+.life-loss-ghost::before {
+  background: #39324f;
+  filter: drop-shadow(3px 4px 0 rgba(57, 50, 79, 0.28));
+}
+
+.life-loss-ghost::after {
+  inset: 3px;
+  background:
+    linear-gradient(136deg, transparent 46%, #fff7ff 47% 52%, transparent 53%),
+    linear-gradient(42deg, rgba(255, 196, 203, 0.82) 0 34%, transparent 35%),
+    linear-gradient(154deg, #ff7b82 0 48%, #bd374a 49% 100%);
+}
+
+.life-loss-shard {
+  --life-shard-index: 0;
+  position: fixed;
+  z-index: 97;
+  width: 10px;
+  height: 9px;
+  margin: -4.5px 0 0 -5px;
+  border: 1.5px solid #39324f;
+  background: linear-gradient(145deg, #ff8b91, #c43f52);
+  box-shadow: 1px 2px 0 rgba(57, 50, 79, 0.18);
+  clip-path: polygon(0 0, 100% 18%, 72% 100%, 12% 72%);
+  animation: life-loss-shard-fly 1.08s cubic-bezier(0.12, 0.72, 0.22, 1) both;
+  pointer-events: none;
+}
+
+.life-loss-readout {
+  position: fixed;
+  z-index: 99;
+  min-width: 112px;
+  color: #fff8f4;
+  text-shadow:
+    -2px -2px 0 #39324f,
+    2px -2px 0 #39324f,
+    -2px 2px 0 #39324f,
+    2px 2px 0 #39324f,
+    0 5px 12px rgba(150, 30, 50, 0.5);
+  font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  font-size: 24px;
+  font-weight: 1000;
+  line-height: 1;
+  text-align: center;
+  transform: translate(-50%, -50%);
+  animation: life-loss-readout-rise 1.28s cubic-bezier(0.14, 0.72, 0.22, 1) both;
+  pointer-events: none;
+}
+
+.life-loss-vignette {
+  position: fixed;
+  z-index: 87;
+  inset: 0;
+  border: clamp(8px, 1.7vw, 24px) solid rgba(204, 51, 70, 0.72);
+  background: radial-gradient(circle at 50% 50%, transparent 40%, rgba(190, 34, 58, 0.24) 100%);
+  box-shadow: inset 0 0 54px rgba(163, 24, 48, 0.42);
+  animation: life-loss-vignette-pulse 0.72s cubic-bezier(0.18, 0.82, 0.24, 1) both;
+  pointer-events: none;
+}
+
+@keyframes life-loss-rack-impact {
+  0%, 100% { filter: none; transform: translateY(0) scale(1); }
+  16% { filter: brightness(1.55) saturate(1.3); transform: translate(-10px, 1px) scale(1.12) rotate(-3deg); }
+  34% { transform: translate(8px, -2px) scale(1.06) rotate(2.2deg); }
+  54% { transform: translate(-4px, 0) scale(1.02) rotate(-1deg); }
+}
+
+@keyframes life-loss-heart-collapse {
+  0% { opacity: 1; filter: brightness(1.7) saturate(1.45); transform: scale(1.3); }
+  24% { opacity: 1; transform: scale(0.9, 1.32) rotate(-7deg); }
+  54% { opacity: 0.82; filter: grayscale(0.15); transform: scale(1.18, 0.42) rotate(5deg); }
+  100% { opacity: 0.32; filter: grayscale(1); transform: scale(0.74); }
+}
+
+@keyframes life-loss-ghost-break {
+  0% { opacity: 1; transform: scale(1.08); clip-path: inset(0 0 0 0); }
+  20% { opacity: 1; transform: scale(1.65, 1.35) rotate(-5deg); filter: brightness(1.65) saturate(1.3); }
+  48% { transform: translate(-8px, -12px) scale(1.2, 0.86) rotate(6deg); clip-path: inset(0 0 24% 0); }
+  72% { opacity: 0.78; transform: translate(11px, -28px) scale(0.78, 0.42) rotate(-11deg); clip-path: inset(32% 0 28% 0); }
+  100% { opacity: 0; transform: translate(18px, -52px) scale(0.24, 0.06) rotate(18deg); clip-path: inset(48% 0 48% 0); }
+}
+
+@keyframes life-loss-shard-fly {
+  0% { opacity: 0; transform: rotate(calc(var(--life-shard-index) * 36deg)) translateY(0) scale(0.25); }
+  14% { opacity: 1; }
+  68% { opacity: 1; }
+  100% { opacity: 0; transform: rotate(calc(var(--life-shard-index) * 36deg)) translateY(-76px) rotate(170deg) scale(0.28); }
+}
+
+@keyframes life-loss-readout-rise {
+  0% { opacity: 0; transform: translate(-50%, -10%) scale(0.48); }
+  18% { opacity: 1; transform: translate(-50%, -105%) scale(1.24); }
+  56% { opacity: 1; transform: translate(-50%, -132%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -240%) scale(0.82); }
+}
+
+@keyframes life-loss-vignette-pulse {
+  0% { opacity: 0; }
+  16% { opacity: 1; }
+  48% { opacity: 0.42; }
+  66% { opacity: 0.78; }
+  100% { opacity: 0; }
+}
+
 #random-lives i.life-added {
   animation: life-slot-popcorn-add 0.72s cubic-bezier(0.18, 0.82, 0.22, 1.28) both;
 }
@@ -2453,7 +2634,8 @@ html.rush-active #hint-button {
 }
 
 #game-actions button,
-#continue-button {
+#continue-button,
+#complete-home-button {
   min-height: 36px;
   padding: 7px 13px;
   border: 1.5px solid #39324f;
@@ -2468,20 +2650,23 @@ html.rush-active #hint-button {
 }
 
 #game-actions button:hover,
-#continue-button:hover {
+#continue-button:hover,
+#complete-home-button:hover {
   background: #fff7ed;
   transform: translate(1px, 1px);
   box-shadow: 2px 2px 0 rgba(57, 50, 79, 0.2);
 }
 
 #game-actions button:active,
-#continue-button:active {
+#continue-button:active,
+#complete-home-button:active {
   transform: translate(3px, 3px);
   box-shadow: none;
 }
 
 #game-actions button:disabled,
-#continue-button:disabled {
+#continue-button:disabled,
+#complete-home-button:disabled {
   cursor: wait;
   opacity: 0.55;
   transform: none;
@@ -2521,6 +2706,29 @@ html.rush-active #hint-button {
 #toast.error {
   color: #8d3d48;
   border-color: rgba(181, 50, 47, 0.52);
+}
+
+#toast.life-loss {
+  z-index: 100;
+  top: 16%;
+  min-width: min(360px, calc(100vw - 32px));
+  padding: 13px 24px 14px;
+  border: 2.5px solid #7d2f43;
+  border-radius: 12px;
+  color: #fff8f4;
+  background: linear-gradient(145deg, rgba(206, 68, 82, 0.96), rgba(135, 41, 65, 0.96));
+  box-shadow: 0 8px 0 rgba(57, 50, 79, 0.3), 0 16px 34px rgba(138, 29, 52, 0.32);
+  font-size: 20px;
+  font-weight: 1000;
+  letter-spacing: 0.04em;
+  animation: life-loss-toast-impact 0.66s cubic-bezier(0.16, 0.82, 0.24, 1) both;
+}
+
+@keyframes life-loss-toast-impact {
+  0% { opacity: 0; transform: translate(-50%, -18px) scale(0.7); }
+  22% { opacity: 1; transform: translate(-50%, 3px) scale(1.1) rotate(-1deg); }
+  48% { transform: translate(-50%, -1px) scale(0.98) rotate(0.5deg); }
+  100% { opacity: 1; transform: translate(-50%, 0) scale(1); }
 }
 
 #help-strip {
@@ -2653,10 +2861,19 @@ html.rush-active #hint-button {
   font-size: 13px;
 }
 
-#continue-button {
-  display: flex;
+.complete-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+#continue-button,
+#complete-home-button {
   width: 100%;
-  justify-content: space-between;
+  justify-content: center;
+}
+
+#continue-button {
   color: #fffaf0;
   background: #cf5c62;
 }
@@ -2672,9 +2889,9 @@ html.rush-active #hint-button {
   background: #8f3341;
 }
 
-#continue-button i {
-  font-style: normal;
-  font-size: 18px;
+#complete-home-button {
+  color: #39324f;
+  background: #fff7ed;
 }
 
 .rush-panel {
@@ -3886,7 +4103,8 @@ html[data-theme="night"] #challenge-mode-button {
 }
 
 html[data-theme="night"] #game-actions button,
-html[data-theme="night"] #continue-button {
+html[data-theme="night"] #continue-button,
+html[data-theme="night"] #complete-home-button {
   box-shadow: 3px 3px 0 rgba(24, 20, 38, 0.24);
 }
 
@@ -4005,5 +4223,19 @@ html[data-theme="night"] .appliance-gallery-stage::before {
   body,
   #global-toolbar button {
     transition-duration: 0.08s;
+  }
+
+  .life-loss-shard,
+  .life-loss-ghost {
+    display: none;
+  }
+
+  #random-lives.life-loss-hit,
+  #random-lives i.lost.life-lost-now,
+  .life-loss-readout,
+  .life-loss-vignette,
+  #toast.life-loss {
+    animation-duration: 0.32s;
+    animation-iteration-count: 1;
   }
 }

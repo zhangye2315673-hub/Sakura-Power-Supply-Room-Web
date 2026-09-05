@@ -18,6 +18,7 @@ import {
 } from './ApplianceCatalog';
 import { applianceTopTilt } from './AppliancePresentation';
 import { SoftDeformController } from './SoftDeformController';
+import { CooperativeYieldBudget } from '../core/CooperativeYield';
 
 export type { ApplianceKind, ApplianceSizeTier, ApplianceState } from './ApplianceCatalog';
 
@@ -742,11 +743,12 @@ export class ApplianceScene {
     const restoreVisibility = this.root.visible;
     this.root.visible = false;
     this.clearTargets(seed);
+    const buildBudget = new CooperativeYieldBudget();
     for (let index = 0; index < definitions.length; index += 1) {
       const startedAt = performance.now();
       this.addTarget(definitions[index], index, arrangedColors);
       onProgress?.((index + 1) / definitions.length, performance.now() - startedAt);
-      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+      await buildBudget.afterItem();
     }
     this.commitInitialLayout(seed, restoreVisibility);
   }
@@ -754,16 +756,20 @@ export class ApplianceScene {
   /** Build three bounded replacement generations per slot while the loading UI is still active. */
   async prepareInitialReplacementsAsync(
     onProgress?: (progress: number, buildMs: number) => void,
+    preloadGenerations = REPLACEMENT_PRELOAD_GENERATIONS,
+    awaitWarmups = false,
   ): Promise<void> {
     const initialTargets = [...this.targets];
-    const totalBuilds = initialTargets.length * REPLACEMENT_PRELOAD_GENERATIONS;
+    const generations = Math.max(1, Math.min(REPLACEMENT_PRELOAD_GENERATIONS, Math.floor(preloadGenerations)));
+    const totalBuilds = initialTargets.length * generations;
     let completedBuilds = 0;
+    const buildBudget = new CooperativeYieldBudget();
     for (let index = 0; index < initialTargets.length; index += 1) {
       const startedAt = performance.now();
       this.prepareReplacement(initialTargets[index]);
       completedBuilds += 1;
       onProgress?.(completedBuilds / Math.max(1, totalBuilds), performance.now() - startedAt);
-      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+      await buildBudget.afterItem();
     }
 
     let projectedTargets = initialTargets.map(
@@ -773,7 +779,7 @@ export class ApplianceScene {
       (target, index) => this.preparedReplacements.get(target)?.nextRandomState
         ?? this.replacementStateFor(index),
     );
-    for (let generation = 1; generation < REPLACEMENT_PRELOAD_GENERATIONS; generation += 1) {
+    for (let generation = 1; generation < generations; generation += 1) {
       const nextProjectedTargets: ApplianceTarget[] = [];
       const nextProjectedRandomStates: number[] = [];
       for (let index = 0; index < projectedTargets.length; index += 1) {
@@ -817,10 +823,22 @@ export class ApplianceScene {
         }
         completedBuilds += 1;
         onProgress?.(completedBuilds / Math.max(1, totalBuilds), performance.now() - startedAt);
-        await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+        await buildBudget.afterItem();
       }
       projectedTargets = nextProjectedTargets;
       projectedRandomStates = nextProjectedRandomStates;
+    }
+
+    // The three replacement generations are part of the initial loading
+    // contract. Do not leave shader/geometry warmups running after input is
+    // unlocked: a multi-second compile can otherwise land on the first
+    // appliance skill frame and look like that appliance itself has frozen.
+    if (awaitWarmups) {
+      const initialWarmups = [
+        ...this.preparedReplacements.values(),
+        ...[...this.queuedReplacements.values()].flat(),
+      ].map((prepared) => prepared.warmupPromise);
+      await Promise.all(initialWarmups);
     }
   }
 
