@@ -143,6 +143,7 @@ export class ApplianceTarget {
   isSpawnDrop = false;
   dropLanded = false;
   depthScale = 1;
+  presentationScale = 1;
   landingSway = 0;
   landingSwayVelocity = 0;
   landingTilt = 0;
@@ -158,7 +159,7 @@ export class ApplianceTarget {
   activeTimeRemaining = 0;
   lifecycleScale = 1;
   private readonly materials = new Set<THREE.Material>();
-  readonly indicatorMaterial: THREE.MeshToonMaterial;
+  readonly indicatorMaterial: THREE.MeshPhysicalMaterial;
   private readonly softDeform: SoftDeformController | null;
   private readonly deviceBounds = new THREE.Box3();
   private readonly connectionSocketsByEdge: Partial<Record<
@@ -247,6 +248,14 @@ export class ApplianceTarget {
     this.root.userData.sensoryConnectionColor = color;
   }
 
+  cancelReservation(): boolean {
+    if (!this.isConnecting) return false;
+    this.isConnecting = false;
+    if (this.state === 'connected') this.state = 'idle';
+    delete this.root.userData.sensoryConnectionColor;
+    return true;
+  }
+
   activate(color: number): void {
     this.isConnecting = false;
     this.state = 'active';
@@ -313,7 +322,7 @@ export class ApplianceTarget {
     const dragScale = this.isDragging && !this.softDeform ? 1.055 : 1;
     if (this.state === 'inflating') this.updateInflation(now);
     this.root.scale.setScalar(
-      this.baseScale * this.depthScale * bounce * dragScale * this.lifecycleScale,
+      this.baseScale * this.depthScale * this.presentationScale * bounce * dragScale * this.lifecycleScale,
     );
     if (this.state !== 'active') return;
     if (this.softDeform?.isGrabbing || this.animationPausedAt > 0) return;
@@ -491,12 +500,14 @@ export class ApplianceTarget {
     this.softDeform?.update(delta);
   }
 
-  getScreenSize(aspect: number): THREE.Vector2 {
+  getScreenSize(aspect: number, fov = 26): THREE.Vector2 {
     const width = Math.max(0.01, this.deviceBounds.max.x - this.deviceBounds.min.x);
     const height = Math.max(0.01, this.deviceBounds.max.y - this.deviceBounds.min.y);
+    const projectionScale = Math.tan(THREE.MathUtils.degToRad(13))
+      / Math.tan(THREE.MathUtils.degToRad(fov * 0.5));
     return new THREE.Vector2(
-      this.actualScreenHeight * (width / height) / Math.max(0.6, aspect),
-      this.actualScreenHeight,
+      this.actualScreenHeight * projectionScale * this.presentationScale * (width / height) / Math.max(0.1, aspect),
+      this.actualScreenHeight * projectionScale * this.presentationScale,
     );
   }
 
@@ -1007,6 +1018,16 @@ export class ApplianceScene {
     return target;
   }
 
+  releaseAssignment(cableId: string, expectedTarget?: ApplianceTarget): boolean {
+    const target = this.assignments.get(cableId);
+    if (!target || (expectedTarget && target !== expectedTarget) || !target.cancelReservation()) {
+      return false;
+    }
+    this.assignments.delete(cableId);
+    this.syncRoutingRevision();
+    return true;
+  }
+
   getRoutingSummary(): {
     requiredColors: number[];
     coveredColors: number[];
@@ -1056,13 +1077,13 @@ export class ApplianceScene {
 
   isScreenPointBlockedByAppliance(ndcX: number, ndcY: number): boolean {
     const aspect = this.canvas
-      ? Math.max(0.8, this.canvas.clientWidth / Math.max(1, this.canvas.clientHeight))
+      ? Math.max(0.1, this.canvas.clientWidth / Math.max(1, this.canvas.clientHeight))
       : 16 / 9;
     const screenX = (ndcX + 1) * 0.5;
     const screenY = (1 - ndcY) * 0.5;
     return this.targets.some((target) => {
       if (!target.root.visible || target.isLifecycleTransitioning || target.isConnecting) return false;
-      const size = target.getScreenSize(aspect);
+      const size = target.getScreenSize(aspect, this.camera?.fov);
       return Math.abs(screenX - target.screenPosition.x) <= size.x * 0.46 &&
         Math.abs(screenY - target.screenPosition.y) <= size.y * 0.46;
     });
@@ -1292,13 +1313,13 @@ export class ApplianceScene {
     outwardEdge: 'left' | 'right' | 'top' | 'bottom';
   }> {
     const aspect = this.canvas
-      ? Math.max(0.8, this.canvas.clientWidth / Math.max(1, this.canvas.clientHeight))
+      ? Math.max(0.1, this.canvas.clientWidth / Math.max(1, this.canvas.clientHeight))
       : 16 / 9;
     if (this.camera) {
       this.diagnosticScreenUp.set(0, 1, 0).applyQuaternion(this.camera.quaternion);
     }
     return this.targets.map((target) => {
-      const size = target.getScreenSize(aspect);
+      const size = target.getScreenSize(aspect, this.camera?.fov);
       const rootWorldPosition = target.root.getWorldPosition(new THREE.Vector3());
       const rootScreenY = this.camera
         ? 0.5 - rootWorldPosition.project(this.camera).y * 0.5
@@ -1383,10 +1404,42 @@ export class ApplianceScene {
     this.camera = null;
   }
 
+  resizeLayout(): void {
+    if (this.canvas && this.camera && this.targets.length > 0) this.applyInitialLayout(this.configuredSeed);
+  }
+
+  private fitTargetToViewport(target: ApplianceTarget): void {
+    const aspect = this.camera?.aspect ?? 16 / 9;
+    let scale = 1;
+    if (this.canvas && this.canvas.clientWidth <= 760 && aspect < 0.8) {
+      const size = target.getScreenSize(aspect, this.camera?.fov).divideScalar(target.presentationScale);
+      scale = Math.min(0.21 / size.x, 0.20 * aspect / size.y);
+    }
+    target.root.scale.multiplyScalar(scale / target.presentationScale);
+    target.presentationScale = scale;
+  }
+
   private applyInitialLayout(seed: number): void {
     const aspect = this.canvas
-      ? Math.max(0.8, this.canvas.clientWidth / Math.max(1, this.canvas.clientHeight))
+      ? Math.max(0.1, this.canvas.clientWidth / Math.max(1, this.canvas.clientHeight))
       : 16 / 9;
+    this.targets.forEach(target => this.fitTargetToViewport(target));
+    if (this.canvas && this.canvas.clientWidth <= 760 && aspect < 0.8) {
+      const compression = THREE.MathUtils.clamp((aspect - 750 / 1624) / (750 / 1334 - 750 / 1624), 0, 1);
+      const upperInner = 0.145 + compression * 0.02;
+      const upperOuter = 0.23 + compression * 0.015;
+      const bands = [this.targets.filter((_, index) => index % 2 === 0), this.targets.filter((_, index) => index % 2 === 1)];
+      bands.forEach((targets, band) => {
+        const slots = targets.length <= 2 ? [0.35, 0.65] : targets.length === 3 ? [0.5, 0.15, 0.85] : [0.36, 0.64, 0.15, 0.85];
+        targets.forEach((target, index) => {
+          const outer = targets.length === 3 ? index > 0 : index >= 2;
+          const positionY = outer ? upperOuter : upperInner;
+          target.screenPosition.set(targets.length === 1 ? 0.5 : slots[index], band === 0 ? positionY : 1 - positionY);
+        });
+      });
+      this.syncRoutingRevision();
+      return;
+    }
     const left: ApplianceTarget[] = [];
     const right: ApplianceTarget[] = [];
     const refrigerator = this.targets.find((target) => target.kind === 'refrigerator');
@@ -1433,21 +1486,22 @@ export class ApplianceScene {
       let cursor = LAYOUT_TOP + Math.max(0, (LAYOUT_BOTTOM - LAYOUT_TOP - totalHeight) * 0.5);
       for (let index = 0; index < ordered.length; index += 1) {
         const target = ordered[index];
-        const size = target.getScreenSize(aspect);
+        const size = target.getScreenSize(aspect, this.camera?.fov);
         const halfWidth = size.x * 0.5;
+        const edgePadding = aspect < 0.75 ? 0.05 : 0.025;
         const staggeredLane = side === 'left'
           ? index % 2 === 0 ? 0.12 : 0.19
           : index % 2 === 0 ? 0.88 : 0.81;
         const x = side === 'left'
           ? THREE.MathUtils.clamp(
               staggeredLane,
-              0.025 + halfWidth,
-              CENTRAL_SAFE_MIN - LAYOUT_GAP - halfWidth,
+              edgePadding + halfWidth,
+              Math.max(edgePadding + halfWidth, CENTRAL_SAFE_MIN - LAYOUT_GAP - halfWidth),
             )
           : THREE.MathUtils.clamp(
               staggeredLane,
-              CENTRAL_SAFE_MAX + LAYOUT_GAP + halfWidth,
-              0.975 - halfWidth,
+              Math.min(CENTRAL_SAFE_MAX + LAYOUT_GAP + halfWidth, 1 - edgePadding - halfWidth),
+              1 - edgePadding - halfWidth,
             );
         target.screenPosition.set(x, cursor + target.definition.targetScreenHeight * 0.5);
         cursor += target.definition.targetScreenHeight + LAYOUT_GAP;
@@ -1481,6 +1535,7 @@ export class ApplianceScene {
     camera: THREE.PerspectiveCamera,
     screenDepth: number,
   ): void {
+    this.fitTargetToViewport(target);
     this.projected
       .set(target.screenPosition.x * 2 - 1, 1 - target.screenPosition.y * 2, 0)
       .unproject(camera)
@@ -1665,8 +1720,8 @@ export class ApplianceScene {
   ): number {
     const viewportHeight = Math.max(1, this.canvas?.clientHeight ?? 720);
     const viewportWidth = Math.max(1, this.canvas?.clientWidth ?? viewportHeight * 16 / 9);
-    const aspect = Math.max(0.8, viewportWidth / viewportHeight);
-    const screenHeight = target.getScreenSize(aspect).y;
+    const aspect = Math.max(0.1, viewportWidth / viewportHeight);
+    const screenHeight = target.getScreenSize(aspect, camera.fov).y;
     const marginPx = THREE.MathUtils.clamp(
       viewportHeight * 0.13,
       SPAWN_DROP_TOP_MARGIN_MIN_PX,

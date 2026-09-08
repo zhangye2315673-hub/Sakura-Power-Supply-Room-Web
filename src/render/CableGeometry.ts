@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { ARROW_RADIUS } from '../puzzle/types';
-import { cel } from '../style/toon';
+import { cableJelly } from '../style/jelly';
 
 export const CABLE_RADIUS = ARROW_RADIUS;
 export const CABLE_RADIAL_SEGMENTS = 8;
@@ -41,14 +41,9 @@ export type RoundedCableGeometry = RoundedCablePath & {
 
 export function createCableToonMaterial(
   color: THREE.ColorRepresentation,
-): THREE.MeshToonMaterial {
-  const material = cel({
-    color,
-    bands: 3,
-    tint: 0x625874,
-    flatShading: true,
-  });
-  material.name = 'sakura-cable-toon';
+): THREE.MeshPhysicalMaterial {
+  const material = cableJelly({ color, thickness: CABLE_RADIUS * 2, transparent: false, opacity: 1 });
+  material.name = 'sakura-cable-jelly';
   material.userData.materialRole = 'cable-rubber';
   material.userData.radialSegments = CABLE_RADIAL_SEGMENTS;
   const visualInflation = { value: 0 };
@@ -254,9 +249,8 @@ if (uCableOverheatAmount > 0.001) {
 }`,
       );
     shader.fragmentShader = shader.fragmentShader.replace(
-      'vec3 outgoingLight = reflectedLight.directDiffuse + reflectedLight.indirectDiffuse + totalEmissiveRadiance;',
-      `vec3 outgoingLight = reflectedLight.directDiffuse + reflectedLight.indirectDiffuse + totalEmissiveRadiance;
-outgoingLight += cableHeatEmission + cableCoffeeEmission + cableSkillSweepEmission;`,
+      '#include <opaque_fragment>',
+      'outgoingLight += cableHeatEmission + cableCoffeeEmission + cableSkillSweepEmission;\n#include <opaque_fragment>',
     );
   };
   material.customProgramCacheKey = () => `${previousProgramCacheKey()}-cable-base-v12-skill-recolor`;
@@ -264,7 +258,7 @@ outgoingLight += cableHeatEmission + cableCoffeeEmission + cableSkillSweepEmissi
 }
 
 export function setCableSkillSweep(
-  material: THREE.MeshToonMaterial,
+  material: THREE.MeshPhysicalMaterial,
   progress: number,
   strength: number,
   color: THREE.ColorRepresentation,
@@ -278,7 +272,7 @@ export function setCableSkillSweep(
 }
 
 export function setCableSkillRecolor(
-  material: THREE.MeshToonMaterial,
+  material: THREE.MeshPhysicalMaterial,
   progress: number,
   color: THREE.ColorRepresentation,
 ): void {
@@ -289,7 +283,7 @@ export function setCableSkillRecolor(
 }
 
 export function setCableCoffeeStain(
-  material: THREE.MeshToonMaterial,
+  material: THREE.MeshPhysicalMaterial,
   amount: number,
   reveal: number,
   seed: number,
@@ -309,7 +303,7 @@ export function setCableCoffeeStain(
 }
 
 export function setCableOverheat(
-  material: THREE.MeshToonMaterial,
+  material: THREE.MeshPhysicalMaterial,
   amount: number,
   turnsRemaining: number,
   elapsed: number,
@@ -614,7 +608,7 @@ export function createIceAccretionGeometry(seed: number): THREE.BufferGeometry {
 }
 
 export function setCableVisualInflation(
-  material: THREE.MeshToonMaterial,
+  material: THREE.MeshPhysicalMaterial,
   inflation: number,
 ): void {
   const uniform = material.userData.visualInflation as { value: number } | undefined;
@@ -622,7 +616,7 @@ export function setCableVisualInflation(
 }
 
 export function setCableFreeze(
-  material: THREE.MeshToonMaterial,
+  material: THREE.MeshPhysicalMaterial,
   amount: number,
   progress: number,
   seed: number,

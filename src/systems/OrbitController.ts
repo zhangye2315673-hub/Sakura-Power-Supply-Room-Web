@@ -9,7 +9,7 @@ export function horizontalOrbitInputSign(pitch: number): 1 | -1 {
 }
 
 type OrbitCallbacks = {
-  onClick: (clientX: number, clientY: number) => void;
+  onClick: (clientX: number, clientY: number, touch?: boolean) => void;
   onHover: (clientX: number, clientY: number) => void;
   onLeave: () => void;
   onViewChanged: () => void;
@@ -17,6 +17,16 @@ type OrbitCallbacks = {
 
 export class OrbitController {
   private pointerId: number | null = null;
+  private readonly touches = new Map<number, THREE.Vector2>();
+  private pinchDistance = 0;
+  private readonly pinchCenter = new THREE.Vector2();
+  private touchLantern = false;
+
+  setTouchLantern(active: boolean): void {
+    this.touchLantern = active;
+    this.clearTouches();
+  }
+  private pinching = false;
   private startX = 0;
   private startY = 0;
   private previousX = 0;
@@ -46,6 +56,7 @@ export class OrbitController {
     canvas.addEventListener('pointerleave', this.onPointerLeave);
     canvas.addEventListener('click', this.onClick);
     canvas.addEventListener('wheel', this.onWheel, { passive: false });
+    window.addEventListener('blur', this.clearTouches);
     this.updateCamera();
   }
 
@@ -89,6 +100,7 @@ export class OrbitController {
 
   setEnabled(enabled: boolean): void {
     this.enabled = enabled;
+    if (!enabled) this.clearTouches();
     if (enabled || this.pointerId === null) return;
     this.pointerId = null;
     this.moved = false;
@@ -99,6 +111,7 @@ export class OrbitController {
 
   setClickOnly(clickOnly: boolean): void {
     this.clickOnly = clickOnly;
+    if (clickOnly) this.clearTouches();
     if (!clickOnly || this.pointerId === null) return;
     this.pointerId = null;
     this.moved = false;
@@ -108,6 +121,8 @@ export class OrbitController {
   }
 
   dispose(): void {
+    this.clearTouches();
+    window.removeEventListener('blur', this.clearTouches);
     window.clearTimeout(this.viewSettleTimer);
     this.canvas.removeEventListener('pointerdown', this.onPointerDown);
     this.canvas.removeEventListener('pointermove', this.onPointerMove);
@@ -119,7 +134,23 @@ export class OrbitController {
   }
 
   private readonly onPointerDown = (event: PointerEvent) => {
+    if (event.pointerType === 'touch' && this.enabled && !this.clickOnly) {
+      this.touches.set(event.pointerId, new THREE.Vector2(event.clientX, event.clientY));
+      if (this.touches.size > 1) {
+        event.preventDefault();
+        this.pinching = true;
+        this.suppressClick = true;
+        this.velocityX = this.velocityY = 0;
+        const points = [...this.touches.values()];
+        this.pinchDistance = points[0].distanceTo(points[1]);
+        this.pinchCenter.copy(points[0]).add(points[1]).multiplyScalar(0.5);
+        this.canvas.setPointerCapture(event.pointerId);
+        return;
+      }
+      this.suppressClick = false;
+    }
     if (!this.enabled || this.clickOnly || event.button !== 0 || this.pointerId !== null) return;
+    this.suppressClick = false;
     event.preventDefault();
     this.pointerId = event.pointerId;
     this.startX = this.previousX = event.clientX;
@@ -139,6 +170,25 @@ export class OrbitController {
 
   private readonly onPointerMove = (event: PointerEvent) => {
     if (!this.enabled || this.clickOnly) return;
+    if (this.touches.has(event.pointerId)) {
+      this.touches.get(event.pointerId)!.set(event.clientX, event.clientY);
+      if (this.pinching) {
+        event.preventDefault();
+        if (this.touches.size >= 2) {
+          const points = [...this.touches.values()];
+          const distance = points[0].distanceTo(points[1]);
+          if (distance > 0 && this.pinchDistance > 0) this.setRadius(this.radius * this.pinchDistance / distance);
+          this.pinchDistance = distance;
+          if (this.touchLantern) {
+            const center = points[0].clone().add(points[1]).multiplyScalar(0.5);
+            this.yaw -= (center.x - this.pinchCenter.x) * 0.0063 * horizontalOrbitInputSign(this.pitch);
+            this.applyPitchDelta((center.y - this.pinchCenter.y) * 0.0063);
+            this.pinchCenter.copy(center);
+          }
+        }
+        return;
+      }
+    }
     if (this.pointerId !== event.pointerId) {
       this.callbacks.onHover(event.clientX, event.clientY);
       return;
@@ -151,7 +201,10 @@ export class OrbitController {
     this.previousY = event.clientY;
     const totalDistance = Math.hypot(event.clientX - this.startX, event.clientY - this.startY);
     if (totalDistance > 5) this.moved = true;
+    if (!this.moved) return;
 
+    // Exploration uses one finger for the lantern; two fingers orbit/zoom.
+    if (this.touchLantern && event.pointerType === 'touch') return;
     const sensitivity = 0.0063;
     const horizontalSign = horizontalOrbitInputSign(this.pitch);
     this.yaw -= deltaX * sensitivity * horizontalSign;
@@ -161,6 +214,16 @@ export class OrbitController {
   };
 
   private readonly onPointerUp = (event: PointerEvent) => {
+    this.touches.delete(event.pointerId);
+    if (this.pinching) {
+      event.preventDefault();
+      if (this.canvas.hasPointerCapture(event.pointerId)) this.canvas.releasePointerCapture(event.pointerId);
+      if (this.touches.size === 0) {
+        this.clearTouches();
+        this.callbacks.onViewChanged();
+      }
+      return;
+    }
     if (event.pointerId !== this.pointerId) return;
     event.preventDefault();
     this.suppressClick = this.moved;
@@ -171,18 +234,19 @@ export class OrbitController {
     } catch {
       // Pointer capture may already be released by the browser.
     }
+    if (event.pointerType === 'touch' && !this.moved) {
+      this.callbacks.onClick(event.clientX, event.clientY, true);
+    }
     if (this.moved) {
       this.updateCamera();
       this.callbacks.onViewChanged();
       this.callbacks.onHover(event.clientX, event.clientY);
-      window.setTimeout(() => {
-        this.suppressClick = false;
-      }, 0);
       this.scheduleSettledViewChanged();
     }
   };
 
   private readonly onPointerCancel = (event: PointerEvent) => {
+    if (this.touches.has(event.pointerId)) this.clearTouches();
     if (event.pointerId !== this.pointerId) return;
     this.pointerId = null;
     this.moved = false;
@@ -193,13 +257,27 @@ export class OrbitController {
     if (this.pointerId === null) this.callbacks.onLeave();
   };
 
+  private readonly clearTouches = () => {
+    for (const pointerId of this.touches.keys()) {
+      if (this.canvas.hasPointerCapture(pointerId)) this.canvas.releasePointerCapture(pointerId);
+    }
+    this.touches.clear();
+    this.pinching = false;
+    this.pinchDistance = 0;
+    this.pointerId = null;
+    this.velocityX = this.velocityY = 0;
+    this.suppressClick = true;
+    this.canvas.classList.remove('dragging');
+  };
+
   private readonly onClick = (event: MouseEvent) => {
     if (!this.enabled) return;
+    if (!this.clickOnly && (event as PointerEvent).pointerType === 'touch') return;
     if (this.suppressClick) {
       this.suppressClick = false;
       return;
     }
-    this.callbacks.onClick(event.clientX, event.clientY);
+    this.callbacks.onClick(event.clientX, event.clientY, (event as PointerEvent).pointerType === 'touch');
   };
 
   private readonly onWheel = (event: WheelEvent) => {

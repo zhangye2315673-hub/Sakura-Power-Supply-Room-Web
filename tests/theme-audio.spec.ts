@@ -77,9 +77,9 @@ test('all 29 appliance models expose functional material nodes without generic p
 test('routing lifecycle never turns the shared appliance indicator into a generic glow point', () => {
   APPLIANCE_CATALOG.forEach((definition, index) => {
     const target = new ApplianceTarget(definition, ARROW_COLORS[index % ARROW_COLORS.length], [0.5, 0.5]);
-    const sharedIndicators: THREE.MeshToonMaterial[] = [
+    const sharedIndicators: THREE.MeshPhysicalMaterial[] = [
       target.indicatorMaterial,
-    ].filter((material): material is THREE.MeshToonMaterial => Boolean(material));
+    ].filter((material): material is THREE.MeshPhysicalMaterial => Boolean(material));
     const assertNoGenericGlow = () => {
       expect(sharedIndicators.every((material) => material.emissive.getHex() === 0)).toBe(true);
     };

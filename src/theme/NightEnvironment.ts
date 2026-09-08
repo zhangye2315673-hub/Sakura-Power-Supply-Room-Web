@@ -38,6 +38,8 @@ export class NightEnvironment {
   private lanternTargetIntensity = 0;
   private lastElapsed = 0;
   private pointerActive = false;
+  private touchTarget = false;
+  private readonly touchHint = document.createElement('div');
   private pointerOverUi = false;
   private inApplianceZone = false;
   private reducedMotion = false;
@@ -47,6 +49,7 @@ export class NightEnvironment {
   private readonly lanternWorld = new THREE.Vector3();
   private readonly cameraDirection = new THREE.Vector3();
   private readonly lanternPlanePoint = new THREE.Vector3();
+  private readonly baseEnvironmentIntensity: number;
   private readonly baseFogNear: number;
   private readonly baseFogFar: number;
 
@@ -58,8 +61,12 @@ export class NightEnvironment {
     private readonly lights: LightingRig,
   ) {
     const fog = scene.fog instanceof THREE.Fog ? scene.fog : null;
+    this.baseEnvironmentIntensity = scene.environmentIntensity;
     this.baseFogNear = fog?.near ?? 30;
     this.baseFogFar = fog?.far ?? 82;
+    this.touchHint.className = 'exploration-touch-hint';
+    this.touchHint.textContent = '单指提灯 · 双指拖动旋转 / 捏合缩放 · 轻点抽线';
+    document.body.append(this.touchHint);
     this.lanternPoint.name = 'night-lantern-point-light';
     this.lanternPoint.castShadow = false;
     scene.add(this.lanternPoint);
@@ -101,6 +108,8 @@ export class NightEnvironment {
     this.lights.hemi.color.copy(this.environment.hemiSky);
     this.lights.hemi.groundColor.copy(this.environment.hemiGround);
     const ambientScale = THREE.MathUtils.lerp(1, EXPLORATION_AMBIENT, this.explorationProgress * this.progress);
+    // The studio environment must fade with night too, not only exploration.
+    this.scene.environmentIntensity = this.baseEnvironmentIntensity * THREE.MathUtils.lerp(1, 0.22, this.progress) * ambientScale;
     this.lights.sun.intensity = this.environment.sunIntensity * ambientScale;
     this.lights.fill.intensity = this.environment.fillIntensity * ambientScale;
     this.lights.bounce.intensity = this.environment.bounceIntensity * ambientScale;
@@ -134,7 +143,9 @@ export class NightEnvironment {
       0,
       0.25,
     );
-    const forceCenter = options.galleryOpen || this.pointerOverUi || !this.pointerActive;
+    const mobileExploration = this.explorationProgress > 0 && !options.opening &&
+      (this.touchTarget || window.matchMedia('(pointer: coarse)').matches);
+    const forceCenter = options.galleryOpen || (!mobileExploration && (this.pointerOverUi || !this.pointerActive));
     const desired = forceCenter ? this.lanternCenter : this.lanternTarget;
     const response = this.reducedMotion ? 1 : 1 - Math.exp(-presentationDelta / 0.105);
     this.lanternNdc.lerp(desired, response);
@@ -183,7 +194,7 @@ export class NightEnvironment {
       intensity: this.lanternIntensity,
       targetIntensity: this.lanternTargetIntensity,
       inApplianceZone: this.inApplianceZone,
-      returning: !this.pointerActive || this.pointerOverUi,
+      returning: this.explorationProgress > 0 && (this.touchTarget || window.matchMedia('(pointer: coarse)').matches) ? false : !this.pointerActive || this.pointerOverUi,
     };
   }
 
@@ -193,6 +204,7 @@ export class NightEnvironment {
     this.canvas.removeEventListener('pointerleave', this.onPointerLeave);
     this.canvas.removeEventListener('pointerup', this.onPointerUp);
     window.removeEventListener('pointermove', this.onWindowPointerMove);
+    this.touchHint.remove();
     this.lanternPoint.removeFromParent();
     this.lanternPoint.dispose();
   }
@@ -204,6 +216,7 @@ export class NightEnvironment {
   private updatePointerTarget(event: PointerEvent): void {
     const rect = this.canvas.getBoundingClientRect();
     if (rect.width <= 0 || rect.height <= 0) return;
+    this.touchTarget = event.pointerType === 'touch';
     const mobileOffset = event.pointerType === 'touch' ? 56 : 0;
     const x = (event.clientX - rect.left) / rect.width;
     const y = (event.clientY - mobileOffset - rect.top) / rect.height;
@@ -214,11 +227,11 @@ export class NightEnvironment {
   }
 
   private readonly onPointerLeave = () => {
-    this.pointerActive = false;
+    if (!(this.touchTarget && this.explorationProgress > 0)) this.pointerActive = false;
   };
 
   private readonly onPointerUp = (event: PointerEvent) => {
-    if (event.pointerType === 'touch') this.pointerActive = false;
+    if (event.pointerType === 'touch' && this.explorationProgress === 0) this.pointerActive = false;
   };
 
   private readonly onWindowPointerMove = (event: PointerEvent) => {

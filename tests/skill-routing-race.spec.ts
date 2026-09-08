@@ -5,7 +5,7 @@ test('formal skill mode never exposes a queued-only cable as a clickable target'
   await page.addInitScript(() => {
     window.__APPLIANCE_PERFORMANCE_TIME_OVERRIDE__ = 0;
   });
-  await page.goto('/?theme=day&mode=skill&direct=1&seed=20260829');
+  await page.goto('/?theme=day&mode=skill&direct=1&seed=20260829&diagnostics=1');
   await page.waitForFunction(
     () => window.__THREE_GAME_DIAGNOSTICS__?.opening.ready === true
       && typeof window.__FINISH_OPENING_FOR_EVIDENCE__ === 'function'

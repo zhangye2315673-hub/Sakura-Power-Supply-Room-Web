@@ -1,12 +1,11 @@
 import * as THREE from 'three';
-import { addHullOutline } from '../style/outline';
-import { cel } from '../style/toon';
+import { jelly } from '../style/jelly';
 
 const HIDDEN_STATUS_MARKER = /(?:^|[-_])(status-indicator|status-dot|status-lamp|status-light|status-lens|power-led|power-status-indicator)(?:[-_]|$)/i;
 
 export type ApplianceModelBuild = {
   root: THREE.Group;
-  indicatorMaterial: THREE.MeshToonMaterial;
+  indicatorMaterial: THREE.MeshPhysicalMaterial;
   interactiveMeshes: THREE.Mesh[];
   materials: Set<THREE.Material>;
   accuracy: {
@@ -28,7 +27,7 @@ export class ApplianceModelKit {
   readonly interactiveMeshes: THREE.Mesh[] = [];
   readonly nodes = new Map<string, THREE.Object3D>();
   readonly sockets = new Map<string, THREE.Object3D>();
-  readonly indicatorMaterial: THREE.MeshToonMaterial;
+  readonly indicatorMaterial: THREE.MeshPhysicalMaterial;
 
   constructor(readonly options: ApplianceModelOptions) {
     this.root.name = `appliance-model-${options.id}`;
@@ -46,11 +45,9 @@ export class ApplianceModelKit {
       transparent?: boolean;
       opacity?: number;
     } = {},
-  ): THREE.MeshToonMaterial {
-    const material = cel({
+  ): THREE.MeshPhysicalMaterial {
+    const material = jelly({
       color,
-      bands: 3,
-      tint: options.tint ?? 0x71667f,
       emissive: options.emissive ?? 0x000000,
       emissiveIntensity: options.emissive ? 0 : 1,
       transparent: options.transparent,
@@ -74,11 +71,9 @@ export class ApplianceModelKit {
     mesh.userData.applianceId = this.options.id;
     this.interactiveMeshes.push(mesh);
     this.nodes.set(name, mesh);
-    if (outlined) {
-      const outline = addHullOutline(mesh, 0.00305);
-      const outlineMaterials = Array.isArray(outline.material) ? outline.material : [outline.material];
-      outlineMaterials.forEach((outlineMaterial) => this.materials.add(outlineMaterial));
-    }
+    // An opaque inverted hull shows through gel as a black inner shell.
+    // Keep the factory signature for authored models; Fresnel defines the edge.
+    void outlined;
     parent.add(mesh);
     return mesh;
   }

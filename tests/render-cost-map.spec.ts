@@ -20,7 +20,7 @@ test('profiles production render cost by scene root without changing game state'
     failedRequests.push(`${request.method()} ${request.url()} ${request.failure()?.errorText ?? ''}`);
   });
 
-  await page.goto('/?seed=2679418801&mode=random&direct=1&theme=night');
+  await page.goto('/?seed=2679418801&mode=random&direct=1&theme=night&diagnostics=1');
   await enterPreparedGame(page);
   await page.waitForTimeout(1_000);
 

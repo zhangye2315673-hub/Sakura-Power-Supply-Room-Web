@@ -1,4 +1,6 @@
+import { jellyDynamics } from './JellyDynamicsSettings';
 import * as THREE from 'three';
+import { preserveLatticeVolume } from './softLatticeVolume';
 import { SOFT_CAGE_FUNCTION_GLSL, SOFT_CAGE_UNIFORM_GLSL } from './softDeformShader';
 
 const DRAG_STIFFNESS = 380;
@@ -7,7 +9,7 @@ const RELEASE_STIFFNESS_NEAR = 150;
 const RELEASE_STIFFNESS_FAR = 205;
 const RELEASE_DAMPING_NEAR = 16;
 const RELEASE_DAMPING_FAR = 3.15;
-const MAX_STEP = 1 / 60;
+const MAX_STEP = 1 / 120;
 const MAX_FRAME_CATCHUP = 0.25;
 const SETTLED_DISTANCE = 0.0015;
 const SETTLED_SPEED = 0.008;
@@ -163,6 +165,10 @@ export function softReboundProfile(pullLength: number, maxPullLength: number): S
 }
 
 type SoftUniforms = {
+  uSoftGrabLocal: { value: THREE.Vector3 };
+  uSoftGrabRadius: { value: number };
+  uSoftPinchLocal: { value: THREE.Vector3 };
+  uSoftLattice: { value: THREE.Vector3[] };
   uSoftRootWorldToLocal: { value: THREE.Matrix4 };
   uSoftRootLocalToWorld: { value: THREE.Matrix4 };
   uSoftBoundsMin: { value: THREE.Vector3 };
@@ -191,7 +197,7 @@ const softProjectVertex = /* glsl */ `
 `;
 
 function patchMeshMaterial(
-  material: THREE.MeshToonMaterial | THREE.MeshBasicMaterial,
+  material: THREE.MeshToonMaterial | THREE.MeshBasicMaterial | THREE.MeshPhysicalMaterial,
   uniforms: SoftUniforms,
 ): void {
   if (material.userData.softDeformPatched) return;
@@ -207,9 +213,29 @@ function patchMeshMaterial(
         '#include <common>',
         `#include <common>\n${SOFT_CAGE_UNIFORM_GLSL}\n${SOFT_CAGE_FUNCTION_GLSL}`,
       )
-      .replace('#include <project_vertex>', softProjectVertex);
+       .replace('#include <defaultnormal_vertex>', `
+        vec3 softN = normalize(objectNormal);
+        vec3 softT = normalize(cross(softN, abs(softN.y) < 0.9 ? vec3(0,1,0) : vec3(1,0,0)));
+        vec3 softB = cross(softN, softT);
+        mat4 softMeshMatrix = modelMatrix;
+        #ifdef USE_INSTANCING
+          softMeshMatrix = modelMatrix * instanceMatrix;
+        #endif
+        vec3 softP = (softMeshMatrix * vec4(position,1.0)).xyz;
+        vec3 softDT = softApplyCage(softP + (softMeshMatrix * vec4(softT * 0.002,0.0)).xyz) - softApplyCage(softP - (softMeshMatrix * vec4(softT * 0.002,0.0)).xyz);
+        vec3 softDB = softApplyCage(softP + (softMeshMatrix * vec4(softB * 0.002,0.0)).xyz) - softApplyCage(softP - (softMeshMatrix * vec4(softB * 0.002,0.0)).xyz);
+        vec3 softWorldN = normalize(cross(softDT, softDB));
+        objectNormal = normalize(vec3(dot(softWorldN,softMeshMatrix[0].xyz),dot(softWorldN,softMeshMatrix[1].xyz),dot(softWorldN,softMeshMatrix[2].xyz)));
+        #include <defaultnormal_vertex>
+      `)
+      .replace('#include <project_vertex>', softProjectVertex)
+      .replace('#include <worldpos_vertex>', `#include <worldpos_vertex>
+        #if defined( USE_TRANSMISSION ) || defined( USE_SHADOWMAP ) || defined( USE_ENVMAP ) || defined( DISTANCE ) || defined( USE_SPOTLIGHTMAP )
+          worldPosition = softWorldPosition;
+        #endif
+      `);
   };
-  material.customProgramCacheKey = () => `${previousCacheKey()}|soft-cage-v4`;
+  material.customProgramCacheKey = () => `${previousCacheKey()}|soft-lattice-local-pinch-v6`;
   material.needsUpdate = true;
 }
 
@@ -218,9 +244,14 @@ function bindOutlineMaterial(material: THREE.ShaderMaterial, uniforms: SoftUnifo
 }
 
 export class SoftDeformController {
+  private readonly pinchVelocity = new THREE.Vector3();
   private readonly uniforms: SoftUniforms = {
+    uSoftGrabLocal: { value: new THREE.Vector3() },
+    uSoftGrabRadius: { value: 0.2 },
+    uSoftPinchLocal: { value: new THREE.Vector3() },
     uSoftRootWorldToLocal: { value: new THREE.Matrix4() },
     uSoftRootLocalToWorld: { value: new THREE.Matrix4() },
+    uSoftLattice: { value: Array.from({ length: 27 }, () => new THREE.Vector3()) },
     uSoftBoundsMin: { value: new THREE.Vector3(-0.5, -0.5, -0.5) },
     uSoftBoundsMax: { value: new THREE.Vector3(0.5, 0.5, 0.5) },
     uSoftPullLocal: { value: new THREE.Vector3() },
@@ -230,6 +261,13 @@ export class SoftDeformController {
     uSoftLocalGain: { value: CAGE_SURFACE_GAIN },
     uSoftIndentStrength: { value: 0.38 },
   };
+  private readonly latticeVelocity = Array.from({ length: 27 }, () => new THREE.Vector3());
+  private readonly latticePrevious = Array.from({ length: 27 }, () => new THREE.Vector3());
+  private readonly latticeForce = Array.from({ length: 27 }, () => new THREE.Vector3());
+  private readonly latticeTarget = new THREE.Vector3();
+  private readonly latticeNode = new THREE.Vector3();
+  private readonly latticeDelta = new THREE.Vector3();
+  private latticeEnergy = 0;
   private readonly localGrab = new THREE.Vector3();
   private readonly baseGrabWorld = new THREE.Vector3();
   private readonly targetPull = new THREE.Vector3();
@@ -247,8 +285,6 @@ export class SoftDeformController {
   private readonly shapeSize = new THREE.Vector3();
   private readonly localPull = new THREE.Vector3();
   private maxPullWorld = 1;
-  private releaseStiffness = RELEASE_STIFFNESS_NEAR;
-  private releaseDamping = RELEASE_DAMPING_NEAR;
   private reboundPullRatio = 0;
   private reboundResponse = 0;
   private grabProfile: SoftGrabProfile = {
@@ -271,7 +307,7 @@ export class SoftDeformController {
   ) {
     const materials = new Set<THREE.Material>();
     surfaceRoot.traverse((object) => {
-      if (!(object instanceof THREE.Mesh) || this.isPerformanceEffect(object)) return;
+      if (!(object instanceof THREE.Mesh)) return;
       this.renderableMeshCount += 1;
       const entries = Array.isArray(object.material) ? object.material : [object.material];
       entries.forEach((material) => materials.add(material));
@@ -280,12 +316,12 @@ export class SoftDeformController {
           bindOutlineMaterial(material, this.uniforms);
           return true;
         }
-        return material instanceof THREE.MeshToonMaterial || material instanceof THREE.MeshBasicMaterial;
+        return material instanceof THREE.MeshToonMaterial || material instanceof THREE.MeshBasicMaterial || material instanceof THREE.MeshPhysicalMaterial;
       });
       if (fullyBound) this.boundRenderableMeshCount += 1;
     });
     materials.forEach((material) => {
-      if (material instanceof THREE.MeshToonMaterial || material instanceof THREE.MeshBasicMaterial) {
+      if (material instanceof THREE.MeshToonMaterial || material instanceof THREE.MeshBasicMaterial || material instanceof THREE.MeshPhysicalMaterial) {
         patchMeshMaterial(material, this.uniforms);
       }
     });
@@ -293,12 +329,35 @@ export class SoftDeformController {
     this.syncUniforms();
   }
 
+  applyInertia(worldVelocityChange: THREE.Vector3): void {
+    this.deformRoot.updateWorldMatrix(true, false);
+    const inverse = new THREE.Matrix3().setFromMatrix4(this.deformRoot.matrixWorld.clone().invert());
+    const impulse = worldVelocityChange.clone().applyMatrix3(inverse);
+    for (let i=0; i<27; i++) {
+      const height = (Math.floor(i/3)%3)/2;
+      this.latticeVelocity[i].addScaledVector(impulse, -(0.08 + height*0.7)*jellyDynamics.inertia);
+    }
+    this.latticeEnergy = 1;
+  }
+
+  nudge(): void {
+    this.updateLocalBounds();
+    const size = this.localBounds.getSize(this.shapeSize);
+    // A lateral impulse varies with height, like shaking a pudding's support.
+    for (let i = 0; i < 27; i++) {
+      const height = (Math.floor(i / 3) % 3) / 2;
+      this.latticeVelocity[i].x += size.x * (0.1 + height * 1.2);
+      this.latticeVelocity[i].y -= size.y * 0.12 * height;
+    }
+    this.latticeEnergy = 1;
+  }
+
   get isGrabbing(): boolean {
     return this.grabbing;
   }
 
   get isSettled(): boolean {
-    return !this.grabbing && this.pull.length() < SETTLED_DISTANCE && this.velocity.length() < SETTLED_SPEED;
+    return !this.grabbing && this.pull.length() < SETTLED_DISTANCE && this.velocity.length() < SETTLED_SPEED && this.latticeEnergy < 0.00001;
   }
 
   get pullLength(): number {
@@ -361,8 +420,6 @@ export class SoftDeformController {
     this.pull.set(0, 0, 0);
     this.velocity.set(0, 0, 0);
     this.releaseAxis.set(1, 0, 0);
-    this.releaseStiffness = RELEASE_STIFFNESS_NEAR;
-    this.releaseDamping = RELEASE_DAMPING_NEAR;
     this.reboundPullRatio = 0;
     this.reboundResponse = 0;
     this.grabbing = true;
@@ -382,18 +439,20 @@ export class SoftDeformController {
     if (!this.grabbing) return;
     if (this.pull.lengthSq() > 0.000001) this.releaseAxis.copy(this.pull).normalize();
     const rebound = softReboundProfile(this.pull.length(), this.maxPullWorld);
-    this.releaseStiffness = rebound.stiffness;
-    this.releaseDamping = rebound.damping;
     this.reboundPullRatio = rebound.pullRatio;
     this.reboundResponse = rebound.response;
     this.velocity.multiplyScalar(rebound.velocityRetention);
-    this.velocity.addScaledVector(this.pull, -rebound.snapGain);
+    // Preserve distributed inertia; never add an artificial release kick.
     this.grabbing = false;
     this.targetPull.set(0, 0, 0);
     this.lastUpdateAt = performance.now();
   }
 
   reset(): void {
+    this.uniforms.uSoftLattice.value.forEach(v => v.set(0, 0, 0));
+    this.latticeVelocity.forEach(v => v.set(0, 0, 0));
+    this.latticeEnergy = 0;
+    this.uniforms.uSoftPinchLocal.value.set(0,0,0); this.pinchVelocity.set(0,0,0);
     this.grabbing = false;
     this.targetPull.set(0, 0, 0);
     this.pull.set(0, 0, 0);
@@ -404,8 +463,6 @@ export class SoftDeformController {
     this.uniforms.uSoftWholeCoupling.value = CAGE_OPPOSITE_COUPLING;
     this.uniforms.uSoftLocalGain.value = CAGE_SURFACE_GAIN;
     this.uniforms.uSoftIndentStrength.value = 0.38;
-    this.releaseStiffness = RELEASE_STIFFNESS_NEAR;
-    this.releaseDamping = RELEASE_DAMPING_NEAR;
     this.reboundPullRatio = 0;
     this.reboundResponse = 0;
     this.lastUpdateAt = performance.now();
@@ -423,8 +480,8 @@ export class SoftDeformController {
       return;
     }
 
-    const stiffness = this.grabbing ? DRAG_STIFFNESS : this.releaseStiffness;
-    const damping = this.grabbing ? DRAG_DAMPING : this.releaseDamping;
+    const stiffness = this.grabbing ? DRAG_STIFFNESS : 48;
+    const damping = this.grabbing ? DRAG_DAMPING : 9;
     while (remaining > 0) {
       const step = Math.min(MAX_STEP, remaining);
       this.acceleration
@@ -437,6 +494,7 @@ export class SoftDeformController {
       if (this.grabbing && this.pull.lengthSq() > 0.000001) {
         this.releaseAxis.copy(this.pull).normalize();
       }
+      this.stepLattice(step);
       remaining -= step;
     }
 
@@ -445,6 +503,62 @@ export class SoftDeformController {
       this.velocity.set(0, 0, 0);
     }
     this.syncUniforms();
+  }
+
+  /** Coupled 3x3x3 elastic volume. Forces propagate between neighboring nodes
+   * instead of applying one spring offset independently to mesh parts. */
+  private stepLattice(dt: number): void {
+    const nodes = this.uniforms.uSoftLattice.value;
+    const size = this.localBounds.getSize(this.shapeSize);
+    this.inverseRootMatrix.copy(this.deformRoot.matrixWorld).invert();
+    this.localVectorMatrix.setFromMatrix4(this.inverseRootMatrix);
+    this.latticeTarget.copy(this.targetPull).applyMatrix3(this.localVectorMatrix);
+    const dimension = Math.max(size.x, size.y, size.z);
+    const radius = dimension * jellyDynamics.radius;
+    this.uniforms.uSoftGrabRadius.value = Math.max(dimension * 0.13, radius * 0.65);
+    this.uniforms.uSoftGrabLocal.value.copy(this.localGrab);
+    // A local spring resolves the sub-cell grab that the coarse cage cannot.
+    const pinch = this.uniforms.uSoftPinchLocal.value;
+    const pinchGain = 1 - THREE.MathUtils.smoothstep(jellyDynamics.radius, 0.12, 0.8);
+    const pinchTarget = this.grabbing ? this.latticeTarget.clone().multiplyScalar(pinchGain * 1.35) : new THREE.Vector3();
+    pinchTarget.clampLength(0, dimension * 0.65);
+    const pinchStiffness = this.grabbing ? 150 : jellyDynamics.stiffness;
+    const pinchDamping = this.grabbing ? 18 : jellyDynamics.damping;
+    this.pinchVelocity.addScaledVector(pinchTarget.sub(pinch).multiplyScalar(pinchStiffness).addScaledVector(this.pinchVelocity,-pinchDamping),dt);
+    pinch.addScaledVector(this.pinchVelocity,dt).clampLength(0,dimension*0.75);
+    const limitX = Math.max(0.01, size.x * jellyDynamics.stretch);
+    const limitY = Math.max(0.01, size.y * jellyDynamics.stretch);
+    const limitZ = Math.max(0.01, size.z * jellyDynamics.stretch);
+    for (let z=0; z<3; z++) for (let y=0; y<3; y++) for (let x=0; x<3; x++) {
+      const i = x+y*3+z*9;
+      this.latticeNode.set(x*size.x/2, y*size.y/2, z*size.z/2).add(this.localBounds.min);
+      const weight = 0.015 + 0.985*Math.exp(-this.latticeNode.distanceToSquared(this.localGrab)/(radius*radius));
+      const force = this.latticeForce[i].copy(nodes[i]).multiplyScalar(-jellyDynamics.stiffness)
+        .addScaledVector(this.latticeVelocity[i], -jellyDynamics.damping);
+      if (this.grabbing) force.addScaledVector(this.latticeDelta.copy(this.latticeTarget).multiplyScalar(weight).sub(nodes[i]), jellyDynamics.grab);
+      for (const [dx,dy,dz] of [[1,0,0],[-1,0,0],[0,1,0],[0,-1,0],[0,0,1],[0,0,-1]]) {
+        const nx=x+dx, ny=y+dy, nz=z+dz;
+        if (nx<0 || nx>2 || ny<0 || ny>2 || nz<0 || nz>2) continue;
+        force.addScaledVector(this.latticeDelta.copy(nodes[nx+ny*3+nz*9]).sub(nodes[i]), jellyDynamics.coupling);
+      }
+    }
+    this.latticeEnergy = pinch.lengthSq() + this.pinchVelocity.lengthSq();
+    for (let i=0; i<27; i++) {
+      this.latticePrevious[i].copy(nodes[i]);
+      this.latticeVelocity[i].addScaledVector(this.latticeForce[i], dt);
+      nodes[i].addScaledVector(this.latticeVelocity[i], dt);
+    }
+    preserveLatticeVolume(nodes, size, dt, jellyDynamics.volume);
+    for (let i=0; i<27; i++) {
+      nodes[i].set(
+        THREE.MathUtils.clamp(nodes[i].x, -limitX, limitX),
+        THREE.MathUtils.clamp(nodes[i].y, -limitY, limitY),
+        THREE.MathUtils.clamp(nodes[i].z, -limitZ, limitZ),
+      );
+      // Constraint corrections participate in the next step's inertia.
+      this.latticeVelocity[i].subVectors(nodes[i], this.latticePrevious[i]).divideScalar(dt);
+      this.latticeEnergy += nodes[i].lengthSq() + this.latticeVelocity[i].lengthSq();
+    }
   }
 
   private updateBaseGrabWorld(): void {

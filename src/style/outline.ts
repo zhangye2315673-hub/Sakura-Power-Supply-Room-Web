@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
 import { SOFT_CAGE_FUNCTION_GLSL, SOFT_CAGE_UNIFORM_GLSL } from '../systems/softDeformShader';
+import { isSharedResource, markSharedResource } from '../render/sharedResources';
 import { PAL } from './palette';
 
 const vertexShader = /* glsl */ `
@@ -105,6 +106,7 @@ function smoothGeometry(geometry: THREE.BufferGeometry): THREE.BufferGeometry {
   for (const name of Object.keys(result.attributes)) {
     if (name !== 'position' && name !== 'normal' && name !== 'aCableProgress') result.deleteAttribute(name);
   }
+  if (isSharedResource(geometry)) markSharedResource(result);
   geometryCache.set(geometry, result);
   return result;
 }

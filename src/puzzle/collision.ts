@@ -219,17 +219,18 @@ export function findDoubleEndedRemovalSequence(
   return sequence;
 }
 
-export function findRemovalSequence(definitions: ArrowDefinition[]): string[] | null {
+export function findRemovalSequence(definitions: readonly ArrowDefinition[]): string[] | null {
   const runtimes = definitions.map(makeRuntime);
+  const runtimesById = new Map(runtimes.map((runtime) => [runtime.definition.id, runtime]));
   const sequence: string[] = [];
 
   while (sequence.length < runtimes.length) {
-    const removable = runtimes.find(
-      (arrow) => arrow.state !== 'removed' && checkArrowExit(arrow, runtimes).clear,
-    );
+    const removableEnd = availableCableEnds(runtimes).find(({ end }) => end === 'head');
+    if (!removableEnd) return null;
+    const removable = runtimesById.get(removableEnd.id);
     if (!removable) return null;
     removable.state = 'removed';
-    sequence.push(removable.definition.id);
+    sequence.push(removableEnd.id);
   }
 
   return sequence;
@@ -237,8 +238,8 @@ export function findRemovalSequence(definitions: ArrowDefinition[]): string[] | 
 
 export function countInitiallyFree(definitions: ArrowDefinition[]): number {
   const runtimes = definitions.map(makeRuntime);
-  if (definitions.some((definition) => definition.doubleEnded)) {
-    return availableCableEnds(runtimes).length;
-  }
-  return runtimes.filter((arrow) => checkArrowExit(arrow, runtimes).clear).length;
+  const availableEnds = availableCableEnds(runtimes);
+  return definitions.some((definition) => definition.doubleEnded)
+    ? availableEnds.length
+    : availableEnds.filter(({ end }) => end === 'head').length;
 }

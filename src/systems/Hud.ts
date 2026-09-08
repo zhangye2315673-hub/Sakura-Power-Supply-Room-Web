@@ -35,6 +35,7 @@ export class Hud {
     continueKey: TranslationKey;
   } | null = null;
 
+  readonly resetViewButton = this.getButton('#reset-view-button');
   readonly resetButton = this.getButton('#reset-button');
   readonly newButton = this.getButton('#new-button');
   readonly continueButton = this.getButton('#continue-button');

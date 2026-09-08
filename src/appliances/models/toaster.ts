@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+import { toCreasedNormals } from 'three/addons/utils/BufferGeometryUtils.js';
 import {
   ApplianceModelKit,
   type ApplianceModelBuild,
@@ -63,13 +64,14 @@ function taperedShellGeometry(): THREE.ExtrudeGeometry {
   const geometry = new THREE.ExtrudeGeometry(shape, {
     depth: 1.18,
     bevelEnabled: true,
-    bevelSegments: 1,
+    bevelSegments: 5,
     bevelSize: 0.075,
     bevelThickness: 0.075,
     curveSegments: 2,
     steps: 1,
   });
   geometry.translate(0, 0, -0.59);
+  toCreasedNormals(geometry, Math.PI / 3);
   return geometry;
 }
 

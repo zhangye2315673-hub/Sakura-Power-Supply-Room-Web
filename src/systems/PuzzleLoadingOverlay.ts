@@ -10,12 +10,15 @@ export class PuzzleLoadingOverlay {
   private frame = 0;
   private completionTimer = 0;
   private startedAt = 0;
+  // Async completions belong to the load that started them, including queued frames.
+  private lifecycle = 0;
 
   get active(): boolean {
     return this.element.classList.contains('visible');
   }
 
   show(message: string): void {
+    this.lifecycle += 1;
     this.cancelTimers();
     this.startedAt = performance.now();
     this.label.textContent = message;
@@ -31,9 +34,11 @@ export class PuzzleLoadingOverlay {
   }
 
   complete(onCovered: () => void | Promise<void>, onFinished?: () => void): void {
+    const lifecycle = this.lifecycle;
     if (!this.active) {
-      onCovered();
-      onFinished?.();
+      void Promise.resolve(onCovered()).then(() => {
+        if (lifecycle === this.lifecycle) onFinished?.();
+      });
       return;
     }
     if (this.frame) cancelAnimationFrame(this.frame);
@@ -45,7 +50,9 @@ export class PuzzleLoadingOverlay {
     const remainingMinimum = Math.max(0, PuzzleLoadingOverlay.MINIMUM_VISIBLE_MS - visibleFor);
     this.completionTimer = window.setTimeout(() => {
       void Promise.resolve(onCovered()).finally(() => {
+        if (lifecycle !== this.lifecycle) return;
         requestAnimationFrame(() => requestAnimationFrame(() => {
+          if (lifecycle !== this.lifecycle) return;
           this.hide();
           onFinished?.();
         }));
@@ -58,10 +65,14 @@ export class PuzzleLoadingOverlay {
   }
 
   hide(): void {
+    this.lifecycle += 1;
     this.cancelTimers();
     this.element.classList.remove('visible');
     this.element.setAttribute('aria-hidden', 'true');
-    window.setTimeout(() => this.element.classList.remove('plugged'), 260);
+    const lifecycle = this.lifecycle;
+    window.setTimeout(() => {
+      if (lifecycle === this.lifecycle) this.element.classList.remove('plugged');
+    }, 260);
   }
 
   dispose(): void {

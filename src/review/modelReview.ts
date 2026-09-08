@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { installJellyEnvironment } from '../style/jelly';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import type { ApplianceModelBuild, ApplianceModelOptions } from '../appliances/ApplianceModelKit';
 import {
@@ -42,6 +43,8 @@ renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
 renderer.setClearColor(0xedf1f7, 1);
 
 const scene = new THREE.Scene();
+const disposeJellyEnvironment = installJellyEnvironment(renderer, scene);
+window.addEventListener('pagehide', disposeJellyEnvironment, { once: true });
 scene.background = new THREE.Color(0xedf1f7);
 scene.fog = new THREE.Fog(0xedf1f7, 18, 38);
 const camera = new THREE.PerspectiveCamera(32, 1, 0.05, 80);

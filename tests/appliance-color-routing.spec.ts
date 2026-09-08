@@ -59,12 +59,31 @@ test('a busy same-colour appliance is never reused for a second reservation', ()
   scene.dispose();
 });
 
+test('a rejected pull can release its uncommitted appliance reservation', () => {
+  const yellow = 0xffc857;
+  const blue = 0x5f9ee8;
+  const scene = new ApplianceScene();
+  scene.configure(0x55aa11, APPLIANCE_CATALOG.slice(0, 2), [yellow, blue]);
+  scene.setRequiredColors([yellow, blue]);
+
+  const target = scene.reserveAssignment('yellow-a', yellow);
+  expect(target).toBeTruthy();
+  expect(scene.getRoutingSummary().reservations).toHaveLength(1);
+  expect(scene.releaseAssignment('yellow-a', target ?? undefined)).toBe(true);
+  expect(scene.getRoutingSummary().reservations).toEqual([]);
+  expect(target?.state).toBe('idle');
+  expect(target?.isConnecting).toBe(false);
+  expect(scene.canAssignColor(yellow)).toBe(true);
+
+  scene.dispose();
+});
+
 test('a second same-colour cable can exit while the first is moving and then waits in the queue', async ({ page }) => {
   test.setTimeout(240_000);
   await page.addInitScript(() => {
     window.__APPLIANCE_PERFORMANCE_TIME_OVERRIDE__ = 0;
   });
-  await page.goto('/?seed=42&mode=random&direct=1');
+  await page.goto('/?seed=42&mode=random&direct=1&diagnostics=1');
   await enterPreparedGame(page);
 
   const pair = await page.waitForFunction(

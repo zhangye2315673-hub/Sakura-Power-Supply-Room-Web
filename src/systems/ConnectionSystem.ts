@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { cableJelly } from '../style/jelly';
 import {
   createPlugHead,
   PLUG_HEAD_SCALE,
@@ -8,7 +9,6 @@ import {
 import {
   CABLE_RADIAL_SEGMENTS,
   CABLE_RADIUS,
-  createCableToonMaterial,
 } from '../render/CableGeometry';
 import type { ApplianceTarget } from './ApplianceScene';
 
@@ -19,8 +19,8 @@ type ConnectionFlight = {
   start: THREE.Vector3;
   exitDirection: THREE.Vector3;
   head: PlugHead;
-  cable: THREE.InstancedMesh<THREE.CylinderGeometry, THREE.MeshToonMaterial>;
-  material: THREE.MeshToonMaterial;
+  cable: THREE.InstancedMesh<THREE.CylinderGeometry, THREE.MeshPhysicalMaterial>;
+  material: THREE.MeshPhysicalMaterial;
   target: ApplianceTarget;
   color: number;
   phaseStartedAt: number;
@@ -167,8 +167,27 @@ export class ConnectionSystem {
     onComplete: () => void,
   ): void {
     target.reserve(color);
-    const material = createCableToonMaterial(color);
+    const material = cableJelly({ color, thickness: CABLE_RADIUS * 2 });
     const head = createPlugHead(color, PLUG_HEAD_SCALE, true, plugStyleId);
+    // Flying plugs share the gel of the side connection. The puzzle's original
+    // plug materials and skill shaders remain owned by their existing factory.
+    const gelMaterials = new Map<THREE.Material, THREE.Material>();
+    head.root.traverse((object) => {
+      if (!(object instanceof THREE.Mesh)) return;
+      if (object.userData.isOutline) { object.visible = false; return; }
+      const convert = (source: THREE.Material): THREE.Material => {
+        if (!(source instanceof THREE.MeshToonMaterial)) return source;
+        let gel = gelMaterials.get(source);
+        if (!gel) {
+          gel = cableJelly({ color: source.color, thickness: 0.12 });
+          gelMaterials.set(source, gel);
+        }
+        return gel;
+      };
+      object.material = Array.isArray(object.material)
+        ? object.material.map(convert) : convert(object.material);
+    });
+    gelMaterials.forEach((_, source) => source.dispose());
     const cable = new THREE.InstancedMesh(
       new THREE.CylinderGeometry(
         CABLE_RADIUS,

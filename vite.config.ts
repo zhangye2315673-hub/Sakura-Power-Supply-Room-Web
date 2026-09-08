@@ -1,6 +1,8 @@
 import { defineConfig } from 'vite';
 import { fileURLToPath } from 'node:url';
 
+const hiddenSourceMap = process.env.VITE_HIDDEN_SOURCEMAP === '1';
+
 export default defineConfig({
   base: './',
   server: {
@@ -26,7 +28,9 @@ export default defineConfig({
     // context during the first custom post-processing frames. The unminified
     // bundle is stable and still only about 276 kB over the wire with gzip.
     minify: false,
-    sourcemap: true,
+    // Production builds omit source maps by default. Release diagnostics can
+    // opt into uploadable maps without exposing sourceMappingURL comments.
+    sourcemap: hiddenSourceMap ? 'hidden' : false,
     chunkSizeWarningLimit: 900,
   },
 });

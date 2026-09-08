@@ -1,4 +1,8 @@
+import { TessellateModifier } from 'three/addons/modifiers/TessellateModifier.js';
+import { JellyPreviewBody } from './JellyPreviewBody';
+import { createJellyDynamicsPanel } from './JellyDynamicsPanel';
 import * as THREE from 'three';
+import { installJellyEnvironment } from '../style/jelly';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import {
   AirVent,
@@ -84,9 +88,19 @@ export class ApplianceGallery {
   private readonly element = document.createElement('section');
   private readonly canvas = document.createElement('canvas');
   private readonly renderer: THREE.WebGLRenderer;
+  private readonly disposeJellyEnvironment: () => void;
   private readonly scene = new THREE.Scene();
   private readonly camera = new THREE.PerspectiveCamera(31, 1, 0.1, 80);
   private readonly controls: OrbitControls;
+  private readonly transitionRoot = new THREE.Group();
+  private readonly bodyRoot = new THREE.Group();
+  private readonly body = new JellyPreviewBody(this.bodyRoot, v => this.softDeform?.applyInertia(v));
+  private transition: 'out' | 'in' | null = null;
+  private transitionTime = 0;
+  private pendingKind: ApplianceKind | null = null;
+  private readonly slideAxis = new THREE.Vector3(1,0,0);
+  private slideDistance = 1;
+  private slideVelocity = 0;
   private readonly modelStage = new THREE.Group();
   private readonly performances = new AppliancePerformanceSystem();
   private readonly sensory = new ApplianceSensoryController(0.48);
@@ -103,10 +117,13 @@ export class ApplianceGallery {
   private readonly closeButton = document.createElement('button');
   private readonly resizeObserver: ResizeObserver;
   private current: ApplianceModelBuild | null = null;
+  private readonly previewBounds = new THREE.Box3();
   private galleryTarget: AppliancePerformanceTarget | null = null;
   private currentDefinition: ApplianceDefinition = APPLIANCE_CATALOG[0];
   private frameId = 0;
+  private readonly previewSourceGeometries = new Set<THREE.BufferGeometry>();
   private demoElapsed = 0;
+  private animationResumeAt = 0;
   private previousCycle = -1;
   private lastFrameAt = 0;
   private isOpen = false;
@@ -159,21 +176,30 @@ export class ApplianceGallery {
     this.rotateButton.textContent = '暂停自转';
     this.closeButton.type = 'button';
     this.closeButton.textContent = '关闭';
+    this.closeButton.setAttribute('aria-label', '退出家电图鉴');
     headerNav.append(this.resetButton, this.rotateButton, this.closeButton);
     this.canvas.className = 'appliance-gallery-canvas';
-    stage.append(this.canvas);
+    stage.append(this.canvas, createJellyDynamicsPanel(() => {
+      this.controls.autoRotate = false;
+      this.rotateButton.textContent = '继续自转';
+      this.softDeform?.nudge();
+      this.animationResumeAt = performance.now() * 0.001 + 4.5;
+    }));
     this.list.className = 'appliance-gallery-list';
     footer.prepend(this.list);
     document.querySelector('#app')?.append(this.element);
 
     this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: true, alpha: true });
+    this.disposeJellyEnvironment = installJellyEnvironment(this.renderer, this.scene);
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFShadowMap;
     this.renderer.setClearColor(PAL.fog, 0);
     this.scene.background = new THREE.Color(0xe9edf6);
-    this.scene.fog = new THREE.Fog(0xe9edf6, 18, 42);
-    this.scene.add(this.modelStage);
+    this.scene.fog = null;
+    this.scene.add(this.transitionRoot);
+    this.transitionRoot.add(this.bodyRoot);
+    this.bodyRoot.add(this.modelStage);
     this.scene.add(this.petals.mesh);
     this.scene.add(this.performances.root);
     this.scene.add(this.sensory.root);
@@ -183,6 +209,7 @@ export class ApplianceGallery {
     this.createLighting();
     this.controls = new OrbitControls(this.camera, this.canvas);
     this.controls.enableDamping = true;
+    this.controls.enablePan = false;
     this.controls.dampingFactor = 0.08;
     this.controls.autoRotate = true;
     this.controls.autoRotateSpeed = 1.15;
@@ -242,6 +269,7 @@ export class ApplianceGallery {
     this.sensory.dispose();
     this.petals.dispose();
     this.controls.dispose();
+    this.disposeJellyEnvironment();
     this.renderer.dispose();
     this.element.remove();
     delete window.__APPLIANCE_GALLERY_DIAGNOSTICS__;
@@ -253,7 +281,7 @@ export class ApplianceGallery {
     this.element.classList.add('visible');
     this.element.setAttribute('aria-hidden', 'false');
     document.body.classList.add('appliance-gallery-open');
-    this.select(this.currentDefinition.id);
+    this.loadSelection(this.currentDefinition.id);
     this.demoElapsed = 0;
     this.lastFrameAt = performance.now() * 0.001;
     this.previousCycle = -1;
@@ -265,6 +293,7 @@ export class ApplianceGallery {
     if (!this.isOpen) return;
     this.isOpen = false;
     cancelAnimationFrame(this.frameId);
+    this.transition=null; this.pendingKind=null; this.transitionRoot.position.set(0,0,0);
     this.element.classList.remove('visible');
     this.element.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('appliance-gallery-open');
@@ -290,8 +319,24 @@ export class ApplianceGallery {
   };
 
   private select(kind: ApplianceKind): void {
+    if (kind === this.currentDefinition.id && !this.transition) return;
+    this.pendingKind = kind;
+    if (this.transition) return;
+    this.finishDeformPointer(true);
+    this.body.release();
+    this.controls.autoRotate = false;
+    this.resumeAutoRotateAfterDeform = false;
+    this.rotateButton.textContent = '继续自转';
+    this.slideAxis.setFromMatrixColumn(this.camera.matrixWorld,0).normalize();
+    this.slideDistance = this.camera.position.length()*1.1;
+    this.transition = 'out'; this.transitionTime = 0; this.slideVelocity = 0;
+  }
+
+  private loadSelection(kind: ApplianceKind): void {
     const definition = APPLIANCE_CATALOG.find((item) => item.id === kind);
     if (!definition) return;
+    this.transitionRoot.position.set(0,0,0);
+    this.body.reset(new THREE.Vector3(1,1,1));
     this.currentDefinition = definition;
     if (this.galleryTarget) {
       this.galleryTarget.state = 'idle';
@@ -308,6 +353,26 @@ export class ApplianceGallery {
       accent,
       referencePath: definition.referencePath,
     });
+    // Subdivide only sparse preview surfaces; long triangles otherwise stretch
+    // into flat flags when the player pinches between existing vertices.
+    const refined = new Map<THREE.BufferGeometry, THREE.BufferGeometry>();
+    let refinementVertices = 0;
+    current.root.traverse(object => {
+      if (!(object instanceof THREE.Mesh) || object instanceof THREE.SkinnedMesh) return;
+      const source = object.geometry;
+      if (refined.has(source)) { object.geometry = refined.get(source)!; return; }
+      if ((Array.isArray(object.material) && source.groups.length > 1) || Object.keys(source.morphAttributes).length || source.getAttribute('position').count > 3000) return;
+      source.computeBoundingBox();
+      const size = source.boundingBox!.getSize(new THREE.Vector3());
+      const edge = Math.max(size.x,size.y,size.z)/12;
+      if (edge < 0.025) return;
+      const geometry = new TessellateModifier(edge, 7).modify(source);
+      const count = geometry.getAttribute('position').count;
+      if (refinementVertices + count > 140000) { geometry.dispose(); return; }
+      refinementVertices += count;
+      this.previewSourceGeometries.add(source);
+      refined.set(source,geometry); object.geometry = geometry;
+    });
     this.current = current;
     this.galleryTarget = {
       root: current.root,
@@ -319,6 +384,21 @@ export class ApplianceGallery {
         : this.demoElapsed,
     };
     this.modelStage.add(current.root);
+    this.modelStage.position.set(0, 0, 0);
+    this.transitionRoot.updateMatrixWorld(true);
+    this.modelStage.updateMatrixWorld(true);
+    current.root.updateMatrixWorld(true);
+    this.previewBounds.makeEmpty();
+    current.root.traverseVisible((object) => {
+      if (!(object instanceof THREE.Mesh)) return;
+      const materials = Array.isArray(object.material) ? object.material : [object.material];
+      if (!materials.some(material => material.visible && material.opacity > 0)) return;
+      object.geometry.computeBoundingBox();
+      if (object.geometry.boundingBox) {
+        this.previewBounds.union(object.geometry.boundingBox.clone().applyMatrix4(object.matrixWorld));
+      }
+    });
+    if (this.previewBounds.isEmpty()) this.previewBounds.setFromCenterAndSize(new THREE.Vector3(), new THREE.Vector3(1, 1, 1));
     this.softDeform = new SoftDeformController(current.root);
     this.title.textContent = definition.label;
     this.subtitle.textContent = `${definition.sizeTier} · ${definition.plugStyleId} · 通电动画自动循环`;
@@ -334,30 +414,24 @@ export class ApplianceGallery {
   private readonly resetView = () => {
     if (!this.current) return;
     this.softDeform?.reset();
+    this.body.reset(this.previewBounds.getSize(new THREE.Vector3()));
     this.modelStage.position.set(0, 0, 0);
+    this.transitionRoot.updateMatrixWorld(true);
     this.modelStage.updateMatrixWorld(true);
     this.current.root.position.set(0, 0, 0);
     this.current.root.rotation.set(0, 0, 0);
     this.current.root.scale.setScalar(1);
     this.current.root.updateMatrixWorld(true);
-    const bounds = new THREE.Box3().setFromObject(this.current.root);
+    const bounds = this.previewBounds;
     const center = bounds.getCenter(new THREE.Vector3());
     const size = bounds.getSize(new THREE.Vector3());
     // Every appliance is framed around the same canvas-space origin. Keep the
     // model root untouched because powered animations are allowed to vibrate
     // or rotate it; the stable gallery stage owns the centering correction.
     this.modelStage.position.copy(center).multiplyScalar(-1);
-    if (this.currentDefinition.id === 'radio') this.modelStage.position.y -= 1.65;
-    const radius = Math.max(size.x, size.y, size.z) * 0.58;
-    const modelFramingScale = Number(this.current.root.userData.previewFramingScale ?? 1);
-    const framingDistance = (this.currentDefinition.id === 'refrigerator'
-      ? 1.32
-      : this.currentDefinition.id === 'radio'
-        ? 1.45
-      : this.currentDefinition.id === 'toaster'
-        ? 1.16
-        : 1) * modelFramingScale;
-    const distance = radius / Math.tan(THREE.MathUtils.degToRad(this.camera.fov * 0.5)) * 1.18 * framingDistance;
+    const halfFov = THREE.MathUtils.degToRad(this.camera.fov * 0.5);
+    const limitingFov = Math.min(halfFov, Math.atan(Math.tan(halfFov) * this.camera.aspect));
+    const distance = Math.max(2.4, size.length() * 0.5 / Math.sin(limitingFov) * 1.12);
     const direction = this.currentDefinition.id === 'robot-vacuum'
       ? new THREE.Vector3(1.15, 1.9, 2.1)
       : this.currentDefinition.id === 'washer'
@@ -365,14 +439,20 @@ export class ApplianceGallery {
         : this.currentDefinition.id === 'refrigerator'
           ? new THREE.Vector3(1.35, 0.68, 2.55)
           : new THREE.Vector3(1.35, 0.82, 2.45);
-    const focusOffsetY = Number(this.current.root.userData.previewFocusOffsetY ?? 0);
+    this.controls.enableDamping = false;
+    const autoRotate = this.controls.autoRotate;
+    this.controls.autoRotate = false;
+    this.controls.update();
     this.camera.position.copy(direction.normalize().multiplyScalar(Math.max(2.4, distance)));
-    this.camera.position.y += focusOffsetY;
     this.camera.near = Math.max(0.01, distance / 80);
     this.camera.far = Math.max(30, distance * 10);
+    this.controls.minDistance = distance * 0.8;
+    this.controls.maxDistance = distance * 1.55;
     this.camera.updateProjectionMatrix();
-    this.controls.target.set(0, focusOffsetY, 0);
+    this.controls.target.set(0, 0, 0);
     this.controls.update();
+    this.controls.enableDamping = true;
+    this.controls.autoRotate = autoRotate;
     this.floor.position.y = -size.y * 0.5 - 0.04;
     this.floor.scale.setScalar(Math.max(0.7, Math.max(size.x, size.z) * 0.42));
   };
@@ -385,6 +465,7 @@ export class ApplianceGallery {
 
   private readonly onDeformPointerDown = (event: PointerEvent) => {
     if (
+      this.transition !== null ||
       event.button !== 0 ||
       this.deformPointerId !== null ||
       !this.current ||
@@ -405,6 +486,7 @@ export class ApplianceGallery {
     event.preventDefault();
     event.stopImmediatePropagation();
     this.deformPointerId = event.pointerId;
+    this.animationResumeAt = performance.now() * 0.001 + 4.5;
     this.camera.getWorldDirection(this.cameraForward);
     if (hit.face) {
       this.deformNormalMatrix.getNormalMatrix(hit.object.matrixWorld);
@@ -415,6 +497,8 @@ export class ApplianceGallery {
     this.deformPlane.setFromNormalAndCoplanarPoint(this.cameraForward, hit.point);
     const size = new THREE.Box3().setFromObject(this.current.root).getSize(new THREE.Vector3());
     const maxDimension = Math.max(size.x, size.y, size.z);
+    this.deformPlanePoint.copy(hit.point);
+    this.body.begin(hit.point);
     this.softDeform.begin(
       hit.point,
       size.length() * 0.72,
@@ -441,6 +525,7 @@ export class ApplianceGallery {
     this.camera.updateMatrixWorld(true);
     this.raycaster.setFromCamera(this.pointer, this.camera);
     if (this.raycaster.ray.intersectPlane(this.deformPlane, this.deformPlanePoint)) {
+      this.body.move(this.deformPlanePoint);
       this.softDeform.setPointerWorld(this.deformPlanePoint);
     }
   };
@@ -460,8 +545,9 @@ export class ApplianceGallery {
 
   private finishDeformPointer(release: boolean): void {
     const pointerId = this.deformPointerId;
-    if (release) this.softDeform?.release();
+    if (release) { this.softDeform?.release(); this.body.release(); }
     this.deformPointerId = null;
+    if (pointerId !== null) this.animationResumeAt = performance.now() * 0.001 + 4.5;
     this.canvas.classList.remove('squishing');
     if (pointerId === null) return;
     try {
@@ -477,12 +563,46 @@ export class ApplianceGallery {
     this.list.scrollLeft += event.deltaY;
   };
 
+  private updateSlide(delta: number): void {
+    if (!this.transition) return;
+    this.transitionTime += delta;
+    const duration = this.transition === 'out' ? 0.5 : 0.65;
+    const t = Math.min(this.transitionTime/duration,1);
+    // Base moves first. Its acceleration drives the height-weighted lattice.
+    const distance = this.transition === 'out' ? -this.slideDistance*t*t : this.slideDistance*(1-t)*(1-t);
+    const previous = this.transitionRoot.position.dot(this.slideAxis);
+    const velocity = (distance-previous)/Math.max(delta,0.001);
+    this.softDeform?.applyInertia(this.slideAxis.clone().multiplyScalar(velocity-this.slideVelocity));
+    this.slideVelocity = velocity;
+    this.transitionRoot.position.copy(this.slideAxis).multiplyScalar(distance);
+    if(t<1) return;
+    if(this.transition === 'out') {
+      const kind=this.pendingKind ?? this.currentDefinition.id;
+      this.pendingKind=null;
+      this.loadSelection(kind);
+      this.controls.autoRotate=false;
+      this.slideAxis.setFromMatrixColumn(this.camera.matrixWorld,0).normalize();
+      this.slideDistance=this.camera.position.length()*1.1;
+      this.transitionRoot.position.copy(this.slideAxis).multiplyScalar(this.slideDistance);
+      this.transition='in'; this.transitionTime=0; this.slideVelocity=0;
+    } else {
+      this.softDeform?.applyInertia(this.slideAxis.clone().multiplyScalar(-this.slideVelocity));
+      this.transitionRoot.position.set(0,0,0); this.transition=null; this.slideVelocity=0;
+      const next=this.pendingKind; this.pendingKind=null;
+      if(next && next!==this.currentDefinition.id) this.select(next);
+    }
+  }
+
   private animate = () => {
     if (!this.isOpen) return;
     const now = performance.now() * 0.001;
     const delta = Math.min(0.05, Math.max(0, now - this.lastFrameAt));
     this.lastFrameAt = now;
-    const kneading = this.deformPointerId !== null;
+    this.updateSlide(delta);
+    if (!this.transition) this.body.update(delta);
+    if(this.deformPointerId !== null) this.softDeform?.setPointerWorld(this.deformPlanePoint);
+    if (this.deformPointerId !== null) this.animationResumeAt = now + 4.5;
+    const kneading = this.deformPointerId !== null || this.body.moving || this.transition !== null || now < this.animationResumeAt;
     if (!kneading) {
       const cycleDuration = poweredPreviewCycleDuration(this.currentDefinition.id);
       this.demoElapsed = (this.demoElapsed + delta) % cycleDuration;
@@ -510,6 +630,7 @@ export class ApplianceGallery {
     if (
       this.resumeAutoRotateAfterDeform &&
       this.deformPointerId === null &&
+      now >= this.animationResumeAt &&
       this.softDeform?.isSettled
     ) {
       this.controls.autoRotate = true;
@@ -578,6 +699,7 @@ export class ApplianceGallery {
     this.renderer.setSize(rect.width, rect.height, false);
     this.camera.aspect = rect.width / rect.height;
     this.camera.updateProjectionMatrix();
+    if (this.isOpen) this.resetView();
   }
 
   private disposeCurrent(): void {
@@ -596,6 +718,8 @@ export class ApplianceGallery {
       const entries = Array.isArray(object.material) ? object.material : [object.material];
       entries.forEach((material) => materials.add(material));
     });
+    this.previewSourceGeometries.forEach(geometry => geometries.add(geometry));
+    this.previewSourceGeometries.clear();
     geometries.forEach((geometry) => geometry.dispose());
     materials.forEach((material) => material.dispose());
     this.current = null;

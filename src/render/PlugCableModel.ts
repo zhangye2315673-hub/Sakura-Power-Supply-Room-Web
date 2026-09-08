@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { cableJelly } from '../style/jelly';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import {
   addHullOutline,
@@ -52,28 +53,44 @@ import {
   setCableSkillRecolor,
   setCableSkillSweep,
 } from './CableGeometry';
+import { disposeOwnedResource, markSharedResource } from './sharedResources';
 
 const up = new THREE.Vector3(0, 1, 0);
 export const PLUG_CABLE_SOCKET_OVERLAP = ARROW_RADIUS * 0.48;
-const tailGeometry = new THREE.CylinderGeometry(
+const tailGeometry = markSharedResource(new THREE.CylinderGeometry(
   ARROW_RADIUS * 0.82,
   ARROW_RADIUS * 1.08,
   ARROW_RADIUS * 1.15,
   10,
+));
+const tailBandGeometry = markSharedResource(new THREE.CylinderGeometry(
+  ARROW_RADIUS * 1.03,
+  ARROW_RADIUS * 1.03,
+  ARROW_RADIUS * 0.38,
+  10,
+));
+const tailCapGeometry = markSharedResource(new THREE.SphereGeometry(ARROW_RADIUS * 0.76, 8, 5));
+const inductionInnerRingGeometry = markSharedResource(
+  new THREE.TorusGeometry(CABLE_RADIUS * 1.52, CABLE_RADIUS * 0.18, 8, 28),
 );
-const availableHintGeometry = new THREE.TorusGeometry(
+const inductionOuterRingGeometry = markSharedResource(
+  new THREE.TorusGeometry(CABLE_RADIUS * 2.08, CABLE_RADIUS * 0.24, 8, 32),
+);
+const availableHintGeometry = markSharedResource(new THREE.TorusGeometry(
   PLUG_HEAD_MAX_RADIUS * 1.58,
   PLUG_HEAD_MAX_RADIUS * 0.22,
   8,
   28,
-);
-const availableHintOuterGeometry = new THREE.TorusGeometry(
+));
+const availableHintOuterGeometry = markSharedResource(new THREE.TorusGeometry(
   PLUG_HEAD_MAX_RADIUS * 2.05,
   PLUG_HEAD_MAX_RADIUS * 0.08,
   8,
   28,
+));
+const availableHintBeaconGeometry = markSharedResource(
+  new THREE.OctahedronGeometry(PLUG_HEAD_MAX_RADIUS * 0.56, 0),
 );
-const availableHintBeaconGeometry = new THREE.OctahedronGeometry(PLUG_HEAD_MAX_RADIUS * 0.56, 0);
 const AVAILABLE_HINT_REVEAL_DURATION = 0.48;
 const AVAILABLE_HINT_REVEAL_OVERSHOOT = 1.72;
 const AVAILABLE_HINT_PULSE_SPEED = 5.2;
@@ -94,20 +111,20 @@ const LAMP_GUIDE_SOURCE_RADIUS = LAMP_GUIDE_APERTURE_RADIUS / (
 const LAMP_GUIDE_APERTURE_Y = PLUG_HEAD_ENVELOPE.bodyRange[1];
 const LAMP_GUIDE_GEOMETRY_START_Y = LAMP_GUIDE_APERTURE_Y
   - LAMP_GUIDE_LENGTH * LAMP_GUIDE_NEAR_FEATHER;
-const availableHintMaterial = new THREE.MeshBasicMaterial({
+const availableHintMaterial = markSharedResource(new THREE.MeshBasicMaterial({
   color: PAL.yellow,
   transparent: true,
   opacity: 0.94,
   depthWrite: false,
   toneMapped: false,
-});
-const availableHintOuterMaterial = new THREE.MeshBasicMaterial({
+}));
+const availableHintOuterMaterial = markSharedResource(new THREE.MeshBasicMaterial({
   color: PAL.yellow,
   transparent: true,
   opacity: 0.58,
   depthWrite: false,
   toneMapped: false,
-});
+}));
 
 function createAvailableEndHint(): THREE.Group {
   const hint = new THREE.Group();
@@ -254,7 +271,7 @@ function createIceSpikeGeometry(shape: IceSpikeShape, random: () => number): THR
 export class PlugCableModel {
   readonly root = new THREE.Group();
   readonly pickMeshes: THREE.Mesh[] = [];
-  readonly material: THREE.MeshToonMaterial;
+  readonly material: THREE.MeshPhysicalMaterial;
   readonly pathLength: number;
   private readonly basePoints: THREE.Vector3[];
   private readonly cumulativeLengths: number[];
@@ -269,7 +286,7 @@ export class PlugCableModel {
   private tailAvailableHint: THREE.Group | null;
   private tailLampGuide: THREE.Group | null = null;
   private readonly tailRoot = new THREE.Group();
-  private readonly tailMaterial: THREE.MeshToonMaterial;
+  private readonly tailMaterial: THREE.MeshPhysicalMaterial;
   private readonly tailIceShell = new THREE.Group();
   private readonly iceSpikesRoot = new THREE.Group();
   private readonly tailBaseColor: THREE.Color;
@@ -310,11 +327,11 @@ export class PlugCableModel {
     bands: 3,
   });
   private readonly inductionInnerRing = new THREE.Mesh(
-    new THREE.TorusGeometry(CABLE_RADIUS * 1.52, CABLE_RADIUS * 0.18, 8, 28),
+    inductionInnerRingGeometry,
     this.inductionInnerRingMaterial,
   );
   private readonly inductionOuterRing = new THREE.Mesh(
-    new THREE.TorusGeometry(CABLE_RADIUS * 2.08, CABLE_RADIUS * 0.24, 8, 32),
+    inductionOuterRingGeometry,
     this.inductionOuterRingMaterial,
   );
   private inductionRingProgresses: [number, number] = [0.5, 0.5];
@@ -362,12 +379,8 @@ export class PlugCableModel {
     this.freezeSeed = [...this.definition.id].reduce((value, character) => (
       Math.imul(value ^ character.charCodeAt(0), 16777619) >>> 0
     ), 2166136261) / 4294967295;
-    this.tailBaseColor = this.baseColor.clone().multiplyScalar(0.72);
-    this.tailMaterial = cel({
-      color: this.tailBaseColor,
-      bands: 3,
-      tint: 0x625874,
-    });
+    this.tailBaseColor = this.baseColor.clone();
+    this.tailMaterial = cableJelly({ color: this.tailBaseColor, thickness: CABLE_RADIUS * 2, transparent: false, opacity: 1 });
     this.basePoints = cableSocketPointsToWorld(definition);
     new THREE.Box3().setFromPoints(this.basePoints).getCenter(this.recycleSelectionCenter);
     this.cumulativeLengths = [0];
@@ -396,13 +409,13 @@ export class PlugCableModel {
     if (this.tailHead && this.tailAvailableHint) this.tailHead.root.add(this.tailAvailableHint);
 
     const tailBand = new THREE.Mesh(
-      new THREE.CylinderGeometry(ARROW_RADIUS * 1.03, ARROW_RADIUS * 1.03, ARROW_RADIUS * 0.38, 10),
+      tailBandGeometry,
       this.tailMaterial,
     );
     tailBand.name = 'plug-cable-tail-ring';
     tailBand.position.y = -ARROW_RADIUS * 0.16;
     const tailCap = new THREE.Mesh(
-      new THREE.SphereGeometry(ARROW_RADIUS * 0.76, 8, 5),
+      tailCapGeometry,
       this.tailMaterial,
     );
     tailCap.name = 'plug-cable-tail-cap';
@@ -1055,12 +1068,12 @@ export class PlugCableModel {
     (this.outlineMesh?.material as THREE.Material | undefined)?.dispose();
     this.head.dispose();
     this.tailHead?.dispose();
-    this.inductionInnerRing.geometry.dispose();
-    this.inductionOuterRing.geometry.dispose();
+    disposeOwnedResource(this.inductionInnerRing.geometry);
+    disposeOwnedResource(this.inductionOuterRing.geometry);
     this.inductionInnerRingMaterial.dispose();
     this.inductionOuterRingMaterial.dispose();
     this.tailRoot.traverse((object) => {
-      if (object instanceof THREE.Mesh) object.geometry.dispose();
+      if (object instanceof THREE.Mesh) disposeOwnedResource(object.geometry);
     });
     this.material.dispose();
     this.tailMaterial.dispose();
@@ -1469,6 +1482,7 @@ export class PlugCableModel {
     mesh.userData.arrowId = this.definition.id;
     mesh.userData.cableFillets = roundedCable.geometry.userData.cableFillets;
     this.outlineMesh = withOutline ? addHullOutline(mesh, BASE_CABLE_OUTLINE_THICKNESS) : null;
+    if (this.outlineMesh) this.outlineMesh.visible = false;
     this.bodyMesh = mesh;
     this.bodyThicknessState = captureGeometryThicknessState(mesh.geometry);
     this.outlineThicknessState = this.outlineMesh

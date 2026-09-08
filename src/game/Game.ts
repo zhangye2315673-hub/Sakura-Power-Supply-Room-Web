@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { installJellyEnvironment } from '../style/jelly';
 import { Loop } from '../core/Loop';
 import { CooperativeYieldBudget } from '../core/CooperativeYield';
 import {
@@ -38,6 +39,7 @@ import {
   seedForCampaignLevel,
 } from '../puzzle/levels';
 import { PlugCableModel } from '../render/PlugCableModel';
+import { PLUG_SHADOW_PROXY_LAYER } from '../render/PlugParts';
 import { setOutlineResolution } from '../style/outline';
 import { PAL } from '../style/palette';
 import { SakuraPipeline, type SkillScreenEffect } from '../style/post';
@@ -120,6 +122,11 @@ type RushFlow = 'sequence' | 'random-pool';
 const PERFORMANCE_WARMUP_LAYER = 31;
 
 const DIAGNOSTICS_PUBLISH_INTERVAL_FRAMES = 6;
+
+function diagnosticsEnabled(): boolean {
+  return import.meta.env.DEV
+    || new URLSearchParams(window.location.search).get('diagnostics') === '1';
+}
 
 type ArrowAnimation = {
   arrow: ArrowRuntime;
@@ -209,6 +216,7 @@ type RenderCostProfile = {
 
 export class Game {
   private readonly renderer: THREE.WebGLRenderer;
+  private disposeJellyEnvironment: (() => void) | null = null;
   private readonly scene = new THREE.Scene();
   private readonly camera = new THREE.PerspectiveCamera(26, 1, 0.1, 140);
   private readonly applianceGeometryWarmupScene = new THREE.Scene();
@@ -279,12 +287,13 @@ export class Game {
   private readonly washerSpin = new WasherSpinPresentation();
   private readonly skillPresentation: SkillPresentationController;
   private readonly puzzleWorker: Worker;
-  private readonly prefetchWorker: Worker;
+  private prefetchWorker: Worker | null = null;
   private readonly orbit: OrbitController;
   private readonly loop = new Loop(
     (delta, elapsed) => this.update(delta, elapsed),
     () => this.render(),
   );
+  private readonly diagnosticsEnabled = diagnosticsEnabled();
 
   private puzzle: PuzzleDefinition | null = null;
   private arrows: ArrowRuntime[] = [];
@@ -302,6 +311,7 @@ export class Game {
   private availableChoices: CableChoice[] = [];
   private blockedClickTarget: CableScreenTarget | null = null;
   private activeHint: Readonly<{ id: string; end: CableEnd }> | null = null;
+  private blockedRevealTimer = 0;
   private hintUsesRemaining = MAX_HINT_USES;
   private puzzleRequestId = 0;
   private puzzleApplyToken = 0;
@@ -313,6 +323,10 @@ export class Game {
   } | null = null;
   private prefetchingLevelId: number | null = null;
   private waitingForPrefetchLevelId: number | null = null;
+  private skillRemovalSequenceCache: {
+    signature: string;
+    sequence: readonly string[];
+  } | null = null;
   private puzzleRevision = 0;
   private currentLevel: LevelDefinition | null = null;
   private currentMode: GameMode = 'random';
@@ -372,6 +386,8 @@ export class Game {
   private openingActive = true;
   private openingTransitioning = false;
   private initialPuzzlePreparing = false;
+  private initialSceneReady = false;
+  private openingStartPending = false;
   private openingCameraPhase: 'idle' | 'insert' | 'hold' | 'fade-out' | 'background-hold' | 'reveal' | 'pull' = 'idle';
   private openingCameraElapsed = 0;
   private lastOpeningFrameElapsed = 0;
@@ -444,7 +460,7 @@ export class Game {
     }
     this.generationMs = result.generationMs ?? 0;
     const applyToken = this.puzzleApplyToken;
-    if (this.openingActive && this.puzzle === null && !this.initialPuzzlePreparing) {
+    if (this.openingActive && !this.initialSceneReady && this.puzzle === null && !this.initialPuzzlePreparing) {
       this.initialPuzzlePreparing = true;
       void this.applyPuzzle(result.puzzle, true, false, applyToken).catch((error) => {
         this.initialPuzzlePreparing = false;
@@ -455,7 +471,15 @@ export class Game {
     }
     this.hud.completePuzzleLoad(
       () => this.applyPuzzle(result.puzzle!, false, false, applyToken),
-      this.revealCommittedScene,
+      () => {
+        if (applyToken !== this.puzzleApplyToken) return;
+        if (this.openingActive && this.openingStartPending) {
+          this.openingStartPending = false;
+          this.beginOpeningTransition();
+        } else {
+          this.revealCommittedScene();
+        }
+      },
     );
   };
   private readonly onPuzzlePrefetched = (event: MessageEvent<PuzzleWorkerResponse>) => {
@@ -522,7 +546,9 @@ export class Game {
     this.arrowRoot.visible = false;
     this.appliances.root.visible = false;
     this.connections.root.visible = false;
-    window.__PROFILE_RENDER_BREAKDOWN__ = () => this.profileRenderBreakdown();
+    if (this.diagnosticsEnabled) {
+      window.__PROFILE_RENDER_BREAKDOWN__ = () => this.profileRenderBreakdown();
+    }
     this.appliances.setBurstHandler((origin, direction, count) => {
       this.petals.burst(origin, direction, count);
     });
@@ -605,16 +631,12 @@ export class Game {
     this.puzzleWorker = new Worker(new URL('../puzzle/generator.worker.ts', import.meta.url), {
       type: 'module',
     });
-    this.prefetchWorker = new Worker(new URL('../puzzle/generator.worker.ts', import.meta.url), {
-      type: 'module',
-    });
     this.puzzleWorker.addEventListener('message', this.onPuzzleGenerated);
-    this.prefetchWorker.addEventListener('message', this.onPuzzlePrefetched);
     canvas.addEventListener('webglcontextlost', this.onContextLost);
     canvas.addEventListener('webglcontextrestored', this.onContextRestored);
     this.appliances.bind(canvas, this.camera);
     this.orbit = new OrbitController(canvas, this.camera, {
-      onClick: (x, y) => this.handleClick(x, y),
+      onClick: (x, y, touch) => this.handleClick(x, y, undefined, 'head', touch),
       onHover: (x, y) => this.handleHover(x, y),
       onLeave: () => this.setHovered(null),
       onViewChanged: () => {
@@ -623,6 +645,12 @@ export class Game {
       },
     });
 
+    this.hud.resetViewButton.addEventListener('click', () => {
+      this.orbit.setAngles(0.76, this.currentLevel?.shape === 'sphere' ? 0.66 : 0.56);
+      this.orbit.setRadius(this.currentLevel?.cameraRadius ?? 19.2);
+      this.refreshAvailability(false);
+      this.publishDiagnostics();
+    });
     this.hud.resetButton.addEventListener('click', this.resetCurrentPuzzle);
     this.hud.newButton.addEventListener('click', this.loadNewPuzzle);
     this.hud.continueButton.addEventListener('click', this.continueAfterComplete);
@@ -739,8 +767,9 @@ export class Game {
     window.clearTimeout(this.startupTimer);
     this.puzzleWorker.removeEventListener('message', this.onPuzzleGenerated);
     this.puzzleWorker.terminate();
-    this.prefetchWorker.removeEventListener('message', this.onPuzzlePrefetched);
-    this.prefetchWorker.terminate();
+    this.prefetchWorker?.removeEventListener('message', this.onPuzzlePrefetched);
+    this.prefetchWorker?.terminate();
+    this.prefetchWorker = null;
     this.orbit.dispose();
     this.pipeline.dispose();
     this.globalToolbar.dispose();
@@ -773,6 +802,7 @@ export class Game {
     this.hud.dispose();
     this.applianceGeometryWarmupTarget.dispose();
     this.applianceGeometryWarmupMaterial.dispose();
+    this.disposeJellyEnvironment?.();
     this.renderer.dispose();
     if (window.__PROFILE_RENDER_BREAKDOWN__) window.__PROFILE_RENDER_BREAKDOWN__ = undefined;
     this.canvas.removeEventListener('webglcontextlost', this.onContextLost);
@@ -1031,7 +1061,11 @@ export class Game {
   }
 
   private leaveOpeningForModeSelection(): boolean {
-    if (!this.openingActive || !this.puzzle) return false;
+    if (!this.openingActive || !this.initialSceneReady) return false;
+    // Menu readiness belongs to this page lifetime, not to an active puzzle.
+    // Invalidate deferred scene work before starting a fresh challenge.
+    this.puzzleRequestId += 1;
+    this.puzzleApplyToken += 1;
     this.cancelPrefetch();
     this.startScreen.beginExit();
     this.startScreen.finishExit();
@@ -1049,6 +1083,7 @@ export class Game {
   private setExplorationMode(active: boolean): void {
     if (this.explorationMode === active) return;
     this.explorationMode = active;
+    this.orbit.setTouchLantern(active);
     document.documentElement.classList.toggle('exploration-mode-active', active);
     if (active) {
       this.explorationReturnTheme = this.theme.targetMode;
@@ -1067,23 +1102,7 @@ export class Game {
   }
 
   private readonly startRushFromOpening = () => {
-    if (!this.openingActive || !this.puzzle) return;
-    if (this.currentMode === 'rush' && this.currentRushChallenge && this.rushRound) {
-      this.startScreen.beginExit();
-      this.startScreen.finishExit();
-      this.openingActive = false;
-      this.openingTransitioning = false;
-      this.openingCameraPhase = 'idle';
-      this.openingScene.root.visible = false;
-      this.arrowRoot.visible = true;
-      this.appliances.root.visible = false;
-      this.connections.root.visible = false;
-      this.petals.mesh.visible = false;
-      this.rushUi.showBriefing(this.currentRushChallenge);
-      this.refreshAvailability(true);
-      this.publishDiagnostics();
-      return;
-    }
+    if (!this.openingActive || !this.initialSceneReady) return;
     const challenge = this.rushSelectionHint ?? RUSH_CHALLENGES[0];
     this.rushSelectionHint = null;
     if (!this.leaveOpeningForModeSelection()) return;
@@ -1261,6 +1280,7 @@ export class Game {
     this.hud.refreshLocale();
     this.rushUi.refreshLocale();
     this.doubleEndedUi.refreshLocale();
+    this.globalToolbar.refreshLocale();
     this.publishDiagnostics();
   };
 
@@ -1287,14 +1307,19 @@ export class Game {
 
   private readonly returnToOpening = () => {
     if (this.openingActive) return;
-    if (
-      this.animations.length > 0
-      || this.pendingApplianceConnections.length > 0
-      || this.connections.activeCount > 0
-    ) {
-      this.hud.flash(t('flash.wait'));
-      return;
-    }
+    // Home ends the session. Invalidate deferred work before disposing its scene.
+    this.puzzleRequestId += 1;
+    this.puzzleApplyToken += 1;
+    this.cancelPrefetch();
+    this.clearPuzzle();
+    this.puzzle = null;
+    this.initialPuzzlePreparing = false;
+    this.openingStartPending = false;
+    this.removedCount = 0;
+    this.randomGameOver = false;
+    this.randomLives = 3;
+    this.hintUsesRemaining = MAX_HINT_USES;
+    this.rushSelectionHint = null;
     this.setHovered(null);
     this.clearActiveHint();
     this.hud.setHintEnabled(false);
@@ -1327,9 +1352,6 @@ export class Game {
     this.orbit.setAngles(0.76, 0.56);
     this.orbit.setRadius(19.2);
     this.publishDiagnostics();
-    if (this.currentMode === 'campaign' && this.currentLevel?.id === 1) return;
-    const firstLevel = getCampaignLevel(1);
-    this.loadPuzzle(seedForCampaignLevel(firstLevel.id), firstLevel, 'campaign');
   };
 
   private readonly loadNextPuzzle = () => {
@@ -1387,6 +1409,15 @@ export class Game {
         else this.loadClassicRandomPuzzle(seed, getStandardRandomLevel(seed));
     }
   };
+
+  private persistCampaignProgress(): void {
+    if (this.currentMode !== 'campaign' || !this.currentLevel) return;
+    try {
+      const key = 'plug-spirits-campaign-progress';
+      const previous = Number.parseInt(localStorage.getItem(key) ?? '0', 10);
+      localStorage.setItem(key, String(Math.max(previous || 0, this.currentLevel.id)));
+    } catch { /* Optional storage. */ }
+  }
 
   private getCompletionContinuation() {
     return resolveCompletionContinuation({
@@ -1470,6 +1501,7 @@ export class Game {
     this.clearPuzzle();
     this.puzzle = puzzle;
     this.arrows = this.puzzle.arrows.map(makeRuntime);
+    this.resize();
     this.removedCount = 0;
     this.randomGameOver = false;
     if (this.currentMode === 'skill') {
@@ -1652,12 +1684,19 @@ export class Game {
       await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
       if (!isCurrentApply()) return;
       this.initialPuzzlePreparing = false;
+      this.initialSceneReady = true;
       this.startScreen.markReady();
       this.publishDiagnostics();
     } else if (this.currentMode === 'rush' && this.currentRushChallenge) {
       this.rushUi.showBriefing(this.currentRushChallenge);
     } else if (this.isDoubleEndedChallenge()) {
       this.doubleEndedUi.showBriefing();
+    }
+    // A mode selected from the opening screen can race the campaign puzzle
+    // that is being prepared behind the menu. Ensure the newly committed
+    // challenge explicitly reveals its cable root after that race settles.
+    if (!staged && !this.openingActive && isCurrentApply()) {
+      this.revealCommittedScene();
     }
     // A puzzle revision represents a fully committed scene. Publish it only
     // after asynchronous appliance/model setup and mode panels are complete,
@@ -1687,13 +1726,23 @@ export class Game {
     if (this.prefetchedLevel?.levelId === level.id || this.prefetchingLevelId === level.id) return;
     this.prefetchRequestId += 1;
     this.prefetchingLevelId = level.id;
-    this.prefetchWorker.postMessage({
+    this.getPrefetchWorker().postMessage({
       requestId: this.prefetchRequestId,
       seed: seedForCampaignLevel(level.id),
       targetCount: level.targetCount,
       level,
       mode: 'campaign',
     });
+  }
+
+  private getPrefetchWorker(): Worker {
+    if (this.prefetchWorker) return this.prefetchWorker;
+    const worker = new Worker(new URL('../puzzle/generator.worker.ts', import.meta.url), {
+      type: 'module',
+    });
+    worker.addEventListener('message', this.onPuzzlePrefetched);
+    this.prefetchWorker = worker;
+    return worker;
   }
 
   private cancelPrefetch(): void {
@@ -1704,6 +1753,12 @@ export class Game {
   }
 
   private clearPuzzle(): void {
+    window.clearTimeout(this.skillSettleTimer);
+    window.clearTimeout(this.skillCommitTimer);
+    window.clearTimeout(this.skillSettleCueTimer);
+    window.clearTimeout(this.blockedRevealTimer);
+    this.skillTransientHighlights.clear();
+    this.skillRemovalSequenceCache = null;
     window.clearTimeout(this.skillEvidenceCleanupTimer);
     window.clearTimeout(this.skillRecycleSelectionTimer);
     window.clearTimeout(this.skillBuffSwapTimer);
@@ -1824,7 +1879,15 @@ export class Game {
   }
 
   private beginOpeningTransition(): void {
-    if (!this.openingActive || this.openingTransitioning || !this.puzzle) return;
+    if (!this.openingActive || this.openingTransitioning || this.openingStartPending) return;
+    if (!this.puzzle) {
+      if (!this.initialSceneReady) return;
+      this.openingStartPending = true;
+      this.startScreen.beginExit();
+      const firstLevel = getCampaignLevel(1);
+      this.loadPuzzle(seedForCampaignLevel(firstLevel.id), firstLevel, 'campaign');
+      return;
+    }
     this.openingTransitioning = true;
     this.openingCameraPhase = 'insert';
     this.openingCameraElapsed = 0;
@@ -1939,6 +2002,7 @@ export class Game {
   }
 
   private createLighting(): void {
+    this.disposeJellyEnvironment = installJellyEnvironment(this.renderer, this.scene);
     const sun = this.sun;
     sun.position.set(-8.5, 11, 9);
     sun.castShadow = true;
@@ -1951,6 +2015,7 @@ export class Game {
     sun.shadow.camera.far = 35;
     sun.shadow.bias = -0.0004;
     sun.shadow.normalBias = 0.035;
+    sun.shadow.camera.layers.enable(PLUG_SHADOW_PROXY_LAYER);
     this.scene.add(sun, sun.target);
 
     const fill = this.fill;
@@ -2179,6 +2244,7 @@ export class Game {
     clientY: number,
     forcedArrowId?: string,
     forcedEnd: CableEnd = 'head',
+    touch = false,
   ): void {
     if (
       this.openingActive
@@ -2193,7 +2259,7 @@ export class Game {
     ) return;
     const picked = forcedArrowId
       ? { id: forcedArrowId, end: forcedEnd }
-      : this.pickArrow(clientX, clientY);
+      : this.pickArrow(clientX, clientY, touch);
     if (!picked) return;
     const arrow = this.arrows.find((entry) => entry.definition.id === picked.id);
     const model = this.models.get(picked.id);
@@ -2226,11 +2292,15 @@ export class Game {
       if (this.currentMode !== 'rush' && !target && !queueAfterExit) return;
       if (this.currentMode === 'skill') {
         const wasLastCableAtPullStart = this.arrows.length - this.removedCount === 1;
-        if (!target || !this.skillEngine?.beginManualPull(
+        if (!target) return;
+        if (!this.skillEngine?.beginManualPull(
           arrow.definition.id,
           target.kind,
           wasLastCableAtPullStart,
-        )) return;
+        )) {
+          this.appliances.releaseAssignment(arrow.definition.id, target);
+          return;
+        }
         this.setSkillInputLocked(true);
       }
       arrow.state = 'moving';
@@ -2273,6 +2343,7 @@ export class Game {
       });
       if (result.contact) this.petals.burst(result.contact, direction.clone().negate());
       this.hud.showBlocked();
+      if (result.blockerId) this.revealBlockingCable(result.blockerId);
       this.audio.playInteraction('blocked');
       if (this.currentMode === 'random') this.loseRandomLife();
       if (this.currentMode === 'skill') {
@@ -2282,6 +2353,16 @@ export class Game {
       }
       if (this.currentMode === 'rush') this.rushRound?.recordMistake();
     }
+  }
+
+  private revealBlockingCable(blockerId: string): void {
+    window.clearTimeout(this.blockedRevealTimer);
+    const blocker = this.models.get(blockerId);
+    if (!blocker) return;
+    blocker.setHovered(true, undefined, this.theme.snapshot.progress);
+    this.blockedRevealTimer = window.setTimeout(() => {
+      if (this.hoveredId !== blockerId) blocker.setHovered(false);
+    }, 720);
   }
 
   private loseRandomLife(): void {
@@ -2361,7 +2442,7 @@ export class Game {
     const frozen = new Set(this.skillEngine?.getFrozenCableIds() ?? []);
     const fake = new Set(this.skillEngine?.getFakePlugCableIds() ?? []);
     const definitions = remaining.map((arrow) => arrow.definition);
-    const removalSequence = findRemovalSequence(definitions) ?? [];
+    const resolveRemovalSequence = () => this.getSkillRemovalSequence(definitions);
     return {
       remainingCables: remaining.map((arrow) => ({
         id: arrow.definition.id,
@@ -2370,10 +2451,25 @@ export class Game {
         fakePlug: fake.has(arrow.definition.id),
       })),
       availableCableIds: [...physicallyAvailable].filter((id) => !frozen.has(id)),
-      removalSequence,
+      get removalSequence() {
+        return resolveRemovalSequence();
+      },
       routeColors: [...new Set(this.appliances.targets.map((target) => target.accent))],
       state: this.skillEngine!.state,
     };
+  }
+
+  private getSkillRemovalSequence(definitions: readonly ArrowDefinition[]): readonly string[] {
+    const signature = definitions.map((definition) => (
+      `${definition.id}:${definition.exitDirection}:${definition.doubleEnded ? 1 : 0}:`
+      + definition.path.map((point) => point.join(',')).join(';')
+    )).join('|');
+    if (this.skillRemovalSequenceCache?.signature === signature) {
+      return this.skillRemovalSequenceCache.sequence;
+    }
+    const sequence = findRemovalSequence(definitions) ?? [];
+    this.skillRemovalSequenceCache = { signature, sequence };
+    return sequence;
   }
 
   private resolveSkillConnection(_target: ApplianceTarget, arrow: ArrowRuntime): void {
@@ -3227,6 +3323,7 @@ export class Game {
       this.refreshAvailability(false);
       if (remaining === 0 && this.connections.activeCount === 0) {
         this.hud.showComplete();
+        this.persistCampaignProgress();
         this.audio.playInteraction('complete');
       }
     };
@@ -3580,7 +3677,7 @@ export class Game {
       : this.appliances.canHandleColor(color);
   }
 
-  private pickArrow(clientX: number, clientY: number): { id: string; end: CableEnd } | null {
+  private pickArrow(clientX: number, clientY: number, touch = false): { id: string; end: CableEnd } | null {
     const rect = this.canvas.getBoundingClientRect();
     this.pointer.set(
       ((clientX - rect.left) / rect.width) * 2 - 1,
@@ -3601,7 +3698,26 @@ export class Game {
       const model = this.models.get(arrow.definition.id);
       if (model) targets.push(...model.pickMeshes);
     }
-    const hits = this.raycaster.intersectObjects(targets, false)
+    let intersections = this.raycaster.intersectObjects(targets, false);
+    // Preserve exact hits. Only a missed touch gets a small screen-space
+    // tolerance; inner rings win so dense bundles do not snap to distant plugs.
+    if (touch && intersections.length === 0) {
+      for (const radius of [6, 12, 18]) {
+        for (let i = 0; i < 12; i++) {
+          const angle = i * Math.PI / 6;
+          const x = clientX + Math.cos(angle) * radius;
+          const y = clientY + Math.sin(angle) * radius;
+          if (x < rect.left || x > rect.right || y < rect.top || y > rect.bottom) continue;
+          this.pointer.set((x-rect.left)/rect.width*2-1, 1-(y-rect.top)/rect.height*2);
+          this.raycaster.setFromCamera(this.pointer,this.camera);
+          const hit = this.raycaster.intersectObjects(targets,false)[0];
+          if (hit) intersections.push(hit);
+        }
+        if (intersections.length) break;
+      }
+      intersections.sort((a,b)=>a.distance-b.distance);
+    }
+    const hits = intersections
       .map(({ object }) => typeof object.userData.arrowId === 'string'
         ? {
             id: object.userData.arrowId as string,
@@ -4028,9 +4144,12 @@ export class Game {
     }
     this.refreshAvailability(false);
     if (remaining !== 0) return;
+    const completedApplyToken = this.puzzleApplyToken;
     window.setTimeout(() => {
+      if (completedApplyToken !== this.puzzleApplyToken || this.openingActive) return;
       if (this.arrows.length - this.removedCount === 0 && this.connections.activeCount === 0) {
         this.hud.showComplete();
+        this.persistCampaignProgress();
         this.audio.playInteraction('complete');
       }
     }, 0);
@@ -4065,6 +4184,7 @@ export class Game {
     if (this.applianceGallery?.visible || this.contextUnavailable) return;
     this.pipeline.render();
     this.skillPresentation.render();
+    if (!this.diagnosticsEnabled) return;
     if (this.frame % DIAGNOSTICS_PUBLISH_INTERVAL_FRAMES === 0) {
       this.publishDiagnostics();
     } else {
@@ -4222,10 +4342,34 @@ export class Game {
     const width = Math.max(1, this.canvas.clientWidth);
     const height = Math.max(1, this.canvas.clientHeight);
     this.camera.aspect = width / height;
+    const portraitFit = width <= 760 ? Math.max(1, 0.62 / this.camera.aspect) : 1;
+    let fittedTangent = Math.tan(THREE.MathUtils.degToRad(13)) * portraitFit;
+    if (width <= 760 && this.camera.aspect < 0.8 && this.arrows.length > 0) {
+      const radius = this.arrows.reduce((outerRadius, arrow) => Math.max(
+        outerRadius, ...arrow.samplePoints.map(point => point.length() + 0.72),
+      ), 0);
+      const distance = this.currentLevel?.cameraRadius ?? 19.2;
+      const angularRadius = Math.asin(Math.min(0.9, radius / distance));
+      const heightFraction = THREE.MathUtils.mapLinear(
+        THREE.MathUtils.clamp(this.camera.aspect, 750 / 1624, 750 / 1334),
+        750 / 1624, 750 / 1334, 0.54, 0.48,
+      );
+      fittedTangent = Math.max(fittedTangent, Math.tan(angularRadius) / Math.min(
+        this.camera.aspect * 1.08, heightFraction,
+      ));
+    }
+    this.camera.fov = THREE.MathUtils.radToDeg(2 * Math.atan(
+      fittedTangent,
+    ));
     this.camera.updateProjectionMatrix();
+    this.appliances.resizeLayout();
     this.pipeline?.setSize(width, height);
     if (this.pipeline) setOutlineResolution(this.pipeline.size.x, this.pipeline.size.y);
     this.skillPresentation?.resize(width, height);
+    if (!this.openingActive && !this.openingTransitioning && this.models.size > 0) {
+      this.refreshAvailability(false);
+      this.publishDiagnostics();
+    }
   }
 
   private refreshAvailability(orientForFirstMove: boolean): void {
@@ -4376,6 +4520,7 @@ export class Game {
   }
 
   private publishLiveDiagnostics(): void {
+    if (!this.diagnosticsEnabled) return;
     const diagnostics = window.__THREE_GAME_DIAGNOSTICS__;
     if (!diagnostics) {
       this.publishDiagnostics();
@@ -4389,7 +4534,6 @@ export class Game {
     diagnostics.activeBurstPetals = this.petals.activeBurstCount;
     diagnostics.queuedConnections = this.pendingApplianceConnections.length;
     diagnostics.remainingArrows = this.arrows.length - this.removedCount;
-    diagnostics.appliances = this.appliances.getStateSummary();
     if (diagnostics.skill && this.skillEngine) {
       diagnostics.skill.phase = this.skillEngine.state.phase;
       diagnostics.skill.inputLocked = this.skillInputLocked;
@@ -4411,6 +4555,7 @@ export class Game {
   }
 
   private publishDiagnostics(): void {
+    if (!this.diagnosticsEnabled) return;
     const info = this.renderer.info;
     const activeAnimation = this.animations[0];
     const activeFlingMotions = this.animations
@@ -4591,7 +4736,7 @@ export class Game {
       audio: this.audio.getDiagnostics(),
       opening: {
         active: this.openingActive,
-        ready: this.puzzle !== null && !this.initialPuzzlePreparing,
+        ready: this.initialSceneReady,
         progress: this.startScreen.progress,
         transitioning: this.openingTransitioning,
         cameraPhase: this.openingCameraPhase,

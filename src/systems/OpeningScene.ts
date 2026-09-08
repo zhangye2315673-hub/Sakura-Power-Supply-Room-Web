@@ -520,6 +520,8 @@ export class OpeningScene {
   }
 
   private updateSocketAndHeroPlug(camera: THREE.PerspectiveCamera): void {
+    this.socket.position.x = camera.aspect < 0.8 ? 0.2 : 3.35;
+    this.socket.position.y = camera.aspect < 0.8 ? -2.12 : 0.38;
     this.socket.lookAt(camera.position);
     this.socket.rotateY(-0.46);
     this.socketNormal.copy(FORWARD).applyQuaternion(this.socket.quaternion).normalize();

@@ -10,6 +10,7 @@ import {
 import { PLUG_CABLE_SOCKET_OVERLAP, PlugCableModel } from '../src/render/PlugCableModel';
 import {
   PLUG_HEAD_ENVELOPE,
+  PLUG_SHADOW_PROXY_LAYER,
   PLUG_STYLE_IDS,
   createPlugHead,
 } from '../src/render/PlugParts';
@@ -171,6 +172,77 @@ test('plug terminals batch same-material contacts without losing picking or froz
   }
 });
 
+test('fixed plug geometry is shared while picking and shadow proxies stay out of the color pass', () => {
+  const first = createPlugHead(0xe86b82, 1, false, 'usb-c');
+  const second = createPlugHead(0x55a9a7, 1, false, 'usb-c');
+  const fixedPartNames = [
+    'plug-outer-shell',
+    'plug-front-shoulder',
+    'plug-interface-faceplate',
+    'plug-status-indicator',
+  ];
+  fixedPartNames.forEach((name) => {
+    const firstPart = first.root.getObjectByName(name) as THREE.Mesh;
+    const secondPart = second.root.getObjectByName(name) as THREE.Mesh;
+    expect(firstPart.geometry).toBe(secondPart.geometry);
+  });
+
+  const firstTerminal = first.root.getObjectByName('plug-terminal-assembly') as THREE.Group;
+  const secondTerminal = second.root.getObjectByName('plug-terminal-assembly') as THREE.Group;
+  expect(firstTerminal.children.map((child) => (child as THREE.Mesh).geometry)).toEqual(
+    secondTerminal.children.map((child) => (child as THREE.Mesh).geometry),
+  );
+  expect(firstTerminal.children.every((child) => child.castShadow === false)).toBe(true);
+
+  const shadowProxy = first.root.getObjectByName('plug-fixed-shadow-proxy') as THREE.Mesh;
+  expect(shadowProxy.castShadow).toBe(true);
+  expect(shadowProxy.layers.mask).toBe(1 << PLUG_SHADOW_PROXY_LAYER);
+  expect(first.pickMeshes.includes(shadowProxy)).toBe(false);
+
+  const jointPick = first.root.getObjectByName('plug-cable-joint-pick') as THREE.Mesh;
+  expect(jointPick.visible).toBe(false);
+  first.root.updateMatrixWorld(true);
+  const raycaster = new THREE.Raycaster(
+    new THREE.Vector3(0, 0.11, 1),
+    new THREE.Vector3(0, 0, -1),
+  );
+  expect(raycaster.intersectObject(jointPick, false).length).toBeGreaterThan(0);
+
+  const sharedShell = (first.root.getObjectByName('plug-outer-shell') as THREE.Mesh).geometry;
+  let sharedDisposeEvents = 0;
+  sharedShell.addEventListener('dispose', () => { sharedDisposeEvents += 1; });
+  first.dispose();
+  expect(sharedDisposeEvents).toBe(0);
+  second.dispose();
+  expect(sharedDisposeEvents).toBe(0);
+});
+
+test('single-ended cable caps share immutable geometry without sharing dynamic materials', () => {
+  const definition: ArrowDefinition = {
+    id: 'plug-cable-shared-cap-a',
+    path: [[5, 5, 5], [6, 5, 5]],
+    exitDirection: '+X',
+    color: 0xe86b82,
+    lengthClass: 'short',
+  };
+  const first = new PlugCableModel(definition, 'round-two-pin');
+  const second = new PlugCableModel({ ...definition, id: 'plug-cable-shared-cap-b' }, 'round-two-pin');
+  const firstCap = first.root.getObjectByName('plug-cable-tail-cap') as THREE.Mesh;
+  const secondCap = second.root.getObjectByName('plug-cable-tail-cap') as THREE.Mesh;
+  const firstBand = first.root.getObjectByName('plug-cable-tail-ring') as THREE.Mesh;
+  const secondBand = second.root.getObjectByName('plug-cable-tail-ring') as THREE.Mesh;
+  expect(firstCap.geometry).toBe(secondCap.geometry);
+  expect(firstBand.geometry).toBe(secondBand.geometry);
+  expect(firstCap.material).not.toBe(secondCap.material);
+
+  let sharedDisposeEvents = 0;
+  firstCap.geometry.addEventListener('dispose', () => { sharedDisposeEvents += 1; });
+  first.dispose();
+  expect(sharedDisposeEvents).toBe(0);
+  second.dispose();
+  expect(sharedDisposeEvents).toBe(0);
+});
+
 test('plug faceplate batches the fixed status recess without removing its semantic node', () => {
   const head = createPlugHead(0xe86b82, 1, false, 'round-two-pin');
   const face = head.root.getObjectByName('plug-interface-faceplate') as THREE.Mesh;
@@ -189,13 +261,13 @@ test('plug faceplate batches the fixed status recess without removing its semant
 test('plug interface cavity and electrical contacts keep fixed colors during skill tint', () => {
   for (const styleId of PLUG_STYLE_IDS) {
     const head = createPlugHead(0xe86b82, 1, false, styleId);
-    const materials = new Map<string, THREE.MeshToonMaterial>();
+    const materials = new Map<string, THREE.MeshPhysicalMaterial>();
     head.root.traverse((object) => {
       if (!(object instanceof THREE.Mesh)) return;
       const objectMaterials = Array.isArray(object.material) ? object.material : [object.material];
       objectMaterials.forEach((material) => {
         const role = material.userData.materialRole as string | undefined;
-        if (role && material instanceof THREE.MeshToonMaterial) materials.set(role, material);
+        if (role && material instanceof THREE.MeshPhysicalMaterial) materials.set(role, material);
       });
     });
     const shell = materials.get('outer-shell')!;
@@ -363,7 +435,7 @@ test('hover, blocked flash, prepare and reset keep the existing public interacti
   model.dispose();
 });
 
-test('skill tint updates the cable and every colored plug-head surface together', () => {
+test('skill tint updates cable-colored plug surfaces while contacts keep their authored colors', () => {
   const definition: ArrowDefinition = {
     id: 'plug-cable-skill-tint',
     path: [[5, 5, 5], [6, 5, 5]],
@@ -376,17 +448,12 @@ test('skill tint updates the cable and every colored plug-head surface together'
   const shoulder = model.root.getObjectByName('plug-front-shoulder') as THREE.Mesh;
   const sleeve = model.root.getObjectByName('plug-strain-relief') as THREE.Mesh;
   const rearNeck = model.root.getObjectByName('plug-rear-neck') as THREE.Mesh;
-  const face = model.root.getObjectByName('plug-interface-faceplate') as THREE.Mesh;
   const indicator = model.root.getObjectByName('plug-status-indicator') as THREE.Mesh;
   const tailRing = model.root.getObjectByName('plug-cable-tail-ring') as THREE.Mesh;
   const tailCap = model.root.getObjectByName('plug-cable-tail-cap') as THREE.Mesh;
   const cable = model.root.getObjectByName(`${definition.id}-cable`) as THREE.Mesh;
-  const terminalMeshes: THREE.Mesh[] = [];
-  model.root.getObjectByName('plug-terminal-assembly')?.traverse((object) => {
-    if (object instanceof THREE.Mesh) terminalMeshes.push(object);
-  });
   const coloredParts = [
-    cable, shell, shoulder, sleeve, rearNeck, face, indicator, tailRing, tailCap, ...terminalMeshes,
+    cable, shell, shoulder, sleeve, rearNeck, indicator, tailRing, tailCap,
   ];
   const initial = coloredParts.map((mesh) => (mesh.material as THREE.MeshToonMaterial).color.clone());
   model.setSkillTint(0x4f2b23, 0.78);
@@ -519,7 +586,7 @@ test('refrigerator freeze defaults to color until the ice presentation is enable
   ))).toBe(true);
   expect((model.material.userData.freezeAmount as { value: number }).value).toBe(1);
   expect((model.material.userData.freezeProgress as { value: number }).value).toBe(1);
-  expect(model.material.customProgramCacheKey()).toContain('cable-base-v5-progressive-freeze');
+  expect(model.material.customProgramCacheKey()).toContain('cable-base-v12-skill-recolor');
   expect(cableIceShell).toBeUndefined();
   expect(plugIceShell.visible).toBe(false);
   expect(tailIceShell.visible).toBe(false);
@@ -668,8 +735,9 @@ test('assembled seven-style board stays inside the v2 render budget', async ({ p
   await expect(page.locator('.showcase-debug-status')).toHaveCount(0);
   const diagnostics = await page.evaluate(() => window.__PLUG_SHOWCASE_DIAGNOSTICS__!);
   expect(diagnostics.styleCount).toBe(7);
-  expect(diagnostics.drawCalls).toBeLessThanOrEqual(120);
-  expect(diagnostics.triangles).toBeLessThanOrEqual(12_000);
+  expect(diagnostics.drawCalls).toBeLessThanOrEqual(90);
+  expect(diagnostics.triangles).toBeLessThanOrEqual(10_000);
+  expect(diagnostics.geometries).toBeLessThanOrEqual(80);
   expect(diagnostics.textures).toBeLessThanOrEqual(2);
 
   const averageFrameMs = await page.evaluate(() => new Promise<number>((resolve) => {
@@ -683,5 +751,15 @@ test('assembled seven-style board stays inside the v2 render budget', async ({ p
     };
     requestAnimationFrame(sample);
   }));
-  expect(averageFrameMs).toBeLessThanOrEqual(20);
+  const rendererName = await page.evaluate(() => {
+    const canvas = document.querySelector<HTMLCanvasElement>('#game-canvas');
+    const gl = canvas?.getContext('webgl2') ?? canvas?.getContext('webgl');
+    if (!gl) return 'unavailable';
+    const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+    return debugInfo
+      ? String(gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL))
+      : String(gl.getParameter(gl.RENDERER));
+  });
+  const frameBudgetMs = /swiftshader|software/i.test(rendererName) ? 30 : 20;
+  expect(averageFrameMs).toBeLessThanOrEqual(frameBudgetMs);
 });

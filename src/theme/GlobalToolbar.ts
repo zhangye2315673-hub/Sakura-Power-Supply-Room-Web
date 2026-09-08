@@ -1,5 +1,7 @@
 import { Leaf, Moon, Sun, Volume2, VolumeX, createElement, type IconNode } from 'lucide';
 import type { AudioManager } from '../audio/AudioManager';
+import { GameSettings } from '../systems/GameSettings';
+import { getLocale } from '../systems/Locale';
 import { SEASON_MODES, SEASON_PROFILES, type SeasonMode } from './SeasonProfiles';
 import type { SeasonController, SeasonSnapshot } from './SeasonController';
 import type { ThemeController, ThemeSnapshot } from './ThemeController';
@@ -24,6 +26,7 @@ export class GlobalToolbar {
   private readonly unsubscribeSeason: () => void;
   private readonly unsubscribeAudio: () => void;
   private themeLocked = false;
+  private readonly settings: GameSettings;
 
   constructor(
     private readonly theme: ThemeController,
@@ -68,9 +71,20 @@ export class GlobalToolbar {
     this.unsubscribeTheme = theme.subscribe((snapshot) => this.renderTheme(snapshot));
     this.unsubscribeSeason = season.subscribe((snapshot) => this.renderSeason(snapshot));
     this.unsubscribeAudio = audio.subscribe((muted) => this.renderAudio(muted));
+    this.settings = new GameSettings(this.element);
+  }
+
+  refreshLocale(): void {
+    this.settings.refreshLocale();
+    this.renderTheme(this.theme.snapshot);
+    this.renderSeason(this.season.snapshot);
+    this.renderAudio(this.audio.muted);
   }
 
   dispose(): void {
+    this.settings.dispose();
+    const language = this.element.querySelector('#language-button');
+    if (language) document.querySelector('#game-actions')?.append(language);
     this.unsubscribeTheme();
     this.unsubscribeSeason();
     this.unsubscribeAudio();
@@ -147,13 +161,15 @@ export class GlobalToolbar {
   private renderSeason(snapshot: SeasonSnapshot): void {
     setIcon(this.seasonButton, Leaf);
     const target = SEASON_PROFILES[snapshot.targetMode];
-    const label = `选择季节，当前${target.label}季`;
+    const label = getLocale() === 'en' ? `Season: ${snapshot.targetMode}` : `选择季节，当前${target.label}季`;
     this.seasonButton.title = label;
     this.seasonButton.setAttribute('aria-label', label);
     this.seasonButton.dataset.season = snapshot.targetMode;
     this.seasonButton.dataset.label = target.label;
     this.seasonMenu.querySelectorAll<HTMLButtonElement>('button[data-season]').forEach((button) => {
       const selected = button.dataset.season === snapshot.targetMode;
+      const mode = button.dataset.season as SeasonMode;
+      button.textContent = getLocale() === 'en' ? mode : `${SEASON_PROFILES[mode].label}季`;
       button.setAttribute('aria-checked', String(selected));
       button.classList.toggle('active', selected);
     });
@@ -161,7 +177,9 @@ export class GlobalToolbar {
 
   private renderTheme(snapshot: ThemeSnapshot): void {
     const switchToNight = snapshot.targetMode === 'day';
-    const label = switchToNight ? '切换到夜晚' : '切换到白天';
+    const label = getLocale() === 'en'
+      ? switchToNight ? 'Switch to night' : 'Switch to day'
+      : switchToNight ? '切换到夜晚' : '切换到白天';
     setIcon(this.themeButton, switchToNight ? Moon : Sun);
     this.themeButton.title = label;
     this.themeButton.setAttribute('aria-label', label);
@@ -171,7 +189,9 @@ export class GlobalToolbar {
   }
 
   private renderAudio(muted: boolean): void {
-    const label = muted ? '开启声音' : '关闭声音';
+    const label = getLocale() === 'en'
+      ? muted ? 'Enable sound' : 'Mute sound'
+      : muted ? '开启声音' : '关闭声音';
     setIcon(this.audioButton, muted ? VolumeX : Volume2);
     this.audioButton.title = label;
     this.audioButton.setAttribute('aria-label', label);

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>手机尺寸测试 · Plug Cable Spirits</title>
+    <style>
+      * { box-sizing: border-box; }
+      body { margin: 0; padding: 24px; color: #39324f; background: #ded9cf; font: 14px/1.6 system-ui, sans-serif; }
+      main { width: 379px; margin: 0 auto; }
+      header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+      a { color: inherit; text-underline-offset: 3px; }
+      .device { width: 379px; height: 816px; border: 2px solid #39324f; background: #fffaf0; box-shadow: 6px 6px 0 #39324f30; }
+      iframe { display: block; width: 375px; height: 812px; border: 0; }
+      nav { display: flex; gap: 12px; margin-bottom: 12px; }
+      nav a { padding: 5px 8px; border: 1px solid #39324f; background: #fffaf0; }
+      html.short .device { height: 671px; }
+      html.short iframe { height: 667px; }
+      @media (max-width: 426px) {
+        body { padding: 0; }
+        main, .device { width: 100%; }
+        header, nav, p { display: none; }
+        .device, html.short .device { height: 100dvh; border: 0; box-shadow: none; }
+        iframe, html.short iframe { width: 100%; height: 100dvh; }
+      }
+      p { margin: 14px 0 0; font-size: 12px; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header><strong id="size-label">手机预览 · 750 × 1624</strong><a href="/" target="_blank" rel="noopener">打开桌面版</a></header>
+      <nav aria-label="预览尺寸"><a href="?size=750x1624">长屏 750 × 1624</a><a href="?size=750x1334">短屏 750 × 1334</a></nav>
+      <div class="device"><iframe src="/" title="手机尺寸游戏预览" allow="autoplay; fullscreen"></iframe></div>
+      <p>按 2 倍设计稿比例预览，对应 375×812 / 375×667 CSS 视口。两版共用游戏代码；实体手机上铺满可用屏幕。不模拟真机触摸与性能。</p>
+    </main>
+    <script>
+      const short = new URLSearchParams(location.search).get('size') === '750x1334';
+      document.documentElement.classList.toggle('short', short);
+      document.querySelector('#size-label').textContent = short ? '手机预览 · 750 × 1334' : '手机预览 · 750 × 1624';
+    </script>
+  </body>
+</html>

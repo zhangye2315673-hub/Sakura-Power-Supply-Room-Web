@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { installJellyEnvironment } from '../style/jelly';
 import { createPlugHead, PLUG_STYLE_IDS, PLUG_STYLE_LABELS, type PlugHead } from '../render/PlugParts';
 import { ARROW_COLORS, PAL } from '../style/palette';
 import { createCableToonMaterial, createRoundedCableGeometry } from '../render/CableGeometry';
@@ -11,6 +12,7 @@ export type ShowcaseMode = 'plugs' | 'appliances';
 export class Showcase {
   private readonly renderer: THREE.WebGLRenderer;
   private readonly scene = new THREE.Scene();
+  private disposeJellyEnvironment: (() => void) | null = null;
   private readonly camera = new THREE.OrthographicCamera(-8, 8, 4.5, -4.5, 0.1, 60);
   private readonly plugHeads: PlugHead[] = [];
   private readonly appliances: ApplianceTarget[] = [];
@@ -43,6 +45,7 @@ export class Showcase {
     this.renderer.shadowMap.type = THREE.PCFShadowMap;
     this.renderer.setClearColor(PAL.fog, 1);
     this.scene.background = new THREE.Color(PAL.fog);
+    this.disposeJellyEnvironment = installJellyEnvironment(this.renderer, this.scene);
     this.scene.add(new THREE.HemisphereLight(PAL.hemiSky, PAL.hemiGround, 1.55));
     const sun = new THREE.DirectionalLight(PAL.sun, 2.35);
     sun.position.set(-5, 9, 8);
@@ -98,6 +101,7 @@ export class Showcase {
     this.appliances.forEach((appliance) => appliance.dispose());
     this.disposables.forEach((geometry) => geometry.dispose());
     this.disposableMaterials.forEach((material) => material.dispose());
+    this.disposeJellyEnvironment?.();
     this.renderer.dispose();
     document.querySelector('.showcase-overlay')?.remove();
     document.body.classList.remove('showcase-mode');

@@ -5,6 +5,7 @@ import {
   printerSkillLockDurationMs,
   skillPresentationStillActive,
 } from '../src/skill/skillPresentationTiming';
+import { SkillChallengeEngine } from '../src/skill/SkillChallengeEngine';
 
 test('打印机技能在正式流程中锁到最后一张纸完成，固定证据帧仍可快速结算', () => {
   expect(printerSkillLockDurationMs(undefined)).toBe(PRINTER_POWERED_ACTIVE_DURATION * 1_000);
@@ -44,4 +45,12 @@ test('通用技能时间线或临时特效正常收尾时锁定，但超过视�
     elapsedMs: 2_001,
     maxVisualWaitMs: 2_000,
   })).toBe(false);
+});
+
+test('一个技能抽线事务 settle 前拒绝启动第二根普通抽线', () => {
+  const engine = new SkillChallengeEngine(20260906);
+  expect(engine.beginManualPull('first', 'lamp')).toBe(true);
+  expect(engine.state.phase).toBe('manual-exit');
+  expect(engine.beginManualPull('second', 'radio')).toBe(false);
+  expect(engine.state.phase).toBe('manual-exit');
 });

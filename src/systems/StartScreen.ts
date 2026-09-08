@@ -159,6 +159,9 @@ export class StartScreen {
   }
 
   showAgain(): void {
+    // Resource loading is a once-per-page step. A new session needs no menu preload.
+    this.getElement<HTMLElement>('.start-loading-copy').hidden = true;
+    this.progressBar.hidden = true;
     window.clearTimeout(this.exitTimer);
     this.exitTimer = 0;
     this.leaving = false;
@@ -267,7 +270,22 @@ export class StartScreen {
   };
 
   private readonly handleKeyDown = (event: KeyboardEvent) => {
-    if (event.key === 'Escape') this.closeChallengeMenu();
+    if (this.challengeButton.getAttribute('aria-expanded') !== 'true') return;
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      this.closeChallengeMenu();
+      this.challengeButton.focus({ preventScroll: true });
+      return;
+    }
+    if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) return;
+    const buttons = Array.from(this.challengeMenu.querySelectorAll<HTMLButtonElement>('button:not(:disabled)'));
+    const currentIndex = buttons.indexOf(document.activeElement as HTMLButtonElement);
+    if (buttons.length === 0 || (currentIndex < 0 && document.activeElement !== this.challengeButton)) return;
+    event.preventDefault();
+    const nextIndex = event.key === 'Home' ? 0
+      : event.key === 'End' ? buttons.length - 1
+      : (currentIndex + (event.key === 'ArrowDown' ? 1 : -1) + buttons.length) % buttons.length;
+    buttons[nextIndex]?.focus();
   };
 
   private closeChallengeMenu(): void {

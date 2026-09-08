@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { jelly } from '../style/jelly';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import type { ApplianceKind, ApplianceState } from './ApplianceCatalog';
@@ -1139,10 +1140,10 @@ export class ApplianceSpectacleSystem {
     for (let index = 0; index < POOL_CAPACITY[kind]; index += 1) {
       const material: THREE.Material | THREE.Material[] = kind === 'toast'
         ? [
-          new THREE.MeshBasicMaterial({ color: 0x40313a, side: THREE.BackSide, depthWrite: false, fog: true }),
-          new THREE.MeshToonMaterial({ color: 0xb86d35, emissive: 0x2a1005, emissiveIntensity: 0.05 }),
-          new THREE.MeshToonMaterial({ color: 0xffe6a6, emissive: 0x4a2b08, emissiveIntensity: 0.035 }),
-          new THREE.MeshToonMaterial({ color: 0xffe6a6, emissive: 0x4a2b08, emissiveIntensity: 0.035 }),
+          new THREE.MeshBasicMaterial({ visible: false }),
+          jelly({ color: 0xd58b44, thickness: 0.2 }),
+          jelly({ color: 0xffd47e, thickness: 0.16 }),
+          jelly({ color: 0xffd47e, thickness: 0.16 }),
         ]
         : kind === 'wave'
           ? new THREE.MeshPhysicalMaterial({
@@ -1182,8 +1183,17 @@ export class ApplianceSpectacleSystem {
           depthWrite: false,
           fog: true,
           });
-      (Array.isArray(material) ? material : [material]).forEach((entry) => this.materials.add(entry));
-      const mesh = new THREE.Mesh(geometries[index % geometries.length], material);
+      // Keep wispy steam, light and petals on their authored shaders; only solid
+      // emitted objects and liquid volumes acquire the same gel as the device.
+      const solid = ['drop', 'sheet', 'bubble', 'note', 'paper', 'trash', 'popcorn', 'rice', 'ribbon', 'debris', 'wave', 'blender-drop', 'blender-splash'].includes(kind);
+      let surface = material;
+      if (solid && !Array.isArray(material)) {
+        const source = material as THREE.MeshBasicMaterial;
+        surface = jelly({ color: source.color, transparent: true, opacity: 0, thickness: 0.16 });
+        material.dispose();
+      }
+      (Array.isArray(surface) ? surface : [surface]).forEach((entry) => this.materials.add(entry));
+      const mesh = new THREE.Mesh(geometries[index % geometries.length], surface);
       mesh.name = `spectacle-${kind}-${index + 1}`;
       mesh.visible = false;
       mesh.renderOrder = 7;
