@@ -3767,7 +3767,7 @@ export class Game {
       ? Math.min(5, Math.max(delta, elapsed - this.lastOpeningFrameElapsed))
       : delta;
     this.lastOpeningFrameElapsed = elapsed;
-    this.theme.update(delta, !this.explorationMode);
+    this.theme.update(delta, this.openingActive && !this.openingTransitioning && !this.openingStartPending && !this.explorationMode);
     const themeSnapshot = this.theme.snapshot;
     this.season.update(delta, themeSnapshot.progress);
     const seasonSnapshot = this.season.snapshot;

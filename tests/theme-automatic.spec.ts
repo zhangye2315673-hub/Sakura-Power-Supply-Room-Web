@@ -50,8 +50,8 @@ test('automatic day-night timing, manual reset, and exploration pause', async ({
   expect(result.saved).toBe('night');
 });
 
-test('live game automatically changes theme and keeps manual controls', async ({ page }) => {
-  test.setTimeout(150_000);
+test('only the home screen cycles theme and gameplay keeps its entry theme', async ({ page }) => {
+  test.setTimeout(240_000);
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));
   await page.addInitScript(() => localStorage.clear());
@@ -61,5 +61,14 @@ test('live game automatically changes theme and keeps manual controls', async ({
   await page.getByRole('button', { name: '设置', exact: true }).click();
   await page.locator('#theme-button').click();
   await expect(page.locator('#theme-button')).toHaveAttribute('data-mode', 'day');
+  await page.locator('#settings-done-button').click();
+  await page.locator('#start-game-button').click();
+  await page.waitForFunction(() => !document.documentElement.classList.contains('opening-active'), {}, { timeout: 90000 });
+  const entry = await page.evaluate(() => window.__THREE_GAME_DIAGNOSTICS__!.theme);
+  await page.waitForTimeout(47000);
+  const later = await page.evaluate(() => window.__THREE_GAME_DIAGNOSTICS__!.theme);
+  expect(later.automatic).toBe(false);
+  expect(later.autoElapsed).toBeCloseTo(entry.autoElapsed, 1);
+  expect(later.targetMode).toBe(entry.targetMode);
   expect(errors).toEqual([]);
 });

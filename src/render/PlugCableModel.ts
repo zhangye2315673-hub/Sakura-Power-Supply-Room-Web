@@ -1451,9 +1451,26 @@ export class PlugCableModel {
     const firstDirection = points[1].clone().sub(points[0]).normalize();
     const activeExitDirection = activeEnd === 'tail' ? this.tailExitDirection : this.exitDirection;
     const renderPoints = points.map((point) => point.clone());
-    renderPoints.push(
-      points[points.length - 1].clone().addScaledVector(activeExitDirection, PLUG_CABLE_SOCKET_OVERLAP),
-    );
+    if (this.fakeTailPlug && this.tailHead && activeEnd === 'tail') {
+      // Retract the visible cable to the fake plug socket, leaving its contact fixed.
+      const joint = points[points.length - 1].clone().addScaledVector(
+        activeExitDirection, -PLUG_HEAD_MAX_LENGTH + PLUG_CABLE_SOCKET_OVERLAP,
+      );
+      renderPoints.pop();
+      while (renderPoints.length > 1 && (renderPoints[renderPoints.length - 1].clone().sub(joint).dot(activeExitDirection) > 0
+        || renderPoints[renderPoints.length - 1].distanceTo(joint) < CABLE_RADIUS * 2)) renderPoints.pop();
+      renderPoints.push(joint);
+    } else {
+      renderPoints.push(
+        points[points.length - 1].clone().addScaledVector(activeExitDirection, PLUG_CABLE_SOCKET_OVERLAP),
+      );
+      if (this.fakeTailPlug && this.tailHead) {
+        const joint = points[0].clone().addScaledVector(firstDirection, PLUG_HEAD_MAX_LENGTH - PLUG_CABLE_SOCKET_OVERLAP);
+        renderPoints.shift();
+        while (renderPoints.length > 2 && renderPoints[0].distanceTo(joint) < CABLE_RADIUS * 2) renderPoints.shift();
+        renderPoints.unshift(joint);
+      }
+    }
     if (this.tailHead && !this.fakeTailPlug) {
       renderPoints.unshift(points[0].clone().addScaledVector(firstDirection, -PLUG_CABLE_SOCKET_OVERLAP));
     }
