@@ -90,7 +90,7 @@ interface ThreeGameDiagnostics {
   hoveredArrow: string | null;
   hoveredCableEnd: 'head' | 'tail' | null;
   activeBurstPetals: number;
-  theme: {
+  theme: import('./theme/ThemeController').ThemeSnapshot & {
     season: import('./theme/SeasonController').SeasonSnapshot;
     seasonParticles: {
       weights: Record<import('./theme/SeasonProfiles').SeasonMode, number>;
@@ -102,12 +102,6 @@ interface ThreeGameDiagnostics {
       refrigeratorSnowVisible: boolean;
       refrigeratorColdProgress: number;
     };
-    mode: import('./theme/ThemeController').ThemeMode;
-    targetMode: import('./theme/ThemeController').ThemeMode;
-    progress: number;
-    transitioning: boolean;
-    reducedMotion: boolean;
-    source: 'query' | 'saved' | 'default' | 'manual';
     stars: number;
     explorationEyes: {
       pairs: number;

@@ -9,12 +9,17 @@ export type ThemeSnapshot = {
   progress: number;
   transitioning: boolean;
   reducedMotion: boolean;
-  source: 'query' | 'saved' | 'default' | 'manual';
+  source: 'query' | 'saved' | 'default' | 'manual' | 'automatic';
+  automatic: boolean;
+  autoElapsed: number;
+  autoInterval: number;
+  autoRemaining: number;
 };
 
 export type ThemeResolution = Pick<ThemeSnapshot, 'mode' | 'source'>;
 
 const STORAGE_KEY = 'sakura.theme';
+export const AUTO_THEME_INTERVAL_SECONDS = 45;
 const DAY_COLOR = new THREE.Color(0xd4e8fa);
 const NIGHT_COLOR = new THREE.Color(0x11152c);
 const START_INK_DAY = new THREE.Color(0x39324f);
@@ -45,6 +50,9 @@ export class ThemeController {
   private readonly motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
   private reducedMotionValue = this.motionQuery.matches;
   private lastUpdateAt = performance.now();
+  private autoElapsedValue = 0;
+  private automaticValue = true;
+  private automaticTransition = false;
 
   constructor(options: { internalEntry?: boolean } = {}) {
     let savedTheme: string | null = null;
@@ -82,6 +90,10 @@ export class ThemeController {
       transitioning: this.progressValue > 0 && this.progressValue < 1,
       reducedMotion: this.reducedMotionValue,
       source: this.sourceValue,
+      automatic: this.automaticValue,
+      autoElapsed: this.autoElapsedValue,
+      autoInterval: AUTO_THEME_INTERVAL_SECONDS,
+      autoRemaining: Math.max(0, AUTO_THEME_INTERVAL_SECONDS - this.autoElapsedValue),
     };
   }
 
@@ -90,7 +102,9 @@ export class ThemeController {
   }
 
   setMode(mode: ThemeMode, persist = false): void {
+    this.automaticTransition = false;
     if (persist) {
+      this.autoElapsedValue = 0;
       this.sourceValue = 'manual';
       try {
         localStorage.setItem(STORAGE_KEY, mode);
@@ -103,15 +117,26 @@ export class ThemeController {
     this.emit();
   }
 
-  update(delta: number): void {
+  update(delta: number, automatic = true): void {
     const now = performance.now();
-    const wallDelta = Math.min(0.05, Math.max(delta, Math.max(0, (now - this.lastUpdateAt) / 1000)));
+    const elapsed = Math.min(1, Math.max(0, delta, (now - this.lastUpdateAt) / 1000));
+    this.automaticValue = automatic;
+    if (automatic && !document.hidden) {
+      this.autoElapsedValue += elapsed;
+      if (this.autoElapsedValue >= AUTO_THEME_INTERVAL_SECONDS) {
+        this.autoElapsedValue %= AUTO_THEME_INTERVAL_SECONDS;
+        this.sourceValue = 'automatic';
+        this.setMode(this.target === 'night' ? 'day' : 'night');
+        this.automaticTransition = true;
+      }
+    }
+    const wallDelta = Math.min(this.automaticTransition ? 1 : 0.05, elapsed);
     this.lastUpdateAt = now;
     const targetProgress = this.target === 'night' ? 1 : 0;
     if (this.progressValue === targetProgress) return;
     const duration = this.reducedMotionValue
       ? this.target === 'night' ? 0.2 : 0.16
-      : this.target === 'night' ? 1.1 : 0.8;
+      : this.automaticTransition ? 5 : this.target === 'night' ? 1.1 : 0.8;
     this.progressValue = THREE.MathUtils.clamp(
       this.progressValue + Math.sign(targetProgress - this.progressValue) * wallDelta / duration,
       0,

@@ -6,6 +6,7 @@ export class GameSettings {
   private readonly dialog = document.createElement('dialog');
   private readonly restoredElements: Array<{ element: HTMLElement; marker: Text }> = [];
 
+
   constructor(toolbar: HTMLElement) {
     this.trigger.id = 'settings-button';
     this.trigger.type = 'button';

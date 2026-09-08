@@ -1,3 +1,4 @@
+import { applianceBodyBounds } from '../appliances/bodyBounds';
 import { TessellateModifier } from 'three/addons/modifiers/TessellateModifier.js';
 import { JellyPreviewBody } from './JellyPreviewBody';
 import { createJellyDynamicsPanel } from './JellyDynamicsPanel';
@@ -388,17 +389,7 @@ export class ApplianceGallery {
     this.transitionRoot.updateMatrixWorld(true);
     this.modelStage.updateMatrixWorld(true);
     current.root.updateMatrixWorld(true);
-    this.previewBounds.makeEmpty();
-    current.root.traverseVisible((object) => {
-      if (!(object instanceof THREE.Mesh)) return;
-      const materials = Array.isArray(object.material) ? object.material : [object.material];
-      if (!materials.some(material => material.visible && material.opacity > 0)) return;
-      object.geometry.computeBoundingBox();
-      if (object.geometry.boundingBox) {
-        this.previewBounds.union(object.geometry.boundingBox.clone().applyMatrix4(object.matrixWorld));
-      }
-    });
-    if (this.previewBounds.isEmpty()) this.previewBounds.setFromCenterAndSize(new THREE.Vector3(), new THREE.Vector3(1, 1, 1));
+    applianceBodyBounds(current.root, this.previewBounds);
     this.softDeform = new SoftDeformController(current.root);
     this.title.textContent = definition.label;
     this.subtitle.textContent = `${definition.sizeTier} · ${definition.plugStyleId} · 通电动画自动循环`;
@@ -695,7 +686,9 @@ export class ApplianceGallery {
   private resize(): void {
     const rect = this.canvas.parentElement?.getBoundingClientRect();
     if (!rect || rect.width < 1 || rect.height < 1) return;
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+    const pixelRatio = Math.min(window.devicePixelRatio || 1, 2,
+      Math.sqrt(4.6e6 / (rect.width * rect.height)));
+    this.renderer.setPixelRatio(Math.max(1, pixelRatio));
     this.renderer.setSize(rect.width, rect.height, false);
     this.camera.aspect = rect.width / rect.height;
     this.camera.updateProjectionMatrix();

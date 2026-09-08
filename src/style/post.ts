@@ -1972,7 +1972,9 @@ export class SakuraPipeline {
     this.renderHeight = renderHeight;
     this.size.set(renderWidth, renderHeight);
 
-    this.renderer.setPixelRatio(1);
+    // Keep the final screen buffer as sharp as the post-processing targets.
+    // CSS sizing stays in logical pixels; avoid downsampling to 1x on phones.
+    this.renderer.setPixelRatio(scale);
     this.renderer.setSize(width, height, false);
     this.sceneTarget.setSize(renderWidth, renderHeight);
     this.targetA.setSize(renderWidth, renderHeight);

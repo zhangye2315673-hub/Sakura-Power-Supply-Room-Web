@@ -31,6 +31,7 @@ export class NightEnvironment {
   private readonly lanternNdc = new THREE.Vector2(0, 0);
   private readonly lanternTarget = new THREE.Vector2(0, 0);
   private readonly lanternCenter = new THREE.Vector2(0, 0);
+  private readonly coarsePointer = window.matchMedia('(pointer: coarse)');
   // Start dark and let the first real frame ease the cursor lantern in. The
   // previous 0.65 default combined with the centered NDC origin on refresh
   // and rendered a one-frame oval flash in the middle of the homepage.
@@ -65,7 +66,7 @@ export class NightEnvironment {
     this.baseFogNear = fog?.near ?? 30;
     this.baseFogFar = fog?.far ?? 82;
     this.touchHint.className = 'exploration-touch-hint';
-    this.touchHint.textContent = '单指提灯 · 双指拖动旋转 / 捏合缩放 · 轻点抽线';
+    this.touchHint.textContent = '单指拖动：旋转并提灯 · 松手保持照明 · 轻点抽线';
     document.body.append(this.touchHint);
     this.lanternPoint.name = 'night-lantern-point-light';
     this.lanternPoint.castShadow = false;
@@ -144,7 +145,7 @@ export class NightEnvironment {
       0.25,
     );
     const mobileExploration = this.explorationProgress > 0 && !options.opening &&
-      (this.touchTarget || window.matchMedia('(pointer: coarse)').matches);
+      (this.touchTarget || this.coarsePointer.matches);
     const forceCenter = options.galleryOpen || (!mobileExploration && (this.pointerOverUi || !this.pointerActive));
     const desired = forceCenter ? this.lanternCenter : this.lanternTarget;
     const response = this.reducedMotion ? 1 : 1 - Math.exp(-presentationDelta / 0.105);
@@ -194,7 +195,7 @@ export class NightEnvironment {
       intensity: this.lanternIntensity,
       targetIntensity: this.lanternTargetIntensity,
       inApplianceZone: this.inApplianceZone,
-      returning: this.explorationProgress > 0 && (this.touchTarget || window.matchMedia('(pointer: coarse)').matches) ? false : !this.pointerActive || this.pointerOverUi,
+      returning: this.explorationProgress > 0 && (this.touchTarget || this.coarsePointer.matches) ? false : !this.pointerActive || this.pointerOverUi,
     };
   }
 

@@ -52,6 +52,9 @@ export class SeasonController {
   private weightsValue: Record<SeasonMode, number>;
   private sourceWeights: Record<SeasonMode, number>;
   private transitionProgress = 1;
+  private appliedThemeProgress = Number.NaN;
+  private appliedTransitionProgress = Number.NaN;
+  private appliedTarget: SeasonMode | null = null;
   private sourceValue: SeasonSnapshot['source'];
   private readonly listeners = new Set<(snapshot: SeasonSnapshot) => void>();
   private readonly motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -178,6 +181,12 @@ export class SeasonController {
   }
 
   private applyDocumentSeason(themeProgress: number): void {
+    if (this.appliedThemeProgress === themeProgress
+      && this.appliedTransitionProgress === this.transitionProgress
+      && this.appliedTarget === this.target) return;
+    this.appliedThemeProgress = themeProgress;
+    this.appliedTransitionProgress = this.transitionProgress;
+    this.appliedTarget = this.target;
     const environment = this.resolveEnvironment(themeProgress);
     const root = document.documentElement;
     const cssColor = `#${environment.pageBackground.getHexString()}`;

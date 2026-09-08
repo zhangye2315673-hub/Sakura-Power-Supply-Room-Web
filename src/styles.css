@@ -2668,6 +2668,7 @@ html.rush-active #hint-button {
 #complete-home-button,
 #settings-button,
 #settings-close-button,
+#appliance-gallery-button,
 #settings-done-button {
   min-height: 36px;
   padding: 7px 13px;
@@ -2687,6 +2688,7 @@ html.rush-active #hint-button {
 #complete-home-button:hover,
 #settings-button:hover,
 #settings-close-button:hover,
+#appliance-gallery-button:hover,
 #settings-done-button:hover {
   background: #fff7ed;
   transform: translate(1px, 1px);
@@ -2698,6 +2700,7 @@ html.rush-active #hint-button {
 #complete-home-button:active,
 #settings-button:active,
 #settings-close-button:active,
+#appliance-gallery-button:active,
 #settings-done-button:active {
   transform: translate(3px, 3px);
   box-shadow: none;
@@ -4538,7 +4541,7 @@ html[data-theme="night"] #settings-dialog #help-strip b { color: #c7becf; }
 .jelly-dynamics-panel, .jelly-dynamics-actions button { border-radius: 0; }
 .jelly-dynamics-panel { background: var(--paper, #fff8ed); box-shadow: 3px 3px 0 rgba(81,67,75,.16); }
 .jelly-dynamics-actions button:hover { background: #eadbd4; }
-#settings-preferences > #appliance-gallery-button { display: block; visibility: visible; width: 100%; border: 1px solid currentColor; border-radius: 0; padding: 10px; margin-top: 12px; }
+#settings-preferences > #appliance-gallery-button { display: block; visibility: visible; width: 100%; border-radius: 0; padding: 10px; margin-top: 12px; }
 .jelly-dynamics-panel input[type="range"] { appearance: none; height: 5px; background: #d7c8bf; border: 1px solid #9c8d86; border-radius: 0; margin: 12px 0; }
 .jelly-dynamics-panel input[type="range"]::-webkit-slider-thumb { appearance: none; width: 13px; height: 17px; border: 1px solid #66515b; border-radius: 0; background: #c27691; cursor: ew-resize; }
 .jelly-dynamics-panel input[type="range"]::-moz-range-thumb { width: 13px; height: 17px; border: 1px solid #66515b; border-radius: 0; background: #c27691; }
@@ -4573,3 +4576,7 @@ html[data-theme="night"] #settings-dialog #help-strip b { color: #c7becf; }
   .jelly-dynamics-panel input[type="range"] { margin: 18px 0 14px; }
   .appliance-gallery-stage::before { display: none; }
 }
+
+/* Same square controls as the existing settings sheet. */
+
+html[data-theme="night"] #appliance-gallery-button { filter: brightness(0.74) saturate(0.86); }

@@ -1,3 +1,4 @@
+import { applianceBodyBounds } from '../appliances/bodyBounds';
 import * as THREE from 'three';
 import { ARROW_COLORS } from '../style/palette';
 import type { PlugStyleId } from '../render/PlugParts';
@@ -205,7 +206,7 @@ export class ApplianceTarget {
     this.root.add(model.root);
     this.root.scale.setScalar(1);
     this.root.updateMatrixWorld(true);
-    this.deviceBounds.setFromObject(this.root);
+    applianceBodyBounds(this.root, this.deviceBounds);
     for (const edge of ['left', 'right', 'top', 'bottom'] as const) {
       const socket = model.root.getObjectByName(`${definition.id}-${edge}-connection-socket`);
       if (socket) this.connectionSocketsByEdge[edge] = socket;
@@ -213,7 +214,7 @@ export class ApplianceTarget {
     const modelCenter = this.deviceBounds.getCenter(new THREE.Vector3());
     model.root.position.sub(modelCenter);
     this.root.updateMatrixWorld(true);
-    this.deviceBounds.setFromObject(this.root);
+    applianceBodyBounds(this.root, this.deviceBounds);
     const modelWidth = Math.max(0.01, this.deviceBounds.max.x - this.deviceBounds.min.x);
     const modelHeight = Math.max(0.01, this.deviceBounds.max.y - this.deviceBounds.min.y);
     const referenceVerticalSpan = 2 * Math.tan(THREE.MathUtils.degToRad(26 * 0.5)) * REFERENCE_SCREEN_DEPTH;
@@ -1413,7 +1414,9 @@ export class ApplianceScene {
     let scale = 1;
     if (this.canvas && this.canvas.clientWidth <= 760 && aspect < 0.8) {
       const size = target.getScreenSize(aspect, this.camera?.fov).divideScalar(target.presentationScale);
-      scale = Math.min(0.21 / size.x, 0.20 * aspect / size.y);
+      // Tall large appliances need more height than compact desktop devices.
+      const heightInScreenWidths = target.sizeTier === 'XL' ? 0.29 : target.sizeTier === 'L' ? 0.25 : 0.20;
+      scale = Math.min(0.21 / size.x, heightInScreenWidths * aspect / size.y);
     }
     target.root.scale.multiplyScalar(scale / target.presentationScale);
     target.presentationScale = scale;

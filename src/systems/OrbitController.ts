@@ -203,8 +203,6 @@ export class OrbitController {
     if (totalDistance > 5) this.moved = true;
     if (!this.moved) return;
 
-    // Exploration uses one finger for the lantern; two fingers orbit/zoom.
-    if (this.touchLantern && event.pointerType === 'touch') return;
     const sensitivity = 0.0063;
     const horizontalSign = horizontalOrbitInputSign(this.pitch);
     this.yaw -= deltaX * sensitivity * horizontalSign;
@@ -239,8 +237,7 @@ export class OrbitController {
     }
     if (this.moved) {
       this.updateCamera();
-      this.callbacks.onViewChanged();
-      this.callbacks.onHover(event.clientX, event.clientY);
+      if (event.pointerType !== 'touch') this.callbacks.onHover(event.clientX, event.clientY);
       this.scheduleSettledViewChanged();
     }
   };
@@ -258,6 +255,7 @@ export class OrbitController {
   };
 
   private readonly clearTouches = () => {
+    window.clearTimeout(this.viewSettleTimer);
     for (const pointerId of this.touches.keys()) {
       if (this.canvas.hasPointerCapture(pointerId)) this.canvas.releasePointerCapture(pointerId);
     }
