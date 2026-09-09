@@ -174,7 +174,7 @@ export class AudioManager {
       ? 0.09
       : sound === 'rush-tick'
         ? 0.04
-        : 0.065;
+        : 0.085;
     frequencies[sound].forEach((frequency, index) => {
       this.scheduleTone(this.buses.interaction!, frequency, this.context!.currentTime + index * 0.09, sound === 'cable-success' ? 0.28 : sound === 'cable-grab' ? 0.2 : sound === 'button' ? 0.14 : 0.13, gainScale, 'sine');
     });
@@ -276,7 +276,7 @@ export class AudioManager {
     const interaction = context.createGain();
     ambient.gain.value = 0;
     appliance.gain.value = 0.22;
-    interaction.gain.value = 0.26;
+    interaction.gain.value = 0.42;
     ambient.connect(master);
     appliance.connect(master);
     interaction.connect(master);

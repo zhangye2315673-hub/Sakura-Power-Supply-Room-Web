@@ -80,7 +80,7 @@ export class MusicPlayer {
     this.lastTick = now;
     let fading = false;
     this.players.forEach((player, profile) => {
-      const target = profile === this.profile ? 0.16 : 0;
+      const target = profile === this.profile ? 0.09 : 0;
       player.volume += Math.sign(target - player.volume) * Math.min(step, Math.abs(target - player.volume));
       if (Math.abs(target - player.volume) > 0.00001) fading = true;
       if (target === 0 && player.volume < 0.00001) {
