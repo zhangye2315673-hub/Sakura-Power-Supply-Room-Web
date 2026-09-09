@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Plug Spirits · 音频试听</title>
+  <style>
+    :root { color-scheme: dark; font-family: system-ui, sans-serif; background: #201923; color: #fff6ef; }
+    body { max-width: 860px; margin: 0 auto; padding: 36px 22px 60px; background: radial-gradient(circle at 15% 0%, #573b51, transparent 45%), #201923; }
+    h1 { margin: 0 0 8px; font-size: 30px; } p { color: #d8c6c9; }
+    section { margin-top: 28px; } h2 { font-size: 15px; letter-spacing: .12em; color: #f5b8c1; text-transform: uppercase; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+    button { border: 1px solid #9e687d; border-radius: 14px; background: #382735; color: #fff6ef; padding: 16px; text-align: left; cursor: pointer; }
+    button:hover { background: #523347; border-color: #f2a5b6; } button strong { display:block; font-size:16px; } button span { display:block; margin-top:6px; color:#d8c6c9; font-size:12px; }
+    audio { width: 100%; margin-top: 12px; } .stop { margin-top: 12px; width: 100%; text-align:center; }
+  </style>
+</head>
+<body>
+  <h1>樱色插线室 · 音频试听</h1>
+  <p>每个按钮对应一个游戏功能。先试听，不会进入游戏，也不会改变游戏状态。</p>
+  <section><h2>核心玩法声音</h2><div class="grid">
+    <button data-sound="button"><strong>1 · 按钮点击</strong><span>UI / 实体按键感</span></button>
+    <button data-sound="grab"><strong>2 · 开始抽线</strong><span>软塑料弹性与短摩擦</span></button>
+    <button data-sound="blocked"><strong>3 · 抽线受阻</strong><span>闷碰、回弹，不是系统报错</span></button>
+    <button data-sound="connect"><strong>4 · 插头接通</strong><span>机械咔哒 + 电路接通</span></button>
+    <button data-sound="complete"><strong>5 · 关卡完成</strong><span>温暖、短小、有奖励感</span></button>
+  </div></section>
+  <section><h2>背景音乐候选</h2><div class="grid">
+    <button data-music="flowing"><strong>候选 A · Flowing Rocks</strong><span>Kenney 氛围循环</span></button>
+    <button data-music="night"><strong>候选 B · Night at the Beach</strong><span>Kenney 夜间氛围循环</span></button>
+    <button data-music="mishief"><strong>候选 C · Mishief Stroll</strong><span>Kenney 轻俏皮循环</span></button>
+  </div><audio id="player" controls></audio><button class="stop" id="stop">停止背景音乐</button></section>
+  <script>
+    let ctx;
+    const files = {
+      button: '/audio/kenney/interface/click_001.ogg',
+      grab: '/audio/kenney/interface/pluck.ogg',
+      blocked: '/audio/kenney/interface/error.ogg',
+      connect: '/audio/kenney/digital/zap-two-tone.ogg',
+      complete: '/audio/kenney/interface/confirmation.ogg',
+      flowing: '/audio/kenney/music/flowing-rocks.ogg',
+      night: '/audio/kenney/music/night-at-the-beach.ogg',
+      mishief: '/audio/kenney/music/mishief-stroll.ogg'
+    };
+    function tone(f, t, d, type='triangle', gain=.12) {
+      const o=ctx.createOscillator(), g=ctx.createGain(); o.type=type; o.frequency.setValueAtTime(f,ctx.currentTime+t); o.frequency.exponentialRampToValueAtTime(Math.max(50,f*.72),ctx.currentTime+t+d); g.gain.setValueAtTime(0,ctx.currentTime+t); g.gain.linearRampToValueAtTime(gain,ctx.currentTime+t+.012); g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+t+d); o.connect(g).connect(ctx.destination); o.start(ctx.currentTime+t); o.stop(ctx.currentTime+t+d+.02);
+    }
+    function synth(kind) { if(!ctx) ctx=new AudioContext(); if(ctx.state==='suspended') ctx.resume(); if(kind==='connect'){tone(105,.0,.12,'square',.13);tone(330,.08,.28,'sine',.12);tone(494,.19,.4,'triangle',.1);} else if(kind==='complete'){[330,392,494,587].forEach((f,i)=>tone(f,i*.09,.35,'triangle',.1));} else if(kind==='blocked'){tone(150,0,.16,'sawtooth',.12);tone(110,.08,.22,'square',.1);} }
+    document.querySelectorAll('[data-sound]').forEach(b=>b.onclick=()=>{ const k=b.dataset.sound; if(['connect','complete','blocked'].includes(k)) synth(k); else { const a=new Audio(files[k]); a.volume=.65; a.play(); } });
+    const player=document.querySelector('#player'); document.querySelectorAll('[data-music]').forEach(b=>b.onclick=()=>{player.src=files[b.dataset.music]; player.loop=true; player.play();}); document.querySelector('#stop').onclick=()=>{player.pause(); player.currentTime=0;};
+  </script>
+</body></html>

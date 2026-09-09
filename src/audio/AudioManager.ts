@@ -2,17 +2,22 @@ import * as THREE from 'three';
 import type { AppliancePerformanceTarget } from '../systems/AppliancePerformanceSystem';
 import type { ApplianceKind } from '../systems/ApplianceCatalog';
 import { APPLIANCE_AUDIO_PROFILES } from './ApplianceAudioProfiles';
+import { MusicPlayer, type MusicProfile } from './MusicPlayer';
 
 export type AudioBusName = 'master' | 'ambient' | 'appliance' | 'interaction';
 export type InteractionSound =
   | 'confirm'
   | 'cable-success'
+  | 'cable-grab'
+  | 'socket-near'
   | 'blocked'
   | 'appliance-land'
   | 'mode-start'
   | 'complete'
   | 'failed'
-  | 'button';
+  | 'button'
+  | 'rush-tick'
+  | 'rush-warning';
 
 type AudioSession = {
   target: AppliancePerformanceTarget;
@@ -49,6 +54,9 @@ export class AudioManager {
   private readonly activeNodes = new Set<AudioNode>();
   private wind: AudioSession | null = null;
   private noiseBuffer: AudioBuffer | null = null;
+  private readonly music = new MusicPlayer();
+  private readonly sampleUrls: Partial<Record<InteractionSound, string>> = {
+  };
   private nextChimeAt = 0;
   private nextInsectAt = 0;
   private mutedValue = false;
@@ -90,6 +98,11 @@ export class AudioManager {
     this.unlockedValue = this.context.state === 'running';
     this.applyMuteState(0.04);
     if (this.unlockedValue && !this.wind) this.startAmbient();
+    this.music.setEnabled(this.unlockedValue && !this.mutedValue && !this.hidden);
+  }
+
+  setMusicProfile(profile: MusicProfile | null): void {
+    this.music.setProfile(profile);
   }
 
   setMuted(muted: boolean, persist = false): void {
@@ -102,6 +115,7 @@ export class AudioManager {
       }
     }
     this.applyMuteState(0.08);
+    this.music.setEnabled(this.unlockedValue && !muted && !this.hidden);
     this.listeners.forEach((listener) => listener(muted));
   }
 
@@ -141,20 +155,37 @@ export class AudioManager {
 
   playInteraction(sound: InteractionSound): void {
     if (!this.context || !this.unlockedValue || this.mutedValue || this.hidden) return;
+    this.playSample(sound);
     const frequencies: Record<InteractionSound, readonly number[]> = {
       confirm: [392, 523],
-      'cable-success': [330, 440, 660],
+      'cable-success': [440, 660, 880],
+      'cable-grab': [740, 1040],
+      'socket-near': [523],
       blocked: [147, 123],
       'appliance-land': [92],
       'mode-start': [262, 330, 440],
       complete: [330, 440, 550, 660],
       failed: [220, 185, 147],
-      button: [440],
+      button: [1450, 2300],
+      'rush-tick': [660],
+      'rush-warning': [220, 277, 220],
     };
-    const gainScale = sound === 'blocked' || sound === 'failed' ? 0.09 : 0.065;
+    const gainScale = sound === 'blocked' || sound === 'failed' || sound === 'rush-warning'
+      ? 0.09
+      : sound === 'rush-tick'
+        ? 0.04
+        : 0.065;
     frequencies[sound].forEach((frequency, index) => {
-      this.scheduleTone(this.buses.interaction!, frequency, this.context!.currentTime + index * 0.07, 0.11, gainScale, 'sine');
+      this.scheduleTone(this.buses.interaction!, frequency, this.context!.currentTime + index * 0.09, sound === 'cable-success' ? 0.28 : sound === 'cable-grab' ? 0.2 : sound === 'button' ? 0.14 : 0.13, gainScale, 'sine');
     });
+  }
+
+  private playSample(sound: InteractionSound): void {
+    const url = this.sampleUrls[sound];
+    if (!url) return;
+    const element = new Audio(url);
+    element.volume = sound === 'socket-near' ? 0.12 : sound === 'button' ? 0.18 : 0.34;
+    element.play().catch(() => undefined);
   }
 
   getDiagnostics(): {
@@ -189,6 +220,7 @@ export class AudioManager {
     window.clearTimeout(this.suspendTimer);
     [...this.sessions.keys()].forEach((target) => this.stopSession(target, 0));
     if (this.wind) this.stopAudioSession(this.wind, 0);
+    this.music.dispose();
     void this.context?.close();
     this.context = null;
     this.activeNodes.clear();
@@ -206,6 +238,7 @@ export class AudioManager {
     this.suspendTimer = 0;
     const master = this.buses.master;
     if (this.hidden) {
+      this.music.setEnabled(false);
       master?.gain.setTargetAtTime(0, this.context.currentTime, 0.05);
       this.suspendTimer = window.setTimeout(() => {
         this.suspendTimer = 0;
@@ -215,6 +248,7 @@ export class AudioManager {
       void this.context.resume().then(() => {
         this.unlockedValue = this.context?.state === 'running';
         this.applyMuteState(0.08);
+        this.music.setEnabled(this.unlockedValue && !this.mutedValue && !this.hidden);
         [...this.sessions.keys()].forEach((target) => this.stopSession(target, 0));
       });
     }

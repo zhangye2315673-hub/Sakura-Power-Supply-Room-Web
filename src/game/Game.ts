@@ -100,6 +100,7 @@ import { SeasonController } from '../theme/SeasonController';
 import { ApplianceSensoryController } from '../appliances/ApplianceSensoryController';
 import { POWERED_ACTIVE_DURATION } from '../appliances/poweredAnimation';
 import { AudioManager } from '../audio/AudioManager';
+import { selectMusicProfile } from '../audio/MusicPlayer';
 import { TelevisionReconstructionTransition } from '../skill/TelevisionReconstructionTransition';
 import { ToasterHeatSwapTransition } from '../skill/ToasterHeatSwapTransition';
 import { RefrigeratorFreezePresentation } from '../skill/RefrigeratorFreezePresentation';
@@ -2265,6 +2266,8 @@ export class Game {
     const model = this.models.get(picked.id);
     if (!arrow || !model || arrow.state !== 'idle') return;
 
+    this.audio.playInteraction('cable-grab');
+
     if (this.currentMode === 'skill' && this.skillEngine?.state.phase === 'select-recycle-target') {
       this.commitSkillRecycleSelection(arrow);
       return;
@@ -3745,6 +3748,7 @@ export class Game {
     this.hoveredId = picked?.id ?? null;
     this.hoveredEnd = picked?.end ?? null;
     if (picked) {
+      this.audio.playInteraction('socket-near');
       const model = this.models.get(picked.id);
       model?.setHovered(true, picked.end, this.theme.snapshot.progress);
       if (recycleSelectionActive) model?.setRecycleSelectionState('hover');
@@ -3793,6 +3797,7 @@ export class Game {
     const lantern = this.nightEnvironment.lantern;
     this.lanternScreenPosition.set(lantern.position[0], lantern.position[1]);
     this.pipeline.setLantern(this.lanternScreenPosition, lantern.intensity);
+    this.audio.setMusicProfile(selectMusicProfile(this.openingActive));
     if (this.applianceGallery?.visible) return;
     this.audio.update(themeSnapshot.progress, this.appliances.targets, this.camera);
     this.frame += 1;
