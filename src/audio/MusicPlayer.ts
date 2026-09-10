@@ -1,5 +1,7 @@
 export type MusicProfile = 'main' | 'gameplay';
 
+const MUSIC_VOLUME = 0.05;
+
 export function selectMusicProfile(opening: boolean): MusicProfile {
   return opening ? 'main' : 'gameplay';
 }
@@ -76,11 +78,11 @@ export class MusicPlayer {
 
   private tick(): void {
     const now = performance.now();
-    const step = Math.min(0.1, (now - this.lastTick) / 1000) * 0.16 / 1.2;
+    const step = Math.min(0.1, (now - this.lastTick) / 1000) * MUSIC_VOLUME / 1.2;
     this.lastTick = now;
     let fading = false;
     this.players.forEach((player, profile) => {
-      const target = profile === this.profile ? 0.09 : 0;
+      const target = profile === this.profile ? MUSIC_VOLUME : 0;
       player.volume += Math.sign(target - player.volume) * Math.min(step, Math.abs(target - player.volume));
       if (Math.abs(target - player.volume) > 0.00001) fading = true;
       if (target === 0 && player.volume < 0.00001) {

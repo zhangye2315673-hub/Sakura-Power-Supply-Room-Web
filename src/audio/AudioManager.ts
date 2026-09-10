@@ -276,7 +276,7 @@ export class AudioManager {
     const interaction = context.createGain();
     ambient.gain.value = 0;
     appliance.gain.value = 0.22;
-    interaction.gain.value = 0.42;
+    interaction.gain.value = 0.55;
     ambient.connect(master);
     appliance.connect(master);
     interaction.connect(master);
