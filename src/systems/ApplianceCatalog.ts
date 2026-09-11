@@ -96,3 +96,8 @@ export function selectTutorialAppliances(count = TUTORIAL_POOL.length): Applianc
 export function applianceCatalogSummary(): Array<{ id: ApplianceKind; sizeTier: ApplianceSizeTier; plugStyleId: PlugStyleId }> {
   return APPLIANCE_CATALOG.map(({ id, sizeTier, plugStyleId }) => ({ id, sizeTier, plugStyleId }));
 }
+
+/** An authored cast of appliances for each campaign chapter. */
+export function selectCampaignAppliances(ids: readonly ApplianceKind[], count: number): ApplianceDefinition[] {
+  return ids.slice(0, Math.max(1, Math.min(ids.length, count))).map(definition);
+}

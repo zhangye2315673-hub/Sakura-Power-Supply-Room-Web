@@ -1,3 +1,6 @@
+import { CampaignProgress, campaignStars } from './CampaignProgress';
+import { CampaignUi } from '../systems/CampaignUi';
+import { campaignChapter } from './CampaignChapters';
 import * as THREE from 'three';
 import { installJellyEnvironment } from '../style/jelly';
 import { Loop } from '../core/Loop';
@@ -55,7 +58,7 @@ import { AppliancePerformanceSystem } from '../systems/AppliancePerformanceSyste
 import { StartScreen } from '../systems/StartScreen';
 import { RushModeUi } from '../systems/RushModeUi';
 import { DoubleEndedModeUi } from '../systems/DoubleEndedModeUi';
-import { selectTutorialAppliances } from '../systems/ApplianceCatalog';
+import { selectCampaignAppliances } from '../systems/ApplianceCatalog';
 import { getLocale, t, toggleLocale } from '../systems/Locale';
 import { RushRound } from './RushRound';
 import { preferAvailableCablePick } from './CablePickPreference';
@@ -252,9 +255,17 @@ export class Game {
   private readonly globalToolbar: GlobalToolbar;
   private readonly nightEnvironment: NightEnvironment;
   private readonly adaptiveQuality: AdaptiveNightQuality;
-  private readonly landedTargets = new WeakSet<ApplianceTarget>();
+  private readonly campaignProgress = new CampaignProgress(CAMPAIGN_LEVELS.length);
+  private readonly campaignUi = new CampaignUi(this.campaignProgress, CAMPAIGN_LEVELS, (id) => this.loadCampaignLevelById(id), () => this.resetCurrentPuzzle());
+  private completionShown = false;
   private readonly startScreen = new StartScreen({
-    onStart: () => this.beginOpeningTransition(),
+    onStart: () => this.startCampaignFromOpening(),
+    onCampaign: () => this.campaignUi.show(),
+    campaignStartLabel: () => {
+      const snapshot = this.campaignProgress.snapshot();
+      return snapshot.completed.length === 0 ? t('start.enter')
+        : t(snapshot.allComplete ? 'campaign.revisit' : 'campaign.continue', { level: snapshot.nextLevel });
+    },
     onRandom: () => this.startRandomFromOpening(),
     onExplore: () => this.startExploreFromOpening(),
     onRush: () => this.startRushFromOpening(),
@@ -306,6 +317,8 @@ export class Game {
   private frame = 0;
   private removedCount = 0;
   private availableCount = 0;
+  private puzzleStartedAtMs = 0;
+  private puzzleMistakes = 0;
   private applianceRoutingRevision = -1;
   private clickTarget: CableScreenTarget | null = null;
   private availableClickTargets: CableScreenTarget[] = [];
@@ -388,6 +401,10 @@ export class Game {
   private openingTransitioning = false;
   private initialPuzzlePreparing = false;
   private initialSceneReady = false;
+  private homeDepthRevealStartedAt: number | null = null;
+  private homeDepthRevealProgress = 0;
+  private homeDepthRevealComplete = false;
+  private readonly homeDepthFocus = new THREE.Vector3();
   private openingStartPending = false;
   private openingCameraPhase: 'idle' | 'insert' | 'hold' | 'fade-out' | 'background-hold' | 'reveal' | 'pull' = 'idle';
   private openingCameraElapsed = 0;
@@ -655,7 +672,7 @@ export class Game {
     this.hud.resetButton.addEventListener('click', this.resetCurrentPuzzle);
     this.hud.newButton.addEventListener('click', this.loadNewPuzzle);
     this.hud.continueButton.addEventListener('click', this.continueAfterComplete);
-    this.hud.completeHomeButton.addEventListener('click', this.returnToOpening);
+    this.hud.completeHomeButton.addEventListener('click', this.returnFromComplete);
     this.hud.applianceGalleryButton.addEventListener('click', this.onOpenApplianceGallery);
     this.hud.homeButton.addEventListener('click', this.returnToOpening);
     this.hud.languageButton.addEventListener('click', this.toggleLanguage);
@@ -796,6 +813,7 @@ export class Game {
     this.bubbleShield.dispose();
     this.soundWaveShield.dispose();
     this.dehumidifierDryShield.dispose();
+    this.campaignUi.dispose();
     this.startScreen.dispose();
     this.rushUi.dispose();
     this.doubleEndedUi.dispose();
@@ -812,7 +830,7 @@ export class Game {
     this.hud.resetButton.removeEventListener('click', this.resetCurrentPuzzle);
     this.hud.newButton.removeEventListener('click', this.loadNewPuzzle);
     this.hud.continueButton.removeEventListener('click', this.continueAfterComplete);
-    this.hud.completeHomeButton.removeEventListener('click', this.returnToOpening);
+    this.hud.completeHomeButton.removeEventListener('click', this.returnFromComplete);
     this.hud.applianceGalleryButton.removeEventListener('click', this.onOpenApplianceGallery);
     this.hud.homeButton.removeEventListener('click', this.returnToOpening);
     this.hud.languageButton.removeEventListener('click', this.toggleLanguage);
@@ -1231,6 +1249,8 @@ export class Game {
     }
     this.activeHint = null;
     this.availableChoices = [];
+    this.puzzleStartedAtMs = 0;
+    this.puzzleMistakes = 0;
     if (this.currentMode === 'rush') this.rushRound?.reset();
     this.puzzleRevision += 1;
     if (!preserveRandomLives) {
@@ -1269,7 +1289,12 @@ export class Game {
         ? { level: this.currentLevel.id.toString().padStart(2, '0'), shapeId: this.currentLevel.shape }
         : {},
     );
+    this.completionShown = false;
+    this.campaignUi.setCurrent(this.currentMode === 'campaign' && this.currentLevel ? this.currentLevel.id : null);
     this.hud.flash(t('flash.summary', { count: this.arrows.length, free: this.puzzle.initiallyFree }));
+    this.hud.showFirstPlayHint(this.currentMode === 'campaign' && this.currentLevel?.id === 1);
+    this.puzzleStartedAtMs = performance.now();
+    this.campaignUi.revealGoal();
     this.refreshAvailability(true);
     if (this.isDoubleEndedChallenge()) this.doubleEndedUi.showBriefing();
     this.publishDiagnostics();
@@ -1282,6 +1307,7 @@ export class Game {
     this.rushUi.refreshLocale();
     this.doubleEndedUi.refreshLocale();
     this.globalToolbar.refreshLocale();
+    this.campaignUi.refresh();
     this.publishDiagnostics();
   };
 
@@ -1349,13 +1375,47 @@ export class Game {
     this.connections.root.visible = false;
     this.petals.mesh.visible = true;
     this.hud.hidePanels();
+    this.campaignUi.setCurrent(null);
     this.startScreen.showAgain();
     this.orbit.setAngles(0.76, 0.56);
     this.orbit.setRadius(19.2);
     this.publishDiagnostics();
   };
 
+  private readonly returnFromComplete = () => {
+    const campaign = this.currentMode === 'campaign';
+    this.returnToOpening();
+    if (campaign) this.campaignUi.show();
+  };
+
+  private startCampaignFromOpening(): void {
+    if (!this.openingActive || this.openingTransitioning || this.openingStartPending) return;
+    const id = this.campaignProgress.snapshot().nextLevel;
+    // Preserve the prepared first-entry cinematic when the recommended puzzle is ready.
+    if (this.puzzle && this.currentMode === 'campaign' && this.currentLevel?.id === id
+      && this.puzzle.seed === seedForCampaignLevel(id)) {
+      this.beginOpeningTransition();
+    } else {
+      this.loadCampaignLevelById(id);
+    }
+  }
+
+  private loadCampaignLevelById(levelId: number): void {
+    if (!this.campaignProgress.isUnlocked(levelId)) return;
+    if (this.openingActive && !this.leaveOpeningForModeSelection()) return;
+    this.cancelPrefetch();
+    this.currentRushChallenge = null;
+    this.rushRound = null;
+    this.rushFlow = null;
+    this.rushUi.hide();
+    this.doubleEndedUi.hide();
+    this.setExplorationMode(false);
+    const level = getCampaignLevel(levelId);
+    this.loadPuzzle(seedForCampaignLevel(level.id), level, 'campaign');
+  }
+
   private readonly loadNextPuzzle = () => {
+    this.campaignUi.hideGoal();
     this.setExplorationMode(false);
     const nextId = this.currentMode === 'campaign' && this.currentLevel
       ? this.currentLevel.id + 1
@@ -1387,6 +1447,10 @@ export class Game {
   };
 
   private readonly continueAfterComplete = () => {
+    if (this.currentMode === 'campaign' && this.currentLevel?.id === CAMPAIGN_LEVELS.length) {
+      this.returnFromComplete();
+      return;
+    }
     const continuation = this.getCompletionContinuation();
     const seed = createRandomSeed();
     switch (continuation.action) {
@@ -1411,13 +1475,27 @@ export class Game {
     }
   };
 
-  private persistCampaignProgress(): void {
-    if (this.currentMode !== 'campaign' || !this.currentLevel) return;
-    try {
-      const key = 'plug-spirits-campaign-progress';
-      const previous = Number.parseInt(localStorage.getItem(key) ?? '0', 10);
-      localStorage.setItem(key, String(Math.max(previous || 0, this.currentLevel.id)));
-    } catch { /* Optional storage. */ }
+  private showPuzzleCompletion(): void {
+    if (this.completionShown) return;
+    this.completionShown = true;
+    if (this.currentMode === 'campaign' && this.currentLevel) {
+      const result = {
+        timeMs: this.puzzleStartedAtMs > 0 ? Math.max(0, performance.now() - this.puzzleStartedAtMs) : 0,
+        mistakes: this.puzzleMistakes,
+        stars: campaignStars(this.puzzleMistakes),
+      };
+      const outcome = this.campaignProgress.record(this.currentLevel.id, result);
+      const nextStarMistakes = result.stars === 2 ? result.mistakes
+        : result.stars === 1 ? result.mistakes - 2 : undefined;
+      this.hud.showComplete(result, outcome.best, {
+        isNewRecord: outcome.status === 'record', firstResult: outcome.status === 'first', nextStarMistakes,
+      });
+      this.campaignUi.complete(this.currentLevel.id, outcome);
+    } else {
+      this.hud.showComplete();
+      this.campaignUi.complete(null);
+    }
+    this.audio.playInteraction('complete');
   }
 
   private getCompletionContinuation() {
@@ -1455,6 +1533,7 @@ export class Game {
     mode: GameMode = 'random',
     templateMode?: 'random' | 'exploration' | 'skill',
   ): void {
+    this.campaignUi.hideGoal();
     this.puzzleRequestId += 1;
     this.puzzleApplyToken += 1;
     this.currentLevel = level ?? null;
@@ -1501,6 +1580,10 @@ export class Game {
     const modelBuildStartedAt = performance.now();
     this.clearPuzzle();
     this.puzzle = puzzle;
+    this.puzzleMistakes = 0;
+    this.puzzleStartedAtMs = 0;
+    this.completionShown = false;
+    this.campaignUi.setCurrent(this.currentMode === 'campaign' && this.currentLevel ? this.currentLevel.id : null);
     this.arrows = this.puzzle.arrows.map(makeRuntime);
     this.resize();
     this.removedCount = 0;
@@ -1541,8 +1624,8 @@ export class Game {
       this.currentMode === 'campaign' && this.currentLevel ? this.currentLevel.id : 0,
     );
     const activeColors = [...new Set(puzzle.arrows.map((arrow) => arrow.color))];
-    const configuredDefinitions = this.currentMode === 'campaign' && this.currentLevel?.id === 1
-      ? selectTutorialAppliances(activeColors.length)
+    const configuredDefinitions = this.currentMode === 'campaign' && this.currentLevel
+      ? selectCampaignAppliances(campaignChapter(this.currentLevel.id).appliances, activeColors.length)
       : undefined;
     if (!staged) this.preloadMaxSliceMs = 0;
     if (this.currentMode === 'rush') {
@@ -1636,6 +1719,8 @@ export class Game {
         : {},
     );
     this.hud.flash(t('flash.summary', { count: this.arrows.length, free: this.puzzle.initiallyFree }));
+    this.hud.showFirstPlayHint(this.currentMode === 'campaign' && this.currentLevel?.id === 1);
+    this.puzzleStartedAtMs = 0;
     if (this.currentLevel) {
       const preset = this.currentLevel.shape === 'torus'
         ? { yaw: 0.62, pitch: 0.72 }
@@ -1708,6 +1793,8 @@ export class Game {
 
   private readonly revealCommittedScene = (): void => {
     if (this.openingActive || !this.puzzle) return;
+    this.campaignUi.revealGoal();
+    if (this.puzzleStartedAtMs === 0) this.puzzleStartedAtMs = performance.now();
     this.arrowRoot.visible = true;
     this.appliances.root.visible = this.currentMode !== 'rush';
     this.connections.root.visible = this.currentMode !== 'rush';
@@ -1987,6 +2074,8 @@ export class Game {
     if (progress >= 1) {
       this.openingCameraPhase = 'idle';
       this.openingTransitioning = false;
+      this.campaignUi.revealGoal();
+      if (this.puzzleStartedAtMs === 0) this.puzzleStartedAtMs = performance.now();
       this.orbit.setAngles(0.76, this.currentLevel?.shape === 'sphere' ? 0.66 : 0.56);
       this.orbit.setRadius(this.currentLevel?.cameraRadius ?? 19.2);
       // The click target was projected for the close-up camera. Re-project it
@@ -2266,8 +2355,6 @@ export class Game {
     const model = this.models.get(picked.id);
     if (!arrow || !model || arrow.state !== 'idle') return;
 
-    this.audio.playInteraction('cable-grab');
-
     if (this.currentMode === 'skill' && this.skillEngine?.state.phase === 'select-recycle-target') {
       this.commitSkillRecycleSelection(arrow);
       return;
@@ -2306,6 +2393,9 @@ export class Game {
         }
         this.setSkillInputLocked(true);
       }
+      this.campaignUi.collapseGoal();
+      this.audio.playInteraction('cable-grab');
+      if (this.currentMode === 'campaign' && this.currentLevel?.id === 1) this.hud.hideFirstPlayHint();
       arrow.state = 'moving';
       if (this.activeHint?.id === picked.id && this.activeHint.end === picked.end) {
         this.clearActiveHint();
@@ -2345,6 +2435,8 @@ export class Game {
         end: picked.end,
       });
       if (result.contact) this.petals.burst(result.contact, direction.clone().negate());
+      if (this.currentMode === 'campaign') this.puzzleMistakes += 1;
+      if (this.currentMode === 'campaign' && this.currentLevel?.id === 1) this.hud.showFirstPlayHint(true);
       this.hud.showBlocked();
       if (result.blockerId) this.revealBlockingCable(result.blockerId);
       this.audio.playInteraction('blocked');
@@ -3325,9 +3417,7 @@ export class Game {
       this.applianceRoutingRevision = this.appliances.routingRevision;
       this.refreshAvailability(false);
       if (remaining === 0 && this.connections.activeCount === 0) {
-        this.hud.showComplete();
-        this.persistCampaignProgress();
-        this.audio.playInteraction('complete');
+        this.showPuzzleCompletion();
       }
     };
     this.skillSettleTimer = window.setTimeout(settleWhenReady, totalDuration);
@@ -3748,7 +3838,6 @@ export class Game {
     this.hoveredId = picked?.id ?? null;
     this.hoveredEnd = picked?.end ?? null;
     if (picked) {
-      this.audio.playInteraction('socket-near');
       const model = this.models.get(picked.id);
       model?.setHovered(true, picked.end, this.theme.snapshot.progress);
       if (recycleSelectionActive) model?.setRecycleSelectionState('hover');
@@ -3799,7 +3888,7 @@ export class Game {
     this.pipeline.setLantern(this.lanternScreenPosition, lantern.intensity);
     this.audio.setMusicProfile(selectMusicProfile(this.openingActive));
     if (this.applianceGallery?.visible) return;
-    this.audio.update(themeSnapshot.progress, this.appliances.targets, this.camera);
+    this.audio.update(themeSnapshot.progress);
     this.frame += 1;
     this.orbit.update(delta);
     this.appliances.setOrbitState(this.orbit.getState());
@@ -3902,14 +3991,6 @@ export class Game {
       elapsed,
       this.explorationMode ? 1 : 0,
     );
-    for (const target of this.appliances.targets) {
-      if (target.dropLanded && !this.landedTargets.has(target)) {
-        this.landedTargets.add(target);
-        this.audio.playInteraction('appliance-land');
-      } else if (!target.dropLanded) {
-        this.landedTargets.delete(target);
-      }
-    }
     if (this.currentMode === 'rush' && this.rushRound?.phase === 'running') {
       const phase = this.rushRound.update(elapsed);
       this.rushUi.setTimer(this.rushRound.remainingSeconds);
@@ -4060,7 +4141,6 @@ export class Game {
     const remaining = this.arrows.length - this.removedCount;
     this.hud.updateProgress(remaining, this.arrows.length);
     this.hud.showRemoved(remaining);
-    this.audio.playInteraction('cable-success');
     this.syncRequiredColors();
     if (this.currentMode === 'rush') {
       this.rushRound?.recordRemoval();
@@ -4142,7 +4222,7 @@ export class Game {
     );
     const remaining = this.arrows.length - this.removedCount;
     this.hud.showConnected(remaining, target.label);
-    this.audio.playInteraction('confirm');
+    this.audio.playInteraction('cable-success');
     if (this.currentMode === 'skill') {
       this.resolveSkillConnection(target, arrow);
       return;
@@ -4153,9 +4233,7 @@ export class Game {
     window.setTimeout(() => {
       if (completedApplyToken !== this.puzzleApplyToken || this.openingActive) return;
       if (this.arrows.length - this.removedCount === 0 && this.connections.activeCount === 0) {
-        this.hud.showComplete();
-        this.persistCampaignProgress();
-        this.audio.playInteraction('complete');
+        this.showPuzzleCompletion();
       }
     }, 0);
   }
@@ -4185,7 +4263,28 @@ export class Game {
     }
   }
 
+  private updateHomeDepthReveal(): void {
+    if (this.homeDepthRevealComplete) return;
+    // This latch belongs to the page lifetime. Returning home cannot replay it.
+    if (!this.openingActive || this.openingTransitioning || this.openingStartPending
+      || this.explorationMode || this.applianceGallery?.visible || this.contextUnavailable
+      || this.theme.snapshot.reducedMotion) {
+      this.homeDepthRevealProgress = 1;
+    } else if (this.initialSceneReady) {
+      const now = performance.now();
+      this.homeDepthRevealStartedAt ??= now;
+      this.homeDepthRevealProgress = Math.min(1, (now - this.homeDepthRevealStartedAt) / 1400);
+    }
+    // Hold the first scene soft while loading, then focus it once it is ready.
+    // That avoids a sharp -> blurred flash when asynchronous preload completes.
+    this.openingScene.getBundleWorldPosition(this.homeDepthFocus);
+    this.homeDepthFocus.applyMatrix4(this.camera.matrixWorldInverse);
+    this.pipeline.setOpeningDepthReveal(this.homeDepthRevealProgress, -this.homeDepthFocus.z);
+    this.homeDepthRevealComplete = this.homeDepthRevealProgress >= 1;
+  }
+
   private render(): void {
+    this.updateHomeDepthReveal();
     if (this.applianceGallery?.visible || this.contextUnavailable) return;
     this.pipeline.render();
     this.skillPresentation.render();
@@ -4532,6 +4631,11 @@ export class Game {
       return;
     }
     diagnostics.frame = this.frame;
+    diagnostics.opening.depthReveal = {
+      active: this.pipeline.openingDepthRevealActive,
+      progress: this.homeDepthRevealProgress,
+      complete: this.homeDepthRevealComplete,
+    };
     diagnostics.activeAnimations = this.animations.length
       + this.pendingApplianceConnections.length
       + this.connections.activeCount;
@@ -4742,6 +4846,11 @@ export class Game {
       opening: {
         active: this.openingActive,
         ready: this.initialSceneReady,
+        depthReveal: {
+          active: this.pipeline.openingDepthRevealActive,
+          progress: this.homeDepthRevealProgress,
+          complete: this.homeDepthRevealComplete,
+        },
         progress: this.startScreen.progress,
         transitioning: this.openingTransitioning,
         cameraPhase: this.openingCameraPhase,

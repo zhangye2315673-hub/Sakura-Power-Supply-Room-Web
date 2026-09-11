@@ -2,7 +2,6 @@ import { expect, test } from '@playwright/test';
 import * as THREE from 'three';
 import { APPLIANCE_CATALOG } from '../src/systems/ApplianceCatalog';
 import { APPLIANCE_SENSORY_PROFILES } from '../src/appliances/ApplianceSensoryProfiles';
-import { APPLIANCE_AUDIO_PROFILES } from '../src/audio/ApplianceAudioProfiles';
 import { AdaptiveNightQuality } from '../src/theme/AdaptiveQuality';
 import { ApplianceSensoryController } from '../src/appliances/ApplianceSensoryController';
 import { createApplianceModel } from '../src/appliances/models';
@@ -32,21 +31,15 @@ test('adaptive night quality degrades after two seconds and restores after eight
   expect(changes).toEqual(['reduced', 'sparse', 'minimal', 'sparse']);
 });
 
-test('all 29 appliances have sensory and four-stage audio profiles', () => {
+test('all 29 appliances retain their visual sensory profiles', () => {
   const catalogKinds = APPLIANCE_CATALOG.map((definition) => definition.id).sort();
   expect(Object.keys(APPLIANCE_SENSORY_PROFILES).sort()).toEqual(catalogKinds);
-  expect(Object.keys(APPLIANCE_AUDIO_PROFILES).sort()).toEqual(catalogKinds);
   expect(catalogKinds).toHaveLength(29);
   for (const kind of catalogKinds) {
     const sensory = APPLIANCE_SENSORY_PROFILES[kind];
-    const audio = APPLIANCE_AUDIO_PROFILES[kind];
     expect(sensory.standbyBrightness).toBeGreaterThanOrEqual(0.35);
     expect(sensory.standbyBrightness).toBeLessThanOrEqual(0.45);
-    expect(audio.stages).toHaveLength(4);
-    expect(audio.stages.map((stage) => stage.at)).toEqual([...audio.stages.map((stage) => stage.at)].sort((a, b) => a - b));
-    expect(audio.stages[3].at + audio.stages[3].duration).toBeLessThanOrEqual(audio.duration);
   }
-  expect(APPLIANCE_AUDIO_PROFILES.printer.duration).toBeGreaterThan(5.2);
 });
 
 test('all 29 appliance models expose functional material nodes without generic point lights', () => {

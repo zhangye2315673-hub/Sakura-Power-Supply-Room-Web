@@ -56,9 +56,9 @@ export const CAMPAIGN_LEVELS: readonly LevelDefinition[] = [
   level(3, 3668339987, 'pyramid', 'normal', 9, 2, 3, [3, 3, 3], [4, 5, 4], 0.28, 0.18, 19.8, TUTORIAL_QUOTAS[2]),
   level(4, 2802362286, 'cylinder', 'normal', 12, 3, 4, [3, 3, 3], [4, 5, 4], 0.32, 0.35, 20.2, TUTORIAL_QUOTAS[3]),
   level(5, 387276917, 'sphere', 'hard', 16, 3, 5, [4, 4, 4], [6, 6, 6], 0.36, 0.28, 20.8, TUTORIAL_QUOTAS[4]),
-  level(6, 19088743, 'octahedron', 'hard', 20, 4, 6, [4, 4, 4], [6, 6, 6], 0.38, 0.30, 21.2, { short: 0.12, medium: 0.53, long: 0.35 }),
-  level(7, 305419896, 'cuboid', 'hard', 26, 4, 7, [5, 4, 4], [7, 6, 6], 0.40, 0.31, 21.8, { short: 0.10, medium: 0.52, long: 0.38 }),
-  level(8, 3735928559, 'pyramid', 'expert', 32, 5, 8, [5, 5, 5], [7, 7, 7], 0.42, 0.32, 22.4, { short: 0.08, medium: 0.50, long: 0.42 }),
+  level(6, 19088743, 'octahedron', 'hard', 18, 4, 5, [4, 4, 4], [6, 6, 6], 0.38, 0.26, 21.2, { short: 0.12, medium: 0.53, long: 0.35 }),
+  level(7, 305419896, 'cuboid', 'hard', 24, 4, 6, [5, 4, 4], [7, 6, 6], 0.40, 0.22, 21.8, { short: 0.10, medium: 0.52, long: 0.38 }),
+  level(8, 3735928559, 'pyramid', 'expert', 28, 4, 6, [5, 5, 5], [7, 7, 7], 0.42, 0.27, 22.4, { short: 0.08, medium: 0.50, long: 0.42 }),
 ];
 
 export type RandomChallengeProfile = Readonly<{

@@ -7,7 +7,10 @@ if (!canvas) {
   throw new Error('Missing #game-canvas element.');
 }
 
-const showcaseMode = new URLSearchParams(window.location.search).get('showcase');
+const query = new URLSearchParams(window.location.search);
+const showcaseMode = query.get('showcase');
+const recordingMode = query.get('record') === '1' || query.get('recording') === '1';
+if (recordingMode) document.documentElement.classList.add('recording-mode');
 let experience: { start: () => void; dispose: () => void } | null = null;
 let showcaseTheme: ThemeController | null = null;
 

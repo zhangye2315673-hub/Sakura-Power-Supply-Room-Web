@@ -33,6 +33,10 @@
       name="description"
       content="整理缠绕的彩色插头电线精灵，让周围的家电依次恢复供电。"
     />
+    <meta property="og:title" content="Plug Cable Spirits · 樱色插线室" />
+    <meta property="og:description" content="转一转，找到畅通的出口，抽出插头线，让家电逐一亮起来。" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/share-card.svg" />
     <title>Plug Cable Spirits · 樱色插线室</title>
   </head>
   <body>
@@ -48,7 +52,6 @@
             <small>Plug Cable Spirits</small>
             樱色插线室
           </h1>
-          <p>转一转，找到畅通的出口。抽出插头线，让家电一台台亮起来。</p>
           <div class="start-mode-actions">
             <button id="start-game-button" type="button" disabled>线路准备中…</button>
             <div class="challenge-mode-wrap">
@@ -58,7 +61,7 @@
                 aria-expanded="false"
                 aria-controls="challenge-mode-menu"
                 disabled
-              >选择玩法</button>
+              >更多玩法</button>
               <div id="challenge-mode-menu" role="menu" aria-hidden="true">
                 <button id="start-random-button" type="button" role="menuitem" disabled>随机挑战</button>
                 <button id="start-explore-button" type="button" role="menuitem" disabled>探索模式</button>
@@ -67,6 +70,11 @@
                 <button id="start-skill-button" type="button" role="menuitem" disabled>技能挑战</button>
               </div>
             </div>
+          </div>
+          <div id="start-campaign-progress" class="start-campaign-progress" hidden>
+            <button id="campaign-select-button" type="button" disabled>关卡集</button>
+            <strong id="start-campaign-value">0 / 8</strong>
+            <small id="start-campaign-stars">★ 0 / 24</small>
           </div>
           <div class="start-loading-copy">
             <span id="start-loading-status">正在唤醒樱色线路</span>
@@ -83,15 +91,7 @@
             <i></i>
           </div>
         </div>
-        <div class="start-screen-object-note" aria-hidden="true">
-          <span id="start-object-state">PREPARING</span>
-          <b>开放式插头线束</b>
-          <i></i>
-        </div>
-        <footer class="start-screen-footer">
-          <span>拖动旋转 · 滚轮缩放 · 点击理线</span>
-          <span>关卡闯关 / 五种额外玩法</span>
-        </footer>
+        <div class="start-screen-object-note" aria-hidden="true"><span id="start-object-state">PREPARING</span></div>
       </section>
 
       <section id="hud" aria-live="polite">
@@ -109,6 +109,7 @@
           <div class="progress-track" aria-hidden="true">
             <i id="progress-fill"></i>
           </div>
+          <div id="campaign-hud-progress" class="campaign-hud-progress" hidden></div>
         </div>
 
         <div id="status-line">寻找出口畅通的插头精灵</div>
@@ -256,6 +257,7 @@
         <span><b>滚轮</b> 缩放</span>
         <span><b>点击</b> 理顺接线</span>
       </aside>
+      <aside id="first-play-hint" hidden aria-live="polite">拖动空白处旋转 · 点击外层插头</aside>
 
       <section id="game-over-panel" aria-hidden="true">
         <div class="complete-card game-over-card">
@@ -274,6 +276,13 @@
           <span>Home circuit restored</span>
           <h1>全屋通电</h1>
           <p>所有插头精灵都找到了自己的家电。</p>
+          <div id="complete-stats" class="complete-stats" hidden>
+            <div><span>用时</span><strong id="complete-time">0:00</strong></div>
+            <div><span>错误</span><strong id="complete-mistakes">0</strong></div>
+            <div><span>评价</span><strong id="complete-stars">★★★</strong></div>
+          </div>
+          <div id="complete-best" class="complete-best" hidden></div>
+          <div id="complete-campaign-summary" class="complete-campaign-summary" hidden></div>
           <div class="complete-actions">
             <button id="complete-home-button" type="button">返回主界面</button>
             <button id="continue-button" type="button">重新挑战</button>

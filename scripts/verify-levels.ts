@@ -1,3 +1,7 @@
+import { availableCableEnds, makeRuntime } from '../src/puzzle/collision';
+import { campaignChapter } from '../src/game/CampaignChapters';
+import { selectCampaignAppliances } from '../src/systems/ApplianceCatalog';
+import { strict as assert } from 'node:assert';
 import { generatePuzzle } from '../src/puzzle/generator';
 import { validatePuzzleGeometry } from '../src/puzzle/geometryValidation';
 import { measurePuzzleCompactness } from '../src/puzzle/gridOccupancy';
@@ -34,6 +38,23 @@ for (const level of levels) {
     mode: 'campaign',
   });
   const generationMs = Math.round(performance.now() - startedAt);
+  const runtimes = puzzle.arrows.map(makeRuntime);
+  const choiceCounts: number[] = [];
+  for (const id of puzzle.solution) {
+    const choices = availableCableEnds(runtimes);
+    choiceCounts.push(new Set(choices.map(choice => choice.id)).size);
+    assert(choices.some(choice => choice.id === id), `Level ${level.id}: blocked move ${id}`);
+    runtimes.find(arrow => arrow.definition.id === id)!.state = 'removed';
+  }
+  assert(runtimes.every(arrow => arrow.state === 'removed'));
+  const colors = new Set(puzzle.arrows.map(arrow => arrow.color));
+  assert.equal(selectCampaignAppliances(campaignChapter(level.id).appliances, colors.size).length, colors.size);
+  // Every caller owns a copy; scene effects must not mutate the stored campaign layout.
+  const again = generatePuzzle(seed, level.targetCount, { shape: level.shape, level, mode: 'campaign' });
+  assert.deepEqual(again.arrows, puzzle.arrows);
+  assert.notEqual(again.arrows, puzzle.arrows);
+  assert.notEqual(again.arrows[0].path, puzzle.arrows[0].path);
+
   const lengthMix = puzzle.arrows.reduce<Record<ArrowLengthClass, number>>(
     (mix, arrow) => {
       mix[arrow.lengthClass] += 1;
@@ -87,6 +108,7 @@ for (const level of levels) {
     compactness,
     geometryIssues,
     generationMs,
+    choiceCounts,
     checks,
   }));
 }

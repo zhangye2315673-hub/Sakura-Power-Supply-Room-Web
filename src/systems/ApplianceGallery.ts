@@ -302,7 +302,7 @@ export class ApplianceGallery {
       this.galleryTarget.state = 'idle';
       this.performances.stop(this.galleryTarget);
     }
-    this.audio.update(this.theme.progress, []);
+    this.audio.update(this.theme.progress);
     this.sensory.update([], this.theme.progress, this.demoElapsed);
     this.performances.reset();
     this.finishDeformPointer(true);
@@ -343,7 +343,7 @@ export class ApplianceGallery {
       this.galleryTarget.state = 'idle';
       this.performances.stop(this.galleryTarget);
     }
-    this.audio.update(this.theme.progress, []);
+    this.audio.update(this.theme.progress);
     this.sensory.update([], this.theme.progress, this.demoElapsed);
     this.performances.reset();
     this.disposeCurrent();
@@ -612,10 +612,10 @@ export class ApplianceGallery {
       this.sensory.register([this.galleryTarget]);
       this.performances.update(delta, cycle, this.camera, [this.galleryTarget], this.petals);
       this.sensory.update([this.galleryTarget], this.theme.progress, cycle);
-      this.audio.update(this.theme.progress, [this.galleryTarget], this.camera);
+      this.audio.update(this.theme.progress);
     } else {
       this.sensory.update([], this.theme.progress, cycle);
-      this.audio.update(this.theme.progress, []);
+      this.audio.update(this.theme.progress);
     }
     this.applyTheme();
     if (

@@ -15,7 +15,7 @@
     "inspect:connection": "node scripts/inspect-plug-connection.mjs",
     "inspect:appliances": "node scripts/inspect-appliance-drag.mjs",
     "inspect:depth": "node scripts/inspect-appliance-depth.mjs",
-    "verify:levels": "esbuild scripts/verify-levels.ts --bundle --platform=node --format=esm --outfile=node_modules/.cache/arrow-cube/verify-levels.mjs && node node_modules/.cache/arrow-cube/verify-levels.mjs",
+    "verify:levels": "rolldown scripts/verify-levels.ts --platform=node --format=esm --file=node_modules/.cache/arrow-cube/verify-levels.mjs && node node_modules/.cache/arrow-cube/verify-levels.mjs",
     "verify:plug-collision": "esbuild scripts/verify-plug-segment-collision.ts --bundle --platform=node --format=esm --outfile=node_modules/.cache/arrow-cube/verify-plug-segment-collision.mjs && node node_modules/.cache/arrow-cube/verify-plug-segment-collision.mjs",
     "verify:random-levels": "esbuild scripts/verify-random-levels.ts --bundle --platform=node --format=esm --outfile=node_modules/.cache/arrow-cube/verify-random-levels.mjs && node node_modules/.cache/arrow-cube/verify-random-levels.mjs",
     "verify:double-ended": "esbuild scripts/verify-double-ended-challenge.ts --bundle --platform=node --format=esm --outfile=node_modules/.cache/arrow-cube/verify-double-ended-challenge.mjs && node node_modules/.cache/arrow-cube/verify-double-ended-challenge.mjs",

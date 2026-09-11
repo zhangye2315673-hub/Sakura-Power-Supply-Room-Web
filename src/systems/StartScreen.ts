@@ -2,6 +2,8 @@ import { applyStaticTranslations, t, type TranslationKey } from './Locale';
 
 type StartScreenOptions = {
   onStart: () => void;
+  onCampaign: () => void;
+  campaignStartLabel: () => string;
   onRandom: () => void;
   onExplore: () => void;
   onRush: () => void;
@@ -12,6 +14,7 @@ type StartScreenOptions = {
 
 export class StartScreen {
   private readonly element = this.getElement<HTMLElement>('#start-screen');
+  private readonly campaignButton = this.getElement<HTMLButtonElement>('#campaign-select-button');
   private readonly startButton = this.getElement<HTMLButtonElement>('#start-game-button');
   private readonly challengeButton = this.getElement<HTMLButtonElement>('#challenge-mode-button');
   private readonly challengeMenu = this.getElement<HTMLElement>('#challenge-mode-menu');
@@ -44,7 +47,9 @@ export class StartScreen {
   private statusParams: Record<string, string | number> = {};
   private statusError: string | null = null;
 
-  constructor(options: StartScreenOptions) {
+  constructor(private readonly options: StartScreenOptions) {
+    this.campaignButton.disabled = true;
+    this.campaignButton.addEventListener('click', this.handleCampaign);
     this.onStart = options.onStart;
     this.onRandom = options.onRandom;
     this.onExplore = options.onExplore;
@@ -118,7 +123,8 @@ export class StartScreen {
     this.rushButton.disabled = false;
     this.doubleEndedButton.disabled = false;
     this.skillButton.disabled = false;
-    this.startButton.textContent = t('start.enter');
+    this.startButton.textContent = this.options.campaignStartLabel();
+    this.campaignButton.disabled = false;
     this.startButton.classList.add('ready');
     this.element.classList.add('ready');
     this.writeProgress();
@@ -136,6 +142,7 @@ export class StartScreen {
   beginExit(): void {
     if (this.leaving) return;
     this.leaving = true;
+    this.campaignButton.disabled = true;
     this.startButton.disabled = true;
     this.challengeButton.disabled = true;
     this.randomButton.disabled = true;
@@ -171,6 +178,7 @@ export class StartScreen {
     this.element.setAttribute('aria-hidden', 'false');
     this.startButton.classList.remove('error');
     this.startButton.disabled = !this.ready;
+    this.campaignButton.disabled = !this.ready;
     this.challengeButton.disabled = !this.ready;
     this.randomButton.disabled = !this.ready;
     this.exploreButton.disabled = !this.ready;
@@ -184,15 +192,18 @@ export class StartScreen {
 
   refreshLocale(): void {
     applyStaticTranslations();
+    this.campaignButton.textContent = t('campaign.overview');
     this.status.textContent = this.statusError ?? t(this.statusKey, this.statusParams);
     if (this.statusError) this.startButton.textContent = t('start.reload');
     else if (this.leaving) this.startButton.textContent = t('start.connecting');
-    else if (this.ready) this.startButton.textContent = t('start.enter');
+    else if (this.ready) this.startButton.textContent = this.options.campaignStartLabel();
     else if (this.startRequested) this.startButton.textContent = t('start.preparing');
     else this.startButton.textContent = t('start.waiting');
   }
 
   dispose(): void {
+    this.campaignButton.removeEventListener('click', this.handleCampaign);
+    this.campaignButton.remove();
     this.startButton.removeEventListener('click', this.handleStart);
     this.challengeButton.removeEventListener('click', this.toggleChallengeMenu);
     this.randomButton.removeEventListener('click', this.handleRandom);
@@ -206,6 +217,10 @@ export class StartScreen {
     window.clearTimeout(this.exitTimer);
     document.documentElement.classList.remove('opening-active');
   }
+
+  private readonly handleCampaign = () => {
+    if (this.ready && !this.leaving) this.options.onCampaign();
+  };
 
   private readonly handleStart = () => {
     if (this.leaving) return;

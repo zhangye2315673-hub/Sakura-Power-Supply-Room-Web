@@ -1,3 +1,4 @@
+import { CAMPAIGN_LAYOUTS } from './campaignLayouts';
 import * as THREE from 'three';
 import { ARROW_COLORS } from '../style/palette';
 import {
@@ -1588,6 +1589,13 @@ export function generatePuzzle(
   } = {},
 ): PuzzleDefinition {
   const shape = options.shape ?? 'cube';
+  const campaignLayout = options.mode === 'campaign' && options.level
+    ? CAMPAIGN_LAYOUTS[options.level.id] : undefined;
+  if (campaignLayout && campaignLayout.seed === (seed >>> 0)
+    && campaignLayout.count === targetCount && campaignLayout.shape === shape) {
+    const { arrows, solution, initiallyFree } = structuredClone(campaignLayout);
+    return { seed: seed >>> 0, arrows, solution, initiallyFree, level: options.level, mode: 'campaign' };
+  }
   const lengthQuota = options.lengthQuota ?? { short: 0.2, medium: 0.4, long: 0.4 };
   const minInitiallyFree = options.minInitiallyFree ?? 0;
   const maxInitiallyFree = options.maxInitiallyFree ?? targetCount;

@@ -221,6 +221,7 @@ html:lang(en) .start-screen-copy h1 {
 .start-mode-actions {
   display: flex;
   flex-wrap: wrap;
+  margin-top: 28px;
   gap: 11px;
 }
 
@@ -2784,6 +2785,14 @@ html.rush-active #hint-button {
   pointer-events: none;
 }
 
+#app > #help-strip,
+#first-play-hint,
+.start-screen-object-note,
+.start-screen-footer,
+.home-how-to-play {
+  display: none;
+}
+
 #help-strip span {
   padding: 6px 9px;
   border: 1px solid rgba(57, 50, 79, 0.16);
@@ -2793,6 +2802,26 @@ html.rush-active #hint-button {
 
 #help-strip b {
   color: #39324f;
+}
+
+#first-play-hint {
+  position: absolute;
+  left: max(22px, env(safe-area-inset-left));
+  bottom: max(18px, env(safe-area-inset-bottom));
+  z-index: 3;
+  max-width: min(420px, calc(100vw - 44px));
+  padding: 6px 9px;
+  color: #39324f;
+  background: rgba(255, 250, 244, 0.82);
+  border: 1px solid rgba(207, 92, 98, 0.42);
+  box-shadow: 3px 3px 0 rgba(57, 50, 79, 0.12);
+  font-size: clamp(11px, 1.1vw, 14px);
+  font-weight: 800;
+  pointer-events: none;
+}
+
+#first-play-hint[hidden] {
+  display: none;
 }
 
 #complete-panel,
@@ -2901,6 +2930,45 @@ html.rush-active #hint-button {
   margin: 12px 0 26px;
   color: #676075;
   font-size: 13px;
+}
+
+.complete-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: -8px 0 24px;
+}
+
+.complete-stats > div {
+  display: grid;
+  gap: 4px;
+  padding: 9px 7px;
+  border: 1px solid rgba(57, 50, 79, 0.18);
+  background: rgba(255, 247, 237, 0.72);
+  text-align: center;
+}
+
+.complete-stats span {
+  color: #7a728d;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+.complete-stats strong {
+  color: #cf5c62;
+  font-size: 17px;
+  letter-spacing: 0.04em;
+}
+
+.complete-best {
+  margin: -10px 0 22px;
+  padding: 7px 9px;
+  border-left: 3px solid #cf5c62;
+  color: #676075;
+  background: rgba(207, 92, 98, 0.08);
+  font-size: 10px;
+  font-weight: 800;
 }
 
 .complete-actions {
@@ -3371,6 +3439,7 @@ html.rush-active #appliance-gallery-button {
 
   .start-mode-actions {
     width: min(100%, 360px);
+    margin-top: 22px;
   }
 
   #start-game-button,
@@ -3576,6 +3645,13 @@ html.rush-active #appliance-gallery-button {
 
   #seed-label {
     display: none;
+  }
+
+  #first-play-hint {
+    left: max(12px, env(safe-area-inset-left));
+    bottom: max(64px, calc(env(safe-area-inset-bottom) + 58px));
+    max-width: min(300px, calc(100vw - 24px));
+    text-align: left;
   }
 
   #help-strip {
@@ -4580,3 +4656,140 @@ html[data-theme="night"] #settings-dialog #help-strip b { color: #c7becf; }
 /* Same square controls as the existing settings sheet. */
 
 html[data-theme="night"] #appliance-gallery-button { filter: brightness(0.74) saturate(0.86); }
+
+
+/* Campaign progress shares the same compact button language as the two actions above. */
+.start-campaign-progress {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 16px 0 6px;
+  color: var(--start-faint, #81798f);
+  font-size: 11px;
+  font-weight: 800;
+}
+.start-campaign-progress strong {
+  color: #cf5c62;
+  font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+}
+.start-campaign-progress small {
+  color: #cf5c62;
+  font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  font-size: 11px;
+  font-weight: 850;
+}
+#campaign-select-button, #campaign-close, #complete-retry-button, #complete-improve-button {
+  min-height: 36px;
+  padding: 8px 12px;
+  border: 1.5px solid #39324f;
+  color: #39324f;
+  background: #fff7ed;
+  box-shadow: 3px 3px 0 rgba(57, 50, 79, 0.18);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 850;
+  cursor: pointer;
+}
+#campaign-select-button {
+  min-width: 88px;
+  min-height: 34px;
+  padding: 7px 13px;
+  color: #fffaf0;
+  background: #7184b0;
+}
+#campaign-select-button:hover:not(:disabled), #campaign-select-button:focus-visible:not(:disabled) {
+  background: #5f719b;
+}
+#campaign-select-button:disabled { opacity: .5; cursor: wait; }
+#campaign-dialog { width: min(540px, calc(100vw - 36px)); max-height: calc(100dvh - 40px); overflow-y: auto; transform: none; }
+#campaign-dialog::backdrop { background: rgba(57, 50, 79, .42); }
+#campaign-dialog header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+#campaign-dialog h2 { margin: 0; color: #cf5c62; font-size: 23px; }
+#campaign-dialog-progress { margin: 16px 0; font-size: 12px; }
+#campaign-level-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+#campaign-level-list button { display: grid; gap: 6px; text-align: left; padding: 12px; border: 1.5px solid #39324f; color: #39324f; background: #fff7ed; cursor: pointer; }
+#campaign-level-list button span { font-size: 10px; line-height: 1.4; }
+#campaign-level-list button small { color: #cf5c62; font-size: 11px; }
+#campaign-level-list button[aria-current] { border-color: #cf5c62; box-shadow: inset 3px 0 #cf5c62; }
+#campaign-level-list button:disabled { opacity: .5; cursor: default; }
+#campaign-level-list button:not(:disabled):hover { background: #f8e3db; }
+#campaign-dialog button:focus-visible, .campaign-actions button:focus-visible, #campaign-select-button:focus-visible { outline: 3px solid #cf5c62; outline-offset: 3px; }
+.campaign-hud-progress { margin-top: 7px; font-size: 10px; line-height: 1.5; color: #676075; }
+.complete-campaign-summary { display: grid; gap: 7px; margin: -8px 0 18px; font-size: 12px; line-height: 1.5; color: #676075; }
+.complete-campaign-summary > div:first-child { color: #cf5c62; font-weight: 850; }
+.complete-best { line-height: 1.6; overflow-wrap: anywhere; }
+#complete-panel { overflow-y: auto; }
+#complete-panel .complete-card { max-height: calc(100dvh - 40px); overflow-y: auto; }
+#complete-panel .complete-actions button { min-height: 42px; white-space: normal; }
+#complete-panel .campaign-actions #continue-button { grid-column: 1 / -1; }
+.complete-stats[hidden], .complete-best[hidden], .complete-campaign-summary[hidden],
+.start-campaign-progress[hidden], .campaign-hud-progress[hidden],
+#complete-panel button[hidden] { display: none; }
+@media (max-width: 520px) {
+  #campaign-dialog { padding: 20px; }
+  #complete-panel .complete-card { padding: 24px; }
+  #complete-panel .complete-card h1 { font-size: 30px; }
+}
+@media (max-height: 650px) {
+  #start-screen { overflow-y: auto; }
+  .start-screen-copy { position: relative; top: auto; margin-top: 48px; padding-bottom: 80px; }
+  .start-screen-footer { position: fixed; pointer-events: none; }
+}
+
+
+/* Chapter instructions stay outside settings and never block the puzzle. */
+#campaign-goal {
+  position: fixed;
+  z-index: 12;
+  left: 24px;
+  top: 112px;
+  width: min(286px, calc(100vw - 48px));
+  border: 1.5px solid rgba(57, 50, 79, .62);
+  color: #39324f;
+  background: rgba(251, 245, 234, .94);
+  box-shadow: 4px 4px 0 rgba(57, 50, 79, .13);
+  font-size: 12px;
+}
+#campaign-goal[hidden], html.opening-active #campaign-goal { display: none; }
+#campaign-goal summary { padding: 10px 12px; cursor: pointer; font-weight: 850; color: #cf5c62; }
+#campaign-goal summary:focus-visible { outline: 2px solid #cf5c62; outline-offset: 3px; }
+.campaign-goal-body { padding: 0 12px 12px; }
+.campaign-goal-body span { font-size: 10px; color: #7a728d; }
+.campaign-goal-body p { margin: 7px 0 0; line-height: 1.6; }
+#campaign-level-list .campaign-level-stage { color: #9c4958; font-weight: 800; font-size: 10px; }
+#campaign-level-list .campaign-level-goal { font-size: 11px; line-height: 1.6; }
+#campaign-level-list button { align-content: start; }
+html[data-theme="night"] #campaign-goal { background: #292837; color: #eee3dc; }
+html[data-theme="night"] #campaign-goal summary { color: #ed969d; }
+html[data-theme="night"] .campaign-goal-body span { color: #c1b7ca; }
+@media (max-width: 600px) {
+  #campaign-goal { top: 104px; left: 14px; width: min(248px, calc(100vw - 28px)); }
+  #campaign-level-list { grid-template-columns: 1fr; }
+}
+@media (max-height: 480px) {
+  #campaign-goal { top: 82px; width: 216px; font-size: 11px; }
+}
+
+.home-how-to-play div { display: grid; grid-template-columns: 1fr 1fr; gap: 5px 12px; margin-top: 8px; font-size: 10px; line-height: 1.5; }
+.home-how-to-play b { color: #cf5c62; }
+html[data-theme="night"] .home-how-to-play { color: #eee3dc; }
+
+.settings-how-to-guide { display: grid; gap: 8px; margin-top: 12px; padding: 12px; border: 1px solid rgba(57,50,79,.18); background: rgba(255,247,237,.58); font-size: 11px; line-height: 1.55; }
+.settings-how-to-guide p { margin: 0; }
+.settings-how-to-guide b { color: #cf5c62; }
+html[data-theme="night"] .settings-how-to-guide { background: rgba(42,39,55,.72); border-color: rgba(238,227,220,.2); }
+.recording-mode #hud,
+.recording-mode #game-actions,
+.recording-mode #play-tools,
+.recording-mode #toast,
+.recording-mode #help-strip,
+.recording-mode #complete-panel,
+.recording-mode #game-over-panel,
+.recording-mode #puzzle-loader,
+.recording-mode #campaign-goal,
+.recording-mode #first-play-hint,
+.recording-mode #global-toolbar,
+.recording-mode #settings-button { display: none !important; }
+.recording-mode #game-canvas { width: min(100vw, 177.7778vh); height: min(100vh, 56.25vw); margin: auto; position: absolute; inset: 0; }

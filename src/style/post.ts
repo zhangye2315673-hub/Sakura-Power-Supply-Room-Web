@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { FullScreenQuad } from 'three/addons/postprocessing/Pass.js';
 import { PAL } from './palette';
+import { OpeningDepthReveal } from './OpeningDepthReveal';
 import type { NightQualityTier } from '../theme/ThemeController';
 
 const NIGHT_INK = new THREE.Color(0x4b455f);
@@ -1889,6 +1890,7 @@ export class SakuraPipeline {
   private readonly fxaa = makeQuad(fxaaShader);
   private readonly steamBlur = makeQuad(steamBlurShader);
   private readonly skillEffect = makeQuad(skillEffectShader);
+  private openingDepthReveal: OpeningDepthReveal | null = null;
   private readonly skillEffectTimeline = new SkillEffectActivationTimeline();
   private readonly steamCondensation = new SteamCondensationField();
   private qualityTier: NightQualityTier = 'high';
@@ -1979,6 +1981,7 @@ export class SakuraPipeline {
     this.sceneTarget.setSize(renderWidth, renderHeight);
     this.targetA.setSize(renderWidth, renderHeight);
     this.targetB.setSize(renderWidth, renderHeight);
+    this.openingDepthReveal?.setSize(renderWidth, renderHeight);
     this.resizeBloomTarget();
     this.resizeSteamTargets();
 
@@ -2031,7 +2034,14 @@ export class SakuraPipeline {
     this.renderer.setRenderTarget(fxaaTarget);
     this.fxaa.quad.render(this.renderer);
 
-    const skillEffectScene = fxaaTarget.texture;
+    let skillEffectScene = fxaaTarget.texture;
+    if (this.openingDepthReveal) {
+      const revealTarget = fxaaTarget === this.targetA ? this.targetB : this.targetA;
+      this.openingDepthReveal.render(
+        this.renderer, fxaaTarget.texture, this.sceneTarget.depthTexture!, this.camera, revealTarget,
+      );
+      skillEffectScene = revealTarget.texture;
+    }
     let skillEffectSource = skillEffectScene;
     const effectTime = performance.now() * 0.001;
     let finishSteamClearAfterRender = false;
@@ -2244,6 +2254,23 @@ export class SakuraPipeline {
     this.lantern.material.uniforms.uIntensity.value = THREE.MathUtils.clamp(intensity, 0, 1);
   }
 
+  setOpeningDepthReveal(progress: number, focusDistance: number): void {
+    if (progress >= 1) {
+      this.openingDepthReveal?.dispose();
+      this.openingDepthReveal = null;
+      return;
+    }
+    if (!this.openingDepthReveal) {
+      this.openingDepthReveal = new OpeningDepthReveal();
+      this.openingDepthReveal.setSize(this.size.x, this.size.y);
+    }
+    this.openingDepthReveal.setProgress(progress, focusDistance);
+  }
+
+  get openingDepthRevealActive(): boolean {
+    return this.openingDepthReveal !== null;
+  }
+
   setQualityTier(tier: NightQualityTier): void {
     this.qualityTier = tier;
     this.bloom.material.uniforms.uSampleScale.value = 1;
@@ -2252,6 +2279,7 @@ export class SakuraPipeline {
   }
 
   dispose(): void {
+    this.openingDepthReveal?.dispose();
     this.sceneTarget.dispose();
     this.targetA.dispose();
     this.targetB.dispose();

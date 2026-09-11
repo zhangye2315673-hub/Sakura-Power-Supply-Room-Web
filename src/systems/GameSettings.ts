@@ -60,7 +60,12 @@ export class GameSettings {
     const gallery = actions.querySelector<HTMLElement>('#appliance-gallery-button');
     if (gallery) this.move(gallery, this.dialog.querySelector('#settings-preferences')!);
     this.move(document.querySelector<HTMLElement>('#hint-button')!, actions);
-    this.move(document.querySelector<HTMLElement>('#help-strip')!, this.dialog.querySelector('#settings-help')!);
+    const helpSection = this.dialog.querySelector('#settings-help')!;
+    this.move(document.querySelector<HTMLElement>('#help-strip')!, helpSection);
+    const guide = document.createElement('div');
+    guide.id = 'settings-how-to-guide';
+    guide.className = 'settings-how-to-guide';
+    helpSection.append(guide);
     this.trigger.addEventListener('click', this.open);
     this.dialog.addEventListener('click', this.onClick, true);
     this.dialog.addEventListener('close', this.onClose);
@@ -92,6 +97,10 @@ export class GameSettings {
       label.textContent = copy[label.dataset.settingsLabel as 'season' | 'theme' | 'audio' | 'language'];
     });
     this.dialog.querySelector('#reset-view-button')!.textContent = english ? 'Reset view' : '重置视角';
+    const guide = this.dialog.querySelector<HTMLElement>('#settings-how-to-guide');
+    if (guide) guide.innerHTML = english
+      ? '<p><b>Rotate</b> Drag empty space to inspect the bundle.</p><p><b>Find the outside</b> Start with a plug whose exit is clear.</p><p><b>Blocked?</b> Change the angle and check the side or back.</p><p><b>Stars</b> Fewer mistakes earn a better rating.</p>'
+      : '<p><b>旋转</b> 拖动空白处观察线束。</p><p><b>找外层</b> 先找出口畅通的插头。</p><p><b>被挡住</b> 换个角度检查侧面或背面。</p><p><b>星级</b> 错误越少，评价越高。</p>';
   }
 
   dispose(): void {

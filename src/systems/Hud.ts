@@ -6,9 +6,16 @@ export class Hud {
   private readonly total = this.getElement('#total-value');
   private readonly progress = this.getElement('#progress-fill');
   private readonly status = this.getElement('#status-line');
+  private readonly firstPlayHint = this.getElement('#first-play-hint');
   private readonly seedLabel = this.getElement('#seed-label');
   private readonly toast = this.getElement('#toast');
   private readonly completePanel = this.getElement('#complete-panel');
+  private readonly completeStats = this.getElement('#complete-stats');
+  private readonly completeTime = this.getElement('#complete-time');
+  private readonly completeMistakes = this.getElement('#complete-mistakes');
+  private readonly completeStars = this.getElement('#complete-stars');
+  private completionData: Parameters<Hud['showComplete']> | null = null;
+  private readonly completeBest = this.getElement('#complete-best');
   private readonly gameOverPanel = this.getElement('#game-over-panel');
   private readonly randomLives = this.getElement('#random-lives');
   private readonly lifeIcons = [...this.randomLives.querySelectorAll<HTMLElement>('i')];
@@ -117,6 +124,16 @@ export class Hud {
   showBlocked(): void {
     this.setStatus('status.blocked');
     this.flash(t('flash.blocked'), true);
+    if (!this.firstPlayHint.hidden) this.firstPlayHint.innerHTML = t('help.firstBlocked');
+  }
+
+  showFirstPlayHint(visible: boolean): void {
+    this.firstPlayHint.hidden = !visible;
+    if (visible) this.firstPlayHint.innerHTML = t('help.firstPlay');
+  }
+
+  hideFirstPlayHint(): void {
+    this.firstPlayHint.hidden = true;
   }
 
   showRemoved(remaining: number): void {
@@ -128,7 +145,39 @@ export class Hud {
     this.flash(t('flash.connected', { name: applianceLabel }));
   }
 
-  showComplete(): void {
+  showComplete(
+    stats?: { timeMs: number; mistakes: number; stars: number },
+    best?: { timeMs: number; mistakes: number; stars: number },
+    feedback?: { isNewRecord: boolean; firstResult?: boolean; nextStarMistakes?: number },
+  ): void {
+    this.completionData = [stats, best, feedback];
+    if (stats) {
+      this.completeStats.hidden = false;
+      const seconds = Math.max(0, Math.round(stats.timeMs / 1000));
+      this.completeTime.textContent = `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
+      this.completeMistakes.textContent = String(stats.mistakes);
+      this.completeStars.textContent = `${'★'.repeat(stats.stars)}${'☆'.repeat(3 - stats.stars)}`;
+    } else {
+      this.completeStats.hidden = true;
+    }
+    if (best) {
+      const seconds = Math.max(0, Math.round(best.timeMs / 1000));
+      const time = `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
+      const detail = t('complete.best', {
+        time,
+        mistakes: best.mistakes,
+        stars: `${'★'.repeat(best.stars)}${'☆'.repeat(3 - best.stars)}`,
+      });
+      const recordLine = feedback?.firstResult ? t('campaign.first', { detail })
+        : feedback?.isNewRecord ? t('complete.newRecord', { detail }) : detail;
+      const nextStar = feedback?.nextStarMistakes && feedback.nextStarMistakes > 0
+        ? ` · ${t('complete.nextStar', { count: feedback.nextStarMistakes })}`
+        : '';
+      this.completeBest.textContent = `${recordLine}${nextStar}`;
+      this.completeBest.hidden = false;
+    } else {
+      this.completeBest.hidden = true;
+    }
     this.completePanel.classList.add('visible');
     this.completePanel.setAttribute('aria-hidden', 'false');
   }
@@ -312,6 +361,8 @@ export class Hud {
   }
 
   hidePanels(): void {
+    this.completeStats.hidden = true;
+    this.completeBest.hidden = true;
     this.completePanel.classList.remove('visible');
     this.completePanel.setAttribute('aria-hidden', 'true');
     this.hideGameOver();
@@ -325,7 +376,9 @@ export class Hud {
       Number(this.randomLives.dataset.continueRestore ?? 1),
     );
     this.status.textContent = t(this.statusKey, this.statusParams);
+    if (!this.firstPlayHint.hidden) this.firstPlayHint.innerHTML = t('help.firstPlay');
     this.writePuzzleMeta();
+    if (this.completionData && this.completePanel.classList.contains('visible')) this.showComplete(...this.completionData);
     if (this.loadingOverlay.active) this.loadingOverlay.setLabel(t(this.loadingKey, this.loadingParams));
   }
 
@@ -340,6 +393,7 @@ export class Hud {
     window.clearTimeout(this.lifeBurstTimer);
     window.clearTimeout(this.continueReadyTimer);
     this.clearLifeLossFeedback();
+    this.firstPlayHint.hidden = true;
     this.loadingOverlay.dispose();
   }
 

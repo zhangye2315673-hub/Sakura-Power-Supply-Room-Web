@@ -114,14 +114,7 @@ interface ThreeGameDiagnostics {
       highDuration: number;
     };
   };
-  audio: {
-    unlocked: boolean;
-    muted: boolean;
-    state: AudioContextState | 'unavailable';
-    buses: Record<import('./audio/AudioManager').AudioBusName, number>;
-    activeNodes: number;
-    activeAppliances: import('./systems/ApplianceCatalog').ApplianceKind[];
-  };
+  audio: ReturnType<import('./audio/AudioManager').AudioManager['getDiagnostics']>;
   sensory: Array<{
     kind: string;
     state: import('./systems/ApplianceCatalog').ApplianceState;
@@ -163,6 +156,7 @@ interface ThreeGameDiagnostics {
   opening: {
     active: boolean;
     ready: boolean;
+    depthReveal: { active: boolean; progress: number; complete: boolean };
     progress: number;
     transitioning: boolean;
     cameraPhase: 'idle' | 'insert' | 'hold' | 'fade-out' | 'background-hold' | 'reveal' | 'pull';
