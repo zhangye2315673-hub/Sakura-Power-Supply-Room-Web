@@ -1963,6 +1963,12 @@ export class SakuraPipeline {
   }
 
   setSize(width: number, height: number): void {
+    // ResizeObserver and mobile orientation changes can report a transient zero/NaN box.
+    // Never allocate zero-sized render targets: WebGL marks those framebuffers
+    // incomplete and subsequent passes fail noisily.
+    if (!Number.isFinite(width) || !Number.isFinite(height) || width <= 0 || height <= 0) return;
+    width = Math.max(1, Math.floor(width));
+    height = Math.max(1, Math.floor(height));
     const dpr = window.devicePixelRatio || 1;
     let scale = dpr < 1.5 ? 1.25 : Math.min(dpr, 2);
     if (width * height * scale * scale > this.pixelBudget) {

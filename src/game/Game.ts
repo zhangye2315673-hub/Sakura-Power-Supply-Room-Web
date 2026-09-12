@@ -580,7 +580,7 @@ export class Game {
       this.performances.primeRoot(root);
       const restorePerformanceVisibility = this.revealPerformanceEffectsForWarmup(root);
       try {
-        await this.renderer.compileAsync(root, this.camera, this.scene);
+        await this.compileSceneAsync(root, this.camera, this.scene);
         this.uploadApplianceGeometry(root);
       } finally {
         restorePerformanceVisibility();
@@ -933,6 +933,23 @@ export class Game {
     };
   }
 
+  /** Compile lazily without asking Three.js for KHR_parallel_shader_compile on browsers that lack it. */
+  private async compileSceneAsync(
+    object: THREE.Object3D,
+    camera: THREE.Camera,
+    targetScene: THREE.Scene | null = null,
+  ): Promise<void> {
+    const context = this.renderer.getContext();
+    const parallelCompile = Boolean(context?.getExtension?.('KHR_parallel_shader_compile'));
+    if (parallelCompile) {
+      await this.renderer.compileAsync(object, camera, targetScene);
+      return;
+    }
+    // compileAsync would emit a warning before falling back to a timer. Compile
+    // synchronously here so the unsupported capability stays an internal detail.
+    this.renderer.compile(object, camera, targetScene);
+  }
+
   private async warmPerformanceEffectsAsync(): Promise<void> {
     if (this.performanceEffectsWarmed) return;
     this.performanceEffectsWarmed = true;
@@ -950,7 +967,7 @@ export class Game {
     warmupCamera.updateMatrixWorld(true);
     try {
       for (const root of roots) {
-        await this.renderer.compileAsync(root, warmupCamera, this.scene);
+        await this.compileSceneAsync(root, warmupCamera, this.scene);
       }
       this.renderer.setRenderTarget(this.applianceGeometryWarmupTarget);
       this.renderer.clear();
@@ -1648,22 +1665,33 @@ export class Game {
     this.appliances.setRequiredColors(
       this.currentMode === 'rush' ? [] : this.arrows.map((arrow) => arrow.definition.color),
     );
+    // The first campaign scene only needs its configured appliances and cable
+    // models to become interactive. Shader-effect compilation and replacement
+    // generations are lazy-safe: the runtime prepares them after the first
+    // activation, so keeping them out of the blocking startup path shortens
+    // the opening load substantially on mobile and software WebGL.
+    const deferInitialWarmups = staged && this.openingActive &&
+      this.currentMode === 'campaign' && this.currentLevel?.id === 1;
     if (this.currentMode !== 'rush') {
-      await this.warmPerformanceEffectsAsync();
-      if (!isCurrentApply()) return;
+      if (!deferInitialWarmups) {
+        await this.warmPerformanceEffectsAsync();
+        if (!isCurrentApply()) return;
+      }
       const performanceBudget = new CooperativeYieldBudget();
       for (const target of this.appliances.targets) {
         this.performances.prime(target);
         await performanceBudget.afterItem();
         if (!isCurrentApply()) return;
       }
-      await this.appliances.prepareInitialReplacementsAsync((progress, buildMs) => {
-        this.preloadMaxSliceMs = Math.max(this.preloadMaxSliceMs, buildMs);
-        if (staged) {
-          this.startScreen.setExactProgress('start.loading.appliances', 0.76 + progress * 0.06);
-        }
-      }, this.currentMode === 'skill' ? 1 : undefined, true);
-      if (!isCurrentApply()) return;
+      if (!deferInitialWarmups) {
+        await this.appliances.prepareInitialReplacementsAsync((progress, buildMs) => {
+          this.preloadMaxSliceMs = Math.max(this.preloadMaxSliceMs, buildMs);
+          if (staged) {
+            this.startScreen.setExactProgress('start.loading.appliances', 0.76 + progress * 0.06);
+          }
+        }, this.currentMode === 'skill' ? 1 : undefined, true);
+        if (!isCurrentApply()) return;
+      }
     }
     this.applianceRoutingRevision = this.appliances.routingRevision;
 
@@ -3088,7 +3116,7 @@ export class Game {
         return committed;
       },
     });
-    void this.renderer.compileAsync(
+    void this.compileSceneAsync(
       this.televisionReconstruction.root,
       this.camera,
       this.scene,
@@ -3115,7 +3143,7 @@ export class Game {
         return committed;
       },
     });
-    void this.renderer.compileAsync(this.toasterHeatSwap.root, this.camera, this.scene);
+    void this.compileSceneAsync(this.toasterHeatSwap.root, this.camera, this.scene);
   }
 
   private commitSkillDefinitions(

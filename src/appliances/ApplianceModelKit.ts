@@ -3,6 +3,40 @@ import { jelly } from '../style/jelly';
 
 const HIDDEN_STATUS_MARKER = /(?:^|[-_])(status-indicator|status-dot|status-lamp|status-light|status-lens|power-led|power-status-indicator)(?:[-_]|$)/i;
 
+// Shadow-map rendering is a second pass over every caster. Appliance models
+// contain many tiny controls, vents and trim meshes whose shadows are below a
+// pixel at gameplay scale, but still cost one shadow draw each. Keep the
+// silhouette-sized parts casting while skipping these sub-pixel casters.
+const SMALL_SHADOW_RADIUS = 0.12;
+const SHADOW_CRITICAL_PART = /(?:body|shell|base|cabinet|housing|casing|enclosure|panel|door|lid|chamber|globe|guard|frame|ring|barrel|tower|handle|wheel|foot)/i;
+
+function optimizeApplianceShadowCasters(root: THREE.Object3D): void {
+  let before = 0;
+  let after = 0;
+  root.traverse((object) => {
+    if (!(object instanceof THREE.Mesh) || !object.castShadow) return;
+    before += 1;
+    const name = object.name;
+    const part = typeof object.userData.part === 'string' ? object.userData.part : '';
+    const geometry = object.geometry;
+    if (!geometry.boundingSphere) geometry.computeBoundingSphere();
+    const radius = geometry.boundingSphere?.radius ?? Number.POSITIVE_INFINITY;
+    const scale = Math.max(object.scale.x, object.scale.y, object.scale.z);
+    const keepShadow = radius * scale >= SMALL_SHADOW_RADIUS
+      || SHADOW_CRITICAL_PART.test(name)
+      || SHADOW_CRITICAL_PART.test(part)
+      || object.userData.shadowCritical === true;
+    if (keepShadow) after += 1;
+    else object.castShadow = false;
+  });
+  root.userData.shadowOptimization = {
+    before,
+    after,
+    skipped: Math.max(0, before - after),
+    smallShadowRadius: SMALL_SHADOW_RADIUS,
+  };
+}
+
 export type ApplianceModelBuild = {
   root: THREE.Group;
   indicatorMaterial: THREE.MeshPhysicalMaterial;
@@ -120,6 +154,7 @@ export class ApplianceModelKit {
       if (!(object instanceof THREE.Mesh) || !HIDDEN_STATUS_MARKER.test(object.name)) return;
       object.visible = false;
     });
+    optimizeApplianceShadowCasters(this.root);
     this.root.userData.sculptRuntime = {
       nodes: Object.fromEntries(this.nodes),
       sockets: Object.fromEntries(this.sockets),

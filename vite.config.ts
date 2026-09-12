@@ -5,6 +5,8 @@ const hiddenSourceMap = process.env.VITE_HIDDEN_SOURCEMAP === '1';
 
 export default defineConfig({
   base: './',
+  // Keep candidate and preview material outside the release public directory.
+  publicDir: 'public/release',
   server: {
     host: '127.0.0.1',
     port: 5190,

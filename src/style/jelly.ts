@@ -43,7 +43,10 @@ export function jelly(options: JellyOptions): THREE.MeshPhysicalMaterial {
 export function installJellyEnvironment(renderer: THREE.WebGLRenderer, scene: THREE.Scene): () => void {
   const room = new RoomEnvironment();
   const pmrem = new THREE.PMREMGenerator(renderer);
-  const target = pmrem.fromScene(room, 0.06, 0.1, 100);
+  // Keep the initial blur within PMREM's 20-tap budget. 0.06 radians
+  // requests more samples than Three.js can fit and logs a sigmaRadians
+  // clipping warning on every renderer (especially visible on mobile).
+  const target = pmrem.fromScene(room, 0.03, 0.1, 100);
   room.dispose();
   pmrem.dispose();
   const previous = scene.environment;

@@ -7,7 +7,7 @@ export function selectMusicProfile(opening: boolean): MusicProfile {
 }
 
 const tracks: Record<MusicProfile, string> = {
-  main: 'audio/japanese-candidates/amenoprelude.mp3',
+  main: 'audio/music/amenoprelude.mp3',
   gameplay: 'audio/music/reverie.mp3',
 };
 

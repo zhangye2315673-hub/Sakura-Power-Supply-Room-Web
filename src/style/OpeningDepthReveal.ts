@@ -81,6 +81,10 @@ export class OpeningDepthReveal {
   private readonly revealQuad = new FullScreenQuad(this.revealMaterial);
 
   setSize(width: number, height: number): void {
+    // Ignore transient zero-sized layout reports during orientation changes.
+    if (!Number.isFinite(width) || !Number.isFinite(height) || width <= 0 || height <= 0) return;
+    width = Math.max(1, Math.floor(width));
+    height = Math.max(1, Math.floor(height));
     // Blur at quarter resolution; only the final depth composite is full size.
     this.blurA.setSize(Math.max(2, Math.ceil(width / 4)), Math.max(2, Math.ceil(height / 4)));
     this.blurB.setSize(this.blurA.width, this.blurA.height);

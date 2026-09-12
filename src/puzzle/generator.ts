@@ -1227,6 +1227,7 @@ function constrainSkillInitialExits(
   maximum: number,
   shape: ShapeId,
   halfExtents: GridExtents,
+  requireHardChecks = false,
 ): { arrows: ArrowDefinition[]; solution: string[]; initiallyFree: number } | null {
   const arrows = source.map((arrow) => ({
     ...arrow,
@@ -1250,7 +1251,15 @@ function constrainSkillInitialExits(
       const validSolution = removalSequenceIsValid(current, solution)
         ? [...solution]
         : findRemovalSequence(current);
-      return validSolution ? { arrows: current, solution: validSolution, initiallyFree } : null;
+      if (!validSolution) return null;
+      if (requireHardChecks) {
+        const difficulty = analyzeRandomDifficulty(current, validSolution, shape, halfExtents);
+        const difficultyPass = Object.values(hardDifficultyChecks(difficulty)).every(Boolean);
+        const wiringPass = Object.values(hardWiringChecks(measureWiringComplexity(current))).every(Boolean);
+        if (difficultyPass && wiringPass) return { arrows: current, solution: validSolution, initiallyFree };
+      } else {
+        return { arrows: current, solution: validSolution, initiallyFree };
+      }
     }
     if (initiallyFree < minimum) return null;
 
@@ -1281,7 +1290,7 @@ function constrainSkillInitialExits(
           ? { ...arrow, exitDirection }
           : arrow);
         const projectedFree = countInitiallyFree(directionOnly);
-        if (projectedFree >= initiallyFree || projectedFree < minimum) continue;
+        if (projectedFree > initiallyFree || (!requireHardChecks && projectedFree >= initiallyFree) || projectedFree < minimum) continue;
         directionPlans.push({ cableId: id, index, exitDirection, projectedFree });
       }
     }
@@ -1310,7 +1319,7 @@ function constrainSkillInitialExits(
           arrowIndex === plan.index ? candidate : arrow
         ));
         const trialFree = countInitiallyFree(trial);
-        if (trialFree >= initiallyFree || trialFree < minimum) continue;
+        if (trialFree > initiallyFree || (!requireHardChecks && trialFree >= initiallyFree) || trialFree < minimum) continue;
         const trialSolution = removalSequenceIsValid(trial, solution)
           ? [...solution]
           : findRemovalSequence(trial);
@@ -1661,11 +1670,12 @@ export function generatePuzzle(
         const alignedSolution = removalSequenceIsValid(arrows, template.solution)
           ? [...template.solution]
           : findRemovalSequence(arrows);
+        const initiallyFree = countInitiallyFree(arrows);
         if (!alignedSolution) {
           // Fall through to deterministic regeneration if endpoint alignment
           // invalidates every complete removal sequence.
         } else {
-        const skillTemplate = templateMode === 'skill'
+        const constrainedTemplate = (templateMode === 'skill' || templateMode === 'random')
           ? constrainSkillInitialExits(
               arrows,
               alignedSolution,
@@ -1673,16 +1683,17 @@ export function generatePuzzle(
               maxInitiallyFree,
               shape,
               halfExtents,
+              templateMode === 'random',
             )
           : null;
-        if (templateMode === 'skill' && !skillTemplate) {
+        if ((templateMode === 'skill' || templateMode === 'random') && !constrainedTemplate) {
           // Fall through to deterministic regeneration if this transformed
-          // template cannot satisfy the stricter 4-8 initial exit window.
+          // template cannot satisfy the level's initial exit window.
         } else {
-          const selected = skillTemplate ?? {
+          const selected = constrainedTemplate ?? {
             arrows,
             solution: alignedSolution,
-            initiallyFree: countInitiallyFree(arrows),
+            initiallyFree,
           };
         return {
           seed: seed >>> 0,
