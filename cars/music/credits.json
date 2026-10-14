@@ -1,0 +1,690 @@
+{
+ "note": "Music for the pixel car timeline radio. All tracks by Kevin MacLeod (incompetech.com), CC BY 4.0.",
+ "stations": [
+  {
+   "id": "50s",
+   "freq": "87.9",
+   "label": "1950s"
+  },
+  {
+   "id": "60s",
+   "freq": "88.5",
+   "label": "1960s"
+  },
+  {
+   "id": "70s",
+   "freq": "91.3",
+   "label": "1970s"
+  },
+  {
+   "id": "80s",
+   "freq": "94.7",
+   "label": "1980s"
+  },
+  {
+   "id": "90s",
+   "freq": "98.1",
+   "label": "1990s"
+  },
+  {
+   "id": "00s",
+   "freq": "101.5",
+   "label": "2000s"
+  },
+  {
+   "id": "10s",
+   "freq": "104.9",
+   "label": "2010s–20s"
+  }
+ ],
+ "tracks": [
+  {
+   "id": "50s-malt-shop-bop",
+   "station": "50s",
+   "title": "Malt Shop Bop",
+   "artist": "Kevin MacLeod",
+   "source": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100496",
+   "download": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Malt%20Shop%20Bop.mp3",
+   "license": "CC BY 4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+   "attribution": "\"Malt Shop Bop\" Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/",
+   "genreFeel": "Bouncy, Bright, Uplifting",
+   "duration": 166.1,
+   "files": [
+    "50s-malt-shop-bop.ogg",
+    "50s-malt-shop-bop.mp3"
+   ],
+   "changes": "Loudness-normalised (EBU R128 -16 LUFS) and re-encoded to Opus 64 kb/s and MP3 64 kb/s."
+  },
+  {
+   "id": "50s-sock-hop",
+   "station": "50s",
+   "title": "Sock Hop",
+   "artist": "Kevin MacLeod",
+   "source": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100495",
+   "download": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Sock%20Hop.mp3",
+   "license": "CC BY 4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+   "attribution": "\"Sock Hop\" Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/",
+   "genreFeel": "Bouncy, Relaxed, Uplifting",
+   "duration": 166.6,
+   "files": [
+    "50s-sock-hop.ogg",
+    "50s-sock-hop.mp3"
+   ],
+   "changes": "Loudness-normalised (EBU R128 -16 LUFS) and re-encoded to Opus 64 kb/s and MP3 64 kb/s."
+  },
+  {
+   "id": "50s-last-kiss-goodnight",
+   "station": "50s",
+   "title": "Last Kiss Goodnight",
+   "artist": "Kevin MacLeod",
+   "source": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100611",
+   "download": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Last%20Kiss%20Goodnight.mp3",
+   "license": "CC BY 4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+   "attribution": "\"Last Kiss Goodnight\" Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/",
+   "genreFeel": "Calming, Relaxed",
+   "duration": 186.2,
+   "files": [
+    "50s-last-kiss-goodnight.ogg",
+    "50s-last-kiss-goodnight.mp3"
+   ],
+   "changes": "Loudness-normalised (EBU R128 -16 LUFS) and re-encoded to Opus 64 kb/s and MP3 64 kb/s."
+  },
+  {
+   "id": "50s-boogie-party",
+   "station": "50s",
+   "title": "Boogie Party",
+   "artist": "Kevin MacLeod",
+   "source": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN2200002",
+   "download": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Boogie%20Party.mp3",
+   "license": "CC BY 4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+   "attribution": "\"Boogie Party\" Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/",
+   "genreFeel": "Driving, Grooving, Bouncy",
+   "duration": 271.8,
+   "files": [
+    "50s-boogie-party.ogg",
+    "50s-boogie-party.mp3"
+   ],
+   "changes": "Loudness-normalised (EBU R128 -16 LUFS) and re-encoded to Opus 64 kb/s and MP3 64 kb/s."
+  },
+  {
+   "id": "50s-rollin-at-5",
+   "station": "50s",
+   "title": "Rollin at 5",
+   "artist": "Kevin MacLeod",
+   "source": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1400029",
+   "download": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Rollin%20at%205.mp3",
+   "license": "CC BY 4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+   "attribution": "\"Rollin at 5\" Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/",
+   "genreFeel": "Bouncy, Driving, Grooving",
+   "duration": 130.8,
+   "files": [
+    "50s-rollin-at-5.ogg",
+    "50s-rollin-at-5.mp3"
+   ],
+   "changes": "Loudness-normalised (EBU R128 -16 LUFS) and re-encoded to Opus 64 kb/s and MP3 64 kb/s."
+  },
+  {
+   "id": "60s-surf-shimmy",
+   "station": "60s",
+   "title": "Surf Shimmy",
+   "artist": "Kevin MacLeod",
+   "source": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1700018",
+   "download": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Surf%20Shimmy.mp3",
+   "license": "CC BY 4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+   "attribution": "\"Surf Shimmy\" Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/",
+   "genreFeel": "Grooving, Bright, Bouncy",
+   "duration": 122.9,
+   "files": [
+    "60s-surf-shimmy.ogg",
+    "60s-surf-shimmy.mp3"
+   ],
+   "changes": "Loudness-normalised (EBU R128 -16 LUFS) and re-encoded to Opus 64 kb/s and MP3 64 kb/s."
+  },
+  {
+   "id": "60s-happy-bee-surf",
+   "station": "60s",
+   "title": "Happy Bee - Surf",
+   "artist": "Kevin MacLeod",
+   "source": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1300015",
+   "download": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Happy%20Bee%20-%20Surf.mp3",
+   "license": "CC BY 4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+   "attribution": "\"Happy Bee - Surf\" Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/",
+   "genreFeel": "Bouncy, Bright, Uplifting",
+   "duration": 309.2,
+   "files": [
+    "60s-happy-bee-surf.ogg",
+    "60s-happy-bee-surf.mp3"
+   ],
+   "changes": "Loudness-normalised (EBU R128 -16 LUFS) and re-encoded to Opus 64 kb/s and MP3 64 kb/s."
+  },
+  {
+   "id": "60s-bummin-on-tremelo",
+   "station": "60s",
+   "title": "Bummin on Tremelo",
+   "artist": "Kevin MacLeod",
+   "source": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1700032",
+   "download": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Bummin%20on%20Tremelo.mp3",
+   "license": "CC BY 4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+   "attribution": "\"Bummin on Tremelo\" Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/",
+   "genreFeel": "Grooving, Relaxed, Bright",
+   "duration": 192.1,
+   "files": [
+    "60s-bummin-on-tremelo.ogg",
+    "60s-bummin-on-tremelo.mp3"
+   ],
+   "changes": "Loudness-normalised (EBU R128 -16 LUFS) and re-encoded to Opus 64 kb/s and MP3 64 kb/s."
+  },
+  {
+   "id": "60s-deuces",
+   "station": "60s",
+   "title": "Deuces",
+   "artist": "Kevin MacLeod",
+   "source": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1700075",
+   "download": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Deuces.mp3",
+   "license": "CC BY 4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+   "attribution": "\"Deuces\" Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/",
+   "genreFeel": "Bright, Grooving, Relaxed",
+   "duration": 190.8,
+   "files": [
+    "60s-deuces.ogg",
+    "60s-deuces.mp3"
+   ],
+   "changes": "Loudness-normalised (EBU R128 -16 LUFS) and re-encoded to Opus 64 kb/s and MP3 64 kb/s."
+  },
+  {
+   "id": "60s-surf-inspector",
+   "station": "60s",
+   "title": "Surf Inspector",
+   "artist": "Kevin MacLeod",
+   "source": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100497",
+   "download": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Surf%20Inspector.mp3",
+   "license": "CC BY 4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+   "attribution": "\"Surf Inspector\" Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/",
+   "genreFeel": "Bouncy, Grooving",
+   "duration": 200.1,
+   "files": [
+    "60s-surf-inspector.ogg",
+    "60s-surf-inspector.mp3"
+   ],
+   "changes": "Loudness-normalised (EBU R128 -16 LUFS) and re-encoded to Opus 64 kb/s and MP3 64 kb/s."
+  },
+  {
+   "id": "70s-aurea-carmina",
+   "station": "70s",
+   "title": "Aurea Carmina",
+   "artist": "Kevin MacLeod",
+   "source": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1400006",
+   "download": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Aurea%20Carmina.mp3",
+   "license": "CC BY 4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+   "attribution": "\"Aurea Carmina\" Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/",
+   "genreFeel": "Bouncy, Bright, Grooving",
+   "duration": 211.2,
+   "files": [
+    "70s-aurea-carmina.ogg",
+    "70s-aurea-carmina.mp3"
+   ],
+   "changes": "Loudness-normalised (EBU R128 -16 LUFS) and re-encoded to Opus 64 kb/s and MP3 64 kb/s."
+  },
+  {
+   "id": "70s-disco-con-tutti",
+   "station": "70s",
+   "title": "Disco con Tutti",
+   "artist": "Kevin MacLeod",
+   "source": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1200091",
+   "download": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Disco%20con%20Tutti.mp3",
+   "license": "CC BY 4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+   "attribution": "\"Disco con Tutti\" Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/",
+   "genreFeel": "Bouncy, Bright, Grooving, Uplifting",
+   "duration": 236.4,
+   "files": [
+    "70s-disco-con-tutti.ogg",
+    "70s-disco-con-tutti.mp3"
+   ],
+   "changes": "Loudness-normalised (EBU R128 -16 LUFS) and re-encoded to Opus 64 kb/s and MP3 64 kb/s."
+  },
+  {
+   "id": "70s-c-funk",
+   "station": "70s",
+   "title": "C-Funk",
+   "artist": "Kevin MacLeod",
+   "source": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100001",
+   "download": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/C-Funk.mp3",
+   "license": "CC BY 4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+   "attribution": "\"C-Funk\" Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/",
+   "genreFeel": "Grooving",
+   "duration": 170.4,
+   "files": [
+    "70s-c-funk.ogg",
+    "70s-c-funk.mp3"
+   ],
+   "changes": "Loudness-normalised (EBU R128 -16 LUFS) and re-encoded to Opus 64 kb/s and MP3 64 kb/s."
+  },
+  {
+   "id": "70s-twisted",
+   "station": "70s",
+   "title": "Twisted",
+   "artist": "Kevin MacLeod",
+   "source": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1400046",
+   "download": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Twisted.mp3",
+   "license": "CC BY 4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+   "attribution": "\"Twisted\" Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/",
+   "genreFeel": "Driving, Grooving",
+   "duration": 187.2,
+   "files": [
+    "70s-twisted.ogg",
+    "70s-twisted.mp3"
+   ],
+   "changes": "Loudness-normalised (EBU R128 -16 LUFS) and re-encoded to Opus 64 kb/s and MP3 64 kb/s."
+  },
+  {
+   "id": "70s-funky-chunk",
+   "station": "70s",
+   "title": "Funky Chunk",
+   "artist": "Kevin MacLeod",
+   "source": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1500054",
+   "download": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Funky%20Chunk.mp3",
+   "license": "CC BY 4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+   "attribution": "\"Funky Chunk\" Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/",
+   "genreFeel": "Bright, Grooving, Uplifting",
+   "duration": 239.1,
+   "files": [
+    "70s-funky-chunk.ogg",
+    "70s-funky-chunk.mp3"
+   ],
+   "changes": "Loudness-normalised (EBU R128 -16 LUFS) and re-encoded to Opus 64 kb/s and MP3 64 kb/s."
+  },
+  {
+   "id": "80s-newer-wave",
+   "station": "80s",
+   "title": "Newer Wave",
+   "artist": "Kevin MacLeod",
+   "source": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN2000024",
+   "download": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Newer%20Wave.mp3",
+   "license": "CC BY 4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+   "attribution": "\"Newer Wave\" Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/",
+   "genreFeel": "Grooving, Bright, Uplifting",
+   "duration": 174.7,
+   "files": [
+    "80s-newer-wave.ogg",
+    "80s-newer-wave.mp3"
+   ],
+   "changes": "Loudness-normalised (EBU R128 -16 LUFS) and re-encoded to Opus 64 kb/s and MP3 64 kb/s."
+  },
+  {
+   "id": "80s-voltaic",
+   "station": "80s",
+   "title": "Voltaic",
+   "artist": "Kevin MacLeod",
+   "source": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1600056",
+   "download": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Voltaic.mp3",
+   "license": "CC BY 4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+   "attribution": "\"Voltaic\" Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/",
+   "genreFeel": "Action, Driving, Grooving",
+   "duration": 196.1,
+   "files": [
+    "80s-voltaic.ogg",
+    "80s-voltaic.mp3"
+   ],
+   "changes": "Loudness-normalised (EBU R128 -16 LUFS) and re-encoded to Opus 64 kb/s and MP3 64 kb/s."
+  },
+  {
+   "id": "80s-eighties-action",
+   "station": "80s",
+   "title": "Eighties Action",
+   "artist": "Kevin MacLeod",
+   "source": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100243",
+   "download": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Eighties%20Action.mp3",
+   "license": "CC BY 4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+   "attribution": "\"Eighties Action\" Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/",
+   "genreFeel": "Driving, Action",
+   "duration": 171.0,
+   "files": [
+    "80s-eighties-action.ogg",
+    "80s-eighties-action.mp3"
+   ],
+   "changes": "Loudness-normalised (EBU R128 -16 LUFS) and re-encoded to Opus 64 kb/s and MP3 64 kb/s."
+  },
+  {
+   "id": "80s-rhinoceros",
+   "station": "80s",
+   "title": "Rhinoceros",
+   "artist": "Kevin MacLeod",
+   "source": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1500040",
+   "download": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Rhinoceros.mp3",
+   "license": "CC BY 4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+   "attribution": "\"Rhinoceros\" Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/",
+   "genreFeel": "Intense, Action",
+   "duration": 203.9,
+   "files": [
+    "80s-rhinoceros.ogg",
+    "80s-rhinoceros.mp3"
+   ],
+   "changes": "Loudness-normalised (EBU R128 -16 LUFS) and re-encoded to Opus 64 kb/s and MP3 64 kb/s."
+  },
+  {
+   "id": "80s-i-feel-you",
+   "station": "80s",
+   "title": "I Feel You",
+   "artist": "Kevin MacLeod",
+   "source": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100841",
+   "download": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/I%20Feel%20You.mp3",
+   "license": "CC BY 4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+   "attribution": "\"I Feel You\" Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/",
+   "genreFeel": "Driving, Grooving",
+   "duration": 188.1,
+   "files": [
+    "80s-i-feel-you.ogg",
+    "80s-i-feel-you.mp3"
+   ],
+   "changes": "Loudness-normalised (EBU R128 -16 LUFS) and re-encoded to Opus 64 kb/s and MP3 64 kb/s."
+  },
+  {
+   "id": "90s-raving-energy",
+   "station": "90s",
+   "title": "Raving Energy",
+   "artist": "Kevin MacLeod",
+   "source": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1900013",
+   "download": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Raving%20Energy.mp3",
+   "license": "CC BY 4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+   "attribution": "\"Raving Energy\" Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/",
+   "genreFeel": "Bright, Grooving, Driving",
+   "duration": 267.6,
+   "files": [
+    "90s-raving-energy.ogg",
+    "90s-raving-energy.mp3"
+   ],
+   "changes": "Loudness-normalised (EBU R128 -16 LUFS) and re-encoded to Opus 64 kb/s and MP3 64 kb/s."
+  },
+  {
+   "id": "90s-realizer",
+   "station": "90s",
+   "title": "Realizer",
+   "artist": "Kevin MacLeod",
+   "source": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1900024",
+   "download": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Realizer.mp3",
+   "license": "CC BY 4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+   "attribution": "\"Realizer\" Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/",
+   "genreFeel": "Grooving, Bright, Driving",
+   "duration": 310.2,
+   "files": [
+    "90s-realizer.ogg",
+    "90s-realizer.mp3"
+   ],
+   "changes": "Loudness-normalised (EBU R128 -16 LUFS) and re-encoded to Opus 64 kb/s and MP3 64 kb/s."
+  },
+  {
+   "id": "90s-basic-implosion",
+   "station": "90s",
+   "title": "Basic Implosion",
+   "artist": "Kevin MacLeod",
+   "source": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1600032",
+   "download": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Basic%20Implosion.mp3",
+   "license": "CC BY 4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+   "attribution": "\"Basic Implosion\" Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/",
+   "genreFeel": "Aggressive, Dark, Grooving",
+   "duration": 189.6,
+   "files": [
+    "90s-basic-implosion.ogg",
+    "90s-basic-implosion.mp3"
+   ],
+   "changes": "Loudness-normalised (EBU R128 -16 LUFS) and re-encoded to Opus 64 kb/s and MP3 64 kb/s."
+  },
+  {
+   "id": "90s-pyro-flow",
+   "station": "90s",
+   "title": "Pyro Flow",
+   "artist": "Kevin MacLeod",
+   "source": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1500039",
+   "download": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Pyro%20Flow.mp3",
+   "license": "CC BY 4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+   "attribution": "\"Pyro Flow\" Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/",
+   "genreFeel": "Grooving, Driving",
+   "duration": 234.4,
+   "files": [
+    "90s-pyro-flow.ogg",
+    "90s-pyro-flow.mp3"
+   ],
+   "changes": "Loudness-normalised (EBU R128 -16 LUFS) and re-encoded to Opus 64 kb/s and MP3 64 kb/s."
+  },
+  {
+   "id": "90s-shiny-tech",
+   "station": "90s",
+   "title": "Shiny Tech",
+   "artist": "Kevin MacLeod",
+   "source": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100078",
+   "download": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Shiny%20Tech.mp3",
+   "license": "CC BY 4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+   "attribution": "\"Shiny Tech\" Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/",
+   "genreFeel": "Driving, Action, Intense, Uplifting, Bright",
+   "duration": 222.7,
+   "files": [
+    "90s-shiny-tech.ogg",
+    "90s-shiny-tech.mp3"
+   ],
+   "changes": "Loudness-normalised (EBU R128 -16 LUFS) and re-encoded to Opus 64 kb/s and MP3 64 kb/s."
+  },
+  {
+   "id": "00s-blown-away",
+   "station": "00s",
+   "title": "Blown Away",
+   "artist": "Kevin MacLeod",
+   "source": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1200100",
+   "download": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Blown%20Away.mp3",
+   "license": "CC BY 4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+   "attribution": "\"Blown Away\" Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/",
+   "genreFeel": "Aggressive, Driving, Grooving, Intense",
+   "duration": 226.0,
+   "files": [
+    "00s-blown-away.ogg",
+    "00s-blown-away.mp3"
+   ],
+   "changes": "Loudness-normalised (EBU R128 -16 LUFS) and re-encoded to Opus 64 kb/s and MP3 64 kb/s."
+  },
+  {
+   "id": "00s-cipher",
+   "station": "00s",
+   "title": "Cipher",
+   "artist": "Kevin MacLeod",
+   "source": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100844",
+   "download": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Cipher2.mp3",
+   "license": "CC BY 4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+   "attribution": "\"Cipher\" Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/",
+   "genreFeel": "Bright, Grooving, Uplifting",
+   "duration": 231.3,
+   "files": [
+    "00s-cipher.ogg",
+    "00s-cipher.mp3"
+   ],
+   "changes": "Loudness-normalised (EBU R128 -16 LUFS) and re-encoded to Opus 64 kb/s and MP3 64 kb/s."
+  },
+  {
+   "id": "00s-go-cart",
+   "station": "00s",
+   "title": "Go Cart",
+   "artist": "Kevin MacLeod",
+   "source": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1300006",
+   "download": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Go%20Cart.mp3",
+   "license": "CC BY 4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+   "attribution": "\"Go Cart\" Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/",
+   "genreFeel": "Aggressive, Bright, Driving, Intense",
+   "duration": 213.0,
+   "files": [
+    "00s-go-cart.ogg",
+    "00s-go-cart.mp3"
+   ],
+   "changes": "Loudness-normalised (EBU R128 -16 LUFS) and re-encoded to Opus 64 kb/s and MP3 64 kb/s."
+  },
+  {
+   "id": "00s-exhilarate",
+   "station": "00s",
+   "title": "Exhilarate",
+   "artist": "Kevin MacLeod",
+   "source": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1300028",
+   "download": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Exhilarate.mp3",
+   "license": "CC BY 4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+   "attribution": "\"Exhilarate\" Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/",
+   "genreFeel": "Aggressive, Driving, Intense",
+   "duration": 145.5,
+   "files": [
+    "00s-exhilarate.ogg",
+    "00s-exhilarate.mp3"
+   ],
+   "changes": "Loudness-normalised (EBU R128 -16 LUFS) and re-encoded to Opus 64 kb/s and MP3 64 kb/s."
+  },
+  {
+   "id": "00s-laserpack",
+   "station": "00s",
+   "title": "Laserpack",
+   "artist": "Kevin MacLeod",
+   "source": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1800018",
+   "download": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Laserpack.mp3",
+   "license": "CC BY 4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+   "attribution": "\"Laserpack\" Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/",
+   "genreFeel": "Bouncy, Driving, Grooving",
+   "duration": 185.7,
+   "files": [
+    "00s-laserpack.ogg",
+    "00s-laserpack.mp3"
+   ],
+   "changes": "Loudness-normalised (EBU R128 -16 LUFS) and re-encoded to Opus 64 kb/s and MP3 64 kb/s."
+  },
+  {
+   "id": "10s-limit-70",
+   "station": "10s",
+   "title": "Limit 70",
+   "artist": "Kevin MacLeod",
+   "source": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1900042",
+   "download": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Limit%2070.mp3",
+   "license": "CC BY 4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+   "attribution": "\"Limit 70\" Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/",
+   "genreFeel": "Calming, Grooving, Relaxed",
+   "duration": 301.7,
+   "files": [
+    "10s-limit-70.ogg",
+    "10s-limit-70.mp3"
+   ],
+   "changes": "Loudness-normalised (EBU R128 -16 LUFS) and re-encoded to Opus 64 kb/s and MP3 64 kb/s."
+  },
+  {
+   "id": "10s-chill-wave",
+   "station": "10s",
+   "title": "Chill Wave",
+   "artist": "Kevin MacLeod",
+   "source": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1600048",
+   "download": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Chill%20Wave.mp3",
+   "license": "CC BY 4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+   "attribution": "\"Chill Wave\" Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/",
+   "genreFeel": "Grooving, Relaxed",
+   "duration": 240.1,
+   "files": [
+    "10s-chill-wave.ogg",
+    "10s-chill-wave.mp3"
+   ],
+   "changes": "Loudness-normalised (EBU R128 -16 LUFS) and re-encoded to Opus 64 kb/s and MP3 64 kb/s."
+  },
+  {
+   "id": "10s-ethernight-club",
+   "station": "10s",
+   "title": "Ethernight Club",
+   "artist": "Kevin MacLeod",
+   "source": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN2100002",
+   "download": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Ethernight%20Club.mp3",
+   "license": "CC BY 4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+   "attribution": "\"Ethernight Club\" Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/",
+   "genreFeel": "Grooving, Driving, Mysterious",
+   "duration": 305.8,
+   "files": [
+    "10s-ethernight-club.ogg",
+    "10s-ethernight-club.mp3"
+   ],
+   "changes": "Loudness-normalised (EBU R128 -16 LUFS) and re-encoded to Opus 64 kb/s and MP3 64 kb/s."
+  },
+  {
+   "id": "10s-cloud-dancer",
+   "station": "10s",
+   "title": "Cloud Dancer",
+   "artist": "Kevin MacLeod",
+   "source": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN2300007",
+   "download": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Cloud%20Dancer.mp3",
+   "license": "CC BY 4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+   "attribution": "\"Cloud Dancer\" Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/",
+   "genreFeel": "Grooving, Bouncy, Bright",
+   "duration": 219.9,
+   "files": [
+    "10s-cloud-dancer.ogg",
+    "10s-cloud-dancer.mp3"
+   ],
+   "changes": "Loudness-normalised (EBU R128 -16 LUFS) and re-encoded to Opus 64 kb/s and MP3 64 kb/s."
+  },
+  {
+   "id": "10s-severe-tire-damage",
+   "station": "10s",
+   "title": "Severe Tire Damage",
+   "artist": "Kevin MacLeod",
+   "source": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1500018",
+   "download": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Severe%20Tire%20Damage.mp3",
+   "license": "CC BY 4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+   "attribution": "\"Severe Tire Damage\" Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/",
+   "genreFeel": "Aggressive, Driving",
+   "duration": 412.0,
+   "files": [
+    "10s-severe-tire-damage.ogg",
+    "10s-severe-tire-damage.mp3"
+   ],
+   "changes": "Loudness-normalised (EBU R128 -16 LUFS) and re-encoded to Opus 64 kb/s and MP3 64 kb/s."
+  },
+  {
+   "id": "10s-too-cool",
+   "station": "10s",
+   "title": "Too Cool",
+   "artist": "Kevin MacLeod",
+   "source": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1600068",
+   "download": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Too%20Cool.mp3",
+   "license": "CC BY 4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+   "attribution": "\"Too Cool\" Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/",
+   "genreFeel": "Grooving, Relaxed",
+   "duration": 181.6,
+   "files": [
+    "10s-too-cool.ogg",
+    "10s-too-cool.mp3"
+   ],
+   "changes": "Loudness-normalised (EBU R128 -16 LUFS) and re-encoded to Opus 64 kb/s and MP3 64 kb/s."
+  }
+ ]
+}
