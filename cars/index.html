@@ -5809,9 +5809,9 @@ void main() {
   vec4 mv = modelViewMatrix * vec4(position, 1.0);
   // (10.5) a puff drifting back past the camera thins out instead of filling the bottom of the
   // screen as a big dark disc (the 'dark mound' after a launch, a hard stop or a fork)
-  vA = aAlpha * smoothstep(1.5, 4.0, -mv.z);
+  vA = aAlpha * smoothstep(3.0, 5.0, -mv.z); // (the rear wheels are ~5.5 m from the chase camera)
   gl_Position = projectionMatrix * mv;
-  gl_PointSize = vA <= 0.0 ? 0.0 : clamp(aSize * uPx / -mv.z, 2.0, 48.0);
+  gl_PointSize = vA <= 0.0 ? 0.0 : clamp(aSize * uPx / -mv.z, 2.0, 36.0);
 }
 `,RG=`
 ${Eg}
