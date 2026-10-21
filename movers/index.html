@@ -4,8 +4,8 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 <title>怪兽甜点铺 · Monster Sweets</title>
-  <script type="module" crossorigin src="./assets/index-h3A9YGhr.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-BAK1QX-T.css">
+  <script type="module" crossorigin src="./assets/index-CoaqVa0L.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-yFrPg9ES.css">
 </head>
 <body>
 <canvas id="gl"></canvas>
@@ -42,10 +42,14 @@
 
     <aside class="menu card">
       <div class="tape"></div>
-      <div class="menu-head"><span class="script">Menu</span><span class="zh">本日菜单</span></div>
+      <div class="menu-head">
+        <span class="mh-l"><span class="script">Menu</span><svg class="sprig" viewBox="0 0 60 40" aria-hidden="true"><path d="M8 34 Q26 26 40 10" stroke="#6f9a52" stroke-width="2.2" fill="none" stroke-linecap="round"/><path d="M22 27 Q14 20 18 13 Q26 18 22 27Z" fill="#8fbc6c"/><path d="M31 19 Q34 9 42 8 Q41 17 31 19Z" fill="#8fbc6c"/><path d="M26 23 Q35 25 38 33 Q29 32 26 23Z" fill="#7fae5c"/><path d="M50 6 l4 -3 M52 11 l6 -1 M47 2 l1 -2" stroke="#f4c84e" stroke-width="2" stroke-linecap="round"/></svg></span>
+        <span class="mh-r"><span class="zh">本日菜单</span><svg class="berry" viewBox="0 0 40 40" aria-hidden="true"><path d="M20 22 Q22 12 30 6" stroke="#6f9a52" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M24 14 Q31 8 36 12 Q30 18 24 14Z" fill="#8fbc6c"/><path d="M22 18 Q14 12 16 6 Q23 10 22 18Z" fill="#7fae5c"/><circle cx="14" cy="28" r="4.6" fill="#d8534a"/><circle cx="24" cy="31" r="4.2" fill="#e0675c"/><circle cx="12.6" cy="26.6" r="1.2" fill="#fff" opacity=".7"/></svg></span>
+      </div>
       <div id="menuGrid" class="grid"></div>
-      <div class="menu-foot">点一点甜点，转着看看</div>
+      <div class="menu-foot"><i></i><b>✦</b><span>点一点甜点，转着看看</span><b>✦</b><i></i></div>
     </aside>
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="deckle" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency="0.09" numOctaves="2" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="7" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
 
     <!-- receipt printer: paper really comes out of the slot -->
     <div id="printer" class="printer">
