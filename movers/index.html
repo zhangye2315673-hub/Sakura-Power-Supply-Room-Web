@@ -93,7 +93,17 @@ body {
 		<link id="-gd-engine-icon" rel="icon" type="image/png" href="index.icon.png" />
 <link rel="apple-touch-icon" href="index.apple-touch-icon.png"/>
 
-	</head>
+	<style>
+html,body,#status{background:#f9efe0 !important;}
+#status-splash{display:none !important;}
+#status::before{content:"怪兽甜点铺";position:absolute;top:calc(50% - 70px);left:0;right:0;text-align:center;font:700 52px/1.2 "PingFang SC","Microsoft YaHei",sans-serif;color:#d9503f;letter-spacing:4px;}
+#status::after{content:"布丁们正在把小镇铺开……";position:absolute;top:calc(50% + 60px);left:0;right:0;text-align:center;font:16px "PingFang SC","Microsoft YaHei",sans-serif;color:#8a6b58;}
+#status-progress{width:340px !important;height:12px !important;border:none;border-radius:8px;background:#efe0c9;accent-color:#d9503f;-webkit-appearance:none;appearance:none;overflow:hidden;}
+#status-progress::-webkit-progress-bar{background:#efe0c9;border-radius:8px;}
+#status-progress::-webkit-progress-value{background:#d9503f;border-radius:8px;}
+#status-progress::-moz-progress-bar{background:#d9503f;border-radius:8px;}
+</style>
+</head>
 	<body>
 		<canvas id="canvas">
 			Your browser does not support the canvas tag.
@@ -114,7 +124,7 @@ body {
 </script>
 <script src="index.js"></script>
 		<script>
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":405948,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":468164,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
 const GODOT_THREADS_ENABLED = false;
 const engine = new Engine(GODOT_CONFIG);
 
