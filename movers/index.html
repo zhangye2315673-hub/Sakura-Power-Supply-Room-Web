@@ -4,12 +4,12 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 <title>怪兽甜点铺 · Monster Sweets</title>
-  <script type="module" crossorigin src="./assets/index-BgnkrRNI.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-IYxOCJZy.css">
+  <script type="module" crossorigin src="./assets/index-CQk_dca8.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-If9r2vHJ.css">
 </head>
 <body>
 <canvas id="gl"></canvas>
-<canvas id="wash"></canvas>
+
 
 <div id="stage">
   <!-- ======== SHOP PAGE ======== -->
@@ -31,12 +31,13 @@
       <div class="chip"><span class="ic">✿</span><span id="day">第 1 天</span></div>
       <div class="chip"><span class="ic coin">¥</span><span id="coins">0</span></div>
       <div class="chip"><span class="ic heart">♥</span><span id="hearts">0</span></div>
+      <div class="chip swap" id="swapShop"><span class="ic">⇄</span><span>换一栋</span></div>
     </div>
 
     <section class="hero">
       <div class="eyebrow">PUDDING YOKAI PATISSERIE</div>
       <h1>今天的甜点，<br/>由布丁妖怪<br/>亲手送到家。</h1>
-      <p>街角那栋红色小楼，每天清晨烤好第一炉。<br/>接单、打包、开着小卡车穿过整座小镇。</p>
+      <p>街角那间小小的布丁店，每天清晨烤好第一炉。<br/>接单、打包、开着小卡车穿过整座小镇。</p>
     </section>
 
     <aside class="menu card">
@@ -46,12 +47,18 @@
       <div class="menu-foot">点一点甜点，转着看看</div>
     </aside>
 
-    <!-- receipt printer -->
+    <!-- receipt printer: paper really comes out of the slot -->
     <div id="printer" class="printer">
-      <div class="paper-out" id="paperOut"><div class="tear"></div><div class="lines" id="paperLines"></div></div>
-      <div class="body">
-        <div class="slot"></div>
-        <div class="face"><span class="led" id="led"></span><span class="lbl">ORDER</span></div>
+      <div class="strip" id="paperOut"><div class="sp" id="paperLines"></div></div>
+      <div class="pbody">
+        <div class="lid"><div class="slot"></div><div class="lip"></div></div>
+        <div class="front">
+          <div class="lcd" id="led">READY</div>
+          <div class="pface"><svg viewBox="0 0 40 40"><path d="M7 33 L33 33 L29 15 Q20 10 11 15 Z" fill="#f6d27a" stroke="#4b3226" stroke-width="1.8" stroke-linejoin="round"/><path d="M11 15 Q20 9 29 15 L30 19 Q26 17 25 21 Q22 17 20 20 Q17 17 15 21 Q13 17 10 19 Z" fill="#a5552d" stroke="#4b3226" stroke-width="1.8" stroke-linejoin="round"/><circle cx="20" cy="7" r="3.4" fill="#d8343b" stroke="#4b3226" stroke-width="1.5"/><circle cx="16" cy="25" r="1.4" fill="#3a2a22"/><circle cx="24" cy="25" r="1.4" fill="#3a2a22"/><path d="M18.4 27.6 Q20 29 21.6 27.6" stroke="#3a2a22" stroke-width="1.2" fill="none" stroke-linecap="round"/></svg></div>
+          <div class="btns"><i></i><i></i><i></i></div>
+        </div>
+        <div class="plabel">ORDER · PRINTER</div>
+        <div class="feet"><i></i><i></i></div>
       </div>
       <div class="bubble" id="bubble">点我取单！</div>
     </div>
@@ -59,17 +66,28 @@
 
   <!-- ======== RECEIPT MODAL ======== -->
   <div id="receiptWrap" class="modal hide">
-    <div class="ticket" id="ticket">
-      <div class="washi"></div>
-      <div class="t-head"><div class="script">Order</div><div class="no" id="tNo">No. 0001</div></div>
-      <div class="cust"><img id="tAvatar" alt="" /><div><div class="cname" id="tName"></div><div class="caddr" id="tAddr"></div></div></div>
-      <div class="dash"></div>
-      <div id="tItems" class="items"></div>
-      <div class="dash"></div>
-      <div class="total"><span>合计</span><span id="tTotal"></span></div>
-      <div class="note" id="tNote"></div>
-      <button class="go" id="goBtn"><span>派送</span><small>Deliver</small></button>
-      <div class="zig"></div>
+    <div class="rcol">
+      <div class="ticket" id="ticket">
+        <div class="r-logo"><svg viewBox="0 0 40 40"><path d="M7 33 L33 33 L29 15 Q20 10 11 15 Z" fill="#f6d27a" stroke="#4b3226" stroke-width="1.8" stroke-linejoin="round"/><path d="M11 15 Q20 9 29 15 L30 19 Q26 17 25 21 Q22 17 20 20 Q17 17 15 21 Q13 17 10 19 Z" fill="#a5552d" stroke="#4b3226" stroke-width="1.8" stroke-linejoin="round"/><circle cx="20" cy="7" r="3.4" fill="#d8343b" stroke="#4b3226" stroke-width="1.5"/><circle cx="16" cy="25" r="1.4" fill="#3a2a22"/><circle cx="24" cy="25" r="1.4" fill="#3a2a22"/><path d="M18.4 27.6 Q20 29 21.6 27.6" stroke="#3a2a22" stroke-width="1.2" fill="none" stroke-linecap="round"/></svg></div>
+        <div class="r-title">怪兽甜点铺</div>
+        <div class="r-sub">MONSTER SWEETS · DELIVERY</div>
+        <div class="dash"></div>
+        <div class="r-meta"><span>订单号 <b id="tNo">No.0001</b></span><span id="tTime">05:11</span></div>
+        <div class="dash"></div>
+        <div id="tItems" class="items"></div>
+        <div class="dash"></div>
+        <div class="r-kv"><span>顾客</span><b id="tName"></b></div>
+        <div class="r-kv"><span>送至</span><b id="tAddr"></b></div>
+        <div class="r-kv"><span>路程</span><b id="tDist"></b></div>
+        <div class="dash"></div>
+        <div class="total"><span>合计</span><span id="tTotal"></span></div>
+        <div class="r-bonus">附赠 +1 爱心</div>
+        <div class="note" id="tNote"></div>
+        <div class="barcode" id="barcode"></div>
+        <div class="r-foot">今天也有甜甜的事</div>
+      </div>
+      <button class="go" id="goBtn"><svg viewBox="0 0 34 22"><rect x="2" y="6" width="17" height="10" rx="2" fill="#fff8ee"/><path d="M19 16 V5 Q19 3 21 3 H25 Q28 3 29 7 L31 11 V16 Z" fill="#fff8ee"/><circle cx="8" cy="17.5" r="3" fill="#d24a40" stroke="#fff8ee" stroke-width="2"/><circle cx="25" cy="17.5" r="3" fill="#d24a40" stroke="#fff8ee" stroke-width="2"/></svg><span>派送</span></button>
+      <div class="r-hint">点击空白处返回店铺</div>
     </div>
   </div>
 
