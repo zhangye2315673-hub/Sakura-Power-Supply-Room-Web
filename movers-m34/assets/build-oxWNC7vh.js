@@ -401,7 +401,11 @@ void main(){
       }
 #endif
       float fres = 0.42 + 0.5 * pow(1.0 - clamp(-V.y, 0.0, 1.0), 3.0);
+      // M3.6c at night the shaped light reflections (vlights.js decals, lamp pools) stay in the puddle: their bright part is
+      // kept (a little stronger: still water mirrors sharper than wet asphalt), read through the ripple-bent normal
+      vec3 hiL = max(texture2D(tColor, vUv + n.xz * vec2(0.03, 0.05)).rgb - 0.2, 0.0) * smoothstep(0.3, 0.8, uNightP);
       col.rgb = mix(col.rgb, refl * vec3(0.86, 0.9, 0.96), fres * pm * 0.85);
+      col.rgb += hiL * fres * pm * 1.05;
       col.rgb += vec3(0.7, 0.75, 0.82) * min(ring, 1.0) * pm * (0.12 + 0.1 * (1.0 - uNightP));
     }
     // splashes on anything that faces the sky within 40 m: a thin ring + six little arcs, 0.3 s, one chance per cell
