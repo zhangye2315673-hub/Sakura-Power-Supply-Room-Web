@@ -7,8 +7,8 @@
 <title>怪兽甜品铺 · Monster Sweets</title>
 <link rel="icon" type="image/png" href="./assets/favicon-Bh7ZrL1y.png" />
 <link rel="apple-touch-icon" href="./assets/apple-touch-icon-CSS99J1v.png" />
-  <script type="module" crossorigin src="./assets/index-BUGvMHBU.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-Pp1ZHgcg.css">
+  <script type="module" crossorigin src="./assets/index-CR_14CEO.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-zsyAf4th.css">
 </head>
 <body>
 <canvas id="gl"></canvas>
@@ -34,30 +34,20 @@
       <div class="chip swap" id="swapShop" title="换一栋"><span class="ic" data-icon="swap"></span></div>
     </div>
 
-    <aside class="menu card">
-      <div class="tape"></div>
-      <div class="menu-head">
-        <span class="script">Menu</span>
-        <div class="menu-tabs" id="menuTabs"><button class="mt on" data-cat="dessert">甜品</button><button class="mt" data-cat="drink">饮品</button></div>
-      </div>
-      <div id="menuGrid" class="grid"></div>
+    <aside class="menu" id="menu">
+      <div class="menu-tabs" id="menuTabs" role="tablist"><button class="mt on" data-cat="dessert" aria-label="甜品"><span class="ic" data-icon="cake"></span><span class="mt-l">甜品</span></button><button class="mt" data-cat="drink" aria-label="饮品"><span class="ic" data-icon="drink"></span><span class="mt-l">饮品</span></button></div>
+      <div class="sheet"><div id="menuGrid" class="grid"></div></div>
     </aside>
     <svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="deckle" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency="0.09" numOctaves="2" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="7" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
 
-    <!-- receipt printer (original design): paper really comes out of the slot -->
+    <!-- order printer: the 3D model (printer3d.js) pre-rendered to a sprite at load; LCD text and the paper strip stay DOM -->
     <div id="printer" class="printer">
-      <div class="strip" id="paperOut"><div class="sp" id="paperLines"></div></div>
       <div class="pbody">
-        <div class="lid"><div class="slot"></div><div class="lip"></div></div>
-        <div class="front">
-          <div class="lcd" id="led">READY</div>
-          <div class="pface"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#msIcon"/></svg></div>
-          <div class="btns"><i></i><i></i><i></i></div>
-        </div>
-        <div class="plabel">ORDER · PRINTER</div>
-        <div class="feet"><i></i><i></i></div>
+        <img class="psprite" alt="" draggable="false" />
+        <div class="strip" id="paperOut"><div class="sp" id="paperLines"></div></div>
+        <img class="psprite front" alt="" draggable="false" />
+        <div class="lcd" id="led">READY</div>
       </div>
-      <div class="lip2"></div>
       <div class="bubble" id="bubble">点我取单！</div>
     </div>
   </div>
@@ -89,16 +79,14 @@
   <!-- ======== PRODUCT DETAIL (recipe card) ======== -->
   <div id="viewer" class="modal hide">
     <div class="vcard">
-      <div class="vlace"></div>
-      <i class="tape tl"></i><i class="tape tr"></i>
-      <div class="vstage"><div class="vdoily"></div><canvas id="vcanvas"></canvas><span class="vrot ic" data-icon="rotate"></span></div>
+      <div class="vstage"><canvas id="vcanvas"></canvas><span class="vrot ic" data-icon="rotate"></span></div>
       <div class="vinfo">
         <div class="ribbon"><span id="vName"></span></div>
         <div class="script" id="vEn"></div>
-        <div class="vnote"><i class="tape tn"></i><div class="vdesc" id="vDesc"></div></div>
+        <div class="vnote"><div class="vdesc" id="vDesc"></div></div>
         <div class="vtag"><span id="vPrice"></span></div>
       </div>
-      <button class="cookie-x" id="vClose" aria-label="关闭"><span class="ic" data-icon="close"></span></button>
+      <button class="xbtn" id="vClose" aria-label="关闭"><span class="ic" data-icon="close"></span></button>
     </div>
   </div>
 
