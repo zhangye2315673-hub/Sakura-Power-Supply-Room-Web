@@ -5,20 +5,27 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
 <meta name="theme-color" content="#f8efe2" />
 <title>怪兽甜品铺 · Monster Sweets</title>
-<link rel="icon" type="image/png" href="./assets/favicon-CI7VUeaY.png" />
-<link rel="apple-touch-icon" href="./assets/apple-touch-icon-DZrQBdDH.png" />
-<link rel="preload" as="image" href="./assets/logo-C2fly4fh.webp" />
-  <script type="module" crossorigin src="./assets/index-BYlwYTRo.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-C0mYvnDg.css">
+<link rel="icon" type="image/png" href="./assets/favicon-Bh7ZrL1y.png" />
+<link rel="apple-touch-icon" href="./assets/apple-touch-icon-CSS99J1v.png" />
+  <script type="module" crossorigin src="./assets/index-BUGvMHBU.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-Pp1ZHgcg.css">
 </head>
 <body>
 <canvas id="gl"></canvas>
 
 
 <div id="stage">
+  <!-- M3.5g brand icon (one-eyed macaron monster): one symbol, used by the header, printer, receipt and loader -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="msIcon" viewBox="0 0 64 64"><g transform="translate(0 -1)" stroke="#4b3226" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"><path d="M16.5 22 Q12.5 15 16.5 9.5 Q17.5 15 24 17.5 Z" fill="#6e452f"/><path d="M47.5 22 Q51.5 15 47.5 9.5 Q46.5 15 40 17.5 Z" fill="#6e452f"/><path d="M12 44 H52 Q53 52 44 53 H20 Q11 52 12 44 Z" fill="#e2b44e"/><path d="M10.5 38.5 H53.5 Q55 44.5 52 44.5 H12 Q9 44.5 10.5 38.5 Z" fill="#fff5e2"/><path d="M10 39 Q9 15 32 15 Q55 15 54 39 Z" fill="#f6d684"/><path d="M12.5 39 q2.4 -2.6 4.8 0 q2.4 -2.6 4.8 0 q2.4 -2.6 4.8 0 q2.4 -2.6 4.8 0 q2.4 -2.6 4.8 0 q2.4 -2.6 4.8 0 q2.4 -2.6 4.8 0 q2.4 -2.6 4.8 0" fill="none" stroke-width="1.6"/><circle cx="32" cy="24.4" r="7.6" fill="#fffaf2"/><circle cx="32.8" cy="25.2" r="4" fill="#3a2a22" stroke="none"/><circle cx="34.3" cy="23.5" r="1.4" fill="#fff" stroke="none"/><path d="M27.6 33.2 Q32 34.2 36.4 33.2 Q35.4 37.4 32 37.4 Q28.6 37.4 27.6 33.2 Z" fill="#3a2a22" stroke-width="1.6"/><path d="M29.2 33.7 l.9 1.9 l1.1 -1.7 Z M34.8 33.7 l-.9 1.9 l-1.1 -1.7 Z" fill="#fff" stroke="none"/><rect x="16.0" y="22.9" width="5" height="2.2" rx="1.1" fill="#7fb6dc" stroke="none" transform="rotate(-30 18.5 24)"/><rect x="43.0" y="22.9" width="5" height="2.2" rx="1.1" fill="#a993d2" stroke="none" transform="rotate(35 45.5 24)"/><rect x="19.1" y="19.7" width="5" height="2.2" rx="1.1" fill="#fffaf2" stroke="none" transform="rotate(60 21.6 20.8)"/><rect x="39.9" y="19.7" width="5" height="2.2" rx="1.1" fill="#f29aa8" stroke="none" transform="rotate(-55 42.4 20.8)"/><rect x="12.5" y="30.4" width="5" height="2.2" rx="1.1" fill="#f29aa8" stroke="none" transform="rotate(80 15 31.5)"/><rect x="46.5" y="30.4" width="5" height="2.2" rx="1.1" fill="#7fb6dc" stroke="none" transform="rotate(-75 49 31.5)"/></g></symbol></svg>
   <!-- ======== SHOP PAGE ======== -->
   <div id="page" class="hide">
-    <header class="brand"><img class="logo" src="./assets/logo-C2fly4fh.webp" alt="怪兽甜品铺" draggable="false" /></header>
+    <header class="brand">
+      <div class="logo"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#msIcon"/></svg></div>
+      <div class="names">
+        <div class="script">Monster Sweets</div>
+        <div class="zh">怪兽甜品铺</div>
+      </div>
+    </header>
 
     <div class="chips">
       <div class="chip stat"><span class="ic" data-icon="day"></span><span id="day">第1天</span></div>
@@ -37,30 +44,20 @@
     </aside>
     <svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="deckle" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency="0.09" numOctaves="2" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="7" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
 
-    <!-- receipt printer: a butter-cream monster till; the paper really comes out of the slot -->
+    <!-- receipt printer (original design): paper really comes out of the slot -->
     <div id="printer" class="printer">
-      <svg class="pbody" viewBox="0 0 260 210" aria-hidden="true" stroke="#5b3a29" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round">
-        <ellipse cx="130" cy="202" rx="112" ry="7" fill="rgba(75,50,38,.16)" stroke="none"/>
-        <rect x="42" y="184" width="30" height="16" rx="6" fill="#8a5a3f"/><rect x="188" y="184" width="30" height="16" rx="6" fill="#8a5a3f"/>
-        <path d="M20 100 C2 96 -8 76 -4 56 C5 70 14 77 28 80 Z" fill="#9b6646"/><path d="M240 100 C258 96 268 76 264 56 C255 70 246 77 232 80 Z" fill="#9b6646"/>
-        <path d="M2 64 C3 70 6 74 10 77" fill="none" stroke="#fff" stroke-width="2.2" opacity=".5"/>
-        <rect x="16" y="34" width="228" height="52" rx="25" fill="#f6d27a"/>
-        <path d="M34 44 h40" stroke="#fff" stroke-width="3" opacity=".6"/>
-        <rect x="62" y="48" width="136" height="13" rx="6.5" fill="#3a2a22"/>
-        <rect x="12" y="72" width="236" height="118" rx="28" fill="#f6d27a"/>
-        <rect x="26" y="82" width="208" height="96" rx="20" fill="#fffaf0"/>
-        <circle cx="110" cy="100" r="4.6" fill="#3a2a22" stroke="none"/><circle cx="150" cy="100" r="4.6" fill="#3a2a22" stroke="none"/>
-        <circle cx="111.6" cy="98.4" r="1.4" fill="#fff" stroke="none"/><circle cx="151.6" cy="98.4" r="1.4" fill="#fff" stroke="none"/>
-        <path d="M123 106 q3.5 4.5 7 0 q3.5 4.5 7 0" fill="none" stroke-width="2.4"/>
-        <ellipse cx="97" cy="110" rx="7.5" ry="4" fill="#f6b3bb" stroke="none"/><ellipse cx="163" cy="110" rx="7.5" ry="4" fill="#f6b3bb" stroke="none"/>
-        <rect x="40" y="124" width="122" height="40" rx="11" fill="#2f4a48"/>
-        <path d="M188 152 C178 145 175 140 177.5 135.5 C180 131 186 132 188 136 C190 132 196 131 198.5 135.5 C201 140 198 145 188 152 Z" fill="#ef8f9f" stroke-width="2.2"/>
-        <path d="M216 131 l3 6.4 l7 0.8 l-5.2 4.8 l1.5 7 l-6.3 -3.6 l-6.3 3.6 l1.5 -7 l-5.2 -4.8 l7 -0.8 Z" fill="#f6cf62" stroke-width="2.2"/>
-        <g transform="translate(188 -8) rotate(14 34 40)"><rect x="18" y="34" width="34" height="14" rx="4" fill="#fffaf0"/><path d="M19 36 C9 34 9 18 20 19 C20 9 34 7 36 15 C42 8 54 13 51 22 C58 26 55 36 51 36 Z" fill="#fffaf0"/><path d="M26 41 h3 M34 41 h3 M42 41 h3" stroke-width="1.8"/></g>
-      </svg>
       <div class="strip" id="paperOut"><div class="sp" id="paperLines"></div></div>
+      <div class="pbody">
+        <div class="lid"><div class="slot"></div><div class="lip"></div></div>
+        <div class="front">
+          <div class="lcd" id="led">READY</div>
+          <div class="pface"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#msIcon"/></svg></div>
+          <div class="btns"><i></i><i></i><i></i></div>
+        </div>
+        <div class="plabel">ORDER · PRINTER</div>
+        <div class="feet"><i></i><i></i></div>
+      </div>
       <div class="lip2"></div>
-      <div class="lcd" id="led">READY</div>
       <div class="bubble" id="bubble">点我取单！</div>
     </div>
   </div>
@@ -69,7 +66,7 @@
   <div id="receiptWrap" class="modal hide">
     <div class="rcol">
       <div class="ticket" id="ticket">
-        <img class="r-logo" src="./assets/mascot-CWaur_he.webp" alt="" draggable="false" />
+        <div class="r-logo"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#msIcon"/></svg></div>
         <div class="r-title">怪兽甜品铺</div>
         <div class="dash"></div>
         <div class="r-meta"><span><b id="tNo">No.0001</b></span><span id="tTime">05:11</span></div>
@@ -124,7 +121,9 @@
 <!-- ======== LOADER ======== -->
 <div id="loader">
   <div class="ld-in">
-    <img class="ld-logo" src="./assets/logo-C2fly4fh.webp" alt="怪兽甜品铺" draggable="false" />
+    <svg class="ld-pud" viewBox="0 4 64 54" aria-hidden="true"><ellipse cx="32" cy="54.6" rx="21" ry="2.8" fill="#e8d9c2"/><use href="#msIcon"/></svg>
+    <div class="ld-script">Monster Sweets</div>
+    <div class="ld-zh">怪兽甜品铺</div>
     <div class="ld-bar"><div id="ldFill"><div class="ld-head"><i class="puff p1"></i><i class="puff p2"></i><i class="puff p3"></i><i class="puff p4"></i><div class="ld-truck"><svg class="trk" viewBox="0 0 96 64" aria-hidden="true" stroke="#5b3a29" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"> <g class="trk-body"> <path d="M6 46 V20 a6 6 0 0 1 6 -6 H56 a4 4 0 0 1 4 4 V46 Z" fill="#fdeacb"/> <path d="M6 23 V20 a6 6 0 0 1 6 -6 H56 a4 4 0 0 1 4 4 V23 q-4.5 4.5 -9 0 q-4.5 4.5 -9 0 q-4.5 4.5 -9 0 q-4.5 4.5 -9 0 q-4.5 4.5 -9 0 q-4.5 4.5 -9 0 Z" fill="#fffaf1"/> <path d="M6 33 H60 V39 H6 Z" fill="#ef9fae" stroke-width="2"/> <path d="M24 9 q3 -6 7 -1 q4 -4 6 2 q-6 3 -13 -1 Z" fill="#fffaf1" stroke-width="2"/> <path d="M60 46 V24 a4 4 0 0 1 4 -4 H76 q5 0 7 5 L88 34 a4 4 0 0 1 1 2.6 V46 Z" fill="#e0655a"/> <path d="M65 23 H75 q3 0 4.5 3 L83 33 H65 Z" fill="#cfeaea" stroke-width="2"/> <path d="M3 46 H91" stroke-width="2.6"/> <rect x="85" y="38" width="5" height="4" rx="1.5" fill="#f7d38a" stroke-width="1.6"/> <path d="M67 20 q4 -5 10 0" fill="#f8ecd4" stroke-width="2"/> </g> <g class="trk-w trk-w1"><circle cx="21" cy="47" r="7.5" fill="#4a4242"/><circle cx="21" cy="47" r="3" fill="#f3e7d4" stroke-width="1.6"/><path d="M21 41 v3" stroke="#f3e7d4" stroke-width="1.6"/></g> <g class="trk-w trk-w2"><circle cx="73" cy="47" r="7.5" fill="#4a4242"/><circle cx="73" cy="47" r="3" fill="#f3e7d4" stroke-width="1.6"/><path d="M73 41 v3" stroke="#f3e7d4" stroke-width="1.6"/></g> </svg></div></div></div></div>
     <div class="ld-tip" id="ldTip"></div>
   </div>
