@@ -3849,7 +3849,7 @@ if (uTShOn > 0.5 && receiveShadow) tShF = truckShadow(vWorldP, inverseTransformD
 `+e.slice(0,n)+`
 		#if UNROLLED_LOOP_INDEX == 0
 		directLight.color *= tShF;
-		#endif`+e.slice(n)}let na=new it(`#f8efe2`),ra={uBendK:{value:0},uBendC:{value:new j},uRevC:{value:new j},uRevR:{value:9999},uRevSoft:{value:3},uPaper:{value:na.clone()},uTime:{value:0},uCutA:{value:new j},uCutB:{value:new j},uCut:{value:0},uTallR:{value:99999},uKeep:{value:new j(1e5,0,1e5)},uShopP:{value:new we(0,0,0,-1)},uFadeBand:{value:5},uInkR:{value:9999},uColR:{value:9999},uDrvC:{value:new j},uDrvR:{value:1e6},uDrvW:{value:45},uFadeO:{value:1},uFarR:{value:1e6},uRing:{value:new we(0,1e9,8,0)},uNight:{value:0},uWind:{value:new we(.8,.6,.6,0)},uWindAcc:{value:new A},uSeason:{value:2},uSeasonW:{value:new we(0,0,1,0)},uSnow:{value:0},uGrassTint:{value:new j(1,1,1)}};Object.assign(ra,ea),ra.uFarR;function ia(e,t,n){let r=Math.sin(e*127.1+t*311.7+n*74.7)*43758.5453;return r-Math.floor(r)}function aa(e,t,n,r){let i=Math.floor(e),a=Math.floor(t),o=e-i,s=t-a,c=o*o*(3-2*o),l=s*s*(3-2*s),u=(e,t)=>ia((e%r+r)%r,(t%r+r)%r,n);return(u(i,a)*(1-c)+u(i+1,a)*c)*(1-l)+(u(i,a+1)*(1-c)+u(i+1,a+1)*c)*l}function oa(e,t,n,r,i=5){let a=.5,o=0,s=1;for(let c=0;c<i;c++)o+=a*aa(e*s,t*s,n+c,r*s),a*=.5,s*=2;return o}function sa(t,n=256){let r=new Uint8Array(n*n*4);for(let e=0;e<n;e++)for(let i=0;i<n;i++){let a=i/n,o=e/n,s=.5,c=0,l=0,u=oa(a*4,o*4,1,4),d=oa(a*16,o*16,7,16,3);switch(t){case`plaster`:{s=.47+(u-.5)*.22+(d-.5)*.07;let e=oa(a*3,o*6,13,3);e>.66&&(s-=(e-.66)*.5);let t=oa(a*6,o*6,21,6);c=t>.7?Math.min(1,(t-.7)*8):0;break}case`paint`:{s=.5+(u-.5)*.16+(d-.5)*.06;let e=oa(a*5,o*5,31,5)*.75+oa(a*20,o*20,33,20,2)*.25;c=e>.64?Math.min(1,(e-.64)*12):0,l=e>.62&&e<.66?.6:0;break}case`brick`:{let e=o*8,t=Math.floor(e),n=a*4+t%2*.5,r=Math.floor(n),i=n-r,u=e-t,f=i<.05||u<.1;s=f?.72:.42+ia(r,t,3)*.16+(d-.5)*.1,l=f?0:i>.94||u>.9?.35:0,c=+!!f;break}case`tile`:{let e=o*8,t=Math.floor(e),n=a*6+t%2*.5,r=Math.floor(n),i=n-r-.5,c=e-t,u=Math.sqrt(i*i*1.4+(c-.15)*(c-.15));s=.4+c*.25+ia(r,t,5)*.1+(d-.5)*.08,l=c<.07||u>.62?.55:0;break}case`wood`:{let e=Math.floor(a*5);s=.44+(Math.sin(o*40+oa(a*5,o*2,e,5)*6)*.5+.5)*.1+ia(e,0,9)*.08,l=a*5-e<.05?.6:0;break}case`stone`:{let e=a*6,t=o*6,n=Math.floor(e+Math.floor(t)%2*.5),r=Math.floor(t),i=e+r%2*.5-n,c=t-r;s=i<.04||c<.05?.38:.48+ia(n,r,11)*.08+(d-.5)*.08;break}case`leaf`:s=.42+u*.25+(d-.5)*.12,c=+(oa(a*8,o*8,41,8)>.62);break;case`road`:s=.5+(u-.5)*.1+(d-.5)*.1;break;default:s=.5+(d-.5)*.06}let f=(e*n+i)*4;r[f]=Math.max(0,Math.min(255,s*255)),r[f+1]=c*255,r[f+2]=l*255,r[f+3]=255}let s=new Dn(r,n,n,o);return s.wrapS=s.wrapT=e,s.magFilter=i,s.minFilter=a,s.generateMipmaps=!0,s.needsUpdate=!0,s}let ca={};function la(e){return ca[e]||(ca[e]=sa(e))}let ua=`
+		#endif`+e.slice(n)}let na=new it(`#f8efe2`),ra={uBendK:{value:0},uBendC:{value:new j},uRevC:{value:new j},uRevR:{value:9999},uRevSoft:{value:3},uPaper:{value:na.clone()},uTime:{value:0},uCutA:{value:new j},uCutB:{value:new j},uCut:{value:0},uTallR:{value:99999},uKeep:{value:new j(1e5,0,1e5)},uShopP:{value:new we(0,0,0,-1)},uFadeBand:{value:5},uInkR:{value:9999},uColR:{value:9999},uDrvC:{value:new j},uDrvR:{value:1e6},uDrvW:{value:45},uFadeO:{value:1},uFarR:{value:1e6},uRing:{value:new we(0,1e9,8,0)},uNight:{value:0},uWind:{value:new we(.8,.6,.6,0)},uWindAcc:{value:new A},uSeason:{value:2},uSeasonW:{value:new we(0,0,1,0)},uSnow:{value:0},uGrassTint:{value:new j(1,1,1)},uWet:{value:0},uHL:{value:new we(0,0,0,0)},uHLD:{value:new we(0,0,1,13)},uHLC:{value:new it(`#ffd9a0`)}};Object.assign(ra,ea),ra.uFarR;function ia(e,t,n){let r=Math.sin(e*127.1+t*311.7+n*74.7)*43758.5453;return r-Math.floor(r)}function aa(e,t,n,r){let i=Math.floor(e),a=Math.floor(t),o=e-i,s=t-a,c=o*o*(3-2*o),l=s*s*(3-2*s),u=(e,t)=>ia((e%r+r)%r,(t%r+r)%r,n);return(u(i,a)*(1-c)+u(i+1,a)*c)*(1-l)+(u(i,a+1)*(1-c)+u(i+1,a+1)*c)*l}function oa(e,t,n,r,i=5){let a=.5,o=0,s=1;for(let c=0;c<i;c++)o+=a*aa(e*s,t*s,n+c,r*s),a*=.5,s*=2;return o}function sa(t,n=256){let r=new Uint8Array(n*n*4);for(let e=0;e<n;e++)for(let i=0;i<n;i++){let a=i/n,o=e/n,s=.5,c=0,l=0,u=oa(a*4,o*4,1,4),d=oa(a*16,o*16,7,16,3);switch(t){case`plaster`:{s=.47+(u-.5)*.22+(d-.5)*.07;let e=oa(a*3,o*6,13,3);e>.66&&(s-=(e-.66)*.5);let t=oa(a*6,o*6,21,6);c=t>.7?Math.min(1,(t-.7)*8):0;break}case`paint`:{s=.5+(u-.5)*.16+(d-.5)*.06;let e=oa(a*5,o*5,31,5)*.75+oa(a*20,o*20,33,20,2)*.25;c=e>.64?Math.min(1,(e-.64)*12):0,l=e>.62&&e<.66?.6:0;break}case`brick`:{let e=o*8,t=Math.floor(e),n=a*4+t%2*.5,r=Math.floor(n),i=n-r,u=e-t,f=i<.05||u<.1;s=f?.72:.42+ia(r,t,3)*.16+(d-.5)*.1,l=f?0:i>.94||u>.9?.35:0,c=+!!f;break}case`tile`:{let e=o*8,t=Math.floor(e),n=a*6+t%2*.5,r=Math.floor(n),i=n-r-.5,c=e-t,u=Math.sqrt(i*i*1.4+(c-.15)*(c-.15));s=.4+c*.25+ia(r,t,5)*.1+(d-.5)*.08,l=c<.07||u>.62?.55:0;break}case`wood`:{let e=Math.floor(a*5);s=.44+(Math.sin(o*40+oa(a*5,o*2,e,5)*6)*.5+.5)*.1+ia(e,0,9)*.08,l=a*5-e<.05?.6:0;break}case`stone`:{let e=a*6,t=o*6,n=Math.floor(e+Math.floor(t)%2*.5),r=Math.floor(t),i=e+r%2*.5-n,c=t-r;s=i<.04||c<.05?.38:.48+ia(n,r,11)*.08+(d-.5)*.08;break}case`leaf`:s=.42+u*.25+(d-.5)*.12,c=+(oa(a*8,o*8,41,8)>.62);break;case`road`:s=.5+(u-.5)*.1+(d-.5)*.1;break;default:s=.5+(d-.5)*.06}let f=(e*n+i)*4;r[f]=Math.max(0,Math.min(255,s*255)),r[f+1]=c*255,r[f+2]=l*255,r[f+3]=255}let s=new Dn(r,n,n,o);return s.wrapS=s.wrapT=e,s.magFilter=i,s.minFilter=a,s.generateMipmaps=!0,s.needsUpdate=!0,s}let ca={};function la(e){return ca[e]||(ca[e]=sa(e))}let ua=`
 vec4 wP = vec4( transformed, 1.0 );
 #ifdef USE_BATCHING
   wP = batchingMatrix * wP;
@@ -3982,6 +3982,7 @@ vObjP = position; vObjN = normal;
 #endif
 `),e.fragmentShader.includes(`#include <color_fragment>`)?(e.fragmentShader=fa+ma+`
 uniform vec4 uSeasonW; uniform float uSnow; uniform vec3 uGrassTint; uniform float uSnowK;
+uniform float uWet; uniform vec4 uHL; uniform vec4 uHLD; uniform vec3 uHLC;
 `+(e.fragmentShader.includes(`#include <lights_fragment_begin>`)?`
 uniform sampler2DShadow uTSh; uniform mat4 uTShM; uniform float uTShOn; uniform vec2 uTShTex;
 float truckShadow(vec3 wp, vec3 wn){
@@ -4111,6 +4112,32 @@ if (uSnow > 0.001 && uSnowK > 0.001) {
   float s = smoothstep(0.3, 0.62, fn.y + (nz - 0.5) * 0.5 - (1.0 - cover) * 0.6);
   s *= smoothstep(0.2, 0.55, nz * 0.9 + cover * 0.55) * cover;
   diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.86, 0.89, 0.95) * (0.94 + 0.08 * nz), s);
+}
+`)+`
+float wetK = 0.0;
+if (uWet > 0.001) {
+  float wUp = smoothstep(0.55, 0.92, normalize(vObjN).y);
+  wetK = uWet * mix(0.3, 1.0, wUp) * mix(0.6, 1.0, uWorldTex);
+  diffuseColor.rgb *= 1.0 - 0.16 * wetK;
+  diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * vec3(0.93, 0.96, 1.04), wetK * 0.5);
+}
+`),e.fragmentShader.includes(`#include <roughnessmap_fragment>`)&&(e.fragmentShader=e.fragmentShader.replace(`#include <roughnessmap_fragment>`,`#include <roughnessmap_fragment>
+
+roughnessFactor = mix(roughnessFactor, 0.3, wetK * 0.75);
+`)),e.fragmentShader.includes(`#include <emissivemap_fragment>`)&&(e.fragmentShader=e.fragmentShader.replace(`#include <emissivemap_fragment>`,`#include <emissivemap_fragment>
+
+if (uHL.w > 0.001) {
+  vec3 hp = vWorldP - uHL.xyz; float hd = length(hp);
+  if (hd < uHLD.w && hd > 0.25) {
+    vec3 hL = hp / hd;
+    float ca = dot(hL, uHLD.xyz);
+    float soft = mix(0.006, 0.07, smoothstep(1.5, uHLD.w, hd));
+    float cone = smoothstep(0.915 - soft, 0.915 + soft, ca);
+    float att = (1.0 - smoothstep(uHLD.w * 0.45, uHLD.w, hd)) / (1.0 + 0.045 * hd * hd);
+    vec3 wn = normalize((vec4(normal, 0.0) * viewMatrix).xyz);
+    float lam = max(dot(wn, -hL), 0.0) * 0.8 + 0.2;
+    totalEmissiveRadiance += diffuseColor.rgb * uHLC * (cone * att * lam * uHL.w * 2.6);
+  }
 }
 `)),t.wash&&(e.fragmentShader=e.fragmentShader.replace(`#include <normal_fragment_maps>`,`#include <normal_fragment_maps>
 
