@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<meta name="theme-color" content="#f8efe2" />
+<title>怪兽甜品铺 · Monster Sweets</title>
+<link rel="icon" type="image/png" href="./assets/favicon-DdmFDUOL.png" />
+<link rel="apple-touch-icon" href="./assets/apple-touch-icon-Cgjkegsg.png" />
+  <script type="module" crossorigin src="./assets/main-Bpr1Y96Y.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/three.core-Dp-eO7LC.js">
+  <link rel="modulepreload" crossorigin href="./assets/shadowfx-USz7PNBc.js">
+  <link rel="modulepreload" crossorigin href="./assets/core-Cn02cR3U.js">
+  <link rel="modulepreload" crossorigin href="./assets/BufferGeometryUtils-BQUZb3zE.js">
+  <link rel="modulepreload" crossorigin href="./assets/truck-CdTLqCJk.js">
+  <link rel="stylesheet" crossorigin href="./assets/main-CbITvu5P.css">
+</head>
+<body>
+<canvas id="gl"></canvas>
+
+
+<div id="stage">
+  <!-- M3.5k brand icon A (fine-line cloche monster, coral): one symbol for the header, receipt and loader -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="msIcon" viewBox="0 0 64 64"><path d="M-2.7 0 C-4.2 -4.2 -3 -8.6 1.2 -11 C-0.6 -8 -0.4 -4.4 2.5 -1.4 Z" fill="#d24a40" transform="translate(20.6 25.4) rotate(-28) scale(1.05)"/><path d="M-2.7 0 C-4.2 -4.2 -3 -8.6 1.2 -11 C-0.6 -8 -0.4 -4.4 2.5 -1.4 Z" fill="#d24a40" transform="translate(43.4 25.4) rotate(28) scale(-1.05 1.05)"/><path d="M11.5 48 C11.5 28.5 20 19.8 32 19.8 C44 19.8 52.5 28.5 52.5 48 Z" fill="#fffaf2" stroke="#d24a40" stroke-width="2.2" stroke-linejoin="round"/><path d="M32 19.8 V16.6" stroke="#d24a40" stroke-width="2.4" stroke-linecap="round"/><circle cx="32" cy="13.9" r="3" fill="#d24a40"/><path d="M16.6 43 C16.6 35.5 18.8 30.6 22.4 27.4" fill="none" stroke="#d24a40" stroke-width="1.3" stroke-linecap="round" opacity=".5"/><circle cx="32" cy="35.6" r="6.3" fill="#fffaf2" stroke="#d24a40" stroke-width="2.1"/><circle cx="32.3" cy="36.3" r="3.8" fill="#d24a40"/><circle cx="32.3" cy="36.3" r="1.9" fill="#a9352f"/><circle cx="33.9" cy="34.7" r="1.35" fill="#fffaf2"/><circle cx="30.9" cy="37.8" r=".55" fill="#fffaf2"/><path d="M7 50.6 H57" stroke="#d24a40" stroke-width="2.4" stroke-linecap="round"/><path d="M25 54.6 H39" stroke="#d24a40" stroke-width="2" stroke-linecap="round"/></symbol></svg>
+  <!-- ======== SHOP PAGE ======== -->
+  <div id="page" class="hide">
+    <header class="brand">
+      <div class="logo"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#msIcon"/></svg></div>
+      <div class="names">
+        <div class="script">Monster Sweets</div>
+        <div class="zh">怪兽甜品铺</div>
+      </div>
+    </header>
+
+    <div class="chips">
+      <div class="chip stat"><span class="ic" data-icon="day"></span><span id="day">第1天</span></div>
+      <div class="chip stat"><span class="ic" data-icon="coin"></span><span id="coins">0</span></div>
+      <div class="chip stat"><span class="ic" data-icon="heart"></span><span id="hearts">0</span></div>
+      <div class="chip swap" id="swapShop" title="换一栋" style="display:none" aria-hidden="true"><span class="ic" data-icon="swap"></span></div>
+    </div>
+
+    <aside class="menu" id="menu">
+      <div class="menu-tabs" id="menuTabs" role="tablist"><button class="mt on" data-cat="dessert" aria-label="甜品"><span class="ic" data-icon="cake"></span><span class="mt-l">甜品</span></button><button class="mt" data-cat="drink" aria-label="饮品"><span class="ic" data-icon="drink"></span><span class="mt-l">饮品</span></button></div>
+      <div class="sheet"><div class="card"><div class="hd" id="menuHd">Desserts</div><div class="orn"></div><div id="menuGrid" class="grid"></div></div></div>
+    </aside>
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="deckle" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency="0.09" numOctaves="2" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="7" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
+
+    <!-- order printer: the 3D model (printer3d.js) pre-rendered to a sprite at load; LCD text and the paper strip stay DOM -->
+    <div id="printer" class="printer">
+      <div class="pbody">
+        <img class="psprite" alt="" draggable="false" />
+        <div class="strip" id="paperOut"><div class="sp" id="paperLines"></div></div>
+        <img class="psprite front" alt="" draggable="false" />
+        <div class="lcd" id="led">READY</div>
+      </div>
+      <div class="bubble" id="bubble">点我取单！</div>
+    </div>
+  </div>
+
+  <!-- ======== RECEIPT MODAL ======== -->
+  <div id="receiptWrap" class="modal hide">
+    <div class="rcol">
+      <div class="ticket" id="ticket">
+        <div class="r-logo"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#msIcon"/></svg></div>
+        <div class="r-title">怪兽甜品铺</div>
+        <div class="dash"></div>
+        <div class="r-meta"><span><b id="tNo">No.0001</b></span><span id="tTime">05:11</span></div>
+        <div class="dash"></div>
+        <div id="tItems" class="items"></div>
+        <div class="dash"></div>
+        <div class="r-kv"><span>顾客</span><b id="tName"></b></div>
+        <div class="r-kv"><span>送至</span><b id="tAddr"></b></div>
+        <div class="r-kv"><span>路程</span><b id="tDist"></b></div>
+        <div class="dash"></div>
+        <div class="total"><span>合计</span><span id="tTotal"></span></div>
+        <div class="r-bonus"><span class="ic" data-icon="heart"></span>+1</div>
+        <div class="note" id="tNote"></div>
+        <div class="barcode" id="barcode"></div>
+      </div>
+      <button class="go" id="goBtn"><span class="go-trk"></span><span>派送</span></button>
+    </div>
+  </div>
+
+  <!-- ======== PRODUCT DETAIL (recipe card) ======== -->
+  <div id="viewer" class="modal hide">
+    <div class="vcard">
+      <div class="vstage"><canvas id="vcanvas"></canvas><span class="vrot ic" data-icon="rotate"></span></div>
+      <div class="vinfo">
+        <div class="ribbon"><span id="vName"></span></div>
+        <div class="script" id="vEn"></div>
+        <div class="vnote"><div class="vdesc" id="vDesc"></div></div>
+        <div class="vtag"><span id="vPrice"></span></div>
+      </div>
+      <button class="xbtn" id="vClose" aria-label="关闭"><span class="ic" data-icon="close"></span></button>
+    </div>
+  </div>
+
+  <!-- ======== DRIVE HUD ======== -->
+  <div id="hud" class="hide">
+    <div class="pill">
+      <i class="tape"></i>
+      <img id="hAvatar" alt="" />
+      <div class="ptext"><div class="pt1" id="hTo"></div><div class="pt2" id="hSub"></div></div>
+    </div>
+    <div class="route" id="hRoute"><div class="track"><div class="fill" id="hFill"></div></div><div class="truck" id="hTruck"><svg class="van" viewBox="0 0 66 36" aria-hidden="true" stroke-linejoin="round" stroke-linecap="round"><g transform="translate(12.6 2.8)"><g class="dust" fill="none" stroke="#d24a40" stroke-width="1"><circle class="d1" cx="2.2" cy="26.4" r="1.9" opacity=".55"/><circle class="d2" cx="-3.4" cy="23.6" r="1.45" opacity=".38"/><circle class="d3" cx="-8.2" cy="21.6" r="1" opacity=".22"/></g><g class="van-b"><path d="M14.6 6.2C13.6 3.6 14.4 1.4 16.4.4 15.8 2.4 16.4 4.2 18 5.6z" fill="#d24a40"/><path d="M24.6 6.2c1-2.6.2-4.8-1.8-5.8.6 2 0 3.8-1.6 5.2z" fill="#d24a40"/><path d="M6 26V12c0-3.4 2.6-6 6-6h21c2 0 3.4 1 4.2 2.6l4.2 7.6c3.2.4 6 2.2 7 5l.8 2.6c.3 1.3-.5 2.2-1.6 2.2z" fill="#fffaf2" stroke="#d24a40" stroke-width="1.5"/><path d="M35 9.8l3.6 6.2h-5.2V9.8z" fill="none" stroke="#d24a40" stroke-width="1.2"/><path d="M31.4 7v18M10 18.4h17.6" stroke="#d24a40" stroke-width="1" opacity=".55"/><path d="M8.6 10.6q1.375 1.8 2.75 0q1.375 1.8 2.75 0q1.375 1.8 2.75 0q1.375 1.8 2.75 0q1.375 1.8 2.75 0q1.375 1.8 2.75 0q1.375 1.8 2.75 0q1.375 1.8 2.75 0" fill="none" stroke="#d24a40" stroke-width="1"/><circle cx="46.2" cy="21.6" r=".9" fill="#d24a40"/></g><g class="van-w"><circle cx="15" cy="26.4" r="3.9" fill="#fffaf2" stroke="#d24a40" stroke-width="1.5"/><circle cx="15" cy="26.4" r="1.1" fill="#d24a40"/><circle cx="40" cy="26.4" r="3.9" fill="#fffaf2" stroke="#d24a40" stroke-width="1.5"/><circle cx="40" cy="26.4" r="1.1" fill="#d24a40"/></g></g></svg></div><div class="flag ic" data-icon="home"></div></div>
+    <button id="foldBtn" class="ff fold hide"><span class="ic" data-icon="fold"></span><span>回店</span></button>
+    <button id="ffBtn" class="ff fast" aria-label="加速"><span class="ic" data-icon="fast"></span></button>
+  </div>
+
+  <div id="toast" class="toast hide"></div>
+  <div id="speech" class="speech hide"></div>
+</div>
+
+<!-- ======== LOADER ======== -->
+<div id="loader">
+  <div class="ld-in">
+    <svg class="ld-pud" viewBox="0 0 64 64" aria-hidden="true"><use href="#msIcon"/></svg>
+    <div class="ld-script">Monster Sweets</div>
+    <div class="ld-zh">怪兽甜品铺</div>
+    <div class="ld-bar"><div id="ldFill"><div class="ld-head"><div class="ld-truck"><svg class="van" viewBox="0 0 66 36" aria-hidden="true" stroke-linejoin="round" stroke-linecap="round"><g transform="translate(12.6 2.8)"><g class="dust" fill="none" stroke="#d24a40" stroke-width="1"><circle class="d1" cx="2.2" cy="26.4" r="1.9" opacity=".55"/><circle class="d2" cx="-3.4" cy="23.6" r="1.45" opacity=".38"/><circle class="d3" cx="-8.2" cy="21.6" r="1" opacity=".22"/></g><g class="van-b"><path d="M14.6 6.2C13.6 3.6 14.4 1.4 16.4.4 15.8 2.4 16.4 4.2 18 5.6z" fill="#d24a40"/><path d="M24.6 6.2c1-2.6.2-4.8-1.8-5.8.6 2 0 3.8-1.6 5.2z" fill="#d24a40"/><path d="M6 26V12c0-3.4 2.6-6 6-6h21c2 0 3.4 1 4.2 2.6l4.2 7.6c3.2.4 6 2.2 7 5l.8 2.6c.3 1.3-.5 2.2-1.6 2.2z" fill="#fffaf2" stroke="#d24a40" stroke-width="1.5"/><path d="M35 9.8l3.6 6.2h-5.2V9.8z" fill="none" stroke="#d24a40" stroke-width="1.2"/><path d="M31.4 7v18M10 18.4h17.6" stroke="#d24a40" stroke-width="1" opacity=".55"/><path d="M8.6 10.6q1.375 1.8 2.75 0q1.375 1.8 2.75 0q1.375 1.8 2.75 0q1.375 1.8 2.75 0q1.375 1.8 2.75 0q1.375 1.8 2.75 0q1.375 1.8 2.75 0q1.375 1.8 2.75 0" fill="none" stroke="#d24a40" stroke-width="1"/><circle cx="46.2" cy="21.6" r=".9" fill="#d24a40"/></g><g class="van-w"><circle cx="15" cy="26.4" r="3.9" fill="#fffaf2" stroke="#d24a40" stroke-width="1.5"/><circle cx="15" cy="26.4" r="1.1" fill="#d24a40"/><circle cx="40" cy="26.4" r="3.9" fill="#fffaf2" stroke="#d24a40" stroke-width="1.5"/><circle cx="40" cy="26.4" r="1.1" fill="#d24a40"/></g></g></svg></div></div></div><svg class="ld-end" viewBox="-12 -10 24 16" aria-hidden="true" fill="none" stroke="#d24a40" stroke-width="1.4" stroke-linecap="round"><path d="M-8 4C-8-2.6-4.4-6 0-6S8-2.6 8 4Z" fill="#fffaf2"/><path d="M-10 4H10"/><circle cx="0" cy="-7.6" r="1.3" fill="#d24a40" stroke="none"/></svg></div>
+    <div class="ld-tip" id="ldTip"></div>
+  </div>
+</div>
+
+</body>
+</html>
