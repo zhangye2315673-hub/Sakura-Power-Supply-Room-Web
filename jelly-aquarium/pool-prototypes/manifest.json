@@ -1,0 +1,85 @@
+{
+  "version": "v2-d7aaf1423723db44",
+  "sources": [
+    "src/geometry.js",
+    "src/animal-fields.js",
+    "src/inner-layer.js",
+    "src/pool/prototype-data.js",
+    "src/pool/prototype-build.js"
+  ],
+  "generatedAt": "2026-11-05T01:55:58.162Z",
+  "records": [
+    {
+      "kind": "hammerhead",
+      "quality": "high",
+      "bytes": 1126720,
+      "sdfMs": 2436.5404,
+      "innerMs": 37.19140000000016,
+      "cageAndPropsMs": 17.146299999999883,
+      "totalMs": 2490.8822999999998
+    },
+    {
+      "kind": "manta",
+      "quality": "high",
+      "bytes": 1283372,
+      "sdfMs": 2279.4462,
+      "innerMs": 51.698999999999614,
+      "cageAndPropsMs": 15.553100000000086,
+      "totalMs": 2346.7007
+    },
+    {
+      "kind": "dolphin",
+      "quality": "high",
+      "bytes": 841716,
+      "sdfMs": 1159.4129999999996,
+      "innerMs": 14.617700000000696,
+      "cageAndPropsMs": 6.885699999999815,
+      "totalMs": 1180.9171999999999
+    },
+    {
+      "kind": "turtle",
+      "quality": "high",
+      "bytes": 1269524,
+      "sdfMs": 1244.0461000000005,
+      "innerMs": 21.696599999999307,
+      "cageAndPropsMs": 15.77180000000044,
+      "totalMs": 1281.5155000000004
+    },
+    {
+      "kind": "hammerhead",
+      "quality": "low",
+      "bytes": 734088,
+      "sdfMs": 1374.8488000000007,
+      "innerMs": 19.110099999999875,
+      "cageAndPropsMs": 9.901200000000244,
+      "totalMs": 1403.8609999999999
+    },
+    {
+      "kind": "manta",
+      "quality": "low",
+      "bytes": 833532,
+      "sdfMs": 1360.853000000001,
+      "innerMs": 24.060699999999997,
+      "cageAndPropsMs": 5.876399999999194,
+      "totalMs": 1390.7916000000005
+    },
+    {
+      "kind": "dolphin",
+      "quality": "low",
+      "bytes": 538376,
+      "sdfMs": 880.9603000000006,
+      "innerMs": 11.37039999999979,
+      "cageAndPropsMs": 3.7779000000009546,
+      "totalMs": 896.1092000000008
+    },
+    {
+      "kind": "turtle",
+      "quality": "low",
+      "bytes": 815100,
+      "sdfMs": 767.9760999999999,
+      "innerMs": 15.671400000001086,
+      "cageAndPropsMs": 5.550799999999072,
+      "totalMs": 789.1992000000009
+    }
+  ]
+}
