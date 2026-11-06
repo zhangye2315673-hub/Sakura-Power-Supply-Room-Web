@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#eeefe8" />
     <meta name="description" content="揉一揉，游一游。十种Q版海洋动物的双层果冻实验。" />
     <title>海洋动物 · 柔体研究所</title>
-    <script type="module" crossorigin src="./assets/index-DT7yKkuP.js"></script>
+    <script type="module" crossorigin src="./assets/index-IJEtgCgK.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-ByomCP5f.css">
   </head>
   <body>
@@ -15,7 +15,6 @@
         <a class="brand-lockup" href="./" aria-label="柔体研究所首页">
           <span class="brand-mark" aria-hidden="true"><span></span></span><span>柔体研究所</span>
         </a>
-        <div class="view-switch" role="group" aria-label="切换界面"><button type="button" data-view="showcase" aria-pressed="true" class="is-active">展示</button><button type="button" data-view="pool" aria-pressed="false">水族馆</button></div>
         <nav class="breadcrumb" aria-label="当前位置"><span id="experimentLabel">实验 03</span><span class="crumb-divider" aria-hidden="true">/</span><span id="animalBreadcrumb">锤头鲨</span></nav>
         <div class="top-meta" aria-label="渲染状态">
           <span class="gpu-label"><span class="status-dot" aria-hidden="true"></span><span id="gpuStatus">检测中</span></span>
@@ -29,18 +28,6 @@
             <button class="icon-button" id="resetBtn" type="button" aria-label="重置样本" title="重置样本"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9a8 8 0 1 1 .3 7M4 4v5h5" /></svg></button>
             <button class="icon-button" id="pauseBtn" type="button" aria-label="暂停模拟" aria-pressed="false" title="暂停模拟"><svg class="pause-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6v12M15 6v12" /></svg><svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 10 7-10 7Z" /></svg></button>
           </div>
-        <div class="pool-hud" id="poolHud" hidden>
-          <output id="poolCount" aria-live="polite">空缸</output>
-          <div class="pool-tools" role="group" aria-label="鱼缸工具">
-            <button class="pool-tool" type="button" id="poolWind" aria-label="微风" aria-pressed="false" title="微风"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8h11c3 0 3-4 0-4M3 12h16c3 0 3 4 0 4M3 16h8"/></svg></button>
-            <button class="pool-tool" type="button" id="poolRain" aria-label="下雨" aria-pressed="false" title="下雨"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17.5 5.8 20M12 17.5 10.8 20M17 17.5 15.8 20M5 14.2a5 5 0 0 1 2.8-9.1 5.7 5.7 0 0 1 10.7 2.3A4 4 0 0 1 19 15H6.3"/></svg></button>
-            <button class="pool-tool" type="button" id="poolWhirlpool" aria-label="漩涡" aria-pressed="false" title="漩涡"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8c3-3 11-3 14 0M4 12c4-3 12-3 16 0M6 16c3-2 9-2 12 0M10 19c1.2-1 2.8-1 4 0"/></svg></button>
-            <button class="pool-tool" type="button" id="poolNight" aria-label="夜间" aria-pressed="false" title="夜间"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 14.5A7.5 7.5 0 0 1 9.5 5a7.5 7.5 0 1 0 9.5 9.5Z"/></svg></button>
-            <button class="pool-tool" type="button" id="poolMute" aria-label="静音" aria-pressed="false" title="静音"><svg class="sound-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4h4l5 4V6l-5 4H4M17 9.2a4 4 0 0 1 0 5.6M19.5 6.8a7.5 7.5 0 0 1 0 10.4"/></svg><svg class="sound-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4h4l5 4V6l-5 4H4M18 9l4 6M22 9l-4 6"/></svg></button>
-            <button class="pool-tool" type="button" id="poolHide" aria-label="隐藏界面" title="隐藏界面 · H"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h6M4 4v6M20 4h-6M20 4v6M4 20h6M4 20v-6M20 20h-6M20 20v-6"/></svg></button>
-          </div>
-          <button type="button" id="clearPool" aria-label="清空鱼缸">清空鱼缸<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 7h12M7 7l1 9h4l1-9M8 4h4"/></svg></button>
-        </div>
           <div class="viewport-wrap" id="viewportWrap">
             <canvas id="sceneCanvas" tabindex="0" aria-label="可抓取、拉伸和旋转的双层果冻锤头鲨" aria-describedby="interactionHint"></canvas>
             <div class="loading-overlay" id="loadingOverlay" role="status"><span class="loading-line" aria-hidden="true"></span><span id="loadingText">正在准备样本</span></div>
@@ -56,7 +43,6 @@
               <div class="metric"><dt id="spanLabel">眼间距</dt><dd><span id="eyeMetric">—</span><span class="metric-unit">m</span></dd></div>
             </dl>
           </footer>
-          <div class="pool-dock" id="poolDock" role="group" aria-label="放入果冻动物" hidden><button class="pool-card" type="button" data-pool-animal="hammerhead" aria-label="放入锤头鲨"><img alt="" draggable="false"/><span>锤头鲨</span></button><button class="pool-card" type="button" data-pool-animal="manta" aria-label="放入蝠鲼"><img alt="" draggable="false"/><span>蝠鲼</span></button><button class="pool-card" type="button" data-pool-animal="dolphin" aria-label="放入海豚"><img alt="" draggable="false"/><span>海豚</span></button><button class="pool-card" type="button" data-pool-animal="turtle" aria-label="放入海龟"><img alt="" draggable="false"/><span>海龟</span></button><button class="pool-card" type="button" data-pool-animal="clownfish" aria-label="放入小丑鱼"><img alt="" draggable="false"/><span>小丑鱼</span></button><button class="pool-card" type="button" data-pool-animal="seahorse" aria-label="放入海马"><img alt="" draggable="false"/><span>海马</span></button><button class="pool-card" type="button" data-pool-animal="octopus" aria-label="放入章鱼"><img alt="" draggable="false"/><span>章鱼</span></button><button class="pool-card" type="button" data-pool-animal="humpback" aria-label="放入座头鲸"><img alt="" draggable="false"/><span>座头鲸</span></button><button class="pool-card" type="button" data-pool-animal="jellyfish" aria-label="放入水母"><img alt="" draggable="false"/><span>水母</span></button><button class="pool-card" type="button" data-pool-animal="whaleshark" aria-label="放入鲸鲨"><img alt="" draggable="false"/><span>鲸鲨</span></button></div>
         </section>
         <aside class="control-rail" aria-label="样本控制">
           <div class="rail-content">
