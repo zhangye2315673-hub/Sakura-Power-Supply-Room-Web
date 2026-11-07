@@ -3,86 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#eeefe8" />
-    <meta name="description" content="揉一揉，游一游。十种Q版海洋动物的双层果冻实验。" />
-    <title>海洋动物 · 柔体研究所</title>
-    <script type="module" crossorigin src="./assets/index-IJEtgCgK.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-ByomCP5f.css">
+    <meta name="theme-color" content="#f4f4ef" />
+    <meta name="description" content="柔体研究所 · 一个没有水的空气鱼缸。" />
+    <title>Soft Body Lab · 柔体研究所</title>
+    <link rel="preload" href="./fonts/Cormorant-Italic.ttf" as="font" type="font/ttf" crossorigin />
+    <script type="module" crossorigin src="./assets/index-CZu0jIzL.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-FRWKtGzC.css">
   </head>
-  <body>
-    <main class="app-shell">
-      <header class="topbar">
-        <a class="brand-lockup" href="./" aria-label="柔体研究所首页">
-          <span class="brand-mark" aria-hidden="true"><span></span></span><span>柔体研究所</span>
-        </a>
-        <nav class="breadcrumb" aria-label="当前位置"><span id="experimentLabel">实验 03</span><span class="crumb-divider" aria-hidden="true">/</span><span id="animalBreadcrumb">锤头鲨</span></nav>
-        <div class="top-meta" aria-label="渲染状态">
-          <span class="gpu-label"><span class="status-dot" aria-hidden="true"></span><span id="gpuStatus">检测中</span></span>
-          <span class="performance"><span id="fpsValue">—</span><span class="fps-unit">帧 / 秒</span></span>
-        </div>
-      </header>
-      <div class="workspace">
-        <section class="stage" aria-labelledby="studyTitle">
-          <div class="stage-heading"><h1 id="studyTitle">柔软的锋芒。</h1></div>
-          <div class="stage-tools" role="group" aria-label="模拟操作">
-            <button class="icon-button" id="resetBtn" type="button" aria-label="重置样本" title="重置样本"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9a8 8 0 1 1 .3 7M4 4v5h5" /></svg></button>
-            <button class="icon-button" id="pauseBtn" type="button" aria-label="暂停模拟" aria-pressed="false" title="暂停模拟"><svg class="pause-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6v12M15 6v12" /></svg><svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 10 7-10 7Z" /></svg></button>
-          </div>
-          <div class="viewport-wrap" id="viewportWrap">
-            <canvas id="sceneCanvas" tabindex="0" aria-label="可抓取、拉伸和旋转的双层果冻锤头鲨" aria-describedby="interactionHint"></canvas>
-            <div class="loading-overlay" id="loadingOverlay" role="status"><span class="loading-line" aria-hidden="true"></span><span id="loadingText">正在准备样本</span></div>
-            <div class="error-panel" id="errorPanel" role="alert" hidden></div>
-            <div class="scene-notice" id="sceneNotice" role="status" aria-live="polite"></div>
-          </div>
-          <footer class="stage-footer">
-            <div class="strain-readout" aria-label="实时应变"><span>应变</span><span class="strain-meter" aria-hidden="true"><span id="strainFill"></span></span><output id="strainValue">0.00</output></div>
-            <dl class="metric-row" aria-label="实时样本测量">
-              <div class="metric"><dt>质量</dt><dd><span id="massMetric">—</span><span class="metric-unit">kg</span></dd></div>
-              <div class="metric"><dt>体积</dt><dd><span id="volumeMetric">—</span><span class="metric-unit">L</span></dd></div>
-              <div class="metric"><dt id="lengthLabel">体长</dt><dd><span id="lengthMetric">—</span><span class="metric-unit">m</span></dd></div>
-              <div class="metric"><dt id="spanLabel">眼间距</dt><dd><span id="eyeMetric">—</span><span class="metric-unit">m</span></dd></div>
-            </dl>
-          </footer>
-        </section>
-        <aside class="control-rail" aria-label="样本控制">
-          <div class="rail-content">
-            <header class="sample-heading"><div class="sample-id"><span>样本</span><span class="sample-number" id="sampleNumber">03</span></div><h2 id="animalName">大锤头鲨</h2><p id="animalLatin">Sphyrna mokarran</p></header>
-            <section class="rail-section animal-section" aria-labelledby="animalTitle">
-              <h3 id="animalTitle">切换动物</h3>
-              <div class="animal-selector" role="group" aria-label="选择真实动物造型">
-                <button class="animal-choice is-active" data-animal="hammerhead" aria-pressed="true" type="button">锤头鲨</button>
-                <button class="animal-choice" data-animal="manta" aria-pressed="false" type="button">蝠鲼</button>
-                <button class="animal-choice" data-animal="dolphin" aria-pressed="false" type="button">海豚</button>
-                <button class="animal-choice" data-animal="turtle" aria-pressed="false" type="button">海龟</button><button class="animal-choice" data-animal="clownfish" aria-pressed="false" type="button">小丑鱼</button><button class="animal-choice" data-animal="seahorse" aria-pressed="false" type="button">海马</button><button class="animal-choice" data-animal="octopus" aria-pressed="false" type="button">章鱼</button><button class="animal-choice" data-animal="humpback" aria-pressed="false" type="button">座头鲸</button><button class="animal-choice" data-animal="jellyfish" aria-pressed="false" type="button">水母</button><button class="animal-choice" data-animal="whaleshark" aria-pressed="false" type="button">鲸鲨</button>
-              </div>
-            </section>
-            <section class="rail-section palette-section" aria-labelledby="paletteTitle">
-              <h3 id="paletteTitle">配色</h3>
-              <div class="swatch-row" role="group" aria-label="选择果冻配色">
-                <button class="swatch" data-palette="steel" type="button" aria-label="钢蓝配色" aria-pressed="false"><span class="swatch-orb steel" aria-hidden="true"></span><span>钢蓝</span></button>
-                <button class="swatch" data-palette="amber" type="button" aria-label="琥珀配色" aria-pressed="false"><span class="swatch-orb amber" aria-hidden="true"></span><span>琥珀</span></button>
-                <button class="swatch is-active" data-palette="blue" type="button" aria-label="软糖蓝配色" aria-pressed="true"><span class="swatch-orb blue" aria-hidden="true"></span><span>软糖蓝</span></button>
-                <button class="swatch" data-palette="rose" type="button" aria-label="蜜桃粉配色" aria-pressed="false"><span class="swatch-orb rose" aria-hidden="true"></span><span>蜜桃粉</span></button>
-                <button class="swatch" data-palette="mint" type="button" aria-label="薄荷绿配色" aria-pressed="false"><span class="swatch-orb mint" aria-hidden="true"></span><span>薄荷绿</span></button>
-                <button class="swatch" data-palette="violet" type="button" aria-label="葡萄紫配色" aria-pressed="false"><span class="swatch-orb violet" aria-hidden="true"></span><span>葡萄紫</span></button>
-              </div>
-            </section>
-            <section class="rail-section material-section" aria-labelledby="materialTitle">
-              <h3 id="materialTitle">材质</h3>
-              <label class="range-control" for="transparency"><span class="range-heading"><span>透明度</span><output id="transparencyOut" for="transparency">87</output></span><input id="transparency" type="range" min="0" max="100" value="87" /></label>
-              <label class="range-control" for="elasticity"><span class="range-heading"><span>弹性</span><output id="elasticityOut" for="elasticity">58</output></span><input id="elasticity" type="range" min="10" max="90" value="58" /></label>
-              <details class="advanced-control"><summary>地面接触<svg viewBox="0 0 16 16" aria-hidden="true"><path d="m5 6 3 3 3-3" /></svg></summary><label class="range-control" for="friction"><span class="range-heading"><span>摩擦力</span><output id="frictionOut" for="friction">56</output></span><input id="friction" type="range" min="0" max="100" value="56" /></label></details>
-            </section>
-            <section class="rail-section motion-section" aria-labelledby="motionTitle">
-              <h3 id="motionTitle">游泳</h3>
-              <label class="toggle-row" for="swimMotion"><span id="swimMotionLabel">摇身巡游</span><input id="swimMotion" type="checkbox" role="switch" checked /><span class="toggle-track" aria-hidden="true"></span></label>
-            </section>
-          </div>
-            <footer class="gesture-hint" id="interactionHint"><span>拖动身体 · 揉捏</span><span>拖动空白 · 旋转</span></footer>
-
-        </aside>
-      </div>
+  <body data-ready="loading">
+    <main class="air" id="viewportWrap">
+      <h1 class="sr-only">Soft Body Lab 柔体研究所</h1>
+      <canvas id="sceneCanvas" tabindex="0" aria-label="磨砂玻璃后游动的果冻动物，点击玻璃让雾散开"></canvas>
+      <button class="add-jelly" id="addJelly" type="button" aria-label="放入一只果冻动物"><span>+ jelly</span></button>
     </main>
   </body>
 </html>
-
