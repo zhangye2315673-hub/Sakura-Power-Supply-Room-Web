@@ -1,205 +1,193 @@
 {
-  "version": "v3-62736fe9d320b9cf",
-  "items": [
+  "version": "v2-53c9a7f8874f20dd",
+  "sources": [
+    "src/geometry.js",
+    "src/animal-fields.js",
+    "src/inner-layer.js",
+    "src/pool/prototype-data.js",
+    "src/pool/prototype-build.js"
+  ],
+  "generatedAt": "2026-11-06T09:41:13.128Z",
+  "records": [
     {
       "kind": "hammerhead",
       "quality": "high",
-      "bytes": 1077768,
-      "anchors": 0,
-      "sdfMs": 696.4681,
-      "innerMs": 36.45769999999993,
-      "cageAndPropsMs": 19.400300000000016,
-      "totalMs": 752.3298
+      "bytes": 1077748,
+      "sdfMs": 680.8836,
+      "innerMs": 31.81669999999997,
+      "cageAndPropsMs": 14.354600000000005,
+      "totalMs": 727.0585
     },
     {
       "kind": "manta",
       "quality": "high",
-      "bytes": 1061384,
-      "anchors": 0,
-      "sdfMs": 423.30129999999986,
-      "innerMs": 26.565300000000207,
-      "cageAndPropsMs": 18.003999999999905,
-      "totalMs": 467.8751
+      "bytes": 1061376,
+      "sdfMs": 369.45179999999993,
+      "innerMs": 25.152199999999993,
+      "cageAndPropsMs": 15.194200000000137,
+      "totalMs": 409.8008000000001
     },
     {
       "kind": "dolphin",
       "quality": "high",
-      "bytes": 933008,
-      "anchors": 0,
-      "sdfMs": 418.0824,
-      "innerMs": 15.410599999999931,
-      "cageAndPropsMs": 9.661100000000033,
-      "totalMs": 443.155
+      "bytes": 933000,
+      "sdfMs": 371.52949999999987,
+      "innerMs": 15.234500000000025,
+      "cageAndPropsMs": 8.96810000000005,
+      "totalMs": 395.7329
     },
     {
       "kind": "turtle",
       "quality": "high",
-      "bytes": 876332,
-      "anchors": 4,
-      "sdfMs": 812.5299999999997,
-      "innerMs": 24.323300000000017,
-      "cageAndPropsMs": 14.174800000000232,
-      "totalMs": 851.0292999999997
+      "bytes": 1052448,
+      "sdfMs": 737.8226000000002,
+      "innerMs": 16.768299999999726,
+      "cageAndPropsMs": 8.532200000000103,
+      "totalMs": 763.1238000000001
     },
     {
       "kind": "clownfish",
       "quality": "high",
-      "bytes": 722296,
-      "anchors": 0,
-      "sdfMs": 425.82349999999997,
-      "innerMs": 8.376100000000406,
-      "cageAndPropsMs": 8.64009999999962,
-      "totalMs": 442.8407000000002
+      "bytes": 722280,
+      "sdfMs": 353.17530000000033,
+      "innerMs": 10.41820000000007,
+      "cageAndPropsMs": 7.411899999999605,
+      "totalMs": 371.00610000000006
     },
     {
       "kind": "seahorse",
       "quality": "high",
-      "bytes": 570552,
-      "anchors": 0,
-      "sdfMs": 526.2719000000002,
-      "innerMs": 9.558399999999892,
-      "cageAndPropsMs": 4.2815999999997985,
-      "totalMs": 540.1125999999999
+      "bytes": 570532,
+      "sdfMs": 503.95830000000024,
+      "innerMs": 9.244899999999689,
+      "cageAndPropsMs": 3.761700000000019,
+      "totalMs": 516.9655000000002
     },
     {
       "kind": "octopus",
       "quality": "high",
-      "bytes": 713732,
-      "anchors": 8,
-      "sdfMs": 307.4081000000001,
-      "innerMs": 3.815099999999802,
-      "cageAndPropsMs": 5.380500000000211,
-      "totalMs": 316.6046000000001
+      "bytes": 1345592,
+      "sdfMs": 1753.3458999999998,
+      "innerMs": 15.923999999999978,
+      "cageAndPropsMs": 8.980199999999968,
+      "totalMs": 1778.2509999999997
     },
     {
       "kind": "humpback",
       "quality": "high",
-      "bytes": 1282260,
-      "anchors": 0,
-      "sdfMs": 509.4449999999997,
-      "innerMs": 24.76680000000033,
-      "cageAndPropsMs": 8.808799999999792,
-      "totalMs": 543.0212999999994
+      "bytes": 1282240,
+      "sdfMs": 397.4220999999998,
+      "innerMs": 15.283400000000256,
+      "cageAndPropsMs": 9.429600000000391,
+      "totalMs": 422.1360000000004
     },
     {
       "kind": "jellyfish",
       "quality": "high",
-      "bytes": 654824,
-      "anchors": 12,
-      "sdfMs": 144.6876000000002,
-      "innerMs": 3.832999999999629,
-      "cageAndPropsMs": 4.119800000000396,
-      "totalMs": 152.64090000000033
+      "bytes": 944328,
+      "sdfMs": 1156.3886999999995,
+      "innerMs": 12.149800000000141,
+      "cageAndPropsMs": 5.919200000000274,
+      "totalMs": 1174.4583999999995
     },
     {
       "kind": "whaleshark",
       "quality": "high",
-      "bytes": 1105996,
-      "anchors": 0,
-      "sdfMs": 410.9234000000006,
-      "innerMs": 13.659599999999955,
-      "cageAndPropsMs": 7.188899999999194,
-      "totalMs": 431.77289999999994
+      "bytes": 1105976,
+      "sdfMs": 381.65290000000005,
+      "innerMs": 11.11790000000019,
+      "cageAndPropsMs": 8.264199999999619,
+      "totalMs": 401.03630000000067
     },
     {
       "kind": "hammerhead",
       "quality": "low",
-      "bytes": 706552,
-      "anchors": 0,
-      "sdfMs": 381.65650000000005,
-      "innerMs": 11.82340000000022,
-      "cageAndPropsMs": 8.251000000000204,
-      "totalMs": 401.73199999999997
+      "bytes": 706532,
+      "sdfMs": 284.1093000000001,
+      "innerMs": 9.164999999999964,
+      "cageAndPropsMs": 4.488500000000386,
+      "totalMs": 297.7633999999998
     },
     {
       "kind": "manta",
       "quality": "low",
-      "bytes": 678724,
-      "anchors": 0,
-      "sdfMs": 210.8797000000004,
-      "innerMs": 6.999899999999798,
-      "cageAndPropsMs": 4.418999999999869,
-      "totalMs": 222.29939999999988
+      "bytes": 678704,
+      "sdfMs": 200.6799000000001,
+      "innerMs": 7.484499999999571,
+      "cageAndPropsMs": 4.163900000000467,
+      "totalMs": 212.32880000000023
     },
     {
       "kind": "dolphin",
       "quality": "low",
-      "bytes": 606564,
-      "anchors": 0,
-      "sdfMs": 223.40959999999995,
-      "innerMs": 5.689099999999598,
-      "cageAndPropsMs": 3.7645000000002256,
-      "totalMs": 232.86380000000008
+      "bytes": 606544,
+      "sdfMs": 205.38940000000002,
+      "innerMs": 5.224199999999655,
+      "cageAndPropsMs": 3.923999999999978,
+      "totalMs": 214.53849999999966
     },
     {
       "kind": "turtle",
       "quality": "low",
-      "bytes": 572664,
-      "anchors": 4,
-      "sdfMs": 451.5727999999999,
-      "innerMs": 7.504799999999705,
-      "cageAndPropsMs": 4.026499999999942,
-      "totalMs": 463.10499999999956
+      "bytes": 683948,
+      "sdfMs": 521.5196999999998,
+      "innerMs": 9.68789999999899,
+      "cageAndPropsMs": 6.7590000000000146,
+      "totalMs": 537.9674999999997
     },
     {
       "kind": "clownfish",
       "quality": "low",
-      "bytes": 471316,
-      "anchors": 0,
-      "sdfMs": 231.11709999999948,
-      "innerMs": 2.3474000000005617,
-      "cageAndPropsMs": 2.955699999999524,
-      "totalMs": 236.42149999999947
+      "bytes": 471296,
+      "sdfMs": 227.17989999999918,
+      "innerMs": 3.7870999999995547,
+      "cageAndPropsMs": 3.272500000000946,
+      "totalMs": 234.24029999999948
     },
     {
       "kind": "seahorse",
       "quality": "low",
-      "bytes": 360620,
-      "anchors": 0,
-      "sdfMs": 289.2442000000001,
-      "innerMs": 5.132599999999911,
-      "cageAndPropsMs": 2.3343999999997322,
-      "totalMs": 296.71169999999984
+      "bytes": 360600,
+      "sdfMs": 276.1764999999996,
+      "innerMs": 4.220100000000457,
+      "cageAndPropsMs": 3.8315999999995256,
+      "totalMs": 284.2296000000006
     },
     {
       "kind": "octopus",
       "quality": "low",
-      "bytes": 458724,
-      "anchors": 8,
-      "sdfMs": 121.3122999999996,
-      "innerMs": 2.0718000000006214,
-      "cageAndPropsMs": 3.0865999999996347,
-      "totalMs": 126.47209999999995
+      "bytes": 887312,
+      "sdfMs": 1046.9809000000005,
+      "innerMs": 4.939300000000003,
+      "cageAndPropsMs": 5.3125,
+      "totalMs": 1057.2332000000006
     },
     {
       "kind": "humpback",
       "quality": "low",
-      "bytes": 826732,
-      "anchors": 0,
-      "sdfMs": 263.77160000000003,
-      "innerMs": 13.214700000000448,
-      "cageAndPropsMs": 8.077400000000125,
-      "totalMs": 285.0643
+      "bytes": 826720,
+      "sdfMs": 223.70499999999993,
+      "innerMs": 7.352300000000469,
+      "cageAndPropsMs": 4.833000000000538,
+      "totalMs": 235.89080000000104
     },
     {
       "kind": "jellyfish",
       "quality": "low",
-      "bytes": 426852,
-      "anchors": 12,
-      "sdfMs": 85.57569999999942,
-      "innerMs": 2.2221000000008644,
-      "cageAndPropsMs": 2.7461999999995896,
-      "totalMs": 90.54479999999967
+      "bytes": 600424,
+      "sdfMs": 657.5537999999997,
+      "innerMs": 3.2976999999991676,
+      "cageAndPropsMs": 3.9506000000001222,
+      "totalMs": 664.8036999999986
     },
     {
       "kind": "whaleshark",
       "quality": "low",
-      "bytes": 705768,
-      "anchors": 0,
-      "sdfMs": 264.52779999999984,
-      "innerMs": 6.008100000000013,
-      "cageAndPropsMs": 8.103299999999763,
-      "totalMs": 278.6402999999991
+      "bytes": 705748,
+      "sdfMs": 276.5573000000004,
+      "innerMs": 8.579800000001342,
+      "cageAndPropsMs": 9.25249999999869,
+      "totalMs": 294.39110000000073
     }
   ]
 }
