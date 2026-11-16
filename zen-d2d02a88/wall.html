@@ -1462,13 +1462,19 @@ function physStep(dt) {
 
 // ---------- 输入：鼠标拖动 / 方向键 ----------
 let drag = null; const keys = {};
-renderer.domElement.addEventListener('pointerdown', e => { drag = { x: e.clientX, y: e.clientY, tx: tiltTarget.x, tz: tiltTarget.z }; renderer.domElement.setPointerCapture(e.pointerId); });
+// v11b：按住控制（虚拟摇杆）。按下点 = 中心，手指偏离方向 = 盘往哪倾，偏离越远倾得越多；松手盘回平。
+renderer.domElement.addEventListener('pointerdown', e => { drag = { x: e.clientX, y: e.clientY }; renderer.domElement.setPointerCapture(e.pointerId); });
 addEventListener('pointermove', e => {
-  if (!drag) return; const k = MAX_TILT / 180;
-  tiltTarget.z = THREE.MathUtils.clamp(drag.tz - (e.clientX - drag.x) * k, -MAX_TILT, MAX_TILT);
-  tiltTarget.x = THREE.MathUtils.clamp(drag.tx + (e.clientY - drag.y) * k, -MAX_TILT, MAX_TILT);
+  if (!drag) return;
+  const R = Math.max(60, Math.min(innerWidth, innerHeight) * 0.18);          // 拖到 R 像素 = 满倾 12°
+  let dx = (e.clientX - drag.x) / R, dy = (e.clientY - drag.y) / R;
+  const m = Math.hypot(dx, dy), dead = 0.08;                                   // 小死区，防手抖
+  const s = m < dead ? 0 : Math.min(1, (m - dead) / (1 - dead)) / m;
+  dx *= s; dy *= s;
+  tiltTarget.z = -dx * MAX_TILT; tiltTarget.x = dy * MAX_TILT;                // 与方向键一致：右 = z 负，下 = x 正
 });
-addEventListener('pointerup', () => { drag = null; });
+const dragEnd = () => { drag = null; tiltTarget.x = tiltTarget.z = 0; };
+addEventListener('pointerup', dragEnd); addEventListener('pointercancel', dragEnd);
 // 6 个固定机位（按键 1~6；0 回到默认跟随视角）
 const CAMS = {
   1: { p: [0, 7.607, 10.129], t: [0, -0.15, 0.2] },       // 总览（设计稿角度）
@@ -1644,7 +1650,8 @@ function onOrient(e) {
   gyro.got = true; gyro.n++;
 }
 function gyroRecenter() { gyro.ref = null; gyro.f = [0, 0]; }
-function enableGyro() {        // 必须在「开始」的点击回调里同步调用（iOS 13+ 要求用户手势）
+function enableGyro() { return;   // v11b：重力感应手感待调，暂时关闭，改用按住控制
+        // 必须在「开始」的点击回调里同步调用（iOS 13+ 要求用户手势）
   if (typeof DeviceOrientationEvent === 'undefined') return;
   const go = () => { addEventListener('deviceorientation', onOrient); gyro.on = true; gyroRecenter();
     setTimeout(() => { if (!gyro.got) { gyro.on = false; removeEventListener('deviceorientation', onOrient); } }, 1500); };   // 1.5s 没数据（电脑 / http 页面）→ 回退拖动+方向键
