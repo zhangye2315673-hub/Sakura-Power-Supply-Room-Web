@@ -1,0 +1,2049 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="robots" content="noindex,nofollow">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>静</title>
+<style>
+  html,body{margin:0;height:100%;overflow:hidden;background:#EBDFD3;touch-action:none}
+  canvas{display:block;width:100%;height:100%;cursor:grab}
+  canvas:active{cursor:grabbing}
+</style>
+<script type="importmap">
+{ "imports": {
+  "three": "./lib/three.module.js",
+  "three/addons/": "./lib/"
+} }
+</script>
+</head>
+<body>
+<script type="module">
+// 禅意重力迷宫 · 样本 v12_island：以 v11b（墙面版 + 按住控制）为底，只改“盘的外形”：去掉四周外框和底座石圈，
+//   改成浮在雾里的切面石桌 + 桌面铺沙；盘边没有墙，仓鼠出界会掉下去（掉落后回起点）；倾斜时沙粒朝低的一边滑出桌沿、斜着落进雾里。界面先全部去掉。
+//   参考（v12 新增）：
+//   - 沙粒 = 一个 InstancedMesh、每粒随机沙色、切面小粒：khanmjk/Hourglass_Fable5（MIT）https://github.com/khanmjk/Hourglass_Fable5
+// v14：沙层改成 BCRE 两层模型 —— 静止层 R + 薄流动层 F（只有表面那层在流，内部不动；流动层厚度决定侵蚀快慢 → 从沙边/陡处开始崩，往上游倒退，形成一条条沙舌）
+//   - BCRE 两层 + 粒子表现流动面：Bo Zhu & Xubo Yang「Animating Sand as a Surface Flow」http://dalab.se.sjtu.edu.cn/~bo/papers/bo_eg_presentation.pdf
+//   - 静/动两个休止角（迟滞）、滑面崩成沙舌：thomasma「Sand-racer」https://discourse.threejs.org/t/sand-racer-real-time-sand-simulation-terramechanics-in-webgpu-three-js-r187-tsl/96255
+//   - 球压沙：按球底形状挖、挖出的体积推到外圈、再做休止角松弛（体积守恒）：vector76/sandsim https://github.com/vector76/sandsim/blob/main/docs/sand-model.md
+//   - 大块沙不动、超过休止角才滑：av/safe-sand https://github.com/av/safe-sand
+// v13：沙层改成会流动的高度场（沙地本身流动、边缘软塌、流出桌沿的量才变成沙流），思路：
+//   - 高度场 + 超过阈值坡度才搬运（thermal erosion / 休止角崩塌）：SamG-Coder/SandDune https://github.com/SamG-Coder/SandDune
+//   - 慢速蠕动 + 超休止角雪崩两段式：“Fast Hydraulic and Thermal Erosion on the GPU”（Jákó & Tóth 2011）https://old.cescg.org/CESCG-2011/papers/TUBudapest-Jako-Balazs.pdf
+//   - 倾角超过“休止角”才开始流、单粒先在面上滑再飞出：av/safe-sand https://github.com/av/safe-sand
+//   - 只在坡度超过阈值时搬运（rise/run 阈值），稳定时完全静止：SamG-Coder/SandDune（MIT）https://github.com/SamG-Coder/SandDune
+//   - 无墙盘边 = 致命边缘（Patience Mode）：Rikzu Games《Patience Balls》https://rikzugames.itch.io/patience-balls
+//   - 浮岛下半被雾包住：cesartevisual/threejs-japanese-floating-diorama https://github.com/cesartevisual/threejs-japanese-floating-diorama
+// （v11 头注）禅意重力迷宫 · 样本 v11_wall：以 v10 为底，只换墙/外框（切面块石，高低错落，苔床）；另加共用的界面 + 手机重力控制 + 竖屏适配。仓鼠、沙地、灯光、物理与 v10 相同
+// （v10 头注）禅意重力迷宫 · 样本 v10：以 v9 为底，只改墙/外框的造型与材质（写实风化石 → 圆润暖色“黏土石”+ 软苔帽），统一到仓鼠的卡通风格；
+//   另修一个 bug：滚痕重复经过同一处不再刻出新痕（见 paintTrail / relaxTrail，标 [v10 bug 修]）。仓鼠、沙地、灯光、物理手感与 v9 相同
+// （v9 头注：以 v9a 为底，只改毛球材质与配色）
+// 参考：
+//  - 圆与墙块碰撞、按倾斜角给加速度：wwwtyro/Astray  https://github.com/wwwtyro/Astray (Unlicense)
+//  - 盘在框里整体倾斜、镜头固定：markneub/labyrinth  https://github.com/markneub/labyrinth
+//  - 可爱主角球滚动姿态：imshota1009/Nyan-Cororin  https://github.com/imshota1009/Nyan-Cororin
+//  v5 新增：
+//  - 石块“圆盘刮削”出平整崩口（平面投影 + 半径衰减）：Erkaman/gl-rock  https://github.com/Erkaman/gl-rock (example/scrape.js 思路)
+//  - 随机平面切 + 顶点凹凸度(cavity)烘焙给缝隙压暗/棱边提亮：vault80 procedural-rock  https://vault80.com/blog/demos/procedural-rock/SKILL.md
+//  - 毛发壳层合并成 1 个 InstancedMesh，用 gl_InstanceID 当层号，壳层不投影：nicksonthc/ghibli-threejs  https://github.com/nicksonthc/ghibli-threejs/blob/main/skills/threejs-shell-fur-rendering/SKILL.md
+//  - 轨迹写进一张小的世界坐标贴图、只局部更新：Simon Östman Deformable Terrain  https://simonostman.com/portfolio/deformable-terrain/
+//  - 局部纹理更新用 three.js Texture.addUpdateRange（r187 内置）
+import * as THREE from 'three';
+import { ConvexGeometry } from 'three/addons/geometries/ConvexGeometry.js';
+
+// ---------- 色板 ----------
+const C = {
+  sand: new THREE.Color('#EFE6D6'), stone: new THREE.Color('#9A968C'),
+  moss: new THREE.Color('#6F7F4E'), ink: new THREE.Color('#2E2B28'), warm: new THREE.Color('#F2B66B')
+};
+const FOG = new THREE.Color('#EADCCF');
+
+// ---------- 基础 ----------
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5)); // [性能] v4 为 2：高分屏上像素量 ×1.8
+renderer.setSize(innerWidth, innerHeight);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.NeutralToneMapping;
+renderer.toneMappingExposure = 1.0;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFShadowMap;
+renderer.shadowMap.autoUpdate = false; // [性能] 盘/球没动时不重画阴影贴图（见主循环）
+document.body.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+scene.fog = new THREE.Fog(FOG, 13, 30);
+
+// 天空：暖粉米色晨雾，左上一团暖光
+scene.background = (() => {
+  const c = document.createElement('canvas'); c.width = 512; c.height = 288; const x = c.getContext('2d');
+  const g = x.createLinearGradient(0, 0, 0, 288);
+  g.addColorStop(0, '#E9DAD2'); g.addColorStop(0.45, '#EDE0D2'); g.addColorStop(1, '#EADCCF');
+  x.fillStyle = g; x.fillRect(0, 0, 512, 288);
+  const r = x.createRadialGradient(10, 40, 0, 10, 40, 300);
+  r.addColorStop(0, 'rgba(246,196,120,0.95)'); r.addColorStop(0.25, 'rgba(242,182,107,0.55)'); r.addColorStop(0.6, 'rgba(240,200,160,0.18)'); r.addColorStop(1, 'rgba(240,210,190,0)');
+  x.fillStyle = r; x.fillRect(0, 0, 512, 288);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
+})();
+
+const camera = new THREE.PerspectiveCamera(26, innerWidth / innerHeight, 0.1, 80);
+const CAM_EL = THREE.MathUtils.degToRad(38), CAM_DIST = 12.6;
+const CAM_LOOK = new THREE.Vector3(0, -0.15, 0.2);
+const camBase = new THREE.Vector3(0, Math.sin(CAM_EL) * CAM_DIST, Math.cos(CAM_EL) * CAM_DIST).add(CAM_LOOK);
+camera.position.copy(camBase); camera.lookAt(CAM_LOOK);
+
+// 光：左上低角度暖色晨光（长影）+ 暖粉天光
+const hemi = new THREE.HemisphereLight('#F4E3D2', '#CDBBA4', 1.8); scene.add(hemi);
+const sun = new THREE.DirectionalLight('#FFE2C2', 2.6);
+sun.position.set(-6.2, 3.3, -3.2);
+sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048);
+Object.assign(sun.shadow.camera, { left: -4.6, right: 4.6, top: 4.6, bottom: -4.6, near: 0.5, far: 22 });
+sun.shadow.bias = -0.0005; sun.shadow.normalBias = 0.025; sun.shadow.radius = 4;
+scene.add(sun);
+
+// ---------- 小工具 ----------
+function rng(seed) { let s = seed >>> 0; return () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296); }
+const R = rng(7);
+function vnoise(seed) { // 2D value noise
+  const p = new Uint8Array(512), r = rng(seed); for (let i = 0; i < 256; i++) p[i] = i;
+  for (let i = 255; i > 0; i--) { const j = (r() * (i + 1)) | 0; [p[i], p[j]] = [p[j], p[i]]; }
+  for (let i = 0; i < 256; i++) p[i + 256] = p[i];
+  const g = new Float32Array(256).map(() => r());
+  const f = t => t * t * (3 - 2 * t);
+  return (x, y) => {
+    const xi = Math.floor(x), yi = Math.floor(y), xf = x - xi, yf = y - yi, X = xi & 255, Y = yi & 255;
+    const a = g[p[X + p[Y]]], b = g[p[X + 1 + p[Y]]], c = g[p[X + p[Y + 1]]], d = g[p[X + 1 + p[Y + 1]]];
+    const u = f(xf), v = f(yf); return a + (b - a) * u + (c - a) * v + (a - b - c + d) * u * v;
+  };
+}
+const n1 = vnoise(3), n2 = vnoise(17);
+const n3 = (x, y, z) => (n1(x + z * 0.71, y + z * 1.37) + n2(y - z * 0.53, x + z * 0.91)) * 0.5;
+
+// ---------- 迷宫数据（5×5 格，格宽 1，盘面 -2.5..2.5） ----------
+const W = 5, HALF = W / 2, WALL_T = 0.22, WALL_H = 0.42, BALL_R = 0.27;
+// 内墙：x0,x1,z0,z1
+const walls = [
+  [-2.5, 0.6, -0.61, -0.39],
+  [0.89, 1.11, -0.5, 1.6],
+  [-1.6, -0.1, 1.39, 1.61],
+];
+const rim = [ // 外框，内边缘贴盘面
+  [-2.8, 2.8, -2.8, -2.5], [-2.8, 2.8, 2.5, 2.8], [-2.8, -2.5, -2.5, 2.5], [2.5, 2.8, -2.5, 2.5]
+];
+const colliders = walls.slice();   // v12：没有外框，盘边不挡
+
+// [v6-A 写实] 米白偏暖的细砂，平行耙出的圆脊尖沟，颗粒细碎；滚痕是压下去的碗形槽、两侧拱起
+const SAND_BASE = [238, 233, 222], SAND_MOTTLE = 0.05;
+const TR_R = BALL_R * 0.66, TR_DEPTH_V = 0.05, TR_BERM_V = 0.016;
+// ---------- 白砂（v6）：耙纹不再烘焙成 2048² 明暗贴图，改在 shader 里按盘面坐标算“高度 + 法线” ----------
+// v5 的问题：耙纹只是 bumpMap 上的平滑正弦明暗，近看糊、像印上去的；滚痕是一道平涂。
+// v6：底色/墙脚苔藓仍烘焙一张 1024² 贴图（只传一次）；沟垄高度、颗粒、滚痕全部在 shader 里算，法线由高度梯度重建。
+//  - 颗粒：随机向量扰动法线（Journey 沙子，Alan Zucconi 教程 https://www.alanzucconi.com/2019/10/08/journey-sand-shader-3/）
+//  - 耙纹 = 距离场的等值线（joezgao/karesansui https://github.com/joezgao/karesansui；Emergent Mind Zen Garden）
+//  - 滚痕 = 凹槽 + 两侧隆起，max 叠加不越压越深，法线由高度差重建（Hugo Leblanc https://hugoleblanc.fr/devlog/unity-snow-trails/）
+const S = 1024, PX = S / W;
+const sandCol = document.createElement('canvas'); sandCol.width = sandCol.height = S;
+function sdBox(x, z, b) {
+  const cx = (b[0] + b[1]) / 2, cz = (b[2] + b[3]) / 2, hx = (b[1] - b[0]) / 2, hz = (b[3] - b[2]) / 2;
+  const dx = Math.abs(x - cx) - hx, dz = Math.abs(z - cz) - hz;
+  return Math.hypot(Math.max(dx, 0), Math.max(dz, 0)) + Math.min(Math.max(dx, dz), 0);
+}
+(function genSand() {
+  const cx = sandCol.getContext('2d'), ci = cx.createImageData(S, S);
+  const moss = [0x6F, 0x7F, 0x4E], mossY = [0x8C, 0x94, 0x55], base = SAND_BASE;
+  for (let py = 0; py < S; py++) for (let px = 0; px < S; px++) {
+    const x = (px + 0.5) / PX - HALF, z = (py + 0.5) / PX - HALF;
+    let d = 9; for (const b of walls)   /* v12：盘边不再压暗（没有墙脚） */ d = Math.min(d, sdBox(x, z, b));
+    const tone = 1 + (n1(x * 1.1, z * 1.1) - 0.5) * SAND_MOTTLE + (n2(x * 9, z * 9) - 0.5) * 0.02 - (1 - THREE.MathUtils.smoothstep(d, 0, 0.09)) * 0.06;
+    let r = base[0] * tone, g = base[1] * tone, bl = base[2] * tone;
+    const mn = n1(x * 7 + 3, z * 7) * 0.65 + n2(x * 19, z * 19) * 0.35;           // 墙脚苔藓蔓到砂上（同 v5）
+    const mossAmt = 0 * THREE.MathUtils.smoothstep(mn - d * 7.5, 0.42, 0.52);   // [v10] 墙脚蔓到砂上的碎苔去掉（属于“墙”的写实细节，和圆润软苔帽冲突）
+    if (mossAmt > 0) {
+      const t = n2(x * 23, z * 23), mc = [0, 1, 2].map(k => moss[k] + (mossY[k] - moss[k]) * t);
+      r += (mc[0] - r) * mossAmt; g += (mc[1] - g) * mossAmt; bl += (mc[2] - bl) * mossAmt;
+    }
+    const i = (py * S + px) * 4;
+    ci.data[i] = Math.min(255, r); ci.data[i + 1] = Math.min(255, g); ci.data[i + 2] = Math.min(255, bl); ci.data[i + 3] = 255;
+  }
+  cx.putImageData(ci, 0, 0);
+})();
+const sandMap = new THREE.CanvasTexture(sandCol); sandMap.colorSpace = THREE.SRGBColorSpace; sandMap.anisotropy = 8;
+// 轨迹：沿用 v5 的 512² 小贴图 + 逐行局部上传；通道改为 R=凹槽深度（球面压痕剖面，取 max） G=槽边隆起（取 max）
+const TR_N = 512, TPX = TR_N / W;
+const trailData = new Uint8Array(TR_N * TR_N * 4);
+const trailTex = new THREE.DataTexture(trailData, TR_N, TR_N, THREE.RGBAFormat);
+trailTex.magFilter = trailTex.minFilter = THREE.LinearFilter; trailTex.generateMipmaps = false; trailTex.needsUpdate = true;
+const v4 = b => b.map(v => v.toFixed(3)).join(', ');
+const GLSL_SAND = `
+uniform sampler2D trailMap;
+varying float vRip; varying float vH; varying float vFlow; varying vec2 vP; varying vec3 vBX; varying vec3 vBY; varying vec3 vBZ;
+vec2 gGrad = vec2(0.0); float gH01 = 1.0; float gGrainK = 1.0; float gGlit = 0.0; float gInk = 0.0; vec4 gT0 = vec4(0.0);
+vec3 gDirL = vec3(0.0, 1.0, 0.0); vec3 gDirC = vec3(0.0);
+float hash12(vec2 p){ vec3 p3 = fract(vec3(p.xyx) * 0.1031); p3 += dot(p3, p3.yzx + 33.33); return fract((p3.x + p3.y) * p3.z); }
+vec2 hash22(vec2 p){ vec3 p3 = fract(vec3(p.xyx) * vec3(0.1031, 0.1030, 0.0973)); p3 += dot(p3, p3.yzx + 33.33); return fract((p3.xx + p3.yz) * p3.zy); }
+float vnoise(vec2 p){ vec2 i = floor(p), f = fract(p); f = f * f * (3.0 - 2.0 * f);
+  return mix(mix(hash12(i), hash12(i + vec2(1.0, 0.0)), f.x), mix(hash12(i + vec2(0.0, 1.0)), hash12(i + vec2(1.0, 1.0)), f.x), f.y); }
+float sdB(vec2 p, vec4 b){ vec2 c = vec2(b.x + b.y, b.z + b.w) * 0.5, h = vec2(b.y - b.x, b.w - b.z) * 0.5; vec2 d = abs(p - c) - h;
+  return length(max(d, 0.0)) + min(max(d.x, d.y), 0.0); }
+float sdIn(vec2 p){ return min(min(sdB(p, vec4(${v4(walls[0])})), sdB(p, vec4(${v4(walls[1])}))), sdB(p, vec4(${v4(walls[2])}))); }
+float sdAll(vec2 p){ return min(sdIn(p), ${HALF.toFixed(2)} - max(abs(p.x), abs(p.y))); }
+vec2 trUv(vec2 p){ return vec2(p.x + ${HALF.toFixed(2)}, ${HALF.toFixed(2)} - p.y) / ${W.toFixed(1)}; }
+const float TRE = ${(W / TR_N).toFixed(5)};
+float trH(vec4 t){ return -t.r * TR_DEPTH + t.g * (1.0 - smoothstep(0.05, 0.45, t.r)) * TR_BERM; }
+// 滚痕：中心 + 两个前向差分，返回梯度；gT0 存中心值
+vec2 trailGrad(vec2 p){
+  gT0 = texture(trailMap, trUv(p));
+  vec4 tx = texture(trailMap, trUv(p + vec2(TRE, 0.0))), tz = texture(trailMap, trUv(p + vec2(0.0, TRE)));
+  float h0 = trH(gT0); return vec2(trH(tx) - h0, trH(tz) - h0) / TRE;
+}
+`;
+function sandVertex(sh) {
+  sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nattribute float aRip; attribute float aH; attribute float aFlow; varying float vRip; varying float vH; varying float vFlow; varying vec2 vP; varying vec3 vBX; varying vec3 vBY; varying vec3 vBZ;')
+    .replace('#include <fog_vertex>', `#include <fog_vertex>
+vP = position.xz; vRip = aRip; vH = aH; vFlow = aFlow;
+vBX = normalize(normalMatrix * vec3(1.0, 0.0, 0.0)); vBZ = normalize(normalMatrix * vec3(0.0, 0.0, 1.0)); vBY = normalize(normalMatrix * normal);`);
+}
+// 抓取太阳（唯一的平行光）在本像素的方向和带阴影的颜色，给闪粒/卡通分层用
+const LIGHTS_CAPTURE = THREE.ShaderChunk.lights_fragment_begin.replace('RE_Direct( directLight, geometryPosition', 'gDirL = directLight.direction; gDirC = directLight.color;\n\t\tRE_Direct( directLight, geometryPosition');
+let trStamp = 0;   // [v10 bug 修] 刻痕序号（存在贴图 B/A 通道，着色器不读这两个通道）
+function paintTrail(x, z) {
+  trStamp = (trStamp + 1) & 65535;
+  const cx = (x + HALF) * TPX, cy = (HALF - z) * TPX; // DataTexture 第 0 行在 v=0（世界 z=+2.5）
+  const r = TR_R * TPX, ro = r * 1.6;
+  const x0 = Math.max(0, Math.floor(cx - ro)), x1 = Math.min(TR_N - 1, Math.ceil(cx + ro));
+  const y0 = Math.max(0, Math.floor(cy - ro)), y1 = Math.min(TR_N - 1, Math.ceil(cy + ro));
+  for (let py = y0; py <= y1; py++) {
+    for (let px = x0; px <= x1; px++) {
+      const d = Math.hypot(px + 0.5 - cx, py + 0.5 - cy) / r;
+      if (d >= 1.6) continue;
+      const g = d < 1 ? Math.min(1, THREE.MathUtils.smoothstep(1 - d, 0, 0.45) * 0.72 + 0.28 * (1 - d * d)) : 0; // 球压下去的碗形槽，槽壁陡、槽底缓
+      const b = d > 0.78 ? Math.exp(-(((d - 1.13) / 0.2) ** 2)) : 0;                                       // 被挤到两侧的砂埂
+      const i = (py * TR_N + px) * 4;
+      // [v10 bug 修] v9 是纯 max 叠加：同一处第二次经过数值不变 → 没有新痕。现在：新槽照样取 max 刻深，并压平槽里的旧砂埂；
+      // 新砂埂会把旧槽填回一部分（砂被推进旧沟）。思路参考 snowflow 的“砂埂滑进凹陷”https://github.com/Am11n/snowflow
+      // 只填“旧”槽：B/A 通道存 16 位刻痕序号，刚刻过（14 个印以内，≈0.35 格）的槽不填，否则会把球身后刚刻的槽来回填平、出锯齿
+      let R0 = Math.max(trailData[i], g * 255), B0 = Math.max(trailData[i + 1], b * 255);
+      if (g > 0) { B0 *= 1 - g; trailData[i + 2] = trStamp & 255; trailData[i + 3] = trStamp >> 8; }
+      else if (b > 0 && R0 > 0 && ((trStamp - (trailData[i + 2] | trailData[i + 3] << 8)) & 65535) > 14) R0 *= 1 - 0.55 * b;
+      trailData[i] = R0; trailData[i + 1] = B0;
+    }
+    trailTex.addUpdateRange((py * TR_N + x0) * 4, (x1 - x0 + 1) * 4);
+  }
+  trailDirty = true;
+}
+const sandMat = new THREE.MeshStandardMaterial({ map: sandMap, roughness: 0.97, metalness: 0, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -2 });
+sandMat.onBeforeCompile = sh => {
+  sh.uniforms.trailMap = { value: trailTex };
+  sandVertex(sh);
+  sh.fragmentShader = sh.fragmentShader
+    .replace('#include <common>', `#include <common>
+const float TR_DEPTH = ${TR_DEPTH_V.toFixed(4)}; const float TR_BERM = ${TR_BERM_V.toFixed(4)};
+${GLSL_SAND}
+const float RF = 11.0;   // 每格约 11 道耙纹（同 v5）
+const float RA = 0.016;  // 沟垄高差（世界单位）`)
+    .replace('#include <map_fragment>', `#include <map_fragment>
+{
+  vec2 p = vP;
+  if (vH < 0.0035) discard;                                                  // v13：没沙的地方露出石桌
+  float edge = smoothstep(0.0, 0.07, sdIn(p)) * vRip * smoothstep(0.03, 0.06, vH) * (1.0 - smoothstep(0.0003, 0.002, vFlow));   // 沙流过 / 变薄的地方耙纹被抹平
+  float wob = (vnoise(p * vec2(1.3, 0.9)) - 0.5) * 0.07 + (vnoise(p * vec2(6.0, 3.0)) - 0.5) * 0.012;
+  float ph = (p.y + wob) * RF;
+  float c = max(0.5 + 0.5 * cos(6.2831853 * ph), 1e-4);
+  float hR = pow(c, 0.65);                                                   // 圆脊 + 尖沟（耙齿划出的 V 形沟）
+  float dh = 0.65 * pow(c, -0.35) * (-3.14159265 * sin(6.2831853 * ph)) * RF;
+  vec2 gT = trailGrad(p);
+  float fl = max(smoothstep(0.02, 0.35, gT0.r), 0.8 * gT0.g);               // 槽里/砂埂上耙纹被抹平、被切断
+  float k = RA * edge * (1.0 - fl);
+  gGrad = vec2(0.0, dh * k) + gT;
+  gH01 = mix(0.8, hR, edge * (1.0 - fl));
+  gGrainK = (1.0 - 0.75 * smoothstep(0.2, 0.7, gT0.r)) * (1.0 + 0.8 * gT0.g * (1.0 - gT0.r));  // 槽底压实变细，砂埂更粗
+  float fp = fwidth(p.x);
+  float speck = (vnoise(p * 520.0) - 0.5) * 0.10 * (1.0 - smoothstep(0.0012, 0.004, fp)) + (vnoise(p * 140.0) - 0.5) * 0.05 * (1.0 - smoothstep(0.004, 0.012, fp));
+  diffuseColor.rgb *= mix(0.84, 1.0, gH01) * (1.0 + speck * gGrainK);
+  diffuseColor.rgb *= 1.0 + 0.03 * smoothstep(0.3, 0.9, gT0.r);
+  diffuseColor.rgb *= mix(0.86, 1.0, smoothstep(0.004, 0.03, vH));          // 薄沙透出石色，略暗
+  diffuseColor.rgb *= 1.0 + 0.035 * (1.0 - vRip);                             // 被翻动过的松沙略亮
+  diffuseColor.rgb = mix(diffuseColor.rgb * vec3(0.66, 0.64, 0.62), diffuseColor.rgb, smoothstep(0.0006, 0.007, vH));   // v16：去掉流动层提亮（像另一层面片）；极薄的沙透出石色，和石面自然过渡           // 槽底压实，略亮
+  float lum = dot(diffuseColor.rgb, vec3(0.3, 0.59, 0.11));
+  gGlit = smoothstep(0.35, 0.6, lum);                                        // 苔藓处不闪
+}`)
+    .replace('#include <normal_fragment_maps>', `#include <normal_fragment_maps>
+{
+  float fp = fwidth(vP.x);
+  float m0 = vnoise(vP * 520.0), mx = vnoise((vP + vec2(0.0008, 0.0)) * 520.0), mz = vnoise((vP + vec2(0.0, 0.0008)) * 520.0);
+  vec2 rn = vec2(mx - m0, mz - m0) / 0.0008 * 0.00035 * (1.0 - smoothstep(0.0012, 0.004, fp));   // 砂粒级细颗粒（像素级以下淡出）
+  float n0 = vnoise(vP * 90.0), nx = vnoise((vP + vec2(0.004, 0.0)) * 90.0), nz = vnoise((vP + vec2(0.0, 0.004)) * 90.0);
+  vec2 gg = vec2(nx - n0, nz - n0) / 0.004 * 0.0009;                                            // 细碎起伏，远看也有颗粒感
+  vec2 g = gGrad + (rn + gg) * gGrainK;
+  normal = normalize(vBY - g.x * vBX - g.y * vBZ);
+}`)
+    .replace('#include <lights_fragment_begin>', LIGHTS_CAPTURE)
+    .replace('#include <lights_fragment_end>', `#include <lights_fragment_end>
+{ // 少量闪粒（只在受光处）
+  vec2 cell = floor(vP * 160.0); float r = hash12(cell + 7.1);
+  vec3 gn = normalize(vec3(hash22(cell) - 0.5, 0.35).xzy);
+  vec3 nv = normalize(vBX * gn.x + vBY * gn.y + vBZ * gn.z);
+  float sp = step(0.985, r) * pow(max(dot(normalize(gDirL + geometryViewDir), nv), 0.0), 60.0);
+  reflectedLight.directSpecular += gDirC * sp * 1.6 * gGlit * gGrainK;
+}`);
+};
+
+// ---------- 盘 ----------
+const board = new THREE.Group(); scene.add(board);
+// v13：沙层 = 高度场网格（铺满石桌面），网格顶点每帧按沙厚度抬高；见下方 sandSim
+const SLAB_E = HALF + 0.17, SAND_TOP0 = 0, SG = 128, SDX = 2 * SLAB_E / SG, SGN = SG + 1;
+const sandGeo = new THREE.BufferGeometry();
+{ const pos = new Float32Array(SGN * SGN * 3), uv = new Float32Array(SGN * SGN * 2), idx = [];
+  for (let j = 0; j < SGN; j++) for (let i = 0; i < SGN; i++) { const k = j * SGN + i, x = -SLAB_E + i * SDX, z = -SLAB_E + j * SDX;
+    pos[k * 3] = x; pos[k * 3 + 2] = z; uv[k * 2] = (x + HALF) / W; uv[k * 2 + 1] = (HALF - z) / W; }
+  for (let j = 0; j < SG; j++) for (let i = 0; i < SG; i++) { const a = j * SGN + i, b = a + 1, c = a + SGN, d = c + 1; idx.push(a, c, b, b, c, d); }
+  sandGeo.setIndex(idx); sandGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3).setUsage(THREE.DynamicDrawUsage));
+  sandGeo.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
+  sandGeo.setAttribute('aH', new THREE.BufferAttribute(new Float32Array(SGN * SGN), 1).setUsage(THREE.DynamicDrawUsage));
+  sandGeo.setAttribute('aFlow', new THREE.BufferAttribute(new Float32Array(SGN * SGN), 1).setUsage(THREE.DynamicDrawUsage));
+  sandGeo.setAttribute('aRip', new THREE.BufferAttribute(new Float32Array(SGN * SGN).fill(1), 1).setUsage(THREE.DynamicDrawUsage)); }
+const sand = new THREE.Mesh(sandGeo, sandMat);
+sand.receiveShadow = true; sand.frustumCulled = false; board.add(sand);
+
+// ---------- 风化花岗岩材质（板面局部坐标做纹理：倾斜时不游动；底部被高度雾吃掉） ----------
+// [性能] v4 每像素用 8 次哈希现算一次 3D 值噪声，石材每像素约 40 次 → 300+ 次哈希。
+// v5：把格点随机值存进 64³ 的 3D 贴图，平滑插值改成“先 smoothstep 再硬件三线性采样”，同一种噪声、一次取样。
+const NOISE_N = 64;
+const noise3Tex = (() => {
+  const d = new Uint8Array(NOISE_N ** 3), fr = x => x - Math.floor(x);
+  // 格点值沿用 v4 的 GLSL 哈希 h3（分布偏低，v4 的苔藓/斑点阈值都按它调的），保证石材观感不变
+  const h3 = (x, y, z) => { x = fr(x * 0.3183099 + 0.1) * 17; y = fr(y * 0.3183099 + 0.1) * 17; z = fr(z * 0.3183099 + 0.1) * 17; return fr(x * y * z * (x + y + z)); };
+  for (let z = 0; z < NOISE_N; z++) for (let y = 0; y < NOISE_N; y++) for (let x = 0; x < NOISE_N; x++) d[(z * NOISE_N + y) * NOISE_N + x] = Math.min(255, Math.round(h3(x, y, z) * 255));
+  const t = new THREE.Data3DTexture(d, NOISE_N, NOISE_N, NOISE_N);
+  t.format = THREE.RedFormat; t.minFilter = t.magFilter = THREE.LinearFilter; t.wrapS = t.wrapT = t.wrapR = THREE.RepeatWrapping;
+  t.unpackAlignment = 1; t.needsUpdate = true; return t;
+})();
+const GLSL_NOISE = `
+uniform highp sampler3D uNoise3;
+float vn3(vec3 x){ vec3 i = floor(x), f = fract(x); f = f*f*(3.0-2.0*f); return texture(uNoise3, (i + f + 0.5) / 64.0).r; }
+float fbm3(vec3 p){ float a = 0.5, s = 0.0; for (int i = 0; i < 4; i++){ s += a*vn3(p); p = p*2.03 + vec3(1.7,9.2,3.1); a *= 0.5; } return s/0.9375; }
+// 高频（斑点）仍用 v4 的现算哈希：64³ 贴图在 ×130 频率下周期只有 0.5 格，会看出重复
+float h3(vec3 p){ p = fract(p*0.3183099 + 0.1); p *= 17.0; return fract(p.x*p.y*p.z*(p.x+p.y+p.z)); }
+float vn3h(vec3 x){ vec3 i = floor(x), f = fract(x); f = f*f*(3.0-2.0*f);
+  return mix(mix(mix(h3(i), h3(i+vec3(1,0,0)), f.x), mix(h3(i+vec3(0,1,0)), h3(i+vec3(1,1,0)), f.x), f.y),
+             mix(mix(h3(i+vec3(0,0,1)), h3(i+vec3(1,0,1)), f.x), mix(h3(i+vec3(0,1,1)), h3(i+vec3(1,1,1)), f.x), f.y), f.z); }
+`;
+function stoneMaterial() {
+  const m = new THREE.MeshStandardMaterial({ color: '#ffffff', roughness: 0.92, vertexColors: true });
+  m.onBeforeCompile = sh => {
+    sh.uniforms.uNoise3 = { value: noise3Tex };
+    sh.vertexShader = sh.vertexShader
+      .replace('#include <common>', `#include <common>
+attribute vec2 aM; attribute float aMs; varying float vMs; varying vec2 vM; varying vec3 vLP; varying vec3 vLN; varying float vWY; varying vec3 vNX; varying vec3 vNY; varying vec3 vNZ;`)
+      .replace('#include <fog_vertex>', `#include <fog_vertex>
+vM = aM; vMs = aMs; vLP = position; vLN = normal; vWY = (modelMatrix * vec4(transformed, 1.0)).y;
+vNX = normalMatrix * vec3(1.,0.,0.); vNY = normalMatrix * vec3(0.,1.,0.); vNZ = normalMatrix * vec3(0.,0.,1.);`);
+    sh.fragmentShader = sh.fragmentShader
+      .replace('#include <common>', `#include <common>
+varying float vMs; varying vec2 vM; varying vec3 vLP; varying vec3 vLN; varying float vWY; varying vec3 vNX; varying vec3 vNY; varying vec3 vNZ;
+float gMoss = 0.0;
+${GLSL_NOISE}`)
+      .replace('#include <color_fragment>', `#include <color_fragment>
+{
+  vec3 lp = vLP; vec3 ln = normalize(vLN);
+  float big = fbm3(lp*2.1);
+  float mid = vn3(lp*11.0);
+  float fine = vn3h(lp*130.0) + (vn3h(lp*260.0)-0.5)*0.35;
+  vec3 st = vec3(0.45, 0.435, 0.40);                 // 浅灰米色花岗岩
+  st *= 0.80 + 0.36*big + 0.14*(mid-0.5);
+  st *= 1.0 - smoothstep(0.78, 0.9, fine)*0.38 + smoothstep(0.22, 0.12, fine)*0.2; // 黑白斑点
+  float lich = smoothstep(0.62, 0.74, fbm3(lp*4.3 + 5.0));
+  st = mix(st, vec3(0.42, 0.40, 0.33), lich*0.55);     // 浅色地衣斑
+  st = mix(st, st*vec3(0.80,0.78,0.74), smoothstep(0.55, 0.75, fbm3(lp*3.0+11.0))*(1.0-ln.y)); // 雨痕暗斑
+  // 苔藓：墙顶 + 顶边下垂 + 墙脚，边缘碎
+  float mf = fbm3(lp*4.6 + vec3(7.0,1.0,3.0));
+  float rag = (vn3(lp*30.0)-0.5)*0.22 + (vn3h(lp*70.0)-0.5)*0.12;
+  float top = smoothstep(0.6, 0.92, ln.y);
+  float side = 1.0 - top;
+  float drape = smoothstep(0.62, 1.0, vM.x);
+  float field = top*(mf + 0.02) + side*(mf + drape*0.3 - (1.0-vM.x)*1.1);
+  float inside = step(max(abs(lp.x), abs(lp.z)), 2.53) * step(0.5, vM.y);
+  field = max(field, inside * side * (mf + 0.35 - vM.x*2.6));
+  float moss = smoothstep(0.56, 0.64, field + rag);
+  moss = max(moss, smoothstep(0.38, 0.6, vMs + rag*1.6));   // v5：几何苔垫（有厚度）的范围
+  vec3 mc = mix(vec3(0.12, 0.16, 0.06), vec3(0.25, 0.27, 0.095), vn3(lp*13.0));
+  mc *= 0.85 + 0.3*vn3h(lp*55.0);
+  gMoss = moss;
+  diffuseColor.rgb = mix(st * diffuseColor.rgb, mc, moss);
+}`)
+      .replace('#include <roughnessmap_fragment>', `#include <roughnessmap_fragment>
+roughnessFactor = mix(0.9, 1.0, gMoss);`)
+      .replace('#include <normal_fragment_maps>', `#include <normal_fragment_maps>
+{
+  vec3 q = vLP*12.0; float e = 0.06;
+  float f0 = vn3(q) + 0.45*vn3(q*2.7) + gMoss*0.5*vn3(q*7.0);
+  vec3 g = vec3(vn3(q+vec3(e,0,0)) + 0.45*vn3((q+vec3(e,0,0))*2.7) + gMoss*0.5*vn3((q+vec3(e,0,0))*7.0) - f0,
+                vn3(q+vec3(0,e,0)) + 0.45*vn3((q+vec3(0,e,0))*2.7) + gMoss*0.5*vn3((q+vec3(0,e,0))*7.0) - f0,
+                vn3(q+vec3(0,0,e)) + 0.45*vn3((q+vec3(0,0,e))*2.7) + gMoss*0.5*vn3((q+vec3(0,0,e))*7.0) - f0) / e;
+  vec3 gv = vNX*g.x + vNY*g.y + vNZ*g.z;
+  normal = normalize(normal - 0.14*(gv - dot(gv, normal)*normal)); // v5：石面颗粒略加强，去“橡皮泥”感
+}`)
+      .replace('#include <fog_fragment>', `#include <fog_fragment>
+#ifdef USE_FOG
+gl_FragColor.rgb = mix(gl_FragColor.rgb, fogColor, smoothstep(-0.45, -1.7, vWY) * 0.97);   // v14：雾下移，桌面侧壁倾斜时也看得到，只吃桌腿
+#endif`);
+  };
+  return m;
+}
+const stoneMat = stoneMaterial();
+
+// ---------- 墙 / 外框：扁长风化块石（v5 唯一的造型改动） ----------
+// 设计稿：每段墙由 1~3 块“长条石”拼成，块长约 1~2 格；顶面基本平、略起伏；棱角圆钝但有成片崩口；
+// 侧面有横向裂隙；苔藓成团压在顶棱上并向下垂。v4 的块太短（近立方）且整体“鼓包”，读起来像枕头/砖。
+// 做法：圆角盒 → 圆盘刮削崩口（gl-rock）→ 横/竖裂隙 → 低频起伏 → 凹凸度烘焙到顶点色（vault80）。
+function weld(g) { // 合并同位置顶点（BoxGeometry 每个面各自一套顶点，不焊接会裂缝、法线断开）
+  const p = g.attributes.position, map = new Map(), remap = new Uint32Array(p.count), pos = [];
+  for (let i = 0; i < p.count; i++) {
+    const k = Math.round(p.getX(i) * 1e4) + ',' + Math.round(p.getY(i) * 1e4) + ',' + Math.round(p.getZ(i) * 1e4);
+    let j = map.get(k); if (j === undefined) { j = pos.length / 3; map.set(k, j); pos.push(p.getX(i), p.getY(i), p.getZ(i)); }
+    remap[i] = j;
+  }
+  const idx = g.index.array, out = new THREE.BufferGeometry(), ni = new Uint32Array(idx.length);
+  for (let i = 0; i < idx.length; i++) ni[i] = remap[idx[i]];
+  out.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); out.setIndex(new THREE.BufferAttribute(ni, 1));
+  return out;
+}
+const ss = (a, b, x) => THREE.MathUtils.smoothstep(x, a, b);
+function makeSlab(cx, cy, cz, w, h, d, tone, hRef, mossBottom, seed, opt = {}) {
+  const r = rng(seed * 7919 + 13), STEP = opt.step || 0.035;
+  const g0 = new THREE.BoxGeometry(w, h, d, Math.max(2, Math.round(w / STEP)), Math.max(2, Math.round(h / STEP)), Math.max(2, Math.round(d / STEP)));
+  const g = weld(g0); g0.dispose();
+  const P = g.attributes.position, N = P.count, hs = [w / 2, h / 2, d / 2];
+  const long = w >= d ? 0 : 2, short = 2 - long; // 长轴 / 短轴
+  const v = new THREE.Vector3(), q = [0, 0, 0];
+  // 1) 圆角：棱 / 角投到半径 rb 的圆角上（顶面棱更圆，底部几乎不圆）
+  const rbTop = 0.022 + r() * 0.02, rbSide = 0.014 + r() * 0.014;
+  // 2) 崩口：沿顶棱和竖棱随机挑点，用“有半径的平面”刮掉一片 → 平整斜面 + 硬边
+  const chips = [], nChip = opt.chips ?? (8 + ((r() * 7) | 0));
+  for (let k = 0; k < nChip; k++) {
+    const c = [0, 0, 0], n = [0, 0, 0], t = r();
+    if (t < 0.7) { // 顶棱
+      const ax = r() < 0.75 ? long : short, o = 2 - ax; // 沿 ax 方向的棱，在 o 方向的某一侧
+      c[ax] = (r() * 2 - 1) * hs[ax] * 0.9; c[o] = (r() < 0.5 ? -1 : 1) * hs[o]; c[1] = hs[1];
+      n[o] = Math.sign(c[o]); n[1] = 0.7 + r() * 0.8;
+    } else { // 竖棱 / 角
+      c[0] = (r() < 0.5 ? -1 : 1) * hs[0]; c[2] = (r() < 0.5 ? -1 : 1) * hs[2]; c[1] = (r() * 1.4 - 0.4) * hs[1];
+      n[0] = Math.sign(c[0]) * (0.6 + r()); n[2] = Math.sign(c[2]) * (0.6 + r()); n[1] = r() * 0.6;
+    }
+    n[0] += (r() - 0.5) * 0.4; n[2] += (r() - 0.5) * 0.4;
+    const L = Math.hypot(n[0], n[1], n[2]); n[0] /= L; n[1] /= L; n[2] /= L;
+    chips.push({ c, n, depth: 0.018 + r() * (opt.chipDepth || 0.05), rad: 0.08 + r() * (opt.chipRad || 0.18) });
+  }
+  // 3) 裂隙：长侧面上的横向细缝 0~2 条，竖缝 0~1 条
+  const cracks = [];
+  const nH = (r() * 2.6) | 0;
+  for (let k = 0; k < nH; k++) cracks.push({ type: 'h', side: r() < 0.5 ? -1 : 1, y: (r() * 1.2 - 0.5) * hs[1], w: 0.035 + r() * 0.015, dep: 0.008 + r() * 0.008, ph: r() * 10, x0: (r() * 2 - 1) * hs[long], len: 0.3 + r() * 0.6 });
+  if (r() < 0.45) cracks.push({ type: 'v', side: r() < 0.5 ? -1 : 1, a: (r() * 1.6 - 0.8) * hs[long], w: 0.035 + r() * 0.012, dep: 0.007 + r() * 0.007, ph: r() * 10 }); // 缝宽 ≥ 1 个网格间距，否则会出尖刺状破面
+  const tiltL = (r() - 0.5) * 0.03, tiltS = (r() - 0.5) * 0.015;
+  for (let i = 0; i < N; i++) {
+    const p = [P.getX(i), P.getY(i), P.getZ(i)];
+    // 原始所在面（裂隙用）
+    const onSide = Math.abs(Math.abs(p[short]) - hs[short]) < 1e-4 ? Math.sign(p[short]) : 0;
+    // 圆角
+    const rb = p[1] > 0 ? rbTop : rbSide;
+    for (let k = 0; k < 3; k++) q[k] = Math.max(Math.abs(p[k]) - (hs[k] - (k === 1 && p[1] < 0 ? 0.004 : rb)), 0);
+    const ql = Math.hypot(q[0], q[1], q[2]);
+    if (ql > 0) {
+      const cnt = (q[0] > 0) + (q[1] > 0) + (q[2] > 0);
+      if (cnt >= 2) for (let k = 0; k < 3; k++) if (q[k] > 0) { const rr = (k === 1 && p[1] < 0 ? 0.004 : rb); p[k] = Math.sign(p[k]) * (hs[k] - rr + rr * q[k] / ql); }
+    }
+    // 顶面轻微倾斜 / 起伏（只动上半部分，底部贴地）
+    const up = Math.pow(Math.max(0, (p[1] + hs[1]) / (2 * hs[1])), 2);
+    const wx = p[0] + cx, wz = p[2] + cz;
+    p[1] += up * (tiltL * p[long] / hs[long] + tiltS * p[short] / hs[short] + (n3(wx * 1.6 + 3, wz * 1.6, seed * 0.37) - 0.5) * 0.035);
+    // 裂隙
+    if (onSide) for (const c of cracks) {
+      if (c.side !== onSide) continue;
+      if (c.type === 'h') {
+        const along = p[long] - c.x0; if (Math.abs(along) > c.len * hs[long]) continue;
+        const fadeEnd = 1 - ss(0.6, 1, Math.abs(along) / (c.len * hs[long]));
+        const yc = c.y + (n3(p[long] * 5 + c.ph, c.ph, 1) - 0.5) * 0.05;
+        const t = Math.abs(p[1] - yc) / c.w; if (t < 1) p[short] -= onSide * c.dep * (1 - t * t) * fadeEnd;
+      } else {
+        const xc = c.a + (n3(p[1] * 6 + c.ph, c.ph, 2) - 0.5) * 0.04;
+        const t = Math.abs(p[long] - xc) / c.w; if (t < 1) p[short] -= onSide * c.dep * (1 - t * t) * ss(-hs[1], hs[1] * 0.2, p[1]);
+      }
+    }
+    // 崩口（gl-rock 的 disk scrape：只刮圆盘半径内的点，所以是一片一片的崩口而不是整条倒角）
+    for (const ch of chips) {
+      const dx = p[0] - ch.c[0], dy = p[1] - ch.c[1], dz = p[2] - ch.c[2];
+      const s = dx * ch.n[0] + dy * ch.n[1] + dz * ch.n[2] + ch.depth;
+      if (s <= 0) continue;
+      const ix = dx - ch.n[0] * (s - ch.depth), iy = dy - ch.n[1] * (s - ch.depth), iz = dz - ch.n[2] * (s - ch.depth);
+      const fall = 1 - ss(ch.rad * 0.75, ch.rad, Math.hypot(ix, iy, iz));
+      if (fall <= 0) continue;
+      p[0] -= ch.n[0] * s * fall; p[1] -= ch.n[1] * s * fall; p[2] -= ch.n[2] * s * fall;
+    }
+    P.setXYZ(i, p[0], p[1], p[2]);
+  }
+  g.computeVertexNormals();
+  // 苔垫：沿顶棱成团（2~5 团/块），向侧面垂下一截，边缘用噪声撕碎
+  const ms = new Float32Array(N), mcl = [];
+  if (opt.top) {
+    const nCl = 1 + ((r() * (w + d) * 1.3) | 0);
+    for (let k = 0; k < nCl; k++) {
+      const c = [0, 0, 0]; c[long] = (r() * 2 - 1) * hs[long] * 0.95; c[short] = (r() < 0.5 ? -1 : 1) * hs[short] * (0.5 + r() * 0.6);
+      mcl.push({ c, R: 0.05 + r() * 0.11, drape: 0.02 + r() * r() * 0.16, ph: r() * 50 });
+    }
+  }
+  function mossAt(x, y, z) {
+    let m = 0; const top = hs[1];
+    for (const c of mcl) {
+      const dd = Math.hypot(x - c.c[0], z - c.c[2]) + (n3(x * 9 + c.ph, z * 9, y * 9) - 0.5) * 0.09;
+      const hz = ss(top - 0.045 - c.drape * (0.5 + n3(x * 6, z * 6, c.ph)), top - 0.02, y);
+      m = Math.max(m, (1 - ss(c.R * 0.45, c.R, dd)) * hz);
+    }
+    return m;
+  }
+  // 4) 沿法线的低频坑洼 + 细碎颗粒（不再整体鼓包）
+  const Nn = g.attributes.normal;
+  for (let i = 0; i < N; i++) {
+    v.fromBufferAttribute(P, i); const wx = v.x + cx, wy = v.y + cy, wz = v.z + cz;
+    const bottom = ss(-hs[1] + 0.01, -hs[1] + 0.05, v.y);
+    let dsp = ((n3(wx * 2.6, wy * 2.6, wz * 2.6) - 0.5) * 0.016 + (n3(wx * 8, wy * 8, wz * 8) - 0.5) * 0.012 + (n3(wx * 24, wy * 24, wz * 24) - 0.5) * 0.007) * bottom;
+    const mz = mossAt(v.x, v.y, v.z); ms[i] = mz;
+    dsp += mz > 0.3 ? (mz - 0.3) / 0.7 * (0.011 + n3(wx * 30, wy * 30, wz * 30) * 0.012) : 0; // 苔垫厚度 + 绒面颗粒
+    P.setXYZ(i, v.x + Nn.getX(i) * dsp, v.y + Nn.getY(i) * dsp, v.z + Nn.getZ(i) * dsp);
+  }
+  g.computeVertexNormals();
+  // 5) 凹凸度烘焙：缝/崩口内侧压暗，凸棱提亮（顶点色）
+  const idx = g.index.array, sum = new Float32Array(N * 3), cntA = new Float32Array(N), edgeSum = new Float32Array(N);
+  for (let t = 0; t < idx.length; t += 3) for (let e = 0; e < 3; e++) {
+    const a = idx[t + e], b = idx[t + (e + 1) % 3];
+    const ax = P.getX(a), ay = P.getY(a), az = P.getZ(a), bx = P.getX(b), by = P.getY(b), bz = P.getZ(b);
+    const el = Math.hypot(ax - bx, ay - by, az - bz);
+    sum[a * 3] += bx; sum[a * 3 + 1] += by; sum[a * 3 + 2] += bz; cntA[a]++; edgeSum[a] += el;
+    sum[b * 3] += ax; sum[b * 3 + 1] += ay; sum[b * 3 + 2] += az; cntA[b]++; edgeSum[b] += el;
+  }
+  const cav = new Float32Array(N);
+  for (let i = 0; i < N; i++) {
+    const c = cntA[i] || 1, me = edgeSum[i] / c || 1;
+    const ax = sum[i * 3] / c - P.getX(i), ay = sum[i * 3 + 1] / c - P.getY(i), az = sum[i * 3 + 2] / c - P.getZ(i);
+    cav[i] = THREE.MathUtils.clamp((ax * Nn.getX(i) + ay * Nn.getY(i) + az * Nn.getZ(i)) / me * 3, -1, 1);
+  }
+  const cols = new Float32Array(N * 3), am = new Float32Array(N * 2);
+  for (let i = 0; i < N; i++) {
+    const cv = cav[i], k = (1 - 0.32 * Math.max(cv, 0)) * (1 + 0.1 * Math.max(-cv, 0));
+    cols[i * 3] = tone[0] * k; cols[i * 3 + 1] = tone[1] * k; cols[i * 3 + 2] = tone[2] * k;
+    am[i * 2] = (P.getY(i) + cy - hRef[0]) / (hRef[1] - hRef[0]); am[i * 2 + 1] = mossBottom;
+    P.setXYZ(i, P.getX(i) + cx, P.getY(i) + cy, P.getZ(i) + cz);
+  }
+  g.setAttribute('color', new THREE.Float32BufferAttribute(cols, 3));
+  g.setAttribute('aM', new THREE.Float32BufferAttribute(am, 2));
+  g.setAttribute('aMs', new THREE.Float32BufferAttribute(ms, 1));
+  g.userData = { cx, cy, cz, w, h, d, seed };
+  return g;
+}
+function merge(geos) {
+  const names = ['position', 'normal', 'color', 'aM', 'aMs'], sizes = [3, 3, 3, 2, 1];
+  let nv = 0, ni = 0; for (const g of geos) { nv += g.attributes.position.count; ni += g.index.count; }
+  const arr = names.map((n, k) => new Float32Array(nv * sizes[k])), idx = new Uint32Array(ni);
+  let vo = 0, io = 0;
+  for (const g of geos) {
+    names.forEach((n, k) => arr[k].set(g.attributes[n].array, vo * sizes[k]));
+    const ix = g.index.array; for (let i = 0; i < ix.length; i++) idx[io + i] = ix[i] + vo;
+    vo += g.attributes.position.count; io += ix.length;
+  }
+  const out = new THREE.BufferGeometry();
+  names.forEach((n, k) => out.setAttribute(n, new THREE.BufferAttribute(arr[k], sizes[k])));
+  out.setIndex(new THREE.BufferAttribute(idx, 1)); return out;
+}
+function split(len, lo, hi, r) { // 把一条墙切成长短不一的块
+  const segs = []; let left = len;
+  while (left > hi) { const s = lo + r() * (hi - lo); if (left - s < lo) break; segs.push(s); left -= s; }
+  if (left > hi && segs.length === 0) { segs.push(left / 2); left /= 2; }
+  segs.push(left); return segs;
+}
+// [v10] v9 的写实块石（makeSlab）保留定义但不再调用；下面是新的墙
+// ---------- v10 墙 / 外框：圆润“黏土石”（只改这一处：造型 + 材质，和仓鼠统一成 圆 / 暖 / 哑光 / 软） ----------
+// v9 是写实风化花岗岩（崩口、裂隙、黑白斑点、碎苔），和卡通仓鼠格格不入。v10：
+//  - 造型：大圆角盒（圆角半径≈墙厚的 40%）+ 顶面微鼓 + 侧面“枕头”微鼓 + 低频手捏起伏，读成黏土/软糖块
+//    参考 Claybound（@dermosef91，three.js 官方转发）https://x.com/threejs/status/2103709424271687813
+//    “每块是圆角盒 + 噪声位移顶点”
+//  - 上色：暖亮顶面 / 略冷侧面 / 深一点的墙脚，磨圆的棱更浅；苔藓是“软帽”，边缘是圆扇贝、不是碎边，帽边一圈略深
+//    参考 nicksonthc/ghibli-threejs threejs-stylized-rock-material
+//    https://github.com/nicksonthc/ghibli-threejs/blob/main/skills/threejs-stylized-rock-material/SKILL.md
+//  - 光：和仓鼠一样的包裹漫反射（背光侧柔和）+ 沙地暖反光，roughness 1，无高光、无自发光
+//  - 碰撞体（walls / rim 数组）完全没动，墙的占地与 v9 相同
+const CLAY = {
+  top: new THREE.Color('#E5E0D6'), side: new THREE.Color('#C6BFB3'), foot: new THREE.Color('#A0988C'), edge: new THREE.Color('#F2EEE6'),   // 石灰 #9A968C 往暖、往亮推（见交接报告“色板微调”）
+};
+function clayBlock(cx, cy, cz, w, h, d, seed, opt = {}) {
+  const r = rng(seed * 7919 + 13), STEP = opt.step || 0.03;
+  const g0 = new THREE.BoxGeometry(w, h, d, Math.max(2, Math.round(w / STEP)), Math.max(2, Math.round(h / STEP)), Math.max(2, Math.round(d / STEP)));
+  const g = weld(g0); g0.dispose();
+  const P = g.attributes.position, N = P.count;
+  const rad = Math.min(opt.rad || 0.09, w / 2 - 0.004, d / 2 - 0.004, h / 2 - 0.004);
+  const H = [w / 2 - rad, h / 2 - rad, d / 2 - rad];
+  const ph = r() * 50, bul = opt.bulge ?? 0.012, bulTop = opt.bulgeTop ?? 0.02;
+  const horiz = w >= d, LONG = horiz ? 0 : 2;
+  const tone = 0.97 + r() * 0.06;
+  const am = new Float32Array(N * 2), ams = new Float32Array(N), col = new Float32Array(N * 3);
+  const mossOn = opt.moss !== false, mossPh = r() * 30;
+  const c = new THREE.Color();
+  for (let i = 0; i < N; i++) {
+    const p = [P.getX(i), P.getY(i), P.getZ(i)];
+    const q = p.map((v, k) => Math.max(-H[k], Math.min(H[k], v)));
+    let n = p.map((v, k) => v - q[k]); let L = Math.hypot(n[0], n[1], n[2]);
+    if (L < 1e-9) { n = [0, 1, 0]; L = 1; }
+    n = n.map(v => v / L);
+    const wx = cx + p[0], wy = cy + p[1], wz = cz + p[2];
+    const R = rad + (n3(wx * 2.6 + ph, wy * 2.6, wz * 2.6) - 0.5) * 0.018;     // 手捏的低频起伏
+    // 枕头鼓：每个面中间往外鼓，棱处为 0；顶面鼓得多一点，底面不鼓
+    const f = k => 1 - (q[k] / Math.max(H[k], 1e-4)) ** 2;
+    const bx = n[0] * bul * f(1) * f(2), bz = n[2] * bul * f(0) * f(1), by = n[1] > 0 ? n[1] * bulTop * f(0) * f(2) : 0;
+    const pos = [q[0] + n[0] * R + bx, q[1] + n[1] * R + by, q[2] + n[2] * R + bz];
+    P.setXYZ(i, cx + pos[0], cy + pos[1], cz + pos[2]);
+    // 顶点色：墙脚 → 侧面 → 顶面；磨圆的棱更浅
+    const hf = (pos[1] + h / 2) / h;
+    c.copy(CLAY.foot).lerp(CLAY.side, ss(0.0, 0.55, hf)).lerp(CLAY.top, ss(0.35, 0.92, n[1]));
+    const curv = 1 - Math.max(Math.abs(n[0]), Math.abs(n[1]), Math.abs(n[2]));
+    if (n[1] > -0.2) c.lerp(CLAY.edge, ss(0.06, 0.3, curv) * 0.55 * ss(0.4, 0.8, hf));
+    c.multiplyScalar(tone);
+    col[i * 3] = c.r; col[i * 3 + 1] = c.g; col[i * 3 + 2] = c.b;
+    am[i * 2] = hf; am[i * 2 + 1] = 1;
+    // 苔藓软帽：顶面 + 沿长边向下垂的圆扇贝；按沿墙方向的噪声决定哪一段有苔
+    if (mossOn) {
+      const u = horiz ? wx : wz;
+      const cover = ss(0.45 + (opt.mossBias ?? 0), 0.66 + (opt.mossBias ?? 0), n1(u * 1.15 + mossPh, seed * 0.01));
+      const scal = Math.pow(Math.abs(Math.sin(u * 9.0 + mossPh)), 0.55);           // 圆扇贝下垂
+      const drip = (0.012 + 0.032 * scal) * cover * (opt.mossAmt ?? 1);
+      const below = (h / 2 + bulTop) - pos[1];                                       // 离顶面的竖直距离
+      ams[i] = cover > 0.02 ? Math.max(0, Math.min(1, 0.5 + (drip - below) * 9)) : 0;
+    }
+  }
+  g.computeVertexNormals();
+  g.setAttribute('color', new THREE.Float32BufferAttribute(col, 3));
+  g.setAttribute('aM', new THREE.Float32BufferAttribute(am, 2));
+  g.setAttribute('aMs', new THREE.Float32BufferAttribute(ams, 1));
+  g.userData = { cx, cy, cz, w, h, d, seed, horiz };
+  return g;
+}
+function clayMaterial() {
+  const m = new THREE.MeshStandardMaterial({ color: '#ffffff', roughness: 1, metalness: 0, vertexColors: true });
+  m.onBeforeCompile = sh => {
+    sh.uniforms.uNoise3 = { value: noise3Tex };
+    sh.vertexShader = sh.vertexShader
+      .replace('#include <common>', `#include <common>
+attribute vec2 aM; attribute float aMs; varying float vMs; varying vec3 vLP; varying vec3 vLN; varying float vWY;`)
+      .replace('#include <fog_vertex>', `#include <fog_vertex>
+vMs = aMs; vLP = position; vLN = normal; vWY = (modelMatrix * vec4(transformed, 1.0)).y;`);
+    sh.fragmentShader = sh.fragmentShader
+      .replace('#include <common>', `#include <common>
+varying float vMs; varying vec3 vLP; varying vec3 vLN; varying float vWY;
+${GLSL_NOISE}`)
+      .replace('#include <color_fragment>', `#include <color_fragment>
+{
+  vec3 lp = vLP;
+  diffuseColor.rgb *= 0.975 + 0.045 * vn3(lp * 7.0) + 0.02 * (vn3h(lp * 46.0) - 0.5);   // 黏土上极轻的手捏不匀（不是斑点）
+  diffuseColor.rgb *= 1.0 - 0.07 * smoothstep(0.7, 0.76, vn3(lp * 11.0 + 3.0)) + 0.045 * smoothstep(0.72, 0.78, vn3(lp * 14.0 + 9.0));   // 少量软边圆斑：读成“石头”而不是布面/面包
+  float e = (vn3(lp * 13.0) - 0.5) * 0.12 + (vn3(lp * 31.0) - 0.5) * 0.05;
+  float mv = vMs + e * step(0.01, vMs);
+  float moss = smoothstep(0.47, 0.53, mv);
+  float rim = moss * (1.0 - smoothstep(0.53, 0.64, mv));                 // 苔帽边缘一圈略深：卡通的“描边感”，但不是黑线
+  float ny = normalize(vLN).y;
+  vec3 mc = mix(vec3(0.135, 0.18, 0.068), vec3(0.235, 0.29, 0.105), smoothstep(0.1, 0.95, ny));   // #6F7F4E → #8A9A5C（线性）
+  mc *= 0.95 + 0.1 * vn3h(lp * 34.0);                                    // 软绒点
+  mc = mix(mc, vec3(0.085, 0.115, 0.045), rim * 0.65);
+  diffuseColor.rgb = mix(diffuseColor.rgb, mc, moss);
+}`)
+      .replace('#include <lights_fragment_end>', `#include <lights_fragment_end>
+#if NUM_DIR_LIGHTS > 0
+{ float nl = dot(normal, directionalLights[0].direction);              // 同仓鼠：包裹漫反射，背光侧柔和（masterallarts s4-06）
+  float wr = max(0.0, (nl + 0.6) / 1.6) - max(0.0, nl);
+  reflectedLight.directDiffuse += wr * 0.55 * directionalLights[0].color * BRDF_Lambert(material.diffuseColor); }
+#endif
+{ vec3 nW = (vec4(normal, 0.0) * viewMatrix).xyz;                       // 同仓鼠：沙地暖反光
+  reflectedLight.indirectDiffuse += max(0.0, -nW.y) * vec3(0.93, 0.86, 0.76) * 0.45 * material.diffuseColor; }`)
+      .replace('#include <fog_fragment>', `#include <fog_fragment>
+#ifdef USE_FOG
+gl_FragColor.rgb = mix(gl_FragColor.rgb, fogColor, smoothstep(-0.45, -1.7, vWY) * 0.97);   // v14：雾下移，桌面侧壁倾斜时也看得到，只吃桌腿
+#endif`);
+  };
+  m.customProgramCacheKey = () => 'clay-v10';
+  return m;
+}
+// ---------- v11 墙 / 外框：切面块石（只改这一处：造型 + 材质） ----------
+// v10 的问题（用户反馈）：圆角黏土块像沙发垫 / 软糖；高度一样；顶上的苔帽连成一串绿色贴片。
+// v11 选型：「低多边形大切面 + 清晰倒角 + 平涂三阶光 + 暖墨细描边」的块石
+//  - 和卡通仓鼠统一：平涂、描边（仓鼠的五官就是墨线），不再用软鼓包；又像枯山水的立石：棱角清楚、一块一块高低不同
+//  - 造型：每块 = 点云凸包（Pablo Revuelta《Coding a Zen garden in three.js》：低多边形石 = 随机点 + 凸包）
+//    点云 = 底面八角 + 侧面带（轻微内收，形成 2~3 个大切面）+ 倒角线 + 顶面（沿长度起伏、一头高一头低）
+//    参考 Polyfork Garden Rock（大平切面、暖灰、顶面切面更浅、底宽坐得稳）https://polyfork.dev/asset/garden-rock-7f5d60
+//  - 高低：每块高度 0.62~1.42 × 墙高，相邻块至少差 0.16 → 有台阶；块顶前后两端再差 ±0.05 → 沿长度起伏
+//  - 光：切面法线逐面算三阶（受光 / 侧光 / 背光），阴影照常；背光面只吃天光，不是死黑
+//  - 描边：反向外壳，按每块的尺寸在三个轴上各外扩 7mm（凸包按中心缩放即可，不会在棱上裂开）
+//    参考 Polyfork three.js shaders：“切面模型上描边比分阶更重要”https://polyfork.dev/threejs-shaders
+//  - 苔藓：去掉顶上的苔帽；改成龙安寺式的“苔床”——只在 4 处石脚放一小块低矮的切面苔垫（不连成串）
+//    龙安寺：15 石分 5 组，每组立在一小块苔床上 http://thefifthdesk.org/work/ryoan-ji
+//  - 碰撞体（walls / rim 数组）完全没动；每块石头都在原碰撞盒的占地以内，高度只是视觉
+const STONE = { top: new THREE.Color('#F3EDE1'), side: new THREE.Color('#D6CFC3'), foot: new THREE.Color('#A39E93'), back: new THREE.Color('#8E897F'),
+  mossTop: new THREE.Color('#9DAE6A'), moss: new THREE.Color('#7E8F55'), ink: new THREE.Color('#5B5148') };
+const SR = rng(2026), stoneGeos = [], lineGeos = [];
+function facetStone(x0, x1, z0, z1, y0, hA, hB, seed, opt = {}) {
+  const r = rng(seed * 131 + 7), w = x1 - x0, d = z1 - z0, horiz = w >= d, L = horiz ? w : d, T = horiz ? d : w;
+  const c = Math.min(opt.ch ?? 0.045, T * 0.24, L * 0.2);           // 倒角
+  const P = [], at = (u, t, y) => horiz ? [x0 + u * w, y, z0 + t * d] : [x0 + t * w, y, z0 + u * d];   // u 沿长，t 横向 0..1
+  const hAt = u => y0 + hA + (hB - hA) * u;
+  const n = Math.max(2, Math.round(L / 0.3)), ci = c / L, ct = c / T;
+  // 底面八角
+  [[ci * 0.6, 0], [1 - ci * 0.6, 0], [1, ct * 0.6], [1, 1 - ct * 0.6], [1 - ci * 0.6, 1], [ci * 0.6, 1], [0, 1 - ct * 0.6], [0, ct * 0.6]].forEach(([u, t]) => P.push(at(u, t, y0)));
+  const tops = [];
+  for (let i = 0; i <= n; i++) {
+    const u = ci + (1 - 2 * ci) * i / n, top = hAt(u) + (r() - 0.5) * 0.05; tops.push(top);
+    for (const t of [0, 1]) {
+      const sg = t ? -1 : 1, e = r() * 0.16;                                                  // 每段侧面的外沿不同 → 竖向大切面
+      P.push(at(u, t + sg * e * 0.4, y0 + 0.01));
+      P.push(at(u + (r() - 0.5) * 0.04, t + sg * e, y0 + (top - y0) * (0.4 + r() * 0.25)));
+      P.push(at(u + (r() - 0.5) * 0.03, t + sg * (e + ct * (0.5 + r() * 0.8)), top - c * (0.7 + r() * 0.8)));   // 倒角下沿（高低不齐）
+    }
+    P.push(at(u, ct * (1.3 + r() * 0.8), top - r() * 0.012)); P.push(at(u, 1 - ct * (1.3 + r() * 0.8), top - r() * 0.012));   // 顶面
+    if (r() < 0.6) P.push(at(u + (r() - 0.5) * 0.05, 0.5 + (r() - 0.5) * 0.4, top + 0.01 + r() * 0.02));                 // 顶面微隆，切出棱
+  }
+  for (const u of [0, 1]) {                                                             // 两端面（斜切，不是平的）
+    const top = tops[u ? n : 0], su = u ? -1 : 1, e = r() * 0.25;
+    P.push(at(u + su * ci * e, 0.5, y0 + (top - y0) * 0.45)); P.push(at(u + su * ci * (0.4 + e), 0.22 + r() * 0.12, top - c * 1.3)); P.push(at(u + su * ci * (0.4 + e), 0.66 + r() * 0.12, top - c * 1.1));
+    P.push(at(u + su * ci * (1.0 + e), 0.5, top - c * 0.15));
+  }
+  const g = new ConvexGeometry(P.map(p => new THREE.Vector3(p[0], p[1], p[2])));
+  const pos = g.attributes.position, nrm = g.attributes.normal, N = pos.count, col = new Float32Array(N * 3), cc = new THREE.Color();
+  const tone = 0.95 + r() * 0.08;
+  for (let i = 0; i < N; i += 3) {
+    const ny = nrm.getY(i), jit = 1 + (r() - 0.5) * 0.1;                             // 每个切面一个平涂色，轻微深浅
+    for (let k = 0; k < 3; k++) {
+      const y = pos.getY(i + k);
+      cc.copy(ny > 0.55 ? STONE.top : STONE.side).lerp(STONE.foot, opt.base ? 0 : THREE.MathUtils.smoothstep(y0 + 0.11, y0 + 0.02, y) * (ny > 0.55 ? 0 : 0.8)).multiplyScalar(tone * jit);
+      if (opt.base) cc.lerp(STONE.back, 0.35);
+      col.set([cc.r, cc.g, cc.b], (i + k) * 3);
+    }
+  }
+  g.setAttribute('color', new THREE.BufferAttribute(col, 3)); stoneGeos.push(g);
+  // 描边外壳：绕包围盒中心、三个轴各外扩 OUT
+  g.computeBoundingBox(); const bb = g.boundingBox, ctr = bb.getCenter(new THREE.Vector3()), sz = bb.getSize(new THREE.Vector3()), OUT = opt.out ?? 0.007;
+  const lg = new THREE.BufferGeometry(), lp = new Float32Array(N * 3);
+  for (let i = 0; i < N; i++) { lp[i * 3] = ctr.x + (pos.getX(i) - ctr.x) * (1 + 2 * OUT / sz.x); lp[i * 3 + 1] = ctr.y + (pos.getY(i) - ctr.y) * (1 + 2 * OUT / sz.y); lp[i * 3 + 2] = ctr.z + (pos.getZ(i) - ctr.z) * (1 + 2 * OUT / sz.z); }
+  lg.setAttribute('position', new THREE.BufferAttribute(lp, 3)); lineGeos.push(lg);
+  return g;
+}
+function mergeNI(geos, names) {   // 非索引几何合并
+  const sizes = names.map(n => geos[0].attributes[n].itemSize); let nv = 0; geos.forEach(g => nv += g.attributes.position.count);
+  const arr = names.map((n, k) => new Float32Array(nv * sizes[k])); let o = 0;
+  geos.forEach(g => { names.forEach((n, k) => arr[k].set(g.attributes[n].array, o * sizes[k])); o += g.attributes.position.count; });
+  const out = new THREE.BufferGeometry(); names.forEach((n, k) => out.setAttribute(n, new THREE.BufferAttribute(arr[k], sizes[k]))); return out;
+}
+// 一条墙 → 一排高低错落的块石
+function stoneRow(b, y0, H, lo, hi, fLo, fHi, opt = {}) {
+  const lx = b[1] - b[0], lz = b[3] - b[2], horiz = lx >= lz, len = horiz ? lx : lz, G = 0.014;
+  let a = horiz ? b[0] : b[2], prev = -1;
+  for (const s of split(len, lo, hi, SR)) {
+    let f; do { f = fLo + SR() * (fHi - fLo); } while (prev >= 0 && Math.abs(f - prev) < (opt.step ?? 0.16));   // 相邻块必须有台阶
+    prev = f; const h = H * f, sl = (SR() - 0.5) * (opt.slope ?? 0.1);
+    const u0 = a + G / 2, u1 = a + s - G / 2;
+    if (horiz) facetStone(u0, u1, b[2], b[3], y0, h + sl, h - sl, (SR() * 1e5) | 0, opt);
+    else facetStone(b[0], b[1], u0, u1, y0, h + sl, h - sl, (SR() * 1e5) | 0, opt);
+    a += s;
+  }
+}
+// 内墙：0.42~0.95 格一块，高 0.62~1.42 × 墙高
+walls.forEach(b => stoneRow(b, -0.02, WALL_H, 0.42, 0.95, 0.62, 1.42));
+// 外框：0.6~1.25 格一块，高度起伏小一些（0.84~1.1），盘的边缘仍然读得出来
+const RIM_H = 0.44, RIM_LO = -0.14;
+// v12：外框去掉
+// 底座：更大的切面块，被雾吃掉大半
+const BASE_LO = -1.1;
+[].forEach(   /* v12：底座石圈去掉，换成下面的石桌 */b => stoneRow(b, BASE_LO, RIM_LO - 0.012 - BASE_LO, 1.3, 2.1, 0.97, 1.0, { base: true, step: 0, slope: 0.02, ch: 0.08, out: 0.009 }));
+// 缝后衬：块与块之间的缝里放一条低矮的暗色条，避免透光（比最矮的石头矮）
+function backing2(b, y0, y1) {
+  const lx = b[1] - b[0], lz = b[3] - b[2], hz = lx >= lz;
+  const g = new THREE.BoxGeometry(Math.max(0.02, lx - (hz ? 0.1 : 0.07)), y1 - y0, Math.max(0.02, lz - (hz ? 0.07 : 0.1))).toNonIndexed();
+  g.deleteAttribute('uv'); g.translate((b[0] + b[1]) / 2, (y0 + y1) / 2, (b[2] + b[3]) / 2);
+  const n = g.attributes.position.count, cl = new Float32Array(n * 3); for (let i = 0; i < n; i++) cl.set([STONE.side.r * 0.58, STONE.side.g * 0.56, STONE.side.b * 0.54], i * 3);
+  g.setAttribute('color', new THREE.BufferAttribute(cl, 3)); stoneGeos.push(g);
+}
+walls.forEach(b => backing2(b, -0.02, WALL_H * 0.45));
+
+if (0) { const g = new THREE.BoxGeometry(4.7, -BASE_LO - 0.06, 4.7).toNonIndexed(); g.deleteAttribute('uv'); g.translate(0, BASE_LO / 2 - 0.03, 0);
+  g.setAttribute('color', new THREE.BufferAttribute(new Float32Array(g.attributes.position.count * 3).fill(0.4), 3)); stoneGeos.push(g); }
+// 苔床：4 处石脚，各一小块低矮切面苔垫（几个压扁的低多边形团叠在一起），不上墙顶、不连成串
+[[1.0, 1.68, 0.22], [-1.68, 1.52, 0.18]].forEach(([x, z, s], j) => {
+  const r = rng(500 + j);
+  for (let k = 0; k < 5; k++) {
+    const g = new THREE.IcosahedronGeometry(1, 1), p = g.attributes.position;
+    const sx = s * (0.45 + r() * 0.4), sz = s * (0.4 + r() * 0.35), sy = 0.022 + r() * 0.02, ox = (r() - 0.5) * s * 1.2, oz = (r() - 0.5) * s * 1.2;
+    for (let i = 0; i < p.count; i++) p.setXYZ(i, x + ox + p.getX(i) * sx, Math.max(-0.01, p.getY(i) * sy), z + oz + p.getZ(i) * sz);
+    const ng = g.index ? g.toNonIndexed() : g; ng.deleteAttribute('uv'); ng.computeVertexNormals();
+    const nn = ng.attributes.normal, cl = new Float32Array(nn.count * 3), cc = new THREE.Color();
+    for (let i = 0; i < nn.count; i += 3) { cc.copy(STONE.moss).lerp(STONE.mossTop, THREE.MathUtils.smoothstep(0.5, 0.95, nn.getY(i))).multiplyScalar(0.96 + r() * 0.08); for (let q = 0; q < 3; q++) cl.set([cc.r, cc.g, cc.b], (i + q) * 3); }
+    ng.setAttribute('color', new THREE.BufferAttribute(cl, 3)); stoneGeos.push(ng);
+  }
+});
+
+// ---------- v12：浮空石桌（桌面 + 桌腿 + 桌脚），同 v11 的切面平涂 + 墨线描边 ----------
+// 桌面比沙面每边宽 SLAB_LIP，沙铺到 ±HALF，沙边到桌沿之间露出一圈石面（沙会从这里滑出去落下）
+const SLAB = HALF + 0.17, SLAB_TOP = -0.07, SLAB_BOT = -0.5;
+function hullStone(P, seed, opt = {}) {
+  const r = rng(seed), g = new ConvexGeometry(P.map(p => new THREE.Vector3(p[0], p[1], p[2])));
+  const pos = g.attributes.position, nrm = g.attributes.normal, N = pos.count, col = new Float32Array(N * 3), cc = new THREE.Color();
+  for (let i = 0; i < N; i += 3) {
+    const ny = nrm.getY(i), jit = 1 + (r() - 0.5) * 0.09;
+    cc.copy(ny > 0.55 ? STONE.top : ny < -0.4 ? STONE.back : STONE.side).multiplyScalar(jit * (opt.tone ?? 1));
+    for (let k = 0; k < 3; k++) col.set([cc.r, cc.g, cc.b], (i + k) * 3);
+  }
+  g.setAttribute('color', new THREE.BufferAttribute(col, 3)); stoneGeos.push(g);
+  g.computeBoundingBox(); const bb = g.boundingBox, ctr = bb.getCenter(new THREE.Vector3()), sz = bb.getSize(new THREE.Vector3()), OUT = opt.out ?? 0.008;
+  const lp = new Float32Array(N * 3);
+  for (let i = 0; i < N; i++) { lp[i * 3] = ctr.x + (pos.getX(i) - ctr.x) * (1 + 2 * OUT / sz.x); lp[i * 3 + 1] = ctr.y + (pos.getY(i) - ctr.y) * (1 + 2 * OUT / sz.y); lp[i * 3 + 2] = ctr.z + (pos.getZ(i) - ctr.z) * (1 + 2 * OUT / sz.z); }
+  const lg = new THREE.BufferGeometry(); lg.setAttribute('position', new THREE.BufferAttribute(lp, 3)); lineGeos.push(lg);
+}
+// 方形切面板：每边若干段，段与段外凸量不同 → 侧面出现几块大切面；上棱倒角、下沿内收
+function slabPts(h, y0, y1, ch, inset, seed, segs = 6, bulge = 0.05) {
+  const r = rng(seed), P = [];
+  for (let side = 0; side < 4; side++) for (let i = 0; i <= segs; i++) {
+    const u = -h + (2 * h) * i / segs, e = r() * bulge, cut = Math.max(0, Math.abs(u) - (h - ch * 2.2)) ;   // 角上切掉
+    const out = h + e - cut * 0.9, top = y1 - r() * 0.012;
+    const pts = [[u * (1 - cut / h * 0.5), top, out - ch], [u, top - ch * (0.8 + r() * 0.6), out], [u, y0 + (y1 - y0) * (0.35 + r() * 0.2), out - r() * 0.03], [u * (1 - inset / h), y0, out - inset]];
+    for (const [a, y, b] of pts) P.push(side === 0 ? [a, y, b] : side === 1 ? [a, y, -b] : side === 2 ? [b, y, a] : [-b, y, a]);
+  }
+  return P;
+}
+hullStone(slabPts(SLAB, SLAB_BOT, SLAB_TOP, 0.07, 0.16, 71, 7, 0.045), 71, { tone: 0.8 });   // v13：桌面压暗一档，和沙拉开，沙边才读得出
+// 桌腿：八角柱，上粗下略细，往下沉进雾里
+{ const P = [], r = rng(72); for (let i = 0; i < 8; i++) { const a = (i + 0.5) / 8 * Math.PI * 2, e = 1 + r() * 0.06;
+    P.push([Math.cos(a) * 0.95 * e, SLAB_BOT + 0.02, Math.sin(a) * 0.95 * e]); P.push([Math.cos(a) * 1.0 * e, SLAB_BOT - 0.12, Math.sin(a) * 1.0 * e]);
+    P.push([Math.cos(a) * 0.78 * e, -2.3, Math.sin(a) * 0.78 * e]); }
+  hullStone(P, 72, { tone: 0.97 }); }
+// 桌腿顶下的托板（和桌面之间的一层台阶，读成“桌”而不是“块”）
+hullStone(slabPts(1.35, SLAB_BOT - 0.16, SLAB_BOT + 0.01, 0.04, 0.08, 73, 4, 0.04), 73, { tone: 0.95 });
+// 沙边：沙面边缘到桌面之间一条向外倾的沙坡（沙层有厚度，不是贴纸）
+const SAND_EDGE = (() => {
+  const r = rng(74), pos = [], col = [], n = 40, c0 = new THREE.Color().setRGB(SAND_BASE[0] / 255, SAND_BASE[1] / 255, SAND_BASE[2] / 255, THREE.SRGBColorSpace);
+  for (let side = 0; side < 4; side++) for (let i = 0; i < n; i++) {
+    const u0 = -HALF + W * i / n, u1 = -HALF + W * (i + 1) / n, oF = u => 0.075 + 0.025 * Math.sin(u * 3.1 + side * 1.7) + 0.012 * Math.sin(u * 9.3 + side), o0 = oF(u0), o1 = oF(u1);   // 连续起伏，相邻段共点，不出锯齿
+    const q = [[u0, 0, HALF], [u1, 0, HALF], [u1, SLAB_TOP + 0.002, HALF + o1], [u0, SLAB_TOP + 0.002, HALF + o0]]
+      .map(([a, y, b]) => side === 0 ? [a, y, b] : side === 1 ? [-a, y, -b] : side === 2 ? [b, y, -a] : [-b, y, a]);
+    for (const k of [0, 1, 2, 0, 2, 3]) pos.push(...q[k]);
+    for (let k = 0; k < 6; k++) { const t = 0.93; col.push(c0.r * t, c0.g * t, c0.b * t * 0.98); }
+  }
+  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.setAttribute('color', new THREE.Float32BufferAttribute(col, 3)); g.computeVertexNormals();
+  const m = new THREE.Mesh(g, new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 1, metalness: 0, side: THREE.DoubleSide }));
+  m.receiveShadow = true; return m;   // v13：不再加到场景（硬沙边去掉，改由高度场自然塌成坡）
+})();
+function stoneFog(sh) {   // 底座被高度雾吃掉（同 v10）
+  sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nvarying float vWY;')
+    .replace('#include <fog_vertex>', '#include <fog_vertex>\nvWY = (modelMatrix * vec4(transformed, 1.0)).y;');
+  sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nvarying float vWY;')
+    .replace('#include <fog_fragment>', `#include <fog_fragment>
+#ifdef USE_FOG
+gl_FragColor.rgb = mix(gl_FragColor.rgb, fogColor, smoothstep(-0.45, -1.7, vWY) * 0.97);   // v14：雾下移，桌面侧壁倾斜时也看得到，只吃桌腿
+#endif`);
+}
+const facetMat = new THREE.MeshStandardMaterial({ color: '#ffffff', vertexColors: true, roughness: 1, metalness: 0, flatShading: true });
+facetMat.onBeforeCompile = sh => {
+  stoneFog(sh);
+  sh.fragmentShader = sh.fragmentShader
+    .replace('#include <common>', '#include <common>\nvec3 gDirL = vec3(0.0, 1.0, 0.0); vec3 gDirC = vec3(0.0);')
+    .replace('#include <lights_fragment_begin>', LIGHTS_CAPTURE)
+    .replace('#include <lights_fragment_end>', `#include <lights_fragment_end>
+#if NUM_DIR_LIGHTS > 0
+{ // 三阶平涂：受光面 / 侧光面 / 背光面（硬分界、小过渡），阴影照常乘进来
+  float nl = dot(normal, gDirL);
+  float band = 0.2 + 0.08 * smoothstep(-0.63, -0.57, nl) + 0.22 * smoothstep(-0.03, 0.03, nl) + 0.22 * smoothstep(0.30, 0.36, nl);
+  reflectedLight.directDiffuse = gDirC * band * BRDF_Lambert(material.diffuseColor) * 1.55;
+}
+#endif
+{ vec3 nW = (vec4(normal, 0.0) * viewMatrix).xyz;                         // 同仓鼠：沙地暖反光，背光面不发黑
+  reflectedLight.indirectDiffuse += max(0.0, -nW.y + 0.35) * vec3(0.93, 0.86, 0.76) * 0.62 * material.diffuseColor; }`);
+};
+facetMat.customProgramCacheKey = () => 'facet-v11';
+const stones = new THREE.Mesh(mergeNI(stoneGeos, ['position', 'normal', 'color']), facetMat);
+stones.castShadow = stones.receiveShadow = true; board.add(stones);
+const inkMat = new THREE.MeshBasicMaterial({ color: STONE.ink, side: THREE.BackSide });
+inkMat.onBeforeCompile = stoneFog; inkMat.customProgramCacheKey = () => 'ink-v11';
+const outline = new THREE.Mesh(mergeNI(lineGeos, ['position']), inkMat); board.add(outline);
+
+
+// ---------- 落叶：红褐色枫叶 ----------
+const leaf = new THREE.Group();
+(function makeLeaf() {
+  // 七裂掌状：主尖角度/长度
+  const tips = [[0, 1], [48, 0.9], [-48, 0.9], [100, 0.66], [-100, 0.66], [145, 0.34], [-145, 0.34]].sort((a, b) => a[0] - b[0]);
+  const pts = [];
+  const pol = (deg, r) => { const a = THREE.MathUtils.degToRad(deg); return new THREE.Vector2(Math.sin(a) * r, Math.cos(a) * r); };
+  for (let i = 0; i < tips.length; i++) {
+    const [a0, r0] = tips[i], [a1, r1] = tips[(i + 1) % tips.length];
+    const span = ((a1 - a0) + 360) % 360, mid = a0 + span / 2;
+    pts.push(pol(a0, r0));
+    // 锯齿：主尖两侧各一小齿
+    pts.push(pol(a0 + span * 0.18, r0 * 0.72), pol(a0 + span * 0.24, r0 * 0.66 + 0.04));
+    pts.push(pol(mid, i === tips.length - 1 ? 0.16 : Math.min(r0, r1) * 0.38 + 0.05));
+    pts.push(pol(a1 - span * 0.24, r1 * 0.66 + 0.04), pol(a1 - span * 0.18, r1 * 0.72));
+  }
+  const sh = new THREE.Shape(pts.map(v => v.multiplyScalar(0.27)));
+  const g = new THREE.ShapeGeometry(sh, 4); const p = g.attributes.position, cols = [];
+  const dark = new THREE.Color('#5E2214'), mid = new THREE.Color('#87341E'), lite = new THREE.Color('#9C4429');
+  for (let i = 0; i < p.count; i++) {
+    const x = p.getX(i), y = p.getY(i), r = Math.hypot(x, y) / 0.27;
+    p.setZ(i, r * r * 0.025 + Math.sin(Math.atan2(x, y) * 7) * 0.004 * r);
+    const c = lite.clone().lerp(mid, Math.min(1, r * 1.3)).lerp(dark, Math.max(0, r - 0.6) * 1.4);
+    cols.push(c.r, c.g, c.b);
+  }
+  g.setAttribute('color', new THREE.Float32BufferAttribute(cols, 3)); g.computeVertexNormals();
+  const m = new THREE.Mesh(g, new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.7, side: THREE.DoubleSide }));
+  m.castShadow = true; leaf.add(m);
+  const veinM = new THREE.MeshStandardMaterial({ color: '#6E2817', roughness: 0.8 });
+  tips.forEach(([a, r]) => {
+    const v = new THREE.Mesh(new THREE.BoxGeometry(0.005, r * 0.27 * 0.92, 0.004), veinM);
+    const rad = THREE.MathUtils.degToRad(a); v.position.set(Math.sin(rad) * r * 0.27 * 0.46, Math.cos(rad) * r * 0.27 * 0.46, r * 0.01 + 0.004); v.rotation.z = -rad; leaf.add(v);
+  });
+  const stem = new THREE.Mesh(new THREE.BoxGeometry(0.008, 0.09, 0.006), veinM); stem.position.set(0, -0.06, 0.003); leaf.add(stem);
+  leaf.children.forEach(o => o.rotation.x = -Math.PI / 2);
+})();
+leaf.position.set(-1.6, 0.03, 0.55); leaf.rotation.y = 0.6; board.add(leaf);
+let leafTaken = false, leafFade = 0;
+
+// ---------- 仓鼠毛球（v7 造型；v8 脸 + 表情；v9 修脸朝向 / 表情 / 星星 / 贴墙压平，并重做毛色与短绒材质） ----------
+// v9 材质参考：罗伯夫斯基配色（浅沙金背、白色下腹从鼻尖经颊囊到体侧、眼上白斑）milkbunhamstery.org 的 Agouti 标准；
+//   包裹漫反射 wrap lighting（masterallarts.com three.js From Zero s4-06）抬背光侧，不用自发光；
+//   壳层“底绒实心 + 外层细簇、根部压暗”（nicksonthc/ghibli-threejs threejs-shell-fur-rendering、sorumi.xyz Unity Fur Shader）；
+//   顺毛方向的细纹代替圆斑、轮廓软边（howardc38 motion-fx-lab plush fur 的 strands / fins 思路，只取颜色与软边，不加额外通道）
+// v6A 的问题：球体 + 0.135 长针毛（超出物理半径）+ 白色自发光和逆光补光 → 轮廓像蒲公英、过曝、和沙盘不搭。
+// v7：先定造型——平底“麻薯”蹲姿：宽矮身体 + 稍小的头 + 两侧颊囊 + 小口鼻凸起，平底坐在砂上；
+//     小圆耳半埋在头顶两侧；豆豆眼放在脸前方 62% 高度、间距较宽；毛改成“短底绒 + 圆头毛簇”两层，外轮廓是软的扇贝边，不再是针毛。
+// 参考与出处：
+//  - 造型 SDF（宽矮身体椭球 ∪ 头部椭球 ∪ 颊囊 + 平底切，顶点沿 SDF 梯度取法线，探针在体表放眼睛）：
+//    victoriawu-77/blob-atelier（MIT，© 2026 Victoria Wu） src/animals3d.js 的 hamster
+//    https://github.com/victoriawu-77/blob-atelier  —— 下面 smin / smax / ell 三个函数直接取自该文件
+//  - 颊囊 + 口鼻凸起的比例：Jamozisan 的 Blender 仓鼠拼件阶段 https://x.com/_Jamozisan/status/1998328450508050551
+//  - 毛：哑光底色 + 少量实例化壳层、纤维在静止空间 3D 格子里取（无接缝）、眼睛周围修短：
+//    krisyangdev/jelly（MIT）https://github.com/krisyangdev/jelly ；nicksonthc/ghibli-threejs 壳层毛发（v5 起沿用）
+const ball = new THREE.Group(); board.add(ball);
+const spin = new THREE.Group(); ball.add(spin);   // 物理代码仍按滚动距离转 spin（与 v5/v6 相同），模型不挂在它下面
+const rig = new THREE.Group(); rig.matrixAutoUpdate = false; ball.add(rig);   // v8：撞墙压扁 / 回弹的形变矩阵挂在这一层
+const body = new THREE.Group(); body.rotation.order = 'YXZ'; rig.add(body);
+const starG = new THREE.Group();
+const faceU = { uE1: { value: new THREE.Vector4(1, 0, 0, 0) }, uE2: { value: new THREE.Vector4(1, 0, 0, 0) }, uM: { value: new THREE.Vector4(1, 0, 0, 0) }, uF: { value: new THREE.Vector4(0.35, 0, 0, 0) } };
+const furDrag = { value: new THREE.Vector3() };
+const sm = THREE.MathUtils.smoothstep;
+// —— 以下三个函数取自 blob-atelier src/animals3d.js（MIT）——
+function smin(a, b, k) { const h = Math.max(k - Math.abs(a - b), 0) / k; return Math.min(a, b) - h * h * k * 0.25; }
+function smax(a, b, k) { return -smin(-a, -b, k); }
+function ell(x, y, z, rx, ry, rz) { const a = x / rx, b = y / ry, c = z / rz, k0 = Math.sqrt(a * a + b * b + c * c), k1 = Math.sqrt(a * a / (rx * rx) + b * b / (ry * ry) + c * c / (rz * rz)); return k1 > 1e-9 ? k0 * (k0 - 1) / k1 : -Math.min(rx, ry, rz); }
+// —— 造型（“设计单位”：宽 2.0、高 1.6，原点在底面中心，脸朝 +z）——
+function hamSDF(x, y, z) {
+  const ax = Math.abs(x);
+  let d = smin(ell(x, y - 0.6, z + 0.02, 1.0, 0.62, 0.94), ell(x, y - 1.0, z - 0.06, 0.8, 0.6, 0.76), 0.45);   // 身体 ∪ 头
+  d = smin(d, ell(ax - 0.6, y - 0.63, z - 0.45, 0.39, 0.34, 0.37), 0.26);                                      // 颊囊（v9：略鼓、略前）
+  d = smin(d, ell(x, y - 0.8, z - 0.66, 0.26, 0.19, 0.2), 0.16);                                               // 口鼻
+  return smax(d, -y, 0.07);                                                                                     // 平底
+}
+const HS = 0.245;            // 设计单位 → 世界：身宽 0.49 + 毛 ≈ 物理直径 0.54
+const FUR = 0.03, SHELLS = 16, BODY_Y = -BALL_R - 0.006, FUR_DRAG = 0.012;
+const hamNrm = (x, y, z) => { const e = 0.003; const v = new THREE.Vector3(hamSDF(x + e, y, z) - hamSDF(x - e, y, z), hamSDF(x, y + e, z) - hamSDF(x, y - e, z), hamSDF(x, y, z + e) - hamSDF(x, y, z - e)); return v.normalize(); };
+function hamProbe(x, y) { let z = 2; for (let i = 0; i < 300; i++) { const d = hamSDF(x, y, z); if (d < 3e-4) break; z -= Math.max(d, 0.002); } return { p: new THREE.Vector3(x, y, z), n: hamNrm(x, y, z) }; }
+const wgt = (d, soft) => Math.max(0, Math.min(1, 0.5 - d / soft));
+// ===== v8：脸 + 表情状态机 + 撞墙回弹形变（只读物理的速度 / 碰撞事件，不改手感） =====
+// 参考与出处（v8 新增）：
+//  - 弹簧：Daniel Holden「Spring-It-On」https://theorangeduck.com/page/spring-roll-call
+//    代码 https://github.com/orangeduck/Spring-It-On —— 下面 fastNegexp / springCrit（simple_spring_damper_exact）/
+//    springUnder（spring_damper_exact 的欠阻尼分支，目标 0）由该文 C++ 代码移植为 JS
+//  - 表情 = 一组参数、在着色器里按像素画脸、硬撞皱眉 / 高速惊讶：Aleksandr Shchilkin「Smiley Spheres」
+//    https://shchilkin.dev/design-lab/studies/smiley-spheres/
+//  - 眨眼节奏（3.2s + 随机 2.6s，25% 连眨，70ms 闭 / 160ms 睁）、螺旋眼 2.4s 一圈、晕时摇晃关键帧 [0,-11,9,-7,5,-3,0]°/1.05s：
+//    SmoothUI「AI Orb Face」https://github.com/educlopez/smoothui （packages/smoothui/components/ai-orb-face/index.tsx）
+//  - 挤眼 > <、腮红：krisyangdev/jelly（MIT）https://github.com/krisyangdev/jelly
+//  - 2D SDF（sdSegment / sdArc / sdUnevenCapsule）：Inigo Quilez https://iquilezles.org/articles/distfunctions2d/
+//  - 眼睛略放低显“呆萌”：Daniel Hoang（Fall Guys 角色开发）https://danhoang.artstation.com/projects/28d4aA
+const fastNegexp = x => 1 / (1 + x + 0.48 * x * x + 0.235 * x * x * x);
+const hl2y = h => (4 * 0.69314718056) / (h + 1e-5) / 2;
+function springCrit(s, goal, halflife, dt) {           // simple_spring_damper_exact（临界阻尼，参数过渡用）
+  const y = hl2y(halflife), j0 = s.x - goal, j1 = s.v + j0 * y, e = fastNegexp(y * dt);
+  s.x = e * (j0 + j1 * dt) + goal; s.v = e * (s.v - j1 * y * dt);
+}
+function springUnder(s, freq, ratio, dt) {             // spring_damper_exact 欠阻尼分支（目标 0）：回弹会过冲 1~2 次
+  const k = (2 * Math.PI * freq) ** 2, d = ratio * 2 * Math.sqrt(k), y = d / 2, w = Math.sqrt(k - d * d / 4);
+  let j = Math.sqrt((s.v + y * s.x) ** 2 / (w * w + 1e-5) + s.x * s.x);
+  const p = Math.atan((s.v + s.x * y) / (-s.x * w + 1e-5));
+  j = s.x > 0 ? j : -j; const e = fastNegexp(y * dt);
+  s.x = j * e * Math.cos(w * dt + p); s.v = -y * j * e * Math.cos(w * dt + p) - w * j * e * Math.sin(w * dt + p);
+}
+// 固定种子的随机数（眨眼 / 扫视），保证录屏可复现
+let rngS = 20261116; const rnd = () => { rngS = (rngS + 0x6D2B79F5) | 0; let t = Math.imul(rngS ^ (rngS >>> 15), 1 | rngS); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+
+// —— 表情参数（每个都走临界阻尼弹簧过渡）——
+const FACE_KEYS = ['open', 'squint', 'happy', 'spiral', 'scale', 'smile', 'mouth', 'wavy', 'blush', 'sweat', 'lookX', 'lookY', 'grin'];
+const FACE_HL = { squint: 0.03, spiral: 0.06, mouth: 0.05, open: 0.05, lookX: 0.06, lookY: 0.06, sweat: 0.12, blush: 0.15 };
+const FACES = {   // 各状态的目标值；recover 随时间变化，见 faceTarget
+  idle:    { open: 1, squint: 0, happy: 0, spiral: 0, scale: 1,    smile: 1, mouth: 0,    wavy: 0, blush: 0.35, sweat: 0 },
+  slide:   { open: 1, squint: 0, happy: 1, spiral: 0, scale: 1,    smile: 0, mouth: 0,    wavy: 0, blush: 0.6,  sweat: 0, grin: 1 },   // v9：开心眼 ∩ + 张口笑，和待机一眼可分
+  fast:    { open: 1, squint: 0, happy: 0, spiral: 0, scale: 1.13, smile: 0, mouth: 0.9,  wavy: 0, blush: 0.8,  sweat: 1 },
+  bump:    { open: 1, squint: 1, happy: 0, spiral: 0, scale: 1,    smile: 0, mouth: 0.42, wavy: 0, blush: 0.6,  sweat: 0 },
+  dizzy:   { open: 1, squint: 0, happy: 0, spiral: 1, scale: 1.04, smile: 0, mouth: 0,    wavy: 1, blush: 0.3,  sweat: 0 },
+  recover: { open: 1, squint: 0, happy: 0, spiral: 0, scale: 1,    smile: 0.7, mouth: 0,  wavy: 0, blush: 0.4,  sweat: 0 },
+};
+// 触发阈值（m/s，物理里球速 ~0–2.4）
+const V_SLIDE = 0.12, V_IDLE = 0.06, V_FAST_IN = 1.15, V_FAST_OUT = 0.9, BUMP_MIN = 0.3, DIZZY_MIN = 1.2;
+const face = { state: 'idle', t: 0, hold: 0, next: null, still: 0, blinkT: 0.7, blink: 0, blinkPh: -1, dbl: false, sacT: 1.5, look: [0, 0], dizzyDur: 1.5, forced: false };
+const FS = {}; FACE_KEYS.forEach(k => FS[k] = { x: (FACES.idle[k] ?? 0), v: 0 });
+const slideAmt = { x: 0, v: 0 };   // v9：慢滑身体动作（前倾 + 左右小摇摆）
+const sq = { x: 0, v: 0, nx: 1, nz: 0 }, stretch = { x: 0, v: 0 }, fastAmt = { x: 0, v: 0 }, stars = { x: 0, v: 0 }, wob = { t: 9 };
+let bumpIn = null;                                     // 本帧最大的一次撞击（由物理里的 bumpEvt 写入）
+function bumpEvt(nx, nz, imp) { if (!bumpIn || imp > bumpIn.imp) bumpIn = { nx, nz, imp }; }
+function setFace(s, hold, next) { face.state = s; face.t = 0; face.hold = hold || 0; face.next = next || null; }
+function faceTarget() {
+  const T = { grin: 0, ...FACES[face.state] };
+  if (face.state === 'recover') {                    // 先半睁迷糊，再睁开、松口气
+    const t = face.t; T.open = t < 0.28 ? 0.35 : 0.55 + 0.45 * sm(t, 0.3, 0.7); T.mouth = t < 0.35 ? 0.22 : 0; T.smile = t < 0.35 ? 0 : 0.8;
+  }
+  return T;
+}
+function faceStep(dt, v, lx) {
+  // 1) 碰撞事件 → 形变冲量 + 表情
+  if (bumpIn) {
+    const { nx, nz, imp } = bumpIn; bumpIn = null;
+    if (imp > 0.12) {
+      const add = Math.min(7, 4.2 * imp);
+      if (add > Math.abs(sq.v) * 0.8 || sq.x < 0.03) { sq.nx = nx; sq.nz = nz; }
+      sq.v += add;
+    }
+    if (!face.forced) {
+      if (imp >= DIZZY_MIN) { face.dizzyDur = 1.2 + 0.6 * Math.min(1, (imp - DIZZY_MIN) / 1.0); setFace('bump', 0.22, 'dizzy'); wob.t = 0; }
+      else if (imp >= BUMP_MIN && face.state !== 'dizzy') setFace('bump', 0.32, null);
+    }
+  }
+  springUnder(sq, 3.1, 0.3, dt); sq.x = Math.max(-0.2, Math.min(0.32, sq.x));
+  // 2) 状态机
+  face.t += dt;
+  if (!face.forced) {
+    const lock = face.state === 'bump' || face.state === 'dizzy' || face.state === 'recover';
+    if (lock && face.t >= face.hold) {
+      if (face.state === 'bump' && face.next === 'dizzy') setFace('dizzy', face.dizzyDur, 'recover');
+      else if (face.state === 'dizzy') setFace('recover', 0.75, null);
+      else setFace(v > V_SLIDE ? 'slide' : 'idle');
+    } else if (!lock) {
+      face.still = v < V_IDLE ? face.still + dt : 0;
+      const s = face.state;
+      if (v > (s === 'fast' ? V_FAST_OUT : V_FAST_IN)) { if (s !== 'fast') setFace('fast'); }
+      else if (v > (s === 'idle' ? V_SLIDE : V_IDLE)) { if (s !== 'slide') setFace('slide'); }
+      else if (face.still > 0.3 && s !== 'idle') setFace('idle');
+    }
+  }
+  // 3) 眨眼（待机 / 滑行 / 恢复时）
+  const canBlink = face.state === 'idle' || face.state === 'slide' || face.state === 'recover';
+  face.blinkT -= dt;
+  if (face.state === 'recover' && face.t < dt * 1.5) { face.blinkT = 0.32; face.dbl = true; }   // 恢复时连眨两下
+  if (face.blinkPh < 0 && face.blinkT <= 0 && canBlink) { face.blinkPh = 0; if (face.state !== 'recover') face.dbl = rnd() < 0.25; face.blinkT = 3.2 + rnd() * 2.6; }
+  if (face.blinkPh >= 0) {
+    face.blinkPh += dt; const c = 0.07, o = 0.16, p = face.blinkPh;
+    face.blink = p < c ? p / c : Math.max(0, 1 - (p - c) / o);
+    if (p > c + o) { face.blinkPh = -1; face.blink = 0; if (face.dbl) { face.dbl = false; face.blinkPh = 0; } }
+  }
+  // 4) 视线：待机时偶尔扫视，滑行 / 高速时看前进方向
+  face.sacT -= dt;
+  if (face.state === 'idle' && face.sacT <= 0) { face.look = rnd() < 0.4 ? [0, 0] : [(rnd() - 0.5) * 1.4, (rnd() - 0.4) * 0.8]; face.sacT = 1.7 + rnd() * 0.9; }
+  if (face.state === 'slide' || face.state === 'fast') face.look = [Math.max(-0.75, Math.min(0.75, lx * 1.2)), 0];   // v9：±1 → ±0.75
+  if (face.state === 'bump' || face.state === 'dizzy') face.look = [0, 0];
+  // 5) 参数过渡
+  const T = faceTarget(); T.lookX = face.look[0]; T.lookY = face.look[1];
+  FACE_KEYS.forEach(k => springCrit(FS[k], T[k], FACE_HL[k] || 0.07, dt));
+  springCrit(fastAmt, sm(v, 0.9, 1.7), 0.15, dt);
+  springCrit(slideAmt, face.state === 'slide' ? 1 : 0, 0.12, dt);
+  springCrit(stretch, 0.07 * sm(v, 0.5, 1.8) * (face.state === 'dizzy' ? 0 : 1), 0.12, dt);
+  springCrit(stars, face.state === 'dizzy' ? 1 : 0, face.state === 'dizzy' ? 0.06 : 0.1, dt);
+  wob.t += dt;
+}
+function facePush(time) {     // 参数 → 着色器 uniform
+  const f = k => FS[k].x, open = Math.max(0, f('open')) * (1 - face.blink);
+  faceU.uE1.value.set(open, Math.max(0, f('squint')), Math.max(0, f('happy')), Math.max(0, f('spiral')));
+  faceU.uE2.value.set(f('scale'), f('lookX'), f('lookY'), time * (Math.PI * 2 / 2.4));
+  faceU.uM.value.set(Math.max(0, f('smile')), Math.max(0, f('mouth')), Math.max(0, f('wavy')), Math.max(0, f('grin')));
+  faceU.uF.value.set(Math.max(0, f('blush')), Math.max(0, f('sweat')), time, 0);
+}
+let ballYaw = 0, rollPh = 0;
+const camRel = new THREE.Vector3(), YAW_MAX = 0.14, CAM_AZ_MAX = 1.0;   // v9：偏头上限 ≈8°；镜头方位最多跟到 ±57°
+const wrapA = a => Math.atan2(Math.sin(a), Math.cos(a));
+const tQ = new THREE.Quaternion(), tQ2 = new THREE.Quaternion(), ZAX = new THREE.Vector3(0, 0, 1);
+const wallU = { value: new THREE.Vector4(0, 0, 0, 1e3) };   // v9：贴墙平面（物体空间：a.xyz·p ≤ w）
+const furFast = { value: 0 };
+const bodyM = new THREE.Matrix4(), mM = new THREE.Matrix4(), nB = new THREE.Vector3();
+const rigM = new THREE.Matrix4(), WOB = [0, -11, 9, -7, 5, -3, 0].map(a => a * Math.PI / 180);
+function ballVisual(dt) {
+  const v = Math.hypot(st.vx, st.vz), w = Math.min(1, v / 0.6);
+  const ux = v > 1e-4 ? st.vx / v : 0, uz = v > 1e-4 ? st.vz / v : 0;
+  // v9：脸以“镜头方位”为基准，只向前进方向偏一点（≤ YAW_MAX），高速时固定镜头里也是完整正脸
+  camRel.copy(camera.position); board.worldToLocal(camRel); camRel.sub(ball.position);
+  const camAz = Math.max(-CAM_AZ_MAX, Math.min(CAM_AZ_MAX, Math.atan2(camRel.x, camRel.z)));
+  const moveOff = v > 1e-4 ? wrapA(Math.atan2(ux, uz) - camAz) : 0;
+  const ty = camAz + Math.max(-YAW_MAX, Math.min(YAW_MAX, moveOff)) * w;
+  let dy = ty - ballYaw; dy = Math.atan2(Math.sin(dy), Math.cos(dy)); ballYaw += dy * Math.min(1, dt * 5);
+  rollPh += v * dt / BALL_R;
+  const c = Math.cos(ballYaw), s = Math.sin(ballYaw);
+  const lx = ux * c - uz * s, lz = ux * s + uz * c;
+  faceStep(dt, v, lx * w);
+  // 晕：先按关键帧摇一下，再持续小幅晃
+  let wz = 0, wy = 0;
+  if (wob.t < 1.05) { const k = wob.t / 1.05 * 6, i = Math.min(5, Math.floor(k)), f = k - i; wz = WOB[i] + (WOB[i + 1] - WOB[i]) * (f * f * (3 - 2 * f)); }
+  if (face.state === 'dizzy') { const a = sm(face.t, 0.6, 1.0) * (1 - sm(face.t, face.hold - 0.3, face.hold)); wz += Math.sin(simTime * 5.2) * 0.07 * a; wy = Math.sin(simTime * 2.6) * 0.12 * a; }
+  const b = Math.abs(Math.sin(rollPh)) * 0.05 * w, br = Math.sin(simTime * 2.6) * 0.012 * (1 - w);
+  const sl = slideAmt.x, lw = Math.hypot(lx, lz) || 1, wd = Math.sin(simTime * 9.5) * 0.055 * sl;
+  body.rotation.set(0.14 * w * lz + 0.13 * sl * lz / lw, ballYaw + wy, -0.14 * w * lx - 0.13 * sl * lx / lw + wz + wd);
+  body.scale.set(1 + b * 0.45 - br * 0.4, 1 - b + br, 1 + b * 0.45 - br * 0.4);
+  body.position.set(0, 0, 0);
+  // 撞墙回弹：沿撞击法线 n 压扁 / 回弹拉长（欠阻尼弹簧 sq），横向和竖向补体积；高速时沿速度方向轻微拉长
+  const q = sq.x, e = stretch.x, nx = sq.nx, nz = sq.nz, tx = -nz, tz = nx, wx = -uz, wz2 = ux;
+  const a00 = 1 - q * nx * nx + 0.5 * q * tx * tx + e * ux * ux - 0.45 * e * wx * wx;
+  const a11 = 1 - q * nz * nz + 0.5 * q * tz * tz + e * uz * uz - 0.45 * e * wz2 * wz2;
+  const a01 = -q * nx * nz + 0.5 * q * tx * tz + e * ux * uz - 0.45 * e * wx * wz2;
+  const sy = 1 + 0.45 * q - 0.3 * e, R = 0.25;
+  rigM.set(a00, 0, a01, -nx * q * R, 0, sy, 0, BODY_Y, a01, 0, a11, -nz * q * R, 0, 0, 0, 1);
+  rig.matrix.copy(rigM); rig.matrixWorldNeedsUpdate = true;
+  // 毛：高速时向后飘（只加大 v7 已有的拖拽量 + 一点抖动）
+  const fl = 1 + fastAmt.x * (1.8 + 0.35 * Math.sin(simTime * 23));
+  furDrag.value.set(-lx * w * FUR_DRAG * fl, -0.2 * w * FUR_DRAG * (1 - 0.6 * fastAmt.x), -lz * w * FUR_DRAG * fl);
+  furFast.value = fastAmt.x;
+  // v9：贴墙一侧局部压平——墙面平面换到物体空间，顶点越过就投影回平面（核、毛壳、脸都用同一平面）
+  body.updateMatrix(); bodyM.multiplyMatrices(rig.matrix, body.matrix);
+  if (sq.x > 0.004) {
+    nB.set(-sq.nx, 0, -sq.nz); const dW = BALL_R - 0.022 * Math.min(1, sq.x / 0.12);
+    const e = bodyM.elements, ax = e[0] * nB.x + e[1] * nB.y + e[2] * nB.z, ay = e[4] * nB.x + e[5] * nB.y + e[6] * nB.z, az = e[8] * nB.x + e[9] * nB.y + e[10] * nB.z;
+    wallU.value.set(ax, ay, az, dW - (e[12] * nB.x + e[14] * nB.z));
+  } else wallU.value.set(0, 0, 0, 1e3);
+  // 星星：头顶绕圈
+  const sa = stars.x; starG.visible = sa > 0.02;
+  if (starG.visible) starG.children.forEach((m, i) => {
+    const an = simTime * 4.2 + i * Math.PI * 2 / 3;
+    m.position.set(Math.cos(an) * 0.15, BODY_Y + 0.43 + Math.sin(an * 2) * 0.015, Math.sin(an) * 0.15);
+    ball.getWorldQuaternion(tQ).invert(); m.quaternion.copy(tQ).multiply(camera.quaternion).multiply(tQ2.setFromAxisAngle(ZAX, Math.sin(simTime * 3 + i) * 0.5));   // v9：billboard，绕到侧面也不变成一条线
+    m.scale.setScalar(sa * (0.9 + 0.15 * Math.sin(simTime * 6 + i * 2)));
+  });
+  facePush(simTime);
+}
+// 毛长（与 v7 壳层逐字同一公式，抽成函数给脸部补丁复用）
+const eyeXY = [0.34, 1.0];
+function furLen(x, y, z) {
+  const ax = Math.abs(x);
+  const face = Math.max(sm(z, 0.35, 0.75) * (1 - sm(ax, 0.55, 0.85)) * sm(y, 0.45, 0.7), 0);
+  let L = 1 - 0.65 * face;
+  L = Math.min(L, 0.15 + 0.85 * sm(Math.hypot(ax - eyeXY[0], y - eyeXY[1]), 0.1, 0.26) + (z < 0.3 ? 1 : 0));
+  L *= 0.35 + 0.65 * sm(y, 0.0, 0.3);
+  L += 0.25 * wgt(ell(ax - 0.62, y - 0.66, z - 0.35, 0.3, 0.3, 0.3), 0.15);           // 颊囊蓬一点
+  L += 0.5 * wgt(ell(x + 0.04, y - 1.58, z - 0.1, 0.16, 0.12, 0.2), 0.08);            // 头顶呆毛
+  return Math.max(0.1, L);
+}
+(function makeHamster() {
+  // 1) 网格：单位球的每个方向从体内中心向外步进，取 SDF 第一次变正处（二分细化）→ 规整的球面拓扑，壳层不会破
+  const geo = new THREE.SphereGeometry(1, 80, 52), p = geo.attributes.position, nrm = geo.attributes.normal;
+  const C0 = new THREE.Vector3(0, 0.72, 0), d = new THREE.Vector3(), q = new THREE.Vector3();
+  const cols = [], lens = [];
+  const cBack = new THREE.Color('#D7B48C'), cSide = new THREE.Color('#E4CCAA'), cBelly = new THREE.Color('#F2ECE1'), cMuz = new THREE.Color('#F4EFE6');   // v9：低饱和沙金 + 暖白
+  for (let i = 0; i < p.count; i++) {
+    d.fromBufferAttribute(p, i).normalize();
+    let t0 = 0, t1 = 0;
+    for (let t = 0.01; t < 2.5; t += 0.01) { q.copy(d).multiplyScalar(t).add(C0); if (hamSDF(q.x, q.y, q.z) > 0) { t1 = t; t0 = t - 0.01; break; } }
+    for (let k = 0; k < 20; k++) { const tm = (t0 + t1) / 2; q.copy(d).multiplyScalar(tm).add(C0); if (hamSDF(q.x, q.y, q.z) > 0) t1 = tm; else t0 = tm; }
+    q.copy(d).multiplyScalar(t0).add(C0);
+    const x = q.x, y = q.y, z = q.z, ax = Math.abs(x), n = hamNrm(x, y, z);
+    // 颜色：背/头顶杏色 → 侧面浅杏 → 肚皮、口鼻奶白（区域权重写法同 blob-atelier 的 paint）
+    const up = sm(y, 0.55, 1.35) * sm(-z, -0.75, 0.2);
+    const belly = Math.max(wgt(ell(x, y - 0.42, z - 0.72, 0.78, 0.46, 0.46), 0.08), wgt(ell(x, y - 0.06, z - 0.1, 1.05, 0.22, 1.0), 0.1) * 0.7);
+    const muz = wgt(ell(x, y - 0.8, z - 0.72, 0.36, 0.26, 0.24), 0.07);
+    const brow = wgt(ell(ax - 0.355, y - 1.125, z - 0.7, 0.13, 0.068, 0.16), 0.05);   // 罗伯夫斯基的白眉（v9：略大，比眼睛稍宽）
+    const upF = sm(y, 1.0, 1.22);                                  // v9：额头也是沙金色，白眉斑才看得出
+    const cheekW = wgt(ell(ax - 0.62, y - 0.6, z - 0.47, 0.37, 0.31, 0.36), 0.09);   // v9：白色从口鼻经颊囊往体侧走
+    const c = cSide.clone().lerp(cBack, Math.max(up, upF * 0.9)).lerp(cBelly, Math.max(belly, cheekW * 0.92)).lerp(cMuz, Math.max(muz, brow * 0.95));
+    c.multiplyScalar(0.985 + n3(x * 3 + 1, y * 3, z * 3) * 0.03);   // v9：色斑起伏减半
+    cols.push(c.r, c.g, c.b);
+    // 毛长：脸前短绒、眼周最短，颊囊/背/头顶长；贴地一圈收短；头顶一小撮
+    lens.push(furLen(x, y, z));
+    p.setXYZ(i, x * HS, y * HS, z * HS); nrm.setXYZ(i, n.x, n.y, n.z);
+  }
+  geo.setAttribute('color', new THREE.Float32BufferAttribute(cols, 3));
+  geo.setAttribute('aLen', new THREE.Float32BufferAttribute(lens, 1));
+  geo.computeBoundingSphere();
+  // 2) 内核：毛根颜色（压暗），承担投影（轮廓就是真实造型，不再用球形代理）
+  const coreMat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 1, color: '#eae1d4' });   // v9：底色不再压灰
+  coreMat.onBeforeCompile = sh => { sh.uniforms.uWall = wallU;
+    sh.fragmentShader = sh.fragmentShader.replace('#include <lights_fragment_end>', `#include <lights_fragment_end>
+#if NUM_DIR_LIGHTS > 0
+{ float nl = dot(normal, directionalLights[0].direction);              // v9：包裹漫反射——背光侧柔和过渡，不提高受光面
+  float wr = max(0.0, (nl + 0.5) / 1.5) - max(0.0, nl);
+  reflectedLight.directDiffuse += wr * 0.6 * directionalLights[0].color * BRDF_Lambert(material.diffuseColor); }
+#endif
+{ vec3 nW = (vec4(normal, 0.0) * viewMatrix).xyz;                       // v9：沙地反光（朝下的面接一点暖色漫反射），让肚皮不发灰
+  reflectedLight.indirectDiffuse += max(0.0, -nW.y) * vec3(0.93, 0.86, 0.76) * 0.6 * material.diffuseColor; }`);
+    sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nuniform vec4 uWall;').replace('#include <begin_vertex>', '#include <begin_vertex>\n{ float ws = dot(uWall.xyz, transformed) - uWall.w; if (ws > 0.0) transformed -= uWall.xyz * ws / max(dot(uWall.xyz, uWall.xyz), 1e-6); }'); };
+  coreMat.customProgramCacheKey = () => 'core-v9';
+  const core = new THREE.Mesh(geo, coreMat);
+  core.castShadow = true; body.add(core);
+  // 3) 毛：16 层实例化壳层。两层结构：下 45% 是密底绒（实心），外层是“圆头毛簇”（簇顶按半球收圆，轮廓是软扇贝边，不出针尖）
+  const furMat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 1, transparent: true, depthWrite: true });   // v9：外层簇软边混合（壳层按由内到外顺序画），去掉硬裁切的小毛刺
+  furMat.onBeforeCompile = sh => {
+    sh.uniforms.uNoise3 = { value: noise3Tex }; sh.uniforms.uDrag = furDrag; sh.uniforms.uFast = furFast; sh.uniforms.uWall = wallU;
+    sh.vertexShader = sh.vertexShader
+      .replace('#include <common>', '#include <common>\nattribute float aLen; uniform vec3 uDrag; uniform float uFast; uniform vec4 uWall; varying float vF; varying vec3 vP; varying float vLen; varying vec3 vComb;')
+      .replace('#include <begin_vertex>', `#include <begin_vertex>
+vF = float(gl_InstanceID + 1) / ${SHELLS}.0; vP = position / ${HS.toFixed(3)}; vLen = aLen;
+vec3 nn = normalize(objectNormal);
+float Lf = ${FUR.toFixed(3)} * aLen * vF;
+vec3 dN = dot(uDrag, uDrag) > 1e-9 ? normalize(uDrag) : vec3(0.0);
+float fm = 1.0 - 0.85 * smoothstep(0.35, 0.75, nn.z) * smoothstep(0.35, 0.6, position.y / ${HS.toFixed(3)});   // v9：脸前（五官所在）几乎不被拖动，毛不会盖住眼睛
+float trail = max(0.0, dot(nn, dN)) * fm, lead = max(0.0, -dot(nn, dN));
+Lf *= 1.0 + uFast * (0.45 * trail - 0.3 * lead);   // v9：拖尾侧略长、迎风侧压短
+transformed += nn * Lf;
+transformed.y -= vF * vF * Lf * 0.35;          // 轻微下垂
+transformed += uDrag * vF * vF * aLen * fm * (1.0 + 0.5 * uFast * trail);   // 滚动时被带向后方（v9：拖尾侧更明显，脸前不动）
+{ float ws = dot(uWall.xyz, transformed) - uWall.w; if (ws > 0.0) transformed -= uWall.xyz * ws / max(dot(uWall.xyz, uWall.xyz), 1e-6); }
+vec3 cb = vec3(0.0, -0.55, -0.7) + dN * 2.2 * uFast; vComb = cb - dot(cb, nn) * nn;   // 顺毛：向后、向下（v9：高速时顺向后方）`);
+    sh.fragmentShader = sh.fragmentShader
+      .replace('#include <common>', `#include <common>
+varying float vF; varying vec3 vP; varying float vLen; varying vec3 vComb;
+${GLSL_NOISE}
+vec4 hash43(vec3 p){ vec4 p4 = fract(vec4(p.xyzx) * vec4(0.1031, 0.1030, 0.0973, 0.1099)); p4 += dot(p4, p4.wzxy + 33.33); return fract((p4.xxyz + p4.yzzw) * p4.zywx); }
+float tuft(vec3 q, float f, inout float tint){            // 圆头毛簇：半径随高度按 sqrt(1-t²) 收，簇顶是圆的
+  vec3 c = floor(q); vec4 h = hash43(c); vec3 o = (h.xyz - 0.5) * 0.5;
+  float d = length(fract(q) - 0.5 - o);
+  float len = 0.55 + 0.45 * h.w; float t = f / len;
+  float r = 0.62 * sqrt(max(0.0, 1.0 - t * t));
+  float aa = max(fwidth(d) * 1.0, 0.05);
+  float a = t < 1.0 ? smoothstep(r + aa, r - aa, d) * (1.0 - smoothstep(0.75, 1.0, t)) : 0.0;   // v9：软边 + 簇尖渐隐
+  tint = mix(tint, 0.988 + 0.016 * h.w + 0.012 * t, a);     // v9：簇间深浅差压到 ±1.5%，近看不再是斑点
+  return a;
+}`)
+      .replace('#include <color_fragment>', `#include <color_fragment>
+vec3 cT = normalize(vComb + vec3(1e-4)); vec3 sp = vP * 95.0; float al = dot(sp, cT);
+float streak = vn3h(sp - cT * al * 0.88);                                 // v9：沿顺毛方向拉长的细纹（短绒的“丝”），不是圆斑
+diffuseColor.rgb *= mix(0.9, 1.0, smoothstep(0.0, 0.3, vF)) * (0.965 + 0.075 * streak) * mix(0.9, 1.0, smoothstep(0.02, 0.35, vP.y));`)
+      .replace('#include <lights_fragment_end>', `#include <lights_fragment_end>
+#if NUM_DIR_LIGHTS > 0
+{ float nl = dot(normal, directionalLights[0].direction);              // v9：包裹漫反射——背光侧柔和过渡，不提高受光面
+  float wr = max(0.0, (nl + 0.5) / 1.5) - max(0.0, nl);
+  reflectedLight.directDiffuse += wr * 0.6 * directionalLights[0].color * BRDF_Lambert(material.diffuseColor); }
+#endif
+{ vec3 nW = (vec4(normal, 0.0) * viewMatrix).xyz;                       // v9：沙地反光（朝下的面接一点暖色漫反射），让肚皮不发灰
+  reflectedLight.indirectDiffuse += max(0.0, -nW.y) * vec3(0.93, 0.86, 0.76) * 0.6 * material.diffuseColor; }`)
+      .replace('#include <alphatest_fragment>', `{
+  vec3 q = (vP + vComb * vF * 0.12) * 19.0;           // v9：簇更细更密（13 → 19）
+  float tint = 0.975;                                // 底绒顶面（簇之间的缝）只略暗
+  float a = max(tuft(q, vF, tint), tuft(q * 1.23 + 7.7, vF * 1.1, tint));
+  if (vF < 0.55) { a = 1.0; tint = mix(1.0, 0.975, smoothstep(0.3, 0.55, vF)); }   // 底绒实心到 55%
+  diffuseColor.rgb *= tint;
+  if (vF > 0.55 + 0.45 * smoothstep(0.04, 0.4, abs(dot(normalize(vNormal), normalize(vViewPosition))))) discard;   // v9：轮廓处只留底绒 + 短簇，边缘圆润不出毛刺 / 不起雾
+  if (a < 0.03) discard;
+  diffuseColor.a = a;
+}`);
+  };
+  furMat.customProgramCacheKey = () => 'fur-v9';
+  const shells = new THREE.InstancedMesh(geo, furMat, SHELLS), m4 = new THREE.Matrix4();
+  for (let s = 0; s < SHELLS; s++) shells.setMatrixAt(s, m4);
+  shells.frustumCulled = false; body.add(shells);
+  // 4) 五官：都用 SDF 探针贴在体表，再按毛厚抬出一点
+  const toW = v => v.clone().multiplyScalar(HS);
+  // v9：耳朵——外耳是带 6 层短绒壳的小椭球（颜色同背毛、耳缘略浅），内耳浅粉、无毛；耳根往头里埋 0.03，被头毛盖住
+  const earGeo = new THREE.SphereGeometry(1, 28, 16); earGeo.scale(0.19, 0.17, 0.075); earGeo.computeVertexNormals();
+  const earM = new THREE.MeshStandardMaterial({ color: '#D5B089', roughness: 1 }), earIn = new THREE.MeshStandardMaterial({ color: '#EBC4B8', roughness: 1 });
+  const earFur = new THREE.MeshStandardMaterial({ color: '#D8B48C', roughness: 1, transparent: true, depthWrite: true });
+  earFur.onBeforeCompile = sh => {
+    sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nvarying float vEF; varying vec3 vEP;')
+      .replace('#include <begin_vertex>', `#include <begin_vertex>
+vEF = float(gl_InstanceID + 1) / 6.0; vEP = position;
+vec3 en = normalize(objectNormal);
+transformed += en * 0.024 * vEF * (1.0 - 0.8 * smoothstep(0.2, 0.7, en.z));   // 内耳那面几乎不长毛`);
+    sh.fragmentShader = sh.fragmentShader.replace('#include <common>', `#include <common>
+varying float vEF; varying vec3 vEP;
+float eh(vec3 p){ return fract(sin(dot(p, vec3(127.1, 311.7, 74.7))) * 43758.5453); }`)
+      .replace('#include <color_fragment>', `#include <color_fragment>
+diffuseColor.rgb *= mix(0.9, 1.04, vEF) * (1.0 + 0.06 * smoothstep(0.1, 0.19, length(vEP.xy)));   // 根部略暗、耳缘略浅`)
+      .replace('#include <alphatest_fragment>', `{
+  vec3 q = vEP * 70.0; vec3 c = floor(q); float d = length(fract(q) - 0.5 - (vec3(eh(c), eh(c + 3.1), eh(c + 7.3)) - 0.5) * 0.5);
+  float t = vEF / (0.6 + 0.4 * eh(c + 1.7)); float r = 0.6 * sqrt(max(0.0, 1.0 - t * t)); float aa = max(fwidth(d) * 1.2, 0.08);
+  float a = vEF < 0.34 ? 1.0 : (t < 1.0 ? smoothstep(r + aa, r - aa, d) : 0.0);
+  if (a < 0.03) discard; diffuseColor.a = a;
+}`);
+  };
+  earFur.customProgramCacheKey = () => 'earfur-v9';
+  [-1, 1].forEach(sx => {   // 小圆耳：半埋进头顶两侧，略向外翻、朝前上
+    const e = new THREE.Group();
+    e.add(new THREE.Mesh(earGeo, earM));
+    const f = new THREE.InstancedMesh(earGeo, earFur, 6); for (let s = 0; s < 6; s++) f.setMatrixAt(s, new THREE.Matrix4()); f.frustumCulled = false; e.add(f);
+    const n = new THREE.Mesh(new THREE.SphereGeometry(1, 24, 14), earIn); n.scale.set(0.118, 0.1, 0.03); n.position.set(0, -0.006, 0.066); e.add(n);
+    e.scale.setScalar(HS); e.position.copy(toW(new THREE.Vector3(sx * 0.5, 1.47, -0.04)));
+    e.rotation.set(-0.28, sx * 0.32, -sx * 0.38); body.add(e);
+  });
+  // v8：去掉 v7 的 3D 珠子眼，改为“贴在毛尖外 3mm 的脸部曲面补丁 + 片元着色器按参数画 2D 卡通脸”
+  // 补丁顶点：在脸前方 (x,y) 网格上用 SDF 探针找体表，再沿法线抬到该处毛尖之外（毛长与壳层同一公式 furLen）
+  {
+    const NX = 46, NY = 32, X0 = -0.74, X1 = 0.74, Y0 = 0.5, Y1 = 1.44;
+    const pos = [], fxy = [], idx = [], ok = [];
+    for (let j = 0; j <= NY; j++) for (let i = 0; i <= NX; i++) {
+      const x = X0 + (X1 - X0) * i / NX, y = Y0 + (Y1 - Y0) * j / NY, A = hamProbe(x, y);
+      const hit = Math.abs(hamSDF(A.p.x, A.p.y, A.p.z)) < 2e-3 && A.p.z > 0.05; ok.push(hit);
+      const L = furLen(A.p.x, A.p.y, A.p.z), P = toW(A.p).addScaledVector(A.n, FUR * L + 0.0008);   // v9：贴得更紧
+      if (!hit || !Number.isFinite(P.x + P.y + P.z)) P.set(0, 0.2, 0);   // 没打到体表的格点不参与三角形，放到体内防 NaN
+      pos.push(P.x, P.y, P.z); fxy.push(x, y);
+    }
+    for (let j = 0; j < NY; j++) for (let i = 0; i < NX; i++) {
+      const a = j * (NX + 1) + i, b = a + 1, c2 = a + NX + 1, d2 = c2 + 1;
+      if (ok[a] && ok[b] && ok[c2] && ok[d2]) idx.push(a, b, d2, a, d2, c2);
+    }
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.setAttribute('aF', new THREE.Float32BufferAttribute(fxy, 2));
+    g.setIndex(idx); g.computeVertexNormals();
+    const m = new THREE.MeshStandardMaterial({ transparent: true, depthWrite: false, roughness: 0.8, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
+    m.onBeforeCompile = sh => {
+      Object.assign(sh.uniforms, faceU); sh.uniforms.uWall = wallU;
+      sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nattribute vec2 aF; varying vec2 vF2; uniform vec4 uWall;')
+        .replace('#include <begin_vertex>', '#include <begin_vertex>\nvF2 = aF;\n{ float ws = dot(uWall.xyz, transformed) - uWall.w; if (ws > 0.0) transformed -= uWall.xyz * ws / max(dot(uWall.xyz, uWall.xyz), 1e-6); }');
+      sh.fragmentShader = sh.fragmentShader.replace('#include <common>', `#include <common>
+varying vec2 vF2; uniform vec4 uE1, uE2, uM, uF;
+// —— sdSegment / sdArc / sdUnevenCapsule 取自 Inigo Quilez https://iquilezles.org/articles/distfunctions2d/ ——
+float sdSegment(vec2 p, vec2 a, vec2 b){ vec2 pa = p-a, ba = b-a; float h = clamp(dot(pa,ba)/dot(ba,ba), 0.0, 1.0); return length(pa - ba*h); }
+float sdArc(vec2 p, vec2 sc, float ra, float rb){ p.x = abs(p.x); return ((sc.y*p.x > sc.x*p.y) ? length(p - sc*ra) : abs(length(p) - ra)) - rb; }
+float sdUnevenCapsule(vec2 p, float r1, float r2, float h){ p.x = abs(p.x); float b = (r1-r2)/h; float a = sqrt(1.0-b*b); float k = dot(p, vec2(-b,a));
+  if (k < 0.0) return length(p) - r1; if (k > a*h) return length(p - vec2(0.0,h)) - r2; return dot(p, vec2(a,b)) - r1; }
+float sdEll(vec2 p, vec2 r){ float k0 = length(p/r), k1 = length(p/(r*r)); return k0*(k0-1.0)/max(k1,1e-5); }
+float AA;
+float cov(float d){ return 1.0 - smoothstep(-AA, AA, d); }
+void over(inout vec4 acc, vec3 c, float a){ float na = a + acc.a*(1.0-a); acc.rgb = na > 1e-4 ? (c*a + acc.rgb*acc.a*(1.0-a))/na : acc.rgb; acc.a = na; }
+vec3 srgb(vec3 c){ return pow(c, vec3(2.2)); }
+void eye(inout vec4 acc, vec2 p, float side){
+  vec3 INK = srgb(vec3(0.13, 0.095, 0.08)), HI = srgb(vec3(0.97, 0.95, 0.91));
+  float sc = uE2.x;
+  vec2 c = vec2(side*0.335, 0.955) + vec2(uE2.y*0.034, uE2.z*0.03);
+  vec2 q = p - c;
+  float o = uE1.x, wN = smoothstep(0.45, 1.0, (1.0-uE1.y)*(1.0-uE1.z)*(1.0-uE1.w));   // v9：切挤眼 / 开心眼时不留灰圈
+  // 睁眼：竖椭圆黑眼珠 + 两个高光（随睁眼程度上下收）
+  // 半睁 = 上眼皮往下盖（裁掉椭圆上部 + 一条眼皮线），不是把眼珠压扁
+  vec2 r = vec2(0.088, 0.108)*sc; float lid = r.y*(2.0*o - 1.0);
+  float dE = max(sdEll(q, r), q.y - lid);
+  float aE = cov(dE) * smoothstep(0.12, 0.32, o) * wN;
+  over(acc, INK, aE);
+  float aH = aE * smoothstep(0.3, 0.6, o);
+  over(acc, HI, aH * cov(length(q - vec2(-0.03, 0.042)*sc) - 0.029*sc));
+  over(acc, HI, aH * cov(length(q - vec2(0.03, -0.045)*sc) - 0.013*sc));
+  float lw = r.x*sqrt(max(0.0, 1.0 - (lid/r.y)*(lid/r.y))) + 0.012;
+  float dLid = max(abs(q.y - lid) - 0.009, abs(q.x) - lw);
+  over(acc, INK, cov(dLid) * smoothstep(0.12, 0.3, o) * (1.0 - smoothstep(0.5, 0.7, o)) * wN);
+  // 闭眼（眨眼 / 半睁到底时）：向下弯的细弧 ∪
+  float ra = 0.09;
+  float dL = sdArc(vec2(q.x, -(q.y - ra + 0.012)), vec2(sin(0.95), cos(0.95)), ra, 0.011);
+  over(acc, INK, cov(dL) * (1.0 - smoothstep(0.12, 0.32, o)) * wN);
+  // 开心 ∩
+  float dH = sdArc(q - vec2(0.0, 0.02 - 0.08), vec2(sin(1.05), cos(1.05)), 0.08, 0.013);
+  over(acc, INK, cov(dH) * uE1.z * (1.0-uE1.y) * (1.0-uE1.w));
+  // 挤眼：左眼 > 、右眼 <（尖朝鼻梁）
+  vec2 k = vec2(q.x * -side, q.y); float w = 0.066, h = 0.058;
+  float dS = min(sdSegment(k, vec2(-w, h), vec2(w*0.9, 0.0)), sdSegment(k, vec2(w*0.9, 0.0), vec2(-w, -h))) - 0.014;
+  over(acc, INK, cov(dS) * uE1.y * (1.0-uE1.w));
+  // 螺旋眼（阿基米德螺线，左右反向转）
+  float rr = length(q), an = atan(q.y, q.x*side) + uE2.w, pitch = 0.031, R = 0.1;
+  float f = rr/pitch - an/6.2831853;
+  float dP = (abs(fract(f) - 0.5))*pitch - 0.0085;
+  over(acc, INK, cov(dP) * cov(rr - R) * smoothstep(0.004, 0.012, rr) * uE1.w);
+}
+`).replace('#include <color_fragment>', `#include <color_fragment>
+{
+  vec2 p = vF2; AA = max(fwidth(p.x), fwidth(p.y)) * 0.85;
+  vec4 acc = vec4(0.0);
+  // 腮红（软边）
+  vec3 BL = srgb(vec3(0.91, 0.56, 0.52));
+  for (int s = 0; s < 2; s++){ float sd = s == 0 ? -1.0 : 1.0; float d = sdEll(p - vec2(sd*0.5, 0.775), vec2(0.088, 0.05)); over(acc, BL, (1.0 - smoothstep(-0.03, 0.03, d)) * 0.42 * uF.x); }
+  eye(acc, p, -1.0); eye(acc, p, 1.0);
+  // 嘴：ω（两段向下弯的弧）/ 张嘴 O（深红 + 舌）/ 波浪线
+  vec3 MC = srgb(vec3(0.33, 0.19, 0.16));
+  for (int s = 0; s < 2; s++){ float sd = s == 0 ? -1.0 : 1.0; vec2 q = p - vec2(sd*0.032, 0.778);
+    float d = sdArc(vec2(q.x, -(q.y - 0.032)), vec2(sin(1.3), cos(1.3)), 0.032, 0.0075); over(acc, MC, cov(d) * uM.x * (1.0 - uM.y) * (1.0 - uM.z)); }
+  float mo = uM.y; vec2 mq = p - vec2(0.0, 0.762 - 0.02*mo);
+  float dm = sdEll(mq, vec2(0.036 + 0.012*mo, max(0.006, 0.05*mo)));
+  over(acc, srgb(vec3(0.42, 0.15, 0.14)), cov(dm) * smoothstep(0.03, 0.12, mo));
+  over(acc, srgb(vec3(0.86, 0.48, 0.48)), cov(max(dm, length(mq - vec2(0.0, -0.045*mo)) - 0.028*mo)) * smoothstep(0.3, 0.6, mo));
+  { float g = uM.w; vec2 gq = p - vec2(0.0, 0.782);
+    float dg = max(sdEll(gq, vec2(0.05, 0.05*g + 0.004)), gq.y);
+    over(acc, srgb(vec3(0.42, 0.15, 0.14)), cov(dg) * smoothstep(0.05, 0.25, g));
+    over(acc, srgb(vec3(0.86, 0.50, 0.48)), cov(max(dg, length(gq - vec2(0.0, -0.05*g)) - 0.026*g)) * smoothstep(0.4, 0.7, g)); }
+  float yw = 0.77 + 0.011*sin(p.x*95.0 + uF.z*7.0);
+  float dw = max(abs(p.y - yw) - 0.0075, abs(p.x) - 0.07);
+  over(acc, MC, cov(dw) * uM.z);
+  // 汗滴（右上额头，慢慢下滑）
+  float sl = fract(uF.z*0.45) * 0.05;
+  vec2 sq = p - vec2(0.575, 1.2 - sl);
+  float dd = sdUnevenCapsule(sq, 0.036, 0.006, 0.07);
+  over(acc, srgb(vec3(0.47, 0.66, 0.76)), cov(dd) * uF.y);
+  over(acc, srgb(vec3(0.80, 0.91, 0.95)), cov(dd + 0.009) * uF.y);
+  over(acc, srgb(vec3(0.97, 0.98, 0.98)), cov(length(sq - vec2(-0.012, 0.006)) - 0.009) * uF.y);
+  // v9：斜角淡出——N·V 小于 ~0.4（约 66°）开始淡，边缘按毛的细碎噪声抖开，看起来像被毛挡住而不是一层贴纸
+  float ndv = abs(dot(normalize(vNormal), normalize(vViewPosition)));
+  float hz = fract(sin(dot(floor(vF2 * 150.0), vec2(12.9898, 78.233))) * 43758.5453);
+  acc.a *= smoothstep(0.16, 0.42, ndv + (hz - 0.5) * 0.14);
+  if (acc.a < 0.004) discard;
+  diffuseColor = vec4(acc.rgb, acc.a);
+}`);
+    };
+    m.customProgramCacheKey = () => 'face-v8';
+    const faceMesh = new THREE.Mesh(g, m); faceMesh.renderOrder = 2; body.add(faceMesh);
+  }
+  // 晕眩小星星（3 颗，哑光黄，不自发光）
+  {
+    const sh = new THREE.Shape(); for (let i = 0; i < 10; i++) { const r = i % 2 ? 0.0095 : 0.022, a = i * Math.PI / 5 + Math.PI / 2; i ? sh.lineTo(Math.cos(a) * r, Math.sin(a) * r) : sh.moveTo(Math.cos(a) * r, Math.sin(a) * r); }
+    const sg = new THREE.ExtrudeGeometry(sh, { depth: 0.012, bevelEnabled: true, bevelThickness: 0.004, bevelSize: 0.003, bevelSegments: 2 }); sg.center();   // v9：更厚 + billboard
+    const smat = new THREE.MeshStandardMaterial({ color: '#E9B949', roughness: 0.6 });
+    for (let i = 0; i < 3; i++) starG.add(new THREE.Mesh(sg, smat));
+    starG.visible = false; ball.add(starG);
+  }
+  const N = hamProbe(0, 0.86), nose = new THREE.Mesh(new THREE.SphereGeometry(1, 16, 10), new THREE.MeshStandardMaterial({ color: '#D98C86', roughness: 0.5 }));
+  nose.scale.set(0.014, 0.0095, 0.009); nose.position.copy(toW(N.p)).addScaledVector(N.n, FUR * 0.22);
+  nose.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), N.n); body.add(nose);
+  const pawM = new THREE.MeshStandardMaterial({ color: '#E3ADA0', roughness: 0.9 });
+  [-1, 1].forEach(sx => {   // 前爪：贴地露出一点点
+    const P = hamProbe(sx * 0.22, 0.16), paw = new THREE.Mesh(new THREE.SphereGeometry(1, 14, 10), pawM);
+    paw.scale.set(0.022, 0.012, 0.018); paw.position.copy(toW(P.p)).add(new THREE.Vector3(0, -0.008, FUR * 0.7)); body.add(paw);
+  });
+})();
+
+// 测试钩子（无可见输出）：把脸定在某个表情，供设计稿截图
+window.__facePose = (name, o = {}) => {
+  face.forced = true; face.state = name; face.t = o.t ?? 0.5; face.hold = o.hold ?? 1.5; face.blink = 0; face.blinkPh = -1; face.blinkT = 99;
+  face.look = o.look || [0, 0]; const T = faceTarget(); T.lookX = face.look[0]; T.lookY = face.look[1];
+  FACE_KEYS.forEach(k => { FS[k].x = o[k] ?? T[k]; FS[k].v = 0; });
+  const sv = [st.vx, st.vz]; if (o.vel) { st.vx = o.vel[0]; st.vz = o.vel[1]; }
+  sq.x = o.sq || 0; sq.v = 0; sq.nx = o.nx ?? 1; sq.nz = o.nz ?? 0; stretch.x = o.e || 0; stretch.v = 0;
+  fastAmt.x = name === 'fast' ? 1 : 0; slideAmt.x = name === 'slide' ? 1 : 0; stars.x = name === 'dizzy' ? 1 : 0; wob.t = 9; ballVisual(0); st.vx = sv[0]; st.vz = sv[1];
+};
+window.__faceState = () => ({ state: face.state, t: +face.t.toFixed(3), sq: +sq.x.toFixed(3), blink: +face.blink.toFixed(2), stars: +stars.x.toFixed(2) });
+// ---------- 雾：云海（软雾精灵）+ 远处剪影 ----------
+function cloudTex(seed, soft) {
+  const N = 256, c = document.createElement('canvas'); c.width = c.height = N; const x = c.getContext('2d'), nn = vnoise(seed);
+  const im = x.createImageData(N, N);
+  for (let i = 0; i < N * N; i++) {
+    const px = i % N, py = (i / N) | 0, dx = px / (N / 2) - 1, dy = py / (N / 2) - 1;
+    const fall = Math.max(0, 1 - Math.hypot(dx, dy * 1.25));
+    const v = nn(px / 38, py / 38) * 0.55 + nn(px / 15, py / 15) * 0.3 + nn(px / 6, py / 6) * 0.15;
+    im.data[i * 4] = 244; im.data[i * 4 + 1] = 234; im.data[i * 4 + 2] = 224;
+    im.data[i * 4 + 3] = 255 * Math.min(1, Math.pow(fall, soft) * (0.35 + v * 1.1));
+  }
+  x.putImageData(im, 0, 0); const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
+}
+const cloudA = cloudTex(77, 1.3), cloudB = cloudTex(5, 1.0);
+const mists = [];
+function addMist(x, y, z, sx, sy, o, tex = cloudA) {
+  const m = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true, opacity: o, depthWrite: false, fog: false, color: '#ffffff' }));
+  m.position.set(x, y, z); m.scale.set(sx, sy, 1); m.renderOrder = 3; scene.add(m); mists.push(m); return m;
+}
+// 盘下厚雾：一圈大云把底座下半吃掉
+const MR = rng(5);
+for (let i = 0; i < 22; i++) {
+  const a = (i / 22) * Math.PI * 2, r = 3.2 + MR() * 1.2;
+  addMist(Math.cos(a) * r * 1.25, -1.35 - MR() * 0.5, Math.sin(a) * r, 5 + MR() * 3, 2.2 + MR() * 1.2, 0.85, i % 2 ? cloudA : cloudB);
+}
+for (let i = 0; i < 9; i++) addMist(-6 + i * 1.5, -1.25 - MR() * 0.35, 3.6 + MR() * 0.8, 5 + MR() * 2.5, 2.4, 0.9, i % 2 ? cloudA : cloudB);
+// 远处云海
+for (let i = 0; i < 14; i++) addMist((MR() - 0.5) * 26, -1.6 - MR() * 1.2, -2 - MR() * 10, 8 + MR() * 6, 3 + MR() * 2, 0.5, i % 2 ? cloudA : cloudB);
+for (let i = 0; i < 8; i++) addMist((i % 2 ? 1 : -1) * (7 + MR() * 4), -0.6 - MR() * 1.4, -1 + MR() * 6, 6 + MR() * 4, 3 + MR() * 2, 0.32, cloudB);
+
+// 树丛 / 石山：低多边形团块，用高度雾和距离雾吃掉细节
+function fogify(mat, base, y0, y1) {
+  mat.onBeforeCompile = sh => {
+    sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nvarying float vWY;')
+      .replace('#include <fog_vertex>', '#include <fog_vertex>\nvWY = (modelMatrix * vec4(transformed, 1.0)).y;');
+    sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nvarying float vWY;')
+      .replace('#include <fog_fragment>', `#include <fog_fragment>
+#ifdef USE_FOG
+gl_FragColor.rgb = mix(gl_FragColor.rgb, fogColor, clamp(${base.toFixed(2)} + smoothstep(${y0.toFixed(2)}, ${y1.toFixed(2)}, vWY), 0.0, 0.97));
+#endif`);
+  };
+  return mat;
+}
+const TR = rng(13), blobGeo = new THREE.IcosahedronGeometry(1, 2);
+(() => { const p = blobGeo.attributes.position; for (let i = 0; i < p.count; i++) { const v = new THREE.Vector3().fromBufferAttribute(p, i); v.multiplyScalar(0.88 + n3(v.x * 2.5 + 4, v.y * 2.5, v.z * 2.5) * 0.24); p.setXYZ(i, v.x, v.y, v.z); } blobGeo.computeVertexNormals(); })();
+const greens = ['#5E6A46', '#6A7450', '#56613F', '#747D57', '#62704A'].map(c => new THREE.Color(c));
+const forestItems = [];
+function treeClump(x, y, z, size, tint) { // 一团圆冠 = 多个软球叠起来
+  const n = 7 + ((TR() * 5) | 0), col = tint ? new THREE.Color(tint) : greens[(TR() * greens.length) | 0];
+  for (let i = 0; i < n; i++) {
+    const s = size * (0.32 + TR() * 0.3);
+    forestItems.push([x + (TR() - 0.5) * size * 1.1, y + (TR() - 0.1) * size * 1.2, z + (TR() - 0.5) * size * 0.7, s * 1.05, s * 0.9, s, col.clone().offsetHSL(0, 0, (TR() - 0.5) * 0.06)]);
+  }
+}
+function rockMound(x, y, z, s) {
+  const g = new THREE.IcosahedronGeometry(1, 3), p = g.attributes.position, am = [], cols = [];
+  for (let i = 0; i < p.count; i++) {
+    const v = new THREE.Vector3().fromBufferAttribute(p, i);
+    v.multiplyScalar(0.75 + n3(v.x * 1.6 + 2, v.y * 1.6, v.z * 1.6) * 0.5); v.y *= 0.6;
+    p.setXYZ(i, v.x * s, v.y * s, v.z * s); am.push(0.9, 0); cols.push(0.95, 0.95, 0.93);
+  }
+  g.setAttribute('aM', new THREE.Float32BufferAttribute(am, 2)); g.setAttribute('color', new THREE.Float32BufferAttribute(cols, 3)); g.computeVertexNormals();
+  const m = new THREE.Mesh(g, stoneMat); m.position.set(x, y, z); scene.add(m);
+  treeClump(x + s * 0.2, y + s * 0.75, z - s * 0.2, s * 0.6);
+}
+// 盘下四周的雾中林海：越低越被雾吃掉；正后方留空
+for (let i = 0; i < 46; i++) {
+  const a = TR() * Math.PI * 2, r = 6.5 + TR() * 5, x = Math.cos(a) * r * 1.35, z = Math.sin(a) * r - 1;
+  if (z < -3 && Math.abs(x) < 8) continue;
+  treeClump(x, -1.3 - TR() * 1.6 - Math.max(0, -z - 2) * 0.3, z, 0.55 + TR() * 0.55);
+}
+treeClump(-6.9, -1.2, -0.6, 0.85, '#9E5A3A'); // 一团秋色红枫
+rockMound(-5.6, -2.3, 3.0, 0.8); rockMound(6.0, -2.5, 2.9, 0.85);
+(() => {
+  const mat = fogify(new THREE.MeshLambertMaterial({ color: '#ffffff' }), 0.3, -1.2, -5.0);
+  const im = new THREE.InstancedMesh(blobGeo, mat, forestItems.length), m4 = new THREE.Matrix4(), q = new THREE.Quaternion();
+  forestItems.forEach((it, i) => { m4.compose(new THREE.Vector3(it[0], it[1], it[2]), q, new THREE.Vector3(it[3], it[4], it[5])); im.setMatrixAt(i, m4); im.setColorAt(i, it[6]); });
+  scene.add(im);
+})();
+
+// ---------- 轨迹：见白砂部分 paintTrail（v6 改为碗形槽 + 砂埂，仍是 512² 局部上传） ----------
+let trailDirty = false;
+// [v10 bug 修] 旧痕慢慢回填到“浅痕”（约 60s 从满深落到 45%，不会消失），所以重复经过时新刻的痕明显更深、看得出来。
+// 每秒处理 128 行（4s 扫完整张 512²），只上传有变化的行。参考 snowflow：痕迹一分钟保留约 71%，缓慢回落 https://github.com/Am11n/snowflow
+const TR_FLOOR_R = 115, TR_FLOOR_B = 120, TR_STEP = 9;
+let trRow = 0, trAcc = 0;
+function relaxTrail(dt) {
+  trAcc += dt * TR_N / 4;
+  while (trAcc >= 1) {
+    trAcc -= 1; const y = trRow; trRow = (trRow + 1) % TR_N;
+    let x0 = -1, x1 = -1;
+    for (let x = 0; x < TR_N; x++) {
+      const i = (y * TR_N + x) * 4, r = trailData[i], b = trailData[i + 1];
+      if (r > TR_FLOOR_R || b > TR_FLOOR_B) {
+        if (r > TR_FLOOR_R) trailData[i] = Math.max(TR_FLOOR_R, r - TR_STEP);
+        if (b > TR_FLOOR_B) trailData[i + 1] = Math.max(TR_FLOOR_B, b - TR_STEP);
+        if (x0 < 0) x0 = x; x1 = x;
+      }
+    }
+    if (x0 >= 0) { trailTex.addUpdateRange((y * TR_N + x0) * 4, (x1 - x0 + 1) * 4); trailDirty = true; }
+  }
+}
+
+// ---------- 物理（倾斜 → 加速度；圆 vs 方块碰撞，思路来自 Astray） ----------
+const MAX_TILT = THREE.MathUtils.degToRad(12);
+const st = { x: -1.8, z: -1.5, vx: 0, vz: 0, lastPX: -9, lastPZ: -9 };
+const tilt = { x: 0, z: 0 }, tiltTarget = { x: 0, z: 0 };
+const qTmp = new THREE.Quaternion(), axis = new THREE.Vector3();
+function physStep(dt) {
+  if (st.fall) return;   // v12：掉落中，不再受盘面约束
+  const g = 9.8 * 0.72; // 实心球滚动约 5/7 g
+  st.vx += -g * Math.sin(tilt.z) * dt; st.vz += g * Math.sin(tilt.x) * dt;
+  const damp = Math.exp(-0.55 * dt); st.vx *= damp; st.vz *= damp;
+  const ox = st.x, oz = st.z;
+  st.x += st.vx * dt; st.z += st.vz * dt;
+  for (let it = 0; it < 2; it++) for (const b of colliders) {
+    const cx = Math.max(b[0], Math.min(st.x, b[1])), cz = Math.max(b[2], Math.min(st.z, b[3]));
+    const dx = st.x - cx, dz = st.z - cz, d2 = dx * dx + dz * dz;
+    if (d2 < BALL_R * BALL_R && d2 > 1e-9) {
+      const d = Math.sqrt(d2), nx = dx / d, nz = dz / d, pen = BALL_R - d;
+      st.x += nx * pen; st.z += nz * pen;
+      const vn = st.vx * nx + st.vz * nz; if (vn < 0) { st.vx -= 1.3 * vn * nx; st.vz -= 1.3 * vn * nz; bumpEvt(nx, nz, -vn); }   // v8：只读碰撞事件驱动表情，速度计算与 v7 相同
+    }
+  }
+  const mx = st.x - ox, mz = st.z - oz, dist = Math.hypot(mx, mz);
+  if (dist > 1e-6) { axis.set(mz, 0, -mx).normalize(); qTmp.setFromAxisAngle(axis, dist / BALL_R); spin.quaternion.premultiply(qTmp); }
+  if (Math.hypot(st.x - st.lastPX, st.z - st.lastPZ) > 0.025) { paintTrail(st.x, st.z); st.lastPX = st.x; st.lastPZ = st.z; }
+  if (Math.abs(st.x) > SLAB_E || Math.abs(st.z) > SLAB_E) { st.fall = { t: 0, y: ball.position.y, vy: 0 }; }   // v16：重心真的越过石桌边才掉（之前在桌面内 0.14 处就掉 → 穿过石桌）   // v12：重心出了沙边 → 掉下去
+  if (!leafTaken && Math.hypot(st.x - leaf.position.x, st.z - leaf.position.z) < BALL_R + 0.15) leafTaken = true;
+}
+
+
+// ---------- v14：BCRE 两层沙（静止层 R + 流动层 F）----------
+// 每个网格点：R = 不动的沙厚，F = 正在表面滑的那层沙厚。坡度 s = 沙面梯度 + 盘倾（世界高差）。
+//   侵蚀：|s| 超过本点静休止角 → R 变成 F，速率 ∝ (F + 少量种子)·(|s|−θs)（BCRE 交换项：已经在流的地方才继续刮下更多沙 → 从沙边/陡处起崩、往上游倒退）
+//   沉积：|s| 低于动休止角 → F 落回 R（两个角之间：流着的继续流，停着的不动 = 迟滞）
+//   流动层按坡向以速度 v 迎风平流；静止层超过 32° 时半差额崩塌（沙边、球挤出的沙埂保持真实坡度）
+//   每点的静休止角带噪声 → 不是整片一起滑，而是一条条沙舌
+// 注：真实干沙休止角约 30°，盘最多只倾 12°，所以这里的“休止角”按玩法压低（5.5°/3.5°），只保留“超阈值才流、迟滞、表层流”的行为
+const H0 = -SLAB_TOP, TS = Math.tan(THREE.MathUtils.degToRad(6.5)), TD = Math.tan(THREE.MathUtils.degToRad(3.5)), TAV = Math.tan(THREE.MathUtils.degToRad(32));
+const GAMMA = 55, VF = 5.6, VMAX = 1.0, SEED = 0.002, KG = 0.18, FMAX = 0.005, REFILL_TILT = Math.tan(THREE.MathUtils.degToRad(3));   // 只靠盘倾驱动后，交换率要够大，约 0.5 秒内起崩   // v15：起崩更快、流速更高（v14 倾斜后流下桌沿的沙太少）
+const N2 = SGN * SGN, sR0 = new Float32Array(N2), sFill = new Float32Array(N2), sR = new Float32Array(N2), sF = new Float32Array(N2), sHt = new Float32Array(N2), sTh = new Float32Array(N2);
+const sBase = new Float32Array(N2), BEV0 = 0.075, BEVK = 0.95;   // v17：石桌上棱倒角 → 沙的“底”在桌沿跟着倒角往下走（不再是一张平板悬在倒角外）
+const sVx = new Float32Array(N2), sVz = new Float32Array(N2), sNF = new Float32Array(N2), srip = new Float32Array(N2), ssolid = new Uint8Array(N2), sx0 = new Float32Array(SGN), out4 = [0, 0, 0, 0];
+for (let i = 0; i < SGN; i++) sx0[i] = -SLAB_E + i * SDX;
+for (let j = 0; j < SGN; j++) for (let i = 0; i < SGN; i++) { const ed = SLAB_E - Math.max(Math.abs(sx0[i]), Math.abs(sx0[j])), t = Math.max(0, BEV0 - ed) / BEV0; sBase[j * SGN + i] = -BEV0 * BEVK * t * (0.75 + 0.25 * t); }
+function sandReset() {
+  const n = vnoise(91), n2 = vnoise(92);
+  for (let j = 0; j < SGN; j++) for (let i = 0; i < SGN; i++) {
+    const k = j * SGN + i, x = sx0[i], z = sx0[j];
+    ssolid[k] = walls.some(w => x > w[0] + 0.03 && x < w[1] - 0.03 && z > w[2] + 0.03 && z < w[3] - 0.03) ? 1 : 0;
+    // 沙边轮廓：多层噪声，几处外凸的沙舌、几处内凹，不是直线也不是规整圆角
+    // v15：再加一层很低频的“推挤”起伏（大块外凸/内凹），边缘过渡宽度也按噪声变 → 有的地方是缓坡沙舌，有的地方是被推起的陡沿
+    const lobe = (n(x * 0.45 + 13, z * 0.45 - 4) - 0.5) * 0.5;
+    const wob = lobe + (n(x * 1.1, z * 1.1) - 0.5) * 0.42 + (n(x * 3.3 + 7, z * 3.3) - 0.5) * 0.16 + (n2(x * 9, z * 9) - 0.5) * 0.04 + 0.08;
+    const band = 0.04 + 0.32 * n(x * 0.8 - 9, z * 0.8 + 2);
+    const qx = Math.abs(x) - (HALF - 0.3), qz = Math.abs(z) - (HALF - 0.3);
+    const d = Math.hypot(Math.max(qx, 0), Math.max(qz, 0)) + Math.min(Math.max(qx, qz), 0) - 0.3 + wob;
+    sR[k] = H0 * (1 - THREE.MathUtils.smoothstep(d, -band, 0.05)) * (1 + 0.35 * THREE.MathUtils.smoothstep(-d, 0.0, 0.25) * THREE.MathUtils.smoothstep(0.16, 0.04, band)) * (1 + (n2(x * 2.2, z * 2.2) - 0.5) * 0.12);
+    sR[k] *= THREE.MathUtils.smoothstep(sBase[k], -0.03, -0.004);   // v17：倒角上不放静沙
+    sF[k] = 0; srip[k] = 1;
+    sTh[k] = TS * (0.7 + 1.2 * n(x * 1.6 + 3, z * 1.6 - 5));   // v15：阈值起伏加大（0.7~1.9 倍）→ 中等倾角只有一部分地方流成沙舌，倾满才大片流   // 每点静休止角有起伏（0.7~1.3 倍）
+  }
+  for (let i = 0; i < 30; i++) relaxR();
+  sR0.set(sR);   // v16：记下“满盘”的沙形，放平后往回补
+  srip.fill(1); sandUpload();
+}
+function relaxR() {   // 静止层超过 TAV 的部分搬给低的一边（sandsim 的 repose relaxation）
+  const lim = TAV * SDX;
+  for (let j = 0; j < SGN; j++) for (let i = 0; i < SGN; i++) {
+    const k = j * SGN + i; if (ssolid[k]) continue;
+    if (i + 1 < SGN && !ssolid[k + 1]) { const d = sR[k] - sR[k + 1]; if (Math.abs(d) > lim) { const t = (Math.abs(d) - lim) * 0.25 * Math.sign(d); sR[k] -= t; sR[k + 1] += t; } }
+    if (j + 1 < SGN && !ssolid[k + SGN]) { const d = sR[k] - sR[k + SGN]; if (Math.abs(d) > lim) { const t = (Math.abs(d) - lim) * 0.25 * Math.sign(d); sR[k] -= t; sR[k + SGN] += t; } }
+  }
+}
+function sandStep(dt, gx, gz) {
+  out4[0] = out4[1] = out4[2] = out4[3] = 0;
+  for (let k = 0; k < N2; k++) sHt[k] = sR[k] + sF[k];
+  for (let j = 0; j < SGN; j++) for (let i = 0; i < SGN; i++) {
+    const k = j * SGN + i; sVx[k] = sVz[k] = 0; if (ssolid[k]) continue;
+    const h = sHt[k];
+    const hL = i === 0 ? 0 : ssolid[k - 1] ? h : sHt[k - 1], hR = i === SG ? 0 : ssolid[k + 1] ? h : sHt[k + 1];
+    const hD = j === 0 ? 0 : ssolid[k - SGN] ? h : sHt[k - SGN], hU = j === SG ? 0 : ssolid[k + SGN] ? h : sHt[k + SGN];
+    const b = sBase[k], bL = i === 0 ? b - 0.02 : sBase[k - 1], bR = i === SG ? b - 0.02 : sBase[k + 1], bD = j === 0 ? b - 0.02 : sBase[k - SGN], bU = j === SG ? b - 0.02 : sBase[k + SGN];
+    const onB = b < -1e-4 ? 1 : 0, sx = ((hR - hL) * KG + (bR - bL) * onB) / (2 * SDX) + gx, sz = ((hU - hD) * KG + (bU - bD) * onB) / (2 * SDX) + gz, sm = Math.hypot(sx, sz);   // v17：倒角是真坡，全权重 → 流到桌沿的沙顺着倒角滑下去   // v15：沙面自身坡度只算 KG 倍 → 平放时沙边不会自己流，主要由盘倾驱动
+    if (sm > sTh[k] && sR[k] > 0) {
+      const face = Math.min(1, (Math.abs(hR - hL) + Math.abs(hU - hD)) / (2 * SDX) * 2);   // 有“自由面”（沙边、坑沿）的地方先崩
+      const e = Math.min(sR[k], GAMMA * (sF[k] + SEED * (0.3 + face)) * (sm - sTh[k]) * dt * Math.max(0, 1 - sF[k] / FMAX));   // v15：流动层只允许很薄（BCRE 的表层流），到 FMAX 不再往下刮
+      sR[k] -= e; sF[k] += e; if (sF[k] > FMAX * 0.5) srip[k] = Math.max(0, srip[k] - dt * 1.2);   // v15：只有真正流起来的沙舌才抹掉耙纹
+    } else if (sm < TD && sF[k] > 0) {
+      const d = sF[k] * Math.min(1, dt * 6 * (1 - sm / TD) + dt * 1.5); sF[k] -= d; sR[k] += d;
+    }
+    if (sF[k] > FMAX * 2) { const d = (sF[k] - FMAX * 2) * Math.min(1, dt * 8); sF[k] -= d; sR[k] += d; }   // v15：流动层堆厚（被墙挡、汇聚处）→ 沉积成沙堆
+    if (sF[k] > 1e-6 && sm > 1e-5) { const v = Math.min(VMAX, VF * Math.max(0, sm - TD * 0.6)); sVx[k] = -sx / sm * v; sVz[k] = -sz / sm * v; }
+  }
+  sNF.set(sF);
+  const c = dt / SDX;
+  for (let j = 0; j < SGN; j++) for (let i = 0; i < SGN; i++) {
+    const k = j * SGN + i, f = sF[k]; if (f <= 1e-7 || ssolid[k]) continue;
+    let qx = Math.abs(sVx[k]) * c, qz = Math.abs(sVz[k]) * c; const tot = qx + qz; if (tot > 0.45) { qx *= 0.45 / tot; qz *= 0.45 / tot; }
+    const ni = sVx[k] > 0 ? i + 1 : i - 1, nj = sVz[k] > 0 ? j + 1 : j - 1;
+    if (qx > 0) { const m = f * qx;
+      if (ni < 0 || ni > SG) { out4[ni < 0 ? 1 : 0] += m; sNF[k] -= m; } else if (!ssolid[j * SGN + ni]) { sNF[k] -= m; sNF[j * SGN + ni] += m; } }
+    if (qz > 0) { const m = f * qz;
+      if (nj < 0 || nj > SG) { out4[nj < 0 ? 3 : 2] += m; sNF[k] -= m; } else if (!ssolid[nj * SGN + i]) { sNF[k] -= m; sNF[nj * SGN + i] += m; } }
+  }
+  sF.set(sNF);
+  // v16：沙盘自己补沙。盘接近放平（< 3°）、流动层已停时，从石桌细缝里往上渗沙：
+  //   露出石面 / 很薄的地方补得快（约 1.5 秒补回大半），其余地方极慢（滚痕不会被马上填掉）
+  //   补回来的地方耙纹慢慢重新出现（“自己耙平”的禅意沙盘）
+  const gm = Math.hypot(gx, gz);
+  if (gm < REFILL_TILT) {
+    const kq = 1 - gm / REFILL_TILT;
+    for (let k = 0; k < N2; k++) {
+      if (ssolid[k] || sF[k] > FMAX * 0.3 || sBase[k] < -1e-4) continue;   // v17：倒角上不补
+      const tgt = sR0[k], h = sR[k] + sF[k], d = tgt - h; if (d <= 0) { if (sFill[k] > 0) { srip[k] = Math.min(1, srip[k] + dt * 0.35); if (srip[k] >= 1) sFill[k] = 0; } continue; }
+      const rate = h < tgt * 0.45 ? 1.4 : 0.025, add = d * Math.min(1, rate * kq * dt);
+      sR[k] += add; if (rate > 1) { sFill[k] = 1; srip[k] = Math.min(srip[k], 0.2); }
+      if (sFill[k] > 0 && h > tgt * 0.85) srip[k] = Math.min(1, srip[k] + dt * 0.35);
+    }
+  }
+  relaxR();
+  sandGuard();
+}
+function sandGuard() {   // v17b：防御——任何格出现非有限值/负值/异常高，回到满盘沙形
+  let bad = 0;
+  for (let k = 0; k < N2; k++) { const r = sR[k], f = sF[k]; if (!(r >= 0 && r < 0.4) || !(f >= 0 && f < 0.05)) { sR[k] = sR0[k]; sF[k] = 0; bad++; } }
+  if (bad && !window.__sandBad) { window.__sandBad = bad; console.warn('sandGuard', bad); }
+}
+// 球压沙（sandsim 的 carve & deposit 简化）：球底以下的沙挖走，体积推到外圈（前进方向多推），relaxR 再塌成沙埂
+const SINK = 0.028;
+let ballSandY = 0;
+function ballCarve(bx, bz, vx, vz) {
+  let ring = 0; for (let a = 0; a < 8; a++) { const t = a * Math.PI / 4; ring += sandH(bx + Math.cos(t) * BALL_R * 1.3, bz + Math.sin(t) * BALL_R * 1.3); } ring /= 8;
+  const base = Math.max(0, ring - SINK); ballSandY = SLAB_TOP + base;   // 球坐在“周围沙面 − SINK”，没沙了就坐在石桌上
+  const r2 = BALL_R * BALL_R, i0 = Math.max(0, Math.floor((bx - BALL_R + SLAB_E) / SDX)), i1 = Math.min(SG, Math.ceil((bx + BALL_R + SLAB_E) / SDX));
+  const j0 = Math.max(0, Math.floor((bz - BALL_R + SLAB_E) / SDX)), j1 = Math.min(SG, Math.ceil((bz + BALL_R + SLAB_E) / SDX));
+  let V = 0; const sp = Math.hypot(vx, vz), ux = sp > 1e-3 ? vx / sp : 0, uz = sp > 1e-3 ? vz / sp : 0;
+  for (let j = j0; j <= j1; j++) for (let i = i0; i <= i1; i++) {
+    const k = j * SGN + i; if (ssolid[k]) continue; const dx = sx0[i] - bx, dz = sx0[j] - bz, d2 = dx * dx + dz * dz; if (d2 > r2) continue;
+    const zu = base + BALL_R - Math.sqrt(r2 - d2), h = sR[k] + sF[k];
+    if (h > zu) { const dv = h - zu; V += dv; const fromF = Math.min(sF[k], dv); sF[k] -= fromF; sR[k] -= dv - fromF; srip[k] = Math.min(srip[k], 0.4); }
+  }
+  if (V <= 0) return;
+  const R1 = BALL_R * 0.95, R2 = BALL_R * 1.45, cells = []; let wsum = 0;
+  const a0 = Math.max(0, Math.floor((bx - R2 + SLAB_E) / SDX)), a1 = Math.min(SG, Math.ceil((bx + R2 + SLAB_E) / SDX));
+  const b0 = Math.max(0, Math.floor((bz - R2 + SLAB_E) / SDX)), b1 = Math.min(SG, Math.ceil((bz + R2 + SLAB_E) / SDX));
+  for (let j = b0; j <= b1; j++) for (let i = a0; i <= a1; i++) {
+    const k = j * SGN + i; if (ssolid[k]) continue; const dx = sx0[i] - bx, dz = sx0[j] - bz, d = Math.hypot(dx, dz); if (d < R1 || d > R2) continue;
+    const w = (1 + 2 * Math.max(0, (dx * ux + dz * uz) / d)) * (1 - (d - R1) / (R2 - R1)); cells.push(k, w); wsum += w;
+  }
+  if (!(wsum > 1e-6)) return;   // v17b：外圈全是墙/出界时不分配（之前 0/0 → NaN/无穷大扩散，画面裂开）
+  for (let q = 0; q < cells.length; q += 2) sR[cells[q]] += V * cells[q + 1] / wsum;
+}
+const sandPos = sandGeo.attributes.position, sandAH = sandGeo.attributes.aH, sandRip = sandGeo.attributes.aRip, sandAF = sandGeo.attributes.aFlow;
+sandGeo.setAttribute('normal', new THREE.BufferAttribute(new Float32Array(N2 * 3), 3).setUsage(THREE.DynamicDrawUsage));
+const sandNrm = sandGeo.attributes.normal;
+function sandUpload() {
+  const P = sandPos.array, Nn = sandNrm.array;
+  for (let k = 0; k < N2; k++) { const h = sR[k] + sF[k]; sHt[k] = h; P[k * 3 + 1] = h > 0.0005 ? SLAB_TOP + sBase[k] + h + 0.0006 : SLAB_TOP + sBase[k] - 0.012; sandAH.array[k] = h; sandRip.array[k] = srip[k]; sandAF.array[k] = sF[k]; }   // v16：薄沙也画出来（之前 <3.5mm 直接藏到石面下 → 流过石面的沙看不见，桌沿沙帘像凭空出现）
+  for (let j = 0; j < SGN; j++) for (let i = 0; i < SGN; i++) {
+    const k = j * SGN + i, il = Math.max(0, i - 1), ir = Math.min(SG, i + 1), jd = Math.max(0, j - 1), ju = Math.min(SG, j + 1);
+    const hx = (sHt[j * SGN + ir] + sBase[j * SGN + ir] - sHt[j * SGN + il] - sBase[j * SGN + il]) / ((ir - il) * SDX), hz = (sHt[ju * SGN + i] + sBase[ju * SGN + i] - sHt[jd * SGN + i] - sBase[jd * SGN + i]) / ((ju - jd) * SDX);
+    const l = Math.hypot(hx, 1, hz); Nn[k * 3] = -hx / l; Nn[k * 3 + 1] = 1 / l; Nn[k * 3 + 2] = -hz / l;
+  }
+  sandPos.needsUpdate = sandAH.needsUpdate = sandRip.needsUpdate = sandNrm.needsUpdate = sandAF.needsUpdate = true;
+}
+function bil(A, x, z) {
+  const fx = THREE.MathUtils.clamp((x + SLAB_E) / SDX, 0, SG - 1e-4), fz = THREE.MathUtils.clamp((z + SLAB_E) / SDX, 0, SG - 1e-4);
+  const i = Math.floor(fx), j = Math.floor(fz), u = fx - i, v = fz - j, k = j * SGN + i;
+  return (A[k] * (1 - u) + A[k + 1] * u) * (1 - v) + (A[k + SGN] * (1 - u) + A[k + SGN + 1] * u) * v;
+}
+function sandH(x, z) { return bil(sHt, x, z) + bil(sBase, x, z); }
+
+const GRAIN_MAX = 7000, GV_FALL = 9e-6, SURF_MAX = 1400;   // v15：每颗下落沙粒代表的体积减半多，沙帘更连贯
+const grainMesh = new THREE.InstancedMesh(new THREE.IcosahedronGeometry(1, 0), new THREE.MeshStandardMaterial({ roughness: 1, metalness: 0, flatShading: true }), GRAIN_MAX);
+grainMesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage); grainMesh.count = 0; grainMesh.frustumCulled = false; grainMesh.userData.keep = true;
+{ const c = new THREE.Color(), R = rng(81); for (let i = 0; i < GRAIN_MAX; i++) {
+    const t = R(); c.setRGB(SAND_BASE[0] / 255, SAND_BASE[1] / 255, SAND_BASE[2] / 255, THREE.SRGBColorSpace).multiplyScalar(0.82 + t * 0.18);
+    if (R() < 0.12) c.lerp(new THREE.Color('#B9A58A'), 0.6);
+    grainMesh.setColorAt(i, c); } grainMesh.instanceColor.needsUpdate = true; }
+scene.add(grainMesh);
+const grains = [], gM = new THREE.Matrix4(), gQ = new THREE.Quaternion(), gS = new THREE.Vector3(), gP = new THREE.Vector3(), gV = new THREE.Vector3();
+const gE = new THREE.Euler(), gUp = new THREE.Vector3(0, 1, 0), gRot = new THREE.Matrix4();
+const GR = rng(82); let nSurf = 0;
+function spawnFall(x, z, vx, vz, sz) {
+  if (grains.length >= GRAIN_MAX) return;
+  gP.set(x, SLAB_TOP + 0.004, z); board.localToWorld(gP); gV.set(vx, 0, vz).applyQuaternion(board.quaternion);
+  grains.push({ on: false, s: sz || 0.003 + GR() * GR() * 0.006, t: 0, life: 4, rx: GR() * 6, ry: GR() * 6, wx: gP.x, wy: gP.y, wz: gP.z, wvx: gV.x, wvy: -0.05 * GR(), wvz: gV.z });
+}
+function spillUpdate(dt) {
+  gRot.makeRotationFromEuler(board.rotation); const e = gRot.elements, gx = e[1], gz = e[9];
+  if (!st.fall) ballCarve(st.x, st.z, st.vx, st.vz);
+  const SUBS = 2; for (let s = 0; s < SUBS; s++) {
+    sandStep(dt / SUBS, gx, gz);
+    for (let side = 0; side < 4; side++) {   // 掉出桌沿的流动层体积 → 下落沙粒（从这条边上真有流量的位置漏）
+      let n = out4[side] * SDX * SDX / GV_FALL, guard = 0;
+      while (n > 0 && grains.length < GRAIN_MAX && guard++ < 4000) {
+        if (n < 1 && GR() > n) break;
+        const t = (GR() * 2 - 1) * SLAB_E, edge = side === 0 || side === 2 ? SLAB_E : -SLAB_E;
+        const x = side < 2 ? edge : t, z = side < 2 ? t : edge;
+        if (bil(sF, x * 0.99, z * 0.99) < 0.0003) continue;
+        n -= 1;
+        spawnFall(x, z, bil(sVx, x * 0.99, z * 0.99) + (GR() - 0.5) * 0.04, bil(sVz, x * 0.99, z * 0.99) + (GR() - 0.5) * 0.04);
+      }
+    }
+  }
+  // 表面流动沙粒：只在流动层厚的地方出现，跟着流速走 → 读成一条条在动的沙舌
+  for (let tries = 0; tries < 260 && nSurf < SURF_MAX; tries++) {
+    const k = (GR() * N2) | 0, f = sF[k]; if (f < 0.0006) continue;
+    if (GR() > Math.min(1, f / 0.004)) continue;
+    const i = k % SGN, j = (k / SGN) | 0;
+    grains.push({ on: true, x: sx0[i] + (GR() - 0.5) * SDX, z: sx0[j] + (GR() - 0.5) * SDX, s: 0.003 + GR() * GR() * 0.005, t: 0, life: 0.5 + GR() * 0.8, rx: GR() * 6, ry: GR() * 6 });
+    nSurf++;
+  }
+  sandUpload();
+  const g = 9.8;
+  for (let i = grains.length - 1; i >= 0; i--) {
+    const q = grains[i]; q.t += dt; q.rx += dt * 9; q.ry += dt * 7;
+    if (q.on) {
+      const vx = bil(sVx, q.x, q.z), vz = bil(sVz, q.x, q.z);
+      q.x += vx * 1.15 * dt; q.z += vz * 1.15 * dt;
+      if (Math.abs(q.x) > SLAB_E || Math.abs(q.z) > SLAB_E) { nSurf--; const s0 = q.s; grains[i] = grains[grains.length - 1]; grains.pop(); spawnFall(q.x, q.z, vx, vz, s0); continue; }
+      if (q.t > q.life || bil(sF, q.x, q.z) < 0.0002) { nSurf--; grains[i] = grains[grains.length - 1]; grains.pop(); continue; }
+      gP.set(q.x, SLAB_TOP + sandH(q.x, q.z) + q.s * 0.4, q.z); board.localToWorld(gP);
+    } else {
+      q.wvy -= g * dt; q.wvx *= 0.995; q.wvz *= 0.995;
+      q.wx += q.wvx * dt; q.wy += q.wvy * dt; q.wz += q.wvz * dt; gP.set(q.wx, q.wy, q.wz);
+      if (q.wy < -2.6 || q.t > q.life) { grains[i] = grains[grains.length - 1]; grains.pop(); continue; }
+    }
+    q.px = gP.x; q.py = gP.y; q.pz = gP.z;
+  }
+  for (let i = 0; i < grains.length; i++) {
+    const q = grains[i];
+    if (q.on) { const f = Math.min(1, (q.life - q.t) * 5, q.t * 8); gE.set(q.rx, q.ry, 0); gQ.setFromEuler(gE); gS.set(q.s, q.s * 0.8, q.s).multiplyScalar(f); }
+    else { gV.set(q.wvx, q.wvy, q.wvz); const sp = gV.length(); gQ.setFromUnitVectors(gUp, gV.multiplyScalar(1 / (sp || 1))); gS.set(q.s * 0.8, q.s * (1 + sp * 3.0), q.s * 0.8); }
+    gM.compose(gP.set(q.px, q.py, q.pz), gQ, gS); grainMesh.setMatrixAt(i, gM);
+  }
+  grainMesh.count = grains.length; grainMesh.instanceMatrix.needsUpdate = true;
+}
+sandReset();
+// ---------- 输入：鼠标拖动 / 方向键 ----------
+let drag = null; const keys = {};
+// v11b：按住控制（虚拟摇杆）。按下点 = 中心，手指偏离方向 = 盘往哪倾，偏离越远倾得越多；松手盘回平。
+renderer.domElement.addEventListener('pointerdown', e => { drag = { x: e.clientX, y: e.clientY }; renderer.domElement.setPointerCapture(e.pointerId); });
+addEventListener('pointermove', e => {
+  if (!drag) return;
+  const R = Math.max(60, Math.min(innerWidth, innerHeight) * 0.18);          // 拖到 R 像素 = 满倾 12°
+  let dx = (e.clientX - drag.x) / R, dy = (e.clientY - drag.y) / R;
+  const m = Math.hypot(dx, dy), dead = 0.08;                                   // 小死区，防手抖
+  const s = m < dead ? 0 : Math.min(1, (m - dead) / (1 - dead)) / m;
+  dx *= s; dy *= s;
+  tiltTarget.z = -dx * MAX_TILT; tiltTarget.x = dy * MAX_TILT;                // 与方向键一致：右 = z 负，下 = x 正
+});
+const dragEnd = () => { drag = null; tiltTarget.x = tiltTarget.z = 0; };
+addEventListener('pointerup', dragEnd); addEventListener('pointercancel', dragEnd);
+// 6 个固定机位（按键 1~6；0 回到默认跟随视角）
+const CAMS = {
+  1: { p: [0, 7.607, 10.129], t: [0, -0.15, 0.2] },       // 总览（设计稿角度）
+  2: { p: [0.9, 0.55, 4.6], t: [0.2, 0.05, 2.6] },        // 前沿低机位
+  3: { p: [3.75, 1.15, 3.85], t: [2.55, 0.15, 2.55] },    // 右前角特写
+  4: { p: [-0.35, 1.0, 2.1], t: [0.95, 0.25, 0.55] },     // 内墙特写
+  5: { p: [0, 9.5, 0.01], t: [0, 0, 0] },                 // 俯视
+  6: { p: [-4.6, 2.3, -0.4], t: [-2.2, 0.1, -1.0] },      // 左后侧高角
+};
+addEventListener('keydown', e => {
+  if (CAMS[e.key]) { window.__camOverride = CAMS[e.key]; return; }
+  if (e.key === '0') { window.__camOverride = null; return; }
+  if (e.key === 'r' || e.key === 'R') { resetCommon(); return; }   // v12：没有按钮了，R 重来
+  keys[e.key] = true;
+});
+addEventListener('keyup', e => { keys[e.key] = false; });
+
+// ---------- 主循环 ----------
+let simTime = 0;
+function update(dt) {
+  if (!drag && !window.__hold) {
+    const kx = (keys.ArrowDown ? 1 : 0) - (keys.ArrowUp ? 1 : 0), kz = (keys.ArrowLeft ? 1 : 0) - (keys.ArrowRight ? 1 : 0);
+    if (kx || kz) { tiltTarget.x = kx * MAX_TILT; tiltTarget.z = kz * MAX_TILT; }
+    else if (Object.keys(keys).length) { tiltTarget.x *= 0.9; tiltTarget.z *= 0.9; }
+  }
+  inputHook(dt);   // v11：陀螺仪 / 开始前不动 / 晕时不受控
+  tilt.x += (tiltTarget.x - tilt.x) * Math.min(1, dt * 8); tilt.z += (tiltTarget.z - tilt.z) * Math.min(1, dt * 8);
+  const SUB = 4; for (let i = 0; i < SUB; i++) physStep(dt / SUB);
+  simTime += dt;
+  relaxTrail(dt);   // [v10 bug 修]
+  board.rotation.set(tilt.x, 0, tilt.z);
+  if (st.fall) {   // v12：掉落 —— 惯性 + 重力，翻滚；1.5s 后回起点
+    const f = st.fall; f.t += dt; f.vy -= 9.8 * dt; f.y += f.vy * dt; st.x += st.vx * dt; st.z += st.vz * dt;
+    // v16：绕桌沿翻下去 —— 球离桌沿水平距离 < 半径时，球心不能低于“贴着桌沿”的高度，并被往外推
+    const ex = Math.abs(st.x) - SLAB_E, ez = Math.abs(st.z) - SLAB_E, e = Math.max(ex, ez);
+    if (e < BALL_R) { const yMin = SLAB_TOP + Math.sqrt(Math.max(0, BALL_R * BALL_R - Math.max(0, e) ** 2));
+      if (f.y < yMin) { f.y = yMin; f.vy = Math.max(f.vy, 0);
+        const push = 4.0 * dt; if (ex >= ez) st.vx += Math.sign(st.x) * push; else st.vz += Math.sign(st.z) * push; } }
+    axis.set(st.vz || 0.01, 0, -(st.vx || 0)).normalize(); qTmp.setFromAxisAngle(axis, dt * 7); spin.quaternion.premultiply(qTmp);
+    if (f.t > 1.5) { Object.assign(st, { x: -1.8, z: -1.5, vx: 0, vz: 0, fall: null }); spin.quaternion.identity(); ball.scale.setScalar(0.01); }
+  }
+  if (ball.scale.x < 1) ball.scale.setScalar(Math.min(1, ball.scale.x + dt * 3));   // 回到起点时轻轻“冒”出来
+  ball.position.set(st.x, st.fall ? st.fall.y : ballSandY + BALL_R, st.z);   ballVisual(dt);   // v14：球坐进自己压出的沙窝（周围沙面下 SINK）
+  spillUpdate(dt);   // v12 // v6：毛球姿态（纯视觉）
+  // 落叶：贴在砂上轻轻颤，拾取后升起消失
+  if (!leafTaken) { leaf.position.y = 0.025 + Math.sin(simTime * 1.6) * 0.006; leaf.rotation.y = 0.6 + Math.sin(simTime * 0.7) * 0.06; leaf.rotation.z = Math.sin(simTime * 1.3) * 0.03; }
+  else if (leaf.visible) { leafFade += dt; leaf.position.y += dt * 1.2; leaf.rotation.y += dt * 6; leaf.scale.setScalar(Math.max(0, 1 - leafFade * 1.6)); if (leafFade > 0.65) leaf.visible = false; }
+  mists.forEach((m, i) => { m.position.x += Math.sin(simTime * 0.05 + i) * dt * 0.03; });
+  afterUpdate(dt);   // v11
+}
+let view = 'overview';
+function placeCamera() {
+  if (window.__camOverride) { const c = window.__camOverride; camera.position.set(c.p[0], c.p[1], c.p[2]); camera.lookAt(c.t[0], c.t[1], c.t[2]); return; }
+  if (view === 'close') {
+    const wp = ball.getWorldPosition(new THREE.Vector3());
+    camera.position.set(wp.x + 0.35, wp.y + 0.45, wp.z + 1.3); camera.lookAt(wp.x, wp.y - 0.02, wp.z); return;
+  }
+  camera.position.set(camBase.x + tilt.z * 2.2, camBase.y, camBase.z - tilt.x * 2.2);
+  camera.lookAt(CAM_LOOK);
+}
+// ---------- 帧耗日志：performance.now（CPU 侧 update+render）+ GPU timer query（浏览器支持时） ----------
+const perf = { cpu: [], gpu: [], frame: [], pending: [] };
+const gl = renderer.getContext(), tq = gl.getExtension('EXT_disjoint_timer_query_webgl2');
+function pollGpu() {
+  while (perf.pending.length) {
+    const q = perf.pending[0];
+    if (!gl.getQueryParameter(q, gl.QUERY_RESULT_AVAILABLE)) break;
+    if (!gl.getParameter(tq.GPU_DISJOINT_EXT)) perf.gpu.push(gl.getQueryParameter(q, gl.QUERY_RESULT) / 1e6);
+    gl.deleteQuery(q); perf.pending.shift();
+  }
+}
+const stat = a => { if (!a.length) return null; const s = [...a].sort((x, y) => x - y), n = s.length; return { n, avg: s.reduce((x, y) => x + y, 0) / n, p99: s[Math.min(n - 1, Math.floor(n * 0.99))], max: s[n - 1] }; };
+window.__perfLog = () => ({ gpuTimer: !!tq, summary: { frameInterval: stat(perf.frame), cpu: stat(perf.cpu), gpu: stat(perf.gpu) } });
+// 阴影贴图只在盘倾角 / 球位置变化时重画（落叶的轻颤每 0.25s 补一次）
+const shadowSig = { tx: 9, tz: 9, x: 9, z: 9, t: 0 };
+function shadowCheck(now) {
+  const moved = Math.abs(tilt.x - shadowSig.tx) + Math.abs(tilt.z - shadowSig.tz) + Math.abs(st.x - shadowSig.x) + Math.abs(st.z - shadowSig.z) > 1e-4;
+  if (moved || now - shadowSig.t > 250 || leafTaken && leaf.visible) {
+    renderer.shadowMap.needsUpdate = true;
+    Object.assign(shadowSig, { tx: tilt.x, tz: tilt.z, x: st.x, z: st.z, t: now });
+  }
+}
+let last = performance.now();
+function frame(now) {
+  const t0 = performance.now();
+  const dt = Math.max(0, Math.min(0.033, (now - last) / 1000));   // v17b：首帧 rAF 时间戳可能早于 last → 负 dt perf.frame.push(now - last); last = now;
+  if (window.__noLoop) { last = now; requestAnimationFrame(frame); return; } // 测试钩子：录帧时由脚本逐帧渲染
+  if (!window.__frozen) update(dt);
+  if (trailDirty) { trailTex.needsUpdate = true; trailDirty = false; }
+  placeCamera(); shadowCheck(now);
+  let q = null; if (tq) { q = gl.createQuery(); gl.beginQuery(tq.TIME_ELAPSED_EXT, q); }
+  renderer.render(scene, camera);
+  if (q) { gl.endQuery(tq.TIME_ELAPSED_EXT); perf.pending.push(q); pollGpu(); }
+  perf.cpu.push(performance.now() - t0);
+  if (perf.frame.length > 4000) { perf.frame.splice(0, 2000); perf.cpu.splice(0, 2000); perf.gpu.splice(0, Math.min(2000, perf.gpu.length)); }
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+addEventListener('resize', () => { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); });
+
+// ===================== v11：界面（只用文案清单里的字）+ 手机重力控制 + 竖屏适配 =====================
+// 可见文字只有：静 / 开始 / 第 1/3 关 / 计时 00:00 / 落叶 0/3 / 重来 / 通关（枫叶是 SVG 图标，不是字）
+// ?shot=1：截图/测帧模式，不显示开始页和界面
+const SHOT = true;   // v12：界面先全部去掉（用户 2026-11-17：UI 太垃圾，先去掉），一打开就能玩
+const game = { started: false, t: 0, leaves: 0, won: false, lock: 0, onReset: [], onStart: [] };
+const D2R = Math.PI / 180;
+
+// ---------- 界面 ----------
+(() => {
+  const css = `
+  #ui,#ui *{box-sizing:border-box;font-family:"PingFang SC","Hiragino Sans GB","Noto Sans CJK SC","Microsoft YaHei","WenQuanYi Zen Hei",sans-serif;-webkit-user-select:none;user-select:none}
+  #ui [hidden]{display:none!important}
+  #start{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:space-between;
+    padding:calc(env(safe-area-inset-top,0px) + 22vh) 0 calc(env(safe-area-inset-bottom,0px) + 18vh);
+    background:rgba(237,230,214,.55);-webkit-backdrop-filter:blur(7px);backdrop-filter:blur(7px);z-index:5}
+  #start .jing{font-family:"Songti SC","STSong","Noto Serif CJK SC","Source Han Serif SC","WenQuanYi Zen Hei",serif;font-size:min(30vw,170px);line-height:1;color:#2E2B28;letter-spacing:0}
+  .btn{pointer-events:auto;border:0;border-radius:999px;cursor:pointer;color:#2E2B28;-webkit-tap-highlight-color:transparent}
+  #bStart{background:#F2B66B;font-size:22px;padding:14px 46px;box-shadow:0 6px 18px rgba(120,80,30,.18)}
+  #bStart:active,#bAgain:active{transform:scale(.96)}
+  #hud{position:fixed;left:0;right:0;top:calc(env(safe-area-inset-top,0px) + 14px);display:flex;justify-content:center;gap:10px;pointer-events:none;z-index:3}
+  .chip{background:rgba(243,237,225,.86);color:#2E2B28;border-radius:999px;padding:7px 14px;font-size:15px;line-height:20px;white-space:nowrap;
+    display:flex;align-items:center;gap:5px;box-shadow:0 3px 10px rgba(110,90,60,.10);font-variant-numeric:tabular-nums;transition:transform .18s, box-shadow .18s}
+  .chip.pop{transform:scale(1.18);box-shadow:0 0 0 2px rgba(242,182,107,.85),0 3px 14px rgba(242,182,107,.55)}
+  .chip svg{width:15px;height:15px}
+  #bAgain{position:fixed;left:16px;bottom:calc(env(safe-area-inset-bottom,0px) + 18px);background:rgba(243,237,225,.9);font-size:16px;padding:10px 22px;box-shadow:0 3px 10px rgba(110,90,60,.12);z-index:4}
+  #win{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(237,230,214,.35);z-index:4;pointer-events:none}
+  #win .card{background:rgba(243,237,225,.95);border-radius:28px;padding:30px 54px 26px;text-align:center;color:#2E2B28;box-shadow:0 10px 30px rgba(110,90,60,.18)}
+  #win .t{font-size:44px;line-height:1.2}
+  #win .lv{display:flex;justify-content:center;gap:16px;margin:18px 0 14px}#win .lv svg{width:34px;height:34px}#win .lv svg.off{opacity:.22}
+  #win .wt{font-size:20px;font-variant-numeric:tabular-nums}`;
+  const s = document.createElement('style'); s.textContent = css; document.head.appendChild(s);
+  const leaf = (c = '') => `<svg class="${c}" viewBox="-12 -12 24 24" aria-hidden="true"><path fill="#9C4429" d="M0-11 2.2-5.5 6.5-8 5.6-3 10.5-2.6 6.6 1.3 8.4 4.6 3.4 4.3 1 10H-1L-3.4 4.3-8.4 4.6-6.6 1.3-10.5-2.6-5.6-3-6.5-8-2.2-5.5Z"/></svg>`;
+  const ui = document.createElement('div'); ui.id = 'ui';
+  ui.innerHTML = `<div id="start"><div class="jing">静</div><button class="btn" id="bStart">开始</button></div>
+    <div id="hud" hidden><div class="chip" id="cLv">第 1/3 关</div><div class="chip" id="cT">计时 00:00</div><div class="chip" id="cL">${leaf()}<span id="cLn">落叶 0/3</span></div></div>
+    <button class="btn" id="bAgain" hidden>重来</button>
+    <div id="win" hidden><div class="card"><div class="t">通关</div><div class="lv" id="wL">${leaf()}${leaf()}${leaf()}</div><div class="wt" id="wT">计时 00:00</div></div></div>`;
+  document.body.appendChild(ui);
+  if (SHOT) ui.remove();
+})();
+const $ = id => document.getElementById(id);
+const fmtT = t => { const s = Math.floor(t); return `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`; };
+let hudLast = { t: '', l: -1 };
+function hudTick() {
+  if (SHOT) return;
+  const ts = '计时 ' + fmtT(game.t); if (ts !== hudLast.t) { $('cT').textContent = ts; hudLast.t = ts; }
+  if (game.leaves !== hudLast.l) {
+    if (hudLast.l >= 0 && game.leaves > hudLast.l) { const c = $('cL'); c.classList.add('pop'); setTimeout(() => c.classList.remove('pop'), 420); }
+    $('cLn').textContent = `落叶 ${game.leaves}/3`; hudLast.l = game.leaves;
+  }
+}
+function showWin() {
+  $('wT').textContent = '计时 ' + fmtT(game.t);
+  [...$('wL').children].forEach((e, i) => e.classList.toggle('off', i >= game.leaves));
+  $('win').hidden = false;
+}
+
+// ---------- 手机重力控制（DeviceOrientation） ----------
+// 映射：开始时的手机姿态 = 零点（校准）；相对零点的倾斜（度）→ 盘面倾斜，±12° 封顶；
+// 一阶低通（约 60ms）+ 圆形死区 1.5°；按 screen.orientation.angle 旋转映射，竖屏/横屏/倒拿都对。
+// 向量法（相对中立姿态的差，见 Tilt to Live 开发者博客 paradeofrain.com）避免手机接近竖直时左右分量塌掉。
+const GYRO = { DZ: 1.5, GAIN: 1.0, MAX: 12, TAU: 0.06 };
+const gyro = { on: false, got: false, ref: null, raw: [0, 0], f: [0, 0], ang: 0, n: 0 };
+function g_up(b, g) { b *= D2R; g *= D2R; return [-Math.cos(b) * Math.sin(g), Math.sin(b), Math.cos(b) * Math.cos(g)]; }
+const g_dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+const g_nrm = a => { const l = Math.hypot(a[0], a[1], a[2]) || 1; return [a[0] / l, a[1] / l, a[2] / l]; };
+function g_ref(u0) {
+  let e1 = [1 - u0[0] * u0[0], -u0[0] * u0[1], -u0[0] * u0[2]];
+  if (Math.hypot(e1[0], e1[1], e1[2]) < 0.2) e1 = [-u0[1] * u0[0], 1 - u0[1] * u0[1], -u0[1] * u0[2]];
+  e1 = g_nrm(e1); const e2 = g_nrm([u0[1] * e1[2] - u0[2] * e1[1], u0[2] * e1[0] - u0[0] * e1[2], u0[0] * e1[1] - u0[1] * e1[0]]);
+  return { e1, e2 };
+}
+function screenAngle() {
+  if (window.__screenAngle != null) return window.__screenAngle;                    // 测试钩子
+  const a = screen.orientation && typeof screen.orientation.angle === 'number' ? screen.orientation.angle : (window.orientation || 0);
+  return ((a % 360) + 360) % 360;
+}
+function onOrient(e) {
+  if (e.beta == null || e.gamma == null) return;
+  const u = g_up(e.beta, e.gamma), ang = screenAngle();
+  if (!gyro.ref || ang !== gyro.ang) { gyro.ref = g_ref(u); gyro.ang = ang; gyro.f = [0, 0]; }   // 第一帧 / 转屏后：当前姿态就是零点
+  const dx = Math.asin(Math.max(-1, Math.min(1, -g_dot(u, gyro.ref.e1)))) / D2R;     // 往手机 +x 滚（度）
+  const dy = Math.asin(Math.max(-1, Math.min(1, -g_dot(u, gyro.ref.e2)))) / D2R;     // 往手机顶部滚
+  const ux = dx, uy = -dy, a = ang * D2R, c = Math.cos(a), s = Math.sin(a);
+  gyro.raw = [ux * c + uy * s, -ux * s + uy * c];                                     // 屏幕坐标：右 +、下 +
+  gyro.got = true; gyro.n++;
+}
+function gyroRecenter() { gyro.ref = null; gyro.f = [0, 0]; }
+function enableGyro() { return;   // v11b：重力感应手感待调，暂时关闭，改用按住控制
+        // 必须在「开始」的点击回调里同步调用（iOS 13+ 要求用户手势）
+  if (typeof DeviceOrientationEvent === 'undefined') return;
+  const go = () => { addEventListener('deviceorientation', onOrient); gyro.on = true; gyroRecenter();
+    setTimeout(() => { if (!gyro.got) { gyro.on = false; removeEventListener('deviceorientation', onOrient); } }, 1500); };   // 1.5s 没数据（电脑 / http 页面）→ 回退拖动+方向键
+  if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+    DeviceOrientationEvent.requestPermission().then(r => { if (r === 'granted') go(); }).catch(() => {});   // 被拒 → 保持拖动/方向键
+  } else go();
+}
+addEventListener('orientationchange', gyroRecenter);
+if (screen.orientation && screen.orientation.addEventListener) screen.orientation.addEventListener('change', gyroRecenter);
+function gyroTilt(dt) {
+  if (!gyro.on || !gyro.got) return false;
+  const k = 1 - Math.exp(-dt / GYRO.TAU);
+  gyro.f[0] += (gyro.raw[0] - gyro.f[0]) * k; gyro.f[1] += (gyro.raw[1] - gyro.f[1]) * k;
+  let [sx, sy] = gyro.f; const m = Math.hypot(sx, sy);
+  if (m < GYRO.DZ) { sx = sy = 0; } else { const r = (m - GYRO.DZ) / m; sx *= r; sy *= r; }
+  const lim = v => Math.max(-GYRO.MAX, Math.min(GYRO.MAX, v * GYRO.GAIN)) * D2R;
+  tiltTarget.z = -lim(sx); tiltTarget.x = lim(sy);                                    // 同方向键：右滚 = tilt.z 负，下滚 = tilt.x 正
+  return true;
+}
+
+// ---------- 每帧输入钩子（在 update 里、倾斜平滑之前调用） ----------
+function inputHook(dt) {
+  if (window.__drv) return;                                     // 旧测试接口 __api.sim 直接给倾角
+  if (!game.started && !SHOT) { tiltTarget.x = tiltTarget.z = 0; return; }
+  if (gyroTilt(dt)) drag = null;                                // 陀螺仪生效时不再响应拖动
+  if (game.lock > 0) { game.lock -= dt; tiltTarget.x = tiltTarget.z = 0; }   // 晕：短暂不受控（只在玩法原型里会被设置）
+}
+
+// ---------- 开始 / 重来 ----------
+function resetCommon() {
+  Object.assign(st, { x: -1.8, z: -1.5, vx: 0, vz: 0, lastPX: -9, lastPZ: -9, fall: null });
+  tilt.x = tilt.z = tiltTarget.x = tiltTarget.z = 0; spin.quaternion.identity(); drag = null;
+  leafTaken = false; leafFade = 0; leaf.visible = true; leaf.scale.setScalar(1);
+  trailData.fill(0); trailTex.needsUpdate = true;
+  sandReset(); grains.length = 0; nSurf = 0;
+  game.t = 0; game.won = false; game.lock = 0; game.leaves = 0; hudLast = { t: '', l: -1 };
+  game.onReset.forEach(f => f());
+  gyroRecenter(); if ($('win')) $('win').hidden = true; hudTick();
+}
+$('bStart')?.addEventListener('click', () => {
+  enableGyro();                                                   // 同步调用：iOS 权限弹窗
+  $('start').hidden = true; $('hud').hidden = false; $('bAgain').hidden = false;
+  game.started = true; game.onStart.forEach(f => f()); hudTick();
+});
+$('bAgain')?.addEventListener('click', () => resetCommon());
+if (SHOT) game.started = true;
+
+// ---------- 竖屏适配（按 design_v10/portrait_layout_v10.png） ----------
+// 竖屏：机位抬到约 58°，按“盘宽 6.2 占屏宽 92%”反算垂直 fov（Sebastian Lenton 的 fov 适配思路）；远景树团/石丘隐藏，雾拉远。
+// 横屏：保持 v10 机位，只在窄屏（宽高比小于设计稿）时放大 fov 保证盘不被左右裁掉。
+const CAM0 = { base: camBase.clone(), look: CAM_LOOK.clone(), fov: camera.fov };
+function layout() {
+  const asp = innerWidth / innerHeight, portrait = asp < 0.85;
+  const far = scene.children.filter(o => (o.isInstancedMesh && !o.userData.keep) || (o.isMesh && o.geometry && o.geometry.type === 'IcosahedronGeometry'));
+  if (portrait) {
+    const dist = 13.2, el = 58 * D2R, halfW = 3.1 / 0.92;
+    camera.fov = 2 * Math.atan(Math.tan(Math.atan(halfW / dist)) / asp) / D2R;
+    camBase.set(0, Math.sin(el) * dist - 0.6, Math.cos(el) * dist + 0.35); CAM_LOOK.set(0, -0.6, 0.35);
+    scene.fog.near = 16; scene.fog.far = 40; far.forEach(o => o.visible = false);
+  } else {
+    const need = 2 * Math.atan(Math.tan(Math.atan(3.35 / CAM0.base.distanceTo(CAM0.look))) / asp) / D2R;
+    camera.fov = Math.max(CAM0.fov, need);
+    camBase.copy(CAM0.base); CAM_LOOK.copy(CAM0.look); scene.fog.near = 13; scene.fog.far = 30; far.forEach(o => o.visible = true);
+  }
+  camera.aspect = asp; camera.updateProjectionMatrix();
+}
+addEventListener('resize', layout);
+window.__gyro = gyro; window.__game = game; window.__step1 = () => update(1 / 60);   // 测试钩子（无可见输出）
+
+function afterUpdate(dt) { if (game.started && !game.won) game.t += dt; game.leaves = leafTaken ? 1 : 0; hudTick(); }
+layout();
+
+// 测试钩子（无可见输出）：固定步长推进、切机位
+window.__api = {
+  vtx: () => { const P = sandPos.array, Nn = sandNrm.array; let lo = 1e9, hi = -1e9, bad = 0; for (let k = 0; k < N2; k++) { const y = P[k * 3 + 1]; if (!isFinite(y) || !isFinite(Nn[k * 3 + 1])) bad++; else { lo = Math.min(lo, y); hi = Math.max(hi, y); } } return [+lo.toFixed(3), +hi.toFixed(3), bad, grains.length]; },
+  health: () => { let mx = 0, bad = 0, R = 0, mk = -1; for (let k = 0; k < N2; k++) { const h = sR[k] + sF[k]; if (!isFinite(h)) bad++; else { if (h > mx) { mx = h; mk = k; } R += h; } } return [+mx.toFixed(3), bad, Math.round(R), mk % SGN, Math.floor(mk / SGN), +sBase[mk].toFixed(3)]; },
+  sand: () => { let F = 0, mF = 0, R = 0; for (let k = 0; k < N2; k++) { F += sF[k]; R += sR[k]; mF = Math.max(mF, sF[k]); } return { F, mF, R, rx: board.rotation.x, rz: board.rotation.z, n: grains.length, nSurf }; },
+  place(x, z, vx, vz) { Object.assign(st, { x, z, vx, vz, fall: null, lastPX: x, lastPZ: z }); },
+  simdt(n, dt, tx, tz) { window.__drv = 1; tiltTarget.x = tx; tiltTarget.z = tz; for (let i = 0; i < n; i++) update(dt); window.__drv = 0; },
+  sim(sec, tx, tz) { window.__drv = 1; tiltTarget.x = tx; tiltTarget.z = tz; const n = Math.round(sec * 60); for (let i = 0; i < n; i++) update(1 / 60); window.__drv = 0; },
+  view(v) { view = v; },
+  renderOnce() { if (trailDirty) { trailTex.needsUpdate = true; trailDirty = false; } placeCamera(); renderer.shadowMap.needsUpdate = true; renderer.render(scene, camera); }, reset() { Object.assign(st, { x: -1.8, z: -1.5, vx: 0, vz: 0 }); tilt.x = tilt.z = tiltTarget.x = tiltTarget.z = 0; spin.quaternion.identity(); update(1 / 60); }, state: () => ({ ...st, tilt: { ...tilt }, leafTaken })
+};
+window.__dbg = { renderer, scene, camera, body, ball, trailUpd: (x,z)=>{ paintTrail(x,z); trailTex.needsUpdate = true; } };
+window.__ready = true;
+</script>
+</body>
+</html>
